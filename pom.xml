@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.wso2.carbon</groupId>
+    <artifactId>wso2cdm-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>2.0.0-SNAPSHOT</version>
+    <name>WSO2 CDM - Parent</name>
+    <url>http://wso2.org</url>
+    <description>WSO2 Connected Device Manager</description>
+
+
+    <parent>
+        <groupId>org.wso2</groupId>
+        <artifactId>wso2</artifactId>
+        <version>1</version>
+    </parent>
+
+    <modules>
+        <module>modules/features</module>
+        <module>modules/p2-profile-gen</module>
+        <module>modules/distribution</module>
+        <!--<module>modules/integration</module>-->
+    </modules>
+
+    <properties>
+        <carbon.kernal.version>4.2.0</carbon.kernal.version>
+        <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
+        <maven-buildnumber-plugin.version>1.3</maven-buildnumber-plugin.version>
+    </properties>
+
+</project>
+
