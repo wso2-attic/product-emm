@@ -1,6 +1,0 @@
-instructions.configure = \
-org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/server/jaggeryapps,overwrite:true);  \
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../../deployment/server/jaggeryapps/publisher,target:${installFolder}/../../deployment/server/jaggeryapps/fakepublisher,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/../../deployment/server/jaggeryapps/publisher);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../../deployment/server/jaggeryapps/store,target:${installFolder}/../../deployment/server/jaggeryapps/fakestore,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/../../deployment/server/jaggeryapps/store);\
