@@ -38,6 +38,7 @@
     </parent>
 
     <modules>
+        <module>components/device-mgt</module>
         <module>product/modules/p2-profile-gen</module>
         <module>product/modules/distribution</module>
         <module>product/modules/integration</module>
