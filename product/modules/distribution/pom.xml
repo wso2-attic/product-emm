@@ -83,7 +83,7 @@
                                 <artifactItem>
                                     <groupId>org.wso2.carbon</groupId>
                                     <artifactId>wso2carbon-core</artifactId>
-                                    <version>${carbon.kernal.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target</outputDirectory>
@@ -118,7 +118,7 @@
                                         <include name="wso2emm-${project.version}.zip"/>
                                     </fileset>
                                 </unzip>
-                                <copy todir="target/wso2carbon-core-${carbon.kernal.version}/repository/components"
+                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components"
                                       overwrite="true">
                                     <fileset
                                             dir="${tempdir}/wso2emm-${project.version}/repository/components"></fileset>
@@ -141,7 +141,7 @@
                                 <copy file="src/repository/resources/shindig/index.jsp"
                                       todir="target/shindig"/>-->
 
-                                <concat destfile="target/wso2carbon-core-${carbon.kernal.version}/repository/log4j.properties">
+                                <concat destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/log4j.properties">
                                     og4j.logger.net.sf.ehcache=ERROR
                                 </concat>
 
@@ -155,16 +155,16 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <!--<copy todir="target/wso2carbon-core-${carbon.kernal.version}/modules"
+                                <!--<copy todir="target/wso2carbon-core-${carbon.kernel.version}/modules"
                                       overwrite="true">
                                     <fileset dir="src/repository/modules"></fileset>
                                 </copy>
-                                <copy todir="target/wso2carbon-core-${carbon.kernal.version}/repository/deployment/server/jaggeryapps"
+                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps"
                                       overwrite="true">
                                     <fileset dir="../apps"></fileset>
                                 </copy>
 
-                                <copy todir="target/wso2carbon-core-${carbon.kernal.version}/repository/components/plugins"
+                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins"
                                       overwrite="true">
                                     <fileset dir="src/repository/components/patches/apimgt"></fileset>
                                 </copy>-->
@@ -185,7 +185,7 @@
                                 <delete dir="target/archive-tmp"/>
                                 <delete dir="target/dependency-maven-plugin-markers"/>
                                 <delete dir="target/maven-archiver"/>
-                                <delete dir="target/wso2carbon-core-${carbon.kernal.version}"/>
+                                <delete dir="target/wso2carbon-core-${carbon.kernel.version}"/>
                                 <delete file="target/wso2emm-${project.version}.jar"/>
                                 <delete dir="target/sources"/>
                                 <delete dir="target/site"/>

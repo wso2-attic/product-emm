@@ -48,7 +48,7 @@
                                 <artifactItem>
                                     <groupId>org.wso2.carbon</groupId>
                                     <artifactId>wso2carbon-core</artifactId>
-                                    <version>${carbon.kernal.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target</outputDirectory>
@@ -101,7 +101,7 @@
                             <featureArtifacts>
 
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.kernal.version}
+                                    org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.kernel.version}
                                 </featureArtifactDef>
                             </featureArtifacts>
 
@@ -120,18 +120,18 @@
                             <metadataRepository>file:${basedir}/target/p2-repo</metadataRepository>
                             <artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>
                             <destination>
-                                ${basedir}/target/wso2carbon-core-${carbon.kernal.version}/repository/components
+                                ${basedir}/target/wso2carbon-core-${carbon.kernel.version}/repository/components
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
                                 <feature>
                                     <id>org.wso2.carbon.ndatasource.feature.group</id>
-                                    <version>${carbon.kernal.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                 </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.ndatasource.ui.feature.group</id>
-                                    <version>${carbon.kernal.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                 </feature>
                             </features>
                         </configuration>
@@ -148,7 +148,7 @@
                         <configuration>
                             <tasks>
                                 <replace token="false" value="true"
-                                         dir="target/wso2carbon-core-${carbon.kernal.version}/repository/components">
+                                         dir="target/wso2carbon-core-${carbon.kernel.version}/repository/components">
                                     <include name="**/bundles.info"/>
                                 </replace>
                             </tasks>
