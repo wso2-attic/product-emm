@@ -1,5 +1,5 @@
 <!--
- ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
  ~ Version 2.0 (the "License"); you may not use this file except
@@ -26,7 +26,7 @@
         <!-- Copying p2 profile and osgi bundles-->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/components</directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/components</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/components</outputDirectory>
             <excludes>
                 <exclude>**/eclipse.ini</exclude>
                 <exclude>**/*.lock</exclude>

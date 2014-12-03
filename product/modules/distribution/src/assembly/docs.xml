@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
  ~ Version 2.0 (the "License"); you may not use this file except
@@ -25,11 +25,11 @@
     <fileSets>
         <fileSet>
             <directory>target/site</directory>
-            <outputDirectory>wso2emm-${pom.version}-docs</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}-docs</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../../modules/documentation/src/site/xdoc/user-core</directory>
-            <outputDirectory>wso2mobileserver-${pom.version}-docs/user-core</outputDirectory>
+            <outputDirectory>wso2mobileserver-${project.version}-docs/user-core</outputDirectory>
             <fileMode>755</fileMode>
             <includes>
                 <include>user-mgt-actdir.xml</include>

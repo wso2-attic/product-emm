@@ -8,7 +8,7 @@
     <fileSets>
         <fileSet>
             <directory>target/wso2carbon-core-${carbon.kernel.version}</directory>
-            <outputDirectory>wso2emm-${pom.version}</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}</outputDirectory>
             <excludes>
                 <exclude>**/*.sh</exclude>
                 <exclude>**/README*</exclude>
@@ -27,14 +27,14 @@
         <!--copying runtimes-->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/runtimes</directory>
-            <outputDirectory>wso2emm-${pom.version}/lib/runtimes/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/lib/runtimes/</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>target/wso2carbon-core-${carbon.kernel.version}</directory>
-            <outputDirectory>wso2emm-${pom.version}</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}</outputDirectory>
             <includes>
                 <include>**/*.sh</include>
             </includes>
@@ -44,7 +44,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-4.3.0/dbscripts/identity/
             </directory>
-            <outputDirectory>wso2emm-${pom.version}/dbscripts/identity</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/dbscripts/identity</outputDirectory>
             <includes>
                 <include>**/**.sql</include>
             </includes>
@@ -55,7 +55,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
             </directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/multitenancy</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/multitenancy</outputDirectory>
             <includes>
                 <include>**/stratos.xml</include>
                 <include>**/multitenancy-packages.xml</include>
@@ -68,7 +68,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
             </directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf</outputDirectory>
             <includes>
                 <include>**/tenant-mgt.xml</include>
             </includes>
@@ -76,14 +76,14 @@
 
         <fileSet>
             <directory>src/repository/resources/styles/css</directory>
-            <outputDirectory>wso2emm-${pom.version}/resources/allthemes/Default/admin</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/resources/allthemes/Default/admin</outputDirectory>
             <includes>
                 <include>**/**.css</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/resources/styles/images</directory>
-            <outputDirectory>wso2emm-${pom.version}/resources/allthemes/Default/images</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/resources/allthemes/Default/images</outputDirectory>
             <includes>
                 <include>**/**.gif</include>
                 <include>**/**.png</include>
@@ -94,18 +94,18 @@
         <!-- copy documentation -->
         <fileSet>
             <directory>target/site</directory>
-            <outputDirectory>wso2emm-${pom.version}/docs</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/docs</outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
         <!-- copy the landing page webapp -->
         <fileSet>
             <directory>src/repository/resources/stratos_root</directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/deployment/server/webapps/STRATOS_ROOT</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/deployment/server/webapps/STRATOS_ROOT</outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/modules</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/modules/</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${project.version}/modules/</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -114,7 +114,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps
             </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/
+            <outputDirectory>${pom.artifactId}-${project.version}/repository/deployment/server/jaggeryapps/
             </outputDirectory>
             <includes>
                 <include>*/**</include>
@@ -131,7 +131,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
             </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${project.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
                 <include>oauth2.war</include>
             </includes>
@@ -142,14 +142,14 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
             </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${project.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
                 <include>authenticationendpoint.war</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/conf</directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf</outputDirectory>
             <includes>
                 <include>**/api-manager.xml</include>
                 <include>**/sso-idp-config.xml</include>
@@ -159,7 +159,7 @@
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/
             </directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/security/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/security/</outputDirectory>
             <includes>
                 <include>**/entitlement.properties</include>
                 <include>**/trusted-idp-config.xml</include>
@@ -167,14 +167,14 @@
         </fileSet>
         <fileSet>
             <directory>src/repository/conf/datasources</directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/datasources</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/datasources</outputDirectory>
             <includes>
                 <include>**/master-datasources.xml</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/resources</directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/resources</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/resources</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -182,26 +182,26 @@
         <!--data-bridge configuration-->
         <fileSet>
             <directory>src/repository/conf/data-bridge</directory>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/data-bridge</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/data-bridge</outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.version}/lib/runtimes</directory>
-            <outputDirectory>wso2emm-${pom.version}/lib/runtimes/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/lib/runtimes/</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/dbscripts/storage</directory>
-            <outputDirectory>wso2emm-${pom.version}/dbscripts/storage</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/dbscripts/storage</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/dbscripts/apimgt</directory>
-            <outputDirectory>wso2emm-${pom.version}/dbscripts/apimgt</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/dbscripts/apimgt</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -209,7 +209,7 @@
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/service-provider
             </directory>
-            <outputDirectory>wso2emm-${pom.version}/dbscripts/service-provider</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/dbscripts/service-provider</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -218,17 +218,17 @@
         <fileSet>
             <directory>../apps/productapipublisher/</directory>
             <outputDirectory>
-                ${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/productapipublisher
+                ${pom.artifactId}-${project.version}/repository/deployment/server/jaggeryapps/productapipublisher
             </outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../apps/productapistore/</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/productapistore
+            <outputDirectory>${pom.artifactId}-${project.version}/repository/deployment/server/jaggeryapps/productapistore
             </outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules</directory>
-            <outputDirectory>wso2emm-${pom.version}/modules/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/modules/</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -238,7 +238,7 @@
         <!-- Script -->
         <fileSet>
             <directory>src/repository/dbscripts/</directory>
-            <outputDirectory>wso2emm-${pom.version}/dbscripts</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/dbscripts</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -248,13 +248,13 @@
     </fileSets>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>wso2emm-${pom.version}/lib/endorsed</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/lib/endorsed</outputDirectory>
             <includes>
                 <include>javax.el:el-api:jar</include>
             </includes>
         </dependencySet>
         <dependencySet>
-            <outputDirectory>wso2emm-${pom.version}/repository/deployment/client/modules
+            <outputDirectory>wso2emm-${project.version}/repository/deployment/client/modules
             </outputDirectory>
             <includes>
                 <include>org.hibernate.wso2:hibernate:jar</include>
@@ -268,7 +268,7 @@
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml
             </source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/tomcat</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
@@ -276,132 +276,132 @@
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml
             </source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/tomcat</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>src/repository/conf/tomcat/context.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/tomcat</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/event-broker.xml
             </source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
 
         <file>
             <source>INSTALL.txt</source>
-            <outputDirectory>wso2emm-${pom.version}</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>README.txt</source>
-            <outputDirectory>wso2emm-${pom.version}</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>LICENSE.txt</source>
-            <outputDirectory>wso2emm-${pom.version}</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>release-notes.html</source>
-            <outputDirectory>wso2emm-${pom.version}</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/bin/README.txt</source>
-            <outputDirectory>wso2emm-${pom.version}/bin/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/bin/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/bin/version.txt</source>
-            <outputDirectory>wso2emm-${pom.version}/bin/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/bin/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>src/repository/conf/carbon.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
         </file>
         <file>
             <source>src/repository/conf/registry.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
         </file>
 
         <file>
             <source>src/repository/conf/wso2emm.jks</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/resources/security</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/resources/security</outputDirectory>
             <filtered>true</filtered>
         </file>
 
         <file>
             <source>src/repository/conf/cipher-tool.properties</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/security/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/security/</outputDirectory>
             <filtered>true</filtered>
         </file>
         <!--copy default xacml policy to repository/resources/security -->
         <file>
             <source>src/repository/resources/policies/xacml/default/admin.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/resources/security/policies/xacml/default
+            <outputDirectory>wso2emm-${project.version}/repository/resources/security/policies/xacml/default
             </outputDirectory>
             <filtered>true</filtered>
         </file>
 
         <file>
             <source>src/repository/conf/log4j.properties</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
         </file>
         <file>
             <source>src/repository/conf/multitenancy/cloud-services-desc.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/multitenancy/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/multitenancy/</outputDirectory>
             <filtered>true</filtered>
         </file>
         <file>
             <source>src/repository/conf/axis2/axis2.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/axis2/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/axis2/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>src/repository/conf/application-authenticators.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/security/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/security/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/README</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>src/repository/conf/identity.xml</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf</outputDirectory>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>src/repository/database/WSO2EMM_DB.h2.db</source>
-            <outputDirectory>wso2emm-${pom.version}/repository/database</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/database</outputDirectory>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/user-mgt.xml
             </source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
         </file>
 
@@ -410,7 +410,7 @@
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml
             </source>
-            <outputDirectory>wso2emm-${pom.version}/repository/conf/etc</outputDirectory>
+            <outputDirectory>wso2emm-${project.version}/repository/conf/etc</outputDirectory>
         </file>
 
         <!-- End - nTask Component -->
