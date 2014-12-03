@@ -20,14 +20,8 @@
                 <exclude>**/axis2services/version/**</exclude>
                 <exclude>**/pom.xml</exclude>
                 <exclude>**/version.txt</exclude>
-                <exclude>**/carbon.xml</exclude>
-                <exclude>**/user-mgt.xml</exclude>
-                <exclude>**/registry.xml</exclude>
                 <exclude>**/axis2/axis2.xml</exclude>
                 <exclude>**/master-datasources.xml</exclude>
-                <exclude>**/org.wso2.carbon.identity.relyingparty.ui-3.1.0.SNAPSHOT.jar</exclude>
-                <exclude>**/org.wso2.carbon.identity.user.registration.ui-3.1.0.SNAPSHOT.jar</exclude>
-                <exclude>**/log4j.properties</exclude>
             </excludes>
         </fileSet>
         <!--copying runtimes-->
