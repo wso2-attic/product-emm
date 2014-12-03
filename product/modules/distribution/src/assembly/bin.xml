@@ -24,7 +24,6 @@
                 <exclude>**/user-mgt.xml</exclude>
                 <exclude>**/registry.xml</exclude>
                 <exclude>**/axis2/axis2.xml</exclude>
-                <!--exclude>**/ciphertool.bat</exclude-->
                 <exclude>**/master-datasources.xml</exclude>
                 <exclude>**/org.wso2.carbon.identity.relyingparty.ui-3.1.0.SNAPSHOT.jar</exclude>
                 <exclude>**/org.wso2.carbon.identity.user.registration.ui-3.1.0.SNAPSHOT.jar</exclude>
@@ -411,76 +410,6 @@
             <outputDirectory>wso2emm-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
         </file>
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/lib/org.wso2.carbon.server-${carbon.kernel.version}.jar
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/lib/</outputDirectory>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/db2.sql</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/mysql.sql
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0003/dbscripts/mysql_cluster.sql
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-            <fileMode>644</fileMode>
-        </file>
-        <!-- Files WSO2-CARBON-PATCH-4.2.0-0002 - Start -->
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-text.properties
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-tool.properties
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2.xml
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/tenant-axis2.xml
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2_client.xml
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>
-                ../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0004/repository/conf/carbon.xml
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
 
         <!-- nTask Component -->
         <file>
