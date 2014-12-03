@@ -42,7 +42,7 @@
         </fileSet>
         <fileSet>
             <directory>
-                ../p2-profile-gen/target/wso2carbon-core-4.3.0/dbscripts/identity/
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/
             </directory>
             <outputDirectory>wso2emm-${project.version}/dbscripts/identity</outputDirectory>
             <includes>
@@ -193,38 +193,12 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>src/repository/dbscripts/storage</directory>
-            <outputDirectory>wso2emm-${project.version}/dbscripts/storage</outputDirectory>
-            <includes>
-                <include>*/**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>src/repository/dbscripts/apimgt</directory>
-            <outputDirectory>wso2emm-${project.version}/dbscripts/apimgt</outputDirectory>
-            <includes>
-                <include>*/**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/service-provider
             </directory>
             <outputDirectory>wso2emm-${project.version}/dbscripts/service-provider</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
-        </fileSet>
-        <!-- API Store/ API Publisher -->
-        <fileSet>
-            <directory>../apps/productapipublisher/</directory>
-            <outputDirectory>
-                ${pom.artifactId}-${project.version}/repository/deployment/server/jaggeryapps/productapipublisher
-            </outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../apps/productapistore/</directory>
-            <outputDirectory>${pom.artifactId}-${project.version}/repository/deployment/server/jaggeryapps/productapistore
-            </outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules</directory>
@@ -330,28 +304,7 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-        <file>
-            <source>src/repository/conf/carbon.xml</source>
-            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-        <file>
-            <source>src/repository/conf/registry.xml</source>
-            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
-            <filtered>true</filtered>
-        </file>
 
-        <file>
-            <source>src/repository/conf/wso2emm.jks</source>
-            <outputDirectory>wso2emm-${project.version}/repository/resources/security</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-
-        <file>
-            <source>src/repository/conf/cipher-tool.properties</source>
-            <outputDirectory>wso2emm-${project.version}/repository/conf/security/</outputDirectory>
-            <filtered>true</filtered>
-        </file>
         <!--copy default xacml policy to repository/resources/security -->
         <file>
             <source>src/repository/resources/policies/xacml/default/admin.xml</source>
@@ -397,12 +350,6 @@
             <source>src/repository/database/WSO2EMM_DB.h2.db</source>
             <outputDirectory>wso2emm-${project.version}/repository/database</outputDirectory>
             <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/user-mgt.xml
-            </source>
-            <outputDirectory>wso2emm-${project.version}/repository/conf/</outputDirectory>
-            <filtered>true</filtered>
         </file>
 
         <!-- nTask Component -->
