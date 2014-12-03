@@ -31,5 +31,5 @@
     <groupId>org.wso2.cdmserver</groupId>
     <artifactId>wso2cdmserver-parent</artifactId>
     <packaging>pom</packaging>
-    <name>admin-clents</name>
+    <name>WSO2 Connected Device Manager (CDM) - Parent</name>
 </project>
