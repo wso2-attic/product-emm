@@ -33,7 +33,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Bundle-Version>${project.version}</Bundle-Version>
-                        <Bundle-Description>Device Management Core Bundle</Bundle-Description>
+                        <Bundle-Description>Device Management Mobile Impl Bundle</Bundle-Description>
                         <Private-Package>org.wso2.carbon.device.mgt.mobile.impl.internal</Private-Package>
                         <Import-Package>
                             org.osgi.framework,
@@ -71,6 +71,11 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi.services</artifactId>
+            <version>3.2.0.v20090520-1800</version>
         </dependency>
     </dependencies>
 
