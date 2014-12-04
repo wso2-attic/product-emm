@@ -32,7 +32,7 @@
     <artifactId>org.wso2.cdm.integration.common.utils</artifactId>
     <groupId>org.wso2.cdm</groupId>
     <packaging>jar</packaging>
-    <name>integration-test-utils</name>
+    <name>WSO2 CDM - Integration Test Utils</name>
 
     <licenses>
         <license>
