@@ -25,8 +25,16 @@ import java.util.List;
 /**
  * This represents the Windows implementation of DeviceManagerService.
  */
-public class WindowsDeviceManagerService implements DeviceManagerService{
-	@Override
+public class WindowsDeviceManagerService implements DeviceManagerService {
+
+    private static final String DEVICE_MANAGER_WINDOWS = "windows";
+
+    @Override
+    public String getProviderType() {
+        return DEVICE_MANAGER_WINDOWS;
+    }
+
+    @Override
 	public void enrollDevice(Device device) throws DeviceManagementException {
 
 	}
