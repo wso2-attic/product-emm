@@ -28,22 +28,22 @@ public interface DeviceManagerService {
     /*
         Method corresponding to enrolling a particular device of type mobile, IoT, etc within CDM
      */
-    void enrolDevice();
+    void enrolDevice(Device device);
 
-    void modifyEnrolment();
+    void modifyEnrolment(Device device);
 
-    void disEnrollDevice();
+    void disEnrollDevice(String type, String deviceId);
 
     boolean isRegistered();
 
     boolean isActive();
 
-    boolean setActive();
+    void setActive(boolean status);
 
-    List<Device> getAllDeviceInfo();
+    List<Device> getAllDeviceInfo(String type);
 
-    Device getDeviceInfo();
+    Device getDeviceInfo(String type, String deviceId);
 
-    void setOwnership();
+    void setOwnership(String ownershipType);
 
 }
