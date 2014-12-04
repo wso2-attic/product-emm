@@ -36,22 +36,6 @@
 
     <build>
         <plugins>
-            <!--plugin>
-                <groupId>org.apache.axis2</groupId>
-                <artifactId>axis2-java2wsdl-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java2wsdl</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <className>
-                    </className>
-                </configuration>
-            </plugin-->
-
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
@@ -86,6 +70,24 @@
         </plugins>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
 

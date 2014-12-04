@@ -15,6 +15,31 @@
  */
 package org.wso2.carbon.device.mgt.core.internal;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+
+/**
+ * @scr.component name="org.wso2.carbon.device.manager" immediate="true"
+ * @scr.reference name="device.manager.service"
+ * interface="org.wso2.carbon.device.mgt.common.spi.DeviceManager" cardinality="1..n"
+ * policy="dynamic" bind="setDeviceManagerService" unbind="unsetDeviceManagerService"
+ */
 public class DeviceMgtServiceComponent {
+
+    private static Log log = LogFactory.getLog(DeviceMgtServiceComponent.class);
+
+    protected void setDeviceManagerService(DeviceManagerService deviceManager) {
+        if (log.isDebugEnabled()) {
+            log.debug("Setting Data Sources Service");
+        }
+    }
+
+    protected void unsetDeviceManagerService(DeviceManagerService deviceManager) {
+        if (log.isDebugEnabled()) {
+            log.debug("Unsetting Data Sources Service");
+        }
+    }
+
 
 }
