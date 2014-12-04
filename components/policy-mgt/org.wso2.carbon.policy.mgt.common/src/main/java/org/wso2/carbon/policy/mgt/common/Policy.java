@@ -18,9 +18,12 @@
 
 package org.wso2.carbon.policy.mgt.common;
 
+import java.util.List;
+
 public class Policy {
     private int id;
     private String policyName;
+    private List<Features>  featuresList;
 
 
     public static class Features {
