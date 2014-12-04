@@ -22,7 +22,7 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 /**
  * @scr.component name="org.wso2.carbon.device.manager" immediate="true"
  * @scr.reference name="device.manager.service"
- * interface="org.wso2.carbon.device.mgt.common.spi.DeviceManager" cardinality="1..n"
+ * interface="org.wso2.carbon.device.mgt.common.spi.DeviceManagerService" cardinality="1..n"
  * policy="dynamic" bind="setDeviceManagerService" unbind="unsetDeviceManagerService"
  */
 public class DeviceMgtServiceComponent {
