@@ -16,6 +16,7 @@
 package org.wso2.carbon.device.mgt.common.spi;
 
 import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 
 import java.util.List;
 
@@ -25,25 +26,76 @@ import java.util.List;
  */
 public interface DeviceManagerService {
 
-    /*
-        Method corresponding to enrolling a particular device of type mobile, IoT, etc within CDM
+    /**
+     * Method to enrolling a particular device of type mobile, IoT, etc within CDM.
+     * @param device Metadata corresponding to the device being enrolled
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    void enrolDevice(Device device);
+    void enrolDevice(Device device) throws DeviceManagementException;
 
-    void modifyEnrolment(Device device);
+    /**
+     * Method to modify the metadata corresponding to device enrollment
+     * @param device    Modified device enrollment related metadata
+     * @throws DeviceManagementException    If some unusual behaviour is observed while modify the enrollment of a
+     *                                      device
+     */
+    void modifyEnrolment(Device device) throws DeviceManagementException;
 
-    void disEnrollDevice(String type, String deviceId);
+    /**
+     * Method to disenroll a particular device from CDM.
+     * @param type      Device Type
+     * @param deviceId  Device Identifier
+     * @throws DeviceManagementException
+     */
+    void disEnrollDevice(String type, String deviceId) throws DeviceManagementException;
 
-    boolean isRegistered();
+    /**
+     * Method to retrieve the status of the registration process of a particular device.
+     * @param type      Device Type
+     * @param deviceId  Device Identifier
+     * @return          Status of enrollment
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     */
+    boolean isRegistered(String type, String deviceId) throws DeviceManagementException;
 
-    boolean isActive();
+    /**
+     * Method to retrieve the status of a particular device.
+     * @param type      Device Type
+     * @param deviceId  Device Identifier
+     * @return          Returns if the device is active
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     */
+    boolean isActive(String type, String deviceId) throws DeviceManagementException;
 
-    void setActive(boolean status);
+    /**
+     * Method to set the status indicating whether a particular device registered within CDM is enabled at a given
+     * moment.
+     * @param status    Indicates whether the device is active
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     */
+    void setActive(boolean status) throws DeviceManagementException;
 
-    List<Device> getAllDeviceInfo(String type);
+    /**
+     * Method to retrieve metadata of all devices registered within CDM corresponding to a particular device type.
+     * @param type  Device Type
+     * @return      List of metadata corresponding to all devices registered within CDM
+     */
+    List<Device> getAllDeviceInfo(String type) throws DeviceManagementException;
 
-    Device getDeviceInfo(String type, String deviceId);
+    /**
+     * Method to retrieve metadata of a device corresponding to a particular type that carries a specific identifier.
+     * @param type      Device Type
+     * @param deviceId  Device Identifier
+     * @return  Metadata corresponding to a particular device
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     */
+    Device getDeviceInfo(String type, String deviceId) throws DeviceManagementException;
 
-    void setOwnership(String ownershipType);
+    /**
+     * Method to set the ownership type of a particular device. i.e. BYOD, COPE
+     * @param ownershipType Type of ownership
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     */
+    void setOwnership(String ownershipType) throws DeviceManagementException;
 
 }
