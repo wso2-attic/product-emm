@@ -89,8 +89,8 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
-            <artifactId>logging</artifactId>
-            <version>${carbon.platform.version}</version>
+            <artifactId>org.wso2.carbon.logging</artifactId>
+            <version>${carbon.kernel.version}</version>
         </dependency>
     </dependencies>
 

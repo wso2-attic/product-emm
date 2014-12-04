@@ -34,7 +34,7 @@ public class DeviceMgtDAOImpl implements DeviceMgtDAO {
 
     @Override
     public void addDevice(Device device) throws CDMDAOException, CDMDatabaseConnectionException {
-        
+
     }
 
     @Override
