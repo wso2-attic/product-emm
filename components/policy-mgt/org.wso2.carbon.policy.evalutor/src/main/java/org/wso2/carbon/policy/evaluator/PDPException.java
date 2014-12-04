@@ -18,5 +18,37 @@
 
 package org.wso2.carbon.policy.evaluator;
 
-public class PDPException {
+public class PDPException extends Exception {
+
+    private String pdpErrorMessage;
+
+    public String getPdpErrorMessage() {
+        return pdpErrorMessage;
+    }
+
+    public void setPdpErrorMessage(String pdpErrorMessage) {
+        this.pdpErrorMessage = pdpErrorMessage;
+    }
+
+    public PDPException(String message) {
+        setPdpErrorMessage(message);
+    }
+
+    public PDPException(String message, Exception ex) {
+        super(message, ex);
+        setPdpErrorMessage(message);
+    }
+
+    public PDPException(String message, Throwable cause) {
+        super(message, cause);
+        setPdpErrorMessage(message);
+    }
+
+    public PDPException(Throwable cause) {
+        super(cause);
+    }
+
+    public PDPException(){
+        super();
+    }
 }
