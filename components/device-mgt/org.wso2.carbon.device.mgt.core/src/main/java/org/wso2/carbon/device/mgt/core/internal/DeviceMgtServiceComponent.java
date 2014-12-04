@@ -31,13 +31,13 @@ public class DeviceMgtServiceComponent {
 
     protected void setDeviceManagerService(DeviceManagerService deviceManager) {
         if (log.isDebugEnabled()) {
-            log.debug("Setting Data Sources Service");
+            log.debug("Setting Device Management Service");
         }
     }
 
     protected void unsetDeviceManagerService(DeviceManagerService deviceManager) {
         if (log.isDebugEnabled()) {
-            log.debug("Unsetting Data Sources Service");
+            log.debug("Unsetting Device Management Service");
         }
     }
 
