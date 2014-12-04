@@ -32,5 +32,5 @@
     <groupId>org.wso2.cdm</groupId>
     <artifactId>org.wso2.cdm.integration.common.clients</artifactId>
     <packaging>jar</packaging>
-    <name>admin-clents</name>
+    <name>WSO2 CDM - Integration Admin Clients</name>
 </project>
