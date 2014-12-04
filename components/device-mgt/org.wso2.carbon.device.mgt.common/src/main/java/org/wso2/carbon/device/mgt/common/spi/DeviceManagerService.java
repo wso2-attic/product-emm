@@ -31,7 +31,7 @@ public interface DeviceManagerService {
      * @param device Metadata corresponding to the device being enrolled
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    void enrolDevice(Device device) throws DeviceManagementException;
+    void enrollDevice(Device device) throws DeviceManagementException;
 
     /**
      * Method to modify the metadata corresponding to device enrollment
@@ -39,7 +39,7 @@ public interface DeviceManagerService {
      * @throws DeviceManagementException    If some unusual behaviour is observed while modify the enrollment of a
      *                                      device
      */
-    void modifyEnrolment(Device device) throws DeviceManagementException;
+    void modifyEnrollment(Device device) throws DeviceManagementException;
 
     /**
      * Method to disenroll a particular device from CDM.
