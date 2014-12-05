@@ -45,7 +45,6 @@ public class PolicyManagementException extends Exception {
         setPolicyErrorMessage(message);
     }
 
-
     public PolicyManagementException() {
         super();
     }
