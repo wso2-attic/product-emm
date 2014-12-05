@@ -17,7 +17,7 @@
  */
 package org.wso2.carbon.device.mgt.core.dao.exception;
 
-public class CDMDatabaseConnectionException extends Exception {
+public class DeviceDatabaseConnectionException extends Exception {
 
     private String message;
 
@@ -27,7 +27,7 @@ public class CDMDatabaseConnectionException extends Exception {
      * @param message error message
      * @param nestedException exception
      */
-    public CDMDatabaseConnectionException(String message, Exception nestedException) {
+    public DeviceDatabaseConnectionException(String message, Exception nestedException) {
         super(message, nestedException);
         setErrorMessage(message);
     }
@@ -38,7 +38,7 @@ public class CDMDatabaseConnectionException extends Exception {
      * @param message the detail message.
      * @param cause   the cause of this exception.
      */
-    public CDMDatabaseConnectionException(String message, Throwable cause) {
+    public DeviceDatabaseConnectionException(String message, Throwable cause) {
         super(message, cause);
         setErrorMessage(message);
     }
@@ -48,7 +48,7 @@ public class CDMDatabaseConnectionException extends Exception {
      *
      * @param message the detail message.
      */
-    public CDMDatabaseConnectionException(String message) {
+    public DeviceDatabaseConnectionException(String message) {
         super(message);
         setErrorMessage(message);
     }
@@ -58,7 +58,7 @@ public class CDMDatabaseConnectionException extends Exception {
      *
      * @param cause   the cause of this exception.
      */
-    public CDMDatabaseConnectionException(Throwable cause) {
+    public DeviceDatabaseConnectionException(Throwable cause) {
         super(cause);
     }
 

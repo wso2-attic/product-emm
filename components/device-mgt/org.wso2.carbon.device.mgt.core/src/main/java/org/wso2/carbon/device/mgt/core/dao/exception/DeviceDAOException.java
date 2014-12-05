@@ -21,7 +21,7 @@ package org.wso2.carbon.device.mgt.core.dao.exception;
 /**
  * Custom exception class for data access related exceptions
  */
-public class CDMDAOException extends Exception {
+public class DeviceDAOException extends Exception {
 
     private String message;
     private static final long serialVersionUID = 2021891706072918864L;
@@ -32,7 +32,7 @@ public class CDMDAOException extends Exception {
      * @param message error message
      * @param nestedException exception
      */
-    public CDMDAOException(String message, Exception nestedException) {
+    public DeviceDAOException(String message, Exception nestedException) {
         super(message, nestedException);
         setErrorMessage(message);
     }
@@ -43,7 +43,7 @@ public class CDMDAOException extends Exception {
      * @param message the detail message.
      * @param cause   the cause of this exception.
      */
-    public CDMDAOException(String message, Throwable cause) {
+    public DeviceDAOException(String message, Throwable cause) {
         super(message, cause);
         setErrorMessage(message);
     }
@@ -53,7 +53,7 @@ public class CDMDAOException extends Exception {
      *
      * @param message the detail message.
      */
-    public CDMDAOException(String message) {
+    public DeviceDAOException(String message) {
         super(message);
         setErrorMessage(message);
     }
@@ -63,7 +63,7 @@ public class CDMDAOException extends Exception {
      *
      * @param cause   the cause of this exception.
      */
-    public CDMDAOException(Throwable cause) {
+    public DeviceDAOException(Throwable cause) {
         super(cause);
     }
 
