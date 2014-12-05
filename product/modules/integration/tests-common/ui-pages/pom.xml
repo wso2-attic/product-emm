@@ -32,7 +32,7 @@
     <groupId>org.wso2.cdm</groupId>
     <artifactId>org.wso2.cdm.integration.ui.pages</artifactId>
     <packaging>jar</packaging>
-    <name>integration-test-ui-pages</name>
+    <name>WSO2 CDM - Integration Test Ui Pages</name>
 
     <dependencies>
 

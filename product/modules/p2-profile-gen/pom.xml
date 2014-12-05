@@ -28,6 +28,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wso2cdm-profile-gen</artifactId>
+    <name>WSO2 Connected Device Manager (CDM) - P2 Profile Gen</name>
     <packaging>pom</packaging>
 
     <build>
@@ -103,6 +104,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.kernel.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.device.mgt.server.feature:${project.version}
+                                </featureArtifactDef>
                             </featureArtifacts>
 
                         </configuration>
@@ -128,10 +132,13 @@
                                     <id>org.wso2.carbon.ndatasource.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
                                 </feature>
-
                                 <feature>
                                     <id>org.wso2.carbon.ndatasource.ui.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.server.feature.group</id>
+                                    <version>${project.version}</version>
                                 </feature>
                             </features>
                         </configuration>
