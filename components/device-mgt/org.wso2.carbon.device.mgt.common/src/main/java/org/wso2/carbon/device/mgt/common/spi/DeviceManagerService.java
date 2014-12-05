@@ -103,6 +103,13 @@ public interface DeviceManagerService {
     Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException;
 
     /**
+     * Method to update device information.
+     * @param device   Updated device information related data
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     */
+    void updateDeviceInfo(Device device) throws DeviceManagementException;
+
+    /**
      * Method to set the ownership type of a particular device. i.e. BYOD, COPE
      *
      * @param deviceId          Fully qualified device identifier

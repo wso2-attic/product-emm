@@ -75,9 +75,19 @@ public class IOSDeviceManagerService implements DeviceManagerService {
         return null;
     }
 
+<<<<<<< HEAD
     @Override
     public void setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
 
     }
+=======
+	@Override
+	public void updateDeviceInfo(Device device) throws DeviceManagementException{
+
+	}
+
+	@Override
+	public void setOwnership(String ownershipType) throws DeviceManagementException {
+>>>>>>> cc9417d8eba5a0e432e8cc9c87f3e4b64951e520
 
 }
