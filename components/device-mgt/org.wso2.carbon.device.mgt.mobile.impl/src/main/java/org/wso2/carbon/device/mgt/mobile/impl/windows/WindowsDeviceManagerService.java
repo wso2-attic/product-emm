@@ -79,6 +79,11 @@ public class WindowsDeviceManagerService implements DeviceManagerService {
 	}
 
 	@Override
+	public void updateDeviceInfo(Device device) throws DeviceManagementException{
+
+	}
+
+	@Override
 	public void setOwnership(String ownershipType) throws DeviceManagementException {
 
 	}
