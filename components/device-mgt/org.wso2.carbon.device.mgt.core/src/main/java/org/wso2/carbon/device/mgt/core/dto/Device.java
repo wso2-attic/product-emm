@@ -20,7 +20,7 @@ package org.wso2.carbon.device.mgt.core.dto;
 
 import java.io.Serializable;
 
-public class Device implements Serializable{
+public class Device implements Serializable {
 
     private static final long serialVersionUID = -8101106997837486245L;
     private Long id;
@@ -33,6 +33,15 @@ public class Device implements Serializable{
     private String ownerId;
     private String ownerShip;
     private Long tenantId;
+    private DeviceType deviceType;
+
+    public DeviceType getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
 
     public Long getId() {
         return id;
