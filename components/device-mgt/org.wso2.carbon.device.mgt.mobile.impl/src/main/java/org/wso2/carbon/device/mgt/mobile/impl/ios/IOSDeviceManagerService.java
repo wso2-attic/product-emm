@@ -17,6 +17,7 @@
 package org.wso2.carbon.device.mgt.mobile.impl.ios;
 
 import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 
@@ -44,42 +45,39 @@ public class IOSDeviceManagerService implements DeviceManagerService {
 
 	}
 
-	@Override
-	public void disEnrollDevice(String type, String deviceId)
-			throws DeviceManagementException {
+    @Override
+    public void disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
 
-	}
+    }
 
-	@Override
-	public boolean isRegistered(String type, String deviceId)
-			throws DeviceManagementException {
-		return false;
-	}
+    @Override
+    public boolean isRegistered(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return false;
+    }
 
-	@Override
-	public boolean isActive(String type, String deviceId)
-			throws DeviceManagementException {
-		return false;
-	}
+    @Override
+    public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return false;
+    }
 
-	@Override
-	public void setActive(boolean status) throws DeviceManagementException {
+    @Override
+    public void setActive(boolean status) throws DeviceManagementException {
 
-	}
+    }
 
-	@Override
-	public List<Device> getAllDeviceInfo(String type) throws DeviceManagementException {
-		return null;
-	}
+    @Override
+    public List<Device> getAllDevices(String type) throws DeviceManagementException {
+        return null;
+    }
 
-	@Override
-	public Device getDeviceInfo(String type, String deviceId)
-			throws DeviceManagementException {
-		return null;
-	}
+    @Override
+    public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return null;
+    }
 
-	@Override
-	public void setOwnership(String ownershipType) throws DeviceManagementException {
+    @Override
+    public void setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
 
-	}
+    }
+
 }
