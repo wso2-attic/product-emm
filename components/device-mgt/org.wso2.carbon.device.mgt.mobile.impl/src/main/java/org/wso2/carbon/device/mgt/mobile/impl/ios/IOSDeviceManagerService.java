@@ -26,7 +26,15 @@ import java.util.List;
  * This represents the iOS implementation of DeviceManagerService. *
  */
 public class IOSDeviceManagerService implements DeviceManagerService {
-	@Override
+
+    private static final String DEVICE_MANAGER_IOS = "ios";
+
+    @Override
+    public String getProviderType() {
+        return DEVICE_MANAGER_IOS;
+    }
+
+    @Override
 	public void enrollDevice(Device device) throws DeviceManagementException {
 
 	}

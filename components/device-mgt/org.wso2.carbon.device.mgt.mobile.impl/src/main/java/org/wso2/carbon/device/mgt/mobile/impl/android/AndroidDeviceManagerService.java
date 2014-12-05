@@ -27,7 +27,14 @@ import java.util.List;
  */
 public class AndroidDeviceManagerService implements DeviceManagerService {
 
-	@Override
+    private static final String DEVICE_MANAGER_ANDROID = "android";
+
+    @Override
+    public String getProviderType() {
+        return DEVICE_MANAGER_ANDROID;
+    }
+
+    @Override
 	public void enrollDevice(Device device) throws DeviceManagementException {
 
 	}

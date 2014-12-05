@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*  Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 *
 *  WSO2 Inc. licenses this file to you under the Apache License,
 *  Version 2.0 (the "License"); you may not use this file except
@@ -18,38 +18,38 @@
 
 package org.wso2.carbon.policy.mgt.common;
 
-public class PolicyManagementException extends Exception {
+public class FeatureManagementException extends Exception{
 
-    private String policyErrorMessage;
+    private String errorMessage;
 
-    public String getPolicyErrorMessage() {
-        return policyErrorMessage;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setPolicyErrorMessage(String policyErrorMessage) {
-        this.policyErrorMessage = policyErrorMessage;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
-    public PolicyManagementException(String message) {
+    public FeatureManagementException(String message) {
         super(message);
-        setPolicyErrorMessage(message);
+        setErrorMessage(message);
     }
 
-    public PolicyManagementException(String message, Exception ex) {
+    public FeatureManagementException(String message, Exception ex) {
         super(message, ex);
-        setPolicyErrorMessage(message);
+        setErrorMessage(message);
     }
 
-    public PolicyManagementException(String message, Throwable cause) {
+    public FeatureManagementException(String message, Throwable cause) {
         super(message, cause);
-        setPolicyErrorMessage(message);
+        setErrorMessage(message);
     }
 
-    public PolicyManagementException() {
+    public FeatureManagementException() {
         super();
     }
 
-    public PolicyManagementException(Throwable cause) {
+    public FeatureManagementException(Throwable cause) {
         super(cause);
     }
 }
