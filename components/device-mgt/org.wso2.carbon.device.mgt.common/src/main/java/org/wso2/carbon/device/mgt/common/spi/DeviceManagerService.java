@@ -92,6 +92,13 @@ public interface DeviceManagerService {
     Device getDeviceInfo(String type, String deviceId) throws DeviceManagementException;
 
     /**
+     * Method to update device information.
+     * @param device   Updated device information related data
+     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     */
+    void updateDeviceInfo(Device device) throws DeviceManagementException;
+
+    /**
      * Method to set the ownership type of a particular device. i.e. BYOD, COPE
      * @param ownershipType Type of ownership
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
