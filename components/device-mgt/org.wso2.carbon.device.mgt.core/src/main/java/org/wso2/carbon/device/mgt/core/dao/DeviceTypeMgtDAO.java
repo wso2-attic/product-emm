@@ -18,17 +18,17 @@
 
 package org.wso2.carbon.device.mgt.core.dao;
 
-import org.wso2.carbon.device.mgt.core.dao.exception.CDMDAOException;
-import org.wso2.carbon.device.mgt.core.dao.exception.CDMDatabaseConnectionException;
+import org.wso2.carbon.device.mgt.core.dao.exception.DeviceDAOException;
+import org.wso2.carbon.device.mgt.core.dao.exception.DeviceDatabaseConnectionException;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 
 import java.util.List;
 
 public interface DeviceTypeMgtDAO {
 
-    void addDeviceType(DeviceType deviceType) throws CDMDAOException, CDMDatabaseConnectionException;
+    void addDeviceType(DeviceType deviceType) throws DeviceDAOException, DeviceDatabaseConnectionException;
 
-    void updateDeviceType(DeviceType deviceType) throws CDMDAOException, CDMDatabaseConnectionException;
+    void updateDeviceType(DeviceType deviceType) throws DeviceDAOException, DeviceDatabaseConnectionException;
 
-    List<DeviceType> getDeviceTypes() throws CDMDAOException, CDMDatabaseConnectionException;
+    List<DeviceType> getDeviceTypes() throws DeviceDAOException, DeviceDatabaseConnectionException;
 }

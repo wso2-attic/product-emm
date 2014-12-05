@@ -17,4 +17,13 @@ package org.wso2.carbon.device.mgt.common;
 
 public final class DeviceManagementConstants {
 
+    /*DEVICE Manager operations*/
+     public static final String ADD_DEVICE_ENTRY = "Add device entry";
+
+    /*Data Source Configurations */
+
+    public static final class DataSourceProperties {
+        public static final String DB_CHECK_QUERY = "SELECT * FROM DM_DEVICE";
+        public static final String SECURE_VAULT_NS = "http://org.wso2.securevault/configuration";
+    }
 }
