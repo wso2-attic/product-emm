@@ -20,18 +20,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.wso2.carbon</groupId>
-        <artifactId>device-mgt</artifactId>
+        <artifactId>policy-mgt</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon</groupId>
-    <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
+    <artifactId>org.wso2.carbon.policy.evaluator</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>WSO2 Carbon - Device Management Core</name>
-    <description>WSO2 Carbon - Device Management Core</description>
+    <name>WSO2 Carbon - Policy Decision Point</name>
+    <description>WSO2 Carbon - Policy Decision Point</description>
     <url>http://wso2.org</url>
 
     <build>
@@ -50,17 +50,13 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Bundle-Version>${project.version}</Bundle-Version>
-                        <Bundle-Description>Device Management Core Bundle</Bundle-Description>
-                        <Private-Package>org.wso2.carbon.device.mgt.core.internal</Private-Package>
+                        <Bundle-Description>Policy Management Common Bundle</Bundle-Description>
+                        <Private-Package>org.wso2.carbon.policy.evaluator</Private-Package>
                         <Import-Package>
-                            org.apache.axis2.*;version="${axis2.osgi.version.range}",
-                            org.osgi.framework,
-                            org.osgi.service.component,
-                            org.apache.commons.logging,
+                            org.apache.commons.logging
                         </Import-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.core.internal,
-                            org.wso2.carbon.device.mgt.core.*
+                            org.wso2.carbon.policy.evaluator.*
                         </Export-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
@@ -81,42 +77,6 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.logging</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.utils</artifactId>
-            <version>${carbon.platform.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.ndatasource.core</artifactId>
-            <version>${carbon.platform.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.ndatasource.rdbms</artifactId>
-            <version>${carbon.platform.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.transaction.manager</artifactId>
-            <version>${carbon.platform.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.spec.javax.transaction</groupId>
-            <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-            <version>${jboss-transaction-api.version}</version>
         </dependency>
     </dependencies>
 

@@ -104,16 +104,16 @@
                                 <!--<property name="shindig.version" value="2.5.0-beta5"/>-->
 
                                 <mkdir dir="${tempdir}"/>
-                                <mkdir dir="${tempdir}/wso2emm-${project.version}/repository/components"/>
+                                <mkdir dir="${tempdir}/wso2cdm-${project.version}/repository/components"/>
                                 <unzip dest="${tempdir}">
                                     <fileset dir="target">
-                                        <include name="wso2emm-${project.version}.zip"/>
+                                        <include name="wso2cdm-${project.version}.zip"/>
                                     </fileset>
                                 </unzip>
                                 <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components"
                                       overwrite="true">
                                     <fileset
-                                            dir="${tempdir}/wso2emm-${project.version}/repository/components"></fileset>
+                                            dir="${tempdir}/wso2cdm-${project.version}/repository/components"></fileset>
                                 </copy>
                                 <!--testing -->
                                 <!--<unzip src="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar"
@@ -137,7 +137,7 @@
                                     og4j.logger.net.sf.ehcache=ERROR
                                 </concat>
 
-                                <delete file="target/wso2emm-${project.version}.zip"/>
+                                <!--<delete file="target/wso2cdm-${project.version}.zip"/>-->
                                 <delete dir="${tempdir}"/>
                             </tasks>
                         </configuration>
@@ -178,7 +178,7 @@
                                 <delete dir="target/dependency-maven-plugin-markers"/>
                                 <delete dir="target/maven-archiver"/>
                                 <delete dir="target/wso2carbon-core-${carbon.kernel.version}"/>
-                                <delete file="target/wso2emm-${project.version}.jar"/>
+                                <!--<delete file="target/wso2cdm-${project.version}.jar"/>-->
                                 <delete dir="target/sources"/>
                                 <delete dir="target/site"/>
                                 <delete dir="target/antrun"/>
@@ -197,7 +197,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.2</version>
+                <!--<version>2.5.2</version>-->
                 <executions>
                     <execution>
                         <id>1-pre-dist</id>
@@ -217,21 +217,22 @@
                         </configuration>
                     </execution>
 
-                    <!-- <execution>
-                         <id>2-dist</id>
-                         <phase>package</phase>
-                         <goals>
-                             <goal>attached</goal>
-                         </goals>
-                         <configuration>
-                             <filters>
-                                 <filter>${basedir}/src/assembly/filter.properties</filter>
-                             </filters>
-                             <descriptors>
-                                 <descriptor>${basedir}/src/assembly/bin.xml</descriptor>
-                             </descriptors>
-                         </configuration>
-                     </execution>-->
+                    <execution>
+                        <id>2-dist</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <filters>
+                                <filter>${basedir}/src/assembly/filter.properties</filter>
+                            </filters>
+                            <descriptors>
+                                <descriptor>${basedir}/src/assembly/bin.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
