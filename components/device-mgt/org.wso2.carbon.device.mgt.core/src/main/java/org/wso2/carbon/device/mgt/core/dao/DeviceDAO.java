@@ -24,7 +24,7 @@ public class DeviceDAO {
     private DataSource dataSource;
 
     public DeviceDAO(DataSource dataSource) {
-        this.dataSource = ;
+        this.dataSource = dataSource;
     }
 
 }

@@ -17,7 +17,18 @@ package org.wso2.carbon.device.mgt.core.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+import org.wso2.carbon.device.mgt.core.config.DeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
+import org.wso2.carbon.device.mgt.core.util.DeviceMgtDbCreator;
+import org.wso2.carbon.utils.CarbonUtils;
+
+import javax.naming.InitialContext;
+import javax.transaction.TransactionManager;
+import java.io.File;
 
 /**
  * @scr.component name="org.wso2.carbon.device.manager" immediate="true"
@@ -28,6 +39,7 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 public class DeviceMgtServiceComponent {
 
     private static Log log = LogFactory.getLog(DeviceMgtServiceComponent.class);
+    private final String deviceMgtSetupSql = CarbonUtils.getCarbonHome() + File.separator + "dbscripts" ;
 
     protected void setDeviceManagerService(DeviceManagerService deviceManager) {
         if (log.isDebugEnabled()) {
@@ -41,5 +53,61 @@ public class DeviceMgtServiceComponent {
         }
     }
 
+    protected void activate(ComponentContext componentContext) {
+        BundleContext bundleContext = componentContext.getBundleContext();
+
+
+        try {
+
+           /* Looks up for the JNDI registered transaction manager */
+            DeviceManagerDataHolder.getInstance().setTransactionManager(this.lookupTransactionManager());
+            /* Initializing RSS Configuration */
+            DeviceConfigurationManager.getInstance().initConfig();
+
+            String setupOption = System.getProperty("setup");
+            //if -Dsetup option specified then create rss manager tables
+            if (setupOption != null) {
+                log.info("Setup option specified");
+                DeviceMgtDbCreator dbCreator = new DeviceMgtDbCreator(DeviceManagerUtil.getDataSource());
+                dbCreator.setRssDBScriptDirectory(deviceMgtSetupSql);
+                log.info("Creating Meta Data tables");
+                dbCreator.createRegistryDatabase();
+            }
+
+        } catch (Throwable e) {
+            String msg = "Error occurred while initializing RSS Manager core bundle";
+            log.error(msg, e);
+        }
+    }
+
+    private TransactionManager lookupTransactionManager() {
+        TransactionManager transactionManager = null;
+        try {
+            Object txObj = InitialContext.doLookup(
+                    DeviceManagementConstants.STANDARD_USER_TRANSACTION_JNDI_NAME);
+            if (txObj instanceof TransactionManager) {
+                transactionManager = (TransactionManager) txObj;
+            }
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Cannot find transaction manager at: "
+                        + DeviceManagementConstants.STANDARD_USER_TRANSACTION_JNDI_NAME, e);
+            }
+            /* ignore, move onto next step */
+        }
+        if (transactionManager == null) {
+            try {
+                transactionManager = InitialContext.doLookup(
+                        DeviceManagementConstants.STANDARD_TRANSACTION_MANAGER_JNDI_NAME);
+            } catch (Exception e) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Cannot find transaction manager at: " +
+                            DeviceManagementConstants.STANDARD_TRANSACTION_MANAGER_JNDI_NAME, e);
+                }
+                /* we'll do the lookup later, maybe user provided a custom JNDI name */
+            }
+        }
+        return transactionManager;
+    }
 
 }

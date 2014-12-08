@@ -21,6 +21,7 @@ package org.wso2.carbon.device.mgt.core.dao.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceDAO;
 import org.wso2.carbon.device.mgt.core.dao.DeviceMgtDAO;
 import org.wso2.carbon.device.mgt.core.dao.exception.DeviceDAOException;
@@ -29,6 +30,7 @@ import org.wso2.carbon.device.mgt.core.dao.util.DeviceDAOUtil;
 import org.wso2.carbon.device.mgt.core.dao.util.ErrorHandler;
 import org.wso2.carbon.device.mgt.core.dto.Device;
 import org.wso2.carbon.device.mgt.core.dto.Status;
+import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -37,13 +39,17 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-public class DeviceMgtDAOImpl extends DeviceDAO implements DeviceMgtDAO {
+public class DeviceMgtDAOImpl implements DeviceMgtDAO {
 
     private static final Log log = LogFactory.getLog(DeviceMgtDAOImpl.class);
     private DataSource dataSource;
 
+    public DeviceMgtDAOImpl() {
+        this.dataSource = DeviceManagerUtil.getDataSource();
+    }
+
     @Override
-    public void addDevice(Device device) throws DeviceDAOException, DeviceDatabaseConnectionException {
+    public void addDevice(Device device) throws DeviceDAOException, DeviceManagementException {
 
         Connection conn = null;
         PreparedStatement addDeviceDBStatement = null;
@@ -78,33 +84,33 @@ public class DeviceMgtDAOImpl extends DeviceDAO implements DeviceMgtDAO {
     }
 
     @Override
-    public void updateDevice(Device device) throws DeviceDAOException, DeviceDatabaseConnectionException {
+    public void updateDevice(Device device) throws DeviceDAOException, DeviceManagementException {
 
     }
 
     @Override
     public void updateDeviceStatus(Long deviceId, Status status)
-            throws DeviceDAOException, DeviceDatabaseConnectionException {
+            throws DeviceDAOException, DeviceManagementException {
 
     }
 
     @Override
-    public void deleteDevice(Long deviceId) throws DeviceDAOException, DeviceDatabaseConnectionException {
+    public void deleteDevice(Long deviceId) throws DeviceDAOException, DeviceManagementException {
 
     }
 
     @Override
     public List<Device> getDeviceByDeviceId(Long deviceId)
-            throws DeviceDAOException, DeviceDatabaseConnectionException {
+            throws DeviceDAOException, DeviceManagementException {
         return null;
     }
 
-    private Connection getDataSourceConnection() throws DeviceDatabaseConnectionException {
+    private Connection getDataSourceConnection() throws DeviceManagementException {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            String msg = "Error while acquiring the database connection. Meta Repository Database server may down";
-            throw new DeviceDatabaseConnectionException(msg, e);
+            String msg = "Error while acquiring the database connection";
+            throw new DeviceManagementException(msg, e);
         }
     }
 }

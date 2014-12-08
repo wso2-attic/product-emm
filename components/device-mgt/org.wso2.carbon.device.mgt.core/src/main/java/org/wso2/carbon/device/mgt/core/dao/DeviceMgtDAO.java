@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.device.mgt.core.dao;
 
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.dao.exception.DeviceDAOException;
 import org.wso2.carbon.device.mgt.core.dao.exception.DeviceDatabaseConnectionException;
 import org.wso2.carbon.device.mgt.core.dto.Device;
@@ -27,14 +28,14 @@ import java.util.List;
 
 public interface DeviceMgtDAO {
 
-    void addDevice(Device device) throws DeviceDAOException, DeviceDatabaseConnectionException;
+    void addDevice(Device device) throws DeviceDAOException, DeviceManagementException;
 
-    void updateDevice(Device device) throws DeviceDAOException, DeviceDatabaseConnectionException;
+    void updateDevice(Device device) throws DeviceDAOException, DeviceManagementException;
 
-    void updateDeviceStatus(Long deviceId, Status status) throws DeviceDAOException, DeviceDatabaseConnectionException;
+    void updateDeviceStatus(Long deviceId, Status status) throws DeviceDAOException, DeviceManagementException;
 
-    void deleteDevice(Long deviceId) throws DeviceDAOException, DeviceDatabaseConnectionException;
+    void deleteDevice(Long deviceId) throws DeviceDAOException, DeviceManagementException;
 
-    List<Device> getDeviceByDeviceId(Long deviceId) throws DeviceDAOException, DeviceDatabaseConnectionException;
+    List<Device> getDeviceByDeviceId(Long deviceId) throws DeviceDAOException, DeviceManagementException;
 
 }

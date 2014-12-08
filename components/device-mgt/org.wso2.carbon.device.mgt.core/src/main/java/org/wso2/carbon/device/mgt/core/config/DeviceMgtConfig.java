@@ -14,48 +14,26 @@
  */
 package org.wso2.carbon.device.mgt.core.config;
 
-import org.wso2.carbon.rssmanager.core.environment.Environment;
-
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Represents RSS configuration.
+ * Represents Device Mgt configuration.
  */
-@XmlRootElement(name = "RSSConfiguration")
+@XmlRootElement(name = "DeviceMgtConfiguration")
 public final class DeviceMgtConfig {
 
-	private String rssProvider;
-	private Environment[] environments;
-	private RSSManagementRepository rssMgtRepository;
+    private String deviceMgtProvider;
 
-	@XmlElement(name = "ManagementRepository", nillable = false)
-	public RSSManagementRepository getRSSManagementRepository() {
-		return rssMgtRepository;
-	}
+    @XmlElement(name = "ManagementRepository", nillable = false)
+    public DeviceManagementRepository getDeviceMgtRepository() {
+        return deviceMgtRepository;
+    }
 
-	public void setRSSManagementRepository(RSSManagementRepository rssMgtRepository) {
-		this.rssMgtRepository = rssMgtRepository;
-	}
+    public void setDeviceMgtRepository(DeviceManagementRepository deviceMgtRepository) {
+        this.deviceMgtRepository = deviceMgtRepository;
+    }
 
-	@XmlElementWrapper(name = "Environments", nillable = false)
-	@XmlElement(name = "Environment", nillable = false)
-	public Environment[] getRSSEnvironments() {
-		return environments;
-	}
-
-	public void setRSSEnvironments(Environment[] environments) {
-		this.environments = environments;
-	}
-
-	@XmlElement(name = "Provider", nillable = false)
-	public String getRSSProvider() {
-		return rssProvider;
-	}
-
-	public void setRSSProvider(String rssProvider) {
-		this.rssProvider = rssProvider;
-	}
+    private DeviceManagementRepository deviceMgtRepository;
 
 }
