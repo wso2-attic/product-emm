@@ -15,14 +15,11 @@
 
 package org.wso2.carbon.device.mgt.core.config;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.core.dao.exception.DeviceMgtDAOFactory;
+import org.wso2.carbon.device.mgt.core.config.datasource.DataSourceConfig;
 import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
-import org.wso2.carbon.device.mgt.core.util.DeviceMgtDbCreator;
 import org.wso2.carbon.utils.CarbonUtils;
 import javax.sql.DataSource;
 import javax.xml.bind.JAXBContext;
@@ -34,15 +31,11 @@ import java.io.File;
  */
 public class DeviceConfigurationManager {
 
-    private DeviceMgtConfig currentDeviceConfig;
+    private DeviceManagementConfig currentDeviceConfig;
     private static DeviceConfigurationManager deviceConfigManager;
 
-    private static final Log log = LogFactory.getLog(DeviceConfigurationManager.class);
     private final String deviceMgtConfigXMLPath = CarbonUtils.getCarbonConfigDirPath() + File.separator  +
             DeviceManagementConstants.DataSourceProperties.DEVICE_CONFIG_XML_NAME;
-
-    private final String cdmSetupSql = CarbonUtils.getCarbonHome() + File.separator + "repository" + File.separator +
-            "conf" + File.separator + "dbscripts";
 
     public static DeviceConfigurationManager getInstance() {
         if (deviceConfigManager == null) {
@@ -55,33 +48,26 @@ public class DeviceConfigurationManager {
         return deviceConfigManager;
     }
 
-
     public synchronized void initConfig() throws DeviceManagementException {
         try {
             File deviceMgtConfig = new File(deviceMgtConfigXMLPath);
             Document doc = DeviceManagerUtil.convertToDocument(deviceMgtConfig);
-/*            Document doc = DeviceManagerUtil.convertToDocument(deviceMgtConfig);
-            //rss-config supports secure vault as it needs to be resolve when parsing
-            DeviceManagerUtil.secureResolveDocument(doc);*/
-            /* Un-marshaling RSS configuration */
-            JAXBContext rssContext = JAXBContext.newInstance(DeviceMgtConfig.class);
-            Unmarshaller unmarshaller = rssContext.createUnmarshaller();
-            this.currentDeviceConfig = (DeviceMgtConfig) unmarshaller.unmarshal(doc);
-            //set jndi data source name for future use
-            DeviceManagerUtil.setJndiDataSourceName(currentDeviceConfig.getDeviceMgtRepository().getDataSourceConfig().
-                    getJndiLookupDefintion().getJndiName());
-            DataSource dataSource = DeviceMgtDAOFactory.resolveDataSource(this.currentDeviceConfig.getDeviceMgtRepository()
-                            .getDataSourceConfig());
-            DeviceManagerUtil.setDataSource(dataSource);
 
+            /* Un-marshaling Device Management configuration */
+            JAXBContext rssContext = JAXBContext.newInstance(DeviceManagementConfig.class);
+            Unmarshaller unmarshaller = rssContext.createUnmarshaller();
+            this.currentDeviceConfig = (DeviceManagementConfig) unmarshaller.unmarshal(doc);
         } catch (Exception e) {
             throw new DeviceManagementException("Error occurred while initializing RSS config", e);
         }
     }
 
-
-
-    public DeviceMgtConfig getCurrentDeviceConfig() {
+    public DeviceManagementConfig getDeviceManagementConfig() {
         return currentDeviceConfig;
     }
+
+    public DataSourceConfig getDataSourceConfig() {
+        return currentDeviceConfig.getDeviceMgtRepository().getDataSourceConfig();
+    }
+
 }

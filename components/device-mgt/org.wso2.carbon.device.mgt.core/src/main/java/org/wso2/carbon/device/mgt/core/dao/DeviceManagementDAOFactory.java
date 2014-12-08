@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2012, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,37 +13,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.carbon.device.mgt.core.util;
+package org.wso2.carbon.device.mgt.core.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.config.datasource.DataSourceConfig;
 import org.wso2.carbon.device.mgt.core.config.datasource.JNDILookupDefinition;
+import org.wso2.carbon.device.mgt.core.dao.impl.DeviceDAOImpl;
+import org.wso2.carbon.device.mgt.core.dao.impl.DeviceTypeDAOImpl;
 import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
 
 import javax.sql.DataSource;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.util.Hashtable;
 import java.util.List;
 
-public final class DeviceManagerUtil {
+public class DeviceManagementDAOFactory {
 
-    private static final Log log = LogFactory.getLog(DeviceManagerUtil.class);
+    private static DataSource dataSource;
+    private static final Log log = LogFactory.getLog(DeviceManagementDAOFactory.class);
 
-    public static Document convertToDocument(File file) throws DeviceManagementException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        try {
-            DocumentBuilder docBuilder = factory.newDocumentBuilder();
-            return docBuilder.parse(file);
-        } catch (Exception e) {
-            throw new DeviceManagementException("Error occurred while parsing file, while converting " +
-                    "to a org.w3c.dom.Document : " + e.getMessage(), e);
-        }
+    public static DeviceDAO getDeviceDAO() {
+        return new DeviceDAOImpl(dataSource);
+    }
+
+    public static DeviceTypeDAO getDeviceTypeDAO() {
+        return new DeviceTypeDAOImpl(dataSource);
+    }
+
+    public static void init(DataSourceConfig config) {
+        dataSource = resolveDataSource(config);
     }
 
     /**

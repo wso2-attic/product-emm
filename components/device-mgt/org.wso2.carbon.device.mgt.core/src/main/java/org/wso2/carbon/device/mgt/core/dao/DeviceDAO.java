@@ -15,16 +15,21 @@
 
 package org.wso2.carbon.device.mgt.core.dao;
 
-import org.wso2.carbon.device.mgt.core.dao.util.DeviceDAOUtil;
+import org.wso2.carbon.device.mgt.core.dto.Device;
+import org.wso2.carbon.device.mgt.core.dto.Status;
 
-import javax.sql.DataSource;
+import java.util.List;
 
-public class DeviceDAO {
+public interface DeviceDAO {
 
-    private DataSource dataSource;
+    void addDevice(Device device) throws DeviceManagementDAOException;
 
-    public DeviceDAO(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    void updateDevice(Device device) throws DeviceManagementDAOException;
+
+    void updateDeviceStatus(Long deviceId, Status status) throws DeviceManagementDAOException;
+
+    void deleteDevice(Long deviceId) throws DeviceManagementDAOException;
+
+    List<Device> getDeviceByDeviceId(Long deviceId) throws DeviceManagementDAOException;
 
 }

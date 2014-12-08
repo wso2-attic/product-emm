@@ -15,11 +15,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.device.mgt.core.dao.exception;
 
-public class DeviceDatabaseConnectionException extends Exception {
+package org.wso2.carbon.device.mgt.core.dao;
+
+/**
+ * Custom exception class for data access related exceptions
+ */
+public class DeviceManagementDAOException extends Exception {
 
     private String message;
+    private static final long serialVersionUID = 2021891706072918864L;
 
     /**
      * Constructs a new exception with the specified detail message and nested exception.
@@ -27,7 +32,7 @@ public class DeviceDatabaseConnectionException extends Exception {
      * @param message error message
      * @param nestedException exception
      */
-    public DeviceDatabaseConnectionException(String message, Exception nestedException) {
+    public DeviceManagementDAOException(String message, Exception nestedException) {
         super(message, nestedException);
         setErrorMessage(message);
     }
@@ -38,7 +43,7 @@ public class DeviceDatabaseConnectionException extends Exception {
      * @param message the detail message.
      * @param cause   the cause of this exception.
      */
-    public DeviceDatabaseConnectionException(String message, Throwable cause) {
+    public DeviceManagementDAOException(String message, Throwable cause) {
         super(message, cause);
         setErrorMessage(message);
     }
@@ -48,7 +53,7 @@ public class DeviceDatabaseConnectionException extends Exception {
      *
      * @param message the detail message.
      */
-    public DeviceDatabaseConnectionException(String message) {
+    public DeviceManagementDAOException(String message) {
         super(message);
         setErrorMessage(message);
     }
@@ -58,7 +63,7 @@ public class DeviceDatabaseConnectionException extends Exception {
      *
      * @param cause   the cause of this exception.
      */
-    public DeviceDatabaseConnectionException(Throwable cause) {
+    public DeviceManagementDAOException(Throwable cause) {
         super(cause);
     }
 
@@ -69,4 +74,5 @@ public class DeviceDatabaseConnectionException extends Exception {
     public void setErrorMessage(String errorMessage) {
         this.message = errorMessage;
     }
+
 }

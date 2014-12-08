@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2012, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,22 +13,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.carbon.device.mgt.core;
+package org.wso2.carbon.device.mgt.core.service;
 
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+import org.wso2.carbon.core.AbstractAdmin;
 
-import java.util.Map;
+public class DeviceManagementAdminService extends AbstractAdmin {
 
-public class DeviceManagementRepository {
 
-    private Map<String, DeviceManagerService> providers;
-
-    public void addDeviceManagementProvider(DeviceManagerService provider) {
-        providers.put(provider.getProviderType(), provider);
-    }
-
-    public DeviceManagerService getDeviceManagementProvider(String type) {
-        return providers.get(type);
-    }
 
 }

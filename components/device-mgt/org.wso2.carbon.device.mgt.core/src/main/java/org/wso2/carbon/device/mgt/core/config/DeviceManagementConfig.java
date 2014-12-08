@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Represents Device Mgt configuration.
  */
 @XmlRootElement(name = "DeviceMgtConfiguration")
-public final class DeviceMgtConfig {
+public final class DeviceManagementConfig {
 
     private String deviceMgtProvider;
 

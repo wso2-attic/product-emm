@@ -61,7 +61,7 @@ public class IOSDeviceManagerService implements DeviceManagerService {
     }
 
     @Override
-    public void setActive(boolean status) throws DeviceManagementException {
+    public void setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
 
     }
 

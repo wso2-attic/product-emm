@@ -17,18 +17,20 @@ package org.wso2.carbon.device.mgt.core.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.core.config.datasource.DataSourceConfig;
+import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.dbcreator.DatabaseCreator;
 
 import javax.sql.DataSource;
+import java.io.File;
 
-public class DeviceMgtDbCreator extends DatabaseCreator {
+public final class DeviceManagementSchemaInitializer extends DatabaseCreator {
 
-    private static final Log log = LogFactory.getLog(DeviceMgtDbCreator.class);
-    private String rssDBScriptDirectory;// stores the the location of the database script that is run according to the databse type
+    private static final Log log = LogFactory.getLog(DeviceManagementSchemaInitializer.class);
+    private static final String setupSQLScriptLocation = CarbonUtils.getCarbonHome() + File.separator + "dbscripts" ;
 
-    public DeviceMgtDbCreator(DataSource dataSource) {
-        super(dataSource);
-
+    public DeviceManagementSchemaInitializer(DataSourceConfig config) {
+        super(DeviceManagerUtil.resolveDataSource(config));
     }
 
     protected String getDbScriptLocation(String databaseType) {
@@ -36,14 +38,7 @@ public class DeviceMgtDbCreator extends DatabaseCreator {
         if (log.isDebugEnabled()) {
             log.debug("Loading database script from :" + scriptName);
         }
-        return rssDBScriptDirectory.replaceFirst("DBTYPE", databaseType) + scriptName;
+        return setupSQLScriptLocation.replaceFirst("DBTYPE", databaseType) + scriptName;
     }
 
-    /**
-     * Sets database scripts directory
-     * @param rssDBScriptDirectory database scripts location
-     */
-    public void setRssDBScriptDirectory(String rssDBScriptDirectory) {
-        this.rssDBScriptDirectory = rssDBScriptDirectory;
-    }
 }

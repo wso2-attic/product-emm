@@ -80,10 +80,11 @@ public interface DeviceManagerService {
      * Method to set the status indicating whether a particular device registered within CDM is enabled at a given
      * moment.
      *
+     * @param deviceId  Fully qualified device identifier
      * @param status    Indicates whether the device is active
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    void setActive(boolean status) throws DeviceManagementException;
+    void setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException;
 
     /**
      * Method to retrieve metadata of all devices registered within CDM corresponding to a particular device type.

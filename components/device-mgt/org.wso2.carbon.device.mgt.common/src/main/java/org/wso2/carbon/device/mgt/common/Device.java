@@ -22,6 +22,8 @@ public class Device {
 
     private int id;
 
+    private String type;
+
     private String description;
 
     private String name;
@@ -128,6 +130,14 @@ public class Device {
 
     public void setFeatures(List<Feature> features) {
         this.features = features;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

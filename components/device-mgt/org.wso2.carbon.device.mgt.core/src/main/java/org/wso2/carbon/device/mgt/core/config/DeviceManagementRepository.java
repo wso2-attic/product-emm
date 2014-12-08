@@ -37,4 +37,5 @@ public class DeviceManagementRepository {
 	public void setDataSourceConfig(DataSourceConfig dataSourceConfig) {
 		this.dataSourceConfig = dataSourceConfig;
 	}
+
 }
