@@ -50,7 +50,7 @@ public class DeviceManagementDAOFactory {
      * @param config data source configuration
      * @return data source resolved from the data source definition
      */
-    public static DataSource resolveDataSource(DataSourceConfig config) {
+    private static DataSource resolveDataSource(DataSourceConfig config) {
         DataSource dataSource = null;
         if (config == null) {
             throw new RuntimeException("Device Management Repository data source configuration " +

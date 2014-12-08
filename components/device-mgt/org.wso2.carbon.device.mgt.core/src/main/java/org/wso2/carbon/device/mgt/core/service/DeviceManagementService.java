@@ -32,82 +32,52 @@ public class DeviceManagementService implements DeviceManagerService {
 
     @Override
     public void enrollDevice(Device device) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(device.getType());
-        dms.enrollDevice(device);
+        DeviceManagementDataHolder.getInstance().getDeviceManager().enrollDevice(device);
     }
 
     @Override
     public void modifyEnrollment(Device device) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(device.getType());
-        dms.modifyEnrollment(device);
+        DeviceManagementDataHolder.getInstance().getDeviceManager().modifyEnrollment(device);
     }
 
     @Override
     public void disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(deviceId.getType());
-        dms.disenrollDevice(deviceId);
+        DeviceManagementDataHolder.getInstance().getDeviceManager().disenrollDevice(deviceId);
     }
 
     @Override
     public boolean isRegistered(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(deviceId.getType());
-        return dms.isRegistered(deviceId);
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().isRegistered(deviceId);
     }
 
     @Override
     public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(deviceId.getType());
-        return dms.isActive(deviceId);
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().isActive(deviceId);
     }
 
     @Override
     public void setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(deviceId.getType());
-        dms.setActive(deviceId, status);
+        DeviceManagementDataHolder.getInstance().getDeviceManager().setActive(deviceId, status);
     }
 
     @Override
     public List<Device> getAllDevices(String type) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(type);
-        return dms.getAllDevices(type);
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().getAllDevices(type);
     }
 
     @Override
     public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(deviceId.getType());
-        return dms.getDevice(deviceId);
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().getDevice(deviceId);
     }
 
     @Override
     public void updateDeviceInfo(Device device) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(device.getType());
-        dms.updateDeviceInfo(device);
+        DeviceManagementDataHolder.getInstance().getDeviceManager().updateDeviceInfo(device);
     }
 
     @Override
     public void setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
-        DeviceManagerService dms =
-                DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                        getDeviceManagementProvider(deviceId.getType());
-        dms.setOwnership(deviceId, ownershipType);
+        DeviceManagementDataHolder.getInstance().getDeviceManager().setOwnership(deviceId, ownershipType);
     }
 
 }

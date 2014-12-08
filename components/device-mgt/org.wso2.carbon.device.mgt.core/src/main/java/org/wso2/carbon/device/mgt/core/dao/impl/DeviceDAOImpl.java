@@ -38,7 +38,6 @@ public class DeviceDAOImpl implements DeviceDAO {
     private DataSource dataSource;
     private static final Log log = LogFactory.getLog(DeviceDAOImpl.class);
 
-
     public DeviceDAOImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }

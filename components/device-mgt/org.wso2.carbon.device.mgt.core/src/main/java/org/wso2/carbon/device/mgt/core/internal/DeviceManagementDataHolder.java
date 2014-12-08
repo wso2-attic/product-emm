@@ -20,6 +20,7 @@
 package org.wso2.carbon.device.mgt.core.internal;
 
 import org.wso2.carbon.device.mgt.core.DeviceManagementRepository;
+import org.wso2.carbon.device.mgt.core.DeviceManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.user.core.tenant.TenantManager;
 
@@ -27,7 +28,7 @@ public class DeviceManagementDataHolder {
 
     private RealmService realmService;
     private TenantManager tenantManager;
-    private DeviceManagementRepository repository;
+    private DeviceManager deviceManager;
     private static DeviceManagementDataHolder thisInstance = new DeviceManagementDataHolder();
 
     private DeviceManagementDataHolder() {}
@@ -56,12 +57,12 @@ public class DeviceManagementDataHolder {
         return tenantManager;
     }
 
-    public DeviceManagementRepository getDeviceManagementRepository() {
-        return repository;
+    public DeviceManager getDeviceManager() {
+        return deviceManager;
     }
 
-    public void setDeviceManagementRepository(DeviceManagementRepository repository) {
-        this.repository = repository;
+    public void setDeviceManager(DeviceManager deviceManager) {
+        this.deviceManager = deviceManager;
     }
 
 }

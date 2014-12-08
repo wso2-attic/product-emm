@@ -22,7 +22,9 @@ import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 import org.wso2.carbon.device.mgt.core.DeviceManagementRepository;
+import org.wso2.carbon.device.mgt.core.DeviceManager;
 import org.wso2.carbon.device.mgt.core.config.DeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.core.config.DeviceManagementConfig;
 import org.wso2.carbon.device.mgt.core.config.datasource.DataSourceConfig;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
@@ -47,15 +49,20 @@ import org.wso2.carbon.user.core.service.RealmService;
 public class DeviceManagementServiceComponent {
 
     private static Log log = LogFactory.getLog(DeviceManagementServiceComponent.class);
+    private DeviceManagementRepository pluginRepository = new DeviceManagementRepository();
 
     protected void activate(ComponentContext componentContext) {
         try {
             /* Initializing Device Management Configuration */
             DeviceConfigurationManager.getInstance().initConfig();
-            DeviceManagementDataHolder.getInstance().setDeviceManagementRepository(new DeviceManagementRepository());
 
-            DataSourceConfig config = DeviceConfigurationManager.getInstance().getDataSourceConfig();
-            DeviceManagementDAOFactory.init(config);
+            DeviceManagementConfig config = DeviceConfigurationManager.getInstance().getDeviceManagementConfig();
+
+            DeviceManager deviceManager = new DeviceManager(config, this.getPluginRepository());
+            DeviceManagementDataHolder.getInstance().setDeviceManager(deviceManager);
+
+            DataSourceConfig dsConfig = config.getDeviceMgtRepository().getDataSourceConfig();
+            DeviceManagementDAOFactory.init(dsConfig);
 
             /* If -Dsetup option enabled then create device management database schema */
             String setupOption = System.getProperty("setup");
@@ -64,7 +71,7 @@ public class DeviceManagementServiceComponent {
                     log.debug("-Dsetup is enabled. Device management repository schema initialization is about " +
                             "to begin");
                 }
-                setupDeviceManagementSchema(config);
+                setupDeviceManagementSchema(dsConfig);
             }
 
             BundleContext bundleContext = componentContext.getBundleContext();
@@ -96,8 +103,7 @@ public class DeviceManagementServiceComponent {
         if (log.isDebugEnabled()) {
             log.debug("Setting Device Management Service");
         }
-        DeviceManagementDataHolder.getInstance().getDeviceManagementRepository().
-                addDeviceManagementProvider(deviceManager);
+        this.getPluginRepository().addDeviceManagementProvider(deviceManager);
     }
 
     /**
@@ -130,6 +136,10 @@ public class DeviceManagementServiceComponent {
             log.debug("Unsetting Realm Service");
         }
         DeviceManagementDataHolder.getInstance().setRealmService(null);
+    }
+
+    private DeviceManagementRepository getPluginRepository() {
+        return pluginRepository;
     }
 
 }
