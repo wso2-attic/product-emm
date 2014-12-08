@@ -20,15 +20,10 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.rssmanager.core.dao.RSSDAOFactory;
-import org.wso2.carbon.rssmanager.core.environment.EnvironmentManager;
-import org.wso2.carbon.rssmanager.core.environment.EnvironmentManagerFactory;
-import org.wso2.carbon.rssmanager.core.exception.RSSManagerException;
-import org.wso2.carbon.rssmanager.core.manager.adaptor.EnvironmentAdaptor;
-import org.wso2.carbon.rssmanager.core.util.RSSDbCreator;
-import org.wso2.carbon.rssmanager.core.util.RSSManagerUtil;
+import org.wso2.carbon.device.mgt.core.dao.exception.DeviceMgtDAOFactory;
+import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
+import org.wso2.carbon.device.mgt.core.util.DeviceMgtDbCreator;
 import org.wso2.carbon.utils.CarbonUtils;
-
 import javax.sql.DataSource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -39,12 +34,11 @@ import java.io.File;
  */
 public class DeviceConfigurationManager {
 
-    private RSSConfig currentRSSConfig;
+    private DeviceMgtConfig currentDeviceConfig;
     private static DeviceConfigurationManager deviceConfigManager;
 
     private static final Log log = LogFactory.getLog(DeviceConfigurationManager.class);
-    private final String rssConfigXMLPath = CarbonUtils.getCarbonConfigDirPath() + File.separator + "conf" + File
-            .separator +
+    private final String deviceMgtConfigXMLPath = CarbonUtils.getCarbonConfigDirPath() + File.separator  +
             DeviceManagementConstants.DataSourceProperties.DEVICE_CONFIG_XML_NAME;
 
     private final String cdmSetupSql = CarbonUtils.getCarbonHome() + File.separator + "repository" + File.separator +
@@ -64,41 +58,30 @@ public class DeviceConfigurationManager {
 
     public synchronized void initConfig() throws DeviceManagementException {
         try {
-            File rssConfig = new File(rssConfigXMLPath);
-            Document doc = RSSManagerUtil.convertToDocument(rssConfig);
+            File deviceMgtConfig = new File(deviceMgtConfigXMLPath);
+            Document doc = DeviceManagerUtil.convertToDocument(deviceMgtConfig);
+/*            Document doc = DeviceManagerUtil.convertToDocument(deviceMgtConfig);
             //rss-config supports secure vault as it needs to be resolve when parsing
-            RSSManagerUtil.secureResolveDocument(doc);
+            DeviceManagerUtil.secureResolveDocument(doc);*/
             /* Un-marshaling RSS configuration */
-            JAXBContext rssContext = JAXBContext.newInstance(RSSConfig.class);
+            JAXBContext rssContext = JAXBContext.newInstance(DeviceMgtConfig.class);
             Unmarshaller unmarshaller = rssContext.createUnmarshaller();
-            this.currentRSSConfig = (RSSConfig) unmarshaller.unmarshal(doc);
+            this.currentDeviceConfig = (DeviceMgtConfig) unmarshaller.unmarshal(doc);
             //set jndi data source name for future use
-            RSSManagerUtil.setJndiDataSourceName(currentRSSConfig.getRSSManagementRepository().getDataSourceConfig().
+            DeviceManagerUtil.setJndiDataSourceName(currentDeviceConfig.getDeviceMgtRepository().getDataSourceConfig().
                     getJndiLookupDefintion().getJndiName());
-            DataSource dataSource = RSSDAOFactory.resolveDataSource(this.currentRSSConfig.getRSSManagementRepository()
-                    .getDataSourceConfig());
-            RSSManagerUtil.setDataSource(dataSource);
-            String setupOption = System.getProperty("setup");
-            //if -Dsetup option specified then create rss manager tables
-            if (setupOption != null) {
-                log.info("Setup option specified");
-                RSSDbCreator dbCreator = new RSSDbCreator(dataSource);
-                dbCreator.setRssDBScriptDirectory(cdmSetupSql);
-                log.info("Creating Meta Data tables");
-                dbCreator.createRegistryDatabase();
-            }
-            //Initialization of environment manager
-            EnvironmentManager environmentManager = EnvironmentManagerFactory.getEnvironmentManager(currentRSSConfig.
-                    getRSSEnvironments());
-            environmentManager
-                    .initEnvironments(currentRSSConfig.getRSSProvider(), currentRSSConfig.getRSSManagementRepository());
-            this.adaptor = new EnvironmentAdaptor(environmentManager);
+            DataSource dataSource = DeviceMgtDAOFactory.resolveDataSource(this.currentDeviceConfig.getDeviceMgtRepository()
+                            .getDataSourceConfig());
+            DeviceManagerUtil.setDataSource(dataSource);
+
         } catch (Exception e) {
-            throw new RSSManagerException("Error occurred while initializing RSS config", e);
+            throw new DeviceManagementException("Error occurred while initializing RSS config", e);
         }
     }
 
-    public RSSConfig getCurrentRSSConfig() {
-        return currentRSSConfig;
+
+
+    public DeviceMgtConfig getCurrentDeviceConfig() {
+        return currentDeviceConfig;
     }
 }
