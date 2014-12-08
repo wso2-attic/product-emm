@@ -22,6 +22,9 @@ import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 
 import java.util.List;
 
+/**
+ * This class represents the key operations associated with persisting device type related information
+ */
 public interface DeviceTypeDAO {
 
     void addDeviceType(DeviceType deviceType) throws DeviceManagementDAOException;

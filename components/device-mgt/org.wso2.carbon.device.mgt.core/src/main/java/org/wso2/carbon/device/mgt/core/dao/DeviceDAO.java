@@ -20,6 +20,9 @@ import org.wso2.carbon.device.mgt.core.dto.Status;
 
 import java.util.List;
 
+/**
+ * This class represents the key operations associated with persisting device related information
+ */
 public interface DeviceDAO {
 
     void addDevice(Device device) throws DeviceManagementDAOException;
