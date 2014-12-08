@@ -20,18 +20,18 @@ package org.wso2.carbon.device.mgt.core;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-import static org.junit.Assert.assertEquals;
 
 public class DeviceManagementTestCase {
 
     private static final Log log = LogFactory.getLog(DeviceManagementTestCase.class);
 
-    @Test
+    @Test(groups = "device.mgt.test", description = "Testing the first test case with testng.")
     public void setUp() throws Exception {
         log.info("Testing started.");
-        assertEquals("A", "A");
+        Assert.assertEquals("A", "A");
     }
 
 }

@@ -137,17 +137,26 @@
 
 
             <!--Test dependencies-->
+<!--
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.12-beta-3</version>
                 <scope>test</scope>
             </dependency>
+-->
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
     <properties>
+        <testng.version>6.1.1</testng.version>
         <carbon.kernel.version>4.3.0-SNAPSHOT</carbon.kernel.version>
         <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
         <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
