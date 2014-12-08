@@ -24,4 +24,27 @@ public class Feature {
     private String name;
     private Object attribute;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Object getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(Object attribute) {
+        this.attribute = attribute;
+    }
 }

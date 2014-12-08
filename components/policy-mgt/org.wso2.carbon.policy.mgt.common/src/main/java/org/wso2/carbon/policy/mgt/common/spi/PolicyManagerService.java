@@ -18,7 +18,9 @@
 
 package org.wso2.carbon.policy.mgt.common.spi;
 
+import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.Policy;
+import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 
 /**
  * This interface defines the policy management which should be implemented by the plugins
@@ -35,7 +37,7 @@ public interface PolicyManagerService {
      * @param policy
      */
 
-    void addPolicyToDevice(String deviceId, String deviceType, Policy policy);
+    int addPolicyToDevice(String deviceId, String deviceType, Policy policy) throws FeatureManagementException, PolicyManagementException;
 
     /**
      * This method adds a policy to device type by the related device type plugins.
@@ -43,14 +45,14 @@ public interface PolicyManagerService {
      * @param policy
      */
 
-    void addPolicyToDeviceType(String deviceType,Policy policy);
+    int addPolicyToDeviceType(String deviceType,Policy policy) throws FeatureManagementException, PolicyManagementException;
 
     /**
      * This method adds the policy to specific role.
      * @param roleName
      * @param policy
      */
-    void addPolicyToRole(String roleName, Policy policy);
+    int addPolicyToRole(String roleName, Policy policy) throws FeatureManagementException, PolicyManagementException;
 
    // Policy getPolicy();
 
@@ -61,7 +63,7 @@ public interface PolicyManagerService {
      * @return  Policy
      */
 
-    Policy getPolicyOfDevice(String deviceId, String deviceType);
+    Policy getPolicyOfDevice(String deviceId, String deviceType) throws FeatureManagementException, PolicyManagementException;
 
     /**
      * This method returns the device type specific policy.
@@ -69,7 +71,7 @@ public interface PolicyManagerService {
      * @return  Policy
      */
 
-    Policy getPolicyOfDeviceType(String deviceType);
+    Policy getPolicyOfDeviceType(String deviceType) throws FeatureManagementException, PolicyManagementException;
 
     /**
      * This method returns the role specific policy.
@@ -77,7 +79,7 @@ public interface PolicyManagerService {
      * @return
      */
 
-    Policy getPolicyOfRole(String roleName);
+    Policy getPolicyOfRole(String roleName) throws FeatureManagementException, PolicyManagementException;
 
 
 }
