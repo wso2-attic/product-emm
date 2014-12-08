@@ -20,11 +20,64 @@ package org.wso2.carbon.policy.mgt.common.spi;
 
 import org.wso2.carbon.policy.mgt.common.Policy;
 
+/**
+ * This interface defines the policy management which should be implemented by the plugins
+ */
+
 public interface PolicyManagerService {
 
-    void addPolicy(Policy policy);
+  //  void addPolicy(Policy policy);
 
-    void addPolicy(String deviceId, String deviceType, Policy policy);
+    /**
+     * This method adds a policy per device which should be implemented by the related plugins.
+     * @param deviceId
+     * @param deviceType
+     * @param policy
+     */
 
-    void addPolicy(String deviceType,Policy policy);
+    void addPolicyToDevice(String deviceId, String deviceType, Policy policy);
+
+    /**
+     * This method adds a policy to device type by the related device type plugins.
+     * @param deviceType
+     * @param policy
+     */
+
+    void addPolicyToDeviceType(String deviceType,Policy policy);
+
+    /**
+     * This method adds the policy to specific role.
+     * @param roleName
+     * @param policy
+     */
+    void addPolicyToRole(String roleName, Policy policy);
+
+   // Policy getPolicy();
+
+    /**
+     * This method gives the device specific policy.
+     * @param deviceId
+     * @param deviceType
+     * @return  Policy
+     */
+
+    Policy getPolicyOfDevice(String deviceId, String deviceType);
+
+    /**
+     * This method returns the device type specific policy.
+     * @param deviceType
+     * @return  Policy
+     */
+
+    Policy getPolicyOfDeviceType(String deviceType);
+
+    /**
+     * This method returns the role specific policy.
+     * @param roleName
+     * @return
+     */
+
+    Policy getPolicyOfRole(String roleName);
+
+
 }

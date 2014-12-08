@@ -18,23 +18,20 @@
 
 package org.wso2.carbon.device.mgt.core;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
 
-public class DeviceManagementTestCase extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class DeviceManagementTestCase {
 
     private static final Log log = LogFactory.getLog(DeviceManagementTestCase.class);
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite() {
-        return new TestSuite(DeviceManagementTestCase.class);
+    @Test
+    public void setUp() throws Exception {
+        log.info("Testing started.");
+        assertEquals("A", "A");
     }
-
-
 
 }
