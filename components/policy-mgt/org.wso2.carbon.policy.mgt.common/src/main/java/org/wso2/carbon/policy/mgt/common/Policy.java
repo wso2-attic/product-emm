@@ -25,4 +25,27 @@ public class Policy {
     private String policyName;
     private List<Feature>  featuresList;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPolicyName() {
+        return policyName;
+    }
+
+    public void setPolicyName(String policyName) {
+        this.policyName = policyName;
+    }
+
+    public List<Feature> getFeaturesList() {
+        return featuresList;
+    }
+
+    public void setFeaturesList(List<Feature> featuresList) {
+        this.featuresList = featuresList;
+    }
 }
