@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DataSourceConfig {
 
 	private JNDILookupDefinition jndiLookupDefintion;
-	private RDBMSConfig rdbmsConfig;
 
 	@XmlElement(name = "JndiLookupDefinition", nillable = true)
 	public JNDILookupDefinition getJndiLookupDefintion() {
@@ -34,15 +33,6 @@ public class DataSourceConfig {
 
 	public void setJndiLookupDefintion(JNDILookupDefinition jndiLookupDefintion) {
 		this.jndiLookupDefintion = jndiLookupDefintion;
-	}
-
-	@XmlElement(name = "Definition", nillable = true)
-	public RDBMSConfig getRdbmsConfiguration() {
-		return rdbmsConfig;
-	}
-
-	public void setRdbmsConfiguration(RDBMSConfig rdbmsConfig) {
-		this.rdbmsConfig = rdbmsConfig;
 	}
 
 }

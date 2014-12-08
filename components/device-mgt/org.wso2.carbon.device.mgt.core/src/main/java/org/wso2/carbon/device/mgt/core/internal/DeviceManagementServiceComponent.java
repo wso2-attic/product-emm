@@ -52,15 +52,18 @@ public class DeviceManagementServiceComponent {
         try {
             /* Initializing Device Management Configuration */
             DeviceConfigurationManager.getInstance().initConfig();
+            DeviceManagementDataHolder.getInstance().setDeviceManagementRepository(new DeviceManagementRepository());
 
             DataSourceConfig config = DeviceConfigurationManager.getInstance().getDataSourceConfig();
             DeviceManagementDAOFactory.init(config);
 
-            DeviceManagementDataHolder.getInstance().setDeviceManagementRepository(new DeviceManagementRepository());
-
+            /* If -Dsetup option enabled then create device management database schema */
             String setupOption = System.getProperty("setup");
-            /* If -Dsetup option specified then create device management database schema */
             if (setupOption != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("-Dsetup is enabled. Device management repository schema initialization is about " +
+                            "to begin");
+                }
                 setupDeviceManagementSchema(config);
             }
 
@@ -75,9 +78,8 @@ public class DeviceManagementServiceComponent {
     }
 
     private void setupDeviceManagementSchema(DataSourceConfig config) throws DeviceManagementException {
-        log.info("Setup option specified");
         DeviceManagementSchemaInitializer initializer = new DeviceManagementSchemaInitializer(config);
-        log.info("Creating Meta Data tables");
+        log.info("Initializing device management repository database schema");
         try {
             initializer.createRegistryDatabase();
         } catch (Exception e) {

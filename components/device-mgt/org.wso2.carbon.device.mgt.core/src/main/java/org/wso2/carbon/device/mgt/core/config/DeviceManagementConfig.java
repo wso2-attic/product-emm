@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "DeviceMgtConfiguration")
 public final class DeviceManagementConfig {
 
-    private String deviceMgtProvider;
+    private DeviceManagementRepository deviceMgtRepository;
 
     @XmlElement(name = "ManagementRepository", nillable = false)
     public DeviceManagementRepository getDeviceMgtRepository() {
@@ -33,7 +33,5 @@ public final class DeviceManagementConfig {
     public void setDeviceMgtRepository(DeviceManagementRepository deviceMgtRepository) {
         this.deviceMgtRepository = deviceMgtRepository;
     }
-
-    private DeviceManagementRepository deviceMgtRepository;
 
 }
