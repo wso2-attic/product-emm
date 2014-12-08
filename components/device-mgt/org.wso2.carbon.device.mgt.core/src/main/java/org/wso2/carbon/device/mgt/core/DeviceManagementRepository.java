@@ -17,11 +17,16 @@ package org.wso2.carbon.device.mgt.core;
 
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DeviceManagementRepository {
 
     private Map<String, DeviceManagerService> providers;
+
+    public DeviceManagementRepository() {
+        providers = new HashMap<String, DeviceManagerService>();
+    }
 
     public void addDeviceManagementProvider(DeviceManagerService provider) {
         providers.put(provider.getProviderType(), provider);
@@ -29,6 +34,10 @@ public class DeviceManagementRepository {
 
     public DeviceManagerService getDeviceManagementProvider(String type) {
         return providers.get(type);
+    }
+
+    public Map<String, DeviceManagerService> getProviders() {
+        return providers;
     }
 
 }
