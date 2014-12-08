@@ -15,7 +15,6 @@
   -->
 
 <DeviceMgtConfiguration>
-    <!-- Supported Provider types H2|MYSQL|ORACLE|POSTGRES|SQLSERVER -->
     <ManagementRepository>
         <DataSourceConfiguration>
             <JndiLookupDefinition>
@@ -23,7 +22,5 @@
             </JndiLookupDefinition>
         </DataSourceConfiguration>
     </ManagementRepository>
-
-
 </DeviceMgtConfiguration>
 
