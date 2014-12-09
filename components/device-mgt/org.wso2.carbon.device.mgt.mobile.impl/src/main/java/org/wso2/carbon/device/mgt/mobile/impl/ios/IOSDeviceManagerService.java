@@ -31,7 +31,7 @@ public class IOSDeviceManagerService implements DeviceManagerService {
 
     @Override
     public String getProviderType() {
-        return MobileDeviceManagementConstants.MOBILE_DEVICE_TYPE_IOS;
+        return MobileDeviceManagementConstants.PlatformTypes.MOBILE_DEVICE_TYPE_IOS;
     }
 
     @Override

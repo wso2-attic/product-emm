@@ -19,10 +19,15 @@ package org.wso2.carbon.device.mgt.mobile.impl;
 /**
  * Constants used by Mobile device Management classes.
  */
-public class MobileDeviceManagementConstants {
+public final class MobileDeviceManagementConstants {
 
-	public final static String MOBILE_DEVICE_TYPE_ANDROID = "android";
-	public final static String MOBILE_DEVICE_TYPE_IOS = "ios";
-	public final static String MOBILE_DEVICE_TYPE_WINDOWS = "windows";
+    public static class PlatformTypes {
+        private PlatformTypes() {
+            throw new AssertionError();
+        }
+        public final static String MOBILE_DEVICE_TYPE_ANDROID = "android";
+        public final static String MOBILE_DEVICE_TYPE_IOS = "ios";
+        public final static String MOBILE_DEVICE_TYPE_WINDOWS = "windows";
+    }
 
 }

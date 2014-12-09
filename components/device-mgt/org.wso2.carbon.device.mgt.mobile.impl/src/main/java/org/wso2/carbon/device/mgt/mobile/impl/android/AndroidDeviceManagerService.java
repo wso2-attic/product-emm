@@ -31,7 +31,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public String getProviderType() {
-		return MobileDeviceManagementConstants.MOBILE_DEVICE_TYPE_ANDROID;
+		return MobileDeviceManagementConstants.PlatformTypes.MOBILE_DEVICE_TYPE_ANDROID;
 	}
 
 	@Override

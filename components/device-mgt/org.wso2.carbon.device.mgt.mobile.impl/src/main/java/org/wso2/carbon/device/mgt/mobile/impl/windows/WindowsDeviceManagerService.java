@@ -31,7 +31,7 @@ public class WindowsDeviceManagerService implements DeviceManagerService {
 
     @Override
     public String getProviderType() {
-        return MobileDeviceManagementConstants.MOBILE_DEVICE_TYPE_WINDOWS;
+        return MobileDeviceManagementConstants.PlatformTypes.MOBILE_DEVICE_TYPE_WINDOWS;
     }
 
     @Override
