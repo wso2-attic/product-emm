@@ -38,6 +38,7 @@ public class DeviceDAOImpl implements DeviceDAO {
     private DataSource dataSource;
     private static final Log log = LogFactory.getLog(DeviceDAOImpl.class);
 
+
     public DeviceDAOImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -60,13 +61,13 @@ public class DeviceDAOImpl implements DeviceDAO {
             stmt.setLong(4, new Date().getTime());
             stmt.setString(5, device.getOwnerShip());
             stmt.setString(6, device.getStatus().toString());
-            stmt.setLong(7, device.getDeviceType().getId());
-            stmt.setLong(8, device.getDeviceIdentificationId());
+            stmt.setString(7, device.getDeviceType());
+            stmt.setString(8, device.getDeviceIdentificationId());
             stmt.setString(9, device.getOwnerId());
             stmt.setInt(10, DeviceManagementDAOUtil.getTenantId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            String msg = "Failed to enroll device '" + device.getName() + "'";
+            String msg = "Error occurred while enrolling device '" + device.getName() + "'";
             log.error(msg, e);
             throw new DeviceManagementDAOException(msg, e);
         } finally {
