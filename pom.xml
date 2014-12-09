@@ -120,7 +120,14 @@
                 <version>${project.version}</version>
             </dependency>
 
-              <!--Osgi dependencies-->
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.policy.mgt.common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <!--Osgi dependencies-->
             <dependency>
                 <groupId>org.eclipse.osgi</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
