@@ -34,4 +34,13 @@ public final class DeviceManagementConstants {
         public static final String SECURE_VAULT_NS = "http://org.wso2.securevault/configuration";
     }
 
+    public static class MobileDeviceTypes {
+        private MobileDeviceTypes() {
+            throw new AssertionError();
+        }
+        public final static String MOBILE_DEVICE_TYPE_ANDROID = "android";
+        public final static String MOBILE_DEVICE_TYPE_IOS = "ios";
+        public final static String MOBILE_DEVICE_TYPE_WINDOWS = "windows";
+    }
+
 }
