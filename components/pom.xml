@@ -29,13 +29,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.cdmserver</groupId>
-    <artifactId>wso2cdmserver-product</artifactId>
+    <artifactId>wso2cdmserver-components</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Connected Device Manager (CDM) - Parent</name>
 
     <modules>
-	<module>modules/p2-profile-gen</module>
-        <module>modules/distribution</module>
-        <module>modules/integration</module>
+	<module>device-mgt</module>
+        <module>policy-mgt</module>
     </modules>
 </project>
