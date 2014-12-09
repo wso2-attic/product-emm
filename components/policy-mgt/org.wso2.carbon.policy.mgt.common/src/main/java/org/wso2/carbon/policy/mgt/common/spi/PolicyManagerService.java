@@ -31,7 +31,7 @@ public interface PolicyManagerService {
     /**
      * This method adds a policy to the platform
      * @param policy
-     * @return
+     * @return primary key (generated key)
      */
 
     int addPolicy(Policy policy);
@@ -41,7 +41,7 @@ public interface PolicyManagerService {
      * @param deviceId
      * @param deviceType
      * @param policy
-     * @return
+     * @return primary key (generated key)
      */
 
     int addPolicyToDevice(String deviceId, String deviceType, Policy policy) throws FeatureManagementException, PolicyManagementException;
@@ -50,7 +50,7 @@ public interface PolicyManagerService {
      * This method adds a policy to device type by the related device type plugins.
      * @param deviceType
      * @param policy
-     * @return
+     * @return primary key (generated key)
      */
 
     int addPolicyToDeviceType(String deviceType,Policy policy) throws FeatureManagementException, PolicyManagementException;
@@ -59,7 +59,7 @@ public interface PolicyManagerService {
      * This method adds the policy to specific role.
      * @param roleName
      * @param policy
-     * @return
+     * @return primary key (generated key)
      */
     int addPolicyToRole(String roleName, Policy policy) throws FeatureManagementException, PolicyManagementException;
 
