@@ -18,5 +18,40 @@
 
 package org.wso2.carbon.policy.mgt.core.internal;
 
+import org.wso2.carbon.user.core.service.RealmService;
+import org.wso2.carbon.user.core.tenant.TenantManager;
+
 public class PolicyManagementDataHolder {
+
+    private RealmService realmService;
+    private TenantManager tenantManager;
+    private static PolicyManagementDataHolder thisInstance = new PolicyManagementDataHolder();
+
+    private PolicyManagementDataHolder() {}
+
+    public static PolicyManagementDataHolder getInstance() {
+        return thisInstance;
+    }
+
+    public RealmService getRealmService() {
+        return realmService;
+    }
+
+    public void setRealmService(RealmService realmService) {
+        this.realmService = realmService;
+        this.setTenantManager(realmService);
+    }
+
+    private void setTenantManager(RealmService realmService) {
+        if (realmService == null) {
+            throw new IllegalStateException("Realm service is not initialized properly");
+        }
+        this.tenantManager = realmService.getTenantManager();
+    }
+
+    public TenantManager getTenantManager() {
+        return tenantManager;
+    }
+
+
 }

@@ -18,5 +18,21 @@
 
 package org.wso2.carbon.policy.mgt.core.dao.util;
 
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import java.util.Hashtable;
+
 public class PolicyManagementDAOUtil {
+    public static DataSource lookupDataSource(String dataSourceName, final Hashtable<Object, Object> jndiProperties) {
+        try {
+            if (jndiProperties == null || jndiProperties.isEmpty()) {
+                return (DataSource) InitialContext.doLookup(dataSourceName);
+            }
+            final InitialContext context = new InitialContext(jndiProperties);
+            return (DataSource) context.doLookup(dataSourceName);
+        } catch (Exception e) {
+            throw new RuntimeException("Error in looking up data source: " + e.getMessage(), e);
+        }
+    }
+
 }
