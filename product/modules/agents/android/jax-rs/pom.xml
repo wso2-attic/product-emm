@@ -18,12 +18,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <parent>
+        <groupId>org.wso2.cdmserver</groupId>
+        <artifactId>wso2cdmserver-parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../../../../pom.xml</relativePath>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.appserver</groupId>
-    <artifactId>android-api</artifactId>
-    <version>5.2.0</version>
-    <name>JAX-RS Basic Demo</name>
-    <description>JAX-RS Basic Demo</description>
+    <groupId>org.wso2.carbon</groupId>
+    <artifactId>cdm-android-api</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>JAX-RS Android API</name>
+    <description>JAX-RS Android API</description>
     <packaging>war</packaging>
 
     <build>
@@ -40,13 +47,10 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                     
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <warName>${project.artifactId}</warName>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
 
@@ -136,6 +140,15 @@
                 <groupId>javax.ws.rs</groupId>
                 <artifactId>jsr311-api</artifactId>
                 <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.utils</artifactId>
             </dependency>
         </dependencies>
     <properties>

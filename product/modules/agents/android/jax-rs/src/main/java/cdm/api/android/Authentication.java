@@ -16,98 +16,36 @@
 
 package cdm.api.android;
 
+
+import com.google.gson.JsonObject;
+
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.core.Response;
 
 @Path("/authenticate/")
 public class Authentication {
 
 	@POST
 	@Path("/device/")
-	@Produces("text/plain")
+	@Produces("application/json")
 	public String authenticateDevice(@FormParam("username") String username, @FormParam("password") String password) {
-		System.out.println(password+"----invoking getCustomerName, Customer id is: "+username);
-		return "Isuru Suriarachchi";
+		JsonObject result = new JsonObject();
+		result.addProperty("senderId","jwwfowrjwqporqwrpqworpq");
+		return result.toString();
 	}
 
-	//
-	//	@GET
-	//    @Path("/customers/{id}/")
-	//    public Customer getCustomer(@PathParam("id") String id) {
-	//        System.out.println("----invoking getCustomer, Customer id is: " + id);
-	//        long idNumber = Long.parseLong(id);
-	//        Customer c = customers.get(idNumber);
-	//        return c;
-	//    }
-	//
-	//    @PUT
-	//    @Path("/customers/")
-	//    public Response updateCustomer(Customer customer) {
-	//        System.out.println("----invoking updateCustomer, Customer name is: " + customer.getName());
-	//        Customer c = customers.get(customer.getId());
-	//        Response r;
-	//        if (c != null) {
-	//            customers.put(customer.getId(), customer);
-	//            r = Response.ok().build();
-	//        } else {
-	//            r = Response.notModified().build();
-	//        }
-	//
-	//        return r;
-	//    }
-	//
-	//    @POST
-	//    @Path("/customers/")
-	//    public Response addCustomer(Customer customer) {
-	//        System.out.println("----invoking addCustomer, Customer name is: " + customer.getName());
-	//        customer.setId(++currentId);
-	//
-	//        customers.put(customer.getId(), customer);
-	//
-	//        return Response.ok(customer).build();
-	//    }
-	//
-	//    // Adding a new method to demonstrate Consuming and Producing text/plain
-	//
-	//
-	//    @DELETE
-	//    @Path("/customers/{id}/")
-	//    public Response deleteCustomer(@PathParam("id") String id) {
-	//        System.out.println("----invoking deleteCustomer, Customer id is: " + id);
-	//        long idNumber = Long.parseLong(id);
-	//        Customer c = customers.get(idNumber);
-	//
-	//        Response r;
-	//        if (c != null) {
-	//            r = Response.ok().build();
-	//            customers.remove(idNumber);
-	//        } else {
-	//            r = Response.notModified().build();
-	//        }
-	//
-	//        return r;
-	//    }
-	//
-	//    @Path("/orders/{orderId}/")
-	//    public Order getOrder(@PathParam("orderId") String orderId) {
-	//        System.out.println("----invoking getOrder, Order id is: " + orderId);
-	//        long idNumber = Long.parseLong(orderId);
-	//        Order c = orders.get(idNumber);
-	//        return c;
-	//    }
-	//
-	//    final void init() {
-	//        Customer c = new Customer();
-	//        c.setName("John");
-	//        c.setId(123);
-	//        customers.put(c.getId(), c);
-	//
-	//        Order o = new Order();
-	//        o.setDescription("order 223");
-	//        o.setId(223);
-	//        orders.put(o.getId(), o);
-	//    }
+	@POST
+	@Path("/device/license")
+	public String getLicense() {
+		return "License Agreement";
+	}
 
+	@POST
+	@Path("/device/enroll")
+	public Response enrollDevice() {
+		return Response.status(201).entity("Registration Successful").build();
+	}
 }

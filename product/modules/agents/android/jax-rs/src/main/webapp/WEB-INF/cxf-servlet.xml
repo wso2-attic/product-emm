@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2011-2012 WSO2, Inc. (http://wso2.com)
+  ~ Copyright 2014 WSO2, Inc. (http://wso2.com)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -28,7 +28,18 @@
             <ref bean="serviceBean"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
-
+    <jaxrs:server id="deviceManagementService" address="/devices">
+        <jaxrs:serviceBeans>
+            <ref bean="deviceMgtServiceBean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+    <jaxrs:server id="enrollmentService" address="/enrollment">
+        <jaxrs:serviceBeans>
+            <ref bean="enrollmentServiceBean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
     <bean id="serviceBean" class="cdm.api.android.Authentication"/>
+    <bean id="deviceMgtServiceBean" class="cdm.api.android.Device"/>
+    <bean id="enrollmentServiceBean" class="cdm.api.android.Enrollment"/>
 </beans>
 
