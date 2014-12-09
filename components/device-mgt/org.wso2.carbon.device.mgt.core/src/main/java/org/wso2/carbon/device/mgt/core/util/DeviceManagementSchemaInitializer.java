@@ -34,7 +34,7 @@ public final class DeviceManagementSchemaInitializer extends DatabaseCreator {
     }
 
     protected String getDbScriptLocation(String databaseType) {
-        String scriptName = "wso2_rss_" + databaseType + ".sql";
+        String scriptName = "wso2_cdm_" + databaseType + ".sql";
         if (log.isDebugEnabled()) {
             log.debug("Loading database script from :" + scriptName);
         }

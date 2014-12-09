@@ -31,18 +31,18 @@ public class DeviceManagementService implements DeviceManagerService {
     }
 
     @Override
-    public void enrollDevice(Device device) throws DeviceManagementException {
-        DeviceManagementDataHolder.getInstance().getDeviceManager().enrollDevice(device);
+    public boolean enrollDevice(Device device) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().enrollDevice(device);
     }
 
     @Override
-    public void modifyEnrollment(Device device) throws DeviceManagementException {
-        DeviceManagementDataHolder.getInstance().getDeviceManager().modifyEnrollment(device);
+    public boolean modifyEnrollment(Device device) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().modifyEnrollment(device);
     }
 
     @Override
-    public void disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagementDataHolder.getInstance().getDeviceManager().disenrollDevice(deviceId);
+    public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().disenrollDevice(deviceId);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class DeviceManagementService implements DeviceManagerService {
     }
 
     @Override
-    public void setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
-        DeviceManagementDataHolder.getInstance().getDeviceManager().setActive(deviceId, status);
+    public boolean setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().setActive(deviceId, status);
     }
 
     @Override
@@ -71,13 +71,13 @@ public class DeviceManagementService implements DeviceManagerService {
     }
 
     @Override
-    public void updateDeviceInfo(Device device) throws DeviceManagementException {
+    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
         DeviceManagementDataHolder.getInstance().getDeviceManager().updateDeviceInfo(device);
     }
 
     @Override
-    public void setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
-        DeviceManagementDataHolder.getInstance().getDeviceManager().setOwnership(deviceId, ownershipType);
+    public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
+       return DeviceManagementDataHolder.getInstance().getDeviceManager().setOwnership(deviceId, ownershipType);
     }
 
 }

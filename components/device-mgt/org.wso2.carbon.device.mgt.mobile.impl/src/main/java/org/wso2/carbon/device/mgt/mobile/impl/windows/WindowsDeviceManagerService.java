@@ -20,6 +20,7 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+import org.wso2.carbon.device.mgt.mobile.impl.MobileDeviceManagementConstants;
 
 import java.util.List;
 
@@ -28,41 +29,40 @@ import java.util.List;
  */
 public class WindowsDeviceManagerService implements DeviceManagerService {
 
-    private static final String DEVICE_MANAGER_WINDOWS = "windows";
-
     @Override
     public String getProviderType() {
-        return DEVICE_MANAGER_WINDOWS;
+        return MobileDeviceManagementConstants.MOBILE_DEVICE_TYPE_WINDOWS;
     }
 
     @Override
-	public void enrollDevice(Device device) throws DeviceManagementException {
-
-	}
-
-	@Override
-	public void modifyEnrollment(Device device) throws DeviceManagementException {
-
-	}
+    public boolean enrollDevice(Device device) throws DeviceManagementException {
+        return true;
+    }
 
     @Override
-    public void disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
+    public boolean modifyEnrollment(Device device) throws DeviceManagementException {
+        return true;
+    }
 
+    @Override
+    public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return true;
     }
 
     @Override
     public boolean isRegistered(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return false;
+        return true;
     }
 
     @Override
-    public void setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
-
+    public boolean setActive(DeviceIdentifier deviceId, boolean status)
+            throws DeviceManagementException {
+        return true;
     }
 
     @Override
@@ -75,15 +75,15 @@ public class WindowsDeviceManagerService implements DeviceManagerService {
         return null;
     }
 
-
     @Override
-    public void setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
-
+    public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType)
+            throws DeviceManagementException {
+        return true;
     }
 
-	@Override
-	public void updateDeviceInfo(Device device) throws DeviceManagementException{
-
-	}
+    @Override
+    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
+        return true;
+    }
 
 }

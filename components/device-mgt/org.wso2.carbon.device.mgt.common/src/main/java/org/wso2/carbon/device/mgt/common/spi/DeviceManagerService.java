@@ -39,7 +39,7 @@ public interface DeviceManagerService {
      * @param device    Metadata corresponding to the device being enrolled
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    void enrollDevice(Device device) throws DeviceManagementException;
+    boolean enrollDevice(Device device) throws DeviceManagementException;
 
     /**
      * Method to modify the metadata corresponding to device enrollment
@@ -48,7 +48,7 @@ public interface DeviceManagerService {
      * @throws DeviceManagementException If some unusual behaviour is observed while modify the enrollment of a
      *                                   device
      */
-    void modifyEnrollment(Device device) throws DeviceManagementException;
+    boolean modifyEnrollment(Device device) throws DeviceManagementException;
 
     /**
      * Method to disenroll a particular device from CDM.
@@ -56,7 +56,7 @@ public interface DeviceManagerService {
      * @param deviceId  Fully qualified device identifier
      * @throws DeviceManagementException If some unusual behaviour is observed while disenrolling a device
      */
-    void disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException;
+    boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException;
 
     /**
      * Method to retrieve the status of the registration process of a particular device.
@@ -84,7 +84,7 @@ public interface DeviceManagerService {
      * @param status    Indicates whether the device is active
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    void setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException;
+    boolean setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException;
 
     /**
      * Method to retrieve metadata of all devices registered within CDM corresponding to a particular device type.
@@ -108,7 +108,7 @@ public interface DeviceManagerService {
      * @param device   Updated device information related data
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    void updateDeviceInfo(Device device) throws DeviceManagementException;
+    boolean updateDeviceInfo(Device device) throws DeviceManagementException;
 
     /**
      * Method to set the ownership type of a particular device. i.e. BYOD, COPE
@@ -117,6 +117,6 @@ public interface DeviceManagerService {
      * @param ownershipType     Type of ownership
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    void setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException;
+    boolean setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException;
 
 }
