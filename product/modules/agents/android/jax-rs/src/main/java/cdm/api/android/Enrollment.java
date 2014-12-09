@@ -21,8 +21,8 @@ import com.google.gson.JsonObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.core.dto.Device;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 
 import javax.ws.rs.*;
@@ -34,62 +34,66 @@ import javax.ws.rs.core.Response;
 @Path("/enrollment")
 public class Enrollment {
 
-	private static Log log = LogFactory.getLog(Enrollment.class);
-	@POST
-	@Consumes("application/json")
-	public Response enrollDevice() {
-		JsonObject result = new JsonObject();
-		result.addProperty("senderId","jwwfowrjwqporqwrpqworpq");
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
-		Device device = AndroidAPIUtil.convertToDeviceDTO(result);
-		try {
-			dmService.enrollDevice(null);
-		} catch (DeviceManagementException e) {
-			String msg = "Error occurred while enrolling the device";
-			log.error(msg, e);
-		}
-		return Response.status(201).entity("Registration Successful").build();
-	}
+    private static final Log log = LogFactory.getLog(Enrollment.class);
 
-	@GET
-	@Path("{id}")
-	public String isEnrolled(@PathParam("id") String id) {
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
-		try {
-			Device device = AndroidAPIUtil.convertToDeviceDTO(id);
-			dmService.isRegistered(null);
-		} catch (DeviceManagementException e) {
-			e.printStackTrace();
-		}
-		return "true";
-	}
+    @POST
+    @Consumes("application/json")
+    public Response enrollDevice() {
+        JsonObject result = new JsonObject();
+        result.addProperty("senderId", "jwwfowrjwqporqwrpqworpq");
+        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+        DeviceManagementService dmService =
+                (DeviceManagementService) context.getOSGiService(DeviceManagementService.class, null);
+        Device device = AndroidAPIUtil.convertToDeviceDTO(result);
+        try {
+            dmService.enrollDevice(device);
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while enrolling the device";
+            log.error(msg, e);
+        }
+        return Response.status(201).entity("Registration Successful").build();
+    }
 
-	@PUT
-	@Consumes("application/json")
-	@Path("{id}")
-	public Response modifyEnrollment(@PathParam("id") String id) {
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
-		try {
-			dmService.isRegistered(null);
-		} catch (DeviceManagementException e) {
-			e.printStackTrace();
-		}
-		return Response.status(201).entity("Registration Successful").build();
-	}
+    @GET
+    @Path("{id}")
+    public String isEnrolled(@PathParam("id") String id) {
+        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+        DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class, null);
+        try {
+            Device device = AndroidAPIUtil.convertToDeviceDTO(id);
+            dmService.isRegistered(null);
+        } catch (DeviceManagementException e) {
+            e.printStackTrace();
+        }
+        return "true";
+    }
 
-	@DELETE
-	@Path("{id}")
-	public Response disenrollDevice(@PathParam("id") String id) {
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
-		try {
-			dmService.isRegistered(null);
-		} catch (DeviceManagementException e) {
-			e.printStackTrace();
-		}
-		return Response.status(201).entity("Registration Successful").build();
-	}
+    @PUT
+    @Consumes("application/json")
+    @Path("{id}")
+    public Response modifyEnrollment(@PathParam("id") String id) {
+        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+        DeviceManagementService dmService =
+                (DeviceManagementService) context.getOSGiService(DeviceManagementService.class, null);
+        try {
+            dmService.isRegistered(null);
+        } catch (DeviceManagementException e) {
+            e.printStackTrace();
+        }
+        return Response.status(201).entity("Registration Successful").build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response disenrollDevice(@PathParam("id") String id) {
+        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+        DeviceManagementService dmService =
+                (DeviceManagementService) context.getOSGiService(DeviceManagementService.class, null);
+        try {
+            dmService.isRegistered(null);
+        } catch (DeviceManagementException e) {
+            e.printStackTrace();
+        }
+        return Response.status(201).entity("Registration Successful").build();
+    }
 }
