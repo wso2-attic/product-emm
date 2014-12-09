@@ -37,8 +37,9 @@
     </parent>
 
     <modules>
-        <module>components</module>
-        <module>features</module>
+        <module>components/device-mgt</module>
+        <module>components/policy-mgt</module>
+        <module>features/device-mgt</module>
         <module>product</module>
     </modules>
 
