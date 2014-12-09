@@ -26,13 +26,9 @@ import java.util.List;
 
 public class PolicyCreator {
 
-    private Policy policy = new Policy();
+    private static Policy policy = new Policy();
 
-    public PolicyCreator() {
-        createPolicy();
-    }
-
-    private void createPolicy() {
+    public static Policy createPolicy() {
 
         Feature feature = new Feature();
         feature.setName("Camera");
@@ -45,9 +41,6 @@ public class PolicyCreator {
         policy.setFeaturesList(featureList);
         policy.setPolicyName("Camera_related_policy");
 
-    }
-
-    public Policy getPolicy() {
         return policy;
     }
 

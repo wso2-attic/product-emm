@@ -32,28 +32,24 @@ public class PolicyManagementTestCase {
 
     private static final Log log = LogFactory.getLog(PolicyManagementTestCase.class);
 
-    PolicyCreator creator = new PolicyCreator();
-    Policy policy = creator.getPolicy();
+    Policy policy = PolicyCreator.createPolicy();
 
     private PolicyManagement policyManagement = new PolicyManagement();
 
-    @Test(groups = "policy.mgt.test", description = "Testing the first test case with testng.")
-    public void testPolicy() {
-        Assert.assertEquals("A", "A");
-    }
-
 
     @Test(groups = "policy.mgt.test", description = "Testing the adding policy to a device")
-    public void testAddPolicy() {
-        try {
-            Assert.assertEquals(policyManagement.addPolicyToDevice("1212-ESDD-12ER-7890", "MD", policy), 0);
-        } catch (FeatureManagementException e) {
-            log.error("Feature management exception happened.", e);
-            Assert.fail();
-        } catch (PolicyManagementException e) {
-            log.error("Policy management exception happened.", e);
-            Assert.fail();
-        }
+    public void testAddPolicy() throws FeatureManagementException, PolicyManagementException {
+        Assert.assertEquals(policyManagement.addPolicyToDevice("1212-ESDD-12ER-7890", "MD", policy), 0);
+    }
+
+    @Test(groups = "policy.mgt.test", description = "Testing the adding policy to a device type")
+    public void testAddPolicyToDeviceType() throws FeatureManagementException, PolicyManagementException {
+        Assert.assertEquals(policyManagement.addPolicyToDeviceType("MD", policy), 0);
+    }
+
+    @Test(groups = "policy.mgt.test", description = "Testing the adding policy to a user Role")
+    public void testAddPolicyToRole() throws FeatureManagementException, PolicyManagementException {
+        Assert.assertEquals(policyManagement.addPolicyToRole("Admin", policy), 0);
     }
 
 }

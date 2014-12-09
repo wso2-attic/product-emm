@@ -28,13 +28,20 @@ import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 
 public interface PolicyManagerService {
 
-  //  void addPolicy(Policy policy);
+    /**
+     * This method adds a policy to the platform
+     * @param policy
+     * @return
+     */
+
+    int addPolicy(Policy policy);
 
     /**
      * This method adds a policy per device which should be implemented by the related plugins.
      * @param deviceId
      * @param deviceType
      * @param policy
+     * @return
      */
 
     int addPolicyToDevice(String deviceId, String deviceType, Policy policy) throws FeatureManagementException, PolicyManagementException;
@@ -43,6 +50,7 @@ public interface PolicyManagerService {
      * This method adds a policy to device type by the related device type plugins.
      * @param deviceType
      * @param policy
+     * @return
      */
 
     int addPolicyToDeviceType(String deviceType,Policy policy) throws FeatureManagementException, PolicyManagementException;
@@ -51,10 +59,16 @@ public interface PolicyManagerService {
      * This method adds the policy to specific role.
      * @param roleName
      * @param policy
+     * @return
      */
     int addPolicyToRole(String roleName, Policy policy) throws FeatureManagementException, PolicyManagementException;
 
-   // Policy getPolicy();
+    /**
+     * This method returns the policy of whole platform
+     * @return
+     */
+
+     Policy getPolicy();
 
     /**
      * This method gives the device specific policy.

@@ -25,6 +25,11 @@ import org.wso2.carbon.policy.mgt.common.spi.PolicyManagerService;
 
 public class PolicyManagement implements PolicyManagerService {
     @Override
+    public int addPolicy(Policy policy) {
+        return 0;
+    }
+
+    @Override
     public int addPolicyToDevice(String deviceId, String deviceType, Policy policy) throws FeatureManagementException, PolicyManagementException {
         return 0;
     }
@@ -37,6 +42,11 @@ public class PolicyManagement implements PolicyManagerService {
     @Override
     public int addPolicyToRole(String roleName, Policy policy) throws FeatureManagementException, PolicyManagementException {
         return 0;
+    }
+
+    @Override
+    public Policy getPolicy() {
+        return null;
     }
 
     @Override
