@@ -15,6 +15,7 @@
  */
 package org.wso2.carbon.device.mgt.core.dao.impl;
 
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
 import org.wso2.carbon.device.mgt.core.dao.DeviceTypeDAO;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
@@ -58,6 +59,11 @@ public class DeviceTypeDAOImpl implements DeviceTypeDAO {
     @Override
     public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
         return null;
+    }
+
+    @Override
+    public DeviceIdentifier getDeviceType() throws DeviceManagementDAOException {
+        return new DeviceIdentifier();
     }
 
     private Connection getConnection() throws DeviceManagementDAOException {

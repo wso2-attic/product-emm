@@ -19,6 +19,7 @@
 package org.wso2.carbon.device.mgt.core.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Device implements Serializable {
 
@@ -26,20 +27,20 @@ public class Device implements Serializable {
     private String id;
     private String description;
     private String name;
-    private Long dateOfEnrolment;
-    private Long dateOfLastUpdate;
-    private Long deviceIdentificationId;
+    private Date dateOfEnrolment;
+    private Date dateOfLastUpdate;
+    private String deviceIdentificationId;
     private Status status;
     private String ownerId;
     private String ownerShip;
-    private Long tenantId;
-    private DeviceType deviceType;
+    private int tenantId;
+    private String deviceType;
 
-    public DeviceType getDeviceType() {
+    public String getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(DeviceType deviceType) {
+    public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;
     }
 
@@ -67,27 +68,27 @@ public class Device implements Serializable {
         this.name = name;
     }
 
-    public Long getDateOfEnrolment() {
+    public Date getDateOfEnrolment() {
         return dateOfEnrolment;
     }
 
-    public void setDateOfEnrolment(Long dateOfEnrolment) {
+    public void setDateOfEnrolment(Date dateOfEnrolment) {
         this.dateOfEnrolment = dateOfEnrolment;
     }
 
-    public Long getDateOfLastUpdate() {
+    public Date getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public void setDateOfLastUpdate(Long dateOfLastUpdate) {
+    public void setDateOfLastUpdate(Date dateOfLastUpdate) {
         this.dateOfLastUpdate = dateOfLastUpdate;
     }
 
-    public Long getDeviceIdentificationId() {
+    public String getDeviceIdentificationId() {
         return deviceIdentificationId;
     }
 
-    public void setDeviceIdentificationId(Long deviceIdentificationId) {
+    public void setDeviceIdentificationId(String deviceIdentificationId) {
         this.deviceIdentificationId = deviceIdentificationId;
     }
 
@@ -115,11 +116,11 @@ public class Device implements Serializable {
         this.ownerId = ownerId;
     }
 
-    public Long getTenantId() {
+    public int getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(Long tenantId) {
+    public void setTenantId(int tenantId) {
         this.tenantId = tenantId;
     }
 }

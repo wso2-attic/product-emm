@@ -19,6 +19,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.core.dto.Device;
+import org.wso2.carbon.device.mgt.core.dto.DeviceType;
+import org.wso2.carbon.device.mgt.core.dto.Status;
 import org.wso2.carbon.device.mgt.core.internal.DeviceManagementDataHolder;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.tenant.TenantManager;
@@ -97,6 +100,21 @@ public final class DeviceManagementDAOUtil {
         } catch (Exception e) {
             throw new RuntimeException("Error in looking up data source: " + e.getMessage(), e);
         }
+    }
+
+    public static Device convertDevice(org.wso2.carbon.device.mgt.common.Device
+                                               device) throws DeviceManagementDAOException {
+        Device deviceBO = new Device();
+        deviceBO.setDescription(device.getDescription());
+        deviceBO.setName(device.getName());
+        deviceBO.setDateOfEnrolment(device.getDateOfEnrolment());
+        deviceBO.setDateOfLastUpdate(device.getDateOfLastUpdate());
+        deviceBO.setStatus(Status.valueOf(String.valueOf(device.isStatus())));
+        deviceBO.setOwnerId(device.getOwner());
+        deviceBO.setOwnerShip(device.getOwnership());
+        deviceBO.setTenantId(DeviceManagementDAOUtil.getTenantId());
+        deviceBO.setDeviceType(device.getType());
+        return deviceBO;
     }
 
 }

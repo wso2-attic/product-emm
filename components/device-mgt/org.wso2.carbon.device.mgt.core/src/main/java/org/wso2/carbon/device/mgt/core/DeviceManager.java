@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2012, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.wso2.carbon.device.mgt.core.dao.DeviceDAO;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dao.DeviceTypeDAO;
+import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
 
 import java.util.List;
 
@@ -52,7 +53,8 @@ public class DeviceManager implements DeviceManagerService {
                 this.getPluginRepository().getDeviceManagementProvider(device.getType());
         boolean status = dms.enrollDevice(device);
         try {
-            this.getDeviceDAO().addDevice(device);
+            this.getDeviceTypeDAO().getDeviceType();
+            this.getDeviceDAO().addDevice(DeviceManagementDAOUtil.convertDevice(device));
         } catch (DeviceManagementDAOException e) {
             throw new DeviceManagementException("Error occurred while enrolling the device '" +
                     device.getId() + "'", e);
@@ -66,7 +68,7 @@ public class DeviceManager implements DeviceManagerService {
                 this.getPluginRepository().getDeviceManagementProvider(device.getType());
         boolean status = dms.modifyEnrollment(device);
         try {
-            this.getDeviceDAO().updateDevice(device);
+            this.getDeviceDAO().updateDevice(DeviceManagementDAOUtil.convertDevice(device));
         } catch (DeviceManagementDAOException e) {
             throw new DeviceManagementException("Error occurred while modifying the device '" +
                     device.getId() + "'", e);

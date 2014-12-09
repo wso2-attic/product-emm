@@ -17,12 +17,6 @@ package org.wso2.carbon.device.mgt.common;
 
 public final class DeviceManagementConstants {
 
-    /*DEVICE Manager operations*/
-    public static final String ADD_DEVICE_ENTRY = "Add device entry";
-    public static final String STANDARD_TRANSACTION_MANAGER_JNDI_NAME = "java:comp/TransactionManager";
-    public static final String STANDARD_USER_TRANSACTION_JNDI_NAME = "java:comp/UserTransaction";
-    /*Data Source Configurations */
-
     public static final class DataSourceProperties {
         private DataSourceProperties() {
             throw new AssertionError();
