@@ -17,9 +17,8 @@
 package cdm.api.android.util;
 
 import com.google.gson.JsonObject;
-import org.wso2.carbon.device.mgt.core.dto.Device;
-import org.wso2.carbon.device.mgt.core.dto.DeviceType;
-import org.wso2.carbon.device.mgt.mobile.impl.MobileDeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 
 /**
  *  AndroidAPIUtil class provides utility function used by Android REST-API classes.
@@ -35,7 +34,7 @@ public class AndroidAPIUtil {
 		Device device = new Device();
 		DeviceType type = new DeviceType();
 		device.setId(deviceId);
-		type.setName(MobileDeviceManagementConstants.MOBILE_DEVICE_TYPE_ANDROID);
+		type.setName(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		device.setDeviceType(type);
 		return device;
 	}
