@@ -27,7 +27,7 @@ public class Device implements Serializable {
     private String id;
     private String description;
     private String name;
-    private Date dateOfEnrolment;
+    private Date dateOfEnrollment;
     private Date dateOfLastUpdate;
     private String deviceIdentificationId;
     private Status status;
@@ -68,12 +68,12 @@ public class Device implements Serializable {
         this.name = name;
     }
 
-    public Date getDateOfEnrolment() {
-        return dateOfEnrolment;
+    public Date getDateOfEnrollment() {
+        return dateOfEnrollment;
     }
 
-    public void setDateOfEnrolment(Date dateOfEnrolment) {
-        this.dateOfEnrolment = dateOfEnrolment;
+    public void setDateOfEnrollment(Date dateOfEnrollment) {
+        this.dateOfEnrollment = dateOfEnrollment;
     }
 
     public Date getDateOfLastUpdate() {

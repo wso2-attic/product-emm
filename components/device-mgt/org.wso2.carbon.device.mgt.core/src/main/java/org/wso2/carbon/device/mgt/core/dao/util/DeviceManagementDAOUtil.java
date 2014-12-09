@@ -107,7 +107,7 @@ public final class DeviceManagementDAOUtil {
         Device deviceBO = new Device();
         deviceBO.setDescription(device.getDescription());
         deviceBO.setName(device.getName());
-        deviceBO.setDateOfEnrolment(device.getDateOfEnrolment());
+        deviceBO.setDateOfEnrollment(device.getDateOfEnrolment());
         deviceBO.setDateOfLastUpdate(device.getDateOfLastUpdate());
         deviceBO.setStatus(Status.valueOf(String.valueOf(device.isStatus())));
         deviceBO.setOwnerId(device.getOwner());
