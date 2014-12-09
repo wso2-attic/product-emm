@@ -18,9 +18,9 @@ package org.wso2.carbon.device.mgt.mobile.impl.ios;
 
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.impl.MobileDeviceManagementConstants;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class IOSDeviceManagerService implements DeviceManagerService {
 
     @Override
     public String getProviderType() {
-        return MobileDeviceManagementConstants.PlatformTypes.MOBILE_DEVICE_TYPE_IOS;
+        return DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_IOS;
     }
 
     @Override

@@ -18,9 +18,9 @@ package org.wso2.carbon.device.mgt.mobile.impl.android;
 
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.impl.MobileDeviceManagementConstants;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public String getProviderType() {
-		return MobileDeviceManagementConstants.PlatformTypes.MOBILE_DEVICE_TYPE_ANDROID;
+		return DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID;
 	}
 
 	@Override

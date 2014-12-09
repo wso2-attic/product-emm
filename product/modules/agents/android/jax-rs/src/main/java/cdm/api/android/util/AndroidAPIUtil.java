@@ -19,7 +19,7 @@ package cdm.api.android.util;
 import com.google.gson.JsonObject;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.mobile.impl.MobileDeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 
 
 /**
@@ -29,7 +29,7 @@ public class AndroidAPIUtil {
 
 	public static Device convertToDeviceObject(JsonObject json){
 		Device device = new Device();
-		device.setType(MobileDeviceManagementConstants.PlatformTypes.MOBILE_DEVICE_TYPE_ANDROID);
+		device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		device.setName("Test Device");
 		device.setOwner("harshan");
 		return device;
@@ -38,7 +38,7 @@ public class AndroidAPIUtil {
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId){
 		DeviceIdentifier identifier = new DeviceIdentifier();
 		identifier.setId(deviceId);
-		identifier.setType(MobileDeviceManagementConstants.PlatformTypes.MOBILE_DEVICE_TYPE_ANDROID);
+		identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		return identifier;
 	}
 }
