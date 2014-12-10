@@ -27,18 +27,19 @@ import java.io.File;
 public final class DeviceManagementSchemaInitializer extends DatabaseCreator {
 
     private static final Log log = LogFactory.getLog(DeviceManagementSchemaInitializer.class);
-    private static final String setupSQLScriptLocation = CarbonUtils.getCarbonHome() + File.separator + "dbscripts" ;
+    private static final String setupSQLScriptBaseLocation =
+            CarbonUtils.getCarbonHome() + File.separator + "dbscripts" + File.separator + "cdm" + File.separator;
 
     public DeviceManagementSchemaInitializer(DataSourceConfig config) {
         super(DeviceManagerUtil.resolveDataSource(config));
     }
 
     protected String getDbScriptLocation(String databaseType) {
-        String scriptName = "wso2_cdm_" + databaseType + ".sql";
+        String scriptName = databaseType + ".sql";
         if (log.isDebugEnabled()) {
             log.debug("Loading database script from :" + scriptName);
         }
-        return setupSQLScriptLocation.replaceFirst("DBTYPE", databaseType) + scriptName;
+        return setupSQLScriptBaseLocation.replaceFirst("DBTYPE", databaseType) + scriptName;
     }
 
 }

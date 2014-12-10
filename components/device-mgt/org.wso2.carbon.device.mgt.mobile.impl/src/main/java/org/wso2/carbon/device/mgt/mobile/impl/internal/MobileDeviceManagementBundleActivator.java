@@ -26,9 +26,9 @@ import org.wso2.carbon.device.mgt.mobile.impl.android.AndroidDeviceManagerServic
 import org.wso2.carbon.device.mgt.mobile.impl.ios.IOSDeviceManagerService;
 import org.wso2.carbon.device.mgt.mobile.impl.windows.WindowsDeviceManagerService;
 
-public class MobileDeviceManagementServiceComponent implements BundleActivator {
+public class MobileDeviceManagementBundleActivator implements BundleActivator {
 
-	private static final Log log = LogFactory.getLog(MobileDeviceManagementServiceComponent.class);
+	private static final Log log = LogFactory.getLog(MobileDeviceManagementBundleActivator.class);
 	private ServiceRegistration androidServiceRegRef;
 	private ServiceRegistration iOSServiceRegRef;
 	private ServiceRegistration windowsServiceRegRef;
