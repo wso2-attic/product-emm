@@ -21,10 +21,12 @@ import com.google.gson.JsonObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -42,9 +44,18 @@ public class Enrollment {
 		boolean result = false;
 		int status = 0;
 		String msg = "";
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context
-				.getOSGiService(DeviceManagementService.class, null);
+		DeviceManagementService dmService;
+		try {
+			PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+
+			dmService = (DeviceManagementService) ctx
+					.getOSGiService(DeviceManagementService.class, null);
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
 		Device device = AndroidAPIUtil.convertToDeviceObject(null);
 		try {
 			result = dmService.enrollDevice(device);
