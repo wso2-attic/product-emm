@@ -1,17 +1,17 @@
-/*
- ~ Copyright (c) 2014, WSO2 Inc. (http://wso2.com/) All Rights Reserved.
- ~
- ~ Licensed under the Apache License, Version 2.0 (the "License");
- ~ you may not use this file except in compliance with the License.
- ~ You may obtain a copy of the License at
- ~
- ~      http://www.apache.org/licenses/LICENSE-2.0
- ~
- ~ Unless required by applicable law or agreed to in writing, software
- ~ distributed under the License is distributed on an "AS IS" BASIS,
- ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- ~ See the License for the specific language governing permissions and
- ~ limitations under the License.
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.wso2.cdm.agent.utils;
@@ -37,12 +37,14 @@ public class CommonUtilities {
 	public static String SERVER_PROTOCOL = "http://";
 	public static String API_VERSION = "1.0.0";
 	
-	public static String SERVER_APP_ENDPOINT = "/emm/api/";
+	public static String SERVER_APP_ENDPOINT = "/cdm-android-api/";
+	public static String SERVER_AUTHENTICATION_ENDPOINT="register/authenticate/device";
+	public static String LICENSE_ENDPOINT = "register/authenticate/device/license";
+	public static String REGISTER_ENDPOINT = "enrollment/authenticate/device/enroll";
+	
 	public static String OAUTH_ENDPOINT = "/oauth2/token";
 	public static String SENDER_ID_ENDPOINT = "devices/sender_id/";
 	public static String IS_REGISTERED_ENDPOINT = "devices/isregistered/";
-	public static String LICENSE_ENDPOINT = "devices/license/";
-	public static String REGISTER_ENDPOINT = "devices/register/";
 	public static String UNREGISTER_ENDPOINT = "devices/unregister/";
 	public static String NOTIFICATION_ENDPOINT = "notifications/pendingOperations/";
 	
@@ -82,8 +84,6 @@ public class CommonUtilities {
 
 	public static void setServerURL(String serverIP) {
 		SERVER_IP = serverIP;
-		/*SERVER_URL = SERVER_PROTOCOL + sERVER_URL + ":" + SERVER_PORT
-				+ "/mdm/api/";*/
 		SERVER_URL = SERVER_PROTOCOL + serverIP + ":" + SERVER_PORT
 				+SERVER_APP_ENDPOINT;
 		
