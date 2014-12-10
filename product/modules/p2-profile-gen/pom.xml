@@ -107,6 +107,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.device.mgt.server.feature:${project.version}
                                 </featureArtifactDef>
+				<featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.device.mgt.mobile.feature:${project.version}
+                                </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.webapp.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
@@ -159,6 +162,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.server.feature.group</id>
+                                    <version>${project.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.feature.group</id>
                                     <version>${project.version}</version>
                                 </feature>
                                 <feature>
