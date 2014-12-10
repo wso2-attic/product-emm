@@ -84,10 +84,10 @@ public class DeviceManager implements DeviceManagerService {
     }
 
     @Override
-    public boolean isRegistered(DeviceIdentifier deviceId) throws DeviceManagementException {
+    public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
         DeviceManagerService dms =
                 this.getPluginRepository().getDeviceManagementProvider(deviceId.getType());
-        return dms.isRegistered(deviceId);
+        return dms.isEnrolled(deviceId);
     }
 
     @Override
