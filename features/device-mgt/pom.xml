@@ -38,6 +38,7 @@
 
     <modules>
         <module>org.wso2.carbon.device.mgt.server.feature</module>
+	<module>org.wso2.carbon.device.mgt.mobile.feature</module>
     </modules>
 
 </project>
