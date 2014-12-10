@@ -72,26 +72,30 @@ public class Enrollment {
 	@Consumes("application/json")
 	@Path("{id}")
 	public Response modifyEnrollment(@PathParam("id") String id) {
+		boolean status = false;
 		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
 		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
 		try {
-			dmService.isRegistered(null);
+			status = dmService.isRegistered(null);
 		} catch (DeviceManagementException e) {
-			e.printStackTrace();
+			String msg = "Error occurred while modifying enrollment of the device";
+			log.error(msg, e);
 		}
-		return Response.status(201).entity("Registration Successful").build();
+		return Response.status(201).entity(status).build();
 	}
 
 	@DELETE
 	@Path("{id}")
 	public Response disenrollDevice(@PathParam("id") String id) {
+		boolean status = false;
 		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
 		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
 		try {
-			dmService.isRegistered(null);
+			status = dmService.isRegistered(null);
 		} catch (DeviceManagementException e) {
-			e.printStackTrace();
+			String msg = "Error occurred while disenrolling the device";
+			log.error(msg, e);
 		}
-		return Response.status(201).entity("Registration Successful").build();
+		return Response.status(201).entity(status).build();
 	}
 }
