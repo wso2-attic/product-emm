@@ -17,6 +17,7 @@ package org.wso2.cdm.agent;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.cdm.agent.R;
@@ -28,9 +29,9 @@ import org.wso2.cdm.agent.services.AlarmReceiver;
 import org.wso2.cdm.agent.utils.CommonDialogUtils;
 import org.wso2.cdm.agent.utils.CommonUtilities;
 import org.wso2.cdm.agent.utils.HTTPConnectorUtils;
+import org.wso2.cdm.agent.utils.Preference;
 import org.wso2.cdm.agent.utils.ServerUtils;
-import android.annotation.SuppressLint;
-import android.app.Activity;
+
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -64,6 +65,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gcm.GCMRegistrar;
 
+/**
+ * Activity that captures username, password and device ownership details
+ */
 public class AuthenticationActivity extends SherlockActivity implements APIAccessCallBack,
                                                             APIResultCallBack {
 
@@ -73,19 +77,16 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	EditText username;
 	EditText txtDomain;
 	EditText password;
-	// TextView txtLoadingEULA;
 	RadioButton radioBYOD, radioCOPE;
 	String deviceType;
 	Context context;
-	String isAgreed = "";
 	String senderId = "";
-	String eula = "";
 	String usernameForRegister = "";
+	String usernameVal;
+	String passwordVal;
 	ProgressDialog progressDialog;
 	AlertDialog.Builder alertDialog;
-	private final int TAG_BTN_AUTHENTICATE = 0;
 
-	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,10 +95,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		getSupportActionBar().setCustomView(R.layout.custom_sherlock_bar);
 		getSupportActionBar().setTitle(R.string.empty_app_title);
 		View homeIcon =
-		                findViewById(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-		                                                                                   ? android.R.id.home
-		                                                                                   : R.id.abs__home);
-		((View) homeIcon.getParent()).setVisibility(View.GONE);
+		                (View) findViewById(
+		                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+		                                                                                          ? android.R.id.home
+		                                                                                          : R.id.abs__home).getParent();
+		homeIcon.setVisibility(View.GONE);
 
 		context = AuthenticationActivity.this;
 		deviceType = getResources().getString(R.string.device_enroll_type_byod);
@@ -110,8 +112,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		txtDomain.requestFocus();
 		authenticate = (Button) findViewById(R.id.btnRegister);
 		authenticate.setEnabled(false);
-		authenticate.setTag(TAG_BTN_AUTHENTICATE);
 		authenticate.setOnClickListener(onClickAuthenticate);
+		// change button color background till user enters a valid input
 		authenticate.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		authenticate.setTextColor(getResources().getColor(R.color.black));
 
@@ -155,19 +157,37 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		public void onClick(View view) {
 			if (username.getText() != null && !username.getText().toString().trim().equals("") &&
 			    password.getText() != null && !password.getText().toString().trim().equals("")) {
+
+				passwordVal = password.getText().toString().trim();
+				if (txtDomain.getText() != null &&
+				    !txtDomain.getText().toString().trim().equals("")) {
+					usernameVal =
+					              username.getText().toString().trim() + "@" +
+					                      txtDomain.getText().toString().trim();
+
+				} else {
+					usernameVal = username.getText().toString().trim();
+				}
+
 				if (radioBYOD.isChecked()) {
 					deviceType = getResources().getString(R.string.device_enroll_type_byod);
 				} else {
 					deviceType = getResources().getString(R.string.device_enroll_type_cope);
 				}
-				AlertDialog.Builder builder = new AlertDialog.Builder(AuthenticationActivity.this);
-				builder.setMessage(getResources().getString(R.string.dialog_init_middle) + " " +
-				                           deviceType + " " +
-				                           getResources().getString(R.string.dialog_init_end))
-				       .setNegativeButton(getResources().getString(R.string.info_label_rooted_answer_yes),
-				                          dialogClickListener)
-				       .setPositiveButton(getResources().getString(R.string.info_label_rooted_answer_no),
-				                          dialogClickListener).show();
+				alertDialog =
+				              CommonDialogUtils.getAlertDialogWithTwoButtonAndTitle(context,
+				                                                                    getResources().getString(R.string.dialog_init_device_type),
+				                                                                    getResources().getString(R.string.dialog_init_middle) +
+				                                                                            " " +
+				                                                                            deviceType +
+				                                                                            " " +
+				                                                                            getResources().getString(R.string.dialog_init_end),
+				                                                                    getResources().getString(R.string.yes),
+
+				                                                                    getResources().getString(R.string.no),
+				                                                                    dialogClickListener,
+				                                                                    dialogClickListener);
+				alertDialog.show();
 			} else {
 				if (username.getText() != null && !username.getText().toString().trim().equals("")) {
 					Toast.makeText(context,
@@ -182,6 +202,265 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 		}
 	};
+
+	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					dialog.dismiss();
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.dismiss();
+					startAuthentication();
+					break;
+			}
+		}
+	};
+
+	/**
+	 * Start authentication process.
+	 */
+	public void startAuthentication() {
+		Preference.put(context, getResources().getString(R.string.shared_pref_reg_type), deviceType);
+		// Check network connection availability before calling the API.
+		if (PhoneState.isNetworkAvailable(context)) {
+			authenticate();
+		} else {
+			CommonDialogUtils.stopProgressDialog(progressDialog);
+			CommonDialogUtils.showNetworkUnavailableMessage(context);
+		}
+
+	}
+
+	/**
+	 * Communicating with the server to authenticate user.
+	 */
+	private void authenticate() {
+
+		AsyncTask<Void, Void, Map<String, String>> mLicenseTask =
+		                                                          new AsyncTask<Void, Void, Map<String, String>>() {
+
+			                                                          @Override
+			                                                          protected Map<String, String> doInBackground(Void... params) {
+				                                                          Map<String, String> response =
+				                                                                                         null;
+
+				                                                          Map<String, String> requestParametres =
+				                                                                                                  new HashMap<String, String>();
+
+				                                                          requestParametres.put("username",
+				                                                                                usernameVal);
+				                                                          requestParametres.put("password",
+				                                                                                passwordVal);
+				                                                          response =
+				                                                                     HTTPConnectorUtils.postData(context,
+				                                                                                                 CommonUtilities.SERVER_URL +
+				                                                                                                         CommonUtilities.SERVER_AUTHENTICATION_ENDPOINT,
+				                                                                                                 requestParametres);
+				                                                          return response;
+			                                                          }
+
+			                                                          @Override
+			                                                          protected void onPreExecute() {
+				                                                          progressDialog =
+				                                                                           ProgressDialog.show(context,
+				                                                                                               getResources().getString(R.string.dialog_authenticate),
+				                                                                                               getResources().getString(R.string.dialog_please_wait),
+				                                                                                               true);
+
+			                                                          };
+
+			                                                          @Override
+			                                                          protected void onPostExecute(Map<String, String> result) {
+				                                                          JSONObject response =
+				                                                                                null;
+				                                                          if (result != null) {
+					                                                          String responseStatus =
+					                                                                                  result.get("status");
+					                                                          try {
+						                                                          if (responseStatus != null) {
+							                                                          if (responseStatus.equalsIgnoreCase(CommonUtilities.REQUEST_SUCCESSFUL)) {
+								                                                          response =
+								                                                                     new JSONObject(
+								                                                                                    result.get("response"));
+								                                                          senderId =
+								                                                                     response.getString("senderId");
+								                                                          getLicense();
+							                                                          } else if (responseStatus.equalsIgnoreCase(CommonUtilities.UNAUTHORIZED_ACCESS)) {
+								                                                          CommonDialogUtils.stopProgressDialog(progressDialog);
+								                                                          alertDialog =
+								                                                                        CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+								                                                                                                                              getResources().getString(R.string.title_head_authentication_error),
+								                                                                                                                              getResources().getString(R.string.error_authentication_failed),
+								                                                                                                                              getResources().getString(R.string.button_ok),
+								                                                                                                                              dialogClickListener);
+							                                                          } else if (responseStatus.trim()
+							                                                                                   .equals(CommonUtilities.INTERNAL_SERVER_ERROR)) {
+								                                                          CommonDialogUtils.stopProgressDialog(progressDialog);
+								                                                          showInternalServerErrorMessage();
+
+							                                                          } else {
+								                                                          Log.e(TAG,
+								                                                                "Status: " +
+								                                                                        responseStatus);
+								                                                          showAuthCommonErrorMessage();
+							                                                          }
+						                                                          } else {
+							                                                          Log.e(TAG,
+							                                                                "The value of status is null in authenticate()");
+							                                                          showAuthCommonErrorMessage();
+						                                                          }
+
+					                                                          } catch (JSONException e) {
+						                                                          Log.e(TAG,
+						                                                                e.getMessage());
+						                                                          showAuthCommonErrorMessage();
+					                                                          }
+				                                                          } else {
+					                                                          Log.e(TAG,
+					                                                                "The result is null in authenticate()");
+					                                                          showAuthCommonErrorMessage();
+				                                                          }
+
+			                                                          }
+
+		                                                          };
+
+		mLicenseTask.execute();
+
+	}
+
+	/**
+	 * Initialize get device license agreement. Check if the user has already
+	 * agreed
+	 * to license agreement
+	 */
+	private void getLicense() {
+		String isAgreed =
+		                  Preference.get(context,
+		                                 getResources().getString(R.string.shared_pref_isagreed));
+		String type =
+		              Preference.get(context,
+		                             getResources().getString(R.string.shared_pref_reg_type));
+
+		// No need to display license for COPE devices
+		if (type.trim().equals(getResources().getString(R.string.device_enroll_type_byod))) {
+			if (isAgreed == null) {
+				Map<String, String> requestParams = new HashMap<String, String>();
+				requestParams.put("domain", txtDomain.getText().toString().trim());
+
+				// Get License
+				OnCancelListener cancelListener = new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+						                                                      getResources().getString(R.string.error_enrollment_failed_detail),
+						                                                      getResources().getString(R.string.error_enrollment_failed),
+						                                                      getResources().getString(R.string.button_ok),
+						                                                      null);
+
+					}
+				};
+
+				progressDialog =
+				                 CommonDialogUtils.showPrgressDialog(context,
+				                                                     getResources().getString(R.string.dialog_license_agreement),
+				                                                     getResources().getString(R.string.dialog_please_wait),
+				                                                     cancelListener);
+
+				// Check network connection availability before calling the API.
+				if (PhoneState.isNetworkAvailable(context)) {
+					getLicenseFromServer();
+				} else {
+					CommonDialogUtils.stopProgressDialog(progressDialog);
+					CommonDialogUtils.showNetworkUnavailableMessage(context);
+				}
+
+			} else {
+				loadPincodeAcitvity();
+			}
+		} else {
+			loadPincodeAcitvity();
+		}
+
+	}
+
+	/**
+	 * Retriever license agreement details from the server
+	 */
+	private void getLicenseFromServer() {
+
+		AsyncTask<Void, Void, Map<String, String>> mLicenseTask =
+		                                                          new AsyncTask<Void, Void, Map<String, String>>() {
+
+			                                                          @Override
+			                                                          protected Map<String, String> doInBackground(Void... params) {
+				                                                          Map<String, String> response =
+				                                                                                         null;
+				                                                          response =
+				                                                                     HTTPConnectorUtils.postData(context,
+				                                                                                                 CommonUtilities.SERVER_URL +
+				                                                                                                         CommonUtilities.LICENSE_ENDPOINT,
+				                                                                                                 null);
+				                                                          return response;
+			                                                          }
+
+			                                                          @Override
+			                                                          protected void onPreExecute() {
+			                                                          };
+
+			                                                          @Override
+			                                                          protected void onPostExecute(Map<String, String> result) {
+				                                                          CommonDialogUtils.stopProgressDialog(progressDialog);
+				                                                          manipulateLicenseResponse(result);
+			                                                          }
+
+		                                                          };
+
+		mLicenseTask.execute();
+
+	}
+
+	/**
+	 * Manipulates the License agreement response received from server.
+	 * 
+	 * @param result
+	 *            the result of the license agreement request
+	 */
+	private void manipulateLicenseResponse(Map<String, String> result) {
+		String responseStatus;
+		CommonDialogUtils.stopProgressDialog(progressDialog);
+		String licenseAgreement = "";
+
+		if (result != null) {
+			responseStatus = result.get(CommonUtilities.STATUS_KEY);
+			if (responseStatus.equals(CommonUtilities.REQUEST_SUCCESSFUL)) {
+				licenseAgreement = result.get("response");
+
+				if (licenseAgreement != null) {
+					Preference.put(context, getResources().getString(R.string.shared_pref_eula),
+					               licenseAgreement);
+					showAgreement(licenseAgreement, CommonUtilities.EULA_TITLE);
+				} else {
+					showErrorMessage(getResources().getString(R.string.error_enrollment_failed_detail),
+					                 getResources().getString(R.string.error_enrollment_failed));
+				}
+
+			} else if (responseStatus.equals(CommonUtilities.INTERNAL_SERVER_ERROR)) {
+				Log.e(TAG, "The result is : " + result);
+				showInternalServerErrorMessage();
+			} else {
+				showEnrollementFailedErrorMessage();
+			}
+
+		} else {
+			Log.e(TAG, "The result is null in manipulateLicenseResponse()");
+			showEnrollementFailedErrorMessage();
+		}
+	}
 
 	public void showErrorMessage(String message, String title) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -199,7 +478,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		alert.show();
 	}
 
-	public void showAlert(String message, String title) {
+	public void showAgreement(String message, String title) {
 		final Dialog dialog = new Dialog(context);
 		dialog.setContentView(R.layout.custom_terms_popup);
 		dialog.setTitle(CommonUtilities.EULA_TITLE);
@@ -218,12 +497,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SharedPreferences mainPref =
-				                             AuthenticationActivity.this.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
-				                                                                              Context.MODE_PRIVATE);
-				Editor editor = mainPref.edit();
-				editor.putString(getResources().getString(R.string.shared_pref_isagreed), "1");
-				editor.commit();
+				Preference.put(context, getResources().getString(R.string.shared_pref_isagreed),
+				               "1");
 				dialog.dismiss();
 				loadPincodeAcitvity();
 			}
@@ -253,6 +528,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		dialog.show();
 	}
 
+	private void loadPincodeAcitvity() {
+		Intent intent = new Intent(AuthenticationActivity.this, PinCodeActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(getResources().getString(R.string.intent_extra_username), usernameVal);
+		startActivity(intent);
+	}
+
 	public void cancelEntry() {
 		SharedPreferences mainPref =
 		                             context.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
@@ -272,22 +554,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		startActivity(intentIP);
 
 	}
-
-	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			switch (which) {
-				case DialogInterface.BUTTON_POSITIVE:
-					dialog.dismiss();
-					break;
-
-				case DialogInterface.BUTTON_NEGATIVE:
-					dialog.dismiss();
-					startAuthentication();
-					break;
-			}
-		}
-	};
 
 	public void showAlertSingle(String message, String title) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -333,164 +599,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	}
 
 	/**
-	 * Start Authentication.
-	 */
-	public void startAuthentication() {
-		final Context context = AuthenticationActivity.this;
-
-		SharedPreferences mainPref =
-		                             context.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
-		                                                          Context.MODE_PRIVATE);
-		Editor editor = mainPref.edit();
-		editor.putString(getResources().getString(R.string.shared_pref_reg_type), deviceType);
-		editor.commit();
-
-		// Check network connection availability before calling the API.
-		if (PhoneState.isNetworkAvailable(context)) {
-			getOauthClientInfo();
-		} else {
-			CommonDialogUtils.stopProgressDialog(progressDialog);
-			CommonDialogUtils.showNetworkUnavailableMessage(AuthenticationActivity.this);
-		}
-
-	}
-
-	private void getOauthClientInfo() {
-
-		AsyncTask<Void, Void, Map<String, String>> mLicenseTask =
-		                                                          new AsyncTask<Void, Void, Map<String, String>>() {
-
-			                                                          @Override
-			                                                          protected Map<String, String> doInBackground(Void... params) {
-				                                                          Map<String, String> response =
-				                                                                                         null;
-
-				                                                          if (txtDomain.getText() != null &&
-				                                                              !txtDomain.getText()
-				                                                                        .toString()
-				                                                                        .trim()
-				                                                                        .equals("")) {
-
-					                                                          response =
-					                                                                     HTTPConnectorUtils.getClientKey(username.getText()
-					                                                                                                             .toString()
-					                                                                                                             .trim() +
-					                                                                                                             "@" +
-					                                                                                                             txtDomain.getText()
-					                                                                                                                      .toString()
-					                                                                                                                      .trim(),
-					                                                                                                     password.getText()
-					                                                                                                             .toString()
-					                                                                                                             .trim(),
-					                                                                                                     context);
-
-				                                                          } else {
-					                                                          response =
-					                                                                     HTTPConnectorUtils.getClientKey(username.getText()
-					                                                                                                             .toString()
-					                                                                                                             .trim(),
-					                                                                                                     password.getText()
-					                                                                                                             .toString()
-					                                                                                                             .trim(),
-					                                                                                                     context);
-				                                                          }
-				                                                          return response;
-			                                                          }
-
-			                                                          @Override
-			                                                          protected void onPreExecute() {
-				                                                          progressDialog =
-				                                                                           ProgressDialog.show(AuthenticationActivity.this,
-				                                                                                               getResources().getString(R.string.dialog_authenticate),
-				                                                                                               getResources().getString(R.string.dialog_please_wait),
-				                                                                                               true);
-
-			                                                          };
-
-			                                                          @Override
-			                                                          protected void onPostExecute(Map<String, String> result) {
-				                                                          JSONObject response =
-				                                                                                null;
-				                                                          String clienKey = "";
-				                                                          String clientSecret = "";
-
-				                                                          if (result != null) {
-					                                                          String responseStatus =
-					                                                                                  result.get("status");
-					                                                          try {
-						                                                          if (responseStatus != null) {
-							                                                          if (responseStatus.equalsIgnoreCase(CommonUtilities.REQUEST_SUCCESSFUL)) {
-								                                                          response =
-								                                                                     new JSONObject(
-								                                                                                    result.get("response"));
-								                                                          clienKey =
-								                                                                     response.getString("clientkey");
-								                                                          clientSecret =
-								                                                                         response.getString("clientsecret");
-
-								                                                          SharedPreferences mainPref =
-								                                                                                       AuthenticationActivity.this.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
-								                                                                                                                                        Context.MODE_PRIVATE);
-								                                                          Editor editor =
-								                                                                          mainPref.edit();
-								                                                          editor.putString(getResources().getString(R.string.shared_pref_client_id),
-								                                                                           clienKey);
-								                                                          editor.putString(getResources().getString(R.string.shared_pref_client_secret),
-								                                                                           clientSecret);
-								                                                          editor.commit();
-
-								                                                          CommonUtilities.CLIENT_ID =
-								                                                                                      clienKey;
-								                                                          CommonUtilities.CLIENT_SECRET =
-								                                                                                          clientSecret;
-								                                                          initializeIDPLib(clienKey,
-								                                                                           clientSecret);
-							                                                          } else if (responseStatus.equalsIgnoreCase(CommonUtilities.UNAUTHORIZED_ACCESS)) {
-								                                                          CommonDialogUtils.stopProgressDialog(progressDialog);
-								                                                          alertDialog =
-								                                                                        CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-								                                                                                                                              getResources().getString(R.string.title_head_authentication_error),
-								                                                                                                                              getResources().getString(R.string.error_authentication_failed),
-								                                                                                                                              getResources().getString(R.string.button_ok),
-								                                                                                                                              dialogClickListener);
-								                                                          alertDialog.show();
-							                                                          } else if (responseStatus.trim()
-							                                                                                   .equals(CommonUtilities.INTERNAL_SERVER_ERROR)) {
-								                                                          CommonDialogUtils.stopProgressDialog(progressDialog);
-								                                                          showInternalServerErrorMessage();
-
-							                                                          } else {
-								                                                          Log.e(TAG,
-								                                                                "Status: " +
-								                                                                        responseStatus);
-								                                                          showAuthCommonErrorMessage();
-							                                                          }
-						                                                          } else {
-							                                                          Log.e(TAG,
-							                                                                "The value of status is null in getOauthClientInfo()");
-							                                                          showAuthCommonErrorMessage();
-						                                                          }
-
-					                                                          } catch (JSONException e) {
-						                                                          Log.e(TAG,
-						                                                                e.getMessage());
-						                                                          showAuthCommonErrorMessage();
-					                                                          }
-				                                                          } else {
-					                                                          Log.e(TAG,
-					                                                                "The result is null in getOauthClientInfo()");
-					                                                          showAuthCommonErrorMessage();
-				                                                          }
-
-			                                                          }
-
-		                                                          };
-
-		mLicenseTask.execute();
-
-	}
-
-	/**
 	 * Initialize the Android IDP sdk by passing user credentials,client ID and
 	 * client secret.
 	 */
@@ -523,7 +631,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		}
 	}
 
-	@SuppressLint("NewApi")
 	public void enableSubmitIfReady() {
 
 		boolean isReady = false;
@@ -611,50 +718,138 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		}
 	}
 
-	/**
-	 * Manipulates the License agreement response.
-	 * 
-	 * @param result
-	 *            the result of the license agreement request
-	 */
-	private void manipulateLicenseResponse(Map<String, String> result) {
-		String responseStatus;
+	private void showEnrollementFailedErrorMessage() {
 		CommonDialogUtils.stopProgressDialog(progressDialog);
-		Log.e("get licence", "res");
-		String licenseAgreement = "";
+		alertDialog =
+		              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+		                                                                    getResources().getString(R.string.error_enrollment_failed),
+		                                                                    getResources().getString(R.string.error_enrollment_failed_detail),
+		                                                                    getResources().getString(R.string.button_ok),
+		                                                                    senderIdFailedClickListener);
+	}
 
-		if (result != null) {
-			responseStatus = result.get(CommonUtilities.STATUS_KEY);
-			if (responseStatus.equals(CommonUtilities.REQUEST_SUCCESSFUL)) {
-				licenseAgreement = result.get("response");
+	private void managePushNotification(String mode, float interval, Editor editor) {
+		if (mode.trim().toUpperCase().contains("LOCAL")) {
+			CommonUtilities.LOCAL_NOTIFICATIONS_ENABLED = true;
+			CommonUtilities.GCM_ENABLED = false;
+			String androidID = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+			// if (senderId == null || senderId.equals("")) {
+			editor.putString(getResources().getString(R.string.shared_pref_regId), androidID);
+			// }
+			editor.commit();
+
+			startLocalNotification(interval);
+		} else if (mode.trim().toUpperCase().contains("GCM")) {
+			CommonUtilities.LOCAL_NOTIFICATIONS_ENABLED = false;
+			CommonUtilities.GCM_ENABLED = true;
+			// editor.commit();
+			GCMRegistrar.register(context, CommonUtilities.SENDER_ID);
+		}
+
+		// if (senderId!=null && !senderId.equals("")) {
+		// CommonUtilities.GCM_ENABLED = true;
+		// GCMRegistrar.register(context, CommonUtilities.SENDER_ID);
+		// }
+	}
+
+	@Override
+	public void onAPIAccessRecive(String status) {
+		if (status != null) {
+			if (status.trim().equals(CommonUtilities.REQUEST_SUCCESSFUL)) {
 
 				SharedPreferences mainPref =
-				                             AuthenticationActivity.this.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
-				                                                                              Context.MODE_PRIVATE);
+				                             this.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
+				                                                       Context.MODE_PRIVATE);
 				Editor editor = mainPref.edit();
-				editor.putString(getResources().getString(R.string.shared_pref_eula),
-				                 licenseAgreement);
+				editor.putString(getResources().getString(R.string.shared_pref_username),
+				                 usernameForRegister);
 				editor.commit();
 
-				if (licenseAgreement != null &&
-				    (!licenseAgreement.equals(CommonUtilities.EMPTY_STRING) && !licenseAgreement.equals(CommonUtilities.NULL_STRING))) {
-					showAlert(licenseAgreement, CommonUtilities.EULA_TITLE);
+				Map<String, String> requestParams = new HashMap<String, String>();
+				requestParams.put("domain", txtDomain.getText().toString().trim());
+				// Check network connection availability before calling the API.
+				if (PhoneState.isNetworkAvailable(context)) {
+					// Call get sender ID API.
+					Log.e("sender id ", "call");
+					ServerUtils.callSecuredAPI(AuthenticationActivity.this,
+					                           CommonUtilities.SENDER_ID_ENDPOINT,
+					                           CommonUtilities.GET_METHOD, requestParams,
+					                           AuthenticationActivity.this,
+					                           CommonUtilities.SENDER_ID_REQUEST_CODE);
 				} else {
-					showErrorMessage(getResources().getString(R.string.error_enrollment_failed_detail),
-					                 getResources().getString(R.string.error_enrollment_failed));
+					CommonDialogUtils.stopProgressDialog(progressDialog);
+					CommonDialogUtils.showNetworkUnavailableMessage(AuthenticationActivity.this);
 				}
 
-			} else if (responseStatus.equals(CommonUtilities.INTERNAL_SERVER_ERROR)) {
-				Log.e(TAG, "The result is : " + result);
+			} else if (status.trim().equals(CommonUtilities.AUTHENTICATION_FAILED)) {
+				CommonDialogUtils.stopProgressDialog(progressDialog);
+				alertDialog =
+				              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+				                                                                    getResources().getString(R.string.title_head_authentication_error),
+				                                                                    getResources().getString(R.string.error_authentication_failed),
+				                                                                    getResources().getString(R.string.button_ok),
+				                                                                    dialogClickListener);
+			} else if (status.trim().equals(CommonUtilities.INTERNAL_SERVER_ERROR)) {
 				showInternalServerErrorMessage();
+
 			} else {
-				showEnrollementFailedErrorMessage();
+				Log.e(TAG, "Status: " + status);
+				showAuthCommonErrorMessage();
 			}
 
 		} else {
-			Log.e(TAG, "The result is null in manipulateLicenseResponse()");
-			showEnrollementFailedErrorMessage();
+			Log.e(TAG, "The value of status is null in onAPIAccessRecive()");
+			showAuthCommonErrorMessage();
 		}
+
+	}
+
+	private void showInternalServerErrorMessage() {
+		CommonDialogUtils.stopProgressDialog(progressDialog);
+		alertDialog =
+		              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+		                                                                    getResources().getString(R.string.title_head_connection_error),
+		                                                                    getResources().getString(R.string.error_internal_server),
+		                                                                    getResources().getString(R.string.button_ok),
+		                                                                    null);
+	}
+
+	/**
+	 * Shows common error message for authentication.
+	 * 
+	 */
+	private void showAuthCommonErrorMessage() {
+		CommonDialogUtils.stopProgressDialog(progressDialog);
+		alertDialog =
+		              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+		                                                                    getResources().getString(R.string.title_head_authentication_error),
+		                                                                    getResources().getString(R.string.error_for_all_unknown_authentication_failures),
+		                                                                    getResources().getString(R.string.button_ok),
+		                                                                    null);
+
+	}
+
+	private void startLocalNotification(Float interval) {
+		long firstTime = SystemClock.elapsedRealtime();
+		firstTime += 1 * 1000;
+
+		Intent downloader = new Intent(context, AlarmReceiver.class);
+		PendingIntent recurringDownload =
+		                                  PendingIntent.getBroadcast(context,
+		                                                             0,
+		                                                             downloader,
+		                                                             PendingIntent.FLAG_CANCEL_CURRENT);
+		AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		Float seconds = interval;
+		if (interval < 1.0) {
+
+			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,
+			                    seconds.intValue(), recurringDownload);
+		} else {
+			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,
+			                    seconds.intValue(), recurringDownload);
+		}
+
 	}
 
 	/**
@@ -714,219 +909,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		} else {
 			Log.e(TAG, "The result is null in manipulateSenderIdResponse()");
 			showEnrollementFailedErrorMessage();
-		}
-
-	}
-
-	private void showEnrollementFailedErrorMessage() {
-		CommonDialogUtils.stopProgressDialog(progressDialog);
-		alertDialog =
-		              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-		                                                                    getResources().getString(R.string.error_enrollment_failed),
-		                                                                    getResources().getString(R.string.error_enrollment_failed_detail),
-		                                                                    getResources().getString(R.string.button_ok),
-		                                                                    senderIdFailedClickListener);
-		alertDialog.show();
-	}
-
-	private void managePushNotification(String mode, float interval, Editor editor) {
-		if (mode.trim().toUpperCase().contains("LOCAL")) {
-			CommonUtilities.LOCAL_NOTIFICATIONS_ENABLED = true;
-			CommonUtilities.GCM_ENABLED = false;
-			String androidID = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-			// if (senderId == null || senderId.equals("")) {
-			editor.putString(getResources().getString(R.string.shared_pref_regId), androidID);
-			// }
-			editor.commit();
-
-			startLocalNotification(interval);
-		} else if (mode.trim().toUpperCase().contains("GCM")) {
-			CommonUtilities.LOCAL_NOTIFICATIONS_ENABLED = false;
-			CommonUtilities.GCM_ENABLED = true;
-			// editor.commit();
-			GCMRegistrar.register(context, CommonUtilities.SENDER_ID);
-		}
-
-		// if (senderId!=null && !senderId.equals("")) {
-		// CommonUtilities.GCM_ENABLED = true;
-		// GCMRegistrar.register(context, CommonUtilities.SENDER_ID);
-		// }
-	}
-
-	/**
-	 * Gets device License agreement.
-	 * 
-	 */
-	private void getLicense() {
-		Log.e("get licence", "get licence");
-		SharedPreferences mainPref =
-		                             context.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
-		                                                          Context.MODE_PRIVATE);
-		isAgreed = mainPref.getString(getResources().getString(R.string.shared_pref_isagreed), "");
-		String eula = mainPref.getString(getResources().getString(R.string.shared_pref_eula), "");
-		String type =
-		              mainPref.getString(getResources().getString(R.string.shared_pref_reg_type),
-		                                 "");
-
-		if (type.trim().equals(getResources().getString(R.string.device_enroll_type_byod))) {
-			if (!isAgreed.equals("1")) {
-				Map<String, String> requestParams = new HashMap<String, String>();
-				requestParams.put("domain", txtDomain.getText().toString().trim());
-
-				// Get License
-				OnCancelListener cancelListener = new OnCancelListener() {
-
-					@Override
-					public void onCancel(DialogInterface arg0) {
-						showAlertSingle(getResources().getString(R.string.error_enrollment_failed_detail),
-						                getResources().getString(R.string.error_enrollment_failed));
-						// finish();
-					}
-				};
-
-				progressDialog =
-				                 CommonDialogUtils.showPrgressDialog(AuthenticationActivity.this,
-				                                                     getResources().getString(R.string.dialog_license_agreement),
-				                                                     getResources().getString(R.string.dialog_please_wait),
-				                                                     cancelListener);
-
-				// Check network connection availability before calling the API.
-				if (PhoneState.isNetworkAvailable(context)) {
-					// Call device license agreement API.
-					ServerUtils.callSecuredAPI(AuthenticationActivity.this,
-					                           CommonUtilities.LICENSE_ENDPOINT,
-					                           CommonUtilities.GET_METHOD, requestParams,
-					                           AuthenticationActivity.this,
-					                           CommonUtilities.LICENSE_REQUEST_CODE);
-				} else {
-					CommonDialogUtils.stopProgressDialog(progressDialog);
-					CommonDialogUtils.showNetworkUnavailableMessage(AuthenticationActivity.this);
-				}
-
-			} else {
-				loadPincodeAcitvity();
-			}
-		} else {
-			loadPincodeAcitvity();
-		}
-
-	}
-
-	private void loadPincodeAcitvity() {
-		Intent intent = new Intent(AuthenticationActivity.this, PinCodeActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		if (txtDomain.getText() != null && !txtDomain.getText().toString().trim().equals("")) {
-			intent.putExtra(getResources().getString(R.string.intent_extra_username),
-			                username.getText().toString().trim() + "@" +
-			                        txtDomain.getText().toString().trim());
-
-		} else {
-			intent.putExtra(getResources().getString(R.string.intent_extra_username),
-			                username.getText().toString().trim());
-		}
-
-		startActivity(intent);
-	}
-
-	@Override
-	public void onAPIAccessRecive(String status) {
-		if (status != null) {
-			if (status.trim().equals(CommonUtilities.REQUEST_SUCCESSFUL)) {
-
-				SharedPreferences mainPref =
-				                             this.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
-				                                                       Context.MODE_PRIVATE);
-				Editor editor = mainPref.edit();
-				editor.putString(getResources().getString(R.string.shared_pref_username),
-				                 usernameForRegister);
-				editor.commit();
-
-				Map<String, String> requestParams = new HashMap<String, String>();
-				requestParams.put("domain", txtDomain.getText().toString().trim());
-				// Check network connection availability before calling the API.
-				if (PhoneState.isNetworkAvailable(context)) {
-					// Call get sender ID API.
-					Log.e("sender id ", "call");
-					ServerUtils.callSecuredAPI(AuthenticationActivity.this,
-					                           CommonUtilities.SENDER_ID_ENDPOINT,
-					                           CommonUtilities.GET_METHOD, requestParams,
-					                           AuthenticationActivity.this,
-					                           CommonUtilities.SENDER_ID_REQUEST_CODE);
-				} else {
-					CommonDialogUtils.stopProgressDialog(progressDialog);
-					CommonDialogUtils.showNetworkUnavailableMessage(AuthenticationActivity.this);
-				}
-
-			} else if (status.trim().equals(CommonUtilities.AUTHENTICATION_FAILED)) {
-				CommonDialogUtils.stopProgressDialog(progressDialog);
-				alertDialog =
-				              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-				                                                                    getResources().getString(R.string.title_head_authentication_error),
-				                                                                    getResources().getString(R.string.error_authentication_failed),
-				                                                                    getResources().getString(R.string.button_ok),
-				                                                                    dialogClickListener);
-				alertDialog.show();
-			} else if (status.trim().equals(CommonUtilities.INTERNAL_SERVER_ERROR)) {
-				showInternalServerErrorMessage();
-
-			} else {
-				Log.e(TAG, "Status: " + status);
-				showAuthCommonErrorMessage();
-			}
-
-		} else {
-			Log.e(TAG, "The value of status is null in onAPIAccessRecive()");
-			showAuthCommonErrorMessage();
-		}
-
-	}
-
-	private void showInternalServerErrorMessage() {
-		CommonDialogUtils.stopProgressDialog(progressDialog);
-		alertDialog =
-		              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-		                                                                    getResources().getString(R.string.title_head_connection_error),
-		                                                                    getResources().getString(R.string.error_internal_server),
-		                                                                    getResources().getString(R.string.button_ok),
-		                                                                    null);
-		alertDialog.show();
-	}
-
-	/**
-	 * Shows common error message for authentication.
-	 * 
-	 */
-	private void showAuthCommonErrorMessage() {
-		CommonDialogUtils.stopProgressDialog(progressDialog);
-		alertDialog =
-		              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-		                                                                    getResources().getString(R.string.title_head_authentication_error),
-		                                                                    getResources().getString(R.string.error_for_all_unknown_authentication_failures),
-		                                                                    getResources().getString(R.string.button_ok),
-		                                                                    null);
-		alertDialog.show();
-
-	}
-
-	private void startLocalNotification(Float interval) {
-		long firstTime = SystemClock.elapsedRealtime();
-		firstTime += 1 * 1000;
-
-		Intent downloader = new Intent(context, AlarmReceiver.class);
-		PendingIntent recurringDownload =
-		                                  PendingIntent.getBroadcast(context,
-		                                                             0,
-		                                                             downloader,
-		                                                             PendingIntent.FLAG_CANCEL_CURRENT);
-		AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		Float seconds = interval;
-		if (interval < 1.0) {
-
-			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,
-			                    seconds.intValue(), recurringDownload);
-		} else {
-			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,
-			                    seconds.intValue(), recurringDownload);
 		}
 
 	}

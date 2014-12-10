@@ -1,18 +1,18 @@
-/*
- ~ Copyright (c) 2014, WSO2 Inc. (http://wso2.com/) All Rights Reserved.
- ~
- ~ Licensed under the Apache License, Version 2.0 (the "License");
- ~ you may not use this file except in compliance with the License.
- ~ You may obtain a copy of the License at
- ~
- ~      http://www.apache.org/licenses/LICENSE-2.0
- ~
- ~ Unless required by applicable law or agreed to in writing, software
- ~ distributed under the License is distributed on an "AS IS" BASIS,
- ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- ~ See the License for the specific language governing permissions and
- ~ limitations under the License.
-*/
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.cdm.agent;
 
 
@@ -35,7 +35,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.wso2.cdm.agent.R;
+import org.wso2.cdm.agent.utils.Preference;
 
 public class PinCodeActivity extends Activity {
 	private TextView lblPin;
@@ -47,13 +49,14 @@ public class PinCodeActivity extends Activity {
 	private final int TAG_BTN_SET_PIN = 0;
 	private String FROM_ACTIVITY = null;
 	private String MAIN_ACTIVITY = null;
+	Context context;
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pin_code);
-
+		context=PinCodeActivity.this;
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			if (extras.containsKey(getResources().getString(R.string.intent_extra_username))) {
@@ -73,7 +76,6 @@ public class PinCodeActivity extends Activity {
 			}
 		}
 		
-		//initializeComponents();
 		lblPin = (TextView) findViewById(R.id.lblPin);
 		txtPin = (EditText) findViewById(R.id.txtPinCode);
 		txtOldPin = (EditText) findViewById(R.id.txtOldPinCode);
@@ -146,22 +148,6 @@ public class PinCodeActivity extends Activity {
 		}
 	}
 
-	/**
-	 * Initializes UI components.
-	 * 
-	 */
-	private void initializeComponents() {
-		lblPin = (TextView) findViewById(R.id.lblPin);
-		txtPin = (EditText) findViewById(R.id.txtPinCode);
-		txtOldPin = (EditText) findViewById(R.id.txtOldPinCode);
-		btnPin = (Button) findViewById(R.id.btnSetPin);
-		btnPin.setTag(TAG_BTN_SET_PIN);
-		btnPin.setOnClickListener(onClickListener_BUTTON_CLICKED);
-		btnPin.setEnabled(false);
-		btnPin.setBackground(getResources().getDrawable(R.drawable.btn_grey));
-		btnPin.setTextColor(getResources().getColor(R.color.black));
-	}
-
 	OnClickListener onClickListener_BUTTON_CLICKED = new OnClickListener() {
 
 		@Override
@@ -177,8 +163,8 @@ public class PinCodeActivity extends Activity {
 						getResources().getString(R.string.dialog_pin_confirmation)
 								+ " " +txtPin.getText().toString() + " " 
 								+ getResources().getString(R.string.dialog_pin_confirmation_end))
-						.setPositiveButton(getResources().getString(R.string.info_label_rooted_answer_yes), dialogClickListener)
-						.setNegativeButton(getResources().getString(R.string.info_label_rooted_answer_no), dialogClickListener).show();
+						.setPositiveButton(getResources().getString(R.string.yes), dialogClickListener)
+						.setNegativeButton(getResources().getString(R.string.no), dialogClickListener).show();
 				break;
 			default:
 				break;
@@ -203,12 +189,7 @@ public class PinCodeActivity extends Activity {
 	};
 
 	public void savePin() {
-
-		SharedPreferences mainPref = this.getSharedPreferences(getResources().getString(R.string.shared_pref_package),
-				Context.MODE_PRIVATE);
-		Editor editor = mainPref.edit();
-		editor.putString(getResources().getString(R.string.shared_pref_pin), txtPin.getText().toString().trim());
-		editor.commit();
+		Preference.put(context, getResources().getString(R.string.shared_pref_pin), txtPin.getText().toString().trim());
 
 		if(FROM_ACTIVITY != null && (FROM_ACTIVITY.equals(AlreadyRegisteredActivity.class.getSimpleName()))){
 			Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_message_pin_change_success), Toast.LENGTH_SHORT).show();

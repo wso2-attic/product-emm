@@ -71,7 +71,7 @@
       </LinearLayout>
       <!-- Login Form Ends -->
 
-	  <TextView android:id="@+id/txtVw"
+	  <TextView android:id="@+id/severAddressLabel"
 	    android:layout_width="wrap_content"
 	    android:layout_below="@+id/linearLayout1"
 	    android:layout_marginLeft="10dp"
@@ -87,7 +87,7 @@
           android:id="@+id/etServerIP"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/txtVw"
+          android:layout_below="@+id/severAddressLabel"
           android:layout_centerHorizontal="true"
           android:layout_marginLeft="22dp"
           android:ems="10"
@@ -105,18 +105,7 @@
           android:background="@drawable/btn_orange"
           android:layout_below="@+id/etServerIP"
           android:text="Start Registration" />
-      
-      <TextView
-        android:id="@+id/incompatibleError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_margin="10dp"
-        android:textColor="@android:color/background_dark"
-        android:gravity="center"
-        android:text="Welcome" />
-
+     
   </RelativeLayout>
 
 </ScrollView>

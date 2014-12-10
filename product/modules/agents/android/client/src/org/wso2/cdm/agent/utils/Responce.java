@@ -21,7 +21,7 @@ import org.wso2.cdm.agent.R;
  * Describes the errors and their relevant error messages.
  * In order to internationalize the message is the res
  */
-public enum Errors {
+public enum Responce {
 	  INCOMPATIBLE(false, R.string.device_not_compatible_error),
 	  INCOMPATIBLE_OS(false, R.string.device_not_compatible_error_os),
 	  COMPATIBLE(true,R.string.device_not_compatible_error_os);
@@ -29,7 +29,7 @@ public enum Errors {
 	  private final boolean code;
 	  private final int descriptionResourceID;
 
-	  private Errors(boolean code, int description) {
+	  private Responce(boolean code, int description) {
 	    this.code = code;
 	    this.descriptionResourceID = description;
 	  }

@@ -23,7 +23,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.wso2.cdm.agent.R;
 import org.wso2.cdm.agent.utils.CommonUtilities;
-import org.wso2.cdm.agent.utils.Errors;
+import org.wso2.cdm.agent.utils.Responce;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -303,17 +303,17 @@ public class DeviceInfo {
 		return amount;
 	}
 
-	public Errors isCompatible(Context c) {
+	public Responce isCompatible() {
 		if (!(getSdkVersion() >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) &&
 		    isRooted()) {
-			return Errors.INCOMPATIBLE;
+			return Responce.INCOMPATIBLE;
 
 		} else if (getSdkVersion() < android.os.Build.VERSION_CODES.FROYO) {
-			return Errors.INCOMPATIBLE;
+			return Responce.INCOMPATIBLE;
 		} else if (isRooted()) {
-			return Errors.INCOMPATIBLE;
+			return Responce.INCOMPATIBLE;
 		}
-		return Errors.COMPATIBLE;
+		return Responce.COMPATIBLE;
 	}
 
 	/*
