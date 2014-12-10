@@ -323,12 +323,12 @@
             <outputDirectory>wso2cdm-${project.version}/repository/conf/multitenancy/</outputDirectory>
             <filtered>true</filtered>
         </file>
-        <file>
+        <!--<file>
             <source>src/repository/conf/axis2/axis2.xml</source>
             <outputDirectory>wso2cdm-${project.version}/repository/conf/axis2/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
-        </file>
+        </file>-->
         <file>
             <source>src/repository/conf/application-authenticators.xml</source>
             <outputDirectory>wso2cdm-${project.version}/repository/conf/security/</outputDirectory>

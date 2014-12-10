@@ -65,7 +65,7 @@ public interface DeviceManagerService {
      * @return          Status of enrollment
      * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
      */
-    boolean isRegistered(DeviceIdentifier deviceId) throws DeviceManagementException;
+    boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException;
 
     /**
      * Method to retrieve the status of a particular device.
