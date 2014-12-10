@@ -36,66 +36,124 @@ import javax.ws.rs.core.Response;
 public class Enrollment {
 
 	private static Log log = LogFactory.getLog(Enrollment.class);
+
 	@POST
 	public Response enrollDevice() {
-		JsonObject result = new JsonObject();
-		result.addProperty("senderId","jwwfowrjwqporqwrpqworpq");
+		boolean result = false;
+		int status = 0;
+		String msg = "";
 		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
-		Device device = AndroidAPIUtil.convertToDeviceObject(result);
+		DeviceManagementService dmService = (DeviceManagementService) context
+				.getOSGiService(DeviceManagementService.class, null);
+		Device device = AndroidAPIUtil.convertToDeviceObject(null);
 		try {
-			dmService.enrollDevice(device);
+			result = dmService.enrollDevice(device);
+			status = 1;
 		} catch (DeviceManagementException e) {
-			String msg = "Error occurred while enrolling the device";
+			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);
+			status = -1;
 		}
-		return Response.status(201).entity("Registration Successful").build();
+		switch (status) {
+			case 1:
+				if (result) {
+					return Response.status(201).entity("Registration Successful").build();
+				}
+				break;
+			case -1:
+				return Response.status(500).entity(msg).build();
+		}
+		return Response.status(400).entity("Registration Failed").build();
 	}
 
 	@GET
 	@Path("{id}")
 	public Response isEnrolled(@PathParam("id") String id) {
-		boolean status = false;
+		boolean result = false;
+		int status = 0;
+		String msg = "";
 		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
+		DeviceManagementService dmService = (DeviceManagementService) context
+				.getOSGiService(DeviceManagementService.class, null);
 		try {
 			DeviceIdentifier deviceIdentifier = AndroidAPIUtil.convertToDeviceIdentifierObject(id);
-			status = dmService.isRegistered(deviceIdentifier);
+			result = dmService.isEnrolled(deviceIdentifier);
+			status = 1;
 		} catch (DeviceManagementException e) {
-			String msg = "Error occurred while checking enrollment of the device";
+			msg = "Error occurred while checking enrollment of the device";
 			log.error(msg, e);
+			status = -1;
 		}
-		return Response.status(200).entity(status).build();
+		switch (status) {
+			case 1:
+				if (result) {
+					return Response.status(200).entity(result).build();
+				}
+				break;
+			case -1:
+				return Response.status(500).entity(msg).build();
+		}
+		return Response.status(404).entity(result).build();
 	}
 
 	@PUT
 	@Consumes("application/json")
 	@Path("{id}")
 	public Response modifyEnrollment(@PathParam("id") String id) {
-		boolean status = false;
+		boolean result = false;
+		int status = 0;
+		String msg = "";
 		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
+		DeviceManagementService dmService = (DeviceManagementService) context
+				.getOSGiService(DeviceManagementService.class, null);
+		Device device = AndroidAPIUtil.convertToDeviceObject(null);
 		try {
-			status = dmService.isRegistered(null);
+			result = dmService.modifyEnrollment(device);
+			status = 1;
 		} catch (DeviceManagementException e) {
-			String msg = "Error occurred while modifying enrollment of the device";
+			msg = "Error occurred while modifying enrollment of the device";
 			log.error(msg, e);
+			status = -1;
 		}
-		return Response.status(201).entity(status).build();
+		switch (status) {
+			case 1:
+				if (result) {
+					return Response.status(200).entity("Device information modified").build();
+				}
+				break;
+			case -1:
+				return Response.status(500).entity(msg).build();
+		}
+		return Response.status(400).entity("Update enrollment failed").build();
 	}
 
 	@DELETE
 	@Path("{id}")
 	public Response disenrollDevice(@PathParam("id") String id) {
-		boolean status = false;
+		boolean result = false;
+		int status = 0;
+		String msg = "";
 		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class,null);
+		DeviceManagementService dmService = (DeviceManagementService) context
+				.getOSGiService(DeviceManagementService.class, null);
 		try {
-			status = dmService.isRegistered(null);
+			DeviceIdentifier deviceIdentifier = AndroidAPIUtil.convertToDeviceIdentifierObject(id);
+			result = dmService.disenrollDevice(deviceIdentifier);
+			status = 1;
 		} catch (DeviceManagementException e) {
-			String msg = "Error occurred while disenrolling the device";
+			msg = "Error occurred while disenrolling the device";
 			log.error(msg, e);
+			status = -1;
 		}
-		return Response.status(201).entity(status).build();
+		switch (status) {
+			case 1:
+				if (result) {
+					return Response.status(200).entity(result).build();
+				}
+				break;
+			case -1:
+				return Response.status(500).entity(msg).build();
+		}
+		return Response.status(404).entity("Device not found").build();
 	}
 }

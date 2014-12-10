@@ -46,8 +46,8 @@ public class DeviceManagementService implements DeviceManagerService {
     }
 
     @Override
-    public boolean isRegistered(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().isRegistered(deviceId);
+    public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().isEnrolled(deviceId);
     }
 
     @Override

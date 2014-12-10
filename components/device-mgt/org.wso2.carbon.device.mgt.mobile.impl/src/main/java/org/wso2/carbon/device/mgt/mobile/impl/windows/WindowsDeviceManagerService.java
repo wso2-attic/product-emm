@@ -50,7 +50,7 @@ public class WindowsDeviceManagerService implements DeviceManagerService {
     }
 
     @Override
-    public boolean isRegistered(DeviceIdentifier deviceId) throws DeviceManagementException {
+    public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
         return true;
     }
 
