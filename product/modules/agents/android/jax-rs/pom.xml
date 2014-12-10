@@ -19,8 +19,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
-        <artifactId>wso2cdm-parent</artifactId>
+        <groupId>org.wso2.cdmserver</groupId>
+        <artifactId>wso2cdmserver-product</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../../../../pom.xml</relativePath>
     </parent>
@@ -47,7 +47,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
+                    <packagingExcludes>WEB-INF/lib/*cxf*.jar</packagingExcludes>
                     <warName>${project.artifactId}</warName>
                 </configuration>
             </plugin>
