@@ -104,9 +104,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.kernel.version}
                                 </featureArtifactDef>
-                                <!--<featureArtifactDef>-->
-                                    <!--org.wso2.carbon:org.wso2.carbon.device.mgt.server.feature:${project.version}-->
-                                <!--</featureArtifactDef>-->
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.device.mgt.server.feature:${project.version}
+                                </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.webapp.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
@@ -157,10 +157,10 @@
                                     <id>org.wso2.carbon.ndatasource.ui.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
                                 </feature>
-                                <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.device.mgt.server.feature.group</id>-->
-                                    <!--<version>${project.version}</version>-->
-                                <!--</feature>-->
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.server.feature.group</id>
+                                    <version>${project.version}</version>
+                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.webapp.mgt.feature.group</id>
                                     <version>${carbon.platform.version}</version>
