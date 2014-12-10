@@ -35,6 +35,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>Device Management Mobile Impl Bundle</Bundle-Description>
+                        <Bundle-Activator>org.wso2.carbon.device.mgt.mobile.impl.internal.MobileDeviceManagementBundleActivator</Bundle-Activator>
                         <Private-Package>org.wso2.carbon.device.mgt.mobile.impl.internal</Private-Package>
                         <Import-Package>
                             org.osgi.framework,
