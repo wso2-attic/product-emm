@@ -62,8 +62,9 @@ public interface DeviceManagerService {
      * Method to retrieve the status of the registration process of a particular device.
      *
      * @param deviceId  Fully qualified device identifier
-     * @return          Status of enrollment
-     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     * @return Status of enrollment
+     * @throws DeviceManagementException If some unusual behaviour is observed while checking the enrollment
+     *                      status of the device
      */
     boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException;
 
@@ -71,8 +72,9 @@ public interface DeviceManagerService {
      * Method to retrieve the status of a particular device.
      *
      * @param deviceId  Fully qualified device identifier
-     * @return          Returns if the device is active
-     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     * @return Returns if the device is active
+     * @throws DeviceManagementException If some unusual behaviour is observed while checking the status
+     * of the device
      */
     boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException;
 
@@ -82,7 +84,8 @@ public interface DeviceManagerService {
      *
      * @param deviceId  Fully qualified device identifier
      * @param status    Indicates whether the device is active
-     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     * @throws DeviceManagementException If some unusual behaviour is observed while updating the active status
+     * of the device
      */
     boolean setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException;
 
@@ -90,7 +93,8 @@ public interface DeviceManagerService {
      * Method to retrieve metadata of all devices registered within CDM corresponding to a particular device type.
      *
      * @param type  Device Type
-     * @return      List of metadata corresponding to all devices registered within CDM
+     * @return List of metadata corresponding to all devices registered within CDM
+     * @throws DeviceManagementException If some unusual behaviour is observed while obtaining the enrolled device list
      */
     List<Device> getAllDevices(String type) throws DeviceManagementException;
 
@@ -99,14 +103,14 @@ public interface DeviceManagerService {
      *
      * @param deviceId  Fully qualified device identifier
      * @return          Metadata corresponding to a particular device
-     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     * @throws DeviceManagementException If some unusual behaviour is observed obtaining the device object
      */
     Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException;
 
     /**
      * Method to update device information.
      * @param device   Updated device information related data
-     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     * @throws DeviceManagementException If some unusual behaviour is observed while updating the device info
      */
     boolean updateDeviceInfo(Device device) throws DeviceManagementException;
 
@@ -115,7 +119,8 @@ public interface DeviceManagerService {
      *
      * @param deviceId          Fully qualified device identifier
      * @param ownershipType     Type of ownership
-     * @throws DeviceManagementException If some unusual behaviour is observed while enrolling a device
+     * @throws DeviceManagementException If some unusual behaviour is observed while setting the ownership
+     * of the device
      */
     boolean setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException;
 
