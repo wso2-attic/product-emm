@@ -31,7 +31,6 @@ public class AndroidAPIUtils {
 	public static Device convertToDeviceObject(String jsonString) {
 		JsonObject obj = new Gson().fromJson(jsonString, JsonObject.class);
 		Device device = new Device();
-
 		device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		if (obj.get(AndroidConstants.DeviceConstants.DEVICE_MAC_KEY) != null) {
 			device.setDeviceIdentifier(

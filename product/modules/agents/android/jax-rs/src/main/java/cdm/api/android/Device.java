@@ -17,6 +17,7 @@
 package cdm.api.android;
 
 import cdm.api.android.util.AndroidAPIUtils;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,7 +71,8 @@ public class Device {
 		}
 		switch (status) {
 			case 1:
-				return Response.status(200).entity(result).build();
+				String response = new Gson().toJson(result);
+				return Response.status(200).entity(response).build();
 			case -1:
 				return Response.status(500).entity(msg).build();
 		}
@@ -83,7 +85,7 @@ public class Device {
 		int status = 0;
 		String msg = "";
 		DeviceManagementService dmService;
-		org.wso2.carbon.device.mgt.common.Device device = null;
+		org.wso2.carbon.device.mgt.common.Device device = new org.wso2.carbon.device.mgt.common.Device();
 		try {
 			PrivilegedCarbonContext.startTenantFlow();
 			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -111,7 +113,8 @@ public class Device {
 		}
 		switch (status) {
 			case 1:
-				return Response.status(200).entity(device).build();
+				String response = new Gson().toJson(device);
+				return Response.status(200).entity(response).build();
 			case -1:
 				return Response.status(500).entity(msg).build();
 		}
