@@ -29,28 +29,50 @@ import java.util.*;
 public class AndroidAPIUtil {
 
 	public static Device convertToDeviceObject(String jsonString) {
-
 		JsonObject obj = new Gson().fromJson(jsonString, JsonObject.class);
-		JsonObject properties =
-				new Gson().fromJson(obj.get(AndroidConstants.DeviceConstants.DEVICE_PROPERTIES_KEY)
-						, JsonObject.class);
-		JsonObject features =
-				new Gson().fromJson(
-						obj.get(AndroidConstants.DeviceConstants.DEVICE_FEATURES_KEY),
-						JsonObject.class);
 		Device device = new Device();
+
 		device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-		device.setOwner(properties.get(AndroidConstants.DeviceProperties.PROPERTY_USER_KEY).getAsString());
-		device.setDeviceIdentifier(
-				obj.get(AndroidConstants.DeviceConstants.DEVICE_MAC_KEY).getAsString());
-		device.setDescription(
-				obj.get(AndroidConstants.DeviceConstants.DEVICE_DESCRIPTION_KEY).getAsString());
-		device.setOwnership(
-				obj.get(AndroidConstants.DeviceConstants.DEVICE_OWNERSHIP_KEY).getAsString());
-		device.setName(properties.get(AndroidConstants.DeviceProperties.PROPERTY_DEVICE_KEY)
-		                         .getAsString());
-		device.setFeatures(parseFeatures(features));
-		device.setProperties(parseProperties(properties));
+		if (obj.get(AndroidConstants.DeviceConstants.DEVICE_MAC_KEY) != null) {
+			device.setDeviceIdentifier(
+					obj.get(AndroidConstants.DeviceConstants.DEVICE_MAC_KEY).getAsString());
+		}
+		if (obj.get(AndroidConstants.DeviceConstants.DEVICE_DESCRIPTION_KEY) != null) {
+			device.setDescription(
+					obj.get(AndroidConstants.DeviceConstants.DEVICE_DESCRIPTION_KEY).getAsString());
+		}
+		if (obj.get(AndroidConstants.DeviceConstants.DEVICE_OWNERSHIP_KEY) != null) {
+			device.setOwnership(
+					obj.get(AndroidConstants.DeviceConstants.DEVICE_OWNERSHIP_KEY).getAsString());
+		}
+
+		if (obj.get(AndroidConstants.DeviceConstants.DEVICE_PROPERTIES_KEY) != null) {
+			JsonObject properties =
+					new Gson().fromJson(
+							obj.get(AndroidConstants.DeviceConstants.DEVICE_PROPERTIES_KEY)
+							, JsonObject.class);
+			if (properties.get(AndroidConstants.DeviceProperties.PROPERTY_USER_KEY) != null) {
+				device.setOwner(properties.get(AndroidConstants.DeviceProperties.PROPERTY_USER_KEY)
+				                          .getAsString());
+			}
+			if (properties.get(AndroidConstants.DeviceProperties.PROPERTY_DEVICE_KEY) != null) {
+				device.setName(properties.get(AndroidConstants.DeviceProperties.PROPERTY_DEVICE_KEY)
+				                         .getAsString());
+			}
+			device.setProperties(parseProperties(properties));
+		}else{
+			device.setProperties(new ArrayList<Property>(0));
+		}
+
+		if (obj.get(AndroidConstants.DeviceConstants.DEVICE_FEATURES_KEY) != null) {
+			JsonObject features =
+					new Gson().fromJson(
+							obj.get(AndroidConstants.DeviceConstants.DEVICE_FEATURES_KEY),
+							JsonObject.class);
+			device.setFeatures(parseFeatures(features));
+		}else{
+			device.setFeatures(new ArrayList<Feature>(0));
+		}
 		return device;
 	}
 
