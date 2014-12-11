@@ -16,32 +16,148 @@
 
 package cdm.api.android;
 
+import cdm.api.android.util.AndroidAPIUtils;
 import com.google.gson.JsonObject;
-import org.wso2.carbon.context.CarbonContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Android Device Management REST-API implementation.
  */
 public class Device {
 
+	private static Log log = LogFactory.getLog(Device.class);
+
 	@GET
-	public String getAllDevices() {
-		return "License Agreement";
+	public Response getAllDevices() {
+		List<org.wso2.carbon.device.mgt.common.Device> result = null;
+		int status = 0;
+		String msg = "";
+		DeviceManagementService dmService;
+		try {
+			PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+			dmService = (DeviceManagementService) ctx
+					.getOSGiService(DeviceManagementService.class, null);
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
+		try {
+			if(dmService!=null){
+				result = dmService.getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+				status = 1;
+			}else{
+				status = -1;
+				msg = "Device Manager service not available";
+			}
+
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while fetching the device list";
+			log.error(msg, e);
+			status = -1;
+		}
+		switch (status) {
+			case 1:
+				return Response.status(200).entity(result).build();
+			case -1:
+				return Response.status(500).entity(msg).build();
+		}
+		return Response.status(400).entity("Unable to fetch device list").build();
 	}
 
 	@GET
 	@Path("{id}")
-	public String getDevice(@PathParam("id") String id) {
-		return "License Agreement";
+	public Response getDevice(@PathParam("id") String id) {
+		int status = 0;
+		String msg = "";
+		DeviceManagementService dmService;
+		org.wso2.carbon.device.mgt.common.Device device = null;
+		try {
+			PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+			dmService = (DeviceManagementService) ctx
+					.getOSGiService(DeviceManagementService.class, null);
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
+		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+		try {
+			if(dmService!=null){
+				device = dmService.getDevice(deviceIdentifier);
+				status = 1;
+			}else{
+				status = -1;
+				msg = "Device Manager service not available";
+			}
+
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while fetching the device information";
+			log.error(msg, e);
+			status = -1;
+		}
+		switch (status) {
+			case 1:
+				return Response.status(200).entity(device).build();
+			case -1:
+				return Response.status(500).entity(msg).build();
+		}
+		return Response.status(400).entity("Unable to fetch device information").build();
 	}
 
 	@PUT
 	@Path("{id}")
-	public Response updateDevice(@PathParam("id") String id) {
-		return Response.status(201).entity("Registration Successful").build();
+	public Response updateDevice(@PathParam("id") String id, String jsonPayload) {
+		boolean result = false;
+		int status = 0;
+		String msg = "";
+		DeviceManagementService dmService;
+		try {
+			PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+			dmService = (DeviceManagementService) ctx
+					.getOSGiService(DeviceManagementService.class, null);
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
+		org.wso2.carbon.device.mgt.common.Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
+		try {
+			if(dmService!=null){
+				result = dmService.updateDeviceInfo(device);
+				status = 1;
+			}else{
+				status = -1;
+				msg = "Device Manager service not available";
+			}
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while modifying the device information";
+			log.error(msg, e);
+			status = -1;
+		}
+		switch (status) {
+			case 1:
+				if (result) {
+					return Response.status(200).entity("Device has modified").build();
+				}
+				break;
+			case -1:
+				return Response.status(500).entity(msg).build();
+		}
+		return Response.status(400).entity("Update device has failed").build();
 	}
 }
