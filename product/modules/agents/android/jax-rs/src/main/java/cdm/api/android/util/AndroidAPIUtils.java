@@ -26,7 +26,7 @@ import java.util.*;
 /**
  * AndroidAPIUtil class provides utility function used by Android REST-API classes.
  */
-public class AndroidAPIUtil {
+public class AndroidAPIUtils {
 
 	public static Device convertToDeviceObject(String jsonString) {
 		JsonObject obj = new Gson().fromJson(jsonString, JsonObject.class);

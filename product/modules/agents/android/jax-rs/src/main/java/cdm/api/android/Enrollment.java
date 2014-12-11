@@ -16,12 +16,9 @@
 
 package cdm.api.android;
 
-import cdm.api.android.util.AndroidAPIUtil;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import cdm.api.android.util.AndroidAPIUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -55,7 +52,7 @@ public class Enrollment {
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
-		Device device = AndroidAPIUtil.convertToDeviceObject(jsonPayload);
+		Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
 		try {
 			if(dmService!=null){
 				result = dmService.enrollDevice(device);
@@ -88,13 +85,26 @@ public class Enrollment {
 		boolean result = false;
 		int status = 0;
 		String msg = "";
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context
-				.getOSGiService(DeviceManagementService.class, null);
+		DeviceManagementService dmService;
 		try {
-			DeviceIdentifier deviceIdentifier = AndroidAPIUtil.convertToDeviceIdentifierObject(id);
-			result = dmService.isEnrolled(deviceIdentifier);
-			status = 1;
+			PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+			dmService = (DeviceManagementService) ctx
+					.getOSGiService(DeviceManagementService.class, null);
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
+		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+		try {
+			if(dmService!=null){
+				result = dmService.isEnrolled(deviceIdentifier);
+				status = 1;
+			}else{
+				status = -1;
+				msg = "Device Manager service not available";
+			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while checking enrollment of the device";
 			log.error(msg, e);
@@ -113,19 +123,31 @@ public class Enrollment {
 	}
 
 	@PUT
-	@Consumes("application/json")
 	@Path("{id}")
-	public Response modifyEnrollment(@PathParam("id") String id) {
+	public Response modifyEnrollment(@PathParam("id") String id,String jsonPayload) {
 		boolean result = false;
 		int status = 0;
 		String msg = "";
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context
-				.getOSGiService(DeviceManagementService.class, null);
-		Device device = AndroidAPIUtil.convertToDeviceObject(null);
+		DeviceManagementService dmService;
 		try {
-			result = dmService.modifyEnrollment(device);
-			status = 1;
+			PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+			dmService = (DeviceManagementService) ctx
+					.getOSGiService(DeviceManagementService.class, null);
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
+		Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
+		try {
+			if(dmService!=null){
+				result = dmService.modifyEnrollment(device);
+				status = 1;
+			}else{
+				status = -1;
+				msg = "Device Manager service not available";
+			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying enrollment of the device";
 			log.error(msg, e);
@@ -149,13 +171,26 @@ public class Enrollment {
 		boolean result = false;
 		int status = 0;
 		String msg = "";
-		CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-		DeviceManagementService dmService = (DeviceManagementService) context
-				.getOSGiService(DeviceManagementService.class, null);
+		DeviceManagementService dmService;
 		try {
-			DeviceIdentifier deviceIdentifier = AndroidAPIUtil.convertToDeviceIdentifierObject(id);
-			result = dmService.disenrollDevice(deviceIdentifier);
-			status = 1;
+			PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+			dmService = (DeviceManagementService) ctx
+					.getOSGiService(DeviceManagementService.class, null);
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
+		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+		try {
+			if(dmService!=null){
+				result = dmService.disenrollDevice(deviceIdentifier);
+				status = 1;
+			}else{
+				status = -1;
+				msg = "Device Manager service not available";
+			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while disenrolling the device";
 			log.error(msg, e);
