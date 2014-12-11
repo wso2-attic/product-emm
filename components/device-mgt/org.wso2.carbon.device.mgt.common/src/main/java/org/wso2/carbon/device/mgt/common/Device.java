@@ -44,6 +44,8 @@ public class Device {
 
     private List<Feature> features;
 
+    private List<Property> properties;
+
     public int getId() {
         return id;
     }
@@ -140,4 +142,11 @@ public class Device {
         this.type = type;
     }
 
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
 }

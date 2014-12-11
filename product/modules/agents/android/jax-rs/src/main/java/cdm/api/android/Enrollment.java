@@ -17,6 +17,7 @@
 package cdm.api.android;
 
 import cdm.api.android.util.AndroidAPIUtil;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,13 +35,12 @@ import javax.ws.rs.core.Response;
 /**
  * Android Device Enrollment REST-API implementation.
  */
-@Path("/enrollment")
 public class Enrollment {
 
 	private static Log log = LogFactory.getLog(Enrollment.class);
 
 	@POST
-	public Response enrollDevice() {
+	public Response enrollDevice(String jsonPayload) {
 		boolean result = false;
 		int status = 0;
 		String msg = "";
@@ -50,16 +50,21 @@ public class Enrollment {
 			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-
 			dmService = (DeviceManagementService) ctx
 					.getOSGiService(DeviceManagementService.class, null);
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
-		Device device = AndroidAPIUtil.convertToDeviceObject(null);
+		Device device = AndroidAPIUtil.convertToDeviceObject(jsonPayload);
 		try {
-			result = dmService.enrollDevice(device);
-			status = 1;
+			if(dmService!=null){
+				result = dmService.enrollDevice(device);
+				status = 1;
+			}else{
+				status = -1;
+				msg = "Device Manager service not available";
+			}
+
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);

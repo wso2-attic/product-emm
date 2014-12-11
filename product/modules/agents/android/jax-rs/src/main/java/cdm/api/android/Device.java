@@ -26,7 +26,6 @@ import javax.ws.rs.core.Response;
 /**
  * Android Device Management REST-API implementation.
  */
-@Path("/devices")
 public class Device {
 
 	@GET
