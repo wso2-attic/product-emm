@@ -40,11 +40,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.Security;
@@ -64,8 +63,6 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 	}
 
 	private String enrollmentResponseFile;
-
-	private String responseFile;
 
 	private String wapProvisioningXmlFile;
 
@@ -156,9 +153,21 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 
 	public Response getPolicies(Document request) {
 		LOGGER.info("Received Get Policies Request");
+
 		String response = null;
+		File file = null;
+		FileInputStream fis = null;
+		byte[] data = null;
+
 		try {
-			response = new String(Files.readAllBytes(Paths.get(responseFile)));
+
+			file = new File("./conf/policy-service.xml");
+			fis = new FileInputStream(file);
+			data = new byte[(int) file.length()];
+			fis.read(data);
+			fis.close();
+			response = new String(data, "UTF-8");
+
 		} catch (IOException e) {
 			LOGGER.error("An Unexpected Error has occurred while processing the request ", e);
 		}
@@ -248,10 +257,6 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 
 	public void setEnrollmentResponseFile(String enrollmentResponseFile) {
 		this.enrollmentResponseFile = enrollmentResponseFile;
-	}
-
-	public void setResponseFile(String responseFile) {
-		this.responseFile = responseFile;
 	}
 
 	public void setWapProvisioningXmlFile(String wapProvisioningXmlFile) {

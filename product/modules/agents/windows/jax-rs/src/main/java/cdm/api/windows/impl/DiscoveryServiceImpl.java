@@ -21,24 +21,35 @@ package cdm.api.windows.impl;
 import cdm.api.windows.DiscoveryService;
 
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 
 import org.apache.log4j.Logger;
 
 public class DiscoveryServiceImpl implements DiscoveryService {
 
 	private Logger LOGGER = Logger.getLogger(DiscoveryServiceImpl.class);
-	private String discoveryServiceFileName;
 
 	public Response getDiscoveryResponse(InputStream discoveryRequest) {
 		LOGGER.info("Received Discovery Service POST Request [{}]");
 
 		String response = null;
+		File file = null;
+		FileInputStream fis = null;
+		byte[] data = null;
+
 		try {
-			response = new String(Files.readAllBytes(Paths.get(discoveryServiceFileName)));
+
+			file = new File("./conf/discover-service.xml");
+			fis = new FileInputStream(file);
+			data = new byte[(int) file.length()];
+			fis.read(data);
+			fis.close();
+			response = new String(data, "UTF-8");
+
 		} catch (IOException e) {
 			LOGGER.error("An Unexpected Error has occurred while processing the request ", e);
 		}
@@ -57,8 +68,5 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 		return Response.ok().build();
 	}
 
-	public void setDiscoveryServiceFileName(String discoveryServiceFileName) {
-		this.discoveryServiceFileName = discoveryServiceFileName;
-	}
 
 }
