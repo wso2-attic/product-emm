@@ -45,4 +45,12 @@ public final class AndroidConstants {
 		public static final String DEVICE_PROPERTIES_KEY = "properties";
 		public static final String DEVICE_FEATURES_KEY = "features";
 	}
+
+	public final class Messages{
+		private Messages(){
+			throw new AssertionError();
+		}
+		public static final String DEVICE_MANAGER_SERVICE_NOT_AVAILABLE =
+				"Device Manager service not available";
+	}
 }

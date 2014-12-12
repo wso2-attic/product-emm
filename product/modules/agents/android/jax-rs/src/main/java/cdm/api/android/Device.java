@@ -17,8 +17,9 @@
 package cdm.api.android;
 
 import cdm.api.android.util.AndroidAPIUtils;
+import cdm.api.android.util.AndroidConstants;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -26,7 +27,6 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -46,22 +46,18 @@ public class Device {
 		String msg = "";
 		DeviceManagementService dmService;
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			dmService = (DeviceManagementService) ctx
-					.getOSGiService(DeviceManagementService.class, null);
+			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
 		try {
-			if(dmService!=null){
-				result = dmService.getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+			if (dmService != null) {
+				result = dmService.getAllDevices(
+						DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 				status = 1;
-			}else{
+			} else {
 				status = -1;
-				msg = "Device Manager service not available";
+				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
 			}
 
 		} catch (DeviceManagementException e) {
@@ -71,12 +67,14 @@ public class Device {
 		}
 		switch (status) {
 			case 1:
-				String response = new Gson().toJson(result);
-				return Response.status(200).entity(response).build();
+				if(result!=null){
+					String response = new Gson().toJson(result);
+					return Response.status(HttpStatus.SC_OK).entity(response).build();
+				}
 			case -1:
-				return Response.status(500).entity(msg).build();
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
 		}
-		return Response.status(400).entity("Unable to fetch device list").build();
+		return Response.status(HttpStatus.SC_NOT_FOUND).entity("Unable to fetch device list").build();
 	}
 
 	@GET
@@ -85,25 +83,21 @@ public class Device {
 		int status = 0;
 		String msg = "";
 		DeviceManagementService dmService;
-		org.wso2.carbon.device.mgt.common.Device device = new org.wso2.carbon.device.mgt.common.Device();
+		org.wso2.carbon.device.mgt.common.Device device =
+				new org.wso2.carbon.device.mgt.common.Device();
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			dmService = (DeviceManagementService) ctx
-					.getOSGiService(DeviceManagementService.class, null);
+			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
 		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 		try {
-			if(dmService!=null){
+			if (dmService != null) {
 				device = dmService.getDevice(deviceIdentifier);
 				status = 1;
-			}else{
+			} else {
 				status = -1;
-				msg = "Device Manager service not available";
+				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
 			}
 
 		} catch (DeviceManagementException e) {
@@ -113,12 +107,15 @@ public class Device {
 		}
 		switch (status) {
 			case 1:
-				String response = new Gson().toJson(device);
-				return Response.status(200).entity(response).build();
+				if(device!=null) {
+					String response = new Gson().toJson(device);
+					return Response.status(HttpStatus.SC_OK).entity(response).build();
+				}
+				break;
 			case -1:
-				return Response.status(500).entity(msg).build();
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
 		}
-		return Response.status(400).entity("Unable to fetch device information").build();
+		return Response.status(HttpStatus.SC_NOT_FOUND).entity("Unable to fetch device information").build();
 	}
 
 	@PUT
@@ -129,23 +126,19 @@ public class Device {
 		String msg = "";
 		DeviceManagementService dmService;
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			dmService = (DeviceManagementService) ctx
-					.getOSGiService(DeviceManagementService.class, null);
+			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
-		org.wso2.carbon.device.mgt.common.Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
+		org.wso2.carbon.device.mgt.common.Device device =
+				AndroidAPIUtils.convertToDeviceObject(jsonPayload);
 		try {
-			if(dmService!=null){
+			if (dmService != null) {
 				result = dmService.updateDeviceInfo(device);
 				status = 1;
-			}else{
+			} else {
 				status = -1;
-				msg = "Device Manager service not available";
+				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
 			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying the device information";
@@ -155,12 +148,12 @@ public class Device {
 		switch (status) {
 			case 1:
 				if (result) {
-					return Response.status(200).entity("Device has modified").build();
+					return Response.status(HttpStatus.SC_OK).entity("Device has modified").build();
 				}
 				break;
 			case -1:
-				return Response.status(500).entity(msg).build();
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
 		}
-		return Response.status(400).entity("Update device has failed").build();
+		return Response.status(HttpStatus.SC_NOT_MODIFIED).entity("Update device has failed").build();
 	}
 }
