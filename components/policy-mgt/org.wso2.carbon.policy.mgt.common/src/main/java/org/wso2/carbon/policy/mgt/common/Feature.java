@@ -20,9 +20,18 @@ package org.wso2.carbon.policy.mgt.common;
 
 public class Feature {
 
+    private int id;
     private String code;
     private String name;
     private Object attribute;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;

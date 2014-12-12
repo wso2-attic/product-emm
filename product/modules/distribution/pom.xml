@@ -105,6 +105,8 @@
 
                                 <mkdir dir="${tempdir}"/>
                                 <mkdir dir="${tempdir}/wso2cdm-${project.version}/repository/components"/>
+                                <mkdir dir="${tempdir}/wso2cdm-${project.version}/repository/deployment/server"/>
+                                <mkdir dir="${tempdir}/wso2cdm-${project.version}/repository/deployment/server/webapps"/>
                                 <unzip dest="${tempdir}">
                                     <fileset dir="target">
                                         <include name="wso2cdm-${project.version}.zip"/>
@@ -137,7 +139,7 @@
                                     og4j.logger.net.sf.ehcache=ERROR
                                 </concat>
 
-                                <!--<delete file="target/wso2cdm-${project.version}.zip"/>-->
+                                <delete file="target/wso2cdm-${project.version}.zip"/>
                                 <delete dir="${tempdir}"/>
                             </tasks>
                         </configuration>
@@ -147,6 +149,8 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
+                                <mkdir dir="target/wso2carbon-core-${project.version}/repository/deployment/server/webapps"/>
+
                                 <!--<copy todir="target/wso2carbon-core-${carbon.kernel.version}/modules"
                                       overwrite="true">
                                     <fileset dir="src/repository/modules"></fileset>
