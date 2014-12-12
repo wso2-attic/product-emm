@@ -17,14 +17,15 @@
 package cdm.api.android;
 
 import cdm.api.android.util.AndroidAPIUtils;
+import cdm.api.android.util.AndroidConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.httpclient.HttpStatus;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -43,25 +44,19 @@ public class Enrollment {
 		String msg = "";
 		DeviceManagementService dmService;
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			dmService = (DeviceManagementService) ctx
-					.getOSGiService(DeviceManagementService.class, null);
+			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
 		Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
 		try {
-			if(dmService!=null){
+			if (dmService != null) {
 				result = dmService.enrollDevice(device);
 				status = 1;
-			}else{
+			} else {
 				status = -1;
-				msg = "Device Manager service not available";
+				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
 			}
-
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);
@@ -70,13 +65,13 @@ public class Enrollment {
 		switch (status) {
 			case 1:
 				if (result) {
-					return Response.status(201).entity("Registration Successful").build();
+					return Response.status(HttpStatus.SC_CREATED).entity("Device enrollment has succeeded").build();
 				}
 				break;
 			case -1:
-				return Response.status(500).entity(msg).build();
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
 		}
-		return Response.status(400).entity("Registration Failed").build();
+		return Response.status(HttpStatus.SC_BAD_REQUEST).entity("Device enrollment has Failed").build();
 	}
 
 	@GET
@@ -87,23 +82,18 @@ public class Enrollment {
 		String msg = "";
 		DeviceManagementService dmService;
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			dmService = (DeviceManagementService) ctx
-					.getOSGiService(DeviceManagementService.class, null);
+			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
 		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 		try {
-			if(dmService!=null){
+			if (dmService != null) {
 				result = dmService.isEnrolled(deviceIdentifier);
 				status = 1;
-			}else{
+			} else {
 				status = -1;
-				msg = "Device Manager service not available";
+				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
 			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while checking enrollment of the device";
@@ -113,40 +103,35 @@ public class Enrollment {
 		switch (status) {
 			case 1:
 				if (result) {
-					return Response.status(200).entity(result).build();
+					return Response.status(HttpStatus.SC_OK).entity(result).build();
 				}
 				break;
 			case -1:
-				return Response.status(500).entity(msg).build();
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
 		}
-		return Response.status(404).entity(result).build();
+		return Response.status(HttpStatus.SC_NOT_FOUND).entity(result).build();
 	}
 
 	@PUT
 	@Path("{id}")
-	public Response modifyEnrollment(@PathParam("id") String id,String jsonPayload) {
+	public Response modifyEnrollment(@PathParam("id") String id, String jsonPayload) {
 		boolean result = false;
 		int status = 0;
 		String msg = "";
 		DeviceManagementService dmService;
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			dmService = (DeviceManagementService) ctx
-					.getOSGiService(DeviceManagementService.class, null);
+			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
 		Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
 		try {
-			if(dmService!=null){
+			if (dmService != null) {
 				result = dmService.modifyEnrollment(device);
 				status = 1;
-			}else{
+			} else {
 				status = -1;
-				msg = "Device Manager service not available";
+				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
 			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying enrollment of the device";
@@ -156,13 +141,13 @@ public class Enrollment {
 		switch (status) {
 			case 1:
 				if (result) {
-					return Response.status(200).entity("Device information modified").build();
+					return Response.status(HttpStatus.SC_OK).entity("Enrollment information has modified").build();
 				}
 				break;
 			case -1:
-				return Response.status(500).entity(msg).build();
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
 		}
-		return Response.status(400).entity("Update enrollment failed").build();
+		return Response.status(HttpStatus.SC_NOT_MODIFIED).entity("Update enrollment has failed").build();
 	}
 
 	@DELETE
@@ -173,23 +158,18 @@ public class Enrollment {
 		String msg = "";
 		DeviceManagementService dmService;
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			dmService = (DeviceManagementService) ctx
-					.getOSGiService(DeviceManagementService.class, null);
+			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
 		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 		try {
-			if(dmService!=null){
+			if (dmService != null) {
 				result = dmService.disenrollDevice(deviceIdentifier);
 				status = 1;
-			}else{
+			} else {
 				status = -1;
-				msg = "Device Manager service not available";
+				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
 			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while disenrolling the device";
@@ -199,12 +179,12 @@ public class Enrollment {
 		switch (status) {
 			case 1:
 				if (result) {
-					return Response.status(200).entity(result).build();
+					return Response.status(HttpStatus.SC_OK).entity(result).build();
 				}
 				break;
 			case -1:
-				return Response.status(500).entity(msg).build();
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
 		}
-		return Response.status(404).entity("Device not found").build();
+		return Response.status(HttpStatus.SC_NOT_FOUND).entity("Device not found").build();
 	}
 }

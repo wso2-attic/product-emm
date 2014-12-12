@@ -19,7 +19,10 @@ package cdm.api.android.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.util.*;
 
@@ -111,5 +114,17 @@ public class AndroidAPIUtils {
 		identifier.setId(deviceId);
 		identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		return identifier;
+	}
+
+
+	public static DeviceManagementService getDeviceManagementService() {
+		DeviceManagementService dmService;
+		PrivilegedCarbonContext.startTenantFlow();
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+		dmService = (DeviceManagementService) ctx
+				.getOSGiService(DeviceManagementService.class, null);
+		return dmService;
 	}
 }

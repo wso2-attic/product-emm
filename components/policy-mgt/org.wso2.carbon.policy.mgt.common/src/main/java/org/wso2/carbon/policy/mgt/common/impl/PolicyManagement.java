@@ -63,4 +63,19 @@ public class PolicyManagement implements PolicyManagerService {
     public Policy getPolicyOfRole(String roleName) throws FeatureManagementException, PolicyManagementException {
         return null;
     }
+
+    @Override
+    public boolean isPolicyAvailableForDevice(String deviceId, String deviceType) throws PolicyManagementException {
+        return false;
+    }
+
+    @Override
+    public boolean isPolicyUsed(String deviceId, String deviceType) throws PolicyManagementException {
+        return false;
+    }
+
+    @Override
+    public void setPolicyUsed(String deviceId, String deviceType, Policy policy) throws PolicyManagementException {
+
+    }
 }
