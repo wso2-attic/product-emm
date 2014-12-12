@@ -198,7 +198,6 @@
         <file>
             <source>../agents/android/jax-rs/target/cdm-android-api.war</source>
             <outputDirectory>wso2cdm-${pom.version}/repository/deployment/server/webapps</outputDirectory>
-            <filtered>true</filtered>
             <fileMode>755</fileMode>
         </file>
         <!-- <file>
