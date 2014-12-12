@@ -35,6 +35,8 @@
 
     <modules>
         <!--<module>modules/agents/android/jax-rs</module>-->
+        <module>modules/agents/windows/jax-rs</module>
+        <module>modules/agents/android/jax-rs</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
         <module>modules/integration</module>
