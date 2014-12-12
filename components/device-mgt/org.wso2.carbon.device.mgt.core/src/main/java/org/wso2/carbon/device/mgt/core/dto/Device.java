@@ -33,13 +33,13 @@ public class Device implements Serializable {
     private String ownerId;
     private String ownerShip;
     private int tenantId;
-    private String deviceType;
+    private Integer deviceType;
 
-    public String getDeviceType() {
+    public Integer getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(String deviceType) {
+    public void setDeviceType(Integer deviceType) {
         this.deviceType = deviceType;
     }
 

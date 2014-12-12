@@ -47,6 +47,7 @@ public class TestDBConfiguration {
     public void setConnectionUrl(String connectionUrl) {
         this.connectionUrl = connectionUrl;
     }
+
     @XmlElement(name = "driverclass", nillable = false)
     public String getDriverClass() {
         return driverClass;

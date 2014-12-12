@@ -27,6 +27,7 @@ import org.wso2.carbon.device.mgt.core.common.TestDBConfiguration;
 import org.wso2.carbon.device.mgt.core.common.TestDBConfigurations;
 import org.wso2.carbon.device.mgt.core.dto.Device;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
+import org.wso2.carbon.device.mgt.core.dto.OwnerShip;
 import org.wso2.carbon.device.mgt.core.dto.Status;
 import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 
@@ -146,8 +147,10 @@ public class DeviceMgtDAOTestSuite {
         device.setDescription("test description");
         device.setStatus(Status.ACTIVE);
         device.setDeviceIdentificationId("111");
-        device.setDeviceType(devType.getId().toString());
+        device.setDeviceType(devType.getId().intValue());
+        device.setOwnerShip(OwnerShip.BYOD.toString());
         device.setOwnerId("111");
+        device.setTenantId(-1234);
         deviceMgtDAO.addDevice(device);
 
         Long deviceId = null;

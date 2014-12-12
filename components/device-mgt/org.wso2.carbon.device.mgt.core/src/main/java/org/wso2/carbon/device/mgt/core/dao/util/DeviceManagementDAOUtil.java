@@ -113,7 +113,7 @@ public final class DeviceManagementDAOUtil {
         deviceBO.setOwnerId(device.getOwner());
         deviceBO.setOwnerShip(device.getOwnership());
         deviceBO.setTenantId(DeviceManagementDAOUtil.getTenantId());
-        deviceBO.setDeviceType(device.getType());
+        deviceBO.setDeviceType(Integer.parseInt(device.getType()));
         return deviceBO;
     }
 
