@@ -25,59 +25,64 @@ import java.util.List;
 
 public class DeviceManagementService implements DeviceManagerService {
 
-    @Override
-    public String getProviderType() {
-        return null;  
-    }
+	@Override
+	public String getProviderType() {
+		return null;
+	}
 
-    @Override
-    public boolean enrollDevice(Device device) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().enrollDevice(device);
-    }
+	@Override
+	public boolean enrollDevice(Device device) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager().enrollDevice(device);
+	}
 
-    @Override
-    public boolean modifyEnrollment(Device device) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().modifyEnrollment(device);
-    }
+	@Override
+	public boolean modifyEnrollment(Device device) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager().modifyEnrollment(device);
+	}
 
-    @Override
-    public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().disenrollDevice(deviceId);
-    }
+	@Override
+	public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager()
+		                                 .disenrollDevice(deviceId);
+	}
 
-    @Override
-    public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().isEnrolled(deviceId);
-    }
+	@Override
+	public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager().isEnrolled(deviceId);
+	}
 
-    @Override
-    public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().isActive(deviceId);
-    }
+	@Override
+	public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager().isActive(deviceId);
+	}
 
-    @Override
-    public boolean setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().setActive(deviceId, status);
-    }
+	@Override
+	public boolean setActive(DeviceIdentifier deviceId, boolean status)
+			throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager()
+		                                 .setActive(deviceId, status);
+	}
 
-    @Override
-    public List<Device> getAllDevices(String type) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().getAllDevices(type);
-    }
+	@Override
+	public List<Device> getAllDevices(String type) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager().getAllDevices(type);
+	}
 
-    @Override
-    public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().getDevice(deviceId);
-    }
+	@Override
+	public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager().getDevice(deviceId);
+	}
 
-    @Override
-    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
-        return DeviceManagementDataHolder.getInstance().getDeviceManager().updateDeviceInfo(device);
-    }
+	@Override
+	public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager().updateDeviceInfo(device);
+	}
 
-    @Override
-    public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
-       return DeviceManagementDataHolder.getInstance().getDeviceManager().setOwnership(deviceId, ownershipType);
-    }
+	@Override
+	public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType)
+			throws DeviceManagementException {
+		return DeviceManagementDataHolder.getInstance().getDeviceManager()
+		                                 .setOwnership(deviceId, ownershipType);
+	}
 
 }

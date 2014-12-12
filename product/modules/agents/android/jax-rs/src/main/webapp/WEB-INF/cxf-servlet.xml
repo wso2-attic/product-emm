@@ -38,6 +38,7 @@
             <ref bean="enrollmentServiceBean"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
+
     <bean id="serviceBean" class="cdm.api.android.Authentication"/>
     <bean id="deviceMgtServiceBean" class="cdm.api.android.Device"/>
     <bean id="enrollmentServiceBean" class="cdm.api.android.Enrollment"/>

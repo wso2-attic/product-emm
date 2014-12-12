@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -44,7 +43,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.wso2.cdm.agent.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ParseException;
@@ -56,39 +54,38 @@ public class HTTPConnectorUtils {
 
 	private static final int MAX_ATTEMPTS = 2;
 
-	public static Map<String, String> getClientKey(String username, String password, Context context) {
-		Map<String, String> params = new HashMap<String, String>();
-		Map<String, String> response = new HashMap<String, String>();
+	// public static Map<String, String> getClientKey(String username, String
+	// password, Context context) {
+	// Map<String, String> params = new HashMap<String, String>();
+	// Map<String, String> response = new HashMap<String, String>();
+	//
+	// params.put("username", username);
+	// params.put("password", password);
+	//
+	// try {
+	// response =
+	// postData("services/register/authenticate/device", params,
+	// context);
+	// } catch (Exception ex) {
+	// ex.printStackTrace();
+	// return response;
+	// }
+	// return response;
+	// }
 
-		params.put("username", username);
-		params.put("password", password);
-
-		try {
-			response =
-			           sendWithTimeWait("services/register/authenticate/device", params, "POST",
-			                            context);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return response;
-		}
-		return response;
-	}
-
-	public static Map<String, String> sendWithTimeWait(String epPostFix,
-	                                                   Map<String, String> params, String option,
-	                                                   Context context) {
+	public static Map<String, String> postData(Context context, String url,
+	                                           Map<String, String> params) {
 		Map<String, String> response = null;
 		Map<String, String> responseFinal = null;
 		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-			Log.d(TAG, "Attempt #" + i + " to register");
+			Log.d(TAG, "Attempt #" + i + " to register " + url);
 			try {
 
-				response = postData(context, epPostFix, params);
+				response = postToServer(context, url, params);
 				if (response != null && !response.equals(null)) {
 					responseFinal = response;
 				}
-				String message = context.getString(R.string.server_registered);
-				Log.v("Check Reg Success", message.toString());
+				Log.d("Success", "Check Reg Success");
 
 				return responseFinal;
 			} catch (Exception e) {
@@ -100,49 +97,34 @@ public class HTTPConnectorUtils {
 				return responseFinal;
 			}
 		}
-		String message = context.getString(R.string.server_register_error, MAX_ATTEMPTS);
 
 		return responseFinal;
 	}
 
-	public static Map<String, String> postData(Context context, String url,
-	                                           Map<String, String> params) {
+	public static Map<String, String> postToServer(Context context, String url,
+	                                               Map<String, String> params) {
 		// Create a new HttpClient and Post Header
 		Map<String, String> response_params = new HashMap<String, String>();
 		HttpClient httpclient = getCertifiedHttpClient(context);
 
-		String endpoint = CommonUtilities.SERVER_URL + url;
-
-		SharedPreferences mainPref = context.getSharedPreferences("com.mdm", Context.MODE_PRIVATE);
-		String ipSaved = mainPref.getString("ip", "");
-
-		if (ipSaved != null && ipSaved != "") {
-			endpoint =
-			           CommonUtilities.SERVER_PROTOCOL + ipSaved + ":" +
-			                   CommonUtilities.SERVER_PORT + CommonUtilities.SERVER_APP_ENDPOINT +
-			                   url;
-		}
-
-		endpoint =
-		           "http://10.100.5.70:9763/wso2appserver-cxf-samples/services/register/authenticate/device";
-
-		Log.v(TAG, ipSaved + "Posting '" + params.toString() + "' to " + endpoint);
 		StringBuilder bodyBuilder = new StringBuilder();
-		Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
-		// constructs the POST body using the parameters
-		while (iterator.hasNext()) {
-			Entry<String, String> param = iterator.next();
-			bodyBuilder.append(param.getKey()).append('=').append(param.getValue());
-			if (iterator.hasNext()) {
-				bodyBuilder.append('&');
+		if (params != null) {
+			Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+			// constructs the POST body using the parameters
+			while (iterator.hasNext()) {
+				Entry<String, String> param = iterator.next();
+				bodyBuilder.append(param.getKey()).append('=').append(param.getValue());
+				if (iterator.hasNext()) {
+					bodyBuilder.append('&');
+				}
 			}
 		}
 
 		String body = bodyBuilder.toString();
-		Log.v(TAG, "Posting '" + body + "' to " + endpoint);
+		Log.v(TAG, "Posting '" + body + "' to " + url);
 		byte[] postData = body.getBytes();
 
-		HttpPost httppost = new HttpPost(endpoint);
+		HttpPost httppost = new HttpPost(url);
 		httppost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		httppost.setHeader("Accept", "*/*");
 		httppost.setHeader("User-Agent", "Mozilla/5.0 ( compatible ), Android");
@@ -185,13 +167,12 @@ public class HTTPConnectorUtils {
 				                             new ThreadSafeClientConnManager(params, schemeRegistry);
 				client = new DefaultHttpClient(cm, params);
 			} else {
-				Log.e("", "out");
 				client = new DefaultHttpClient();
 			}
 
 			return client;
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			return null;
 		}
 	}

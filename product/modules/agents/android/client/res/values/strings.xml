@@ -124,6 +124,7 @@
     <string name="dialog_pin_confirmation_end"> as your PIN code?</string>
     <string name="dialog_init_confirmation">You have set your domain to </string>
     <string name="dialog_init_middle">Your device is a </string>
+    <string name="dialog_init_device_type">Device type</string>
     <string name="dialog_init_end"> device, are you sure you want to proceed ?</string>
     <string name="dialog_init_end_general"> are you sure you want to proceed ?</string>
     <string name="dialog_unregister">You are trying to unregister from EMM. Are you sure you want to proceed ?</string>
@@ -150,8 +151,8 @@
     <string name="info_label_imsi">IMSI:</string>
     <string name="info_label_os">OS:</string>
     <string name="info_label_rooted">Rooted:</string>
-    <string name="info_label_rooted_answer_yes">Yes</string>
-    <string name="info_label_rooted_answer_no">No</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- BUTTON TITLES -->
     <string name="button_ok">OK</string>
