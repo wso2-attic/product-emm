@@ -15,7 +15,6 @@
  */
 package org.wso2.carbon.device.mgt.common;
 
-import java.util.Date;
 import java.util.List;
 
 public class Device {
@@ -28,9 +27,9 @@ public class Device {
 
     private String name;
 
-    private Date dateOfEnrolment;
+    private Long dateOfEnrolment;
 
-    private Date dateOfLastUpdate;
+    private Long dateOfLastUpdate;
 
     private String ownership;
 
@@ -70,19 +69,19 @@ public class Device {
         this.name = name;
     }
 
-    public Date getDateOfEnrolment() {
+    public Long getDateOfEnrolment() {
         return dateOfEnrolment;
     }
 
-    public void setDateOfEnrolment(Date dateOfEnrolment) {
+    public void setDateOfEnrolment(Long dateOfEnrolment) {
         this.dateOfEnrolment = dateOfEnrolment;
     }
 
-    public Date getDateOfLastUpdate() {
+    public Long getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public void setDateOfLastUpdate(Date dateOfLastUpdate) {
+    public void setDateOfLastUpdate(Long dateOfLastUpdate) {
         this.dateOfLastUpdate = dateOfLastUpdate;
     }
 
