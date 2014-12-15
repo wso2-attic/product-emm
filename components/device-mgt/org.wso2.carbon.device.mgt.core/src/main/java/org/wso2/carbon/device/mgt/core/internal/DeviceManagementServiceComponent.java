@@ -58,11 +58,11 @@ public class DeviceManagementServiceComponent {
 
             DeviceManagementConfig config = DeviceConfigurationManager.getInstance().getDeviceManagementConfig();
 
-            DeviceManager deviceManager = new DeviceManager(config, this.getPluginRepository());
-            DeviceManagementDataHolder.getInstance().setDeviceManager(deviceManager);
-
             DataSourceConfig dsConfig = config.getDeviceMgtRepository().getDataSourceConfig();
             DeviceManagementDAOFactory.init(dsConfig);
+
+            DeviceManager deviceManager = new DeviceManager(config, this.getPluginRepository());
+            DeviceManagementDataHolder.getInstance().setDeviceManager(deviceManager);
 
             /* If -Dsetup option enabled then create device management database schema */
             String setupOption = System.getProperty("setup");
