@@ -63,7 +63,7 @@ public class AndroidAPIUtils {
 			}
 			device.setProperties(parseProperties(properties));
 		}else{
-			device.setProperties(new ArrayList<Property>(0));
+			device.setProperties(new ArrayList<Device.Property>(0));
 		}
 
 		if (obj.get(AndroidConstants.DeviceConstants.DEVICE_FEATURES_KEY) != null) {
@@ -78,8 +78,8 @@ public class AndroidAPIUtils {
 		return device;
 	}
 
-	private static List<Property> parseProperties(JsonObject properties) {
-		List<Property> propertyList = new ArrayList<Property>(0);
+	private static List<Device.Property> parseProperties(JsonObject properties) {
+		List<Device.Property> propertyList = new ArrayList<Device.Property>(0);
 		for (Map.Entry<String, JsonElement> entry : properties.entrySet()) {
 			propertyList.add(parseProperty(entry.getKey(), entry.getValue()));
 		}
@@ -93,20 +93,18 @@ public class AndroidAPIUtils {
 	}
 
 	private static List<Feature> parseFeatures(JsonObject features) {
-		List<Feature> featureList = new ArrayList<Feature>(0);
-		return featureList;
+        return new ArrayList<Feature>(0);
 	}
 
-	private static Property parseProperty(String property, JsonElement value) {
-		Property prop = new Property();
+	private static Device.Property parseProperty(String property, JsonElement value) {
+        Device.Property prop = new Device.Property();
 		prop.setName(property);
 		prop.setValue(value.getAsString());
 		return prop;
 	}
 
 	private static Feature parseFeature(JsonElement featureElement) {
-		Feature feature = new Feature();
-		return feature;
+        return new Feature();
 	}
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
