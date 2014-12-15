@@ -75,9 +75,12 @@
             <artifactId>org.wso2.carbon.logging</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.utils</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.osgi</groupId>
             <artifactId>org.eclipse.osgi.services</artifactId>
-            <version>3.2.0.v20090520-1800</version>
         </dependency>
     </dependencies>
 

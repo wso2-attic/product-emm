@@ -19,20 +19,21 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Represents Device Mgt configuration.
+ * Represents Mobile Device Mgt configuration.
  */
 @XmlRootElement(name = "MobileDeviceMgtConfiguration")
 public final class MobileDeviceManagementConfig {
 
-    private DeviceManagementRepository deviceMgtRepository;
+    private MobileDeviceManagementRepository mobileDeviceMgtRepository;
 
     @XmlElement(name = "ManagementRepository", nillable = false)
-    public DeviceManagementRepository getDeviceMgtRepository() {
-        return deviceMgtRepository;
+    public MobileDeviceManagementRepository getMobileDeviceMgtRepository() {
+        return mobileDeviceMgtRepository;
     }
 
-    public void setDeviceMgtRepository(DeviceManagementRepository deviceMgtRepository) {
-        this.deviceMgtRepository = deviceMgtRepository;
+    public void setMobileDeviceMgtRepository(
+            MobileDeviceManagementRepository mobileDeviceMgtRepository) {
+        this.mobileDeviceMgtRepository = mobileDeviceMgtRepository;
     }
 
 }

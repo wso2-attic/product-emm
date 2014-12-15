@@ -86,4 +86,6 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		return true;
 	}
 
+	//should implement equals and hashcode in all service bundles
+
 }

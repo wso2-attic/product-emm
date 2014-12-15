@@ -25,9 +25,10 @@ public class MobileDeviceManagementDAOException extends Exception {
 	private static final long serialVersionUID = 2021891706072918865L;
 
 	/**
-	 * Constructs a new exception with the specified detail message and nested exception.
+	 * Constructs a new MobileDeviceManagementDAOException with the specified detail message and
+	 * nested exception.
 	 *
-	 * @param message error message
+	 * @param message         error message
 	 * @param nestedException exception
 	 */
 	public MobileDeviceManagementDAOException(String message, Exception nestedException) {
@@ -36,7 +37,8 @@ public class MobileDeviceManagementDAOException extends Exception {
 	}
 
 	/**
-	 * Constructs a new exception with the specified detail message and cause.
+	 * Constructs a new MobileDeviceManagementDAOException with the specified detail message
+	 * and cause.
 	 *
 	 * @param message the detail message.
 	 * @param cause   the cause of this exception.
@@ -47,7 +49,7 @@ public class MobileDeviceManagementDAOException extends Exception {
 	}
 
 	/**
-	 * Constructs a new exception with the specified detail message
+	 * Constructs a new MobileDeviceManagementDAOException with the specified detail message
 	 *
 	 * @param message the detail message.
 	 */
@@ -57,9 +59,9 @@ public class MobileDeviceManagementDAOException extends Exception {
 	}
 
 	/**
-	 * Constructs a new exception with the specified and cause.
+	 * Constructs a new MobileDeviceManagementDAOException with the specified and cause.
 	 *
-	 * @param cause   the cause of this exception.
+	 * @param cause the cause of this exception.
 	 */
 	public MobileDeviceManagementDAOException(Throwable cause) {
 		super(cause);
