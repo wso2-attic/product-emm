@@ -41,7 +41,7 @@ import org.wso2.carbon.user.core.service.RealmService;
  * unbind="unsetRealmService"
  * @scr.reference name="device.manager.service"
  * interface="org.wso2.carbon.device.mgt.common.spi.DeviceManagerService"
- * cardinality="1..n"
+ * cardinality="0..n"
  * policy="dynamic"
  * bind="setDeviceManagerService"
  * unbind="unsetDeviceManagerService"
