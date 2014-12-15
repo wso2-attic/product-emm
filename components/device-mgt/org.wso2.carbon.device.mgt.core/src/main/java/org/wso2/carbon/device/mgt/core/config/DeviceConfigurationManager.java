@@ -54,8 +54,8 @@ public class DeviceConfigurationManager {
             Document doc = DeviceManagerUtil.convertToDocument(deviceMgtConfig);
 
             /* Un-marshaling Device Management configuration */
-            JAXBContext rssContext = JAXBContext.newInstance(DeviceManagementConfig.class);
-            Unmarshaller unmarshaller = rssContext.createUnmarshaller();
+            JAXBContext cdmContext = JAXBContext.newInstance(DeviceManagementConfig.class);
+            Unmarshaller unmarshaller = cdmContext.createUnmarshaller();
             this.currentDeviceConfig = (DeviceManagementConfig) unmarshaller.unmarshal(doc);
         } catch (Exception e) {
             throw new DeviceManagementException("Error occurred while initializing RSS config", e);

@@ -304,11 +304,6 @@
             <outputDirectory>wso2cdm-${project.version}/repository/conf</outputDirectory>
             <fileMode>644</fileMode>
         </file>
-        <file>
-            <source>src/repository/database/WSO2EMM_DB.h2.db</source>
-            <outputDirectory>wso2cdm-${project.version}/repository/database</outputDirectory>
-            <fileMode>644</fileMode>
-        </file>
 
         <file>
             <source>
