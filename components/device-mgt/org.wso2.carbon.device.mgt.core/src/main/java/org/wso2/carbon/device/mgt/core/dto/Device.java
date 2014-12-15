@@ -19,7 +19,6 @@
 package org.wso2.carbon.device.mgt.core.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Device implements Serializable {
 
@@ -27,20 +26,20 @@ public class Device implements Serializable {
     private String id;
     private String description;
     private String name;
-    private Date dateOfEnrollment;
-    private Date dateOfLastUpdate;
+    private Long dateOfEnrollment;
+    private Long dateOfLastUpdate;
     private String deviceIdentificationId;
     private Status status;
     private String ownerId;
     private String ownerShip;
     private int tenantId;
-    private String deviceType;
+    private Integer deviceType;
 
-    public String getDeviceType() {
+    public Integer getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(String deviceType) {
+    public void setDeviceType(Integer deviceType) {
         this.deviceType = deviceType;
     }
 
@@ -68,19 +67,19 @@ public class Device implements Serializable {
         this.name = name;
     }
 
-    public Date getDateOfEnrollment() {
+    public Long getDateOfEnrollment() {
         return dateOfEnrollment;
     }
 
-    public void setDateOfEnrollment(Date dateOfEnrollment) {
+    public void setDateOfEnrollment(Long dateOfEnrollment) {
         this.dateOfEnrollment = dateOfEnrollment;
     }
 
-    public Date getDateOfLastUpdate() {
+    public Long getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public void setDateOfLastUpdate(Date dateOfLastUpdate) {
+    public void setDateOfLastUpdate(Long dateOfLastUpdate) {
         this.dateOfLastUpdate = dateOfLastUpdate;
     }
 

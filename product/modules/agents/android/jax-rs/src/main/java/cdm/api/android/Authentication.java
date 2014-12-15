@@ -39,7 +39,10 @@ public class Authentication {
 
 	@POST
 	@Path("/device/license")
+	@Produces("application/json")
 	public String getLicense() {
-		return "License Agreement";
+		JsonObject result = new JsonObject();
+		result.addProperty("licenseText", "License Agreement");
+		return result.toString();
 	}
 }

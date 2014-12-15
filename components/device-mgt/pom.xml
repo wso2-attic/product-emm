@@ -69,6 +69,11 @@
                 <artifactId>org.eclipse.osgi.services</artifactId>
                 <version>3.3.100.v20120522-1822</version>
             </dependency>
+            <dependency>
+                <groupId>com.h2database.wso2</groupId>
+                <artifactId>h2-database-engine</artifactId>
+                <version>${orbit.version.h2.engine}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -91,5 +96,7 @@
             </plugins>
         </pluginManagement>
     </build>
-
+    <properties>
+        <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
+    </properties>
 </project>

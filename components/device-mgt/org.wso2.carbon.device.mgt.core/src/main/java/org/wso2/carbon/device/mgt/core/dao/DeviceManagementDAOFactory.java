@@ -44,6 +44,10 @@ public class DeviceManagementDAOFactory {
         dataSource = resolveDataSource(config);
     }
 
+    public static void init(DataSource dtSource) {
+        dataSource = dtSource;
+    }
+
     /**
      * Resolve data source from the data source definition
      *
@@ -78,4 +82,7 @@ public class DeviceManagementDAOFactory {
         return dataSource;
     }
 
+    public static DataSource getDataSource() {
+        return dataSource;
+    }
 }

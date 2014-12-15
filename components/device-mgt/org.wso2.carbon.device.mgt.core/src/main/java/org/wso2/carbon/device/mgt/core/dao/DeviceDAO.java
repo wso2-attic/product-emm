@@ -33,6 +33,8 @@ public interface DeviceDAO {
 
     void deleteDevice(Long deviceId) throws DeviceManagementDAOException;
 
-    List<Device> getDeviceByDeviceId(Long deviceId) throws DeviceManagementDAOException;
+    Device getDeviceByDeviceId(Long deviceId) throws DeviceManagementDAOException;
+
+    List<Device> getDevices() throws DeviceManagementDAOException;
 
 }

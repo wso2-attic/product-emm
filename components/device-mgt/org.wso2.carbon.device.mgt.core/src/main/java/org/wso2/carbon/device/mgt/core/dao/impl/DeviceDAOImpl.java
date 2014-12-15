@@ -61,10 +61,10 @@ public class DeviceDAOImpl implements DeviceDAO {
             stmt.setLong(4, new Date().getTime());
             stmt.setString(5, device.getOwnerShip());
             stmt.setString(6, device.getStatus().toString());
-            stmt.setString(7, device.getDeviceType());
+            stmt.setInt(7, device.getDeviceType());
             stmt.setString(8, device.getDeviceIdentificationId());
             stmt.setString(9, device.getOwnerId());
-            stmt.setInt(10, DeviceManagementDAOUtil.getTenantId());
+            stmt.setInt(10, device.getTenantId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             String msg = "Error occurred while enrolling device '" + device.getName() + "'";
@@ -91,8 +91,13 @@ public class DeviceDAOImpl implements DeviceDAO {
     }
 
     @Override
-    public List<Device> getDeviceByDeviceId(Long deviceId)
+    public Device getDeviceByDeviceId(Long deviceId)
             throws DeviceManagementDAOException {
+        return null;
+    }
+
+    @Override
+    public List<Device> getDevices() throws DeviceManagementDAOException {
         return null;
     }
 
