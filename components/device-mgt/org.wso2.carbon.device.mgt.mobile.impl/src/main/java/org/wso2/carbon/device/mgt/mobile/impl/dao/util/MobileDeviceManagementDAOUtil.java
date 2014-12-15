@@ -16,8 +16,15 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.dao.util;
 
+import javax.sql.DataSource;
+
 /**
  * Utility method required by MobileDeviceManagement DAO classes.
  */
 public class MobileDeviceManagementDAOUtil {
+
+    public static DataSource resolveDataSource() {
+        return null;
+    }
+
 }
