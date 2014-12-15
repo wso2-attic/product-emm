@@ -25,7 +25,7 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 import java.util.List;
 
 /**
- * This represents the Android implementation of DeviceManagerService. *
+ * This represents the Android implementation of DeviceManagerService.
  */
 public class AndroidDeviceManagerService implements DeviceManagerService {
 

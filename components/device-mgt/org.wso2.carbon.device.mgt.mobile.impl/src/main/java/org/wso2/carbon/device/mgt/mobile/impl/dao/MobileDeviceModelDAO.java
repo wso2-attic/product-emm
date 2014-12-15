@@ -16,8 +16,19 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.dao;
 
+import org.wso2.carbon.device.mgt.mobile.impl.dto.MobileDeviceModel;
+
 /**
- * Created by harshan on 12/12/14.
+ * This class represents the key operations associated with persisting mobile-device model related
+ * information.
  */
 public interface MobileDeviceModelDAO {
+
+	MobileDeviceModel getDeviceModel(String modelId) throws MobileDeviceManagementDAOException;
+
+	void addDeviceModel(MobileDeviceModel deviceModel) throws MobileDeviceManagementDAOException;
+
+	void updateDeviceModel(MobileDeviceModel deviceModel) throws MobileDeviceManagementDAOException;
+
+	void deleteDeviceModel(String modelId) throws MobileDeviceManagementDAOException;
 }
