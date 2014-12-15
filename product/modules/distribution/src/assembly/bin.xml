@@ -338,14 +338,6 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!-- nTask Component -->
-        <!--        <file>
-                    <source>
-                        ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml
-                    </source>
-                    <outputDirectory>wso2cdm-${project.version}/repository/conf/etc</outputDirectory>
-                </file>-->
 
-        <!-- End - nTask Component -->
     </files>
 </assembly>

@@ -40,6 +40,7 @@
         <module>components/device-mgt</module>
         <module>components/policy-mgt</module>
         <module>features/device-mgt</module>
+        <module>features/policy-mgt</module>
         <module>product</module>
     </modules>
 
@@ -119,6 +120,11 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.policy.mgt.common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.policy.mgt.common.spi;
+package org.wso2.carbon.policy.mgt.common;
 
 import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.Policy;
