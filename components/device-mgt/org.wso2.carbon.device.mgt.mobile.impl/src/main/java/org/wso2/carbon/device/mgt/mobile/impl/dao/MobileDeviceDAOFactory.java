@@ -17,7 +17,7 @@ package org.wso2.carbon.device.mgt.mobile.impl.dao;
 
 import org.wso2.carbon.device.mgt.mobile.impl.DataSourceListener;
 import org.wso2.carbon.device.mgt.mobile.impl.dao.impl.MobileDeviceDAOImpl;
-import org.wso2.carbon.device.mgt.mobile.impl.dao.impl.MobileDeviceModelImpl;
+import org.wso2.carbon.device.mgt.mobile.impl.dao.impl.MobileDeviceModelDAOImpl;
 import org.wso2.carbon.device.mgt.mobile.impl.dao.impl.MobileDeviceVendorDAOImpl;
 import org.wso2.carbon.device.mgt.mobile.impl.dao.impl.MobileOSVersionDAOImpl;
 import org.wso2.carbon.device.mgt.mobile.impl.dao.util.MobileDeviceManagementDAOUtil;
@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 
 public class MobileDeviceDAOFactory implements DataSourceListener {
 
-    private DataSource dataSource;
+    private static DataSource dataSource;
 
     public MobileDeviceDAOFactory() {
         MobileDeviceManagementBundleActivator.registerDataSourceListener(this);
@@ -35,27 +35,23 @@ public class MobileDeviceDAOFactory implements DataSourceListener {
 
     @Override
     public void notifyObserver() {
-        this.dataSource = MobileDeviceManagementDAOUtil.resolveDataSource();
-    }
-
-    private DataSource getDataSource() {
-        return dataSource;
+        dataSource = MobileDeviceManagementDAOUtil.resolveDataSource();
     }
 
     public static MobileDeviceDAO getMobileDeviceDAO() {
-        return new MobileDeviceDAOImpl();
+        return new MobileDeviceDAOImpl(dataSource);
     }
 
     public static MobileDeviceModelDAO getMobileDeviceModelDAO() {
-        return new MobileDeviceModelImpl();
+        return new MobileDeviceModelDAOImpl(dataSource);
     }
 
     public static MobileDeviceVendorDAO getMobileDeviceVendorDAO() {
-        return new MobileDeviceVendorDAOImpl();
+        return new MobileDeviceVendorDAOImpl(dataSource);
     }
 
     public static MobileOSVersionDAO getMobileOSVersionDAO() {
-        return new MobileOSVersionDAOImpl();
+        return new MobileOSVersionDAOImpl(dataSource);
     }
 
 }

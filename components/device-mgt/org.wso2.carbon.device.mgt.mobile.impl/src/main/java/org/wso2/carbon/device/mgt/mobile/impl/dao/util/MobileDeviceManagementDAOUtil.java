@@ -16,9 +16,9 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.dao.util;
 
-<<<<<<< HEAD
+
 import javax.sql.DataSource;
-=======
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -32,19 +32,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
->>>>>>> 95f72f77f1a86f8f7e92b8cceafd63b40374dcbb
 
 /**
  * Utility method required by MobileDeviceManagement DAO classes.
  */
 public class MobileDeviceManagementDAOUtil {
 
-<<<<<<< HEAD
     public static DataSource resolveDataSource() {
         return null;
     }
 
-=======
 	private static final Log log = LogFactory.getLog(MobileDeviceManagementDAOUtil.class);
 
 	public static void cleanupResources(Connection conn, PreparedStatement stmt, ResultSet rs) {
@@ -89,5 +86,5 @@ public class MobileDeviceManagementDAOUtil {
 		MobileDevice mobileDeviceBO = new MobileDevice();
 		return mobileDeviceBO;
 	}
->>>>>>> 95f72f77f1a86f8f7e92b8cceafd63b40374dcbb
+
 }

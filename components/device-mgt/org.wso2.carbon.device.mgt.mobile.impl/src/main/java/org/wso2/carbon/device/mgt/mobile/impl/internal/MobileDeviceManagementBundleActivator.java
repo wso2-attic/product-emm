@@ -16,27 +16,15 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.internal;
 
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-<<<<<<< HEAD
+import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.*;
-=======
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
->>>>>>> 95f72f77f1a86f8f7e92b8cceafd63b40374dcbb
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 import org.wso2.carbon.device.mgt.mobile.impl.DataSourceListener;
 import org.wso2.carbon.device.mgt.mobile.impl.android.AndroidDeviceManagerService;
-<<<<<<< HEAD
-import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceDAOFactory;
-=======
-import org.wso2.carbon.device.mgt.mobile.impl.config.MobileDeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.mobile.impl.config.MobileDeviceManagementConfig;
 import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
-import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceManagementDAOFactory;
->>>>>>> 95f72f77f1a86f8f7e92b8cceafd63b40374dcbb
+import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.impl.ios.IOSDeviceManagerService;
 import org.wso2.carbon.device.mgt.mobile.impl.util.MobileDeviceManagementSchemaInitializer;
 import org.wso2.carbon.device.mgt.mobile.impl.windows.WindowsDeviceManagerService;
@@ -54,7 +42,6 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
     private static final Log log = LogFactory.getLog(MobileDeviceManagementBundleActivator.class);
     private static final String SYMBOLIC_NAME_DATA_SOURCE_COMPONENT = "org.wso2.carbon.ndatasource.core";
 
-<<<<<<< HEAD
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         try {
@@ -62,6 +49,17 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
                 log.debug("Activating Mobile Device Management Service bundle");
             }
             bundleContext.addBundleListener(this);
+
+            /* If -Dsetup option enabled then create device management database schema */
+            String setupOption = System.getProperty("setup");
+            if (setupOption != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug(
+                            "-Dsetup is enabled. Mobile Device management repository schema initialization is about " +
+                                    "to begin");
+                }
+                setupMobileDeviceManagementSchema(null);
+            }
 
             MobileDeviceDAOFactory daoFactory = new MobileDeviceDAOFactory();
             //TODO Register this dao to an appropriate config file
@@ -113,73 +111,20 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
     private List<DataSourceListener> getDataSourceListeners() {
         return dataSourceListeners;
     }
-=======
-	@Override
-	public void start(BundleContext bundleContext) throws Exception {
-		try {
-			//Initialize Mobile Device Management datasource
-//			MobileDeviceConfigurationManager.getInstance().initConfig();
-//			MobileDeviceManagementConfig config = MobileDeviceConfigurationManager.getInstance()
-//			                                                                      .getMobileDeviceManagementConfig();
-//			MobileDataSourceConfig
-//					dsConfig = config.getMobileDeviceMgtRepository().getMobileDataSourceConfig();
-//			MobileDeviceManagementDAOFactory.init(dsConfig);
 
-			/* If -Dsetup option enabled then create device management database schema */
-			String setupOption = System.getProperty("setup");
-			if (setupOption != null) {
-				if (log.isDebugEnabled()) {
-					log.debug(
-							"-Dsetup is enabled. Mobile Device management repository schema initialization is about " +
-							"to begin");
-				}
-				setupMobileDeviceManagementSchema(null);
-			}
+    private void setupMobileDeviceManagementSchema(MobileDataSourceConfig config) throws
+            DeviceManagementException {
+        MobileDeviceManagementSchemaInitializer initializer =
+                new MobileDeviceManagementSchemaInitializer(config);
+        log.info("Initializing mobile device management repository database schema");
+        try {
+            //initializer.createRegistryDatabase();
+        } catch (Exception e) {
+            throw new DeviceManagementException(
+                    "Error occurred while initializing Mobile Device Management " +
+                            "database schema", e);
+        }
+    }
 
-			if (log.isDebugEnabled()) {
-				log.debug("Activating Mobile Device Management Service bundle");
-			}
-			androidServiceRegRef =
-					bundleContext.registerService(DeviceManagerService.class.getName(),
-					                              new AndroidDeviceManagerService(), null);
-			iOSServiceRegRef =
-					bundleContext.registerService(DeviceManagerService.class.getName(),
-					                              new IOSDeviceManagerService(), null);
-			windowsServiceRegRef =
-					bundleContext.registerService(DeviceManagerService.class.getName(),
-					                              new WindowsDeviceManagerService(), null);
-			if (log.isDebugEnabled()) {
-				log.debug("Mobile Device Management Service bundle is activated");
-			}
-		} catch (Throwable e) {
-			log.error("Error occurred while activating Mobile Device Management Service Component",
-			          e);
-		}
-	}
-
-	private void setupMobileDeviceManagementSchema(MobileDataSourceConfig config) throws
-	                                                                              DeviceManagementException {
-		MobileDeviceManagementSchemaInitializer initializer =
-				new MobileDeviceManagementSchemaInitializer(config);
-		log.info("Initializing mobile device management repository database schema");
-		try {
-			initializer.createRegistryDatabase();
-		} catch (Exception e) {
-			throw new DeviceManagementException(
-					"Error occurred while initializing Mobile Device Management " +
-					"database schema", e);
-		}
-	}
-
-	@Override
-	public void stop(BundleContext bundleContext) throws Exception {
-		if (log.isDebugEnabled()) {
-			log.debug("Deactivating Mobile Device Management Service");
-		}
-		androidServiceRegRef.unregister();
-		iOSServiceRegRef.unregister();
-		windowsServiceRegRef.unregister();
-	}
->>>>>>> 95f72f77f1a86f8f7e92b8cceafd63b40374dcbb
 
 }
