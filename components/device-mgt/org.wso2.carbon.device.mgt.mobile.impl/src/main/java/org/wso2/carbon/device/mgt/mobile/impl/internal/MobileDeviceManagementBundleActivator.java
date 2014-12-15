@@ -43,12 +43,12 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		try {
 			//Initialize Mobile Device Management datasource
-			MobileDeviceConfigurationManager.getInstance().initConfig();
-			MobileDeviceManagementConfig config = MobileDeviceConfigurationManager.getInstance()
-			                                                                      .getMobileDeviceManagementConfig();
-			MobileDataSourceConfig
-					dsConfig = config.getMobileDeviceMgtRepository().getMobileDataSourceConfig();
-			MobileDeviceManagementDAOFactory.init(dsConfig);
+//			MobileDeviceConfigurationManager.getInstance().initConfig();
+//			MobileDeviceManagementConfig config = MobileDeviceConfigurationManager.getInstance()
+//			                                                                      .getMobileDeviceManagementConfig();
+//			MobileDataSourceConfig
+//					dsConfig = config.getMobileDeviceMgtRepository().getMobileDataSourceConfig();
+//			MobileDeviceManagementDAOFactory.init(dsConfig);
 
 			/* If -Dsetup option enabled then create device management database schema */
 			String setupOption = System.getProperty("setup");
@@ -58,7 +58,7 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator {
 							"-Dsetup is enabled. Mobile Device management repository schema initialization is about " +
 							"to begin");
 				}
-				setupMobileDeviceManagementSchema(dsConfig);
+				setupMobileDeviceManagementSchema(null);
 			}
 
 			if (log.isDebugEnabled()) {
