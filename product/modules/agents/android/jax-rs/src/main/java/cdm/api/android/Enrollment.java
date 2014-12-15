@@ -48,6 +48,9 @@ public class Enrollment {
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
+		if(log.isDebugEnabled()){
+			log.debug("Device Enroll >>> " + jsonPayload);
+		}
 		Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
 		try {
 			if (dmService != null) {
@@ -85,6 +88,9 @@ public class Enrollment {
 			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
+		}
+		if(log.isDebugEnabled()){
+			log.debug("Device is enrolled  >>> " + id);
 		}
 		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 		try {
@@ -124,6 +130,9 @@ public class Enrollment {
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
+		if(log.isDebugEnabled()){
+			log.debug("Modify Enrollment  >>> id : " + id + ", payload : " + jsonPayload);
+		}
 		Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
 		try {
 			if (dmService != null) {
@@ -161,6 +170,9 @@ public class Enrollment {
 			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
+		}
+		if(log.isDebugEnabled()){
+			log.debug("DisenrollDevice  >>> id : " + id );
 		}
 		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 		try {

@@ -109,11 +109,15 @@ public final class DeviceManagementDAOUtil {
         deviceBO.setName(device.getName());
         deviceBO.setDateOfEnrollment(device.getDateOfEnrolment());
         deviceBO.setDateOfLastUpdate(device.getDateOfLastUpdate());
-        deviceBO.setStatus(Status.valueOf(String.valueOf(device.isStatus())));
+        if (!device.isStatus()){
+            deviceBO.setStatus(Status.INACTIVE);
+        }else{
+            deviceBO.setStatus(Status.ACTIVE);
+        }
         deviceBO.setOwnerId(device.getOwner());
         deviceBO.setOwnerShip(device.getOwnership());
         deviceBO.setTenantId(DeviceManagementDAOUtil.getTenantId());
-        deviceBO.setDeviceType(Integer.parseInt(device.getType()));
+        //deviceBO.setDeviceType(Integer.parseInt(device.getType()));
         return deviceBO;
     }
 
