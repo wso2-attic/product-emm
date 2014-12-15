@@ -91,8 +91,13 @@ public class DeviceDAOImpl implements DeviceDAO {
     }
 
     @Override
-    public List<Device> getDeviceByDeviceId(Long deviceId)
+    public Device getDeviceByDeviceId(Long deviceId)
             throws DeviceManagementDAOException {
+        return null;
+    }
+
+    @Override
+    public List<Device> getDevices() throws DeviceManagementDAOException {
         return null;
     }
 
