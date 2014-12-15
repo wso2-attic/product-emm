@@ -50,6 +50,9 @@ public class Device {
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}
+		if(log.isDebugEnabled()){
+			log.debug("Get all devices");
+		}
 		try {
 			if (dmService != null) {
 				result = dmService.getAllDevices(
@@ -85,6 +88,9 @@ public class Device {
 		DeviceManagementService dmService;
 		org.wso2.carbon.device.mgt.common.Device device =
 				new org.wso2.carbon.device.mgt.common.Device();
+		if(log.isDebugEnabled()){
+			log.debug("Get device id : " + id);
+		}
 		try {
 			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
@@ -129,6 +135,9 @@ public class Device {
 			dmService = AndroidAPIUtils.getDeviceManagementService();
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
+		}
+		if(log.isDebugEnabled()){
+			log.debug("Update device id : " + id + ", payload : " + jsonPayload);
 		}
 		org.wso2.carbon.device.mgt.common.Device device =
 				AndroidAPIUtils.convertToDeviceObject(jsonPayload);

@@ -15,7 +15,7 @@
  */
 package org.wso2.carbon.device.mgt.mobile.impl.config;
 
-import org.wso2.carbon.device.mgt.core.config.datasource.DataSourceConfig;
+import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,15 +26,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "ManagementRepository")
 public class MobileDeviceManagementRepository {
 
-    private DataSourceConfig dataSourceConfig;
+	private MobileDataSourceConfig mobileDataSourceConfig;
 
 	@XmlElement(name = "DataSourceConfiguration", nillable = false)
-	public DataSourceConfig getDataSourceConfig() {
-		return dataSourceConfig;
+	public MobileDataSourceConfig getMobileDataSourceConfig() {
+		return mobileDataSourceConfig;
 	}
 
-	public void setDataSourceConfig(DataSourceConfig dataSourceConfig) {
-		this.dataSourceConfig = dataSourceConfig;
+	public void setMobileDataSourceConfig(MobileDataSourceConfig mobileDataSourceConfig) {
+		this.mobileDataSourceConfig = mobileDataSourceConfig;
 	}
 
 }
