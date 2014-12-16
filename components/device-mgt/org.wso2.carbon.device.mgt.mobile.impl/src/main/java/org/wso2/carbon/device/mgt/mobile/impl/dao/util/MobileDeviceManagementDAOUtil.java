@@ -16,6 +16,9 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.dao.util;
 
+
+import javax.sql.DataSource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -34,6 +37,10 @@ import java.util.Hashtable;
  * Utility method required by MobileDeviceManagement DAO classes.
  */
 public class MobileDeviceManagementDAOUtil {
+
+    public static DataSource resolveDataSource() {
+        return null;
+    }
 
 	private static final Log log = LogFactory.getLog(MobileDeviceManagementDAOUtil.class);
 
@@ -79,4 +86,5 @@ public class MobileDeviceManagementDAOUtil {
 		MobileDevice mobileDeviceBO = new MobileDevice();
 		return mobileDeviceBO;
 	}
+
 }
