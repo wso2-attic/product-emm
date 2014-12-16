@@ -23,15 +23,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "DeviceMgtConfiguration")
 public final class PolicyManagementConfig {
 
+    public void setPolicyManagementRepository(PolicyManagementRepository policyManagementRepository) {
+        this.policyManagementRepository = policyManagementRepository;
+    }
+
     private PolicyManagementRepository policyManagementRepository;
 
     @XmlElement(name = "ManagementRepository", nillable = false)
     public PolicyManagementRepository getPolicyManagementRepository() {
         return policyManagementRepository;
-    }
-
-    public void setPolicyMgtRepository(PolicyManagementRepository policyManagementRepository) {
-        this.policyManagementRepository = policyManagementRepository;
     }
 
 }
