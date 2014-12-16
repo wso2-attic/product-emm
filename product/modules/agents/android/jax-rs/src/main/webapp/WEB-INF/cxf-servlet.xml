@@ -27,20 +27,33 @@
         <jaxrs:serviceBeans>
             <ref bean="serviceBean"/>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
     </jaxrs:server>
     <jaxrs:server id="deviceManagementService" address="/devices">
         <jaxrs:serviceBeans>
             <ref bean="deviceMgtServiceBean"/>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
     </jaxrs:server>
     <jaxrs:server id="enrollmentService" address="/enrollment">
         <jaxrs:serviceBeans>
             <ref bean="enrollmentServiceBean"/>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
     </jaxrs:server>
 
     <bean id="serviceBean" class="cdm.api.android.Authentication"/>
     <bean id="deviceMgtServiceBean" class="cdm.api.android.Device"/>
     <bean id="enrollmentServiceBean" class="cdm.api.android.Enrollment"/>
+    <bean id="testServiceBean" class="cdm.api.android.Test"/>
+    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+
+
 </beans>
 

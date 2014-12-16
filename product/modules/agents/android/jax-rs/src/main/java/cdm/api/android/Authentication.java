@@ -18,31 +18,27 @@ package cdm.api.android;
 
 import com.google.gson.JsonObject;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.*;
 
+@Produces({ "application/json", "application/xml" })
+@Consumes({ "application/json", "application/xml" })
 @Path("/authenticate/")
 public class Authentication {
 
-	@POST
-	@Path("/device/")
-	@Produces("application/json")
-	public String authenticateDevice(@FormParam("username") String username,
-	                                 @FormParam("password") String password) {
-		JsonObject result = new JsonObject();
-		result.addProperty("senderId", "jwwfowrjwqporqwrpqworpq");
-		return result.toString();
-	}
+    @POST
+    @Path("/device/")
+    public String authenticateDevice(@FormParam("username") String username,
+            @FormParam("password") String password) {
+        JsonObject result = new JsonObject();
+        result.addProperty("senderId", "jwwfowrjwqporqwrpqworpq");
+        return result.toString();
+    }
 
-	@POST
-	@Path("/device/license")
-	@Produces("application/json")
-	public String getLicense() {
-		JsonObject result = new JsonObject();
-		result.addProperty("licenseText", "License Agreement");
-		return result.toString();
-	}
+    @POST
+    @Path("/device/license")
+    public String getLicense() {
+        JsonObject result = new JsonObject();
+        result.addProperty("licenseText", "License Agreement");
+        return result.toString();
+    }
 }
