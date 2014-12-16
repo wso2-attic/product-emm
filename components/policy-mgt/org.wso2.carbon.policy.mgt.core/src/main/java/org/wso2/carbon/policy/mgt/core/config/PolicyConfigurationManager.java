@@ -62,7 +62,7 @@ public class PolicyConfigurationManager {
         }
     }
 
-    public PolicyManagementConfig getDeviceManagementConfig() {
+    public PolicyManagementConfig getPolicyManagementConfig() {
         return currentPolicyConfig;
     }
 

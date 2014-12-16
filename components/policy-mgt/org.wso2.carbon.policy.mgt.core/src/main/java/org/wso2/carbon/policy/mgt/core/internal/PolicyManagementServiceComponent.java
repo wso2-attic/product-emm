@@ -42,7 +42,7 @@ public class PolicyManagementServiceComponent {
 
         try {
             PolicyConfigurationManager.getInstance().initConfig();
-            PolicyManagementConfig config = PolicyConfigurationManager.getInstance().getDeviceManagementConfig();
+            PolicyManagementConfig config = PolicyConfigurationManager.getInstance().getPolicyManagementConfig();
             DataSourceConfig dsConfig = config.getPolicyManagementRepository().getDataSourceConfig();
             PolicyManagementDAOFactory.init(dsConfig);
 
