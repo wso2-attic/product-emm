@@ -16,8 +16,6 @@
 
 package cdm.api.android;
 
-import com.google.gson.JsonObject;
-
 import javax.ws.rs.*;
 
 @Produces({ "application/json", "application/xml" })
@@ -29,16 +27,16 @@ public class Authentication {
     @Path("/device/")
     public String authenticateDevice(@FormParam("username") String username,
             @FormParam("password") String password) {
-        JsonObject result = new JsonObject();
-        result.addProperty("senderId", "jwwfowrjwqporqwrpqworpq");
-        return result.toString();
+/*        JsonObject result = new JsonObject();
+        result.addProperty("senderId", "jwwfowrjwqporqwrpqworpq");*/
+        return "";
     }
 
     @POST
     @Path("/device/license")
     public String getLicense() {
-        JsonObject result = new JsonObject();
-        result.addProperty("licenseText", "License Agreement");
-        return result.toString();
+/*        JsonObject result = new JsonObject();
+        result.addProperty("licenseText", "License Agreement");*/
+        return "";
     }
 }

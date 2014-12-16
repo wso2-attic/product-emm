@@ -34,7 +34,7 @@ public final class DeviceManagementConstants {
         public static final String SECURE_VAULT_NS = "http://org.wso2.securevault/configuration";
     }
 
-    public static class MobileDeviceTypes {
+    public static final class MobileDeviceTypes {
         private MobileDeviceTypes() {
             throw new AssertionError();
         }

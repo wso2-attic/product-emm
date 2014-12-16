@@ -26,7 +26,7 @@ public class ErrorHandler implements ExceptionMapper {
     @Override public Response toResponse(Throwable throwable) {
         Response.Status status;
         status = Response.Status.INTERNAL_SERVER_ERROR;
-
-        return Response.status(status).header("exception", exception.getMessage()).build();
+      //  return Response.status(status).header("exception", exception.getMessage()).build();
+        return null;
     }
 }

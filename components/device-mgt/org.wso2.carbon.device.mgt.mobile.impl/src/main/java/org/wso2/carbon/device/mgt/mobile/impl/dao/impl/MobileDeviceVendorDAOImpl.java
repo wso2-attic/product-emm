@@ -16,14 +16,26 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.dao.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceVendorDAO;
 import org.wso2.carbon.device.mgt.mobile.impl.dto.MobileDeviceVendor;
+
+import javax.sql.DataSource;
 
 /**
  * Implementation of MobileDeviceVendorDAO.
  */
 public class MobileDeviceVendorDAOImpl implements MobileDeviceVendorDAO {
+
+	private DataSource dataSource;
+	private static final Log log = LogFactory.getLog(MobileDeviceVendorDAOImpl.class);
+
+	public MobileDeviceVendorDAOImpl(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
 	@Override
 	public MobileDeviceVendor getDeviceModel(String vendorId)
 			throws MobileDeviceManagementDAOException {

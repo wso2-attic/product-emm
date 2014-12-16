@@ -16,22 +16,31 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.internal;
 
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import org.apache.commons.logging.LogFactory;
+import org.osgi.framework.*;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+import org.wso2.carbon.device.mgt.mobile.impl.DataSourceListener;
 import org.wso2.carbon.device.mgt.mobile.impl.android.AndroidDeviceManagerService;
+import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
+import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.impl.ios.IOSDeviceManagerService;
+import org.wso2.carbon.device.mgt.mobile.impl.util.MobileDeviceManagementSchemaInitializer;
 import org.wso2.carbon.device.mgt.mobile.impl.windows.WindowsDeviceManagerService;
 
-public class MobileDeviceManagementBundleActivator implements BundleActivator {
+import java.util.ArrayList;
+import java.util.List;
 
-	private static final Log log = LogFactory.getLog(MobileDeviceManagementBundleActivator.class);
-	private ServiceRegistration androidServiceRegRef;
-	private ServiceRegistration iOSServiceRegRef;
-	private ServiceRegistration windowsServiceRegRef;
+public class MobileDeviceManagementBundleActivator implements BundleActivator, BundleListener {
+
+    private ServiceRegistration androidServiceRegRef;
+    private ServiceRegistration iOSServiceRegRef;
+    private ServiceRegistration windowsServiceRegRef;
+    private static List<DataSourceListener> dataSourceListeners = new ArrayList<DataSourceListener>();
+
+    private static final Log log = LogFactory.getLog(MobileDeviceManagementBundleActivator.class);
+    private static final String SYMBOLIC_NAME_DATA_SOURCE_COMPONENT = "org.wso2.carbon.ndatasource.core";
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
@@ -39,6 +48,22 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator {
             if (log.isDebugEnabled()) {
                 log.debug("Activating Mobile Device Management Service bundle");
             }
+            bundleContext.addBundleListener(this);
+
+            /* If -Dsetup option enabled then create device management database schema */
+            String setupOption = System.getProperty("setup");
+            if (setupOption != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug(
+                            "-Dsetup is enabled. Mobile Device management repository schema initialization is about " +
+                                    "to begin");
+                }
+                setupMobileDeviceManagementSchema(null);
+            }
+
+            MobileDeviceDAOFactory daoFactory = new MobileDeviceDAOFactory();
+            //TODO Register this dao to an appropriate config file
+
             androidServiceRegRef =
                     bundleContext.registerService(DeviceManagerService.class.getName(),
                             new AndroidDeviceManagerService(), null);
@@ -64,6 +89,42 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator {
         androidServiceRegRef.unregister();
         iOSServiceRegRef.unregister();
         windowsServiceRegRef.unregister();
+
+        bundleContext.removeBundleListener(this);
     }
+
+    @Override
+    public void bundleChanged(BundleEvent bundleEvent) {
+        int eventType = bundleEvent.getType();
+        String bundleSymbolicName = bundleEvent.getBundle().getSymbolicName();
+        if (SYMBOLIC_NAME_DATA_SOURCE_COMPONENT.equals(bundleSymbolicName) && eventType == BundleEvent.STARTED) {
+            for (DataSourceListener listener : this.getDataSourceListeners()) {
+                listener.notifyObserver();
+            }
+        }
+    }
+
+    public static void registerDataSourceListener(DataSourceListener listener) {
+        dataSourceListeners.add(listener);
+    }
+
+    private List<DataSourceListener> getDataSourceListeners() {
+        return dataSourceListeners;
+    }
+
+    private void setupMobileDeviceManagementSchema(MobileDataSourceConfig config) throws
+            DeviceManagementException {
+        MobileDeviceManagementSchemaInitializer initializer =
+                new MobileDeviceManagementSchemaInitializer(config);
+        log.info("Initializing mobile device management repository database schema");
+        try {
+            //initializer.createRegistryDatabase();
+        } catch (Exception e) {
+            throw new DeviceManagementException(
+                    "Error occurred while initializing Mobile Device Management " +
+                            "database schema", e);
+        }
+    }
+
 
 }

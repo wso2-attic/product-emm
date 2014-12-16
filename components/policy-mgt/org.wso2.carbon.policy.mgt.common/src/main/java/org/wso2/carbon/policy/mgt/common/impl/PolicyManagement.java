@@ -21,7 +21,7 @@ package org.wso2.carbon.policy.mgt.common.impl;
 import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.Policy;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.common.spi.PolicyManagerService;
+import org.wso2.carbon.policy.mgt.common.PolicyManagerService;
 
 public class PolicyManagement implements PolicyManagerService {
     @Override

@@ -104,7 +104,7 @@ public class Device {
 
     @PUT
     @Path("{id}")
-    public Message updateDevice(@PathParam("id") String id, String jsonPayload) {
+    public Message updateDevice(@PathParam("id") String id, org.wso2.carbon.device.mgt.common.Device device) {
 
         boolean result = false;
         String msg = "";
@@ -116,8 +116,6 @@ public class Device {
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
-        org.wso2.carbon.device.mgt.common.Device device =
-                AndroidAPIUtils.convertToDeviceObject(jsonPayload);
         try {
             if (dmService != null) {
                 result = dmService.updateDeviceInfo(device);

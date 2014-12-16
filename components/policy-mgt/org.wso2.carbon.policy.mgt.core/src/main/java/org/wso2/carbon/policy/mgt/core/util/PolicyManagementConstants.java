@@ -16,23 +16,9 @@
 * under the License.
 */
 
+package org.wso2.carbon.policy.mgt.core.util;
 
-package org.wso2.carbon.policy.mgt.common.spi;
+public final class PolicyManagementConstants {
 
-import org.wso2.carbon.policy.mgt.common.Feature;
-import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
-
-import java.util.List;
-
-public interface FeatureManagerService {
-
-    void addFeature(Feature feature) throws FeatureManagementException;
-
-    void editFeature(Feature feature) throws FeatureManagementException;
-
-    void removeFeature(int featureId) throws FeatureManagementException;
-
-    List<Feature> getFeatures() throws FeatureManagementException;
-
-    List<Feature> getFeaturesOfPolicy(int policyId) throws FeatureManagementException;
+    public static final String DEVICE_CONFIG_XML_NAME = "cdm-config.xml";
 }

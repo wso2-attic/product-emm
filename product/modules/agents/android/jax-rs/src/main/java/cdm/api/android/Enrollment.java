@@ -41,7 +41,7 @@ public class Enrollment {
     private static Log log = LogFactory.getLog(Enrollment.class);
 
     @POST
-    public Message enrollDevice(String jsonPayload) {
+    public Message enrollDevice(Device device) {
 
         boolean result = false;
         int status = 0;
@@ -54,7 +54,7 @@ public class Enrollment {
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
-        Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
+
         try {
             if (dmService != null) {
                 result = dmService.enrollDevice(device);
@@ -120,7 +120,7 @@ public class Enrollment {
 
     @PUT
     @Path("{id}")
-    public Message modifyEnrollment(@PathParam("id") String id, String jsonPayload) {
+    public Message modifyEnrollment(@PathParam("id") String id, Device device) {
         boolean result = false;
         String msg = "";
         DeviceManagementService dmService;
@@ -131,7 +131,7 @@ public class Enrollment {
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
-        Device device = AndroidAPIUtils.convertToDeviceObject(jsonPayload);
+
         try {
             if (dmService != null) {
                 result = dmService.modifyEnrollment(device);
