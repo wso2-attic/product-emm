@@ -41,17 +41,14 @@ public class PolicyManagementServiceComponent {
     protected void activate(ComponentContext componentContext) {
 
         try {
-
             PolicyConfigurationManager.getInstance().initConfig();
-
             PolicyManagementConfig config = PolicyConfigurationManager.getInstance().getDeviceManagementConfig();
-
             DataSourceConfig dsConfig = config.getPolicyManagementRepository().getDataSourceConfig();
             PolicyManagementDAOFactory.init(dsConfig);
 
-
         } catch (Throwable t) {
-
+            String msg = "Error occurred while initializing the Policy management core.";
+            log.error(msg, t);
         }
     }
 
