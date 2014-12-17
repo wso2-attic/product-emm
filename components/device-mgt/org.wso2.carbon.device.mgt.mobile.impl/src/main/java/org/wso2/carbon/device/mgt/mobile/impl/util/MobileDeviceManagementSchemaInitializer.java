@@ -18,10 +18,10 @@ package org.wso2.carbon.device.mgt.mobile.impl.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
 import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.dbcreator.DatabaseCreator;
 
+import javax.sql.DataSource;
 import java.io.File;
 
 public final class MobileDeviceManagementSchemaInitializer extends DatabaseCreator {
@@ -29,10 +29,10 @@ public final class MobileDeviceManagementSchemaInitializer extends DatabaseCreat
 	private static final Log log = LogFactory.getLog(MobileDeviceManagementSchemaInitializer.class);
 	private static final String setupSQLScriptBaseLocation =
 			CarbonUtils.getCarbonHome() + File.separator + "dbscripts" + File.separator + "cdm" +
-			File.separator + "plugins";
+			File.separator + "plugins" + File.separator ;
 
-	public MobileDeviceManagementSchemaInitializer(MobileDataSourceConfig config) {
-		super(MobileDeviceManagerUtil.resolveDataSource(config));
+	public MobileDeviceManagementSchemaInitializer(DataSource dataSource) {
+		super(dataSource);
 	}
 
 	protected String getDbScriptLocation(String databaseType) {

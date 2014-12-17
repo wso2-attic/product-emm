@@ -18,7 +18,7 @@ package org.wso2.carbon.device.mgt.mobile.impl.config;
 
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.mobile.impl.util.MobileDeviceManagerUtil;
+import org.wso2.carbon.device.mgt.mobile.impl.util.MobileDeviceManagementUtil;
 import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
 import org.wso2.carbon.utils.CarbonUtils;
 
@@ -53,7 +53,7 @@ public class MobileDeviceConfigurationManager {
 	public synchronized void initConfig() throws DeviceManagementException {
 		try {
 			File mobileDeviceMgtConfig = new File(mobileDeviceMgtConfigXMLPath);
-			Document doc = MobileDeviceManagerUtil.convertToDocument(mobileDeviceMgtConfig);
+			Document doc = MobileDeviceManagementUtil.convertToDocument(mobileDeviceMgtConfig);
 			JAXBContext mobileDeviceMgmtContext =
 					JAXBContext.newInstance(MobileDeviceManagementConfig.class);
 			Unmarshaller unmarshaller = mobileDeviceMgmtContext.createUnmarshaller();

@@ -16,11 +16,17 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.android;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.mobile.impl.dto.MobileDevice;
+import org.wso2.carbon.device.mgt.mobile.impl.util.MobileDeviceManagementUtil;
 
 import java.util.List;
 
@@ -29,6 +35,8 @@ import java.util.List;
  */
 public class AndroidDeviceManagerService implements DeviceManagerService {
 
+	private static final Log log = LogFactory.getLog(AndroidDeviceManagerService.class);
+
 	@Override
 	public String getProviderType() {
 		return DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID;
@@ -36,22 +44,64 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public boolean enrollDevice(Device device) throws DeviceManagementException {
-		return true;
+		boolean status = false;
+		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
+		try {
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().addDevice(mobileDevice);
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg = "Error while enrolling the Android device : " +
+			             device.getDeviceIdentifier();
+			log.error(msg, e);
+			throw new DeviceManagementException(msg, e);
+		}
+		return status;
 	}
 
 	@Override
 	public boolean modifyEnrollment(Device device) throws DeviceManagementException {
-		return true;
+		boolean status = false;
+		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
+		try {
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().updateDevice(mobileDevice);
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg = "Error while updating the enrollment of the Android device : " +
+			             device.getDeviceIdentifier();
+			log.error(msg, e);
+			throw new DeviceManagementException(msg, e);
+		}
+		return status;
 	}
 
 	@Override
 	public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-		return true;
+		boolean status = false;
+		try {
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().deleteDevice(deviceId.getId());
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg = "Error while removing the Android device : " + deviceId.getId();
+			log.error(msg, e);
+			throw new DeviceManagementException(msg, e);
+		}
+		return status;
 	}
 
 	@Override
 	public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
-		return true;
+		boolean isEnrolled = false;
+		try {
+			MobileDevice mobileDevice =
+					MobileDeviceManagementDAOFactory.getMobileDeviceDAO().getDevice(
+							deviceId.getId());
+			if(mobileDevice!=null){
+				isEnrolled = true;
+			}
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg = "Error while checking the enrollment status of Android device : " +
+			             deviceId.getId();
+			log.error(msg, e);
+			throw new DeviceManagementException(msg, e);
+		}
+		return isEnrolled;
 	}
 
 	@Override
@@ -72,7 +122,17 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-		return null;
+		Device device = null;
+		try {
+			MobileDevice mobileDevice = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().
+					getDevice(deviceId.getId());
+			device = MobileDeviceManagementUtil.convertToDevice(mobileDevice);
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg = "Error while fetching the Android device : " + deviceId.getId();
+			log.error(msg, e);
+			throw new DeviceManagementException(msg, e);
+		}
+		return device;
 	}
 
 	@Override
@@ -83,9 +143,15 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
-		return true;
+		boolean status = false;
+		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
+		try {
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().updateDevice(mobileDevice);
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg = "Error while updating the Android device : " + device.getDeviceIdentifier();
+			log.error(msg, e);
+			throw new DeviceManagementException(msg, e);
+		}
+		return status;
 	}
-
-	//should implement equals and hashcode in all service bundles
-
 }

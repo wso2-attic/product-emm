@@ -27,9 +27,9 @@ public class MobileDevice implements Serializable {
 	private String regId;
 	private String imei;
 	private String imsi;
-	private int osVersionId;
-	private int modelId;
-	private int vendorId;
+	private String osVersion;
+	private String model;
+	private String vendor;
 
 	public String getMobileDeviceId() {
 		return mobileDeviceId;
@@ -63,27 +63,27 @@ public class MobileDevice implements Serializable {
 		this.imsi = imsi;
 	}
 
-	public int getOsVersionId() {
-		return osVersionId;
+	public String getOsVersion() {
+		return osVersion;
 	}
 
-	public void setOsVersionId(int osVersionId) {
-		this.osVersionId = osVersionId;
+	public void setOsVersion(String osVersion) {
+		this.osVersion = osVersion;
 	}
 
-	public int getModelId() {
-		return modelId;
+	public String getModel() {
+		return model;
 	}
 
-	public void setModelId(int modelId) {
-		this.modelId = modelId;
+	public void setModel(String model) {
+		this.model = model;
 	}
 
-	public int getVendorId() {
-		return vendorId;
+	public String getVendor() {
+		return vendor;
 	}
 
-	public void setVendorId(int vendorId) {
-		this.vendorId = vendorId;
+	public void setVendor(String vendor) {
+		this.vendor = vendor;
 	}
 }

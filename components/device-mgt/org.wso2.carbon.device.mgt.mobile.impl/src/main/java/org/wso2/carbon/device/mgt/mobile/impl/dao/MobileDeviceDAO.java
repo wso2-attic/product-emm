@@ -26,10 +26,10 @@ public interface MobileDeviceDAO {
 
 	MobileDevice getDevice(String deviceId) throws MobileDeviceManagementDAOException;
 
-	void addDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
+	boolean addDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
 
-	void updateDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
+	boolean updateDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
 
-	void deleteDevice(String deviceId) throws MobileDeviceManagementDAOException;
+	boolean deleteDevice(String deviceId) throws MobileDeviceManagementDAOException;
 
 }
