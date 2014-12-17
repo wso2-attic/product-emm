@@ -18,11 +18,21 @@
 
 package org.wso2.carbon.policy.mgt.core.dao.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Hashtable;
 
 public class PolicyManagementDAOUtil {
+
+    private static final Log log = LogFactory.getLog(PolicyManagementDAOUtil.class);
+
     public static DataSource lookupDataSource(String dataSourceName, final Hashtable<Object, Object> jndiProperties) {
         try {
             if (jndiProperties == null || jndiProperties.isEmpty()) {
@@ -32,6 +42,30 @@ public class PolicyManagementDAOUtil {
             return (DataSource) context.doLookup(dataSourceName);
         } catch (Exception e) {
             throw new RuntimeException("Error in looking up data source: " + e.getMessage(), e);
+        }
+    }
+
+    public static void cleanupResources(Connection conn, PreparedStatement stmt, ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                log.warn("Error occurred while closing result set", e);
+            }
+        }
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                log.warn("Error occurred while closing prepared statement", e);
+            }
+        }
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                log.warn("Error occurred while closing database connection", e);
+            }
         }
     }
 

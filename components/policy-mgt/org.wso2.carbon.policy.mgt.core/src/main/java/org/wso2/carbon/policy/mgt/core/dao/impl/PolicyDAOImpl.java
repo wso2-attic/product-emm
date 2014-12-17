@@ -25,6 +25,8 @@ import org.wso2.carbon.policy.mgt.core.dao.PolicyDAO;
 import org.wso2.carbon.policy.mgt.core.dao.PolicyManagerDAOException;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class PolicyDAOImpl implements PolicyDAO {
 
@@ -69,5 +71,14 @@ public class PolicyDAOImpl implements PolicyDAO {
     @Override
     public Policy getPolicy(String deviceID, String deviceType) throws PolicyManagerDAOException {
         return null;
+    }
+
+    private Connection getConnection() throws PolicyManagerDAOException {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new PolicyManagerDAOException("Error occurred while obtaining a connection from the policy " +
+                    "management metadata repository datasource", e);
+        }
     }
 }
