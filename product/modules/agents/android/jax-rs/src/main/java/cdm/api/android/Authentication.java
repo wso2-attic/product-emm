@@ -18,8 +18,6 @@ package cdm.api.android;
 
 import javax.ws.rs.*;
 
-@Produces({ "application/json", "application/xml" })
-@Consumes({ "application/json", "application/xml" })
 @Path("/authenticate/")
 public class Authentication {
 
@@ -27,16 +25,13 @@ public class Authentication {
     @Path("/device/")
     public String authenticateDevice(@FormParam("username") String username,
             @FormParam("password") String password) {
-/*        JsonObject result = new JsonObject();
-        result.addProperty("senderId", "jwwfowrjwqporqwrpqworpq");*/
-        return "";
+        return "jwwfowrjwqporqwrpqworpq";
     }
 
     @POST
     @Path("/device/license")
+    @Produces ("text/plain")
     public String getLicense() {
-/*        JsonObject result = new JsonObject();
-        result.addProperty("licenseText", "License Agreement");*/
-        return "";
+        return "License Agreement";
     }
 }

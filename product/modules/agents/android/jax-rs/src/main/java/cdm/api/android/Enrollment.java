@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 
@@ -40,6 +41,14 @@ public class Enrollment {
 
     private static Log log = LogFactory.getLog(Enrollment.class);
 
+    /*
+    * Request Format : {"deviceIdentifier":"macid","description":"ww","ownership":"ww",
+    * "properties":[{"name":"username","value":"ww"},{"name":"device","value":"ww"},
+    * {"name":"imei","value":"imei"},{"name":"imsi","value":"imsi"},{"name":"model","value":"mi3"},
+    * {"name":"regId","value":"regid"},{"name":"vendor","value":"vendor"},
+    * {"name":"osVersion","value":"Lolipop"}]}
+    *
+    **/
     @POST
     public Message enrollDevice(Device device) {
 
@@ -57,6 +66,7 @@ public class Enrollment {
 
         try {
             if (dmService != null) {
+                device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
                 result = dmService.enrollDevice(device);
                 Response.status(HttpStatus.SC_CREATED);
                 responseMsg.setResponseMessage("Device enrollment has succeeded");
