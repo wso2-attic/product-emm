@@ -24,6 +24,15 @@ public class Policy {
     private int id;
     private String policyName;
     private List<Feature>  featuresList;
+    private boolean generic;
+
+    public boolean isGeneric() {
+        return generic;
+    }
+
+    public void setGeneric(boolean generic) {
+        this.generic = generic;
+    }
 
     public int getId() {
         return id;
