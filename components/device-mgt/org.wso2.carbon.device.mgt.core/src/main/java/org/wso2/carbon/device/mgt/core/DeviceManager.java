@@ -60,7 +60,6 @@ public class DeviceManager implements DeviceManagerService {
            Integer deviceTypeId = this.getDeviceDAO().getDeviceTypeIdByDeviceTypeName(device.getType());
            deviceDto.setDeviceType(deviceTypeId);
            this.getDeviceDAO().addDevice(deviceDto);
-
         } catch (DeviceManagementDAOException e) {
             throw new DeviceManagementException("Error occurred while enrolling the device '" +
                     device.getId() + "'", e);
