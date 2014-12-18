@@ -48,19 +48,20 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 		MobileDevice mobileDevice = null;
 		try {
 			conn = this.getConnection();
-			String createDBQuery =
+			String selectDBQuery =
 					"SELECT * FROM MBL_DEVICE WHERE MOBILE_DEVICE_ID = ?";
-			stmt = conn.prepareStatement(createDBQuery);
+			stmt = conn.prepareStatement(selectDBQuery);
 			stmt.setString(1, deviceId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				mobileDevice.setMobileDeviceId(resultSet.getString(0));
-				mobileDevice.setRegId(resultSet.getString(1));
-				mobileDevice.setImei(resultSet.getString(2));
-				mobileDevice.setImsi(resultSet.getString(3));
-				mobileDevice.setOsVersion(resultSet.getString(4));
-				mobileDevice.setModel(resultSet.getString(5));
-				mobileDevice.setVendor(resultSet.getString(6));
+				mobileDevice = new MobileDevice();
+				mobileDevice.setMobileDeviceId(resultSet.getString(1));
+				mobileDevice.setRegId(resultSet.getString(2));
+				mobileDevice.setImei(resultSet.getString(3));
+				mobileDevice.setImsi(resultSet.getString(4));
+				mobileDevice.setOsVersion(resultSet.getString(5));
+				mobileDevice.setModel(resultSet.getString(6));
+				mobileDevice.setVendor(resultSet.getString(7));
 				break;
 			}
 		} catch (SQLException e) {
@@ -117,10 +118,10 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 		PreparedStatement stmt = null;
 		try {
 			conn = this.getConnection();
-			String createDBQuery =
+			String updateDBQuery =
 					"UPDATE MBL_DEVICE SET REG_ID = ?, IMEI = ?, IMSI = ?, OS_VERSION = ?," +
 					"DEVICE_MODEL = ?, VENDOR = ? WHERE MOBILE_DEVICE_ID = ?";
-			stmt = conn.prepareStatement(createDBQuery);
+			stmt = conn.prepareStatement(updateDBQuery);
 			stmt.setString(1, mobileDevice.getRegId());
 			stmt.setString(2, mobileDevice.getImei());
 			stmt.setString(3, mobileDevice.getImsi());
@@ -150,9 +151,9 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 		PreparedStatement stmt = null;
 		try {
 			conn = this.getConnection();
-			String createDBQuery =
+			String deleteDBQuery =
 					"DELETE FROM MBL_DEVICE WHERE MOBILE_DEVICE_ID = ?";
-			stmt = conn.prepareStatement(createDBQuery);
+			stmt = conn.prepareStatement(deleteDBQuery);
 			stmt.setString(1,deviceId);
 			int rows = stmt.executeUpdate();
 			if(rows>0){
