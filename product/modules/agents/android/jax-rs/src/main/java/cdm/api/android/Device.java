@@ -16,18 +16,17 @@
 
 package cdm.api.android;
 
+import cdm.api.android.common.AndroidAgentException;
 import cdm.api.android.util.AndroidAPIUtils;
-import cdm.api.android.util.AndroidConstants;
 import cdm.api.android.util.Message;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -39,141 +38,104 @@ import java.util.List;
 @Consumes({ "application/json", "application/xml" })
 public class Device {
 
-	private static Log log = LogFactory.getLog(Device.class);
+    private static Log log = LogFactory.getLog(Device.class);
 
-	@GET
-	public List<org.wso2.carbon.device.mgt.common.Device> getAllDevices() {
-		List<org.wso2.carbon.device.mgt.common.Device> devices = null;
-		String msg = "";
-		DeviceManagementService dmService;
+    @GET
+    public List<org.wso2.carbon.device.mgt.common.Device> getAllDevices() throws AndroidAgentException {
 
-		try {
-			dmService = AndroidAPIUtils.getDeviceManagementService();
-		} finally {
-			PrivilegedCarbonContext.endTenantFlow();
-		}
-		try {
-			if (dmService != null) {
-				devices = dmService.getAllDevices(
-						DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-				Response.status(HttpStatus.SC_OK);
-			} else {
-				Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			}
-		} catch (DeviceManagementException e) {
-			msg = "Error occurred while fetching the device list.";
-			log.error(msg, e);
-			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		}
-		return devices;
-	}
+        List<org.wso2.carbon.device.mgt.common.Device> devices;
+        String msg;
+        DeviceManagementService dmService;
 
-	@GET
-	@Path("{id}")
-	public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id) {
-		String msg = "";
-		DeviceManagementService dmService;
-		org.wso2.carbon.device.mgt.common.Device device =
-				new org.wso2.carbon.device.mgt.common.Device();
+        try {
+            dmService = AndroidAPIUtils.getDeviceManagementService();
 
-		try {
-			dmService = AndroidAPIUtils.getDeviceManagementService();
-		} finally {
-			PrivilegedCarbonContext.endTenantFlow();
-		}
-		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-		try {
-			if (dmService != null) {
-				device = dmService.getDevice(deviceIdentifier);
-				if (device == null) {
-					Response.status(HttpStatus.SC_NOT_FOUND);
-				}
+        } catch (DeviceManagementServiceException deviceMgtServiceEx) {
+            String errorMsg = "Device management service error";
+            log.error(errorMsg, deviceMgtServiceEx);
+            throw new AndroidAgentException();
+        }
 
-			} else {
-				Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			}
+        try {
 
-		} catch (DeviceManagementException e) {
-			msg = "Error occurred while fetching the device information.";
-			log.error(msg, e);
-			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		}
-		return device;
-	}
+            devices = dmService.getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            Response.status(HttpStatus.SC_OK);
 
-	@PUT
-	@Path("{id}")
-	public Message updateDevice(@PathParam("id") String id,
-	                            org.wso2.carbon.device.mgt.common.Device device) {
-		boolean result = false;
-		String msg = "";
-		DeviceManagementService dmService;
-		Message responseMessage = new Message();
+        } catch (DeviceManagementException e) {
+            msg = "Error occurred while fetching the device list.";
+            log.error(msg, e);
+            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            throw new AndroidAgentException(msg, e);
 
-		try {
-			dmService = AndroidAPIUtils.getDeviceManagementService();
-		} finally {
-			PrivilegedCarbonContext.endTenantFlow();
-		}
-		try {
-			if (dmService != null) {
-				device.setType(
-						DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-				result = dmService.updateDeviceInfo(device);
-				if (result) {
-					Response.status(HttpStatus.SC_OK);
-					responseMessage.setResponseMessage("Device information has modified successfully.");
-				} else {
-					Response.status(HttpStatus.SC_NOT_MODIFIED);
-					responseMessage.setResponseMessage("Update device has failed.");
-				}
-			} else {
-				Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-				msg = AndroidConstants.Messages.DEVICE_MANAGER_SERVICE_NOT_AVAILABLE;
-				responseMessage.setResponseMessage(msg);
-			}
+        }
+        return devices;
+    }
 
-		} catch (DeviceManagementException e) {
-			msg = "Error occurred while modifying the device information.";
-			log.error(msg, e);
-			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			responseMessage.setResponseMessage(msg);
+    @GET
+    @Path("{id}")
+    public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id) throws AndroidAgentException {
+        String msg;
+        DeviceManagementService dmService;
+        org.wso2.carbon.device.mgt.common.Device device;
 
-		}
-		return responseMessage;
-	}
+        try {
+            dmService = AndroidAPIUtils.getDeviceManagementService();
 
-	@GET
-	@Path("/operations/{id}")
-	public org.wso2.carbon.device.mgt.common.Device getOperations(@PathParam("id") String id) {
-		String msg = "";
-		DeviceManagementService dmService;
-		org.wso2.carbon.device.mgt.common.Device device =
-				new org.wso2.carbon.device.mgt.common.Device();
+        } catch (DeviceManagementServiceException deviceMgtServiceEx) {
+            String errorMsg = "Device management service error";
+            log.error(errorMsg, deviceMgtServiceEx);
+            throw new AndroidAgentException(errorMsg, deviceMgtServiceEx);
+        }
+        DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+        try {
+            device = dmService.getDevice(deviceIdentifier);
+            if (device == null) {
+                Response.status(HttpStatus.SC_NOT_FOUND);
+            }
+        } catch (DeviceManagementException deviceMgtEx) {
+            msg = "Error occurred while fetching the device information.";
+            log.error(msg, deviceMgtEx);
+            throw new AndroidAgentException(msg, deviceMgtEx);
+        }
+        return device;
+    }
 
-		try {
-			dmService = AndroidAPIUtils.getDeviceManagementService();
-		} finally {
-			PrivilegedCarbonContext.endTenantFlow();
-		}
-		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-		try {
-			if (dmService != null) {
-				device = dmService.getDevice(deviceIdentifier);
-				if (device == null) {
-					Response.status(HttpStatus.SC_NOT_FOUND);
-				}
+    @PUT
+    @Path("{id}")
+    public Message updateDevice(@PathParam("id") String id, org.wso2.carbon.device.mgt.common.Device device) throws
+            AndroidAgentException {
 
-			} else {
-				Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			}
+        DeviceManagementService dmService = null;
+        Message responseMessage = new Message();
 
-		} catch (DeviceManagementException e) {
-			msg = "Error occurred while fetching the device information.";
-			log.error(msg, e);
-			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		}
-		return device;
-	}
+        boolean result;
 
+        try {
+            dmService = AndroidAPIUtils.getDeviceManagementService();
+
+        } catch (DeviceManagementServiceException deviceManagementServiceException) {
+            String errorMsg = "Device management service error";
+            log.error(errorMsg, deviceManagementServiceException);
+        }
+
+        try {
+            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            result = dmService.updateDeviceInfo(device);
+
+            if (result) {
+                Response.status(HttpStatus.SC_OK);
+                responseMessage.setResponseMessage("Device information has modified successfully.");
+            } else {
+                Response.status(HttpStatus.SC_NOT_MODIFIED);
+                responseMessage.setResponseMessage("Device not found for the update.");
+            }
+            return responseMessage;
+
+        } catch (DeviceManagementException deviceMgtEx) {
+            String msg = "Error occurred while modifying the device information.";
+            log.error(msg, deviceMgtEx);
+            throw new AndroidAgentException(msg, deviceMgtEx);
+        }
+
+    }
 }

@@ -18,15 +18,19 @@
 
 package cdm.api.android.common;
 
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
-public class ErrorHandler implements ExceptionMapper {
 
-    public Response toResponse(Throwable throwable) {
-        Response.Status status;
-        status = Response.Status.INTERNAL_SERVER_ERROR;
-      //  return Response.status(status).header("exception", exception.getMessage()).build();
-        return null;
+@Produces({ "application/json", "application/xml" })
+public class ErrorHandler implements ExceptionMapper<AndroidAgentException> {
+
+    public Response toResponse(AndroidAgentException exception) {
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setErrorMessage(exception.getErrorMessage());
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
     }
 }

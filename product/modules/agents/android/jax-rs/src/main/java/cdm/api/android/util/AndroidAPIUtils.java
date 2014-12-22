@@ -16,17 +16,19 @@
 
 package cdm.api.android.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
-import java.util.*;
-
 /**
  * AndroidAPIUtil class provides utility function used by Android REST-API classes.
  */
 public class AndroidAPIUtils {
+
+    private static Log log = LogFactory.getLog(AndroidAPIUtils.class);
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
 		DeviceIdentifier identifier = new DeviceIdentifier();
@@ -36,14 +38,22 @@ public class AndroidAPIUtils {
 	}
 
 
-	public static DeviceManagementService getDeviceManagementService() {
+	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException{
+
+        // until complete login this is use to load super tenant context
+
 		DeviceManagementService dmService;
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		dmService = (DeviceManagementService) ctx
-				.getOSGiService(DeviceManagementService.class, null);
+		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
+
+        if (dmService == null){
+            log.error("device management service not initialized");
+            throw new DeviceManagementServiceException("device management service not initialized");
+        }
+        PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
 	}
 }
