@@ -21,7 +21,11 @@ import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.config.datasource.DataSourceConfig;
 import org.wso2.carbon.device.mgt.core.config.datasource.JNDILookupDefinition;
+import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.core.dao.DeviceTypeDAO;
 import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
+import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 
 import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
@@ -80,4 +84,21 @@ public final class DeviceManagerUtil {
         return dataSource;
     }
 
+    public static boolean registerDeviceType(String deviceTypeName) throws DeviceManagementException{
+        boolean status = false;
+        try {
+            DeviceTypeDAO deviceTypeDAO = DeviceManagementDAOFactory.getDeviceTypeDAO();
+            Integer deviceTypeId = deviceTypeDAO.getDeviceTypeIdByDeviceTypeName(deviceTypeName);
+            if(deviceTypeId == null){
+                DeviceType deviceType = new DeviceType();
+                deviceType.setName(deviceTypeName);
+                deviceTypeDAO.addDeviceType(deviceType);
+            }
+            status = true;
+        } catch (DeviceManagementDAOException e) {
+            String msg = "Error occurred while registering the device type " + deviceTypeName;
+            throw new DeviceManagementException(msg, e);
+        }
+        return status;
+    }
 }

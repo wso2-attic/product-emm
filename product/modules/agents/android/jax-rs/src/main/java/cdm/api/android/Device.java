@@ -142,4 +142,38 @@ public class Device {
 		}
 		return responseMessage;
 	}
+
+	@GET
+	@Path("/operations/{id}")
+	public org.wso2.carbon.device.mgt.common.Device getOperations(@PathParam("id") String id) {
+		String msg = "";
+		DeviceManagementService dmService;
+		org.wso2.carbon.device.mgt.common.Device device =
+				new org.wso2.carbon.device.mgt.common.Device();
+
+		try {
+			dmService = AndroidAPIUtils.getDeviceManagementService();
+		} finally {
+			PrivilegedCarbonContext.endTenantFlow();
+		}
+		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+		try {
+			if (dmService != null) {
+				device = dmService.getDevice(deviceIdentifier);
+				if (device == null) {
+					Response.status(HttpStatus.SC_NOT_FOUND);
+				}
+
+			} else {
+				Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			}
+
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while fetching the device information.";
+			log.error(msg, e);
+			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		}
+		return device;
+	}
+
 }

@@ -36,6 +36,4 @@ public interface DeviceDAO {
     Device getDeviceByDeviceId(Long deviceId) throws DeviceManagementDAOException;
 
     List<Device> getDevices() throws DeviceManagementDAOException;
-
-    Integer getDeviceTypeIdByDeviceTypeName(String type) throws DeviceManagementDAOException;
 }

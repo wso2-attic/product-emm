@@ -49,7 +49,7 @@ public class MobileDeviceManagementDAOException extends Exception {
 	}
 
 	/**
-	 * Constructs a new MobileDeviceManagementDAOException with the specified detail message
+	 * Constructs a new MobileDeviceManagementDAOException with the specified detail message.
 	 *
 	 * @param message the detail message.
 	 */

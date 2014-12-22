@@ -36,4 +36,6 @@ public interface DeviceTypeDAO {
 
     DeviceIdentifier getDeviceType() throws DeviceManagementDAOException;
 
+    Integer getDeviceTypeIdByDeviceTypeName(String type) throws DeviceManagementDAOException;
+
 }
