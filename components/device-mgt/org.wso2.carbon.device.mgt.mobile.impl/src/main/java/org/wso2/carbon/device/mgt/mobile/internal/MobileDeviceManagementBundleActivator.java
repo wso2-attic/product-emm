@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.impl.internal;
+package org.wso2.carbon.device.mgt.mobile.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,15 +24,15 @@ import org.wso2.carbon.apimgt.api.APIProvider;
 import org.wso2.carbon.apimgt.impl.APIManagerFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.impl.DataSourceListener;
+import org.wso2.carbon.device.mgt.mobile.DataSourceListener;
 import org.wso2.carbon.device.mgt.mobile.impl.android.AndroidDeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.impl.config.APIConfig;
-import org.wso2.carbon.device.mgt.mobile.impl.config.MobileDeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.mobile.impl.config.MobileDeviceManagementConfig;
-import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
-import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.mobile.config.APIConfig;
+import org.wso2.carbon.device.mgt.mobile.config.MobileDeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.mobile.config.MobileDeviceManagementConfig;
+import org.wso2.carbon.device.mgt.mobile.config.datasource.MobileDataSourceConfig;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.impl.ios.IOSDeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.impl.util.DeviceManagementAPIPublisherUtil;
+import org.wso2.carbon.device.mgt.mobile.util.DeviceManagementAPIPublisherUtil;
 import org.wso2.carbon.device.mgt.mobile.impl.windows.WindowsDeviceManagerService;
 
 import java.util.ArrayList;

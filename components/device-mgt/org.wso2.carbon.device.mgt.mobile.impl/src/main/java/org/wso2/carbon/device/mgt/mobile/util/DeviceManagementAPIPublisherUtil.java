@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.carbon.device.mgt.mobile.impl.util;
+package org.wso2.carbon.device.mgt.mobile.util;
 
 import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.APIProvider;
@@ -22,10 +22,8 @@ import org.wso2.carbon.apimgt.api.model.APIIdentifier;
 import org.wso2.carbon.apimgt.api.model.APIStatus;
 import org.wso2.carbon.apimgt.api.model.URITemplate;
 import org.wso2.carbon.apimgt.impl.APIConstants;
-import org.wso2.carbon.apimgt.usage.publisher.service.APIMGTConfigReaderService;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.mobile.impl.config.APIConfig;
-import org.wso2.carbon.utils.CarbonUtils;
+import org.wso2.carbon.device.mgt.mobile.config.APIConfig;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

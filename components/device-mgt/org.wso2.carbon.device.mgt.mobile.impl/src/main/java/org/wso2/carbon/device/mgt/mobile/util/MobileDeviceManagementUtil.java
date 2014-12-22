@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.impl.util;
+package org.wso2.carbon.device.mgt.mobile.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.mobile.impl.dto.MobileDevice;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

@@ -18,139 +18,36 @@ package org.wso2.carbon.device.mgt.core;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
-import org.wso2.carbon.device.mgt.core.config.DeviceManagementConfig;
-import org.wso2.carbon.device.mgt.core.dao.DeviceDAO;
-import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
-import org.wso2.carbon.device.mgt.core.dao.DeviceTypeDAO;
-import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
+import org.wso2.carbon.device.mgt.common.OperationManager;
 
 import java.util.List;
 
-public class DeviceManager implements DeviceManagerService {
-    
-    private DeviceDAO deviceDAO;
-    private DeviceTypeDAO deviceTypeDAO;
-    private DeviceManagementConfig config;
-    private DeviceManagementRepository pluginRepository;
-    
-    public DeviceManager(DeviceManagementConfig config, DeviceManagementRepository pluginRepository) {
-        this.config = config;
-        this.pluginRepository = pluginRepository;
-        this.deviceDAO = DeviceManagementDAOFactory.getDeviceDAO();
-        this.deviceTypeDAO = DeviceManagementDAOFactory.getDeviceTypeDAO();
-    }
+/**
+ * Proxy class for all Device Management related operations that take the corresponding plugin type in
+ * and resolve the appropriate plugin implementation
+ */
+public interface DeviceManager {
 
-    @Override
-    public String getProviderType() {
-        return null;  
-    }
+    public boolean enrollDevice(Device device) throws DeviceManagementException;
 
-    @Override
-    public boolean enrollDevice(Device device) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(device.getType());
-        boolean status = dms.enrollDevice(device);
-        try {
-            this.getDeviceTypeDAO().getDeviceType();
-            org.wso2.carbon.device.mgt.core.dto.Device deviceDto = DeviceManagementDAOUtil.convertDevice(
-                    device);
+    public boolean modifyEnrollment(Device device) throws DeviceManagementException;
 
-           Integer deviceTypeId = this.getDeviceDAO().getDeviceTypeIdByDeviceTypeName(device.getType());
-           deviceDto.setDeviceType(deviceTypeId);
-           this.getDeviceDAO().addDevice(deviceDto);
-        } catch (DeviceManagementDAOException e) {
-            throw new DeviceManagementException("Error occurred while enrolling the device '" +
-                    device.getId() + "'", e);
-        }
-        return status;
-    }
+    public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException;
 
-    @Override
-    public boolean modifyEnrollment(Device device) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(device.getType());
-        boolean status = dms.modifyEnrollment(device);
-        try {
-            this.getDeviceDAO().updateDevice(DeviceManagementDAOUtil.convertDevice(device));
-        } catch (DeviceManagementDAOException e) {
-            throw new DeviceManagementException("Error occurred while modifying the device '" +
-                    device.getId() + "'", e);
-        }
-        return status;
-    }
+    public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException;
 
-    @Override
-    public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(deviceId.getType());
-        return dms.disenrollDevice(deviceId);
-    }
+    public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException;
 
-    @Override
-    public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(deviceId.getType());
-        return dms.isEnrolled(deviceId);
-    }
+    public boolean setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException;
 
-    @Override
-    public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(deviceId.getType());
-        return dms.isActive(deviceId);
-    }
+    public List<Device> getAllDevices(String type) throws DeviceManagementException;
 
-    @Override
-    public boolean setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(deviceId.getType());
-        return dms.setActive(deviceId, status);
-    }
+    public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException;
 
-    @Override
-    public List<Device> getAllDevices(String type) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(type);
-        return dms.getAllDevices(type);
-    }
+    public boolean updateDeviceInfo(Device device) throws DeviceManagementException;
 
-    @Override
-    public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(deviceId.getType());
-        return dms.getDevice(deviceId);
-    }
+    public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException;
 
-    @Override
-    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(device.getType());
-        return dms.updateDeviceInfo(device);
-    }
-
-    @Override
-    public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException {
-        DeviceManagerService dms =
-                this.getPluginRepository().getDeviceManagementProvider(deviceId.getType());
-        return dms.setOwnership(deviceId, ownershipType);
-    }
-
-    public DeviceDAO getDeviceDAO() {
-        return deviceDAO;
-    }
-
-    public DeviceTypeDAO getDeviceTypeDAO() {
-        return deviceTypeDAO;
-    }
-
-    public DeviceManagementConfig getDeviceManagementConfig() {
-        return config;
-    }
-
-    public DeviceManagementRepository getPluginRepository() {
-        return pluginRepository;
-    }
+    public OperationManager getOperationManager(String type) throws DeviceManagementException;
 
 }

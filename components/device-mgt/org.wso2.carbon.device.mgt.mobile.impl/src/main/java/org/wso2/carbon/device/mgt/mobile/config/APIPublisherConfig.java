@@ -13,10 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.carbon.device.mgt.mobile.impl;
+package org.wso2.carbon.device.mgt.mobile.config;
 
-public interface DataSourceListener {
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
-    void notifyObserver();
+@XmlRootElement(name = "APIPublisher")
+public class APIPublisherConfig {
+
+    private List<APIConfig> apis;
+
+    @XmlElement(name = "APIs")
+    public List<APIConfig> getApis() {
+        return apis;
+    }
+
+    public void setApis(List<APIConfig> apis) {
+        this.apis = apis;
+    }
 
 }

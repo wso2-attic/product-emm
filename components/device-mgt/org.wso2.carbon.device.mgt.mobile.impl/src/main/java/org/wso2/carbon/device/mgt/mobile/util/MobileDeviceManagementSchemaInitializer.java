@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.impl.util;
+package org.wso2.carbon.device.mgt.mobile.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
