@@ -40,7 +40,6 @@
         <module>org.wso2.carbon.device.mgt.core</module>
         <module>org.wso2.carbon.device.mgt.common</module>
         <module>org.wso2.carbon.device.mgt.mobile.impl</module>
-        <module>org.wso2.carbon.device.mgt.oauth.token.handler</module>
     </modules>
 
     <dependencyManagement>
