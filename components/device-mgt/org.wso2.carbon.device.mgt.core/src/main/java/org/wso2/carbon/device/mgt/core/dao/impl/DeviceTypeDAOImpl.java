@@ -15,6 +15,8 @@
  */
 package org.wso2.carbon.device.mgt.core.dao.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
 import org.wso2.carbon.device.mgt.core.dao.DeviceTypeDAO;
@@ -24,55 +26,113 @@ import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeviceTypeDAOImpl implements DeviceTypeDAO {
 
-    private DataSource dataSource;
+	private DataSource dataSource;
+	private static final Log log = LogFactory.getLog(DeviceTypeDAOImpl.class);
 
-    public DeviceTypeDAOImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+	public DeviceTypeDAOImpl(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
-    @Override
-    public void addDeviceType(DeviceType deviceType) throws DeviceManagementDAOException {
-        Connection conn = this.getConnection();
-        PreparedStatement stmt = null;
-        try {
-            stmt = conn.prepareStatement("INSERT INTO DM_DEVICE_TYPE (NAME) VALUES (?)");
-            stmt.setString(1, deviceType.getName());
-            stmt.execute();
-        } catch (SQLException e) {
-            throw new DeviceManagementDAOException("Error occurred while registering the device type '" +
-                    deviceType.getName() + "'", e);
-        } finally {
-            DeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
-        }
-    }
+	@Override
+	public void addDeviceType(DeviceType deviceType) throws DeviceManagementDAOException {
+		Connection conn = this.getConnection();
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("INSERT INTO DM_DEVICE_TYPE (NAME) VALUES (?)");
+			stmt.setString(1, deviceType.getName());
+			stmt.execute();
+		} catch (SQLException e) {
+			String msg = "Error occurred while registering the device type '" +
+			             deviceType.getName() + "'";
+			log.error(msg, e);
+			throw new DeviceManagementDAOException(msg, e);
+		} finally {
+			DeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+		}
+	}
 
-    @Override
-    public void updateDeviceType(DeviceType deviceType) throws DeviceManagementDAOException {
+	@Override
+	public void updateDeviceType(DeviceType deviceType) throws DeviceManagementDAOException {
 
-    }
+	}
 
-    @Override
-    public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
-        return null;
-    }
+	@Override
+	public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
+		Connection conn = this.getConnection();
+		PreparedStatement stmt = null;
+		List<DeviceType> deviceTypes = new ArrayList<DeviceType>();
+		try {
+			stmt = conn.prepareStatement(
+					"SELECT ID AS DEVICE_TYPE_ID, NAME AS DEVICE_TYPE FROM DM_DEVICE_TYPE");
+			ResultSet results = stmt.executeQuery();
+			while (results.next()) {
+				DeviceType deviceType = new DeviceType();
+				deviceType.setId(results.getLong("DEVICE_TYPE_ID"));
+				deviceType.setName(results.getString("DEVICE_TYPE"));
+				deviceTypes.add(deviceType);
+			}
+		} catch (SQLException e) {
+			String msg = "Error occurred while fetching the registered device types";
+			log.error(msg, e);
+			throw new DeviceManagementDAOException(msg, e);
+		} finally {
+			DeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+		}
+		return deviceTypes;
+	}
 
-    @Override
-    public DeviceIdentifier getDeviceType() throws DeviceManagementDAOException {
-        return new DeviceIdentifier();
-    }
+	@Override
+	public DeviceIdentifier getDeviceType() throws DeviceManagementDAOException {
+		return null;
+	}
 
-    private Connection getConnection() throws DeviceManagementDAOException {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new DeviceManagementDAOException("Error occurred while obtaining a connection from the device " +
-                    "management metadata repository datasource", e);
-        }
-    }
+	@Override
+	public Integer getDeviceTypeIdByDeviceTypeName(String type)
+			throws DeviceManagementDAOException {
 
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		Integer deviceTypeId = null;
+
+		try {
+			conn = this.getConnection();
+			String createDBQuery =
+					"SELECT * From DM_DEVICE_TYPE DT WHERE DT.NAME=?";
+			stmt = conn.prepareStatement(createDBQuery);
+			stmt.setString(1, type);
+			resultSet = stmt.executeQuery();
+
+			while (resultSet.next()) {
+				deviceTypeId = resultSet.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			String msg = "Error occurred while fetch device type id for device type '" + type + "'";
+			log.error(msg, e);
+			throw new DeviceManagementDAOException(msg, e);
+		} finally {
+			DeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+		}
+
+		return deviceTypeId;
+	}
+
+	private Connection getConnection() throws DeviceManagementDAOException {
+		try {
+			return dataSource.getConnection();
+		} catch (SQLException e) {
+			String msg = "Error occurred while obtaining a connection from the device " +
+			             "management metadata repository datasource";
+			log.error(msg, e);
+			throw new DeviceManagementDAOException(msg, e);
+		}
+	}
 }
