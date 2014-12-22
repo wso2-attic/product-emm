@@ -144,11 +144,11 @@ public class Device {
         this.type = type;
     }
     @XmlElement
-    public List<Property> getProperties() {
+    public List<Device.Property> getProperties() {
         return properties;
     }
 
-    public void setProperties(List<Property> properties) {
+    public void setProperties(List<Device.Property> properties) {
         this.properties = properties;
     }
 

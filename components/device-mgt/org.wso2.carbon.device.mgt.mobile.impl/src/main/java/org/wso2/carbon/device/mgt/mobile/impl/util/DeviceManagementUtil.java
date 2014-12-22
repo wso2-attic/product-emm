@@ -31,12 +31,9 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.List;
 
-/**
- * Created by harshan on 12/15/14.
- */
-public class MobileDeviceManagerUtil {
+public class DeviceManagementUtil {
 
-	private static final Log log = LogFactory.getLog(MobileDeviceManagerUtil.class);
+	private static final Log log = LogFactory.getLog(DeviceManagementUtil.class);
 
 	public static Document convertToDocument(File file) throws DeviceManagementException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -51,41 +48,4 @@ public class MobileDeviceManagerUtil {
 		}
 	}
 
-	/**
-	 * Resolve data source from the data source definition
-	 *
-	 * @param config data source configuration
-	 * @return data source resolved from the data source definition
-	 */
-	public static DataSource resolveDataSource(MobileDataSourceConfig config) {
-		DataSource dataSource = null;
-		if (config == null) {
-			throw new RuntimeException(
-					"Mobile Device Management Repository data source configuration " +
-					"is null and thus, is not initialized");
-		}
-		JNDILookupDefinition jndiConfig = config.getJndiLookupDefintion();
-		if (jndiConfig != null) {
-			if (log.isDebugEnabled()) {
-				log.debug(
-						"Initializing Mobile Device Management Repository data source using the JNDI " +
-						"Lookup Definition");
-			}
-			List<JNDILookupDefinition.JNDIProperty> jndiPropertyList =
-					jndiConfig.getJndiProperties();
-			if (jndiPropertyList != null) {
-				Hashtable<Object, Object> jndiProperties = new Hashtable<Object, Object>();
-				for (JNDILookupDefinition.JNDIProperty prop : jndiPropertyList) {
-					jndiProperties.put(prop.getName(), prop.getValue());
-				}
-				dataSource =
-						MobileDeviceManagementDAOUtil.lookupDataSource(jndiConfig.getJndiName(),
-						                                               jndiProperties);
-			} else {
-				dataSource = MobileDeviceManagementDAOUtil
-						.lookupDataSource(jndiConfig.getJndiName(), null);
-			}
-		}
-		return dataSource;
-	}
 }

@@ -30,17 +30,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon</groupId>
-    <artifactId>device-mgt</artifactId>
+    <artifactId>key-mgt</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Device Management Component</name>
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.carbon.device.mgt.core</module>
-        <module>org.wso2.carbon.device.mgt.common</module>
-        <module>org.wso2.carbon.device.mgt.mobile.impl</module>
-        <module>org.wso2.carbon.device.mgt.oauth.token.handler</module>
+        <module>org.wso2.carbon.key.mgt.handler.valve</module>
     </modules>
 
     <dependencyManagement>
@@ -69,11 +66,6 @@
                 <groupId>org.eclipse.osgi</groupId>
                 <artifactId>org.eclipse.osgi.services</artifactId>
                 <version>3.3.100.v20120522-1822</version>
-            </dependency>
-            <dependency>
-                <groupId>com.h2database.wso2</groupId>
-                <artifactId>h2-database-engine</artifactId>
-                <version>${orbit.version.h2.engine}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>

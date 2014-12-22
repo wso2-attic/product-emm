@@ -23,4 +23,15 @@
             </JndiLookupDefinition>
         </DataSourceConfiguration>
     </ManagementRepository>
+
+    <APIPublisher>
+	<API>
+	     <Name>enrollment</Name>
+	     <Provider>admin</Provider>
+	     <Context>enrollment</Context>
+	     <Version>1.0.0</Version>
+	     <Endpoint>http://localhost:9763/</Endpoint>
+	     <Transports>http,https</Transports>
+	</API>
+    </APIPublisher>
 </MobileDeviceMgtConfiguration>

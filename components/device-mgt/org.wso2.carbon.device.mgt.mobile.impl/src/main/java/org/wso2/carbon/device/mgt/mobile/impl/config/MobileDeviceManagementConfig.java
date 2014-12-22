@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public final class MobileDeviceManagementConfig {
 
     private MobileDeviceManagementRepository mobileDeviceMgtRepository;
+    private APIPublisherConfig apiPublisherConfig;
 
     @XmlElement(name = "ManagementRepository", nillable = false)
     public MobileDeviceManagementRepository getMobileDeviceMgtRepository() {
@@ -34,6 +35,15 @@ public final class MobileDeviceManagementConfig {
     public void setMobileDeviceMgtRepository(
             MobileDeviceManagementRepository mobileDeviceMgtRepository) {
         this.mobileDeviceMgtRepository = mobileDeviceMgtRepository;
+    }
+
+    @XmlElement(name = "APIPublisher")
+    public APIPublisherConfig getApiPublisherConfig() {
+        return apiPublisherConfig;
+    }
+
+    public void setApiPublisherConfig(APIPublisherConfig apiPublisherConfig) {
+        this.apiPublisherConfig = apiPublisherConfig;
     }
 
 }

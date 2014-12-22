@@ -25,15 +25,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "DataSourceConfiguration")
 public class MobileDataSourceConfig {
 
-	private JNDILookupDefinition jndiLookupDefintion;
+	private JNDILookupDefinition jndiLookupDefinition;
 
 	@XmlElement(name = "JndiLookupDefinition", nillable = true)
 	public JNDILookupDefinition getJndiLookupDefintion() {
-		return jndiLookupDefintion;
+		return jndiLookupDefinition;
 	}
 
-	public void setJndiLookupDefintion(JNDILookupDefinition jndiLookupDefintion) {
-		this.jndiLookupDefintion = jndiLookupDefintion;
+	public void setJndiLookupDefinition(JNDILookupDefinition jndiLookupDefinition) {
+		this.jndiLookupDefinition = jndiLookupDefinition;
 	}
 
 }
