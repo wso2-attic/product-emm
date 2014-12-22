@@ -23,6 +23,7 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 import org.wso2.carbon.device.mgt.core.DeviceManagementRepository;
 import org.wso2.carbon.device.mgt.core.DeviceManager;
+import org.wso2.carbon.device.mgt.core.DeviceManagerImpl;
 import org.wso2.carbon.device.mgt.core.config.DeviceConfigurationManager;
 import org.wso2.carbon.device.mgt.core.config.DeviceManagementConfig;
 import org.wso2.carbon.device.mgt.core.config.datasource.DataSourceConfig;
@@ -61,7 +62,7 @@ public class DeviceManagementServiceComponent {
             DataSourceConfig dsConfig = config.getDeviceMgtRepository().getDataSourceConfig();
             DeviceManagementDAOFactory.init(dsConfig);
 
-            DeviceManager deviceManager = new DeviceManager(config, this.getPluginRepository());
+            DeviceManager deviceManager = new DeviceManagerImpl(config, this.getPluginRepository());
             DeviceManagementDataHolder.getInstance().setDeviceManager(deviceManager);
 
             /* If -Dsetup option enabled then create device management database schema */

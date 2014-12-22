@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.impl.dao;
+package org.wso2.carbon.device.mgt.mobile.dao;
 
 /**
  * Custom exception class for mobile device specific data access related exceptions.

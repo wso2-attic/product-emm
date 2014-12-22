@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2012, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package org.wso2.carbon.device.mgt.common;
 
-@SuppressWarnings("unused")
-public class DeviceManagementException extends Exception {
+public class OperationManagementException extends Exception {
 
-    private static final long serialVersionUID = -3151279311929070297L;
+    private static final long serialVersionUID = -3151279311929070298L;
 
     private String errorMessage;
 
@@ -30,26 +29,26 @@ public class DeviceManagementException extends Exception {
         this.errorMessage = errorMessage;
     }
 
-    public DeviceManagementException(String msg, Exception nestedEx) {
+    public OperationManagementException(String msg, Exception nestedEx) {
         super(msg, nestedEx);
         setErrorMessage(msg);
     }
 
-    public DeviceManagementException(String message, Throwable cause) {
+    public OperationManagementException(String message, Throwable cause) {
         super(message, cause);
         setErrorMessage(message);
     }
 
-    public DeviceManagementException(String msg) {
+    public OperationManagementException(String msg) {
         super(msg);
         setErrorMessage(msg);
     }
 
-    public DeviceManagementException() {
+    public OperationManagementException() {
         super();
     }
 
-    public DeviceManagementException(Throwable cause) {
+    public OperationManagementException(Throwable cause) {
         super(cause);
     }
 

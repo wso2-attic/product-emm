@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wso2.carbon.device.mgt.mobile.impl.config;
+package org.wso2.carbon.device.mgt.mobile.config;
 
-import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
+import org.wso2.carbon.device.mgt.mobile.config.datasource.MobileDataSourceConfig;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

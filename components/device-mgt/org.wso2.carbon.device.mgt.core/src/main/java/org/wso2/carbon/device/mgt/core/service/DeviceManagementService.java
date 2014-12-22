@@ -18,17 +18,14 @@ package org.wso2.carbon.device.mgt.core.service;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.OperationManager;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+import org.wso2.carbon.device.mgt.core.DeviceManager;
 import org.wso2.carbon.device.mgt.core.internal.DeviceManagementDataHolder;
 
 import java.util.List;
 
-public class DeviceManagementService implements DeviceManagerService {
-
-	@Override
-	public String getProviderType() {
-		return null;
-	}
+public class DeviceManagementService implements DeviceManager {
 
 	@Override
 	public boolean enrollDevice(Device device) throws DeviceManagementException {
@@ -84,5 +81,11 @@ public class DeviceManagementService implements DeviceManagerService {
 		return DeviceManagementDataHolder.getInstance().getDeviceManager()
 		                                 .setOwnership(deviceId, ownershipType);
 	}
+
+    @Override
+    public OperationManager getOperationManager(String type) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().
+                getOperationManager(type);
+    }
 
 }

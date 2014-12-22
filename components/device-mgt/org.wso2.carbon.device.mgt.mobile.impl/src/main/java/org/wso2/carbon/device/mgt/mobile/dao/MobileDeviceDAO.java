@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.impl.dao;
+package org.wso2.carbon.device.mgt.mobile.dao;
 
-import org.wso2.carbon.device.mgt.mobile.impl.dto.MobileDevice;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
 
 /**
  * This class represents the key operations associated with persisting mobile-device related

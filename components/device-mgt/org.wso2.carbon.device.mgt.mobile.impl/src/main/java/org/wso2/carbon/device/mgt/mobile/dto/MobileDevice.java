@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.impl.dto;
+package org.wso2.carbon.device.mgt.mobile.dto;
 
 import java.io.Serializable;
 

@@ -18,15 +18,12 @@ package org.wso2.carbon.device.mgt.mobile.impl.android;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.mobile.impl.dao.MobileDeviceManagementDAOFactory;
-import org.wso2.carbon.device.mgt.mobile.impl.dto.MobileDevice;
-import org.wso2.carbon.device.mgt.mobile.impl.util.MobileDeviceManagementUtil;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
+import org.wso2.carbon.device.mgt.mobile.util.MobileDeviceManagementUtil;
 
 import java.util.List;
 
@@ -36,6 +33,11 @@ import java.util.List;
 public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	private static final Log log = LogFactory.getLog(AndroidDeviceManagerService.class);
+    private OperationManager operationManager;
+
+    public AndroidDeviceManagerService() {
+        this.operationManager = new AndroidMobileOperationManager();
+    }
 
 	@Override
 	public String getProviderType() {
@@ -116,7 +118,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 	}
 
 	@Override
-	public List<Device> getAllDevices(String type) throws DeviceManagementException {
+	public List<Device> getAllDevices() throws DeviceManagementException {
 		return null;
 	}
 
@@ -141,7 +143,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		return true;
 	}
 
-	@Override
+    @Override
 	public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
 		boolean status = false;
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
@@ -154,4 +156,10 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		}
 		return status;
 	}
+
+    @Override
+    public OperationManager getOperationManager() throws DeviceManagementException {
+        return operationManager;
+    }
+
 }

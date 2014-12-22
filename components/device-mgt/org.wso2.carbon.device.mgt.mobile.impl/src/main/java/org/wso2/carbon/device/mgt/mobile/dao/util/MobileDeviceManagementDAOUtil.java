@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.impl.dao.util;
+package org.wso2.carbon.device.mgt.mobile.dao.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.JNDILookupDefinition;
-import org.wso2.carbon.device.mgt.mobile.impl.config.datasource.MobileDataSourceConfig;
-import org.wso2.carbon.device.mgt.mobile.impl.util.MobileDeviceManagementSchemaInitializer;
+import org.wso2.carbon.device.mgt.mobile.config.datasource.JNDILookupDefinition;
+import org.wso2.carbon.device.mgt.mobile.config.datasource.MobileDataSourceConfig;
+import org.wso2.carbon.device.mgt.mobile.util.MobileDeviceManagementSchemaInitializer;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;

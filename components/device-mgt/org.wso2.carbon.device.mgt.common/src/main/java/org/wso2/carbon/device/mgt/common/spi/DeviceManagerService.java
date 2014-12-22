@@ -18,6 +18,7 @@ package org.wso2.carbon.device.mgt.common.spi;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.OperationManager;
 
 import java.util.List;
 
@@ -28,7 +29,8 @@ import java.util.List;
 public interface DeviceManagerService {
 
     /**
-     * Method to retrieve the provider type that implements DeviceManagerService interface
+     * Method to retrieve the provider type that implements DeviceManagerService interface.
+     *
      * @return  Returns provider type
      */
     String getProviderType();
@@ -42,7 +44,7 @@ public interface DeviceManagerService {
     boolean enrollDevice(Device device) throws DeviceManagementException;
 
     /**
-     * Method to modify the metadata corresponding to device enrollment
+     * Method to modify the metadata corresponding to device enrollment.
      *
      * @param device    Modified device enrollment related metadata
      * @throws DeviceManagementException If some unusual behaviour is observed while modify the enrollment of a
@@ -92,11 +94,10 @@ public interface DeviceManagerService {
     /**
      * Method to retrieve metadata of all devices registered within CDM corresponding to a particular device type.
      *
-     * @param type  Device Type
      * @return List of metadata corresponding to all devices registered within CDM
      * @throws DeviceManagementException If some unusual behaviour is observed while obtaining the enrolled device list
      */
-    List<Device> getAllDevices(String type) throws DeviceManagementException;
+    List<Device> getAllDevices() throws DeviceManagementException;
 
     /**
      * Method to retrieve metadata of a device corresponding to a particular type that carries a specific identifier.
@@ -109,13 +110,14 @@ public interface DeviceManagerService {
 
     /**
      * Method to update device information.
+     *
      * @param device   Updated device information related data
      * @throws DeviceManagementException If some unusual behaviour is observed while updating the device info
      */
     boolean updateDeviceInfo(Device device) throws DeviceManagementException;
 
     /**
-     * Method to set the ownership type of a particular device. i.e. BYOD, COPE
+     * Method to set the ownership type of a particular device. i.e. BYOD, COPE.
      *
      * @param deviceId          Fully qualified device identifier
      * @param ownershipType     Type of ownership
@@ -123,5 +125,13 @@ public interface DeviceManagerService {
      * of the device
      */
     boolean setOwnership(DeviceIdentifier deviceId, String ownershipType) throws DeviceManagementException;
+
+    /**
+     * Method to retrieve the Operation manager implementation associated with a given plugin.
+     *
+     * @return  An appropriate instance of the underlying operation management implementation
+     * @throws DeviceManagementException
+     */
+    OperationManager getOperationManager() throws DeviceManagementException;
 
 }

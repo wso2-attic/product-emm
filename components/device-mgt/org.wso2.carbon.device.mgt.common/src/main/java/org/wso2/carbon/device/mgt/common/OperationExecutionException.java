@@ -15,10 +15,9 @@
  */
 package org.wso2.carbon.device.mgt.common;
 
-@SuppressWarnings("unused")
-public class DeviceManagementException extends Exception {
+public class OperationExecutionException extends Exception {
 
-    private static final long serialVersionUID = -3151279311929070297L;
+    private static final long serialVersionUID = -3151279311929070299L;
 
     private String errorMessage;
 
@@ -30,26 +29,26 @@ public class DeviceManagementException extends Exception {
         this.errorMessage = errorMessage;
     }
 
-    public DeviceManagementException(String msg, Exception nestedEx) {
+    public OperationExecutionException(String msg, Exception nestedEx) {
         super(msg, nestedEx);
         setErrorMessage(msg);
     }
 
-    public DeviceManagementException(String message, Throwable cause) {
+    public OperationExecutionException(String message, Throwable cause) {
         super(message, cause);
         setErrorMessage(message);
     }
 
-    public DeviceManagementException(String msg) {
+    public OperationExecutionException(String msg) {
         super(msg);
         setErrorMessage(msg);
     }
 
-    public DeviceManagementException() {
+    public OperationExecutionException() {
         super();
     }
 
-    public DeviceManagementException(Throwable cause) {
+    public OperationExecutionException(Throwable cause) {
         super(cause);
     }
 
