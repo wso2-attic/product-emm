@@ -35,12 +35,12 @@ public class DeviceManagementRepository {
 
     public void addDeviceManagementProvider(DeviceManagerService provider) {
         String deviceType = provider.getProviderType();
+        providers.put(deviceType, provider);
         try {
             DeviceManagerUtil.registerDeviceType(deviceType);
         } catch (DeviceManagementException e) {
             log.error("Exception occured while registering the device type.",e);
         }
-        providers.put(deviceType, provider);
     }
 
     public DeviceManagerService getDeviceManagementProvider(String type) {

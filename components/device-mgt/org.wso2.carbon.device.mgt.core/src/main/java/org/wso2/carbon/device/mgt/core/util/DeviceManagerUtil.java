@@ -51,7 +51,7 @@ public final class DeviceManagerUtil {
     }
 
     /**
-     * Resolve data source from the data source definition
+     * Resolve data source from the data source definition.
      *
      * @param config data source configuration
      * @return data source resolved from the data source definition
@@ -84,6 +84,12 @@ public final class DeviceManagerUtil {
         return dataSource;
     }
 
+    /**
+     * Adds a new device type to the database if it does not exists.
+     *
+     * @param deviceTypeName device type
+     * @return status of the operation
+     */
     public static boolean registerDeviceType(String deviceTypeName) throws DeviceManagementException{
         boolean status = false;
         try {
