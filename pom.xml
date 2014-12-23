@@ -157,22 +157,22 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.utils</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.core</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.ndatasource.core</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.ndatasource.rdbms</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -184,6 +184,64 @@
                 <artifactId>jboss-transaction-api_1.1_spec</artifactId>
                 <version>${jboss-transaction-api.version}</version>
             </dependency>
+
+
+            <dependency>
+                <groupId>org.eclipse.osgi</groupId>
+                <artifactId>org.eclipse.osgi</artifactId>
+                <version>3.8.1.v20120830-144521</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>org.eclipse.equinox.common</artifactId>
+                <version>3.6.100.v20120522-1841</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.logging</artifactId>
+                <version>${carbon.kernel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
+                <version>${cdm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.osgi</groupId>
+                <artifactId>org.eclipse.osgi.services</artifactId>
+                <version>3.3.100.v20120522-1822</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database.wso2</groupId>
+                <artifactId>h2-database-engine</artifactId>
+                <version>${orbit.version.h2.engine}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.apimgt.core</artifactId>
+                <version>${apim.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
+                <version>${apim.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.wso2</groupId>
+                <artifactId>tomcat</artifactId>
+                <version>${orbit.version.tomcat}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
+                <version>${carbon.kernel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tomcat</artifactId>
+                <version>${carbon.kernel.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -196,6 +254,7 @@
         <axis2.osgi.version.range>[1.6.1.wso2v11, 1.7.0)</axis2.osgi.version.range>
         <jboss-transaction-api.version>1.0.0.Final</jboss-transaction-api.version>
         <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
+        <cdm.version>2.0.0-SNAPSHOT</cdm.version>
         <!--Testing -->
         <test.framework.version>4.3.1</test.framework.version>
         <testng.version>6.8</testng.version>
@@ -205,6 +264,10 @@
         <!--Eclipse Osgi-->
         <eclipse.equinox.common.version>3.6.100.v20120522-1841</eclipse.equinox.common.version>
         <eclipse.osgi.version>3.8.1.v20120830-144521</eclipse.osgi.version>
+
+        <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
+        <apim.version>1.2.1</apim.version>
+        <orbit.version.tomcat>7.0.52.wso2v5</orbit.version.tomcat>
     </properties>
 
 
