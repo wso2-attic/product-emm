@@ -61,6 +61,9 @@ public final class DeviceManagementDAOUtil {
                 log.warn("Error occurred while closing database connection", e);
             }
         }
+        rs = null;
+        stmt = null;
+        conn = null;
     }
 
     /**
@@ -83,8 +86,7 @@ public final class DeviceManagementDAOUtil {
         try {
             tenantId = tenantManager.getTenantId(tenantDomain);
         } catch (UserStoreException e) {
-            String msg = "Error occurred while retrieving id from the domain of tenant " +
-                    tenantDomain;
+            String msg = "Error occurred while retrieving id from the domain of tenant " + tenantDomain;
             throw new DeviceManagementDAOException(msg);
         }
         return tenantId;
