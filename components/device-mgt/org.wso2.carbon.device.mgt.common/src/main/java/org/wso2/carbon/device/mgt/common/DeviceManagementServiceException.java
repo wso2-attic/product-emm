@@ -18,9 +18,6 @@
 
 package org.wso2.carbon.device.mgt.common;
 
-/**
- * Created by manoj on 12/22/14.
- */
 public class DeviceManagementServiceException extends Exception {
 
     private static final long serialVersionUID = -8933146283800122640L;
