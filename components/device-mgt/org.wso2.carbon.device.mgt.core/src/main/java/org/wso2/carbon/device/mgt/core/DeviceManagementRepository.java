@@ -15,13 +15,18 @@
  */
 package org.wso2.carbon.device.mgt.core;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
+import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DeviceManagementRepository {
 
+    private static final Log log = LogFactory.getLog(DeviceManagerUtil.class);
     private Map<String, DeviceManagerService> providers;
 
     public DeviceManagementRepository() {
@@ -29,7 +34,13 @@ public class DeviceManagementRepository {
     }
 
     public void addDeviceManagementProvider(DeviceManagerService provider) {
-        providers.put(provider.getProviderType(), provider);
+        String deviceType = provider.getProviderType();
+        providers.put(deviceType, provider);
+        try {
+            DeviceManagerUtil.registerDeviceType(deviceType);
+        } catch (DeviceManagementException e) {
+            log.error("Exception occured while registering the device type.",e);
+        }
     }
 
     public DeviceManagerService getDeviceManagementProvider(String type) {

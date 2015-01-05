@@ -27,7 +27,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 /**
- * Class responsible for the mobile device manager configuration initialization
+ * Class responsible for the mobile device manager configuration initialization.
  */
 public class MobileDeviceConfigurationManager {
 

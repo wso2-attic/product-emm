@@ -40,7 +40,7 @@ public class MobileDeviceManagementDAOUtil {
 	private static final Log log = LogFactory.getLog(MobileDeviceManagementDAOUtil.class);
 
 	/**
-	 * Resolve data source from the data source definition
+	 * Resolve data source from the data source definition.
 	 *
 	 * @param config Mobile data source configuration
 	 * @return data source resolved from the data source definition
@@ -128,7 +128,7 @@ public class MobileDeviceManagementDAOUtil {
 	}
 
 	/**
-	 * Initializes the creation of mobile device management schema if -Dsetup has provided
+	 * Initializes the creation of mobile device management schema if -Dsetup has provided.
 	 *
 	 * @param dataSource Mobile data source
 	 */
@@ -151,7 +151,7 @@ public class MobileDeviceManagementDAOUtil {
 	}
 
 	/**
-	 * Creates the mobile device management schema
+	 * Creates the mobile device management schema.
 	 *
 	 * @param dataSource Mobile data source
 	 */

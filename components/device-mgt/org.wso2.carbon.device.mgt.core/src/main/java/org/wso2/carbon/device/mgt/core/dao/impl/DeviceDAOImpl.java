@@ -11,7 +11,7 @@
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
@@ -100,38 +100,6 @@ public class DeviceDAOImpl implements DeviceDAO {
     @Override
     public List<Device> getDevices() throws DeviceManagementDAOException {
         return null;
-    }
-
-    @Override
-    public Integer getDeviceTypeIdByDeviceTypeName(String type)  throws DeviceManagementDAOException {
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet resultSet = null;
-        Integer deviceTypeId = null;
-
-        try {
-            conn = this.getConnection();
-            String createDBQuery =
-                    "SELECT * From DM_DEVICE_TYPE DT WHERE DT.NAME=?";
-
-            stmt = conn.prepareStatement(createDBQuery);
-            stmt.setString(1, type);
-            resultSet = stmt.executeQuery();
-
-            while(resultSet.next()){
-                deviceTypeId = resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            String msg = "Error occurred while fetch device type id for device type '" + type + "'";
-            log.error(msg, e);
-            throw new DeviceManagementDAOException(msg, e);
-        } finally {
-            DeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
-        }
-
-        return deviceTypeId;
     }
 
     private Connection getConnection() throws DeviceManagementDAOException {

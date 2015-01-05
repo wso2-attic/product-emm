@@ -15,23 +15,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.wso2.carbon.device.mgt.core;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+package cdm.api.android.common;
 
 
-public class DeviceManagementTestCase {
+public class ErrorMessage {
 
-    private static final Log log = LogFactory.getLog(DeviceManagementTestCase.class);
+    private String errorMessage;
+    private String errorCode;
 
-    @Test(groups = "device.mgt.test", description = "Testing the first test case with testng.")
-    public void setUp() throws Exception {
-        log.info("Testing started.");
-        Assert.assertEquals("A", "A");
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
 }
