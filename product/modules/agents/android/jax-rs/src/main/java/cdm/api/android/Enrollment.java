@@ -1,17 +1,19 @@
 /*
  * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *          http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package cdm.api.android;
@@ -40,14 +42,6 @@ public class Enrollment {
 
     private static Log log = LogFactory.getLog(Enrollment.class);
 
-    /*
-    * Request Format : {"deviceIdentifier":"macid","description":"description","ownership":"BYOD",
-    * "properties":[{"name":"username","value":"harshan"},{"name":"device","value":"Harshan S5"},
-    * {"name":"imei","value":"356938035643809"},{"name":"imsi","value":"404685505601234"},{"name":"model","value":"Galaxy S5"},
-    * {"name":"regId","value":"02fab24b2242"},{"name":"vendor","value":"Samsung"},
-    * {"name":"osVersion","value":"5.0.0"}]}
-    *
-    **/
     @POST
     public Message enrollDevice(org.wso2.carbon.device.mgt.common.Device device) throws AndroidAgentException {
 
@@ -75,7 +69,6 @@ public class Enrollment {
             log.error(errorMsg, deviceMgtEx);
             throw new AndroidAgentException(errorMsg, deviceMgtEx);
         }
-
     }
 
     @GET
@@ -106,25 +99,14 @@ public class Enrollment {
                 Response.status(HttpStatus.SC_NOT_FOUND);
                 responseMsg.setResponseMessage("Device not found");
             }
-
             return responseMsg;
-
         } catch (DeviceManagementException deviceMgtEx) {
             String errormsg = "Error occurred while enrollment of the device.";
             log.error(errormsg, deviceMgtEx);
             throw new AndroidAgentException(errormsg, deviceMgtEx);
         }
-
     }
 
-    /*
-    * Request Format : {"deviceIdentifier":"macid","description":"description","ownership":"BYOD",
-    * "properties":[{"name":"username","value":"harshan"},{"name":"device","value":"Harshan S5"},
-    * {"name":"imei","value":"356938035643809"},{"name":"imsi","value":"404685505601234"},{"name":"model","value":"Galaxy S5"},
-    * {"name":"regId","value":"02fab24b2242"},{"name":"vendor","value":"Samsung"},
-    * {"name":"osVersion","value":"5.0.0"}]}
-    *
-    **/
     @PUT
     @Path("{id}")
     public Message modifyEnrollment(@PathParam("id") String id, org.wso2.carbon.device.mgt.common.Device device)
@@ -157,19 +139,17 @@ public class Enrollment {
 
             return responseMsg;
 
-        } catch (DeviceManagementException e) {
+        } catch (DeviceManagementException deviceMgtEx) {
             String errorMsg = "Error occurred while modifying enrollment of the device";
-            log.error(errorMsg, e);
-            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            responseMsg.setResponseMessage(errorMsg);
-            return responseMsg;
+            log.error(errorMsg, deviceMgtEx);
+            throw new AndroidAgentException(errorMsg, deviceMgtEx);
         }
 
     }
 
     @DELETE
     @Path("{id}")
-    public Message disenrollDevice(@PathParam("id") String id) throws AndroidAgentException {
+    public Message disEnrollDevice(@PathParam("id") String id) throws AndroidAgentException {
 
         DeviceManagementService dmService;
         Message responseMsg = new Message();
@@ -195,14 +175,12 @@ public class Enrollment {
                 responseMsg.setResponseMessage("Device not found");
                 Response.status(HttpStatus.SC_NOT_FOUND);
             }
-
             return responseMsg;
+
         } catch (DeviceManagementException deviceMgtEx) {
             String errorMsg = "Error occurred while dis enrolling the device";
             log.error(errorMsg, deviceMgtEx);
-            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            responseMsg.setResponseMessage(errorMsg);
-            return responseMsg;
+            throw new AndroidAgentException(errorMsg, deviceMgtEx);
         }
     }
 }
