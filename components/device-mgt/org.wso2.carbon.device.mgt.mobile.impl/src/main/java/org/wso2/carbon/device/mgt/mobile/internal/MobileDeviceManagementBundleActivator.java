@@ -46,7 +46,7 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
 
     private static List<DataSourceListener> dataSourceListeners = new ArrayList<DataSourceListener>();
 
-    private static final String SYMBOLIC_NAME_DATA_SOURCE_COMPONENT = "org.eclipse.osgi";
+    private static final String SYMBOLIC_NAME_DATA_SOURCE_COMPONENT = "org.wso2.carbon.ndatasource.core";
     private static final Log log = LogFactory.getLog(MobileDeviceManagementBundleActivator.class);
 
     @Override

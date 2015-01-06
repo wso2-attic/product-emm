@@ -18,7 +18,7 @@ package org.wso2.carbon.device.mgt.common;
 public class OperationFactory {
 
     public static Operation getOperation(String type) {
-        return new DefaultOperation();
+        return null;
     }
 
 }
