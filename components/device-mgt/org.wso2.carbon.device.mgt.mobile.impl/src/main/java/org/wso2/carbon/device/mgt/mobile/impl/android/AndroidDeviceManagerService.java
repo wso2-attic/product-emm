@@ -25,6 +25,7 @@ import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
 import org.wso2.carbon.device.mgt.mobile.util.MobileDeviceManagementUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,11 +34,11 @@ import java.util.List;
 public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	private static final Log log = LogFactory.getLog(AndroidDeviceManagerService.class);
-    private OperationManager operationManager;
+	private OperationManager operationManager;
 
-    public AndroidDeviceManagerService() {
-        this.operationManager = new AndroidMobileOperationManager();
-    }
+	public AndroidDeviceManagerService() {
+		this.operationManager = new AndroidMobileOperationManager();
+	}
 
 	@Override
 	public String getProviderType() {
@@ -64,7 +65,8 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		boolean status = false;
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
-			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().updateDevice(mobileDevice);
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
+			                                         .updateDevice(mobileDevice);
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while updating the enrollment of the Android device : " +
 			             device.getDeviceIdentifier();
@@ -78,7 +80,8 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 	public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
 		boolean status = false;
 		try {
-			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().deleteDevice(deviceId.getId());
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
+			                                         .deleteDevice(deviceId.getId());
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while removing the Android device : " + deviceId.getId();
 			log.error(msg, e);
@@ -94,7 +97,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 			MobileDevice mobileDevice =
 					MobileDeviceManagementDAOFactory.getMobileDeviceDAO().getDevice(
 							deviceId.getId());
-			if(mobileDevice!=null){
+			if (mobileDevice != null) {
 				isEnrolled = true;
 			}
 		} catch (MobileDeviceManagementDAOException e) {
@@ -118,11 +121,6 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 	}
 
 	@Override
-	public List<Device> getAllDevices() throws DeviceManagementException {
-		return null;
-	}
-
-	@Override
 	public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
 		Device device = null;
 		try {
@@ -143,23 +141,46 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		return true;
 	}
 
-    @Override
+	@Override
 	public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
 		boolean status = false;
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
-			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().updateDevice(mobileDevice);
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
+			                                         .updateDevice(mobileDevice);
 		} catch (MobileDeviceManagementDAOException e) {
-			String msg = "Error while updating the Android device : " + device.getDeviceIdentifier();
+			String msg =
+					"Error while updating the Android device : " + device.getDeviceIdentifier();
 			log.error(msg, e);
 			throw new DeviceManagementException(msg, e);
 		}
 		return status;
 	}
 
-    @Override
-    public OperationManager getOperationManager() throws DeviceManagementException {
-        return operationManager;
-    }
+	@Override
+	public List<Device> getAllDevices() throws DeviceManagementException {
+		List<Device> devices = null;
+		try {
+			List<MobileDevice> mobileDevices =
+					MobileDeviceManagementDAOFactory.getMobileDeviceDAO().
+							getAllDevices();
+			if (mobileDevices != null) {
+				devices = new ArrayList<Device>();
+				for (int x = 0; x < mobileDevices.size(); x++) {
+					devices.add(MobileDeviceManagementUtil.convertToDevice(mobileDevices.get(x)));
+				}
+			}
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg = "Error while fetching all Android devices.";
+			log.error(msg, e);
+			throw new DeviceManagementException(msg, e);
+		}
+		return devices;
+	}
+
+	@Override
+	public OperationManager getOperationManager() throws DeviceManagementException {
+		return operationManager;
+	}
 
 }
