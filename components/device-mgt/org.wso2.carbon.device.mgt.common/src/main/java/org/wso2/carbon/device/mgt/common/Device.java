@@ -18,6 +18,7 @@ package org.wso2.carbon.device.mgt.common;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+
 @XmlRootElement
 public class Device {
 
@@ -45,7 +46,7 @@ public class Device {
 
     private List<Feature> features;
 
-    private List<Property> properties;
+    private List<Device.Property> properties;
 
     @XmlElement
     public int getId() {
