@@ -100,9 +100,9 @@
                             <publishArtifactRepository>true</publishArtifactRepository>
 
                             <featureArtifacts>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.kernel.version}
-                                </featureArtifactDef>
+                                <!--<featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.platform.version}
+                                </featureArtifactDef>-->
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.device.mgt.server.feature:${project.version}
                                 </featureArtifactDef>
@@ -133,13 +133,13 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.as.runtimes.cxf.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
+                                <!--<featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.dbconsole.ui.feature:${carbon.platform.version}
-                                </featureArtifactDef>
+                                </featureArtifactDef>-->
 
                                 <!-- API Manager related features -->
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.apimgt.core.feature:${carbon.kernel.version}
+                                    org.wso2.carbon:org.wso2.carbon.apimgt.core.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.um.ws.service.server.feature:${carbon.platform.version}
@@ -181,6 +181,9 @@
                                     org.wso2.carbon:org.wso2.carbon.event.server.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.event.common.feature:${carbon.platform.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.databridge.datapublisher.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -218,16 +221,16 @@
                             <features>
                                 <feature>
                                     <id>org.wso2.carbon.apimgt.core.feature.group</id>
-                                    <version>${carbon.kernel.version}</version>
+                                    <version>${carbon.platform.version}</version>
                                 </feature>
-                                <feature>
+                               <!-- <feature>
                                     <id>org.wso2.carbon.ndatasource.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
-                                </feature>
-                                <feature>
+                                </feature>-->
+                                <!--<feature>
                                     <id>org.wso2.carbon.ndatasource.ui.feature.group</id>
-                                    <version>${carbon.kernel.version}</version>
-                                </feature>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.server.feature.group</id>
                                     <version>${project.version}</version>
@@ -318,6 +321,11 @@
                                     <id>org.wso2.carbon.event.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+
+                                <feature>
+                                    <id>org.wso2.carbon.event.common.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.databridge.datapublisher.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -340,10 +348,10 @@
                                     <id>org.wso2.carbon.identity.relying.party.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.dbconsole.ui.feature.group</id>
                                     <version>${carbon.platform.version}</version>
-                                </feature>
+                                </feature>-->
                             </features>
                         </configuration>
                     </execution>
