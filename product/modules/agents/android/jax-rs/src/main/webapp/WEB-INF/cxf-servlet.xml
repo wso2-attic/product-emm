@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-  ~ Copyright 2014 WSO2, Inc. (http://wso2.com)
+  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
   ~ http://www.apache.org/licenses/LICENSE-2.0
   ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
@@ -25,7 +25,7 @@
 
     <jaxrs:server id="customerService" address="/register">
         <jaxrs:serviceBeans>
-            <ref bean="serviceBean"/>
+            <ref bean="deviceMgtServiceBean"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"/>
@@ -60,8 +60,6 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
-
-    <bean id="serviceBean" class="cdm.api.android.Authentication"/>
     <bean id="deviceMgtServiceBean" class="cdm.api.android.Device"/>
     <bean id="enrollmentServiceBean" class="cdm.api.android.Enrollment"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
