@@ -87,7 +87,7 @@ public class FeatureDAOImpl implements FeatureDAO {
 	}
 
 	@Override
-	public boolean deleteDevice(String featureCode)
+	public boolean deleteFeature(String featureCode)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;

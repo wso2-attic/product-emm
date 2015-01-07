@@ -32,7 +32,7 @@ public interface FeatureDAO {
 	 * @return The status of the operation. If the delete was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteDevice(String featureCode) throws MobileDeviceManagementDAOException;
+	boolean deleteFeature(String featureCode) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a given feature from plugin database.
