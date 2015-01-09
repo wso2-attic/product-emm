@@ -22,7 +22,7 @@
         <parameter name="dbType" value="H2"/>
         <classes>
 
-            <class name="org.wso2.carbon.device.mgt.core.dao.DeviceMgtDAOTestSuite"/>
+            <class name="org.wso2.carbon.device.mgt.mobile.impl.dao.FeatureDAOTestSuite"/>
         </classes>
     </test>
 </suite>

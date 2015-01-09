@@ -35,7 +35,7 @@ public class FeatureDAOImpl implements FeatureDAO {
 		try {
 			conn = this.getConnection();
 			String createDBQuery =
-					"INSERT INTO MBL_FEATURES(CODE, NAME, DESCRIPTION) VALUES (?, ?, ?)";
+					"INSERT INTO MBL_FEATURE(CODE, NAME, DESCRIPTION) VALUES (?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
 			stmt.setString(1, feature.getCode());
@@ -47,7 +47,7 @@ public class FeatureDAOImpl implements FeatureDAO {
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while adding feature code - '" +
-			             feature.getCode() + "'";
+			             feature.getCode() + "' to feature table";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -65,7 +65,7 @@ public class FeatureDAOImpl implements FeatureDAO {
 		try {
 			conn = this.getConnection();
 			String updateDBQuery =
-					"UPDATE MBL_FEATURES SET CODE = ?, NAME = ?, DESCRIPTION = ? WHERE FEATURE_ID = ?";
+					"UPDATE MBL_FEATURE SET CODE = ?, NAME = ?, DESCRIPTION = ? WHERE FEATURE_ID = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
 			stmt.setString(1, feature.getCode());
 			stmt.setString(2, feature.getName());
@@ -87,7 +87,7 @@ public class FeatureDAOImpl implements FeatureDAO {
 	}
 
 	@Override
-	public boolean deleteFeature(String featureCode)
+	public boolean deleteFeatureByCode(String featureCode)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -95,11 +95,11 @@ public class FeatureDAOImpl implements FeatureDAO {
 		try {
 			conn = this.getConnection();
 			String deleteDBQuery =
-					"DELETE FROM MBL_FEATURES WHERE FEATURE_ID = ?";
+					"DELETE FROM MBL_FEATURE WHERE CODE = ?";
 			stmt = conn.prepareStatement(deleteDBQuery);
 			stmt.setString(1, featureCode);
 			int rows = stmt.executeUpdate();
-			if(rows>0){
+			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
@@ -113,7 +113,33 @@ public class FeatureDAOImpl implements FeatureDAO {
 	}
 
 	@Override
-	public Feature getFeature(String featureCode)
+	public boolean deleteFeatureById(String featureId)
+			throws MobileDeviceManagementDAOException {
+		boolean status = false;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = this.getConnection();
+			String deleteDBQuery =
+					"DELETE FROM MBL_FEATURE WHERE FEATURE_ID = ?";
+			stmt = conn.prepareStatement(deleteDBQuery);
+			stmt.setString(1, featureId);
+			int rows = stmt.executeUpdate();
+			if (rows > 0) {
+				status = true;
+			}
+		} catch (SQLException e) {
+			String msg = "Error occurred while deleting feature with id - " + featureId;
+			log.error(msg, e);
+			throw new MobileDeviceManagementDAOException(msg, e);
+		} finally {
+			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+		}
+		return status;
+	}
+
+	@Override
+	public Feature getFeatureByCode(String featureCode)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -121,7 +147,7 @@ public class FeatureDAOImpl implements FeatureDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE FEATURE_ID = ?";
+					"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE CODE = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
 			stmt.setString(1, featureCode);
 			ResultSet resultSet = stmt.executeQuery();
@@ -145,11 +171,43 @@ public class FeatureDAOImpl implements FeatureDAO {
 	}
 
 	@Override
+	public Feature getFeatureById(String featureID)
+			throws MobileDeviceManagementDAOException {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		Feature feature = null;
+		try {
+			conn = this.getConnection();
+			String selectDBQuery =
+					"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE FEATURE_ID = ?";
+			stmt = conn.prepareStatement(selectDBQuery);
+			stmt.setString(1, featureID);
+			ResultSet resultSet = stmt.executeQuery();
+			while (resultSet.next()) {
+				feature = new Feature();
+				feature.setId(resultSet.getInt(1));
+				feature.setCode(resultSet.getString(2));
+				feature.setName(resultSet.getString(3));
+				feature.setDescription(resultSet.getString(4));
+				break;
+			}
+		} catch (SQLException e) {
+			String msg = "Error occurred while fetching feature id - '" +
+			             featureID + "'";
+			log.error(msg, e);
+			throw new MobileDeviceManagementDAOException(msg, e);
+		} finally {
+			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+		}
+		return feature;
+	}
+
+	@Override
 	public List<Feature> getAllFeatures() throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Feature feature;
-		List<Feature> features=new ArrayList<Feature>();
+		List<Feature> features = new ArrayList<Feature>();
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -178,8 +236,8 @@ public class FeatureDAOImpl implements FeatureDAO {
 		try {
 			return dataSource.getConnection();
 		} catch (SQLException e) {
-			String msg = "Error occurred while obtaining a connection from the mobile device " +
-			             "management metadata repository datasource.";
+			String msg = "Error occurred while obtaining a connection from the mobile specific " +
+			             "datasource.";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		}

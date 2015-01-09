@@ -1,20 +1,19 @@
 package org.wso2.carbon.device.mgt.mobile.dto;
 
-
 /**
  * DTO of feature property. Represents a property of a feature.
  */
 public class FeatureProperty {
 	int propertyId;
 	String property;
-	String featureCode;
+	String featureID;
 
-	public String getFeatureCode() {
-		return featureCode;
+	public String getFeatureID() {
+		return featureID;
 	}
 
-	public void setFeatureCode(String featureCode) {
-		this.featureCode = featureCode;
+	public void setFeatureID(String featureID) {
+		this.featureID = featureID;
 	}
 
 	public int getPropertyId() {

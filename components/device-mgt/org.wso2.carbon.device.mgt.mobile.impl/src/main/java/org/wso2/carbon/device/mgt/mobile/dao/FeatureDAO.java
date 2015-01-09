@@ -11,7 +11,8 @@ import java.util.List;
 public interface FeatureDAO {
 
 	/**
-	 * Add a new feature to plugin feature table.
+	 * Add a new feature to feature table.
+	 *
 	 * @param feature Feature object that holds data related to the feature to be inserted.
 	 * @return The status of the operation. If the insert was successful or not.
 	 * @throws MobileDeviceManagementDAOException
@@ -20,6 +21,7 @@ public interface FeatureDAO {
 
 	/**
 	 * Update a feature in the feature table.
+	 *
 	 * @param feature Feature object that holds data has to be updated.
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
@@ -27,23 +29,44 @@ public interface FeatureDAO {
 	boolean updateFeature(Feature feature) throws MobileDeviceManagementDAOException;
 
 	/**
-	 * Delete a given feature from plugin database.
-	 * @param featureCode Feature code of the feature to be deleted.
-	 * @return The status of the operation. If the delete was successful or not.
+	 * Delete a feature from feature table when the feature id is given.
+	 *
+	 * @param featureId Feature id of the feature to be deleted.
+	 * @return The status of the operation. If the operationId was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteFeature(String featureCode) throws MobileDeviceManagementDAOException;
+	boolean deleteFeatureById(String featureId) throws MobileDeviceManagementDAOException;
 
 	/**
-	 * Retrieve a given feature from plugin database.
+	 * Delete a feature from feature table when the feature code is given.
+	 *
+	 * @param featureCode Feature code of the feature to be deleted.
+	 * @return The status of the operation. If the operationId was successful or not.
+	 * @throws MobileDeviceManagementDAOException
+	 */
+	boolean deleteFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
+
+	/**
+	 * Retrieve a given feature from feature table when the feature id is given.
+	 *
+	 * @param featureId Feature id of the feature to be retrieved.
+	 * @return Feature object that holds data of the feature represented by featureId.
+	 * @throws MobileDeviceManagementDAOException
+	 */
+	Feature getFeatureById(String featureId) throws MobileDeviceManagementDAOException;
+
+	/**
+	 * Retrieve a given feature from feature table when the feature code is given.
+	 *
 	 * @param featureCode Feature code of the feature to be retrieved.
 	 * @return Feature object that holds data of the feature represented by featureCode.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	Feature getFeature(String featureCode) throws MobileDeviceManagementDAOException;
+	Feature getFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
 
 	/**
-	 * Retrieve all the features from plugin database.
+	 * Retrieve all the features from plugin specific database.
+	 *
 	 * @return Feature object list.
 	 * @throws MobileDeviceManagementDAOException
 	 */
