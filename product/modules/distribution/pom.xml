@@ -34,6 +34,13 @@
     <name>WSO2 Connected Device Manager (CDM) - Distribution</name>
     <description>WSO2 Connected Device Manager (CDM) Distribution</description>
 
+    <dependencies>
+	<dependency>
+	    <groupId>com.h2database.wso2</groupId>
+            <artifactId>h2-database-engine</artifactId>
+	</dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -91,6 +98,40 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <!--<version>${maven-antrun-plugin.version}</version>-->
                 <executions>
+		    <execution>
+                        <!-- Creating IDP Management schema -->
+                        <id>create-idp-mgt-schema</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo
+                                        message="########### Create IDP Management H2 Schema ###########"/>
+
+                                <property name="db.dir"
+                                          value="target/wso2carbon-core-${carbon.kernel.version}/repository/database"/>
+                                <property name="userid" value="wso2carbon"/>
+                                <property name="password" value="wso2carbon"/>
+                                <property name="dbURL"
+                                          value="jdbc:h2:file:${basedir}/${db.dir}/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE"/>
+
+                                <sql driver="org.h2.Driver"
+                                     url="${dbURL}"
+                                     userid="${userid}" password="${password}"
+                                     autocommit="true" onerror="continue">
+                                    <classpath refid="maven.dependency.classpath"/>
+                                    <classpath refid="maven.compile.classpath"/>
+                                    <classpath refid="maven.runtime.classpath"/>
+
+                                    <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/application-mgt/h2.sql"/>
+                                </sql>
+                                <echo
+                                        message="##################### END ####################"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>3-extract-docs-from-components</id>
                         <phase>package</phase>
@@ -149,7 +190,7 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <mkdir dir="target/wso2carbon-core-${project.version}/repository/deployment/server/webapps"/>
+                                <mkdir dir="target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps"/>
 
                                 <!--<copy todir="target/wso2carbon-core-${carbon.kernel.version}/modules"
                                       overwrite="true">
@@ -182,7 +223,7 @@
                                 <delete dir="target/dependency-maven-plugin-markers"/>
                                 <delete dir="target/maven-archiver"/>
                                 <delete dir="target/wso2carbon-core-${carbon.kernel.version}"/>
-                                <delete dir="target/wso2carbon-core-${project.version}"/>
+                                <delete dir="target/wso2carbon-core-${carbon.kernel.version}"/>
                                 <delete file="target/wso2cdm-${project.version}.jar"/>
                                 <delete dir="target/sources"/>
                                 <delete dir="target/site"/>

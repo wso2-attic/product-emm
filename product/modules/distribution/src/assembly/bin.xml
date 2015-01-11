@@ -142,7 +142,7 @@
             <fileMode>755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.version}/lib/runtimes</directory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/runtimes</directory>
             <outputDirectory>wso2cdm-${project.version}/lib/runtimes/</outputDirectory>
             <includes>
                 <include>*/**</include>
@@ -156,6 +156,16 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
+
+	<!-- Copying identity related dbscripts -->
+	<fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity</directory>
+            <outputDirectory>wso2cdm-${project.version}/dbscripts/identity</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules</directory>
             <outputDirectory>wso2cdm-${project.version}/modules/</outputDirectory>
