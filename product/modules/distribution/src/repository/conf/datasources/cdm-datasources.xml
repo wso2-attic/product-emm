@@ -5,14 +5,14 @@
 
     <datasources>
         <datasource>
-            <name>WSO2DEVICE_DB</name>
+            <name>DEVICE_MGT_DS</name>
             <description>The datasource used for CDM</description>
             <jndiConfig>
-                <name>jdbc/WSO2DEVICE_DB</name>
+                <name>jdbc/DEVICE_MGT_DS</name>
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
-                    <url>jdbc:h2:repository/database/WSO2DEVICE_DB;DB_CLOSE_ON_EXIT=FALSE</url>
+                    <url>jdbc:h2:repository/database/WSO2DEVICEMGT_DB;DB_CLOSE_ON_EXIT=FALSE</url>
                     <username>wso2carbon</username>
                     <password>wso2carbon</password>
                     <driverClassName>org.h2.Driver</driverClassName>
@@ -25,14 +25,34 @@
             </definition>
         </datasource>
         <datasource>
-            <name>WSO2MOBILE_DB</name>
+            <name>MOBILE_MGT_DS</name>
             <description>The datasource used for CDM Mobile Device Management</description>
             <jndiConfig>
-                <name>jdbc/WSO2MOBILE_DB</name>
+                <name>jdbc/MOBILE_MGT_DS</name>
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
                     <url>jdbc:h2:repository/database/WSO2MOBILE_DB;DB_CLOSE_ON_EXIT=FALSE</url>
+                    <username>wso2carbon</username>
+                    <password>wso2carbon</password>
+                    <driverClassName>org.h2.Driver</driverClassName>
+                    <maxActive>50</maxActive>
+                    <maxWait>60000</maxWait>
+                    <testOnBorrow>true</testOnBorrow>
+                    <validationQuery>SELECT 1</validationQuery>
+                    <validationInterval>30000</validationInterval>
+                </configuration>
+            </definition>
+        </datasource>
+	<datasource>
+            <name>WSO2DEVICE_DB</name>
+            <description>The datasource used for CDM</description>
+            <jndiConfig>
+                <name>jdbc/WSO2AM_DB</name>
+            </jndiConfig>
+            <definition type="RDBMS">
+                <configuration>
+                    <url>jdbc:h2:repository/database/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE</url>
                     <username>wso2carbon</username>
                     <password>wso2carbon</password>
                     <driverClassName>org.h2.Driver</driverClassName>

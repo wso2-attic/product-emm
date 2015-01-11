@@ -18,7 +18,7 @@
     <ManagementRepository>
         <DataSourceConfiguration>
             <JndiLookupDefinition>
-                <Name>jdbc/WSO2DEVICE_DB</Name>
+                <Name>jdbc/DEVICE_MGT_DS</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
     </ManagementRepository>

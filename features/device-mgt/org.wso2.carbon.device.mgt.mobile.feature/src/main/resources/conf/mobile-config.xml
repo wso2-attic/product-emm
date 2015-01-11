@@ -19,7 +19,7 @@
     <ManagementRepository>
         <DataSourceConfiguration>
             <JndiLookupDefinition>
-                <Name>jdbc/WSO2MOBILE_DB</Name>
+                <Name>jdbc/MOBILE_MGT_DS</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
     </ManagementRepository>
