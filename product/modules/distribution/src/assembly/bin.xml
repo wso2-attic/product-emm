@@ -267,6 +267,30 @@
             <fileMode>644</fileMode>
         </file>
 
+	<!-- Copying logging-config.xml -->
+	<file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/logging-config.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf/etc</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+	<!-- Copying event-broker.xml -->
+	<file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/event-broker.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+	<!-- Copying thrift-authentication.xml -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/thrift-authentication.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!--copy default xacml policy to repository/resources/security -->
         <!--     <file>
                  <source>src/repository/resources/policies/xacml/default/admin.xml</source>
