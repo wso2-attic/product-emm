@@ -17,6 +17,7 @@
 package org.wso2.carbon.device.mgt.mobile.dao;
 
 import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
+import java.util.List;
 
 /**
  * This class represents the key operations associated with persisting mobile-device related
@@ -31,5 +32,7 @@ public interface MobileDeviceDAO {
 	boolean updateDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
 
 	boolean deleteDevice(String deviceId) throws MobileDeviceManagementDAOException;
+
+	List<MobileDevice> getAllDevices() throws MobileDeviceManagementDAOException;
 
 }

@@ -28,6 +28,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of MobileDeviceDAO.
@@ -167,6 +169,39 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
 		return status;
+	}
+
+	@Override
+	public List<MobileDevice> getAllDevices() throws MobileDeviceManagementDAOException {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		MobileDevice mobileDevice;
+		List<MobileDevice> mobileDevices=new ArrayList<MobileDevice>();
+		try {
+			conn = this.getConnection();
+			String selectDBQuery =
+					"SELECT * FROM MBL_DEVICE";
+			stmt = conn.prepareStatement(selectDBQuery);
+			ResultSet resultSet = stmt.executeQuery();
+			while (resultSet.next()) {
+				mobileDevice = new MobileDevice();
+				mobileDevice.setMobileDeviceId(resultSet.getString(1));
+				mobileDevice.setRegId(resultSet.getString(2));
+				mobileDevice.setImei(resultSet.getString(3));
+				mobileDevice.setImsi(resultSet.getString(4));
+				mobileDevice.setOsVersion(resultSet.getString(5));
+				mobileDevice.setModel(resultSet.getString(6));
+				mobileDevice.setVendor(resultSet.getString(7));
+				mobileDevices.add(mobileDevice);
+			}
+			return mobileDevices;
+		} catch (SQLException e) {
+			String msg = "Error occurred while fetching all mobile device data'";
+			log.error(msg, e);
+			throw new MobileDeviceManagementDAOException(msg, e);
+		} finally {
+			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+		}
 	}
 
 	private Connection getConnection() throws MobileDeviceManagementDAOException {
