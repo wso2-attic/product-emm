@@ -51,15 +51,6 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <jaxrs:server id="testService" address="/test">
-        <jaxrs:serviceBeans>
-            <ref bean="testServiceBean"/>
-        </jaxrs:serviceBeans>
-        <jaxrs:providers>
-            <ref bean="jsonProvider"/>
-            <ref bean="errorHandler"/>
-        </jaxrs:providers>
-    </jaxrs:server>
     <bean id="deviceMgtServiceBean" class="cdm.api.android.Device"/>
     <bean id="enrollmentServiceBean" class="cdm.api.android.Enrollment"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
