@@ -282,6 +282,14 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
+	
+	<!-- Copying application-authentication.xml -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/application-authentication.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf/security</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
 
 	<!-- Copying thrift-authentication.xml -->
         <file>

@@ -61,7 +61,7 @@
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.device.mgt.mobile.internal,
-                            org.wso2.carbon.device.mgt.mobile.impl.*
+                            org.wso2.carbon.device.mgt.mobile.*
                         </Export-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
