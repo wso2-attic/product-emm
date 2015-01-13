@@ -71,8 +71,4 @@ public class DeviceConfigurationManager {
         return currentDeviceConfig;
     }
 
-    public DataSourceConfig getDataSourceConfig() {
-        return currentDeviceConfig.getDeviceMgtRepository().getDataSourceConfig();
-    }
-
 }

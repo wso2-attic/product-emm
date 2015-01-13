@@ -58,8 +58,7 @@ public class DeviceManagerImpl implements DeviceManager {
             this.getDeviceDAO().addDevice(deviceDto);
 
         } catch (DeviceManagementDAOException e) {
-            throw new DeviceManagementException("Error occurred while enrolling the device '" + device.getId() + "'",
-                    e);
+            throw new DeviceManagementException("Error occurred while enrolling the device '" + device.getId() + "'", e);
         }
         return status;
     }

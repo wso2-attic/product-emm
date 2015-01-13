@@ -101,9 +101,9 @@ public class Enrollment {
             }
             return responseMsg;
         } catch (DeviceManagementException deviceMgtEx) {
-            String errormsg = "Error occurred while enrollment of the device.";
-            log.error(errormsg, deviceMgtEx);
-            throw new AndroidAgentException(errormsg, deviceMgtEx);
+            String errorMsg = "Error occurred while enrollment of the device.";
+            log.error(errorMsg, deviceMgtEx);
+            throw new AndroidAgentException(errorMsg, deviceMgtEx);
         }
     }
 

@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+//org.wso2.carbon....
 package cdm.api.android;
 
 import cdm.api.android.common.AndroidAgentException;
@@ -65,7 +66,6 @@ public class Device {
         } catch (DeviceManagementException e) {
             msg = "Error occurred while fetching the device list.";
             LOG.error(msg, e);
-            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             throw new AndroidAgentException(msg, e);
         }
     }
@@ -80,7 +80,6 @@ public class Device {
 
         try {
             dmService = AndroidAPIUtils.getDeviceManagementService();
-
         } catch (DeviceManagementServiceException deviceMgtServiceEx) {
             String errorMsg = "Device management service error";
             LOG.error(errorMsg, deviceMgtServiceEx);
@@ -94,7 +93,6 @@ public class Device {
                 Response.status(HttpStatus.SC_NOT_FOUND);
             }
             return device;
-
         } catch (DeviceManagementException deviceMgtEx) {
             msg = "Error occurred while fetching the device information.";
             LOG.error(msg, deviceMgtEx);

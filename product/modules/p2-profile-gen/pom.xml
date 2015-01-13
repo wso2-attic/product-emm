@@ -153,12 +153,19 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.identity.provider.server.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.governance.metadata.server.feature:${carbon.platform.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.registry.extensions.server.feature:${carbon.platform.version}
-                                </featureArtifactDef>
+
+                                <!-- Registry Features -->
+                                <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.registry.extensions.feature:${carbon.platform.version}</featureArtifactDef>
+                                <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.registry.ws.feature:${carbon.platform.version}</featureArtifactDef>
+                                <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.registry.ui.menu.governance.feature:${carbon.platform.version}</featureArtifactDef>
+
+                                <!--Governance Feature-->
+                                <!--featureArtifactDef>org.wso2.carbon:org.wso2.carbon.gadget.initializer.feature:${carbon.platform.version}</featureArtifactDef-->
+                                <!--featureArtifactDef>org.wso2.carbon:org.wso2.carbon.gadget.editor.feature:${carbon.platform.version}</featureArtifactDef>
+                                <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.gadget.editor.ui.feature:${carbon.platform.version}</featureArtifactDef-->
+                                <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.governance.metadata.feature:4.2.2</featureArtifactDef>
+                                <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.governance.lifecycle.management.feature:4.2.1</featureArtifactDef>
+
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.identity.core.server.feature:${carbon.platform.version}
                                 </featureArtifactDef>
