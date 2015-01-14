@@ -16,6 +16,7 @@
 package org.wso2.carbon.device.mgt.mobile.config;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
@@ -24,12 +25,13 @@ public class APIPublisherConfig {
 
     private List<APIConfig> apis;
 
-    @XmlElement(name = "APIs")
-    public List<APIConfig> getApis() {
+    @XmlElementWrapper(name = "APIs", nillable = false, required = true)
+    @XmlElement(name = "API", nillable = false)
+    public List<APIConfig> getAPIs() {
         return apis;
     }
 
-    public void setApis(List<APIConfig> apis) {
+    public void setAPIs(List<APIConfig> apis) {
         this.apis = apis;
     }
 

@@ -81,7 +81,6 @@
             </includes>
         </fileSet>
 
-
         <!-- copy documentation -->
         <fileSet>
             <directory>target/site</directory>
@@ -120,6 +119,13 @@
                 <include>**/trusted-idp-config.xml</include>
             </includes>
         </fileSet>
+
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/rxts/
+            </directory>
+            <outputDirectory>wso2cdm-${project.version}/repository/resources/rxts/</outputDirectory>
+        </fileSet>
+
         <fileSet>
             <directory>src/repository/conf/datasources</directory>
             <outputDirectory>wso2cdm-${project.version}/repository/conf/datasources</outputDirectory>
@@ -142,7 +148,7 @@
             <fileMode>755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.version}/lib/runtimes</directory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/runtimes</directory>
             <outputDirectory>wso2cdm-${project.version}/lib/runtimes/</outputDirectory>
             <includes>
                 <include>*/**</include>
@@ -156,6 +162,16 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
+
+	<!-- Copying identity related dbscripts -->
+	<fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity</directory>
+            <outputDirectory>wso2cdm-${project.version}/dbscripts/identity</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules</directory>
             <outputDirectory>wso2cdm-${project.version}/modules/</outputDirectory>
@@ -173,7 +189,10 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
-
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources</directory>
+            <outputDirectory>${project.artifactId}-${project.version}/repository/resources</outputDirectory>
+        </fileSet>
 
     </fileSets>
     <dependencySets>
@@ -267,6 +286,38 @@
             <fileMode>644</fileMode>
         </file>
 
+	<!-- Copying logging-config.xml -->
+	<file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/logging-config.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf/etc</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+	<!-- Copying event-broker.xml -->
+	<file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/event-broker.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+	
+	<!-- Copying application-authentication.xml -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/application-authentication.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf/security</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+	<!-- Copying thrift-authentication.xml -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/thrift-authentication.xml</source>
+            <outputDirectory>wso2cdm-${project.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!--copy default xacml policy to repository/resources/security -->
         <!--     <file>
                  <source>src/repository/resources/policies/xacml/default/admin.xml</source>
@@ -327,12 +378,10 @@
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/mobile-config.xml
             </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/device-mgt-plugin-configs/mobile</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-
-
         <file>
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml

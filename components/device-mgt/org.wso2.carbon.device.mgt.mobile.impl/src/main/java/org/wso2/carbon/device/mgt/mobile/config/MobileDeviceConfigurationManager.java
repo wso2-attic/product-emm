@@ -32,12 +32,13 @@ import java.io.File;
 public class MobileDeviceConfigurationManager {
 
 	private static final String MOBILE_DEVICE_CONFIG_XML_NAME = "mobile-config.xml";
+    private static final String MOBILE_DEVICE_PLUGIN_DIRECTORY = "mobile";
 	private MobileDeviceManagementConfig currentMobileDeviceConfig;
 	private static MobileDeviceConfigurationManager mobileDeviceConfigManager;
 
 	private final String mobileDeviceMgtConfigXMLPath =
-			CarbonUtils.getCarbonConfigDirPath() + File.separator +
-			MOBILE_DEVICE_CONFIG_XML_NAME;
+			CarbonUtils.getEtcCarbonConfigDirPath() + File.separator + "device-mgt-plugin-configs" + File.separator +
+                    MOBILE_DEVICE_PLUGIN_DIRECTORY + File.separator + MOBILE_DEVICE_CONFIG_XML_NAME;
 
 	public static MobileDeviceConfigurationManager getInstance() {
 		if (mobileDeviceConfigManager == null) {

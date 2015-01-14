@@ -14,13 +14,11 @@
   ~ under the License.
   -->
 
-<DeviceMgtConfiguration>
-    <ManagementRepository>
-        <DataSourceConfiguration>
-            <JndiLookupDefinition>
-                <Name>jdbc/DEVICE_MGT_DS</Name>
-            </JndiLookupDefinition>
-        </DataSourceConfiguration>
-    </ManagementRepository>
-</DeviceMgtConfiguration>
-
+<DeviceMgtTestDBConfigurations>
+    <DBType typeName="H2">
+        <connectionurl>jdbc:h2:mem:cdm-test-db;DB_CLOSE_DELAY=-1</connectionurl>
+        <driverclass>org.h2.Driver</driverclass>
+        <userName></userName>
+        <pwd></pwd>
+    </DBType>
+</DeviceMgtTestDBConfigurations>

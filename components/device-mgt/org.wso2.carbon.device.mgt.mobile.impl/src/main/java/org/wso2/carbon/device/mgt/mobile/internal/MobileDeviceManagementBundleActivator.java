@@ -133,7 +133,7 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
     private void initAPIConfigs() throws DeviceManagementException {
         List<APIConfig> apiConfigs =
                 MobileDeviceConfigurationManager.getInstance().getMobileDeviceManagementConfig().
-                        getApiPublisherConfig().getApis();
+                        getApiPublisherConfig().getAPIs();
         for (APIConfig apiConfig : apiConfigs) {
             try {
                 APIProvider provider = APIManagerFactory.getInstance().getAPIProvider(apiConfig.getOwner());
@@ -148,7 +148,7 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
     private void publishAPIs() throws DeviceManagementException {
         List<APIConfig> apiConfigs =
                 MobileDeviceConfigurationManager.getInstance().getMobileDeviceManagementConfig().
-                        getApiPublisherConfig().getApis();
+                        getApiPublisherConfig().getAPIs();
         for (APIConfig apiConfig : apiConfigs) {
             DeviceManagementAPIPublisherUtil.publishAPI(apiConfig);
         }
@@ -157,7 +157,7 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
     private void removeAPIs() throws DeviceManagementException {
         List<APIConfig> apiConfigs =
                 MobileDeviceConfigurationManager.getInstance().getMobileDeviceManagementConfig().
-                        getApiPublisherConfig().getApis();
+                        getApiPublisherConfig().getAPIs();
         for (APIConfig apiConfig : apiConfigs) {
             DeviceManagementAPIPublisherUtil.removeAPI(apiConfig);
         }
