@@ -183,6 +183,13 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
+        <!-- copy cdm jaggery app -->
+        <fileSet>
+            <directory>src/repository/jaggeryapps</directory>
+            <outputDirectory>wso2cdm-${project.version}/repository/deployment/server/jaggeryapps</outputDirectory>
+            <fileMode>755</fileMode>
+        </fileSet>
+
 
 
     </fileSets>
