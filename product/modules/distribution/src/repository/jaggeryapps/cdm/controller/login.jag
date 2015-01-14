@@ -1,0 +1,17 @@
+<%
+(function(){
+    if (!session.get("emmConsoleUserLogin")) {
+      var dataConfi = require('/config/emm.js').config();
+      var sso = require("/modules/sso.js").sso;
+      var keyStoreParams = {
+        keyStoreName : dataConfi.ssoConfiguration.keyStoreName,
+        keyStorePassword : dataConfi.ssoConfiguration.keyStorePassword,
+        identityAlias : dataConfi.ssoConfiguration.identityAlias
+      }
+      sso.configure(dataConfi.ssoConfiguration.issuer, "emm", keyStoreParams, dataConfi.ssoConfiguration.identityProviderURL);
+      sso.login();
+    }else{
+      response.sendRedirect("/emm");
+    }
+}());
+%>
