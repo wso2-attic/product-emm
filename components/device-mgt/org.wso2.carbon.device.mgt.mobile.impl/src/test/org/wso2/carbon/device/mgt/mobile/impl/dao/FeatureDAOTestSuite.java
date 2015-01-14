@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.dao;
 
-
-import org.apache.commons.dbcp.BasicDataSource;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
