@@ -94,13 +94,6 @@
                 <artifactId>org.wso2.carbon.user.api</artifactId>
                 <version>${carbon.kernel.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.utils</artifactId>
-                <version>${carbon.kernel.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.logging</artifactId>
@@ -175,38 +168,6 @@
                 <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.transaction.manager</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.transaction</groupId>
-                <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-                <version>${jboss-transaction-api.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.eclipse.osgi</groupId>
-                <artifactId>org.eclipse.osgi</artifactId>
-                <version>3.8.1.v20120830-144521</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.equinox</groupId>
-                <artifactId>org.eclipse.equinox.common</artifactId>
-                <version>3.6.100.v20120522-1841</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.logging</artifactId>
-                <version>${carbon.kernel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-                <version>${cdm.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.osgi</groupId>
                 <artifactId>org.eclipse.osgi.services</artifactId>
                 <version>3.3.100.v20120522-1822</version>
@@ -255,6 +216,12 @@
         <jboss-transaction-api.version>1.0.0.Final</jboss-transaction-api.version>
         <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
         <cdm.version>2.0.0-SNAPSHOT</cdm.version>
+        <!--Jaggery -->
+        <jaggery.feature.version>0.9.0-SNAPSHOT</jaggery.feature.version>
+        <carbon.feature.version>1.1.0</carbon.feature.version>
+        <process.feature.version>1.0.0</process.feature.version>
+        <uuid.feature.version>1.0.0</uuid.feature.version>
+        <jaggery-test.feature.version>1.1.0</jaggery-test.feature.version>
         <!--Testing -->
         <test.framework.version>4.3.1</test.framework.version>
         <testng.version>6.8</testng.version>

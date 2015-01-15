@@ -20,7 +20,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dto.Device;
-import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.dto.Status;
 import org.wso2.carbon.device.mgt.core.internal.DeviceManagementDataHolder;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -61,9 +60,6 @@ public final class DeviceManagementDAOUtil {
                 log.warn("Error occurred while closing database connection", e);
             }
         }
-        rs = null;
-        stmt = null;
-        conn = null;
     }
 
     /**
