@@ -41,6 +41,8 @@ public class MobileDeviceManagementUtil {
 	private static final String MOBILE_DEVICE_VENDOR = "vendor";
 	private static final String MOBILE_DEVICE_OS_VERSION = "osVersion";
 	private static final String MOBILE_DEVICE_MODEL = "model";
+	private static final String MOBILE_DEVICE_LATITUDE = "latitude";
+	private static final String MOBILE_DEVICE_LONGITUDE = "longitude";
 
 	public static Document convertToDocument(File file) throws DeviceManagementException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -86,6 +88,8 @@ public class MobileDeviceManagementUtil {
 			mobileDevice.setModel(getPropertyValue(device, MOBILE_DEVICE_MODEL));
 			mobileDevice.setOsVersion(getPropertyValue(device, MOBILE_DEVICE_OS_VERSION));
 			mobileDevice.setVendor(getPropertyValue(device, MOBILE_DEVICE_VENDOR));
+			mobileDevice.setLatitude(getPropertyValue(device,MOBILE_DEVICE_LATITUDE));
+			mobileDevice.setLongitude(getPropertyValue(device,MOBILE_DEVICE_LONGITUDE));
 		}
 		return mobileDevice;
 	}
@@ -101,6 +105,8 @@ public class MobileDeviceManagementUtil {
 			propertyList.add(getProperty(MOBILE_DEVICE_MODEL,mobileDevice.getModel()));
 			propertyList.add(getProperty(MOBILE_DEVICE_OS_VERSION,mobileDevice.getOsVersion()));
 			propertyList.add(getProperty(MOBILE_DEVICE_VENDOR,mobileDevice.getVendor()));
+			propertyList.add(getProperty(MOBILE_DEVICE_LATITUDE,mobileDevice.getLatitude()));
+			propertyList.add(getProperty(MOBILE_DEVICE_LONGITUDE,mobileDevice.getLongitude()));
 			device.setProperties(propertyList);
 			device.setDeviceIdentifier(mobileDevice.getMobileDeviceId());
 		}

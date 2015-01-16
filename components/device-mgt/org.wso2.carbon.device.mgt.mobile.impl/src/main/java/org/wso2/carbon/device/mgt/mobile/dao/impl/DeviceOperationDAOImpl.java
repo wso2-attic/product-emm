@@ -49,7 +49,9 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while adding device id - '" +
-			             deviceOperation.getDeviceId() + " and operation id - " + deviceOperation.getOperationId() + "of mapping table MBL_DEVICE_OPERATION";;
+			             deviceOperation.getDeviceId() + " and operation id - " +
+			             deviceOperation.getOperationId() + "of mapping table MBL_DEVICE_OPERATION";
+			;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -79,7 +81,8 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while updating device id - '" +
-			             deviceOperation.getDeviceId() + " and operation id - " + deviceOperation.getOperationId() + "of mapping table MBL_DEVICE_OPERATION";
+			             deviceOperation.getDeviceId() + " and operation id - " +
+			             deviceOperation.getOperationId() + "of mapping table MBL_DEVICE_OPERATION";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -102,12 +105,13 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 			stmt.setString(1, deviceId);
 			stmt.setInt(2, operationId);
 			int rows = stmt.executeUpdate();
-			if(rows>0){
+			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while deleting mapping table MBL_DEVICE_OPERATION with  device id - '" +
-			             deviceId + " and operation id - " + operationId;
+			String msg =
+					"Error occurred while deleting mapping table MBL_DEVICE_OPERATION with  device id - '" +
+					deviceId + " and operation id - " + operationId;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -139,8 +143,9 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 				break;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while fetching mapping table MBL_DEVICE_OPERATION entry with device id - '" +
-			             deviceId + " and operation id - " + operationId;
+			String msg =
+					"Error occurred while fetching mapping table MBL_DEVICE_OPERATION entry with device id - '" +
+					deviceId + " and operation id - " + operationId;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -155,7 +160,7 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		DeviceOperation deviceOperation = null;
-		List<DeviceOperation> deviceOperations=new ArrayList<DeviceOperation>();
+		List<DeviceOperation> deviceOperations = new ArrayList<DeviceOperation>();
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -173,8 +178,9 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 				break;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while fetching mapping table MBL_DEVICE_OPERATION entry with device id - '" +
-			             deviceId;
+			String msg =
+					"Error occurred while fetching mapping table MBL_DEVICE_OPERATION entry with device id - '" +
+					deviceId;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {

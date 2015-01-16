@@ -50,8 +50,9 @@ public class AndroidAPIUtils {
 		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
 
         if (dmService == null){
-            log.error("device management service not initialized");
-            throw new DeviceManagementServiceException("device management service not initialized");
+	        String msg = "Device management service not initialized";
+	        log.error(msg);
+            throw new DeviceManagementServiceException(msg);
         }
         PrivilegedCarbonContext.endTenantFlow();
 		return dmService;

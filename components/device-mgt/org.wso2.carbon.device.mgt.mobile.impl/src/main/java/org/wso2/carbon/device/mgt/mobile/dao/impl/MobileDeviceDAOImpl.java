@@ -64,6 +64,8 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 				mobileDevice.setOsVersion(resultSet.getString(5));
 				mobileDevice.setModel(resultSet.getString(6));
 				mobileDevice.setVendor(resultSet.getString(7));
+				mobileDevice.setLatitude(resultSet.getString(8));
+				mobileDevice.setLongitude(resultSet.getString(9));
 				break;
 			}
 		} catch (SQLException e) {
@@ -87,7 +89,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 			conn = this.getConnection();
 			String createDBQuery =
 					"INSERT INTO MBL_DEVICE(MOBILE_DEVICE_ID, REG_ID, IMEI, IMSI, OS_VERSION," +
-					"DEVICE_MODEL, VENDOR) VALUES (?, ?, ?, ?, ?, ?, ?)";
+					"DEVICE_MODEL, VENDOR, LATITUDE, LONGITUDE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
 			stmt.setString(1, mobileDevice.getMobileDeviceId());
@@ -97,6 +99,8 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 			stmt.setString(5, mobileDevice.getOsVersion());
 			stmt.setString(6, mobileDevice.getModel());
 			stmt.setString(7, mobileDevice.getVendor());
+			stmt.setString(8, mobileDevice.getLatitude());
+			stmt.setString(8, mobileDevice.getLongitude());
 			int rows = stmt.executeUpdate();
 			if(rows>0){
 				status = true;
@@ -122,7 +126,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 			conn = this.getConnection();
 			String updateDBQuery =
 					"UPDATE MBL_DEVICE SET REG_ID = ?, IMEI = ?, IMSI = ?, OS_VERSION = ?," +
-					"DEVICE_MODEL = ?, VENDOR = ? WHERE MOBILE_DEVICE_ID = ?";
+					"DEVICE_MODEL = ?, VENDOR = ? , LATITUDE = ?, LONGITUDE = ? WHERE MOBILE_DEVICE_ID = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
 			stmt.setString(1, mobileDevice.getRegId());
 			stmt.setString(2, mobileDevice.getImei());
@@ -130,7 +134,9 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 			stmt.setString(4, mobileDevice.getOsVersion());
 			stmt.setString(5, mobileDevice.getModel());
 			stmt.setString(6, mobileDevice.getVendor());
-			stmt.setString(7, mobileDevice.getMobileDeviceId());
+			stmt.setString(7, mobileDevice.getLatitude());
+			stmt.setString(8, mobileDevice.getLongitude());
+			stmt.setString(9, mobileDevice.getMobileDeviceId());
 			int rows = stmt.executeUpdate();
 			if(rows>0){
 				status = true;
@@ -192,6 +198,8 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 				mobileDevice.setOsVersion(resultSet.getString(5));
 				mobileDevice.setModel(resultSet.getString(6));
 				mobileDevice.setVendor(resultSet.getString(7));
+				mobileDevice.setLatitude(resultSet.getString(8));
+				mobileDevice.setLongitude(resultSet.getString(9));
 				mobileDevices.add(mobileDevice);
 			}
 			return mobileDevices;

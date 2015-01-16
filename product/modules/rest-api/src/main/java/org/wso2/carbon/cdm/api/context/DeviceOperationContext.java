@@ -14,47 +14,39 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.common;
+package org.wso2.carbon.cdm.api.context;
+
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.Operation;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Properties;
+import java.util.List;
 
+/**
+ * Model object of DeviceOperation.
+ */
 @XmlRootElement
-public class Operation {
+public class DeviceOperationContext {
 
-	public enum Type {
-		CONFIG, MESSAGE, INFO
-	}
-
-	private String code;
-	private Properties properties;
-	private Type type;
+	private List<DeviceIdentifier> devices;
+	private Operation operation;
 
 	@XmlElement
-	public String getCode() {
-		return code;
+	public List<DeviceIdentifier> getDevices() {
+		return devices;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setDevices(List<DeviceIdentifier> devices) {
+		this.devices = devices;
 	}
 
 	@XmlElement
-	public Properties getProperties() {
-		return properties;
+	public Operation getOperation() {
+		return operation;
 	}
 
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
-
-	@XmlElement
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
+	public void setOperation(Operation operation) {
+		this.operation = operation;
 	}
 }

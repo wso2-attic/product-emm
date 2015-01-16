@@ -30,6 +30,8 @@ public class MobileDevice implements Serializable {
 	private String osVersion;
 	private String model;
 	private String vendor;
+	private String latitude;
+	private String longitude;
 
 	public String getMobileDeviceId() {
 		return mobileDeviceId;
@@ -85,5 +87,21 @@ public class MobileDevice implements Serializable {
 
 	public void setVendor(String vendor) {
 		this.vendor = vendor;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 }

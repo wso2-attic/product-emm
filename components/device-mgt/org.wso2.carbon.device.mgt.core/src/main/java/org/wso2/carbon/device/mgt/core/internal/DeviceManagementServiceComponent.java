@@ -51,6 +51,7 @@ import org.wso2.carbon.user.core.service.RealmService;
  */
 public class DeviceManagementServiceComponent {
 
+    public static final String SETUP_OPTION = "setup";
     private static Log log = LogFactory.getLog(DeviceManagementServiceComponent.class);
     private DeviceManagementRepository pluginRepository = new DeviceManagementRepository();
 
@@ -67,7 +68,7 @@ public class DeviceManagementServiceComponent {
             DeviceManagementDataHolder.getInstance().setDeviceManager(deviceManager);
 
             /* If -Dsetup option enabled then create device management database schema */
-            String setupOption = System.getProperty("setup");
+            String setupOption = System.getProperty(SETUP_OPTION);
             if (setupOption != null) {
                 if (log.isDebugEnabled()) {
                     log.debug("-Dsetup is enabled. Device management repository schema initialization is about " +
