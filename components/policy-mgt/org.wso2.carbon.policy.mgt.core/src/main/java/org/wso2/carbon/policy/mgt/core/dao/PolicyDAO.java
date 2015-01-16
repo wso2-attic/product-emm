@@ -28,7 +28,7 @@ public interface PolicyDAO {
 
     int addPolicy(String deviceID, String deviceType, Policy policy) throws PolicyManagerDAOException;
 
-    void updatePolicy(int id) throws PolicyManagerDAOException;
+    void updatePolicy(int id, Policy policy) throws PolicyManagerDAOException;
 
     Policy getPolicy() throws PolicyManagerDAOException;
 

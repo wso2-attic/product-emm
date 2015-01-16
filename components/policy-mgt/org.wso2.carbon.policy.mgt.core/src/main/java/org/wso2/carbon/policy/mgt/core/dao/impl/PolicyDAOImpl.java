@@ -39,7 +39,6 @@ public class PolicyDAOImpl implements PolicyDAO {
 
     @Override
     public int addPolicy(Policy policy) throws PolicyManagerDAOException {
-
         return 0;
     }
 
@@ -54,7 +53,7 @@ public class PolicyDAOImpl implements PolicyDAO {
     }
 
     @Override
-    public void updatePolicy(int id) throws PolicyManagerDAOException {
+    public void updatePolicy(int id, Policy policy) throws PolicyManagerDAOException {
 
     }
 
