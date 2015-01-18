@@ -60,22 +60,22 @@ public class DeviceManagementConfigTests {
     public void testMandateManagementRepositoryElement() {
         File malformedConfig =
                 new File(DeviceManagementConfigTests.MALFORMED_TEST_CONFIG_LOCATION_NO_MGT_REPOSITORY);
-        this.validateConfig(malformedConfig);
+        this.validateMalformedConfig(malformedConfig);
     }
 
     @Test
     public void testMandateDataSourceConfigurationElement() {
         File malformedConfig = new File(DeviceManagementConfigTests.MALFORMED_TEST_CONFIG_LOCATION_NO_DS_CONFIG);
-        this.validateConfig(malformedConfig);
+        this.validateMalformedConfig(malformedConfig);
     }
 
     @Test
     public void testMandateJndiLookupDefinitionElement() {
         File malformedConfig = new File(DeviceManagementConfigTests.MALFORMED_TEST_CONFIG_LOCATION_NO_JNDI_CONFIG);
-        this.validateConfig(malformedConfig);
+        this.validateMalformedConfig(malformedConfig);
     }
 
-    private void validateConfig(File malformedConfig) {
+    private void validateMalformedConfig(File malformedConfig) {
         try {
             JAXBContext ctx = JAXBContext.newInstance(DeviceManagementConfig.class);
             Unmarshaller um = ctx.createUnmarshaller();
@@ -83,7 +83,7 @@ public class DeviceManagementConfigTests {
             um.unmarshal(malformedConfig);
             Assert.assertTrue(false);
         } catch (JAXBException e) {
-            log.error("Error while unmarsharlling the device management config", e);
+            log.error("Error occurred while unmarsharlling device management config", e);
             Assert.assertTrue(true);
         }
     }

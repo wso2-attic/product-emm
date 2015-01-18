@@ -18,6 +18,7 @@ package org.wso2.carbon.device.mgt.mobile.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.DataSourceListener;
 import org.wso2.carbon.device.mgt.mobile.config.datasource.MobileDataSourceConfig;
 import org.wso2.carbon.device.mgt.mobile.dao.impl.*;
@@ -31,66 +32,68 @@ import javax.sql.DataSource;
  */
 public class MobileDeviceManagementDAOFactory implements DataSourceListener {
 
-	private static DataSource dataSource;
-	private static MobileDataSourceConfig mobileDataSourceConfig;
-	private static final Log log = LogFactory.getLog(MobileDeviceManagementDAOFactory.class);
+    private static DataSource dataSource;
+    private static MobileDataSourceConfig mobileDataSourceConfig;
+    private static final Log log = LogFactory.getLog(MobileDeviceManagementDAOFactory.class);
 
-	public MobileDeviceManagementDAOFactory() {
+    public MobileDeviceManagementDAOFactory() {
 
-	}
+    }
 
-	public void init(){
-		dataSource = MobileDeviceManagementDAOUtil.resolveDataSource(mobileDataSourceConfig);
-		if(dataSource!=null){
-			MobileDeviceManagementDAOUtil.createDataSource(dataSource);
-		}else{
-			MobileDeviceManagementBundleActivator.registerDataSourceListener(this);
-		}
-	}
+    public void init() throws DeviceManagementException {
+        dataSource = MobileDeviceManagementDAOUtil.resolveDataSource(mobileDataSourceConfig);
+        if (dataSource != null) {
+            MobileDeviceManagementDAOUtil.createDataSource(dataSource);
+        } else {
+            MobileDeviceManagementBundleActivator.registerDataSourceListener(this);
+        }
+    }
 
-	public static MobileDeviceDAO getMobileDeviceDAO() {
-		return new MobileDeviceDAOImpl(dataSource);
-	}
+    public static MobileDeviceDAO getMobileDeviceDAO() {
+        return new MobileDeviceDAOImpl(dataSource);
+    }
 
-	public static OperationDAO getOperationDAO(){
-		return new OperationDAOImpl(dataSource);
-	}
+    public static OperationDAO getOperationDAO() {
+        return new OperationDAOImpl(dataSource);
+    }
 
-	public static OperationPropertyDAO geOperationPropertyDAO(){
-		return new OperationPropertyDAOImpl(dataSource);
-	}
+    public static OperationPropertyDAO geOperationPropertyDAO() {
+        return new OperationPropertyDAOImpl(dataSource);
+    }
 
-	public static DeviceOperationDAO getDeviceOperationDAO(){
-		return new DeviceOperationDAOImpl(dataSource);
-	}
+    public static DeviceOperationDAO getDeviceOperationDAO() {
+        return new DeviceOperationDAOImpl(dataSource);
+    }
 
-	public static FeatureDAO getFeatureDAO(){
-		return new FeatureDAOImpl(dataSource);
-	}
+    public static FeatureDAO getFeatureDAO() {
+        return new FeatureDAOImpl(dataSource);
+    }
 
-	public static FeaturePropertyDAO getFeaturePropertyDAO(){
-		return new FeaturePropertyDAOImpl(dataSource);
-	}
+    public static FeaturePropertyDAO getFeaturePropertyDAO() {
+        return new FeaturePropertyDAOImpl(dataSource);
+    }
 
-	public static MobileDataSourceConfig getMobileDeviceManagementConfig() {
-		return mobileDataSourceConfig;
-	}
+    public static MobileDataSourceConfig getMobileDeviceManagementConfig() {
+        return mobileDataSourceConfig;
+    }
 
-	public static void setMobileDataSourceConfig(
-			MobileDataSourceConfig mobileDataSourceConfig) {
-		MobileDeviceManagementDAOFactory.mobileDataSourceConfig =
-				mobileDataSourceConfig;
-	}
+    public static void setMobileDataSourceConfig(
+            MobileDataSourceConfig mobileDataSourceConfig) {
+        MobileDeviceManagementDAOFactory.mobileDataSourceConfig =
+                mobileDataSourceConfig;
+    }
 
-	public static DataSource getDataSource() {
-		return dataSource;
-	}
+    public static DataSource getDataSource() {
+        return dataSource;
+    }
 
-	@Override
-	public void notifyObserver() {
-		dataSource = MobileDeviceManagementDAOUtil.resolveDataSource(mobileDataSourceConfig);
-		if(dataSource!=null){
-			MobileDeviceManagementDAOUtil.createDataSource(dataSource);
-		}
-	}
+    @Override
+    public void notifyObserver() {
+        try {
+            dataSource = MobileDeviceManagementDAOUtil.resolveDataSource(mobileDataSourceConfig);
+            MobileDeviceManagementDAOUtil.createDataSource(dataSource);
+        } catch (DeviceManagementException e) {
+            log.error("Error occurred while resolving mobile device management metadata repository data source", e);
+        }
+    }
 }

@@ -24,16 +24,16 @@ import java.util.List;
 
 public class AndroidMobileOperationManager extends AbstractMobileOperationManager {
 
-	@Override
-	public boolean addOperation(Operation operation, List<DeviceIdentifier> devices) throws
-	                                                                                 OperationManagementException {
-		return false;
-	}
+    @Override
+    public boolean addOperation(Operation operation, List<DeviceIdentifier> devices) throws
+            OperationManagementException {
+        return false;
+    }
 
-	@Override
-	public List<Operation> getOperations(DeviceIdentifier deviceIdentifier)
-			throws OperationManagementException {
-		return null;
-	}
+    @Override
+    public List<Operation> getOperations(DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException {
+        return null;
+    }
 
 }
