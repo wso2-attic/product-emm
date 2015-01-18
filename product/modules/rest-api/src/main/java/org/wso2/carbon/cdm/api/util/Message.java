@@ -13,48 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.wso2.carbon.device.mgt.common;
+package org.wso2.carbon.cdm.api.util;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Properties;
 
 @XmlRootElement
-public class Operation {
+public class Message {
 
-	public enum Type {
-		CONFIG, MESSAGE, INFO
-	}
+    private String responseCode;
+    private String responseMessage;
 
-	private String code;
-	private Properties properties;
-	private Type type;
+    @XmlElement
+    public String getResponseMessage() {
+        return responseMessage;
+    }
 
-	@XmlElement
-	public String getCode() {
-		return code;
-	}
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
 
-	@XmlElement
-	public Properties getProperties() {
-		return properties;
-	}
+    @XmlElement
+    public String getResponseCode() {
+        return responseCode;
+    }
 
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
 
-	@XmlElement
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
-	}
 }

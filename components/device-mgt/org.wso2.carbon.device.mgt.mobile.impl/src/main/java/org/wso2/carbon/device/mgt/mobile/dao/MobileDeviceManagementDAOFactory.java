@@ -20,7 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.DataSourceListener;
 import org.wso2.carbon.device.mgt.mobile.config.datasource.MobileDataSourceConfig;
-import org.wso2.carbon.device.mgt.mobile.dao.impl.MobileDeviceDAOImpl;
+import org.wso2.carbon.device.mgt.mobile.dao.impl.*;
 import org.wso2.carbon.device.mgt.mobile.dao.util.MobileDeviceManagementDAOUtil;
 import org.wso2.carbon.device.mgt.mobile.internal.MobileDeviceManagementBundleActivator;
 
@@ -50,6 +50,26 @@ public class MobileDeviceManagementDAOFactory implements DataSourceListener {
 
 	public static MobileDeviceDAO getMobileDeviceDAO() {
 		return new MobileDeviceDAOImpl(dataSource);
+	}
+
+	public static OperationDAO getOperationDAO(){
+		return new OperationDAOImpl(dataSource);
+	}
+
+	public static OperationPropertyDAO geOperationPropertyDAO(){
+		return new OperationPropertyDAOImpl(dataSource);
+	}
+
+	public static DeviceOperationDAO getDeviceOperationDAO(){
+		return new DeviceOperationDAOImpl(dataSource);
+	}
+
+	public static FeatureDAO getFeatureDAO(){
+		return new FeatureDAOImpl(dataSource);
+	}
+
+	public static FeaturePropertyDAO getFeaturePropertyDAO(){
+		return new FeaturePropertyDAOImpl(dataSource);
 	}
 
 	public static MobileDataSourceConfig getMobileDeviceManagementConfig() {

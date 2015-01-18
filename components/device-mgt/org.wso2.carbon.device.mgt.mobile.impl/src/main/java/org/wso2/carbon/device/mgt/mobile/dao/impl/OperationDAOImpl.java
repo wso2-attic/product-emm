@@ -26,9 +26,9 @@ public class OperationDAOImpl implements OperationDAO {
 	}
 
 	@Override
-	public boolean addOperation(Operation operation)
+	public int addOperation(Operation operation)
 			throws MobileDeviceManagementDAOException {
-		boolean status = false;
+		int status = -1;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
@@ -36,12 +36,15 @@ public class OperationDAOImpl implements OperationDAO {
 			String createDBQuery =
 					"INSERT INTO MBL_OPERATION(FEATURE_CODE, CREATED_DATE) VALUES ( ?, ?)";
 
-			stmt = conn.prepareStatement(createDBQuery);
+			stmt = conn.prepareStatement(createDBQuery, new String[] { "OPERATION_ID" });
 			stmt.setString(1, operation.getFeatureCode());
 			stmt.setInt(2, operation.getCreatedDate());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
-				status = true;
+				ResultSet rs = stmt.getGeneratedKeys();
+				if (rs != null && rs.next()) {
+					status = rs.getInt(1);
+				}
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while adding feature code - '" +

@@ -15,10 +15,21 @@
  */
 package org.wso2.carbon.device.mgt.mobile;
 
-import org.wso2.carbon.device.mgt.common.OperationManager;
+import org.wso2.carbon.device.mgt.common.*;
+
+import java.util.List;
 
 public abstract class AbstractMobileOperationManager implements OperationManager {
 
+	@Override
+	public List<Operation> getOperations(DeviceIdentifier deviceIdentifier)
+			throws OperationManagementException {
+		return null;
+	}
 
-
+	@Override
+	public boolean addOperation(Operation operation, List<DeviceIdentifier> devices) throws
+	                                                                                 OperationManagementException {
+		return true;
+	}
 }

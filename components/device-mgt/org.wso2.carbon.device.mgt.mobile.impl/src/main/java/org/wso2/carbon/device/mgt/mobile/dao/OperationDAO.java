@@ -13,10 +13,10 @@ public interface OperationDAO {
 	/**
 	 * Add a new operation to plugin operation table.
 	 * @param operation Operation object that holds data related to the operation to be inserted.
-	 * @return The status of the operation. If the insert was successful or not.
+	 * @return The last inserted Id is returned, if the insertion was unsuccessful -1 is returned.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean addOperation(Operation operation) throws MobileDeviceManagementDAOException;
+	int addOperation(Operation operation) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Update a operation in the operation table.

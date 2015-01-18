@@ -128,7 +128,8 @@
         </fileSet>
 
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/rxts/
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/rxts/
             </directory>
             <outputDirectory>wso2cdm-${project.version}/repository/resources/rxts/</outputDirectory>
         </fileSet>
@@ -205,8 +206,11 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources</directory>
-            <outputDirectory>${project.artifactId}-${project.version}/repository/resources</outputDirectory>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources
+            </directory>
+            <outputDirectory>${project.artifactId}-${project.version}/repository/resources
+            </outputDirectory>
         </fileSet>
         <!-- copy cdm jaggery app -->
         <fileSet>
@@ -237,6 +241,12 @@
 
         <file>
             <source>../agents/android/jax-rs/target/cdm-android-api.war</source>
+            <outputDirectory>wso2cdm-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
+            <source>../rest-api/target/wso2cdm-api.war</source>
             <outputDirectory>wso2cdm-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>

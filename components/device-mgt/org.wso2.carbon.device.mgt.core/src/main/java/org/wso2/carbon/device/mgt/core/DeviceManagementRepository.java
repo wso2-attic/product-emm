@@ -50,5 +50,4 @@ public class DeviceManagementRepository {
     public Map<String, DeviceManagerService> getProviders() {
         return providers;
     }
-
 }

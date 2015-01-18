@@ -15,8 +15,33 @@
  */
 package org.wso2.carbon.device.mgt.common;
 
+import java.util.List;
+
+/**
+ * This represents the Device Operation management functionality which should be implemented by
+ * the device type plugins.
+ */
 public interface OperationManager {
 
-    boolean executeOperation();
+	/**
+	 * Method to add a operation to a device or a set of devices.
+	 *
+	 * @param operation Operation to be added
+	 * @param devices   List of DeviceIdentifiers to execute the operation
+	 * @throws OperationManagementException If some unusual behaviour is observed while adding the
+	 * operation
+	 */
+	public boolean addOperation(Operation operation, List<DeviceIdentifier> devices)
+			throws OperationManagementException;
+
+	/**
+	 * Method to retrieve the list of available operations to a device.
+	 *
+	 * @param deviceId DeviceIdentifier of the device
+	 * @throws OperationManagementException If some unusual behaviour is observed while fetching the
+	 * operation list.
+	 */
+	public List<Operation> getOperations(DeviceIdentifier deviceId)
+			throws OperationManagementException;
 
 }
