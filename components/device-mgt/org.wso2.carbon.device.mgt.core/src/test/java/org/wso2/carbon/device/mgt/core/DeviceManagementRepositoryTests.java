@@ -47,6 +47,7 @@ public class DeviceManagementRepositoryTests {
 
         DeviceManagerService targetProvider =
                 this.getRepository().getDeviceManagementProvider(TestDeviceManagerService.DEVICE_TYPE_TEST);
+
         Assert.assertNull(targetProvider);
     }
 
