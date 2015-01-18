@@ -48,9 +48,9 @@ public class DeviceManagementConfigTests {
     @BeforeClass
     private void initSchema() {
         File deviceManagementSchemaConfig = new File(DeviceManagementConfigTests.TEST_CONFIG_SCHEMA_LOCATION);
-        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
-            schema = sf.newSchema(deviceManagementSchemaConfig);
+            schema = factory.newSchema(deviceManagementSchemaConfig);
         } catch (SAXException e) {
             Assert.fail("Invalid schema found", e);
         }
@@ -83,7 +83,7 @@ public class DeviceManagementConfigTests {
             um.unmarshal(malformedConfig);
             Assert.assertTrue(false);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            log.error("Error while unmarsharlling the device management config", e);
             Assert.assertTrue(true);
         }
     }
