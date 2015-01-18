@@ -105,7 +105,7 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
                services */
             this.removeAPIs();
         } catch (Throwable e) {
-            log.error("Error occurred while de-activating Mobile Device Management bundle");
+            log.error("Error occurred while de-activating Mobile Device Management bundle", e);
         }
     }
 
