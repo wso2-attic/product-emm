@@ -38,7 +38,7 @@ public class DeviceManagementRepository {
         try {
             DeviceManagerUtil.registerDeviceType(deviceType);
         } catch (DeviceManagementException e) {
-            log.error("Exception occurred while registering the device type.",e);
+            log.error("Exception occurred while registering the device type.", e);
         }
         providers.put(deviceType, provider);
     }
@@ -48,7 +48,7 @@ public class DeviceManagementRepository {
         try {
             DeviceManagerUtil.unregisterDeviceType(deviceType);
         } catch (DeviceManagementException e) {
-            log.error("Exception occured while registering the device type.",e);
+            log.error("Exception occurred while registering the device type.", e);
         }
         providers.remove(deviceType);
     }
