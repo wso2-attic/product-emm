@@ -42,7 +42,7 @@ import java.io.File;
 import java.sql.*;
 import java.util.Date;
 
-public class DeviceMgtDAOTestSuite {
+public class DeviceManagementDAOTests {
 
     @BeforeClass
     @Parameters("dbType")
