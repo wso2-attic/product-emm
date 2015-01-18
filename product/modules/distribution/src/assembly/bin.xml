@@ -187,6 +187,17 @@
             </includes>
         </fileSet>
 
+	<!-- Copying API management related dbscripts -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt
+            </directory>
+            <outputDirectory>wso2cdm-${project.version}/dbscripts/apimgt</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules
@@ -220,6 +231,7 @@
             <fileMode>755</fileMode>
         </fileSet>
     </fileSets>
+    
     <dependencySets>
         <dependencySet>
             <outputDirectory>wso2cdm-${project.version}/lib/endorsed</outputDirectory>
@@ -238,7 +250,6 @@
     </dependencySets>
 
     <files>
-
         <file>
             <source>../agents/android/jax-rs/target/cdm-android-api.war</source>
             <outputDirectory>wso2cdm-${pom.version}/repository/deployment/server/webapps
@@ -429,6 +440,15 @@
             <fileMode>644</fileMode>
         </file>
 
+	<!-- Copying H2 database related files corresponding to default API management repository schema -->
+	<file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2AM_DB.h2.db
+	    </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database</outputDirectory>
+            <destName>WSO2AM_DB.h2.db</destName>
+            <fileMode>644</fileMode>
+        </file>
 
     </files>
 </assembly>
