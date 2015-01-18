@@ -16,20 +16,42 @@
 package org.wso2.carbon.device.mgt.core;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 
 public class DeviceManagementRepositoryTests {
 
+    private DeviceManagementRepository repository;
+
+    @BeforeClass
+    public void initRepository() {
+        this.repository = new DeviceManagementRepository();
+    }
+
     @Test
     public void testAddDeviceManagementService() {
         DeviceManagerService sourceProvider = new TestDeviceManagerService();
-        DeviceManagementRepository repository = new DeviceManagementRepository();
-        repository.addDeviceManagementProvider(sourceProvider);
+        this.getRepository().addDeviceManagementProvider(sourceProvider);
 
         DeviceManagerService targetProvider =
-                repository.getDeviceManagementProvider(TestDeviceManagerService.DEVICE_TYPE_TEST);
+                this.getRepository().getDeviceManagementProvider(TestDeviceManagerService.DEVICE_TYPE_TEST);
+
         Assert.assertEquals(targetProvider.getProviderType(), sourceProvider.getProviderType());
+    }
+
+    @Test(dependsOnMethods = "testAddDeviceManagementService")
+    public void testRemoveDeviceManagementService() {
+        DeviceManagerService sourceProvider = new TestDeviceManagerService();
+        this.getRepository().removeDeviceManagementProvider(sourceProvider);
+
+        DeviceManagerService targetProvider =
+                this.getRepository().getDeviceManagementProvider(TestDeviceManagerService.DEVICE_TYPE_TEST);
+        Assert.assertNull(targetProvider);
+    }
+
+    private DeviceManagementRepository getRepository() {
+        return repository;
     }
 
 }
