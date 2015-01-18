@@ -95,7 +95,7 @@ public class MobileDeviceManagementServiceComponent {
                 log.debug("Mobile Device Management Service Component has been successfully activated");
             }
         } catch (Throwable e) {
-            log.error("Error occurred while activating Mobile Device Management Service Component");
+            log.error("Error occurred while activating Mobile Device Management Service Component", e);
         }
     }
 
