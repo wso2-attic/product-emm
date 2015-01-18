@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    <xs:element name="DeviceMgtConfiguration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ManagementRepository" minOccurs="1" maxOccurs="1" type="DataSourceConfigurationType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="JndiLookupDefinitionType">
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DataSourceConfigurationType">
+        <xs:sequence>
+            <xs:element name="JndiLookupDefinition" minOccurs="1" maxOccurs="1"
+                        type="JndiLookupDefinitionType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ManagementRepositoryType">
+        <xs:sequence>
+            <xs:element name="DataSourceConfiguration" minOccurs="1" maxOccurs="1"
+                        type="DataSourceConfigurationType"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

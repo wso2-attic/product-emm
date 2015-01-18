@@ -63,7 +63,8 @@ public final class DeviceManagementDAOUtil {
     }
 
     /**
-     * Get id of the current tenant
+     * Get id of the current tenant.
+     *
      * @return tenant id
      * @throws DeviceManagementDAOException if an error is observed when getting tenant id
      */
@@ -94,7 +95,7 @@ public final class DeviceManagementDAOUtil {
                 return (DataSource) InitialContext.doLookup(dataSourceName);
             }
             final InitialContext context = new InitialContext(jndiProperties);
-            return (DataSource) context.doLookup(dataSourceName);
+            return (DataSource) context.lookup(dataSourceName);
         } catch (Exception e) {
             throw new RuntimeException("Error in looking up data source: " + e.getMessage(), e);
         }
