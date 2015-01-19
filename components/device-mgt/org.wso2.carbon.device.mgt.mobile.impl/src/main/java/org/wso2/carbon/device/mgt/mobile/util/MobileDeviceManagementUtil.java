@@ -22,12 +22,13 @@ import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
+import org.wso2.carbon.device.mgt.mobile.dto.Operation;
+import org.wso2.carbon.device.mgt.mobile.dto.OperationProperty;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Provides utility methods required by the mobile device management bundle.
@@ -111,5 +112,17 @@ public class MobileDeviceManagementUtil {
 			device.setDeviceIdentifier(mobileDevice.getMobileDeviceId());
 		}
 		return device;
+	}
+
+	public static Operation convertToOperation(org.wso2.carbon.device.mgt.common.Operation operation){
+		Operation mobileOperation = new Operation();
+		List<OperationProperty> properties = new LinkedList<OperationProperty>();
+		mobileOperation.setFeatureCode(operation.getCode());
+		mobileOperation.setCreatedDate(new Date().getTime());
+		Properties operationProperties = operation.getProperties();
+		for(String key : operationProperties.stringPropertyNames()) {
+			String value = operationProperties.getProperty(key);
+		}
+		return mobileOperation;
 	}
 }

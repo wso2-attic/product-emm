@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
@@ -40,9 +56,9 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 
 			stmt = conn.prepareStatement(createDBQuery);
 			stmt.setString(1, deviceOperation.getDeviceId());
-			stmt.setInt(2, deviceOperation.getOperationId());
-			stmt.setInt(3, deviceOperation.getSentDate());
-			stmt.setInt(4, deviceOperation.getReceivedDate());
+			stmt.setLong(2, deviceOperation.getOperationId());
+			stmt.setLong(3, deviceOperation.getSentDate());
+			stmt.setLong(4, deviceOperation.getReceivedDate());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
@@ -71,8 +87,8 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 			String updateDBQuery =
 					"UPDATE MBL_DEVICE_OPERATION SET SENT_DATE = ?, RECEIVED_DATE = ? WHERE DEVICE_ID = ? and OPERATION_ID=?";
 			stmt = conn.prepareStatement(updateDBQuery);
-			stmt.setInt(1, deviceOperation.getSentDate());
-			stmt.setInt(2, deviceOperation.getReceivedDate());
+			stmt.setLong(1, deviceOperation.getSentDate());
+			stmt.setLong(2, deviceOperation.getReceivedDate());
 			stmt.setString(3, deviceOperation.getDeviceId());
 			stmt.setInt(4, deviceOperation.getOperationId());
 			int rows = stmt.executeUpdate();
