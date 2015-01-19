@@ -47,7 +47,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public boolean enrollDevice(Device device) throws DeviceManagementException {
-		boolean status = false;
+		boolean status;
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
 			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().addDevice(mobileDevice);
@@ -62,7 +62,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public boolean modifyEnrollment(Device device) throws DeviceManagementException {
-		boolean status = false;
+		boolean status;
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
 			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
@@ -78,7 +78,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-		boolean status = false;
+		boolean status;
 		try {
 			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
 			                                         .deleteDevice(deviceId.getId());
@@ -122,7 +122,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-		Device device = null;
+		Device device;
 		try {
 			MobileDevice mobileDevice = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().
 					getDevice(deviceId.getId());
@@ -143,14 +143,13 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 
 	@Override
 	public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
-		boolean status = false;
+		boolean status;
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
 			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
 			                                         .updateDevice(mobileDevice);
 		} catch (MobileDeviceManagementDAOException e) {
-			String msg =
-					"Error while updating the Android device : " + device.getDeviceIdentifier();
+			String msg = "Error while updating the Android device : " + device.getDeviceIdentifier();
 			log.error(msg, e);
 			throw new DeviceManagementException(msg, e);
 		}
@@ -166,9 +165,9 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 							getAllDevices();
 			if (mobileDevices != null) {
 				devices = new ArrayList<Device>();
-				for (int x = 0; x < mobileDevices.size(); x++) {
-					devices.add(MobileDeviceManagementUtil.convertToDevice(mobileDevices.get(x)));
-				}
+                for (MobileDevice mobileDevice : mobileDevices) {
+                    devices.add(MobileDeviceManagementUtil.convertToDevice(mobileDevice));
+                }
 			}
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while fetching all Android devices.";

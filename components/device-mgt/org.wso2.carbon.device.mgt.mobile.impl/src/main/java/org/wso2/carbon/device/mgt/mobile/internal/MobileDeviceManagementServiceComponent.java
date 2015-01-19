@@ -1,11 +1,11 @@
-/*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+/**
+ *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *          http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,49 +13,59 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.wso2.carbon.device.mgt.mobile.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.apimgt.api.APIManagementException;
 import org.wso2.carbon.apimgt.api.APIProvider;
+import org.wso2.carbon.apimgt.impl.APIManagerConfigurationService;
 import org.wso2.carbon.apimgt.impl.APIManagerFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.DataSourceListener;
-import org.wso2.carbon.device.mgt.mobile.impl.android.AndroidDeviceManagerService;
 import org.wso2.carbon.device.mgt.mobile.config.APIConfig;
 import org.wso2.carbon.device.mgt.mobile.config.MobileDeviceConfigurationManager;
 import org.wso2.carbon.device.mgt.mobile.config.MobileDeviceManagementConfig;
 import org.wso2.carbon.device.mgt.mobile.config.datasource.MobileDataSourceConfig;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.mobile.impl.android.AndroidDeviceManagerService;
 import org.wso2.carbon.device.mgt.mobile.impl.ios.IOSDeviceManagerService;
-import org.wso2.carbon.device.mgt.mobile.util.DeviceManagementAPIPublisherUtil;
 import org.wso2.carbon.device.mgt.mobile.impl.windows.WindowsDeviceManagerService;
+import org.wso2.carbon.device.mgt.mobile.util.DeviceManagementAPIPublisherUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MobileDeviceManagementBundleActivator implements BundleActivator, BundleListener {
+/**
+ * @scr.component name="org.wso2.carbon.device.mgt.mobile.impl.internal.MobileDeviceManagementServiceComponent"
+ * immediate="true"
+ * @scr.reference name="api.manager.config.service"
+ * interface="org.wso2.carbon.apimgt.impl.APIManagerConfigurationService"
+ * cardinality="1..1"
+ * policy="dynamic"
+ * bind="setAPIManagerConfigurationService"
+ * unbind="unsetAPIManagerConfigurationService"
+ * <p/>
+ * Adding reference to API Manager Configuration service is an unavoidable hack to get rid of NPEs thrown while
+ * initializing APIMgtDAOs attempting to register APIs programmatically. APIMgtDAO needs to be proper cleaned up
+ * to avoid as an ideal fix
+ */
+public class MobileDeviceManagementServiceComponent {
 
     private ServiceRegistration androidServiceRegRef;
     private ServiceRegistration iOSServiceRegRef;
     private ServiceRegistration windowsServiceRegRef;
 
-    private static List<DataSourceListener> dataSourceListeners = new ArrayList<DataSourceListener>();
+    private static final Log log = LogFactory.getLog(MobileDeviceManagementServiceComponent.class);
 
-    private static final String SYMBOLIC_NAME_DATA_SOURCE_COMPONENT = "org.wso2.carbon.ndatasource.core";
-    private static final Log log = LogFactory.getLog(MobileDeviceManagementBundleActivator.class);
-
-    @Override
-    public void start(BundleContext bundleContext) throws Exception {
+    protected void activate(ComponentContext ctx) {
+        if (log.isDebugEnabled()) {
+            log.debug("Activating Mobile Device Management Service Component");
+        }
         try {
-            if (log.isDebugEnabled()) {
-                log.debug("Activating Mobile Device Management Service bundle");
-            }
-            bundleContext.addBundleListener(this);
+            BundleContext bundleContext = ctx.getBundleContext();
 
             /* Initialize the datasource configuration */
             MobileDeviceConfigurationManager.getInstance().initConfig();
@@ -82,52 +92,33 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
             this.publishAPIs();
 
             if (log.isDebugEnabled()) {
-                log.debug("Mobile Device Management Service bundle is activated");
+                log.debug("Mobile Device Management Service Component has been successfully activated");
             }
         } catch (Throwable e) {
-            log.error("Error occurred while activating Mobile Device Management bundle", e);
+            log.error("Error occurred while activating Mobile Device Management Service Component", e);
         }
     }
 
-    @Override
-    public void stop(BundleContext bundleContext) throws Exception {
+    protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
-            log.debug("Deactivating Mobile Device Management Service");
+            log.debug("De-activating Mobile Device Management Service Component");
         }
         try {
+            BundleContext bundleContext = ctx.getBundleContext();
+
             androidServiceRegRef.unregister();
             iOSServiceRegRef.unregister();
             windowsServiceRegRef.unregister();
 
-            bundleContext.removeBundleListener(this);
-
             /* Removing all APIs published upon start-up for mobile device management related JAX-RS
                services */
             this.removeAPIs();
+            if (log.isDebugEnabled()) {
+                log.debug("Mobile Device Management Service Component has been successfully de-activated");
+            }
         } catch (Throwable e) {
             log.error("Error occurred while de-activating Mobile Device Management bundle", e);
         }
-    }
-
-    @Override
-    public void bundleChanged(BundleEvent bundleEvent) {
-        int eventType = bundleEvent.getType();
-        String bundleSymbolicName = bundleEvent.getBundle().getSymbolicName();
-
-        if (SYMBOLIC_NAME_DATA_SOURCE_COMPONENT.equals(bundleSymbolicName) &&
-                eventType == BundleEvent.STARTED) {
-            for (DataSourceListener listener : this.getDataSourceListeners()) {
-                listener.notifyObserver();
-            }
-        }
-    }
-
-    public static void registerDataSourceListener(DataSourceListener listener) {
-        dataSourceListeners.add(listener);
-    }
-
-    private List<DataSourceListener> getDataSourceListeners() {
-        return dataSourceListeners;
     }
 
     private void initAPIConfigs() throws DeviceManagementException {
@@ -161,6 +152,14 @@ public class MobileDeviceManagementBundleActivator implements BundleActivator, B
         for (APIConfig apiConfig : apiConfigs) {
             DeviceManagementAPIPublisherUtil.removeAPI(apiConfig);
         }
+    }
+
+    protected void setAPIManagerConfigurationService(APIManagerConfigurationService service) {
+        //do nothing
+    }
+
+    protected void unsetAPIManagerConfigurationService(APIManagerConfigurationService service) {
+        //do nothing
     }
 
 }
