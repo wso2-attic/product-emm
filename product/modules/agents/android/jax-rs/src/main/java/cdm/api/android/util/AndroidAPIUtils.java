@@ -1,20 +1,19 @@
 /*
  * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
-*/
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package cdm.api.android.util;
 
 import org.apache.commons.logging.Log;
@@ -32,7 +31,6 @@ public class AndroidAPIUtils {
     private static Log log = LogFactory.getLog(AndroidAPIUtils.class);
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
-
 		DeviceIdentifier identifier = new DeviceIdentifier();
 		identifier.setId(deviceId);
 		identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
@@ -42,7 +40,8 @@ public class AndroidAPIUtils {
 
 	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException{
 
-        // until complete login this is use to load super tenant context
+        //TODO: complete login change super tenent context
+
 		DeviceManagementService dmService;
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -51,8 +50,9 @@ public class AndroidAPIUtils {
 		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
 
         if (dmService == null){
-            log.error("device management service not initialized");
-            throw new DeviceManagementServiceException("device management service not initialized");
+	        String msg = "Device management service not initialized";
+	        log.error(msg);
+            throw new DeviceManagementServiceException(msg);
         }
         PrivilegedCarbonContext.endTenantFlow();
 		return dmService;

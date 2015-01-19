@@ -19,7 +19,6 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.OperationManager;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagerService;
 import org.wso2.carbon.device.mgt.core.DeviceManager;
 import org.wso2.carbon.device.mgt.core.internal.DeviceManagementDataHolder;
 
@@ -27,60 +26,61 @@ import java.util.List;
 
 public class DeviceManagementService implements DeviceManager {
 
-	@Override
-	public boolean enrollDevice(Device device) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager().enrollDevice(device);
-	}
+    @Override
+    public boolean enrollDevice(Device device) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().enrollDevice(device);
+    }
 
-	@Override
-	public boolean modifyEnrollment(Device device) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager().modifyEnrollment(device);
-	}
+    @Override
+    public boolean modifyEnrollment(Device device) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().modifyEnrollment(device);
+    }
 
-	@Override
-	public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager()
-		                                 .disenrollDevice(deviceId);
-	}
+    @Override
+    public boolean disenrollDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager()
+                .disenrollDevice(deviceId);
+    }
 
-	@Override
-	public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager().isEnrolled(deviceId);
-	}
+    @Override
+    public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().isEnrolled(deviceId);
+    }
 
-	@Override
-	public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager().isActive(deviceId);
-	}
+    @Override
+    public boolean isActive(DeviceIdentifier deviceId) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().isActive(deviceId);
+    }
 
-	@Override
-	public boolean setActive(DeviceIdentifier deviceId, boolean status)
-			throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager()
-		                                 .setActive(deviceId, status);
-	}
+    @Override
+    public boolean setActive(DeviceIdentifier deviceId, boolean status) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().setActive(deviceId, status);
+    }
 
-	@Override
-	public List<Device> getAllDevices(String type) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager().getAllDevices(type);
-	}
+    @Override
+    public List<Device> getAllDevices(String type) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().getAllDevices(type);
+    }
 
-	@Override
-	public Device getDevice(DeviceIdentifier deviceId) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager().getDevice(deviceId);
-	}
+    @Override
+    public org.wso2.carbon.device.mgt.common.Device getDevice(DeviceIdentifier deviceId)
+            throws DeviceManagementException {
 
-	@Override
-	public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager().updateDeviceInfo(device);
-	}
+        Device device = DeviceManagementDataHolder.getInstance().getDeviceManager().getDevice(deviceId);
+        return device;
+    }
 
-	@Override
-	public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType)
-			throws DeviceManagementException {
-		return DeviceManagementDataHolder.getInstance().getDeviceManager()
-		                                 .setOwnership(deviceId, ownershipType);
-	}
+    @Override
+    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager().updateDeviceInfo(device);
+    }
+
+    @Override
+    public boolean setOwnership(DeviceIdentifier deviceId, String ownershipType)
+            throws DeviceManagementException {
+        return DeviceManagementDataHolder.getInstance().getDeviceManager()
+                .setOwnership(deviceId, ownershipType);
+    }
 
     @Override
     public OperationManager getOperationManager(String type) throws DeviceManagementException {

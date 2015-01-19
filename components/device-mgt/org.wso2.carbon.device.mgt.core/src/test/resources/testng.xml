@@ -21,8 +21,9 @@
     <test name="DAO Unit Tests" preserve-order="true">
         <parameter name="dbType" value="H2"/>
         <classes>
-
-            <class name="org.wso2.carbon.device.mgt.core.dao.DeviceMgtDAOTestSuite"/>
+            <class name="org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOTests"/>
+            <class name="org.wso2.carbon.device.mgt.core.DeviceManagementRepositoryTests"/>
+            <class name="org.wso2.carbon.device.mgt.core.DeviceManagementConfigTests"/>
         </classes>
     </test>
 </suite>

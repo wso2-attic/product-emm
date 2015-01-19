@@ -25,10 +25,6 @@
     <servlet-class>
             org.apache.cxf.transport.servlet.CXFServlet
     </servlet-class>
-    <init-param>
-      <param-name>service-list-stylesheet</param-name>
-      <param-value>servicelist.css</param-value>
-    </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>

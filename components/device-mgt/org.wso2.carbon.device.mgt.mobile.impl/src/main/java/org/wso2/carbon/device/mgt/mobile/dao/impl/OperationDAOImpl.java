@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
@@ -26,9 +42,9 @@ public class OperationDAOImpl implements OperationDAO {
 	}
 
 	@Override
-	public boolean addOperation(Operation operation)
+	public int addOperation(Operation operation)
 			throws MobileDeviceManagementDAOException {
-		boolean status = false;
+		int status = -1;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
@@ -36,12 +52,15 @@ public class OperationDAOImpl implements OperationDAO {
 			String createDBQuery =
 					"INSERT INTO MBL_OPERATION(FEATURE_CODE, CREATED_DATE) VALUES ( ?, ?)";
 
-			stmt = conn.prepareStatement(createDBQuery);
+			stmt = conn.prepareStatement(createDBQuery, new String[] { "OPERATION_ID" });
 			stmt.setString(1, operation.getFeatureCode());
-			stmt.setInt(2, operation.getCreatedDate());
+			stmt.setLong(2, operation.getCreatedDate());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
-				status = true;
+				ResultSet rs = stmt.getGeneratedKeys();
+				if (rs != null && rs.next()) {
+					status = rs.getInt(1);
+				}
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while adding feature code - '" +
@@ -66,7 +85,7 @@ public class OperationDAOImpl implements OperationDAO {
 					"UPDATE MBL_OPERATION SET FEATURE_CODE = ?, CREATED_DATE = ? WHERE OPERATION_ID = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
 			stmt.setString(1, operation.getFeatureCode());
-			stmt.setInt(2, operation.getCreatedDate());
+			stmt.setLong(2, operation.getCreatedDate());
 			stmt.setInt(3, operation.getOperationId());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {

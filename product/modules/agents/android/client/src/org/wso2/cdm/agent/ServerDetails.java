@@ -86,6 +86,7 @@ public class ServerDetails extends Activity {
 			                                getResources().getString(R.string.shared_pref_ip));
 			regId = Preference.get(context.getApplicationContext().getApplicationContext(), getResources().getString(R.string.shared_pref_regId));
 
+			//heck if we have the IP saved previously.
 			if (ipSaved != null) {
 				serverIP.setText(ipSaved);
 				CommonUtilities.setServerURL(ipSaved);

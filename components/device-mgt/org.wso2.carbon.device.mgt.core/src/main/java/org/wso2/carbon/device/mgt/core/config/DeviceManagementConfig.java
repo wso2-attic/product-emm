@@ -28,7 +28,7 @@ public final class DeviceManagementConfig {
 
     private DeviceManagementRepository deviceMgtRepository;
 
-    @XmlElement(name = "ManagementRepository", nillable = false)
+    @XmlElement(name = "ManagementRepository", required = true)
     public DeviceManagementRepository getDeviceMgtRepository() {
         return deviceMgtRepository;
     }

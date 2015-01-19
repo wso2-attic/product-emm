@@ -142,6 +142,11 @@ public class DeviceTypeDAOImpl implements DeviceTypeDAO {
         return deviceTypeId;
     }
 
+    @Override
+    public void removeDeviceType(DeviceType deviceType) throws DeviceManagementDAOException {
+
+    }
+
     private Connection getConnection() throws DeviceManagementDAOException {
         try {
             return dataSource.getConnection();

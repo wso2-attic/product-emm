@@ -86,7 +86,6 @@
             </includes>
         </fileSet>
 
-
         <!-- copy documentation -->
         <fileSet>
             <directory>target/site</directory>
@@ -127,6 +126,14 @@
                 <include>**/trusted-idp-config.xml</include>
             </includes>
         </fileSet>
+
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/rxts/
+            </directory>
+            <outputDirectory>wso2cdm-${project.version}/repository/resources/rxts/</outputDirectory>
+        </fileSet>
+
         <fileSet>
             <directory>src/repository/conf/datasources</directory>
             <outputDirectory>wso2cdm-${project.version}/repository/conf/datasources
@@ -180,6 +187,17 @@
             </includes>
         </fileSet>
 
+	<!-- Copying API management related dbscripts -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt
+            </directory>
+            <outputDirectory>wso2cdm-${project.version}/dbscripts/apimgt</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules
@@ -190,14 +208,20 @@
             </includes>
         </fileSet>
 
-
-        <!-- Script -->
+        <!-- Copying Device Management related dbscripts -->
         <fileSet>
-            <directory>src/repository/dbscripts/</directory>
-            <outputDirectory>wso2cdm-${project.version}/dbscripts</outputDirectory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm</directory>
+            <outputDirectory>wso2cdm-${project.version}/dbscripts/cdm</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
+        </fileSet>
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources
+            </directory>
+            <outputDirectory>${project.artifactId}-${project.version}/repository/resources
+            </outputDirectory>
         </fileSet>
         <!-- copy cdm jaggery app -->
         <fileSet>
@@ -206,9 +230,8 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
-
-
     </fileSets>
+    
     <dependencySets>
         <dependencySet>
             <outputDirectory>wso2cdm-${project.version}/lib/endorsed</outputDirectory>
@@ -227,9 +250,14 @@
     </dependencySets>
 
     <files>
-
         <file>
             <source>../agents/android/jax-rs/target/cdm-android-api.war</source>
+            <outputDirectory>wso2cdm-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
+            <source>../rest-api/target/wso2cdm-api.war</source>
             <outputDirectory>wso2cdm-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -341,15 +369,6 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!--copy default xacml policy to repository/resources/security -->
-        <!--     <file>
-                 <source>src/repository/resources/policies/xacml/default/admin.xml</source>
-                 <outputDirectory>wso2cdm-${project.version}/repository/resources/security/policies/xacml/default
-                 </outputDirectory>
-                 <filtered>true</filtered>
-             </file>-->
-
-
         <file>
             <source>src/repository/conf/multitenancy/cloud-services-desc.xml</source>
             <outputDirectory>wso2cdm-${project.version}/repository/conf/multitenancy/
@@ -411,8 +430,6 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-
-
         <file>
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml
@@ -423,6 +440,25 @@
             <fileMode>644</fileMode>
         </file>
 
+	<!-- Copying H2 database related files corresponding to default API management repository schema -->
+	<file>
+            <source>
+                target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2AM_DB.h2.db
+	    </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database</outputDirectory>
+            <destName>WSO2AM_DB.h2.db</destName>
+            <fileMode>644</fileMode>
+        </file>
+
+	<!-- Copying H2 database related files corresponding to default Device management repository schema -->
+        <file>
+            <source>
+                target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2DM_DB.h2.db
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database</outputDirectory>
+            <destName>WSO2DM_DB.h2.db</destName>
+            <fileMode>644</fileMode>
+        </file>
 
     </files>
 </assembly>

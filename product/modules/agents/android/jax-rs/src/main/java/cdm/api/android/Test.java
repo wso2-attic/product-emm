@@ -32,5 +32,4 @@ public class Test {
         throw new DeviceManagementException("test ex");
 
    }
-
 }
