@@ -18,9 +18,9 @@
 //org.wso2.carbon....
 package org.wso2.cdmserver.mobileservices.android;
 
-import cdm.api.android.common.AndroidAgentException;
-import cdm.api.android.util.AndroidAPIUtils;
-import cdm.api.android.util.Message;
+import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
+import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
+import org.wso2.cdmserver.mobileservices.android.util.Message;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -75,11 +75,8 @@ public class DeviceManagementServiceComponent {
                 }
                 setupDeviceManagementSchema(dsConfig);
             }
-
             BundleContext bundleContext = componentContext.getBundleContext();
-            bundleContext.registerService(DeviceManagementService.class.getName(),
-                    new DeviceManagementService(), null);
-
+            bundleContext.registerService(DeviceManagementService.class.getName(), new DeviceManagementService(), null);
         } catch (Throwable e) {
             String msg = "Error occurred while initializing device management core bundle";
             log.error(msg, e);
@@ -118,6 +115,7 @@ public class DeviceManagementServiceComponent {
         if (log.isDebugEnabled()) {
             log.debug("Unsetting Device Management Service");
         }
+        this.getPluginRepository().removeDeviceManagementProvider(deviceManager);
     }
 
     /**

@@ -43,6 +43,11 @@ public class DeviceManagementRepository {
         }
     }
 
+    public void removeDeviceManagementProvider(DeviceManagerService provider) {
+        String deviceType = provider.getProviderType();
+        providers.remove(deviceType);
+    }
+
     public DeviceManagerService getDeviceManagementProvider(String type) {
         return providers.get(type);
     }

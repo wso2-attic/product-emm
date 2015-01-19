@@ -23,29 +23,17 @@ import java.util.List;
 public class Device {
 
     private int id;
-
     private String type;
-
     private String description;
-
     private String name;
-
     private Long dateOfEnrolment;
-
     private Long dateOfLastUpdate;
-
     private String ownership;
-
     private boolean status;
-
     private int deviceTypeId;
-
     private String deviceIdentifier;
-
     private String owner;
-
     private List<Feature> features;
-
     private List<Device.Property> properties;
 
     @XmlElement
@@ -56,6 +44,7 @@ public class Device {
     public void setId(int id) {
         this.id = id;
     }
+
     @XmlElement
     public String getDescription() {
         return description;
@@ -64,6 +53,7 @@ public class Device {
     public void setDescription(String description) {
         this.description = description;
     }
+
     @XmlElement
     public String getName() {
         return name;
@@ -72,6 +62,7 @@ public class Device {
     public void setName(String name) {
         this.name = name;
     }
+
     @XmlElement
     public Long getDateOfEnrolment() {
         return dateOfEnrolment;
@@ -80,6 +71,7 @@ public class Device {
     public void setDateOfEnrolment(Long dateOfEnrolment) {
         this.dateOfEnrolment = dateOfEnrolment;
     }
+
     @XmlElement
     public Long getDateOfLastUpdate() {
         return dateOfLastUpdate;
@@ -88,6 +80,7 @@ public class Device {
     public void setDateOfLastUpdate(Long dateOfLastUpdate) {
         this.dateOfLastUpdate = dateOfLastUpdate;
     }
+
     @XmlElement
     public String getOwnership() {
         return ownership;
@@ -96,6 +89,7 @@ public class Device {
     public void setOwnership(String ownership) {
         this.ownership = ownership;
     }
+
     @XmlElement
     public boolean isStatus() {
         return status;
@@ -104,6 +98,7 @@ public class Device {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
     @XmlElement
     public int getDeviceTypeId() {
         return deviceTypeId;
@@ -112,6 +107,7 @@ public class Device {
     public void setDeviceTypeId(int deviceTypeId) {
         this.deviceTypeId = deviceTypeId;
     }
+
     @XmlElement
     public String getDeviceIdentifier() {
         return deviceIdentifier;
@@ -120,6 +116,7 @@ public class Device {
     public void setDeviceIdentifier(String deviceIdentifier) {
         this.deviceIdentifier = deviceIdentifier;
     }
+
     @XmlElement
     public String getOwner() {
         return owner;
@@ -128,6 +125,7 @@ public class Device {
     public void setOwner(String owner) {
         this.owner = owner;
     }
+
     @XmlElement
     public List<Feature> getFeatures() {
         return features;
@@ -136,6 +134,7 @@ public class Device {
     public void setFeatures(List<Feature> features) {
         this.features = features;
     }
+
     @XmlElement
     public String getType() {
         return type;
@@ -144,6 +143,7 @@ public class Device {
     public void setType(String type) {
         this.type = type;
     }
+
     @XmlElement
     public List<Device.Property> getProperties() {
         return properties;

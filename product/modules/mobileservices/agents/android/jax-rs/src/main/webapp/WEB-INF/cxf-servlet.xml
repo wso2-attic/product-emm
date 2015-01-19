@@ -51,9 +51,9 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="deviceMgtServiceBean" class="cdm.api.android.Device"/>
-    <bean id="enrollmentServiceBean" class="cdm.api.android.Enrollment"/>
+    <bean id="deviceMgtServiceBean" class="org.wso2.cdmserver.mobileservices.android.Device"/>
+    <bean id="enrollmentServiceBean" class="org.wso2.cdmserver.mobileservices.android.Enrollment"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-    <bean id="errorHandler" class="cdm.api.android.common.ErrorHandler"/>
+    <bean id="errorHandler" class="org.wso2.cdmserver.mobileservices.android.common.ErrorHandler"/>
 </beans>
 
