@@ -15,27 +15,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package cdm.api.android.common;
+package org.wso2.cdmserver.mobileservices.android.common;
+
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 
 
-public class ErrorMessage {
+@Produces({ "application/json", "application/xml" })
+public class ErrorHandler implements ExceptionMapper<AndroidAgentException> {
 
-    private String errorMessage;
-    private String errorCode;
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
+    public Response toResponse(AndroidAgentException exception) {
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setErrorMessage(exception.getErrorMessage());
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
     }
 }

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package cdm.api.android;
+package org.wso2.cdmserver.mobileservices.android;
 
 import cdm.api.android.common.AndroidAgentException;
 import cdm.api.android.util.AndroidAPIUtils;
@@ -29,12 +29,12 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 /**
  * Android Device Enrollment REST-API implementation.
+ * All end points supports JSON, XMl with content negotiation.
  */
 @Produces({ "application/json", "application/xml" })
 @Consumes({ "application/json", "application/xml" })
@@ -45,25 +45,18 @@ public class Enrollment {
     @POST
     public Message enrollDevice(org.wso2.carbon.device.mgt.common.Device device) throws AndroidAgentException {
 
-        DeviceManagementService dmService;
         Message responseMsg = new Message();
 
         try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-
+            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
+            Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setResponseMessage("Device enrollment succeeded");
+            return responseMsg;
         } catch (DeviceManagementServiceException deviceServiceMgtEx) {
             String errorMsg = "Device management service error";
             log.error(errorMsg, deviceServiceMgtEx);
             throw new AndroidAgentException(errorMsg, deviceServiceMgtEx);
-        }
-
-        try {
-            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            dmService.enrollDevice(device);
-            Response.status(HttpStatus.SC_CREATED);
-            responseMsg.setResponseMessage("Device enrollment succeeded");
-            return responseMsg;
-
         } catch (DeviceManagementException deviceMgtEx) {
             String errorMsg = "Error occurred while enrolling the device";
             log.error(errorMsg, deviceMgtEx);
@@ -76,22 +69,10 @@ public class Enrollment {
     public Message isEnrolled(@PathParam("id") String id) throws AndroidAgentException {
 
         boolean result;
-        DeviceManagementService dmService;
         Message responseMsg = new Message();
-
-        try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-
-        } catch (DeviceManagementServiceException deviceServiceMgtEx) {
-            String errorMsg = "Device management service error";
-            log.error(errorMsg, deviceServiceMgtEx);
-            throw new AndroidAgentException(errorMsg, deviceServiceMgtEx);
-        }
-
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-
         try {
-            result = dmService.isEnrolled(deviceIdentifier);
+            result = AndroidAPIUtils.getDeviceManagementService().isEnrolled(deviceIdentifier);
             if (result) {
                 Response.status(HttpStatus.SC_OK);
                 responseMsg.setResponseMessage("Device has already enrolled");
@@ -100,6 +81,10 @@ public class Enrollment {
                 responseMsg.setResponseMessage("Device not found");
             }
             return responseMsg;
+        } catch (DeviceManagementServiceException deviceServiceMgtEx) {
+            String errorMsg = "Device management service error";
+            log.error(errorMsg, deviceServiceMgtEx);
+            throw new AndroidAgentException(errorMsg, deviceServiceMgtEx);
         } catch (DeviceManagementException deviceMgtEx) {
             String errorMsg = "Error occurred while enrollment of the device.";
             log.error(errorMsg, deviceMgtEx);
@@ -113,39 +98,29 @@ public class Enrollment {
             throws AndroidAgentException {
 
         boolean result;
-        DeviceManagementService dmService;
         Message responseMsg = new Message();
 
         try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-
+            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            result = AndroidAPIUtils.getDeviceManagementService().modifyEnrollment(device);
+            if (result) {
+                responseMsg.setResponseMessage("Device enrollment has updated successfully");
+                Response.status(HttpStatus.SC_ACCEPTED);
+            } else {
+                responseMsg.setResponseMessage("Device not found for enrollment");
+                Response.status(HttpStatus.SC_NOT_MODIFIED);
+            }
+            return responseMsg;
         } catch (DeviceManagementServiceException deviceServiceMgtEx) {
             String errorMsg = "Device management service error";
             log.error(errorMsg, deviceServiceMgtEx);
             throw new AndroidAgentException(errorMsg, deviceServiceMgtEx);
-        }
-
-        try {
-            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            result = dmService.modifyEnrollment(device);
-
-            if (result) {
-                responseMsg.setResponseMessage("Device enrollment has updated successfully");
-                Response.status(HttpStatus.SC_OK);
-            } else {
-                responseMsg.setResponseMessage("device not found for enrollment");
-                Response.status(HttpStatus.SC_NOT_MODIFIED);
-            }
-
-            return responseMsg;
-
         } catch (DeviceManagementException deviceMgtEx) {
             String errorMsg = "Error occurred while modifying enrollment of the device";
             log.error(errorMsg, deviceMgtEx);
             throw new AndroidAgentException(errorMsg, deviceMgtEx);
         }
-
-    }
+  }
 
     @DELETE
     @Path("{id}")
@@ -155,28 +130,22 @@ public class Enrollment {
         Message responseMsg = new Message();
 
         boolean result;
-
-        try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-
-        } catch (DeviceManagementServiceException deviceServiceMgtEx) {
-            String errorMsg = "Device management service error";
-            log.error(errorMsg, deviceServiceMgtEx);
-            throw new AndroidAgentException(errorMsg, deviceServiceMgtEx);
-        }
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 
         try {
-            result = dmService.disenrollDevice(deviceIdentifier);
+            result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
             if (result) {
-                responseMsg.setResponseMessage("Device has disenrolled successfully");
+                responseMsg.setResponseMessage("Device has removed successfully");
                 Response.status(HttpStatus.SC_OK);
             } else {
                 responseMsg.setResponseMessage("Device not found");
                 Response.status(HttpStatus.SC_NOT_FOUND);
             }
             return responseMsg;
-
+        } catch (DeviceManagementServiceException deviceServiceMgtEx) {
+            String errorMsg = "Device management service error";
+            log.error(errorMsg, deviceServiceMgtEx);
+            throw new AndroidAgentException(errorMsg, deviceServiceMgtEx);
         } catch (DeviceManagementException deviceMgtEx) {
             String errorMsg = "Error occurred while dis enrolling the device";
             log.error(errorMsg, deviceMgtEx);

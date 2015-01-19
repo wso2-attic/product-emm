@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package cdm.api.android.util;
+package org.wso2.cdmserver.mobileservices.android.util;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,7 +35,6 @@ public class Message {
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
     }
-
 
     @XmlElement
     public String getResponseCode() {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cdm.api.android.util;
+package org.wso2.cdmserver.mobileservices.android.util;
 
 /**
  * Defines constants used in Android-REST API bundle.

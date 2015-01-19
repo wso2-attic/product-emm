@@ -16,7 +16,7 @@
  * under the License.
  */
 //org.wso2.carbon....
-package cdm.api.android;
+package org.wso2.cdmserver.mobileservices.android;
 
 import cdm.api.android.common.AndroidAgentException;
 import cdm.api.android.util.AndroidAPIUtils;
@@ -28,119 +28,115 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
  * Android Device Management REST-API implementation.
+ * All end points supports JSON, XMl with content negotiation.
  */
 @Produces({ "application/json", "application/xml" })
 @Consumes({ "application/json", "application/xml" })
 public class Device {
 
-    private static Log LOG = LogFactory.getLog(Device.class);
+    private static Log log = LogFactory.getLog(Device.class);
 
+    /**
+     * Get all devices.Returns list of devices registered in the CDM.
+     * @return Device List
+     * @throws AndroidAgentException
+     */
     @GET
     public List<org.wso2.carbon.device.mgt.common.Device> getAllDevices() throws AndroidAgentException {
 
         List<org.wso2.carbon.device.mgt.common.Device> devices;
-        String msg;
-        DeviceManagementService dmService;
 
         try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-
+            devices = AndroidAPIUtils.getDeviceManagementService().getAllDevices(
+                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            return devices;
         } catch (DeviceManagementServiceException deviceMgtServiceEx) {
             String errorMsg = "Device management service error";
-            LOG.error(errorMsg, deviceMgtServiceEx);
+            log.error(errorMsg, deviceMgtServiceEx);
             throw new AndroidAgentException(errorMsg, deviceMgtServiceEx);
-        }
-
-        try {
-            devices = dmService.getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            Response.status(HttpStatus.SC_OK);
-            return devices;
-
         } catch (DeviceManagementException e) {
-            msg = "Error occurred while fetching the device list.";
-            LOG.error(msg, e);
-            throw new AndroidAgentException(msg, e);
+            String errorMsg = "Error occurred while fetching the device list.";
+            log.error(errorMsg, e);
+            throw new AndroidAgentException(errorMsg, e);
         }
     }
 
+    /**
+     * Fetch device details of given device Id.
+     * @param id Device Id
+     * @return Device
+     * @throws AndroidAgentException
+     */
     @GET
     @Path("{id}")
     public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id) throws AndroidAgentException {
 
         String msg;
-        DeviceManagementService dmService;
         org.wso2.carbon.device.mgt.common.Device device;
 
         try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-        } catch (DeviceManagementServiceException deviceMgtServiceEx) {
-            String errorMsg = "Device management service error";
-            LOG.error(errorMsg, deviceMgtServiceEx);
-            throw new AndroidAgentException(errorMsg, deviceMgtServiceEx);
-        }
-
-        DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-        try {
-            device = dmService.getDevice(deviceIdentifier);
+            DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
             if (device == null) {
                 Response.status(HttpStatus.SC_NOT_FOUND);
             }
             return device;
+        } catch (DeviceManagementServiceException deviceMgtServiceEx) {
+            String errorMsg = "Device management service error";
+            log.error(errorMsg, deviceMgtServiceEx);
+            throw new AndroidAgentException(errorMsg, deviceMgtServiceEx);
         } catch (DeviceManagementException deviceMgtEx) {
             msg = "Error occurred while fetching the device information.";
-            LOG.error(msg, deviceMgtEx);
+            log.error(msg, deviceMgtEx);
             throw new AndroidAgentException(msg, deviceMgtEx);
         }
     }
 
+    /**
+     * Update device details of given device id.
+     * @param id Device Id
+     * @param device  Device Details
+     * @return Message
+     * @throws AndroidAgentException
+     */
     @PUT
     @Path("{id}")
     public Message updateDevice(@PathParam("id") String id, org.wso2.carbon.device.mgt.common.Device device) throws
             AndroidAgentException {
 
-        DeviceManagementService dmService = null;
         Message responseMessage = new Message();
-
         boolean result;
-
-        try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-
-        } catch (DeviceManagementServiceException deviceManagementServiceException) {
-            String errorMsg = "Device management service error";
-            LOG.error(errorMsg, deviceManagementServiceException);
-        }
-
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            result = dmService.updateDeviceInfo(device);
-
+            result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device);
             if (result) {
-                Response.status(HttpStatus.SC_OK);
+                Response.status(HttpStatus.SC_ACCEPTED);
                 responseMessage.setResponseMessage("Device information has modified successfully.");
             } else {
                 Response.status(HttpStatus.SC_NOT_MODIFIED);
                 responseMessage.setResponseMessage("Device not found for the update.");
             }
             return responseMessage;
-
+        } catch (DeviceManagementServiceException deviceManagementServiceException) {
+            String errorMsg = "Device management service error";
+            log.error(errorMsg, deviceManagementServiceException);
+            throw new AndroidAgentException(errorMsg, deviceManagementServiceException);
         } catch (DeviceManagementException deviceMgtEx) {
             String msg = "Error occurred while modifying the device information.";
-            LOG.error(msg, deviceMgtEx);
+            log.error(msg, deviceMgtEx);
             throw new AndroidAgentException(msg, deviceMgtEx);
         }
     }
 
     @POST
     @Path("/device/license")
-    @Produces ("text/plain")
+    @Produces("text/plain")
     public String getLicense() {
         //TODO: need to implement fetch license from core
         return "License Agreement";

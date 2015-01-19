@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package cdm.api.android.util;
+package org.wso2.cdmserver.mobileservices.android.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,7 +50,7 @@ public class AndroidAPIUtils {
 		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
 
         if (dmService == null){
-            log.error("device management service not initialized");
+            log.error("Device management service not initialized");
             throw new DeviceManagementServiceException("device management service not initialized");
         }
         PrivilegedCarbonContext.endTenantFlow();

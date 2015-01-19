@@ -1,4 +1,4 @@
-package cdm.api.android;
+package org.wso2.cdmserver.mobileservices.android;
 
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.Device;
