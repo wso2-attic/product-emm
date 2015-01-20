@@ -50,16 +50,13 @@ public class Operation {
 		OperationManager operationManager;
 		try {
 			dmService = CDMAPIUtils.getDeviceManagementService();
+			operationManager = dmService.getOperationManager(
+					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+			operations = operationManager.getOperations(null);
 		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
 			String errorMsg = "Device management service error";
 			log.error(errorMsg, deviceServiceMgtEx);
 			throw new CDMAPIException(errorMsg, deviceServiceMgtEx);
-		}
-
-		try {
-			operationManager = dmService.getOperationManager(
-					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-			operations = operationManager.getOperations(null);
 		} catch (DeviceManagementException deviceMgtEx) {
 			String errorMsg = "Error occurred while fetching the operation manager.";
 			log.error(errorMsg, deviceMgtEx);
@@ -79,13 +76,6 @@ public class Operation {
 		Message responseMsg = new Message();
 		try {
 			dmService = CDMAPIUtils.getDeviceManagementService();
-		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
-			String errorMsg = "Device management service error";
-			log.error(errorMsg, deviceServiceMgtEx);
-			throw new CDMAPIException(errorMsg, deviceServiceMgtEx);
-		}
-
-		try {
 			operationManager = dmService.getOperationManager(
 					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 			boolean status = operationManager.addOperation(operationContext.getOperation(),
@@ -98,6 +88,10 @@ public class Operation {
 				responseMsg.setResponseMessage("Failure in adding the Operation.");
 			}
 			return responseMsg;
+		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
+			String errorMsg = "Device management service error";
+			log.error(errorMsg, deviceServiceMgtEx);
+			throw new CDMAPIException(errorMsg, deviceServiceMgtEx);
 		} catch (DeviceManagementException deviceMgtEx) {
 			String errorMsg = "Error occurred while adding the operation";
 			log.error(errorMsg, deviceMgtEx);

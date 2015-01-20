@@ -44,7 +44,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 	}
 
 	@Override
-	public MobileDevice getDevice(String deviceId) throws MobileDeviceManagementDAOException {
+	public MobileDevice getMobileDevice(String deviceId) throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		MobileDevice mobileDevice = null;
@@ -80,7 +80,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 	}
 
 	@Override
-	public boolean addDevice(MobileDevice mobileDevice)
+	public boolean addMobileDevice(MobileDevice mobileDevice)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -106,8 +106,8 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while enrolling mobile device '" +
-			             mobileDevice.getMobileDeviceId() + "'";
+			String msg = "Error occurred while adding the mobile device '" +
+			             mobileDevice.getMobileDeviceId() + "' to the mobile db.";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -117,7 +117,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 	}
 
 	@Override
-	public boolean updateDevice(MobileDevice mobileDevice)
+	public boolean updateMobileDevice(MobileDevice mobileDevice)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -153,7 +153,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 	}
 
 	@Override
-	public boolean deleteDevice(String deviceId) throws MobileDeviceManagementDAOException {
+	public boolean deleteMobileDevice(String deviceId) throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -178,7 +178,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 	}
 
 	@Override
-	public List<MobileDevice> getAllDevices() throws MobileDeviceManagementDAOException {
+	public List<MobileDevice> getAllMobileDevices() throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		MobileDevice mobileDevice;

@@ -19,7 +19,16 @@
 package org.wso2.carbon.policy.evaluator.spi;
 
 
+import org.wso2.carbon.policy.evaluator.FeatureRules;
+import org.wso2.carbon.policy.mgt.common.Feature;
+import org.wso2.carbon.policy.mgt.common.Policy;
+
+import java.util.List;
+
 public interface PDPService {
 
+    List<Policy> getEffectivePolicyList(List<Policy> policies, List<String> roles, String deviceType);
+
+    List<Feature> getEffectiveFeatureList(List<Policy> policies, List<FeatureRules> featureRulesList);
 
 }

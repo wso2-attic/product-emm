@@ -5,14 +5,14 @@
 
     <datasources>
         <datasource>
-            <name>DEVICE_MGT_DS</name>
+            <name>DM_DS</name>
             <description>The datasource used for CDM</description>
             <jndiConfig>
-                <name>jdbc/DEVICE_MGT_DS</name>
+                <name>jdbc/DM_DS</name>
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
-                    <url>jdbc:h2:repository/database/WSO2DEVICEMGT_DB;DB_CLOSE_ON_EXIT=FALSE</url>
+                    <url>jdbc:h2:repository/database/WSO2DM_DB;DB_CLOSE_ON_EXIT=FALSE</url>
                     <username>wso2carbon</username>
                     <password>wso2carbon</password>
                     <driverClassName>org.h2.Driver</driverClassName>
@@ -25,14 +25,14 @@
             </definition>
         </datasource>
         <datasource>
-            <name>MOBILE_MGT_DS</name>
+            <name>MobileDM_DS</name>
             <description>The datasource used for CDM Mobile Device Management</description>
             <jndiConfig>
-                <name>jdbc/MOBILE_MGT_DS</name>
+                <name>jdbc/MobileDM_DS</name>
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
-                    <url>jdbc:h2:repository/database/WSO2MOBILE_DB;DB_CLOSE_ON_EXIT=FALSE</url>
+                    <url>jdbc:h2:repository/database/WSO2MobileDM_DB;DB_CLOSE_ON_EXIT=FALSE</url>
                     <username>wso2carbon</username>
                     <password>wso2carbon</password>
                     <driverClassName>org.h2.Driver</driverClassName>
@@ -45,7 +45,7 @@
             </definition>
         </datasource>
 	<datasource>
-            <name>WSO2DEVICE_DB</name>
+            <name>WSO2AM_DS</name>
             <description>The datasource used for CDM</description>
             <jndiConfig>
                 <name>jdbc/WSO2AM_DB</name>

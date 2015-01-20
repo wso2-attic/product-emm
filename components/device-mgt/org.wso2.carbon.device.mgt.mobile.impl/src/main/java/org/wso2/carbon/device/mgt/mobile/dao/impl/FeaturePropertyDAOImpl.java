@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
@@ -16,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of FeaturePropertyDAO
+ * Implementation of FeaturePropertyDAO.
  */
 public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 
@@ -65,18 +81,17 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		try {
 			conn = this.getConnection();
 			String updateDBQuery =
-					"UPDATE MBL_FEATURE_PROPERTY SET PROPERTY = ?, FEATURE_ID = ? WHERE PROPERTY_ID = ?";
+					"UPDATE MBL_FEATURE_PROPERTY SET FEATURE_ID = ? WHERE PROPERTY = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
-			stmt.setString(1, featureProperty.getProperty());
-			stmt.setString(2, featureProperty.getFeatureID());
-			stmt.setInt(3, featureProperty.getPropertyId());
+			stmt.setString(1, featureProperty.getFeatureID());
+			stmt.setString(2, featureProperty.getProperty());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while updating the feature property with property id - '" +
-			             featureProperty.getPropertyId() + "'";
+			String msg = "Error occurred while updating the feature property with property - '" +
+			             featureProperty.getProperty() + "'";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -86,7 +101,7 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 	}
 
 	@Override
-	public boolean deleteFeatureProperty(int propertyId)
+	public boolean deleteFeatureProperty(String property)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -94,16 +109,16 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		try {
 			conn = this.getConnection();
 			String deleteDBQuery =
-					"DELETE FROM MBL_FEATURE_PROPERTY WHERE PROPERTY_ID = ?";
+					"DELETE FROM MBL_FEATURE_PROPERTY WHERE PROPERTY = ?";
 			stmt = conn.prepareStatement(deleteDBQuery);
-			stmt.setInt(1, propertyId);
+			stmt.setString(1, property);
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while deleting feature property with property Id - " +
-			             propertyId;
+			String msg = "Error occurred while deleting feature property with property - " +
+			             property;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -113,7 +128,7 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 	}
 
 	@Override
-	public FeatureProperty getFeatureProperty(int propertyId)
+	public FeatureProperty getFeatureProperty(String property)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -121,9 +136,9 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT PROPERTY, FEATURE_ID FROM MBL_FEATURE_PROPERTY WHERE PROPERTY_ID = ?";
+					"SELECT PROPERTY, FEATURE_ID FROM MBL_FEATURE_PROPERTY WHERE PROPERTY = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setInt(1, propertyId);
+			stmt.setString(1, property);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
 				featureProperty = new FeatureProperty();
@@ -132,8 +147,8 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 				break;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while fetching property Id - '" +
-			             propertyId + "'";
+			String msg = "Error occurred while fetching property - '" +
+			             property + "'";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -152,15 +167,14 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT PROPERTY_ID,PROPERTY, FEATURE_ID FROM MBL_FEATURE_PROPERTY WHERE FEATURE_ID = ?";
+					"SELECT PROPERTY, FEATURE_ID FROM MBL_FEATURE_PROPERTY WHERE FEATURE_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
 			stmt.setString(1, featureId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
 				featureProperty = new FeatureProperty();
-				featureProperty.setPropertyId(resultSet.getInt(1));
-				featureProperty.setProperty(resultSet.getString(2));
-				featureProperty.setFeatureID(resultSet.getString(3));
+				featureProperty.setProperty(resultSet.getString(1));
+				featureProperty.setFeatureID(resultSet.getString(2));
 				FeatureProperties.add(featureProperty);
 			}
 			return FeatureProperties;

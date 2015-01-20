@@ -88,5 +88,4 @@ public class IOSDeviceManagerService implements DeviceManagerService {
         return true;
     }
 
-
 }

@@ -23,7 +23,7 @@ import java.io.Serializable;
 public class Device implements Serializable {
 
     private static final long serialVersionUID = -8101106997837486245L;
-    private String id;
+    private Integer id;
     private String description;
     private String name;
     private Long dateOfEnrollment;
@@ -33,21 +33,21 @@ public class Device implements Serializable {
     private String ownerId;
     private String ownerShip;
     private int tenantId;
-    private Integer deviceType;
+    private Integer deviceTypeId;
 
-    public Integer getDeviceType() {
-        return deviceType;
+    public Integer getDeviceTypeId() {
+        return deviceTypeId;
     }
 
-    public void setDeviceType(Integer deviceType) {
-        this.deviceType = deviceType;
+    public void setDeviceTypeId(Integer deviceTypeId) {
+        this.deviceTypeId = deviceTypeId;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

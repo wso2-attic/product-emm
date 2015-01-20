@@ -19,7 +19,6 @@ package org.wso2.carbon.device.mgt.core.dao.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceTypeDAO;
 import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
@@ -90,9 +89,28 @@ public class DeviceTypeDAOImpl implements DeviceTypeDAO {
     }
 
     @Override
-    public DeviceIdentifier getDeviceType() throws DeviceManagementDAOException {
-        //TODO:
-        return null;
+    public DeviceType getDeviceType(Integer id) throws DeviceManagementDAOException {
+        Connection conn = this.getConnection();
+        PreparedStatement stmt = null;
+        DeviceType deviceType = null;
+        try {
+            stmt = conn.prepareStatement("SELECT ID AS DEVICE_TYPE_ID, NAME AS DEVICE_TYPE FROM DM_DEVICE_TYPE WHERE ID=?");
+            stmt.setInt(1, id);
+            ResultSet results = stmt.executeQuery();
+
+            while (results.next()) {
+                deviceType = new DeviceType();
+                deviceType.setId(results.getLong("DEVICE_TYPE_ID"));
+                deviceType.setName(results.getString("DEVICE_TYPE"));
+            }
+        } catch (SQLException e) {
+            String msg = "Error occurred while fetching the registered device type";
+            log.error(msg, e);
+            throw new DeviceManagementDAOException(msg, e);
+        } finally {
+            DeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+        }
+        return deviceType;
     }
 
     @Override
@@ -122,6 +140,11 @@ public class DeviceTypeDAOImpl implements DeviceTypeDAO {
         }
 
         return deviceTypeId;
+    }
+
+    @Override
+    public void removeDeviceType(DeviceType deviceType) throws DeviceManagementDAOException {
+
     }
 
     private Connection getConnection() throws DeviceManagementDAOException {
