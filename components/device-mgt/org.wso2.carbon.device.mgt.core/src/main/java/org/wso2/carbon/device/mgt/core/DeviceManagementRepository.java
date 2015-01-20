@@ -45,6 +45,7 @@ public class DeviceManagementRepository {
 
     public void removeDeviceManagementProvider(DeviceManagerService provider) {
         String deviceType = provider.getProviderType();
+
         try {
             DeviceManagerUtil.unregisterDeviceType(deviceType);
         } catch (DeviceManagementException e) {
@@ -56,5 +57,4 @@ public class DeviceManagementRepository {
     public DeviceManagerService getDeviceManagementProvider(String type) {
         return providers.get(type);
     }
-
 }

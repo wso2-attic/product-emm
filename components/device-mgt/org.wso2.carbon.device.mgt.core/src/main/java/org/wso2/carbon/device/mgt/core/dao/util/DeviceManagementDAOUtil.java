@@ -18,8 +18,10 @@ package org.wso2.carbon.device.mgt.core.dao.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dto.Device;
+import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.dto.Status;
 import org.wso2.carbon.device.mgt.core.internal.DeviceManagementDataHolder;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -32,7 +34,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public final class DeviceManagementDAOUtil {
 
@@ -101,6 +105,44 @@ public final class DeviceManagementDAOUtil {
         }
     }
 
+    /**
+     * @param device - The DTO device object.
+     * @return A Business Object.
+     */
+    public static org.wso2.carbon.device.mgt.common.Device convertDevice(Device device){
+        org.wso2.carbon.device.mgt.common.Device deviceBO =
+                new org.wso2.carbon.device.mgt.common.Device();
+        deviceBO.setDateOfEnrolment(device.getDateOfEnrollment());
+        deviceBO.setDateOfLastUpdate(device.getDateOfLastUpdate());
+        deviceBO.setDescription(device.getDescription());
+        deviceBO.setDeviceIdentifier(device.getDeviceIdentificationId());
+        deviceBO.setDeviceTypeId(device.getDeviceTypeId());
+        deviceBO.setName(device.getName());
+        deviceBO.setId(device.getId());
+        deviceBO.setOwner(device.getOwnerId());
+        deviceBO.setOwnership(device.getOwnerShip());
+        if (device.getStatus() == Status.ACTIVE) {
+            deviceBO.setStatus(true);
+        } else if (device.getStatus() == Status.INACTIVE) {
+            deviceBO.setStatus(false);
+        }
+        return null;
+    }
+
+    /**
+     * @param devices - DTO Device Object list.
+     * @return  converted Business Object list.
+     */
+    public static List<org.wso2.carbon.device.mgt.common.Device> convertDevices(
+            List<Device> devices) {
+        List<org.wso2.carbon.device.mgt.common.Device> deviceBOList =
+                new ArrayList<org.wso2.carbon.device.mgt.common.Device>();
+        for (Device device : devices) {
+            deviceBOList.add(convertDevice(device));
+        }
+        return deviceBOList;
+    }
+
     public static Device convertDevice(org.wso2.carbon.device.mgt.common.Device
                                                device) throws DeviceManagementDAOException {
         Device deviceBO = new Device();
@@ -121,4 +163,10 @@ public final class DeviceManagementDAOUtil {
         return deviceBO;
     }
 
+    public static DeviceIdentifier createDeviceIdentifier(Device device, DeviceType deviceType) {
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        deviceIdentifier.setType(deviceType.getName());
+        deviceIdentifier.setId(device.getDeviceIdentificationId());
+        return deviceIdentifier;
+    }
 }
