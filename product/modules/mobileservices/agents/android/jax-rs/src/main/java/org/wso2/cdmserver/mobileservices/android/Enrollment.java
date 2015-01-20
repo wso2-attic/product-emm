@@ -18,17 +18,16 @@
 
 package org.wso2.cdmserver.mobileservices.android;
 
-import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
-import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
-import org.wso2.cdmserver.mobileservices.android.util.Message;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
+import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
+import org.wso2.cdmserver.mobileservices.android.util.Message;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -50,7 +49,7 @@ public class Enrollment {
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
-            Response.status(HttpStatus.SC_CREATED);
+            Response.status(Response.Status.CREATED);
             responseMsg.setResponseMessage("Device enrollment succeeded");
             return responseMsg;
         } catch (DeviceManagementServiceException deviceServiceMgtEx) {
@@ -71,13 +70,13 @@ public class Enrollment {
         boolean result;
         Message responseMsg = new Message();
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+
         try {
             result = AndroidAPIUtils.getDeviceManagementService().isEnrolled(deviceIdentifier);
             if (result) {
-                Response.status(HttpStatus.SC_OK);
                 responseMsg.setResponseMessage("Device has already enrolled");
             } else {
-                Response.status(HttpStatus.SC_NOT_FOUND);
+                Response.status(Response.Status.NOT_FOUND);
                 responseMsg.setResponseMessage("Device not found");
             }
             return responseMsg;
@@ -99,16 +98,15 @@ public class Enrollment {
 
         boolean result;
         Message responseMsg = new Message();
-
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             result = AndroidAPIUtils.getDeviceManagementService().modifyEnrollment(device);
             if (result) {
                 responseMsg.setResponseMessage("Device enrollment has updated successfully");
-                Response.status(HttpStatus.SC_ACCEPTED);
+                Response.status(Response.Status.ACCEPTED);
             } else {
                 responseMsg.setResponseMessage("Device not found for enrollment");
-                Response.status(HttpStatus.SC_NOT_MODIFIED);
+                Response.status(Response.Status.NOT_MODIFIED);
             }
             return responseMsg;
         } catch (DeviceManagementServiceException deviceServiceMgtEx) {
@@ -120,15 +118,13 @@ public class Enrollment {
             log.error(errorMsg, deviceMgtEx);
             throw new AndroidAgentException(errorMsg, deviceMgtEx);
         }
-  }
+    }
 
     @DELETE
     @Path("{id}")
     public Message disEnrollDevice(@PathParam("id") String id) throws AndroidAgentException {
 
-        DeviceManagementService dmService;
         Message responseMsg = new Message();
-
         boolean result;
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 
@@ -136,10 +132,9 @@ public class Enrollment {
             result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
             if (result) {
                 responseMsg.setResponseMessage("Device has removed successfully");
-                Response.status(HttpStatus.SC_OK);
             } else {
                 responseMsg.setResponseMessage("Device not found");
-                Response.status(HttpStatus.SC_NOT_FOUND);
+                Response.status(Response.Status.NOT_FOUND);
             }
             return responseMsg;
         } catch (DeviceManagementServiceException deviceServiceMgtEx) {

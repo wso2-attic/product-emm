@@ -251,7 +251,7 @@
 
     <files>
         <file>
-            <source>../agents/android/jax-rs/target/cdm-android-api.war</source>
+            <source>../mobileservices/agents/android/jax-rs/target/cdm-android-api.war</source>
             <outputDirectory>wso2cdm-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
