@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,6 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
 import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
 import org.wso2.cdmserver.mobileservices.android.util.Message;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;

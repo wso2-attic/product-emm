@@ -15,13 +15,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-//org.wso2.carbon....
 package org.wso2.cdmserver.mobileservices.android;
 
 import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
 import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
 import org.wso2.cdmserver.mobileservices.android.util.Message;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -53,8 +51,8 @@ public class Device {
         List<org.wso2.carbon.device.mgt.common.Device> devices;
 
         try {
-            devices = AndroidAPIUtils.getDeviceManagementService().getAllDevices(
-                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            devices = AndroidAPIUtils.getDeviceManagementService().getAllDevices(DeviceManagementConstants
+                    .MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             return devices;
         } catch (DeviceManagementServiceException deviceMgtServiceEx) {
             String errorMsg = "Device management service error";
@@ -84,7 +82,7 @@ public class Device {
             DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
             device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
             if (device == null) {
-                Response.status(HttpStatus.SC_NOT_FOUND);
+                Response.status(Response.Status.NOT_FOUND);
             }
             return device;
         } catch (DeviceManagementServiceException deviceMgtServiceEx) {
@@ -116,10 +114,10 @@ public class Device {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device);
             if (result) {
-                Response.status(HttpStatus.SC_ACCEPTED);
+                Response.status(Response.Status.ACCEPTED);
                 responseMessage.setResponseMessage("Device information has modified successfully.");
             } else {
-                Response.status(HttpStatus.SC_NOT_MODIFIED);
+                Response.status(Response.Status.NOT_MODIFIED);
                 responseMessage.setResponseMessage("Device not found for the update.");
             }
             return responseMessage;
