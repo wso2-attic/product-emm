@@ -19,9 +19,9 @@ package org.wso2.carbon.device.mgt.mobile.dao.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.mobile.dao.OperationDAO;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileOperationDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.util.MobileDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.mobile.dto.Operation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperation;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -30,19 +30,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Implementation of OperationDAO
+ * Implementation of MobileOperationDAO.
  */
-public class OperationDAOImpl implements OperationDAO {
+public class MobileOperationDAOImpl implements MobileOperationDAO {
 
 	private DataSource dataSource;
-	private static final Log log = LogFactory.getLog(OperationDAOImpl.class);
+	private static final Log log = LogFactory.getLog(MobileOperationDAOImpl.class);
 
-	public OperationDAOImpl(DataSource dataSource) {
+	public MobileOperationDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	public int addOperation(Operation operation)
+	public int addMobileOperation(MobileOperation operation)
 			throws MobileDeviceManagementDAOException {
 		int status = -1;
 		Connection conn = null;
@@ -51,7 +51,6 @@ public class OperationDAOImpl implements OperationDAO {
 			conn = this.getConnection();
 			String createDBQuery =
 					"INSERT INTO MBL_OPERATION(FEATURE_CODE, CREATED_DATE) VALUES ( ?, ?)";
-
 			stmt = conn.prepareStatement(createDBQuery, new String[] { "OPERATION_ID" });
 			stmt.setString(1, operation.getFeatureCode());
 			stmt.setLong(2, operation.getCreatedDate());
@@ -63,8 +62,8 @@ public class OperationDAOImpl implements OperationDAO {
 				}
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while adding feature code - '" +
-			             operation.getFeatureCode() + "' to operations table";
+			String msg = "Error occurred while adding the operation - '" +
+			             operation.getFeatureCode() + "' to MBL_OPERATION table";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -74,7 +73,7 @@ public class OperationDAOImpl implements OperationDAO {
 	}
 
 	@Override
-	public boolean updateOperation(Operation operation)
+	public boolean updateMobileOperation(MobileOperation operation)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -92,7 +91,7 @@ public class OperationDAOImpl implements OperationDAO {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while updating the operation with operation id - '" +
+			String msg = "Error occurred while updating the MBL_OPERATION table entry with operation id - '" +
 			             operation.getOperationId() + "'";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
@@ -103,7 +102,7 @@ public class OperationDAOImpl implements OperationDAO {
 	}
 
 	@Override
-	public boolean deleteOperation(int operationId)
+	public boolean deleteMobileOperation(int operationId)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -119,7 +118,7 @@ public class OperationDAOImpl implements OperationDAO {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while deleting operation with operation Id - ";
+			String msg = "Error occurred while deleting MBL_OPERATION entry with operation Id - ";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -129,11 +128,11 @@ public class OperationDAOImpl implements OperationDAO {
 	}
 
 	@Override
-	public Operation getOperation(int operationId)
+	public MobileOperation getMobileOperation(int operationId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		Operation operation = null;
+		MobileOperation operation = null;
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -142,13 +141,13 @@ public class OperationDAOImpl implements OperationDAO {
 			stmt.setInt(1, operation.getOperationId());
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				operation = new Operation();
+				operation = new MobileOperation();
 				operation.setOperationId(resultSet.getInt(1));
 				break;
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while fetching operationId - '" +
-			             operationId + "'";
+			             operationId + "' from MBL_OPERATION";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {

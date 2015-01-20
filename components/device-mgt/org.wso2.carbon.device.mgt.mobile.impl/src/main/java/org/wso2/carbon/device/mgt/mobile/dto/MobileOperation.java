@@ -19,14 +19,14 @@ package org.wso2.carbon.device.mgt.mobile.dto;
 import java.util.List;
 
 /**
- * DTO of operation.
+ * DTO of MobileOperation.
  */
-public class Operation {
+public class MobileOperation {
 
 	private int operationId;
 	private String featureCode;
 	private long createdDate;
-	private List<OperationProperty> properties;
+	private List<MobileOperationProperty> properties;
 
 	public int getOperationId() {
 		return operationId;
@@ -36,11 +36,11 @@ public class Operation {
 		this.operationId = operationId;
 	}
 
-	public List<OperationProperty> getProperties() {
+	public List<MobileOperationProperty> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List<OperationProperty> properties) {
+	public void setProperties(List<MobileOperationProperty> properties) {
 		this.properties = properties;
 	}
 

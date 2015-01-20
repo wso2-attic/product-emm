@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2014 - 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,20 @@
 package org.wso2.carbon.device.mgt.mobile.dto;
 
 /**
- * DTO of Operations.
+ * DTO of Mobile Operation property.
  */
-public class DeviceOperation {
+public class MobileOperationProperty {
 
-	private String deviceId;
 	private int operationId;
-	private long sentDate;
-	private long receivedDate;
+	private String property;
+	private String value;
 
-	public String getDeviceId() {
-		return deviceId;
+	public String getValue() {
+		return value;
 	}
 
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public int getOperationId() {
@@ -42,20 +41,12 @@ public class DeviceOperation {
 		this.operationId = operationId;
 	}
 
-	public long getSentDate() {
-		return sentDate;
+	public String getProperty() {
+		return property;
 	}
 
-	public void setSentDate(long sentDate) {
-		this.sentDate = sentDate;
-	}
-
-	public long getReceivedDate() {
-		return receivedDate;
-	}
-
-	public void setReceivedDate(long receivedDate) {
-		this.receivedDate = receivedDate;
+	public void setProperty(String property) {
+		this.property = property;
 	}
 
 }

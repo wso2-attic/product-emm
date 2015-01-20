@@ -50,7 +50,8 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		boolean status;
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
-			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().addDevice(mobileDevice);
+			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().addMobileDevice(
+					mobileDevice);
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while enrolling the Android device : " +
 			             device.getDeviceIdentifier();
@@ -66,7 +67,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
 			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
-			                                         .updateDevice(mobileDevice);
+			                                         .updateMobileDevice(mobileDevice);
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while updating the enrollment of the Android device : " +
 			             device.getDeviceIdentifier();
@@ -81,7 +82,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		boolean status;
 		try {
 			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
-			                                         .deleteDevice(deviceId.getId());
+			                                         .deleteMobileDevice(deviceId.getId());
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while removing the Android device : " + deviceId.getId();
 			log.error(msg, e);
@@ -95,7 +96,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		boolean isEnrolled = false;
 		try {
 			MobileDevice mobileDevice =
-					MobileDeviceManagementDAOFactory.getMobileDeviceDAO().getDevice(
+					MobileDeviceManagementDAOFactory.getMobileDeviceDAO().getMobileDevice(
 							deviceId.getId());
 			if (mobileDevice != null) {
 				isEnrolled = true;
@@ -125,7 +126,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		Device device;
 		try {
 			MobileDevice mobileDevice = MobileDeviceManagementDAOFactory.getMobileDeviceDAO().
-					getDevice(deviceId.getId());
+					getMobileDevice(deviceId.getId());
 			device = MobileDeviceManagementUtil.convertToDevice(mobileDevice);
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while fetching the Android device : " + deviceId.getId();
@@ -147,7 +148,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		MobileDevice mobileDevice = MobileDeviceManagementUtil.convertToMobileDevice(device);
 		try {
 			status = MobileDeviceManagementDAOFactory.getMobileDeviceDAO()
-			                                         .updateDevice(mobileDevice);
+			                                         .updateMobileDevice(mobileDevice);
 		} catch (MobileDeviceManagementDAOException e) {
 			String msg = "Error while updating the Android device : " + device.getDeviceIdentifier();
 			log.error(msg, e);
@@ -162,7 +163,7 @@ public class AndroidDeviceManagerService implements DeviceManagerService {
 		try {
 			List<MobileDevice> mobileDevices =
 					MobileDeviceManagementDAOFactory.getMobileDeviceDAO().
-							getAllDevices();
+							getAllMobileDevices();
 			if (mobileDevices != null) {
 				devices = new ArrayList<Device>();
                 for (MobileDevice mobileDevice : mobileDevices) {

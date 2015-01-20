@@ -18,10 +18,11 @@ package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.mobile.dao.DeviceOperationDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileOperationPropertyDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.util.MobileDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.mobile.dto.DeviceOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperationProperty;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -32,19 +33,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of DeviceOperationDAO
+ * Implementation of MobileOperationPropertyDAO.
  */
-public class DeviceOperationDAOImpl implements DeviceOperationDAO {
+public class MobileOperationPropertyDAOImpl implements MobileOperationPropertyDAO {
 
 	private DataSource dataSource;
-	private static final Log log = LogFactory.getLog(DeviceOperationDAOImpl.class);
+	private static final Log log = LogFactory.getLog(MobileOperationPropertyDAOImpl.class);
 
-	public DeviceOperationDAOImpl(DataSource dataSource) {
+	public MobileOperationPropertyDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	public boolean addDeviceOperation(DeviceOperation deviceOperation)
+	public boolean addMobileOperationProperty(MobileOperationProperty operationProperty)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -52,22 +53,19 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 		try {
 			conn = this.getConnection();
 			String createDBQuery =
-					"INSERT INTO MBL_DEVICE_OPERATION(DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE) VALUES (?, ?, ?, ?)";
+					"INSERT INTO MBL_OPERATION_PROPERTY(OPERATION_ID, PROPERTY, VALUE) VALUES ( ?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
-			stmt.setString(1, deviceOperation.getDeviceId());
-			stmt.setLong(2, deviceOperation.getOperationId());
-			stmt.setLong(3, deviceOperation.getSentDate());
-			stmt.setLong(4, deviceOperation.getReceivedDate());
+			stmt.setInt(1, operationProperty.getOperationId());
+			stmt.setString(2, operationProperty.getProperty());
+			stmt.setString(3, operationProperty.getValue());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while adding device id - '" +
-			             deviceOperation.getDeviceId() + " and operation id - " +
-			             deviceOperation.getOperationId() + "of mapping table MBL_DEVICE_OPERATION";
-			;
+			String msg =
+					"Error occurred while adding mobile operation property to MBL_OPERATION_PROPERTY table";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -77,28 +75,28 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 	}
 
 	@Override
-	public boolean updateDeviceOperation(DeviceOperation deviceOperation)
+	public boolean updateMobileOperationProperty(
+			MobileOperationProperty operationProperty)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
 			conn = this.getConnection();
-			String updateDBQuery =
-					"UPDATE MBL_DEVICE_OPERATION SET SENT_DATE = ?, RECEIVED_DATE = ? WHERE DEVICE_ID = ? and OPERATION_ID=?";
-			stmt = conn.prepareStatement(updateDBQuery);
-			stmt.setLong(1, deviceOperation.getSentDate());
-			stmt.setLong(2, deviceOperation.getReceivedDate());
-			stmt.setString(3, deviceOperation.getDeviceId());
-			stmt.setInt(4, deviceOperation.getOperationId());
+			String createDBQuery =
+					"UPDATE MBL_OPERATION_PROPERTY SET VALUE = ? WHERE OPERATION_ID = ? AND PROPERTY = ?";
+
+			stmt = conn.prepareStatement(createDBQuery);
+			stmt.setString(1, operationProperty.getValue());
+			stmt.setInt(2, operationProperty.getOperationId());
+			stmt.setString(3, operationProperty.getProperty());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while updating device id - '" +
-			             deviceOperation.getDeviceId() + " and operation id - " +
-			             deviceOperation.getOperationId() + "of mapping table MBL_DEVICE_OPERATION";
+			String msg =
+					"Error occurred while updating the mobile operation property in MBL_OPERATION_PROPERTY table.";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -108,7 +106,7 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 	}
 
 	@Override
-	public boolean deleteDeviceOperation(String deviceId, int operationId)
+	public boolean deleteMobileOperationProperties(int operationId)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -116,18 +114,16 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 		try {
 			conn = this.getConnection();
 			String deleteDBQuery =
-					"DELETE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ? and OPERATION_ID=?";
+					"DELETE FROM MBL_OPERATION_PROPERTY WHERE OPERATION_ID = ?";
 			stmt = conn.prepareStatement(deleteDBQuery);
-			stmt.setString(1, deviceId);
-			stmt.setInt(2, operationId);
+			stmt.setInt(1, operationId);
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
 			String msg =
-					"Error occurred while deleting mapping table MBL_DEVICE_OPERATION with  device id - '" +
-					deviceId + " and operation id - " + operationId;
+					"Error occurred while deleting MBL_OPERATION_PROPERTY entry with operation Id - ";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -137,72 +133,70 @@ public class DeviceOperationDAOImpl implements DeviceOperationDAO {
 	}
 
 	@Override
-	public DeviceOperation getDeviceOperation(String deviceId, int operationId)
+	public MobileOperationProperty getMobileOperationProperty(int operationId,
+	                                                          String property)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		DeviceOperation deviceOperation = null;
+		MobileOperationProperty mobileOperationProperty = null;
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ? and OPERATION_ID=?";
+					"SELECT OPERATION_ID, PROPERTY, VALUE FROM MBL_OPERATION_PROPERTY WHERE OPERATION_ID = ? AND PROPERTY = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, deviceId);
-			stmt.setInt(2, operationId);
+			stmt.setInt(1, operationId);
+			stmt.setString(2, property);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				deviceOperation = new DeviceOperation();
-				deviceOperation.setDeviceId(resultSet.getString(1));
-				deviceOperation.setOperationId(resultSet.getInt(2));
-				deviceOperation.setSentDate(resultSet.getInt(3));
-				deviceOperation.setReceivedDate(resultSet.getInt(4));
+				mobileOperationProperty = new MobileOperationProperty();
+				mobileOperationProperty.setOperationId(resultSet.getInt(1));
+				mobileOperationProperty.setProperty(resultSet.getString(2));
+				mobileOperationProperty.setValue(resultSet.getString(3));
 				break;
 			}
 		} catch (SQLException e) {
 			String msg =
-					"Error occurred while fetching mapping table MBL_DEVICE_OPERATION entry with device id - '" +
-					deviceId + " and operation id - " + operationId;
+					"Error occurred while fetching the mobile operation property of Operation_id : " +
+					operationId + " and Property : " + property;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
-		return deviceOperation;
+		return mobileOperationProperty;
 	}
 
 	@Override
-	public List<DeviceOperation> getAllDeviceOperationOfDevice(String deviceId)
-			throws MobileDeviceManagementDAOException {
+	public List<MobileOperationProperty> getAllMobileOperationPropertiesOfOperation(
+			int operationId) throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		DeviceOperation deviceOperation = null;
-		List<DeviceOperation> deviceOperations = new ArrayList<DeviceOperation>();
+		MobileOperationProperty mobileOperationProperty = null;
+		List<MobileOperationProperty> properties = new ArrayList<MobileOperationProperty>();
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ?";
+					"SELECT OPERATION_ID, PROPERTY, VALUE FROM MBL_OPERATION_PROPERTY WHERE OPERATION_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, deviceId);
+			stmt.setInt(1, operationId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				deviceOperation = new DeviceOperation();
-				deviceOperation.setDeviceId(resultSet.getString(1));
-				deviceOperation.setOperationId(resultSet.getInt(2));
-				deviceOperation.setSentDate(resultSet.getInt(3));
-				deviceOperation.setReceivedDate(resultSet.getInt(4));
-				deviceOperations.add(deviceOperation);
-				break;
+				mobileOperationProperty = new MobileOperationProperty();
+				mobileOperationProperty.setOperationId(resultSet.getInt(1));
+				mobileOperationProperty.setProperty(resultSet.getString(2));
+				mobileOperationProperty.setValue(resultSet.getString(3));
+				properties.add(mobileOperationProperty);
 			}
 		} catch (SQLException e) {
 			String msg =
-					"Error occurred while fetching mapping table MBL_DEVICE_OPERATION entry with device id - '" +
-					deviceId;
+					"Error occurred while fetching the mobile operation properties of Operation_id " +
+					operationId;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
-		return deviceOperations;
+		return properties;
 	}
 
 	private Connection getConnection() throws MobileDeviceManagementDAOException {

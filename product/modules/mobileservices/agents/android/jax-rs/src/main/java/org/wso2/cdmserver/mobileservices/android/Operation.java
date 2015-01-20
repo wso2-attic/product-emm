@@ -36,81 +36,73 @@ import java.util.List;
 @Consumes({ "application/json", "application/xml" })
 public class Operation {
 
-    private static Log log = LogFactory.getLog(Operation.class);
+	private static Log log = LogFactory.getLog(Operation.class);
 
-    @GET
-    @Path("{id}")
-    public List<org.wso2.carbon.device.mgt.common.Operation> getAllOperations(@PathParam("id") String id)
-            throws AndroidAgentException {
+	@GET
+	@Path("{id}")
+	public List<org.wso2.carbon.device.mgt.common.Operation> getAllOperations(
+			@PathParam("id") String id)
+			throws AndroidAgentException {
 
-        List<org.wso2.carbon.device.mgt.common.Operation> operations;
-        String msg;
-        DeviceManagementService dmService;
+		List<org.wso2.carbon.device.mgt.common.Operation> operations;
+		String msg;
+		DeviceManagementService dmService;
 
-        try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-        } catch (DeviceManagementServiceException deviceMgtServiceEx) {
-            msg = "Device management service error";
-            log.error(msg, deviceMgtServiceEx);
-            throw new AndroidAgentException(msg, deviceMgtServiceEx);
-        }
+		try {
+			dmService = AndroidAPIUtils.getDeviceManagementService();
+			DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+			operations = dmService.getOperationManager(
+					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID)
+			                      .getOperations(deviceIdentifier);
+			Response.status(HttpStatus.SC_OK);
+			return operations;
+		} catch (DeviceManagementServiceException deviceMgtServiceEx) {
+			msg = "Device management service error";
+			log.error(msg, deviceMgtServiceEx);
+			throw new AndroidAgentException(msg, deviceMgtServiceEx);
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while fetching the operation manager for the device type.";
+			log.error(msg, e);
+			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			throw new AndroidAgentException(msg, e);
+		} catch (OperationManagementException e) {
+			msg = "Error occurred while fetching the operation list for the device.";
+			log.error(msg, e);
+			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			throw new AndroidAgentException(msg, e);
+		}
+	}
 
-        try {
-            DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-            operations = dmService.getOperationManager(
-                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID)
-                    .getOperations(deviceIdentifier);
-            Response.status(HttpStatus.SC_OK);
-            return operations;
-        } catch (DeviceManagementException e) {
-            msg = "Error occurred while fetching the operation manager for the device type.";
-            log.error(msg, e);
-            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            throw new AndroidAgentException(msg, e);
-        } catch (OperationManagementException e) {
-            msg = "Error occurred while fetching the operation list for the device.";
-            log.error(msg, e);
-            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            throw new AndroidAgentException(msg, e);
-        }
-    }
-
-    @PUT
-    public Message updateOperation() throws AndroidAgentException {
-
-        String msg;
-        DeviceManagementService dmService;
-        Message responseMsg = new Message();
-
-        try {
-            dmService = AndroidAPIUtils.getDeviceManagementService();
-
-        } catch (DeviceManagementServiceException deviceMgtServiceEx) {
-            msg = "Device management service error";
-            log.error(msg, deviceMgtServiceEx);
-            throw new AndroidAgentException(msg, deviceMgtServiceEx);
-        }
-
-        try {
-            boolean result = dmService.getOperationManager("").addOperation(null, null);
-            if (result) {
-                Response.status(HttpStatus.SC_OK);
-                responseMsg.setResponseMessage("Device has already enrolled");
-            } else {
-                Response.status(HttpStatus.SC_NOT_FOUND);
-                responseMsg.setResponseMessage("Operation not found");
-            }
-            return responseMsg;
-        } catch (DeviceManagementException e) {
-            msg = "Error occurred while fetching the operation manager for the device type.";
-            log.error(msg, e);
-            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            throw new AndroidAgentException(msg, e);
-        } catch (OperationManagementException e) {
-            msg = "Error occurred while updating the operation status for the device.";
-            log.error(msg, e);
-            Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            throw new AndroidAgentException(msg, e);
-        }
-    }
+	@PUT
+	public Message updateOperation() throws AndroidAgentException {
+		String msg;
+		DeviceManagementService dmService;
+		Message responseMsg = new Message();
+		try {
+			dmService = AndroidAPIUtils.getDeviceManagementService();
+			boolean result = dmService.getOperationManager("").addOperation(null, null);
+			if (result) {
+				Response.status(HttpStatus.SC_OK);
+				responseMsg.setResponseMessage("Device has already enrolled");
+			} else {
+				Response.status(HttpStatus.SC_NOT_FOUND);
+				responseMsg.setResponseMessage("Operation not found");
+			}
+			return responseMsg;
+		} catch (DeviceManagementServiceException deviceMgtServiceEx) {
+			msg = "Device management service error";
+			log.error(msg, deviceMgtServiceEx);
+			throw new AndroidAgentException(msg, deviceMgtServiceEx);
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while fetching the operation manager for the device type.";
+			log.error(msg, e);
+			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			throw new AndroidAgentException(msg, e);
+		} catch (OperationManagementException e) {
+			msg = "Error occurred while updating the operation status for the device.";
+			log.error(msg, e);
+			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			throw new AndroidAgentException(msg, e);
+		}
+	}
 }

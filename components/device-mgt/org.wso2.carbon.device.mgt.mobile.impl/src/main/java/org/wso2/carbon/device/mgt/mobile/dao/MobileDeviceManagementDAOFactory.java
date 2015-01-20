@@ -53,16 +53,16 @@ public class MobileDeviceManagementDAOFactory implements DataSourceListener {
         return new MobileDeviceDAOImpl(dataSource);
     }
 
-    public static OperationDAO getOperationDAO() {
-        return new OperationDAOImpl(dataSource);
+    public static MobileOperationDAO getMobileOperationDAO() {
+        return new MobileOperationDAOImpl(dataSource);
     }
 
-    public static OperationPropertyDAO geOperationPropertyDAO() {
-        return new OperationPropertyDAOImpl(dataSource);
+    public static MobileOperationPropertyDAO getMobileOperationPropertyDAO() {
+        return new MobileOperationPropertyDAOImpl(dataSource);
     }
 
-    public static DeviceOperationDAO getDeviceOperationDAO() {
-        return new DeviceOperationDAOImpl(dataSource);
+    public static MobileDeviceOperationDAO getMobileDeviceOperationDAO() {
+        return new MobileDeviceOperationDAOImpl(dataSource);
     }
 
     public static FeatureDAO getFeatureDAO() {

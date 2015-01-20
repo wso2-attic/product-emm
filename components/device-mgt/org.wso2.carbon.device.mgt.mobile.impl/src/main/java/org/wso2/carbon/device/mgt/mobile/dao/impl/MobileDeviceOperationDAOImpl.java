@@ -18,10 +18,10 @@ package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.mobile.dao.FeaturePropertyDAO;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceOperationDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.dao.util.MobileDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.mobile.dto.FeatureProperty;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileDeviceOperation;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -32,19 +32,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of FeaturePropertyDAO.
+ * Implementation of MobileDeviceOperationDAO.
  */
-public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
+public class MobileDeviceOperationDAOImpl implements MobileDeviceOperationDAO {
 
 	private DataSource dataSource;
-	private static final Log log = LogFactory.getLog(FeaturePropertyDAOImpl.class);
+	private static final Log log = LogFactory.getLog(MobileDeviceOperationDAOImpl.class);
 
-	public FeaturePropertyDAOImpl(DataSource dataSource) {
+	public MobileDeviceOperationDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	public boolean addFeatureProperty(FeatureProperty featureProperty)
+	public boolean addMobileDeviceOperation(MobileDeviceOperation deviceOperation)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -52,18 +52,23 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		try {
 			conn = this.getConnection();
 			String createDBQuery =
-					"INSERT INTO MBL_FEATURE_PROPERTY(PROPERTY, FEATURE_ID) VALUES (?, ?)";
+					"INSERT INTO MBL_DEVICE_OPERATION(DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE) VALUES (?, ?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
-			stmt.setString(1, featureProperty.getProperty());
-			stmt.setString(2, featureProperty.getFeatureID());
+			stmt.setString(1, deviceOperation.getDeviceId());
+			stmt.setLong(2, deviceOperation.getOperationId());
+			stmt.setLong(3, deviceOperation.getSentDate());
+			stmt.setLong(4, deviceOperation.getReceivedDate());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while adding property id - '" +
-			             featureProperty.getFeatureID() + "'";
+			String msg = "Error occurred while adding device id - '" +
+			             deviceOperation.getDeviceId() + " and operation id - " +
+			             deviceOperation.getOperationId() +
+			             " to mapping table MBL_DEVICE_OPERATION";
+			;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -73,7 +78,7 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 	}
 
 	@Override
-	public boolean updateFeatureProperty(FeatureProperty featureProperty)
+	public boolean updateMobileDeviceOperation(MobileDeviceOperation deviceOperation)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -81,17 +86,20 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		try {
 			conn = this.getConnection();
 			String updateDBQuery =
-					"UPDATE MBL_FEATURE_PROPERTY SET FEATURE_ID = ? WHERE PROPERTY = ?";
+					"UPDATE MBL_DEVICE_OPERATION SET SENT_DATE = ?, RECEIVED_DATE = ? WHERE DEVICE_ID = ? AND OPERATION_ID=?";
 			stmt = conn.prepareStatement(updateDBQuery);
-			stmt.setString(1, featureProperty.getFeatureID());
-			stmt.setString(2, featureProperty.getProperty());
+			stmt.setLong(1, deviceOperation.getSentDate());
+			stmt.setLong(2, deviceOperation.getReceivedDate());
+			stmt.setString(3, deviceOperation.getDeviceId());
+			stmt.setInt(4, deviceOperation.getOperationId());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while updating the feature property with property - '" +
-			             featureProperty.getProperty() + "'";
+			String msg = "Error occurred while updating device id - '" +
+			             deviceOperation.getDeviceId() + " and operation id - " +
+			             deviceOperation.getOperationId() + " in table MBL_DEVICE_OPERATION";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -101,7 +109,7 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 	}
 
 	@Override
-	public boolean deleteFeatureProperty(String property)
+	public boolean deleteMobileDeviceOperation(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -109,16 +117,18 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		try {
 			conn = this.getConnection();
 			String deleteDBQuery =
-					"DELETE FROM MBL_FEATURE_PROPERTY WHERE PROPERTY = ?";
+					"DELETE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ? AND OPERATION_ID=?";
 			stmt = conn.prepareStatement(deleteDBQuery);
-			stmt.setString(1, property);
+			stmt.setString(1, deviceId);
+			stmt.setInt(2, operationId);
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while deleting feature property with property - " +
-			             property;
+			String msg =
+					"Error occurred while deleting the table entry MBL_DEVICE_OPERATION with  device id - '" +
+					deviceId + " and operation id - " + operationId;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -128,63 +138,71 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 	}
 
 	@Override
-	public FeatureProperty getFeatureProperty(String property)
+	public MobileDeviceOperation getMobileDeviceOperation(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		FeatureProperty featureProperty = null;
+		MobileDeviceOperation deviceOperation = null;
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT PROPERTY, FEATURE_ID FROM MBL_FEATURE_PROPERTY WHERE PROPERTY = ?";
+					"SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ? AND OPERATION_ID=?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, property);
+			stmt.setString(1, deviceId);
+			stmt.setInt(2, operationId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				featureProperty = new FeatureProperty();
-				featureProperty.setProperty(resultSet.getString(1));
-				featureProperty.setFeatureID(resultSet.getString(2));
+				deviceOperation = new MobileDeviceOperation();
+				deviceOperation.setDeviceId(resultSet.getString(1));
+				deviceOperation.setOperationId(resultSet.getInt(2));
+				deviceOperation.setSentDate(resultSet.getInt(3));
+				deviceOperation.setReceivedDate(resultSet.getInt(4));
 				break;
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while fetching property - '" +
-			             property + "'";
+			String msg =
+					"Error occurred while fetching table MBL_DEVICE_OPERATION entry with device id - '" +
+					deviceId + " and operation id - " + operationId;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
-		return featureProperty;
+		return deviceOperation;
 	}
 
 	@Override
-	public List<FeatureProperty> getFeaturePropertyOfFeature(String featureId)
+	public List<MobileDeviceOperation> getAllMobileDeviceOperationsOfDevice(String deviceId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		FeatureProperty featureProperty = null;
-		List<FeatureProperty> FeatureProperties = new ArrayList<FeatureProperty>();
+		MobileDeviceOperation deviceOperation = null;
+		List<MobileDeviceOperation> deviceOperations = new ArrayList<MobileDeviceOperation>();
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT PROPERTY, FEATURE_ID FROM MBL_FEATURE_PROPERTY WHERE FEATURE_ID = ?";
+					"SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, featureId);
+			stmt.setString(1, deviceId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				featureProperty = new FeatureProperty();
-				featureProperty.setProperty(resultSet.getString(1));
-				featureProperty.setFeatureID(resultSet.getString(2));
-				FeatureProperties.add(featureProperty);
+				deviceOperation = new MobileDeviceOperation();
+				deviceOperation.setDeviceId(resultSet.getString(1));
+				deviceOperation.setOperationId(resultSet.getInt(2));
+				deviceOperation.setSentDate(resultSet.getInt(3));
+				deviceOperation.setReceivedDate(resultSet.getInt(4));
+				deviceOperations.add(deviceOperation);
 			}
-			return FeatureProperties;
 		} catch (SQLException e) {
-			String msg = "Error occurred while fetching all feature property.'";
+			String msg =
+					"Error occurred while fetching mapping table MBL_DEVICE_OPERATION entries of device id - '" +
+					deviceId;
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
+		return deviceOperations;
 	}
 
 	private Connection getConnection() throws MobileDeviceManagementDAOException {

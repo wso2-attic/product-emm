@@ -48,20 +48,20 @@ public interface FeaturePropertyDAO {
 	/**
 	 * Delete a given feature property from feature property table.
 	 *
-	 * @param propertyId Id of the feature property to be deleted.
+	 * @param property Property of the feature property to be deleted.
 	 * @return The status of the operation. If the operationId was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteFeatureProperty(int propertyId) throws MobileDeviceManagementDAOException;
+	boolean deleteFeatureProperty(String property) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a given feature property from feature property table.
 	 *
-	 * @param propertyId Id of the feature property to be retrieved.
+	 * @param property Property of the feature property to be retrieved.
 	 * @return Feature property object that holds data of the feature property represented by propertyId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	FeatureProperty getFeatureProperty(int propertyId) throws MobileDeviceManagementDAOException;
+	FeatureProperty getFeatureProperty(String property) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a list of feature property corresponds to a feature id .
