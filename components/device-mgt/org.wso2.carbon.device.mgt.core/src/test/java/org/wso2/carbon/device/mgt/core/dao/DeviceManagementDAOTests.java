@@ -147,7 +147,7 @@ public class DeviceManagementDAOTests {
         DeviceType deviceType = new DeviceType();
         deviceType.setId(Long.parseLong("1"));
 
-        device.setDeviceType(deviceType.getId().intValue());
+        device.setDeviceTypeId(deviceType.getId().intValue());
         device.setOwnerShip(OwnerShip.BYOD.toString());
         device.setOwnerId("111");
         device.setTenantId(-1234);
