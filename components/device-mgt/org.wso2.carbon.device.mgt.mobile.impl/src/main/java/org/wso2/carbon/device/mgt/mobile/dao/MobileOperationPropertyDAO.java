@@ -16,64 +16,65 @@
 
 package org.wso2.carbon.device.mgt.mobile.dao;
 
-import org.wso2.carbon.device.mgt.mobile.dto.DeviceOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperationProperty;
 
 import java.util.List;
 
 /**
- * This class represents the mapping between device and operations.
+ * This class represents the key operations associated with persisting operation property related
+ * information.
  */
-public interface DeviceOperationDAO {
+public interface MobileOperationPropertyDAO {
 	/**
-	 * Add a new mapping to plugin device_operation table.
+	 * Add a new mapping to plugin operation property table.
 	 *
-	 * @param deviceOperation DeviceOperation object that holds data related to the DeviceOperation
-	 *                        to be inserted.
+	 * @param operationProperty OperationProperty object that holds data related to the operation
+	 *       property to be inserted.
 	 * @return The status of the operation. If the insert was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean addDeviceOperation(DeviceOperation deviceOperation)
+	boolean addMobileOperationProperty(MobileOperationProperty operationProperty)
 			throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Update a feature in the feature table.
 	 *
-	 * @param deviceOperation DeviceOperation object that holds data has to be updated.
+	 * @param operationProperty DeviceOperation object that holds data has to be updated.
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateDeviceOperation(DeviceOperation deviceOperation)
+	boolean updateMobileOperationProperty(MobileOperationProperty operationProperty)
 			throws MobileDeviceManagementDAOException;
 
 	/**
-	 * Delete a given device operation from device operation table.
+	 * Deletes mobile operation properties of a given operation id from the plugin database.
 	 *
-	 * @param deviceId    Device id of the mapping to be deleted.
 	 * @param operationId Operation id of the mapping to be deleted.
 	 * @return The status of the operation. If the deletion was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteDeviceOperation(String deviceId, int operationId)
+	boolean deleteMobileOperationProperties(int operationId)
 			throws MobileDeviceManagementDAOException;
 
 	/**
-	 * Retrieve a given device operation from plugin database.
+	 * Retrieve a given mobile operation property from plugin database.
 	 *
-	 * @param deviceId    Device id of the mapping to be retrieved.
 	 * @param operationId Operation id of the mapping to be retrieved.
+	 * @param property    Property of the mapping to be retrieved.
 	 * @return DeviceOperation object that holds data of the device operation mapping represented by
-	 * deviceId and operationId.
+	 *         deviceId and operationId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	DeviceOperation getDeviceOperation(String deviceId, int operationId)
+	MobileOperationProperty getMobileOperationProperty(int operationId, String property)
 			throws MobileDeviceManagementDAOException;
 
 	/**
-	 * Retrieve all the device operation mapping from plugin database.
+	 * Retrieve all the mobile operation properties related to the a operation id.
 	 *
+	 * @param operationId Operation id of the mapping to be retrieved.
 	 * @return Device operation mapping object list.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	List<DeviceOperation> getAllDeviceOperationOfDevice(String deviceId)
+	List<MobileOperationProperty> getAllMobileOperationPropertiesOfOperation(int operationId)
 			throws MobileDeviceManagementDAOException;
 }

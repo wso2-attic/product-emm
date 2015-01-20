@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,21 @@
 package org.wso2.carbon.device.mgt.mobile.dto;
 
 /**
- * DTO of operation property.
+ * DTO of Mobile Device Operations.
  */
-public class OperationProperty {
+public class MobileDeviceOperation {
 
-	private int operationPropertyId;
+	private String deviceId;
 	private int operationId;
-	private int propertyId;
-	private String value;
+	private long sentDate;
+	private long receivedDate;
 
-	public String getValue() {
-		return value;
+	public String getDeviceId() {
+		return deviceId;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public int getOperationPropertyId() {
-		return operationPropertyId;
-	}
-
-	public void setOperationPropertyId(int operationPropertyId) {
-		this.operationPropertyId = operationPropertyId;
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 
 	public int getOperationId() {
@@ -50,12 +42,20 @@ public class OperationProperty {
 		this.operationId = operationId;
 	}
 
-	public int getPropertyId() {
-		return propertyId;
+	public long getSentDate() {
+		return sentDate;
 	}
 
-	public void setPropertyId(int propertyId) {
-		this.propertyId = propertyId;
+	public void setSentDate(long sentDate) {
+		this.sentDate = sentDate;
+	}
+
+	public long getReceivedDate() {
+		return receivedDate;
+	}
+
+	public void setReceivedDate(long receivedDate) {
+		this.receivedDate = receivedDate;
 	}
 
 }

@@ -21,9 +21,11 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.Operation;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
-import org.wso2.carbon.device.mgt.mobile.dto.Operation;
-import org.wso2.carbon.device.mgt.mobile.dto.OperationProperty;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileDeviceOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperationProperty;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -69,7 +71,7 @@ public class MobileDeviceManagementUtil {
 
 	private static Device.Property getProperty(String property, String value) {
 		Device.Property prop = null;
-		if(property != null){
+		if (property != null) {
 			prop = new Device.Property();
 			prop.setName(property);
 			prop.setValue(value);
@@ -89,40 +91,66 @@ public class MobileDeviceManagementUtil {
 			mobileDevice.setModel(getPropertyValue(device, MOBILE_DEVICE_MODEL));
 			mobileDevice.setOsVersion(getPropertyValue(device, MOBILE_DEVICE_OS_VERSION));
 			mobileDevice.setVendor(getPropertyValue(device, MOBILE_DEVICE_VENDOR));
-			mobileDevice.setLatitude(getPropertyValue(device,MOBILE_DEVICE_LATITUDE));
-			mobileDevice.setLongitude(getPropertyValue(device,MOBILE_DEVICE_LONGITUDE));
+			mobileDevice.setLatitude(getPropertyValue(device, MOBILE_DEVICE_LATITUDE));
+			mobileDevice.setLongitude(getPropertyValue(device, MOBILE_DEVICE_LONGITUDE));
 		}
 		return mobileDevice;
 	}
 
 	public static Device convertToDevice(MobileDevice mobileDevice) {
 		Device device = null;
-		if(mobileDevice!=null){
+		if (mobileDevice != null) {
 			device = new Device();
 			List<Device.Property> propertyList = new ArrayList<Device.Property>();
-			propertyList.add(getProperty(MOBILE_DEVICE_IMEI,mobileDevice.getImei()));
-			propertyList.add(getProperty(MOBILE_DEVICE_IMSI,mobileDevice.getImsi()));
-			propertyList.add(getProperty(MOBILE_DEVICE_REG_ID,mobileDevice.getRegId()));
-			propertyList.add(getProperty(MOBILE_DEVICE_MODEL,mobileDevice.getModel()));
-			propertyList.add(getProperty(MOBILE_DEVICE_OS_VERSION,mobileDevice.getOsVersion()));
-			propertyList.add(getProperty(MOBILE_DEVICE_VENDOR,mobileDevice.getVendor()));
-			propertyList.add(getProperty(MOBILE_DEVICE_LATITUDE,mobileDevice.getLatitude()));
-			propertyList.add(getProperty(MOBILE_DEVICE_LONGITUDE,mobileDevice.getLongitude()));
+			propertyList.add(getProperty(MOBILE_DEVICE_IMEI, mobileDevice.getImei()));
+			propertyList.add(getProperty(MOBILE_DEVICE_IMSI, mobileDevice.getImsi()));
+			propertyList.add(getProperty(MOBILE_DEVICE_REG_ID, mobileDevice.getRegId()));
+			propertyList.add(getProperty(MOBILE_DEVICE_MODEL, mobileDevice.getModel()));
+			propertyList.add(getProperty(MOBILE_DEVICE_OS_VERSION, mobileDevice.getOsVersion()));
+			propertyList.add(getProperty(MOBILE_DEVICE_VENDOR, mobileDevice.getVendor()));
+			propertyList.add(getProperty(MOBILE_DEVICE_LATITUDE, mobileDevice.getLatitude()));
+			propertyList.add(getProperty(MOBILE_DEVICE_LONGITUDE, mobileDevice.getLongitude()));
 			device.setProperties(propertyList);
 			device.setDeviceIdentifier(mobileDevice.getMobileDeviceId());
 		}
 		return device;
 	}
 
-	public static Operation convertToOperation(org.wso2.carbon.device.mgt.common.Operation operation){
-		Operation mobileOperation = new Operation();
-		List<OperationProperty> properties = new LinkedList<OperationProperty>();
+	public static MobileOperation convertToMobileOperation(
+			org.wso2.carbon.device.mgt.common.Operation operation) {
+		MobileOperation mobileOperation = new MobileOperation();
+		MobileOperationProperty operationProperty = null;
+		List<MobileOperationProperty> properties = new LinkedList<MobileOperationProperty>();
 		mobileOperation.setFeatureCode(operation.getCode());
 		mobileOperation.setCreatedDate(new Date().getTime());
 		Properties operationProperties = operation.getProperties();
-		for(String key : operationProperties.stringPropertyNames()) {
-			String value = operationProperties.getProperty(key);
+		for (String key : operationProperties.stringPropertyNames()) {
+			operationProperty = new MobileOperationProperty();
+			operationProperty.setProperty(key);
+			operationProperty.setValue(operationProperties.getProperty(key));
+			properties.add(operationProperty);
 		}
+		mobileOperation.setProperties(properties);
 		return mobileOperation;
+	}
+
+	public static List<Integer> getMobileOperationIdsFromMobileDeviceOperations(
+			List<MobileDeviceOperation> mobileDeviceOperations) {
+		List<Integer> mobileOperationIds = new ArrayList<Integer>();
+		for(MobileDeviceOperation mobileDeviceOperation:mobileDeviceOperations){
+			mobileOperationIds.add(mobileDeviceOperation.getOperationId());
+		}
+		return mobileOperationIds;
+	}
+
+	public static Operation convertMobileOperationToOperation(MobileOperation mobileOperation){
+		Operation operation = new Operation();
+		Properties properties = new Properties();
+		operation.setCode(mobileOperation.getFeatureCode());
+		for(MobileOperationProperty mobileOperationProperty:mobileOperation.getProperties()){
+			properties.put(mobileOperationProperty.getProperty(),mobileOperationProperty.getValue());
+		}
+		operation.setProperties(properties);
+		return operation;
 	}
 }

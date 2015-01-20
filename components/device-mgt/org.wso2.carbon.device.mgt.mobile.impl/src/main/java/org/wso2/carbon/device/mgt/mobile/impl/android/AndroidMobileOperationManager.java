@@ -18,15 +18,17 @@ package org.wso2.carbon.device.mgt.mobile.impl.android;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.Operation;
 import org.wso2.carbon.device.mgt.common.OperationManagementException;
 import org.wso2.carbon.device.mgt.mobile.AbstractMobileOperationManager;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOFactory;
-import org.wso2.carbon.device.mgt.mobile.dto.DeviceOperation;
-import org.wso2.carbon.device.mgt.mobile.dto.OperationProperty;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileDeviceOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileOperationProperty;
+import org.wso2.carbon.device.mgt.mobile.util.MobileDeviceManagementUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AndroidMobileOperationManager extends AbstractMobileOperationManager {
@@ -36,26 +38,67 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 	@Override
 	public boolean addOperation(Operation operation, List<DeviceIdentifier> devices) throws
 	                                                                                 OperationManagementException {
+		boolean status = false;
 		try {
-			MobileDeviceManagementDAOFactory.getOperationDAO().addOperation(
-					new org.wso2.carbon.device.mgt.mobile.dto.Operation());
-			MobileDeviceManagementDAOFactory.geOperationPropertyDAO()
-			                                .addOperationProperty(new OperationProperty());
-			MobileDeviceManagementDAOFactory.getDeviceOperationDAO()
-			                                .addDeviceOperation(new DeviceOperation());
+			MobileDeviceOperation mobileDeviceOperation = null;
+			MobileOperation mobileOperation =
+					MobileDeviceManagementUtil.convertToMobileOperation(operation);
+			int operationId = MobileDeviceManagementDAOFactory.getMobileOperationDAO()
+			                                                  .addMobileOperation(mobileOperation);
+			if (operationId > 0) {
+				for (MobileOperationProperty operationProperty : mobileOperation.getProperties()) {
+					operationProperty.setOperationId(operationId);
+					status = MobileDeviceManagementDAOFactory.getMobileOperationPropertyDAO()
+					                                         .addMobileOperationProperty(
+							                                         operationProperty);
+				}
+				for (DeviceIdentifier deviceIdentifier : devices) {
+					mobileDeviceOperation = new MobileDeviceOperation();
+					mobileDeviceOperation.setOperationId(operationId);
+					mobileDeviceOperation.setDeviceId(deviceIdentifier.getId());
+					status = MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
+					                                         .addMobileDeviceOperation(
+							                                         new MobileDeviceOperation());
+				}
+			}
 		} catch (MobileDeviceManagementDAOException e) {
-			String msg = "Error while updating the enrollment of the Android device : " +
-			             devices.get(0).getId();
+			String msg =
+					"Error while adding an operation " + operation.getCode() + "to Android devices";
 			log.error(msg, e);
 			throw new OperationManagementException(msg, e);
 		}
-		return false;
+		return status;
 	}
 
 	@Override
 	public List<Operation> getOperations(DeviceIdentifier deviceIdentifier)
 			throws OperationManagementException {
-		return null;
+		List<Operation> operations = new ArrayList<Operation>();
+		List<MobileDeviceOperation> mobileDeviceOperations = null;
+		MobileOperation mobileOperation = null;
+		try {
+			mobileDeviceOperations = MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
+			                                                         .getAllMobileDeviceOperationsOfDevice(
+					                                                         deviceIdentifier
+							                                                         .getId());
+			if (mobileDeviceOperations.size() > 0) {
+				List<Integer> operationIds = MobileDeviceManagementUtil
+						.getMobileOperationIdsFromMobileDeviceOperations(mobileDeviceOperations);
+				for (Integer operationId : operationIds) {
+					mobileOperation = MobileDeviceManagementDAOFactory.getMobileOperationDAO()
+					                                                  .getMobileOperation(
+							                                                  operationId);
+					operations.add(MobileDeviceManagementUtil
+							               .convertMobileOperationToOperation(mobileOperation));
+				}
+			}
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg =
+					"Error while fetching the operations for the android device " +
+					deviceIdentifier.getId();
+			log.error(msg, e);
+			throw new OperationManagementException(msg, e);
+		}
+		return operations;
 	}
-
 }

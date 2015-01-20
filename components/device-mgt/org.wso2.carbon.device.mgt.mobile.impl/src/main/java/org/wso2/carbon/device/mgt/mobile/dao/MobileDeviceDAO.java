@@ -25,14 +25,14 @@ import java.util.List;
  */
 public interface MobileDeviceDAO {
 
-	MobileDevice getDevice(String deviceId) throws MobileDeviceManagementDAOException;
+	MobileDevice getMobileDevice(String deviceId) throws MobileDeviceManagementDAOException;
 
-	boolean addDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
+	boolean addMobileDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
 
-	boolean updateDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
+	boolean updateMobileDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException;
 
-	boolean deleteDevice(String deviceId) throws MobileDeviceManagementDAOException;
+	boolean deleteMobileDevice(String deviceId) throws MobileDeviceManagementDAOException;
 
-	List<MobileDevice> getAllDevices() throws MobileDeviceManagementDAOException;
+	List<MobileDevice> getAllMobileDevices() throws MobileDeviceManagementDAOException;
 
 }

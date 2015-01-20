@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of FeatureDAO
+ * Implementation of FeatureDAO.
  */
 public class FeatureDAOImpl implements FeatureDAO {
 

@@ -21,7 +21,6 @@ package org.wso2.carbon.device.mgt.mobile.dto;
  */
 public class FeatureProperty {
 
-	private int propertyId;
 	private String property;
 	private String featureID;
 
@@ -31,14 +30,6 @@ public class FeatureProperty {
 
 	public void setFeatureID(String featureID) {
 		this.featureID = featureID;
-	}
-
-	public int getPropertyId() {
-		return propertyId;
-	}
-
-	public void setPropertyId(int propertyId) {
-		this.propertyId = propertyId;
 	}
 
 	public String getProperty() {
