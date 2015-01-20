@@ -40,12 +40,12 @@ import org.wso2.cdm.agent.utils.Responce;
  */
 public class ServerDetails extends Activity {
 
-	TextView serverIP;
-	Button startRegistration;
+	TextView evServerIP;
+	Button btnStartRegistration;
 	Context context;
 	DialogInterface.OnClickListener dialogClickListener;
 	DeviceInfo info;
-	TextView severAddressLabel;
+	TextView tvSeverAddress;
 
 	String senderID = null;
 	ProgressDialog progressDialog;
@@ -62,49 +62,51 @@ public class ServerDetails extends Activity {
 		setContentView(R.layout.activity_settings);
 		context = ServerDetails.this;
 		info = new DeviceInfo(ServerDetails.this);
-		serverIP = (TextView) findViewById(R.id.etServerIP);
-		severAddressLabel = (TextView) findViewById(R.id.severAddressLabel);
-		startRegistration = (Button) findViewById(R.id.startRegistration);
+		evServerIP = (TextView) findViewById(R.id.evServerIP);
+		tvSeverAddress = (TextView) findViewById(R.id.tvSeverAddress);
+		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
 
 		// Checking if the device meets minimum requirements
 		Responce compatibility = info.isCompatible();
 		if (!compatibility.getCode()) {
-			startRegistration.setVisibility(View.GONE);
-			severAddressLabel.setVisibility(View.GONE);
-			serverIP.setVisibility(View.GONE);
+			btnStartRegistration.setVisibility(View.GONE);
+			tvSeverAddress.setVisibility(View.GONE);
+			evServerIP.setVisibility(View.GONE);
 			alertDialog =
-			              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context.getApplicationContext(),
+			              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
 			                                                                    getResources().getString(R.string.error_authorization_failed),
 			                                                                    getResources().getString(compatibility.getDescriptionResourceID()),
 			                                                                    getResources().getString(R.string.button_ok),
 			                                                                    onRootedClickListner);
 		} else {
-			startRegistration.setVisibility(View.VISIBLE);
-			serverIP.setVisibility(View.VISIBLE);
+			btnStartRegistration.setVisibility(View.VISIBLE);
+			evServerIP.setVisibility(View.VISIBLE);
 			String ipSaved =
 			                 Preference.get(context.getApplicationContext(),
 			                                getResources().getString(R.string.shared_pref_ip));
-			regId = Preference.get(context.getApplicationContext().getApplicationContext(), getResources().getString(R.string.shared_pref_regId));
+			regId = Preference.get(context.getApplicationContext(), getResources().getString(R.string.shared_pref_regId));
 
-			//heck if we have the IP saved previously.
+			//check if we have the IP saved previously.
 			if (ipSaved != null) {
-				serverIP.setText(ipSaved);
+				evServerIP.setText(ipSaved);
 				CommonUtilities.setServerURL(ipSaved);
 				startAuthenticationActivity();
 			} else {
-				serverIP.setText(CommonUtilities.SERVER_IP);
+				evServerIP.setText(CommonUtilities.SERVER_IP);
 			}
 
 			// on click handler for start registration
-			startRegistration.setOnClickListener(new OnClickListener() {
+			btnStartRegistration.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(ServerDetails.this);
-					builder.setMessage(getResources().getString(R.string.dialog_init_confirmation) +
-					                           " " +
-					                           serverIP.getText().toString() +
-					                           " " +
-					                           getResources().getString(R.string.dialog_init_end_general))
+					AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ServerDetails.this);
+					StringBuilder messageBuilder = new StringBuilder();
+					messageBuilder.append(getResources().getString(R.string.dialog_init_confirmation));
+					messageBuilder.append(" ");
+					messageBuilder.append(evServerIP.getText().toString());
+					messageBuilder.append(" ");
+					messageBuilder.append(getResources().getString(R.string.dialog_init_end_general));
+					alertBuilder.setMessage(messageBuilder.toString())
 					       .setPositiveButton(getResources().getString(R.string.yes),
 					                          dialogClickListener)
 					       .setNegativeButton(getResources().getString(R.string.no),
@@ -117,11 +119,11 @@ public class ServerDetails extends Activity {
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
 						case DialogInterface.BUTTON_POSITIVE:
-							if (!serverIP.getText().toString().trim().equals("")) {
-								CommonUtilities.setServerURL(serverIP.getText().toString().trim());
+							if (!evServerIP.getText().toString().trim().equals("")) {
+								CommonUtilities.setServerURL(evServerIP.getText().toString().trim());
 								Preference.put(context.getApplicationContext(),
 								               getResources().getString(R.string.shared_pref_ip),
-								               serverIP.getText().toString().trim());
+								               evServerIP.getText().toString().trim());
 								startAuthenticationActivity();
 
 							} else {
@@ -148,6 +150,9 @@ public class ServerDetails extends Activity {
 		}
 	};
 
+	/**
+	 *  This method is called to open AuthenticationActivity.
+	 */
 	private void startAuthenticationActivity() {
 		Intent intent = new Intent(ServerDetails.this, AuthenticationActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -161,10 +166,13 @@ public class ServerDetails extends Activity {
 	 */
 	@Override
 	protected void onDestroy() {
-		//Avoiding memory leaks by destroying context object
 		context = null;
 		super.onDestroy();
 	}
+	
+	
+	
+	
 
 	// Old API manager communication code.
 	//
