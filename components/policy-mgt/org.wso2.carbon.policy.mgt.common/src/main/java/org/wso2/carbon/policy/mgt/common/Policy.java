@@ -23,8 +23,35 @@ import java.util.List;
 public class Policy {
     private int id;
     private String policyName;
-    private List<Feature>  featuresList;
+    private List<Feature> featuresList;
     private boolean generic;
+    private List<String> roleList;
+    private List<String> DeviceList;
+    private String deviceType;
+
+    public List<String> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<String> roleList) {
+        this.roleList = roleList;
+    }
+
+    public List<String> getDeviceList() {
+        return DeviceList;
+    }
+
+    public void setDeviceList(List<String> deviceList) {
+        DeviceList = deviceList;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
 
     public boolean isGeneric() {
         return generic;

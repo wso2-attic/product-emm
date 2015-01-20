@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*  Copyright (c) 2015 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 *
 *  WSO2 Inc. licenses this file to you under the Apache License,
 *  Version 2.0 (the "License"); you may not use this file except
@@ -16,19 +16,26 @@
 * under the License.
 */
 
-package org.wso2.carbon.policy.evaluator.spi;
+package org.wso2.carbon.policy.evaluator;
 
+public class FeatureRules {
 
-import org.wso2.carbon.policy.evaluator.FeatureRules;
-import org.wso2.carbon.policy.mgt.common.Feature;
-import org.wso2.carbon.policy.mgt.common.Policy;
+    private String name;
+    private String evaluationCriteria;
 
-import java.util.List;
+    public String getName() {
+        return name;
+    }
 
-public interface PDPService {
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    List<Policy> getEffectivePolicyList(List<Policy> policies, List<String> roles, String deviceType);
+    public String getEvaluationCriteria() {
+        return evaluationCriteria;
+    }
 
-    List<Feature> getEffectiveFeatureList(List<Policy> policies, List<FeatureRules> featureRulesList);
-
+    public void setEvaluationCriteria(String evaluationCriteria) {
+        this.evaluationCriteria = evaluationCriteria;
+    }
 }

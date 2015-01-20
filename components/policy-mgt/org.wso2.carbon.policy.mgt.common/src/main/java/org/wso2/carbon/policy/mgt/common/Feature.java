@@ -24,6 +24,15 @@ public class Feature {
     private String code;
     private String name;
     private Object attribute;
+    private String ruleValue;
+
+    public String getRuleValue() {
+        return ruleValue;
+    }
+
+    public void setRuleValue(String ruleValue) {
+        this.ruleValue = ruleValue;
+    }
 
     public int getId() {
         return id;
