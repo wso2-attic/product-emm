@@ -35,11 +35,48 @@
     <name>WSO2 CDM - Integration Test Ui Pages</name>
 
     <dependencies>
-
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.integration.common.admin.client</artifactId>
             <scope>compile</scope>
+	    <exclusions>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
+                </exclusion>
+                <exclusion>
+          	   <groupId>org.wso2.carbon</groupId>
+          	   <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
+        	</exclusion>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.ndatasource.stub</artifactId>
+                </exclusion>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.server.admin.stub</artifactId>
+                </exclusion>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.throttle.stub</artifactId>
+                </exclusion>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.tenant.mgt.stub</artifactId>
+                </exclusion>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.application.mgt.stub</artifactId>
+                </exclusion>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.security.mgt.stub</artifactId>
+                </exclusion>
+		<exclusion>
+                   <groupId>org.wso2.carbon</groupId>
+                   <artifactId>org.wso2.carbon.identity.user.profile.stub</artifactId>
+                </exclusion>
+      	    </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>

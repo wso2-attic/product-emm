@@ -19,7 +19,7 @@
     <ManagementRepository>
         <DataSourceConfiguration>
             <JndiLookupDefinition>
-                <Name>jdbc/MOBILE_MGT_DS</Name>
+                <Name>jdbc/MobileDM_DS</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
     </ManagementRepository>
@@ -28,7 +28,7 @@
 	<APIs>
 	    <API>
 	       <Name>enrollment</Name>
-	       <Provider>admin</Provider>
+	       <Owner>admin</Owner>
 	       <Context>enrollment</Context>
 	       <Version>1.0.0</Version>
 	       <Endpoint>http://localhost:9763/</Endpoint>

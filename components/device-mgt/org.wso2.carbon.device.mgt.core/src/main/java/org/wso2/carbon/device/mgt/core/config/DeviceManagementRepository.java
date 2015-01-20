@@ -29,7 +29,7 @@ public class DeviceManagementRepository {
 
     private DataSourceConfig dataSourceConfig;
 
-	@XmlElement(name = "DataSourceConfiguration", nillable = false)
+	@XmlElement(name = "DataSourceConfiguration", required = false)
 	public DataSourceConfig getDataSourceConfig() {
 		return dataSourceConfig;
 	}

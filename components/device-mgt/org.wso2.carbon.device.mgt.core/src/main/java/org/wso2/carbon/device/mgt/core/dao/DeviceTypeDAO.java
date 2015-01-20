@@ -17,7 +17,6 @@
  */
 package org.wso2.carbon.device.mgt.core.dao;
 
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 
 import java.util.List;
@@ -33,8 +32,10 @@ public interface DeviceTypeDAO {
 
     List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException;
 
-    DeviceIdentifier getDeviceType() throws DeviceManagementDAOException;
+    DeviceType getDeviceType(Integer id) throws DeviceManagementDAOException;
 
     Integer getDeviceTypeIdByDeviceTypeName(String type) throws DeviceManagementDAOException;
+
+    void removeDeviceType(DeviceType deviceType) throws DeviceManagementDAOException;
 
 }

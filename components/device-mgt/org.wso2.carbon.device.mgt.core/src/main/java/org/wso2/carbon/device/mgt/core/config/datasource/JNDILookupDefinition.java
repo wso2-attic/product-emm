@@ -27,7 +27,7 @@ public class JNDILookupDefinition {
 	private String jndiName;
 	private List<JNDIProperty> jndiProperties;
 
-	@XmlElement(name = "Name", nillable = false)
+	@XmlElement(name = "Name", required = false)
 	public String getJndiName() {
 		return jndiName;
 	}
@@ -36,7 +36,7 @@ public class JNDILookupDefinition {
 		this.jndiName = jndiName;
 	}
 
-	@XmlElementWrapper(name = "Environment", nillable = false)
+	@XmlElementWrapper(name = "Environment", required = false)
 	@XmlElement(name = "Property", nillable = false)
 	public List<JNDIProperty> getJndiProperties() {
 		return jndiProperties;

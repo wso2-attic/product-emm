@@ -41,7 +41,6 @@ public class AndroidAPIUtils {
 	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException{
 
         //TODO: complete login change super tenent context
-
 		DeviceManagementService dmService;
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -50,8 +49,9 @@ public class AndroidAPIUtils {
 		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
 
         if (dmService == null){
-            log.error("Device management service not initialized");
-            throw new DeviceManagementServiceException("device management service not initialized");
+	        String msg = "Device management service not initialized";
+	        log.error(msg);
+            throw new DeviceManagementServiceException(msg);
         }
         PrivilegedCarbonContext.endTenantFlow();
 		return dmService;

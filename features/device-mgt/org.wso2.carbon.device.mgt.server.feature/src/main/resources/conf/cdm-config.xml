@@ -18,7 +18,7 @@
     <ManagementRepository>
         <DataSourceConfiguration>
             <JndiLookupDefinition>
-                <Name>jdbc/DEVICE_MGT_DS</Name>
+                <Name>jdbc/DM_DS</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
     </ManagementRepository>

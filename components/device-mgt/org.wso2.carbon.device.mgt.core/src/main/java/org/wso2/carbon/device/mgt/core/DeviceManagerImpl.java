@@ -29,6 +29,7 @@ import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dao.DeviceTypeDAO;
 import org.wso2.carbon.device.mgt.core.dao.util.DeviceManagementDAOUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeviceManagerImpl implements DeviceManager {
@@ -51,10 +52,9 @@ public class DeviceManagerImpl implements DeviceManager {
         boolean status = dms.enrollDevice(device);
 
         try {
-            this.getDeviceTypeDAO().getDeviceType();
             org.wso2.carbon.device.mgt.core.dto.Device deviceDto = DeviceManagementDAOUtil.convertDevice(device);
             Integer deviceTypeId = this.getDeviceTypeDAO().getDeviceTypeIdByDeviceTypeName(device.getType());
-            deviceDto.setDeviceType(deviceTypeId);
+            deviceDto.setDeviceTypeId(deviceTypeId);
             this.getDeviceDAO().addDevice(deviceDto);
 
         } catch (DeviceManagementDAOException e) {
@@ -104,9 +104,29 @@ public class DeviceManagerImpl implements DeviceManager {
 
     @Override
     public List<Device> getAllDevices(String type) throws DeviceManagementException {
-        DeviceManagerService dms =
+      DeviceManagerService dms =
                 this.getPluginRepository().getDeviceManagementProvider(type);
-        return dms.getAllDevices();
+	    List<Device> devicesList = new ArrayList<Device>();
+        try {
+            Integer deviceTypeId = this.getDeviceTypeDAO().getDeviceTypeIdByDeviceTypeName(type);
+	        List<org.wso2.carbon.device.mgt.core.dto.Device> devices =
+			        this.getDeviceDAO().getDevices(deviceTypeId);
+
+            for (org.wso2.carbon.device.mgt.core.dto.Device device : devices) {
+                Device convertedDevice = DeviceManagementDAOUtil.convertDevice(device);
+                DeviceIdentifier deviceIdentifier = DeviceManagementDAOUtil
+                        .createDeviceIdentifier(device, this.deviceTypeDAO
+                                .getDeviceType(device.getDeviceTypeId()));
+                Device dmsDevice = dms.getDevice(deviceIdentifier);
+                convertedDevice.setProperties(dmsDevice.getProperties());
+                convertedDevice.setFeatures(dmsDevice.getFeatures());
+                devicesList.add(convertedDevice);
+            }
+        } catch (DeviceManagementDAOException e) {
+            throw new DeviceManagementException("Error occurred while obtaining the device for type '" + type + "'",
+                                                e);
+        }
+	    return devicesList;
     }
 
     @Override

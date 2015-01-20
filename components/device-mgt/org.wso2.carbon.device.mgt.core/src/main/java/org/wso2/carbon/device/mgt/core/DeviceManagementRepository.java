@@ -35,25 +35,26 @@ public class DeviceManagementRepository {
 
     public void addDeviceManagementProvider(DeviceManagerService provider) {
         String deviceType = provider.getProviderType();
-        providers.put(deviceType, provider);
         try {
             DeviceManagerUtil.registerDeviceType(deviceType);
         } catch (DeviceManagementException e) {
-            log.error("Exception occured while registering the device type.",e);
+            log.error("Exception occurred while registering the device type.", e);
         }
+        providers.put(deviceType, provider);
     }
 
     public void removeDeviceManagementProvider(DeviceManagerService provider) {
         String deviceType = provider.getProviderType();
+
+        try {
+            DeviceManagerUtil.unregisterDeviceType(deviceType);
+        } catch (DeviceManagementException e) {
+            log.error("Exception occurred while registering the device type.", e);
+        }
         providers.remove(deviceType);
     }
 
     public DeviceManagerService getDeviceManagementProvider(String type) {
         return providers.get(type);
     }
-
-    public Map<String, DeviceManagerService> getProviders() {
-        return providers;
-    }
-
 }
