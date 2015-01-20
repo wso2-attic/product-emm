@@ -27,7 +27,7 @@
               android:layout_height="wrap_content"
               android:layout_margin="5dp"
               android:singleLine="true"
-              android:id="@+id/txtDomain"
+              android:id="@+id/etDomain"
               android:hint="Domain"
               android:textColor="@android:color/black"
               android:inputType="text" />
@@ -37,7 +37,7 @@
               android:layout_height="wrap_content"
               android:layout_margin="5dp"
               android:singleLine="true"
-              android:id="@+id/username"
+              android:id="@+id/etUsername"
               android:hint="Username"
               android:textColor="@android:color/black"
               android:inputType="textEmailAddress" />
@@ -47,7 +47,7 @@
 
           <EditText
               android:inputType="textPassword"
-              android:id="@+id/editText2"
+              android:id="@+id/etPassword"
               android:layout_margin="5dp"
               android:textColor="@android:color/black"
               android:layout_width="match_parent"

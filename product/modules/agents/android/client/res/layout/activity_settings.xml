@@ -71,7 +71,7 @@
       </LinearLayout>
       <!-- Login Form Ends -->
 
-	  <TextView android:id="@+id/severAddressLabel"
+	  <TextView android:id="@+id/tvSeverAddress"
 	    android:layout_width="wrap_content"
 	    android:layout_below="@+id/linearLayout1"
 	    android:layout_marginLeft="10dp"
@@ -84,10 +84,10 @@
 	    android:text="@string/registration_heading"/>
 		
       <EditText
-          android:id="@+id/etServerIP"
+          android:id="@+id/evServerIP"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/severAddressLabel"
+          android:layout_below="@+id/tvSeverAddress"
           android:layout_centerHorizontal="true"
           android:layout_marginLeft="22dp"
           android:ems="10"
@@ -96,14 +96,14 @@
       </EditText>  
 
       <Button
-          android:id="@+id/startRegistration"
+          android:id="@+id/btnStartRegistration"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
           android:layout_margin="10dp"
           android:layout_centerHorizontal="true"
           style="@style/ButtonText"
           android:background="@drawable/btn_orange"
-          android:layout_below="@+id/etServerIP"
+          android:layout_below="@+id/evServerIP"
           android:text="Start Registration" />
      
   </RelativeLayout>
