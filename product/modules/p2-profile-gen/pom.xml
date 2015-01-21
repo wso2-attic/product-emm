@@ -467,7 +467,4 @@
         </plugins>
     </build>
 
-    <properties>
-        <apim.version>1.2.1</apim.version>
-    </properties>
 </project>
