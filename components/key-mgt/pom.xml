@@ -33,64 +33,13 @@
     <artifactId>key-mgt</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>WSO2 Carbon - Device Management Component</name>
+    <name>WSO2 Carbon - Oauth Key Management Component</name>
     <url>http://wso2.org</url>
 
     <modules>
         <module>org.wso2.carbon.key.mgt.handler.valve</module>
     </modules>
 
-<!--
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.eclipse.osgi</groupId>
-                <artifactId>org.eclipse.osgi</artifactId>
-                <version>3.8.1.v20120830-144521</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.equinox</groupId>
-                <artifactId>org.eclipse.equinox.common</artifactId>
-                <version>3.6.100.v20120522-1841</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.logging</artifactId>
-                <version>4.3.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.osgi</groupId>
-                <artifactId>org.eclipse.osgi.services</artifactId>
-                <version>3.3.100.v20120522-1822</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.apimgt.core</artifactId>
-                <version>${apim.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
-                <version>${apim.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat.wso2</groupId>
-                <artifactId>tomcat</artifactId>
-                <version>${orbit.version.tomcat}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
-                <version>4.3.0-SNAPSHOT</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
--->
 
     <build>
         <pluginManagement>
@@ -111,9 +60,5 @@
             </plugins>
         </pluginManagement>
     </build>
-<!--    <properties>
-        <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
-        <apim.version>1.2.1</apim.version>
-        <orbit.version.tomcat>7.0.52.wso2v5</orbit.version.tomcat>
-    </properties>-->
+
 </project>

@@ -39,12 +39,10 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.device.mgt.mobile.impl</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -102,7 +100,7 @@
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.device.mgt.server:${project.version}
+                                <importFeatureDef>org.wso2.carbon.device.mgt.server:${cdm.core.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>
