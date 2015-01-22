@@ -19,7 +19,7 @@ package org.wso2.carbon.device.mgt.mobile.dao;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileOperation;
 
 /**
- * This class represents the key operations associated with persisting operation related
+ * This class represents the key operations associated with persisting mobile operation related
  * information.
  */
 public interface MobileOperationDAO {

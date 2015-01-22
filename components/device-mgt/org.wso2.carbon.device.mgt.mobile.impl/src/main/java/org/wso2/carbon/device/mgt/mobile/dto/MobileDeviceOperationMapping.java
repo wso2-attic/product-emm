@@ -17,14 +17,37 @@
 package org.wso2.carbon.device.mgt.mobile.dto;
 
 /**
- * DTO of Mobile Device Operations.
+ * DTO of Mobile Device Operation Mappings.
  */
-public class MobileDeviceOperation {
+public class MobileDeviceOperationMapping {
 
 	private String deviceId;
 	private int operationId;
 	private long sentDate;
 	private long receivedDate;
+	private Status status;
+
+	public enum Status {
+		NEW, INPROGRESS, COMPLETED
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public void setStatus(String status) {
+		if(Status.NEW.name().equals(status)){
+			this.status = Status.NEW;
+		}else if(Status.INPROGRESS.name().equals(status)){
+			this.status = Status.INPROGRESS;
+		}else if(Status.COMPLETED.name().equals(status)){
+			this.status = Status.COMPLETED;
+		}
+	}
 
 	public String getDeviceId() {
 		return deviceId;

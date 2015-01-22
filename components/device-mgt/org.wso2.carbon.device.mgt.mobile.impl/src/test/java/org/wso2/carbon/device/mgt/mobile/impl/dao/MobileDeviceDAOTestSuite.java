@@ -14,30 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.dto;
+package org.wso2.carbon.device.mgt.mobile.impl.dao;
 
-/**
- * DTO of feature property. Represents a property of a feature.
- */
-public class FeatureProperty {
-
-	private String property;
-	private String featureID;
-
-	public String getFeatureID() {
-		return featureID;
-	}
-
-	public void setFeatureID(String featureID) {
-		this.featureID = featureID;
-	}
-
-	public String getProperty() {
-		return property;
-	}
-
-	public void setProperty(String property) {
-		this.property = property;
-	}
-
+public class MobileDeviceDAOTestSuite {
 }

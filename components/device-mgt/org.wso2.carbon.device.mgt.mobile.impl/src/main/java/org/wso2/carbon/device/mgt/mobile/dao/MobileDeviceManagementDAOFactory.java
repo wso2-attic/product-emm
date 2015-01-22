@@ -62,7 +62,7 @@ public class MobileDeviceManagementDAOFactory {
 			throw new RuntimeException("Device Management Repository data source configuration " +
 			                           "is null and thus, is not initialized");
 		}
-		JNDILookupDefinition jndiConfig = config.getJndiLookupDefintion();
+		JNDILookupDefinition jndiConfig = config.getJndiLookupDefinition();
 		if (jndiConfig != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Initializing Device Management Repository data source using the JNDI " +
@@ -98,16 +98,16 @@ public class MobileDeviceManagementDAOFactory {
 		return new MobileOperationPropertyDAOImpl(dataSource);
 	}
 
-	public static MobileDeviceOperationDAO getMobileDeviceOperationDAO() {
-		return new MobileDeviceOperationDAOImpl(dataSource);
+	public static MobileDeviceOperationMappingDAO getMobileDeviceOperationDAO() {
+		return new MobileDeviceOperationMappingDAOImpl(dataSource);
 	}
 
-	public static FeatureDAO getFeatureDAO() {
-		return new FeatureDAOImpl(dataSource);
+	public static MobileFeatureDAO getFeatureDAO() {
+		return new MobileFeatureDAOImpl(dataSource);
 	}
 
-	public static FeaturePropertyDAO getFeaturePropertyDAO() {
-		return new FeaturePropertyDAOImpl(dataSource);
+	public static MobileFeaturePropertyDAO getFeaturePropertyDAO() {
+		return new MobileFeaturePropertyDAOImpl(dataSource);
 	}
 
 	public static MobileDataSourceConfig getMobileDeviceManagementConfig() {

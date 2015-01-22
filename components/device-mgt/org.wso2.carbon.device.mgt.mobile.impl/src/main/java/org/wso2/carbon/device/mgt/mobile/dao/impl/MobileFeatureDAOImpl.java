@@ -18,10 +18,10 @@ package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.mobile.dao.FeatureDAO;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileFeatureDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.dao.util.MobileDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.mobile.dto.Feature;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileFeature;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -32,19 +32,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of FeatureDAO.
+ * Implementation of MobileFeatureDAO.
  */
-public class FeatureDAOImpl implements FeatureDAO {
+public class MobileFeatureDAOImpl implements MobileFeatureDAO {
 
 	private DataSource dataSource;
-	private static final Log log = LogFactory.getLog(FeatureDAOImpl.class);
+	private static final Log log = LogFactory.getLog(MobileFeatureDAOImpl.class);
 
-	public FeatureDAOImpl(DataSource dataSource) {
+	public MobileFeatureDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	public boolean addFeature(Feature feature) throws MobileDeviceManagementDAOException {
+	public boolean addFeature(MobileFeature mobileFeature) throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -54,16 +54,16 @@ public class FeatureDAOImpl implements FeatureDAO {
 					"INSERT INTO MBL_FEATURE(CODE, NAME, DESCRIPTION) VALUES (?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
-			stmt.setString(1, feature.getCode());
-			stmt.setString(2, feature.getName());
-			stmt.setString(3, feature.getDescription());
+			stmt.setString(1, mobileFeature.getCode());
+			stmt.setString(2, mobileFeature.getName());
+			stmt.setString(3, mobileFeature.getDescription());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while adding feature code - '" +
-			             feature.getCode() + "' to feature table";
+			             mobileFeature.getCode() + "' to feature table";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -73,7 +73,7 @@ public class FeatureDAOImpl implements FeatureDAO {
 	}
 
 	@Override
-	public boolean updateFeature(Feature feature)
+	public boolean updateFeature(MobileFeature mobileFeature)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -83,17 +83,17 @@ public class FeatureDAOImpl implements FeatureDAO {
 			String updateDBQuery =
 					"UPDATE MBL_FEATURE SET CODE = ?, NAME = ?, DESCRIPTION = ? WHERE FEATURE_ID = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
-			stmt.setString(1, feature.getCode());
-			stmt.setString(2, feature.getName());
-			stmt.setString(3, feature.getDescription());
-			stmt.setInt(4, feature.getId());
+			stmt.setString(1, mobileFeature.getCode());
+			stmt.setString(2, mobileFeature.getName());
+			stmt.setString(3, mobileFeature.getDescription());
+			stmt.setInt(4, mobileFeature.getId());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while updating the feature with feature code - '" +
-			             feature.getId() + "'";
+			             mobileFeature.getId() + "'";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -155,11 +155,11 @@ public class FeatureDAOImpl implements FeatureDAO {
 	}
 
 	@Override
-	public Feature getFeatureByCode(String featureCode)
+	public MobileFeature getFeatureByCode(String featureCode)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		Feature feature = null;
+		MobileFeature mobileFeature = null;
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -168,11 +168,11 @@ public class FeatureDAOImpl implements FeatureDAO {
 			stmt.setString(1, featureCode);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				feature = new Feature();
-				feature.setId(resultSet.getInt(1));
-				feature.setCode(resultSet.getString(2));
-				feature.setName(resultSet.getString(3));
-				feature.setDescription(resultSet.getString(4));
+				mobileFeature = new MobileFeature();
+				mobileFeature.setId(resultSet.getInt(1));
+				mobileFeature.setCode(resultSet.getString(2));
+				mobileFeature.setName(resultSet.getString(3));
+				mobileFeature.setDescription(resultSet.getString(4));
 				break;
 			}
 		} catch (SQLException e) {
@@ -183,15 +183,15 @@ public class FeatureDAOImpl implements FeatureDAO {
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
-		return feature;
+		return mobileFeature;
 	}
 
 	@Override
-	public Feature getFeatureById(String featureID)
+	public MobileFeature getFeatureById(String featureID)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		Feature feature = null;
+		MobileFeature mobileFeature = null;
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -200,11 +200,11 @@ public class FeatureDAOImpl implements FeatureDAO {
 			stmt.setString(1, featureID);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				feature = new Feature();
-				feature.setId(resultSet.getInt(1));
-				feature.setCode(resultSet.getString(2));
-				feature.setName(resultSet.getString(3));
-				feature.setDescription(resultSet.getString(4));
+				mobileFeature = new MobileFeature();
+				mobileFeature.setId(resultSet.getInt(1));
+				mobileFeature.setCode(resultSet.getString(2));
+				mobileFeature.setName(resultSet.getString(3));
+				mobileFeature.setDescription(resultSet.getString(4));
 				break;
 			}
 		} catch (SQLException e) {
@@ -215,15 +215,15 @@ public class FeatureDAOImpl implements FeatureDAO {
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
-		return feature;
+		return mobileFeature;
 	}
 
 	@Override
-	public List<Feature> getAllFeatures() throws MobileDeviceManagementDAOException {
+	public List<MobileFeature> getAllFeatures() throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		Feature feature;
-		List<Feature> features = new ArrayList<Feature>();
+		MobileFeature mobileFeature;
+		List<MobileFeature> mobileFeatures = new ArrayList<MobileFeature>();
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -231,14 +231,14 @@ public class FeatureDAOImpl implements FeatureDAO {
 			stmt = conn.prepareStatement(selectDBQuery);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				feature = new Feature();
-				feature.setId(resultSet.getInt(1));
-				feature.setCode(resultSet.getString(2));
-				feature.setName(resultSet.getString(3));
-				feature.setDescription(resultSet.getString(4));
-				features.add(feature);
+				mobileFeature = new MobileFeature();
+				mobileFeature.setId(resultSet.getInt(1));
+				mobileFeature.setCode(resultSet.getString(2));
+				mobileFeature.setName(resultSet.getString(3));
+				mobileFeature.setDescription(resultSet.getString(4));
+				mobileFeatures.add(mobileFeature);
 			}
-			return features;
+			return mobileFeatures;
 		} catch (SQLException e) {
 			String msg = "Error occurred while fetching all features.'";
 			log.error(msg, e);

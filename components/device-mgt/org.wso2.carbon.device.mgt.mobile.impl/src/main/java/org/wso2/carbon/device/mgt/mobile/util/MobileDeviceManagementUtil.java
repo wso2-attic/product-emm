@@ -23,7 +23,7 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.Operation;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileDevice;
-import org.wso2.carbon.device.mgt.mobile.dto.MobileDeviceOperation;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileDeviceOperationMapping;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileOperation;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileOperationProperty;
 
@@ -115,10 +115,10 @@ public class MobileDeviceManagementUtil {
 	}
 
 	public static List<Integer> getMobileOperationIdsFromMobileDeviceOperations(
-			List<MobileDeviceOperation> mobileDeviceOperations) {
+			List<MobileDeviceOperationMapping> mobileDeviceOperationMappings) {
 		List<Integer> mobileOperationIds = new ArrayList<Integer>();
-		for(MobileDeviceOperation mobileDeviceOperation:mobileDeviceOperations){
-			mobileOperationIds.add(mobileDeviceOperation.getOperationId());
+		for(MobileDeviceOperationMapping mobileDeviceOperationMapping : mobileDeviceOperationMappings){
+			mobileOperationIds.add(mobileDeviceOperationMapping.getOperationId());
 		}
 		return mobileOperationIds;
 	}

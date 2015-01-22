@@ -15,13 +15,12 @@
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="EMM-core-initializer">
+<suite name="CDM-Mobile-Tests">
     <parameter name="useDefaultListeners" value="false"/>
 
     <test name="DAO Unit Tests" preserve-order="true">
         <parameter name="dbType" value="H2"/>
         <classes>
-
             <class name="org.wso2.carbon.device.mgt.mobile.impl.dao.FeatureDAOTestSuite"/>
         </classes>
     </test>

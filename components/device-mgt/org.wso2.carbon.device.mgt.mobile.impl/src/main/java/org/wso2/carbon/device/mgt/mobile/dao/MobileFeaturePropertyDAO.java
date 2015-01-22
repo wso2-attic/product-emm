@@ -16,33 +16,33 @@
 
 package org.wso2.carbon.device.mgt.mobile.dao;
 
-import org.wso2.carbon.device.mgt.mobile.dto.FeatureProperty;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileFeatureProperty;
 
 import java.util.List;
 
 /**
- * This class represents the key operations associated with persisting feature property related
+ * This class represents the key operations associated with persisting mobile feature property related
  * information.
  */
-public interface FeaturePropertyDAO {
+public interface MobileFeaturePropertyDAO {
 	/**
 	 * Add a new feature property to feature property table.
 	 *
-	 * @param featureProperty Feature property object that holds data related to the feature property to be inserted.
+	 * @param mobileFeatureProperty Feature property object that holds data related to the feature property to be inserted.
 	 * @return The status of the operation. If the insert was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean addFeatureProperty(FeatureProperty featureProperty)
+	boolean addFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Update a feature property in the feature property table.
 	 *
-	 * @param featureProperty Feature property object that holds data has to be updated.
+	 * @param mobileFeatureProperty Feature property object that holds data has to be updated.
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateFeatureProperty(FeatureProperty featureProperty)
+	boolean updateFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -61,7 +61,7 @@ public interface FeaturePropertyDAO {
 	 * @return Feature property object that holds data of the feature property represented by propertyId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	FeatureProperty getFeatureProperty(String property) throws MobileDeviceManagementDAOException;
+	MobileFeatureProperty getFeatureProperty(String property) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a list of feature property corresponds to a feature id .
@@ -70,7 +70,7 @@ public interface FeaturePropertyDAO {
 	 * @return Feature property object that holds data of the feature property represented by propertyId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	List<FeatureProperty> getFeaturePropertyOfFeature(String featureId)
+	List<MobileFeatureProperty> getFeaturePropertyOfFeature(String featureId)
 			throws MobileDeviceManagementDAOException;
 
 }

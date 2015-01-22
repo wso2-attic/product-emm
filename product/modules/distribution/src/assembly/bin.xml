@@ -460,5 +460,15 @@
             <fileMode>644</fileMode>
         </file>
 
+        <!-- Copying H2 database related files corresponding to default Mobile Device management repository schema -->
+        <file>
+            <source>
+                ../distribution/src/repository/database/WSO2MobileDM_DB.h2.db
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database</outputDirectory>
+            <destName>WSO2MobileDM_DB.h2.db</destName>
+            <fileMode>644</fileMode>
+        </file>
+
     </files>
 </assembly>

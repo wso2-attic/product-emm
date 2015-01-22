@@ -18,10 +18,10 @@ package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.mobile.dao.FeaturePropertyDAO;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileFeaturePropertyDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.dao.util.MobileDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.mobile.dto.FeatureProperty;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileFeatureProperty;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -32,19 +32,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of FeaturePropertyDAO.
+ * Implementation of MobileFeaturePropertyDAO.
  */
-public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
+public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 
 	private DataSource dataSource;
-	private static final Log log = LogFactory.getLog(FeaturePropertyDAOImpl.class);
+	private static final Log log = LogFactory.getLog(MobileFeaturePropertyDAOImpl.class);
 
-	public FeaturePropertyDAOImpl(DataSource dataSource) {
+	public MobileFeaturePropertyDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	@Override
-	public boolean addFeatureProperty(FeatureProperty featureProperty)
+	public boolean addFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -55,15 +55,15 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 					"INSERT INTO MBL_FEATURE_PROPERTY(PROPERTY, FEATURE_ID) VALUES (?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
-			stmt.setString(1, featureProperty.getProperty());
-			stmt.setString(2, featureProperty.getFeatureID());
+			stmt.setString(1, mobileFeatureProperty.getProperty());
+			stmt.setString(2, mobileFeatureProperty.getFeatureID());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while adding property id - '" +
-			             featureProperty.getFeatureID() + "'";
+			             mobileFeatureProperty.getFeatureID() + "'";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -73,7 +73,7 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 	}
 
 	@Override
-	public boolean updateFeatureProperty(FeatureProperty featureProperty)
+	public boolean updateFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -83,15 +83,15 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 			String updateDBQuery =
 					"UPDATE MBL_FEATURE_PROPERTY SET FEATURE_ID = ? WHERE PROPERTY = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
-			stmt.setString(1, featureProperty.getFeatureID());
-			stmt.setString(2, featureProperty.getProperty());
+			stmt.setString(1, mobileFeatureProperty.getFeatureID());
+			stmt.setString(2, mobileFeatureProperty.getProperty());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 			}
 		} catch (SQLException e) {
 			String msg = "Error occurred while updating the feature property with property - '" +
-			             featureProperty.getProperty() + "'";
+			             mobileFeatureProperty.getProperty() + "'";
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
@@ -128,11 +128,11 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 	}
 
 	@Override
-	public FeatureProperty getFeatureProperty(String property)
+	public MobileFeatureProperty getFeatureProperty(String property)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		FeatureProperty featureProperty = null;
+		MobileFeatureProperty mobileFeatureProperty = null;
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -141,9 +141,9 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 			stmt.setString(1, property);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				featureProperty = new FeatureProperty();
-				featureProperty.setProperty(resultSet.getString(1));
-				featureProperty.setFeatureID(resultSet.getString(2));
+				mobileFeatureProperty = new MobileFeatureProperty();
+				mobileFeatureProperty.setProperty(resultSet.getString(1));
+				mobileFeatureProperty.setFeatureID(resultSet.getString(2));
 				break;
 			}
 		} catch (SQLException e) {
@@ -154,16 +154,16 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
-		return featureProperty;
+		return mobileFeatureProperty;
 	}
 
 	@Override
-	public List<FeatureProperty> getFeaturePropertyOfFeature(String featureId)
+	public List<MobileFeatureProperty> getFeaturePropertyOfFeature(String featureId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		FeatureProperty featureProperty = null;
-		List<FeatureProperty> FeatureProperties = new ArrayList<FeatureProperty>();
+		MobileFeatureProperty mobileFeatureProperty = null;
+		List<MobileFeatureProperty> FeatureProperties = new ArrayList<MobileFeatureProperty>();
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
@@ -172,10 +172,10 @@ public class FeaturePropertyDAOImpl implements FeaturePropertyDAO {
 			stmt.setString(1, featureId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
-				featureProperty = new FeatureProperty();
-				featureProperty.setProperty(resultSet.getString(1));
-				featureProperty.setFeatureID(resultSet.getString(2));
-				FeatureProperties.add(featureProperty);
+				mobileFeatureProperty = new MobileFeatureProperty();
+				mobileFeatureProperty.setProperty(resultSet.getString(1));
+				mobileFeatureProperty.setFeatureID(resultSet.getString(2));
+				FeatureProperties.add(mobileFeatureProperty);
 			}
 			return FeatureProperties;
 		} catch (SQLException e) {

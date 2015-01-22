@@ -19,9 +19,9 @@ package org.wso2.carbon.device.mgt.mobile.dto;
 import java.io.Serializable;
 
 /**
- * DTO of features.
+ * DTO of Mobile features.
  */
-public class Feature implements Serializable {
+public class MobileFeature implements Serializable {
 
 	private int id;
 	private String code;

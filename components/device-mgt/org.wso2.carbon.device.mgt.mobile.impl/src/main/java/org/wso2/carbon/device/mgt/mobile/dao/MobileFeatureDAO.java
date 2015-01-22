@@ -16,33 +16,33 @@
 
 package org.wso2.carbon.device.mgt.mobile.dao;
 
-import org.wso2.carbon.device.mgt.mobile.dto.Feature;
+import org.wso2.carbon.device.mgt.mobile.dto.MobileFeature;
 
 import java.util.List;
 
 /**
- * This class represents the key operations associated with persisting feature related
+ * This class represents the key operations associated with persisting mobile feature related
  * information.
  */
-public interface FeatureDAO {
+public interface MobileFeatureDAO {
 
 	/**
 	 * Add a new feature to feature table.
 	 *
-	 * @param feature Feature object that holds data related to the feature to be inserted.
+	 * @param mobileFeature Feature object that holds data related to the feature to be inserted.
 	 * @return The status of the operation. If the insert was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean addFeature(Feature feature) throws MobileDeviceManagementDAOException;
+	boolean addFeature(MobileFeature mobileFeature) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Update a feature in the feature table.
 	 *
-	 * @param feature Feature object that holds data has to be updated.
+	 * @param mobileFeature Feature object that holds data has to be updated.
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateFeature(Feature feature) throws MobileDeviceManagementDAOException;
+	boolean updateFeature(MobileFeature mobileFeature) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Delete a feature from feature table when the feature id is given.
@@ -69,7 +69,7 @@ public interface FeatureDAO {
 	 * @return Feature object that holds data of the feature represented by featureId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	Feature getFeatureById(String featureId) throws MobileDeviceManagementDAOException;
+	MobileFeature getFeatureById(String featureId) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a given feature from feature table when the feature code is given.
@@ -78,7 +78,7 @@ public interface FeatureDAO {
 	 * @return Feature object that holds data of the feature represented by featureCode.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	Feature getFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
+	MobileFeature getFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve all the features from plugin specific database.
@@ -86,5 +86,5 @@ public interface FeatureDAO {
 	 * @return Feature object list.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	List<Feature> getAllFeatures() throws MobileDeviceManagementDAOException;
+	List<MobileFeature> getAllFeatures() throws MobileDeviceManagementDAOException;
 }

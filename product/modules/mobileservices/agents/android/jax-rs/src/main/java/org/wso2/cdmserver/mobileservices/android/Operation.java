@@ -39,7 +39,7 @@ public class Operation {
 
 	@GET
 	@Path("{id}")
-	public List<org.wso2.carbon.device.mgt.common.Operation> getAllOperations(
+	public List<org.wso2.carbon.device.mgt.common.Operation> getPendingOperations(
 			@PathParam("id") String id)
 			throws AndroidAgentException {
 
@@ -52,7 +52,7 @@ public class Operation {
 			DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
 			operations = dmService.getOperationManager(
 					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID)
-			                      .getOperations(deviceIdentifier);
+			                      .getPendingOperations(deviceIdentifier);
 			Response.status(HttpStatus.SC_OK);
 			return operations;
 		} catch (DeviceManagementServiceException deviceMgtServiceEx) {
