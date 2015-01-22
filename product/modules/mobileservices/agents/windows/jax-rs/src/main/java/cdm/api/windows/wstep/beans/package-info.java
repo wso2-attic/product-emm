@@ -17,11 +17,11 @@
  */
 
 @XmlSchema(namespace = "http://www.w3.org/2003/05/soap-envelope",
-		xmlns = {
-				@XmlNs(prefix = "", namespaceURI = "http://www.w3.org/2003/05/soap-envelope"),
-		}, elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+        xmlns = {
+                @XmlNs(prefix = "", namespaceURI = "http://www.w3.org/2003/05/soap-envelope")
+        }, elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 
-package com.ex.wstep;
+package cdm.api.windows.wstep.beans;
 
 import javax.xml.bind.annotation.XmlNs;
 import javax.xml.bind.annotation.XmlSchema;
