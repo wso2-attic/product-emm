@@ -22,8 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Class for holding data source configuration in mobile-config.xml at parsing with JAXB.
  */
-@XmlRootElement(name = "DataSourceConfiguration")
-public class MobileDataSourceConfig {
+@XmlRootElement(name = "DataSourceConfiguration") public class MobileDataSourceConfig {
 
 	private JNDILookupDefinition jndiLookupDefinition;
 
