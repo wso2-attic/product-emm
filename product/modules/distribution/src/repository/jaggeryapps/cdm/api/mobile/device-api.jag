@@ -16,23 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var utility = require("/modules/utility.js");
-var deviceManagementService = utility.getDeviceManagementService();
-var devices = deviceManagementService.getAllDevices("android");
-var logger = new Log();
-var deviceList = [];
-for (i = 0; i < devices.size(); i++) {
-    var device = devices.get(i);
-    deviceList.push({
-        "identifier": device.getDeviceIdentifier(),
-        "name": device.getName(),
-        "ownership": device.getOwnership(),
-        "owner": device.getOwner(),
-        "deviceType": device.getType(),
-        "vendor": device.getProperties().get("vendor"),
-        "model": device.getProperties().get("model"),
-        "osVersion": device.getProperties().get("osVersion")
-    });
+
+var verb = request.getMethod();
+var uri = request.getRequestURI();
+var callPath=uri.replace("/cdm/api/","");
+var log = new Log();
+var deviceModule = require("/modules/device.js");
+if (uri != null) {
+    var uriMatcher = new URIMatcher(callPath);
+    log.info(callPath);
+    if (uriMatcher.match("devices/mobile/{type}/{deviceid}/")) {
+        var deviceId = uriMatcher.elements().deviceid;
+        var type = uriMatcher.elements().type;
+        var result = deviceModule.viewDevice(type, deviceId);
+        print(result);
+    }
+    if (uriMatcher.match("devices/mobile/")) {
+        var result = deviceModule.listDevices();
+        print(result);
+    }
 }
-print(deviceList);
 %>

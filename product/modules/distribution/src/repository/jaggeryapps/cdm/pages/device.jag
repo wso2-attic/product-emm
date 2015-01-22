@@ -26,11 +26,20 @@ var title="WSO2 CDM";
     <body>
         <%
         include("/includes/header.jag");
+
+        var deviceModule = require("/modules/device.js");
+        var uri = request.getRequestURI();
+        var callPath=uri.replace("/cdm/","");
+        var uriMatcher = new URIMatcher(callPath);
+        uriMatcher.match("devices/{type}/{deviceid}/");
+        var deviceId = uriMatcher.elements().deviceid;
+        var type = uriMatcher.elements().type;
+        var device = deviceModule.viewDevice(type, deviceId);
         %>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-9 main col-centered">
-                    <h2 class="sub-header">Dulitha's iPhone</h2>
+                    <h2 class="sub-header"><%=device.name%></h2>
                     <div class="row">
                     </div>
                     <div class="row">
@@ -50,36 +59,44 @@ var title="WSO2 CDM";
                        <div class="col-md-8">
                          <div class="row">
                            <div class="col-md-12 well well-lg device-static-data">
-                             <p>Model: <span>GT-I9500</span> </p>
-                             <p>IMSI : <span>GT-I9500</span> </p>
-                             <p>IMEI : <span>GT-I9500</span> </p>
-                           </div>
-                         </div>
-                         <div class="row">
-                           <div class="col-md-12 well well-lg device-static-data">
-                             <p>Model: <span>GT-I9500</span> </p>
-                             <p>IMSI : <span>GT-I9500</span> </p>
-                             <p>IMEI : <span>GT-I9500</span> </p>
-                           </div>
-                         </div>
-                         <div class="row">
-                           <div class="col-md-12 well well-lg device-static-data">
-                             <table id="table-pagination" data-toggle="table"  data-url="/cdm/data3.json" data-query-params="queryParams" data-height="300" data-pagination="true" data-search="true">
-                                  <thead>
-                                      <tr>
-                                          <th data-field="appName" data-align="right" data-sortable="true">App name</th>
-                                          <th data-field="packageName" data-align="center" data-sortable="true">Package name</th>
-                                      </tr>
-                                  </thead>
-                              </table>
-                           </div>
-                         </div>
-                       </div>
-                    </div>
-                </div>
+
+                                                          <%
+                            for (var property in device.properties) {
+                                if (device.properties.hasOwnProperty(property)) {
+                                    var value = device.properties[property];
+                                    %>
+                                      <p><%=property %>: <span><%=value %></span> </p>
+                                    <%
+                                }
+                            }
+                            %>
+                   </div>
+                 </div>
+                 <div class="row">
+                   <div class="col-md-12 well well-lg device-static-data">
+                     <p>Model: <span>GT-I9500</span> </p>
+                     <p>IMSI : <span>GT-I9500</span> </p>
+                     <p>IMEI : <span>GT-I9500</span> </p>
+                   </div>
+                 </div>
+                 <div class="row">
+                   <div class="col-md-12 well well-lg device-static-data">
+                     <table id="table-pagination" data-toggle="table"  data-url="/cdm/data3.json" data-query-params="queryParams" data-height="300" data-pagination="true" data-search="true">
+                          <thead>
+                              <tr>
+                                  <th data-field="appName" data-align="right" data-sortable="true">App name</th>
+                                  <th data-field="packageName" data-align="center" data-sortable="true">Package name</th>
+                              </tr>
+                          </thead>
+                      </table>
+                   </div>
+                 </div>
+               </div>
             </div>
         </div>
-        <%
+    </div>
+</div>
+<%
         include("/includes/layout-footer.jag");
         %>
     </body>
