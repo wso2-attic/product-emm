@@ -20,10 +20,16 @@
   -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>CDM-Windows-API</display-name>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/cxf-servlet.xml</param-value>
+  </context-param>
+
   <servlet>
-    <description>JAX-WS/JAX-RS Endpoint</description>
-    <display-name>JAX-WS/JAX-RS Servlet</display-name>
-    <servlet-name>JAXServlet</servlet-name>
+    <description>JAX-WS/JAX-RS-windows Endpoint</description>
+    <display-name>JAX-WS/JAX-RS-windows Servlet</display-name>
+    <servlet-name>JAXServlet-windows</servlet-name>
     <servlet-class>
             org.apache.cxf.transport.servlet.CXFServlet
     </servlet-class>
@@ -34,7 +40,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>JAXServlet</servlet-name>
+    <servlet-name>JAXServlet-windows</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
   <session-config>
