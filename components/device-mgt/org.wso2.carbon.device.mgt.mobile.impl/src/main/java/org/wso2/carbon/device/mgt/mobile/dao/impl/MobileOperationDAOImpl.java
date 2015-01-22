@@ -138,11 +138,13 @@ public class MobileOperationDAOImpl implements MobileOperationDAO {
 			String selectDBQuery =
 					"SELECT OPERATION_ID, FEATURE_CODE, CREATED_DATE FROM MBL_OPERATION WHERE OPERATION_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setInt(1, operation.getOperationId());
+			stmt.setInt(1, operationId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
 				operation = new MobileOperation();
 				operation.setOperationId(resultSet.getInt(1));
+				operation.setFeatureCode(resultSet.getString(2));
+				operation.setCreatedDate(resultSet.getLong(3));
 				break;
 			}
 		} catch (SQLException e) {

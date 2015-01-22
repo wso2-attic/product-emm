@@ -52,7 +52,7 @@ public class MobileDeviceOperationDAOImpl implements MobileDeviceOperationDAO {
 		try {
 			conn = this.getConnection();
 			String createDBQuery =
-					"INSERT INTO MBL_DEVICE_OPERATION(DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE) VALUES (?, ?, ?, ?)";
+            "INSERT INTO MBL_DEVICE_OPERATION_MAPPING (DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE) VALUES (?, ?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
 			stmt.setString(1, deviceOperation.getDeviceId());
@@ -86,7 +86,7 @@ public class MobileDeviceOperationDAOImpl implements MobileDeviceOperationDAO {
 		try {
 			conn = this.getConnection();
 			String updateDBQuery =
-					"UPDATE MBL_DEVICE_OPERATION SET SENT_DATE = ?, RECEIVED_DATE = ? WHERE DEVICE_ID = ? AND OPERATION_ID=?";
+            "UPDATE MBL_DEVICE_OPERATION_MAPPING SET SENT_DATE = ?, RECEIVED_DATE = ? WHERE DEVICE_ID = ? AND OPERATION_ID=?";
 			stmt = conn.prepareStatement(updateDBQuery);
 			stmt.setLong(1, deviceOperation.getSentDate());
 			stmt.setLong(2, deviceOperation.getReceivedDate());
@@ -117,7 +117,7 @@ public class MobileDeviceOperationDAOImpl implements MobileDeviceOperationDAO {
 		try {
 			conn = this.getConnection();
 			String deleteDBQuery =
-					"DELETE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ? AND OPERATION_ID=?";
+            "DELETE FROM MBL_DEVICE_OPERATION_MAPPING WHERE DEVICE_ID = ? AND OPERATION_ID=?";
 			stmt = conn.prepareStatement(deleteDBQuery);
 			stmt.setString(1, deviceId);
 			stmt.setInt(2, operationId);
@@ -146,7 +146,7 @@ public class MobileDeviceOperationDAOImpl implements MobileDeviceOperationDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ? AND OPERATION_ID=?";
+            "SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION_MAPPING WHERE DEVICE_ID = ? AND OPERATION_ID=?";
 			stmt = conn.prepareStatement(selectDBQuery);
 			stmt.setString(1, deviceId);
 			stmt.setInt(2, operationId);
@@ -181,7 +181,7 @@ public class MobileDeviceOperationDAOImpl implements MobileDeviceOperationDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION WHERE DEVICE_ID = ?";
+            "SELECT DEVICE_ID, OPERATION_ID, SENT_DATE, RECEIVED_DATE FROM MBL_DEVICE_OPERATION_MAPPING WHERE DEVICE_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
 			stmt.setString(1, deviceId);
 			ResultSet resultSet = stmt.executeQuery();
