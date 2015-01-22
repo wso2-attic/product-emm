@@ -15,18 +15,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-//Init js to execute
-var logger = new Log();
-logger.debug("running debug");
-var app_TENANT_CONFIGS = 'tenant.configs';
-var app_carbon = require('carbon');
-var app_configs = {
-    "HTTPS_URL": "https://localhost:9443"
-};
 
-var app_server = new app_carbon.server.Server({
-    tenanted: app_configs.tenanted,
-    url: app_configs.HTTPS_URL + '/admin'
-});
-application.put("SERVER", app_server);
-application.put(app_TENANT_CONFIGS, {});
+//temporary
+
+var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext,
+    Class = java.lang.Class;
+
+osgiService = function (clazz) {
+    return PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(Class.forName(clazz));
+};
+var getDeviceManagementService= function(){
+    //server.authenticate("admin", "admin");
+    var realmService = osgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementService');
+    //var realmService = null;
+    return realmService;
+}

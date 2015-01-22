@@ -128,6 +128,9 @@
                                     org.jaggeryjs.modules:uuid.feature:${uuid.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
+                                    org.jaggeryjs.modules:sso.feature:${sso.feature.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
                                     org.jaggeryjs.modules:jaggery-test.feature:${jaggery-test.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -280,6 +283,10 @@
                                 <feature>
                                     <id>org.jaggeryjs.modules.uuid.feature.group</id>
                                     <version>${uuid.feature.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.sso.feature.group</id>
+                                    <version>${sso.feature.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.jaggery-test.feature.group</id>

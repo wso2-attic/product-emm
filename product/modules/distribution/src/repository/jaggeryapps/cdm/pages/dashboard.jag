@@ -1,5 +1,22 @@
 <!DOCTYPE html>
-<% 
+<%
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 var title="WSO2 CDM";
 %>
 <html lang="en">
@@ -14,25 +31,43 @@ var title="WSO2 CDM";
             <div class="row">
                 <div class="col-sm-9 main col-centered">
                     <h2 class="sub-header">Devices list</h2>
+                    <!--
                     <div class="row">
                         <div class="col-md-1"><button type="button" class="btn btn-primary">Execute</button></div>
                     </div>
-                    <div class="table-responsive">
-                        <table id="table-pagination" data-toggle="table" data-url="data2.json"  data-query-params="queryParams" data-height="400" data-pagination="true" data-search="true">
-                            <thead>
-                                <tr>
-                                    <th data-field="state" data-checkbox="true"></th>
-                                    <th data-field="identifier" data-align="right" data-sortable="true"  data-formatter="identifierFormatter">Identifier</th>
-                                    <th data-field="name" data-align="center" data-sortable="true">Name</th>
-                                    <th data-field="owner" data-align="center" data-sortable="true">Owner</th>
-                                    <th data-field="ownership" data-align="center" data-sortable="true">Ownership</th>
-                                    <th data-field="deviceType" data-align="center" data-sortable="true">Device Type</th>
-                                    <th data-field="vendor" data-align="center" data-sortable="true">Vendor</th>
-                                    <th data-field="model" data-align="center" data-sortable="true">Model</th>
-                                    <th data-field="osVersion" data-align="center" data-sortable="true">OS Version</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    -->
+                    <div role="devicepanel">
+
+                      <!-- Nav tabs -->
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#mobile" aria-controls="home" role="tab" data-toggle="tab">Mobile</a></li>
+                        <li role="presentation"><a href="#raspberrypi" aria-controls="profile" role="tab" data-toggle="tab">RaspberryPi</a></li>
+                      </ul>
+
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <div role="devicepanel" class="tab-pane active" id="mobile">
+                            <div class="table-responsive">
+                                <table id="table-pagination" data-toggle="table" data-url="/cdm/api/devices/mobile"  data-query-params="queryParams" data-height="400" data-pagination="true" data-search="true">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="state" data-checkbox="true"></th>
+                                            <th data-field="identifier" data-align="right" data-sortable="true"  data-formatter="identifierFormatter">Identifier</th>
+                                            <th data-field="name" data-align="center" data-sortable="true">Name</th>
+                                            <th data-field="owner" data-align="center" data-sortable="true">Owner</th>
+                                            <th data-field="ownership" data-align="center" data-sortable="true">Ownership</th>
+                                            <th data-field="deviceType" data-align="center" data-sortable="true">Device Type</th>
+                                            <th data-field="vendor" data-align="center" data-sortable="true">Vendor</th>
+                                            <th data-field="model" data-align="center" data-sortable="true">Model</th>
+                                            <th data-field="osVersion" data-align="center" data-sortable="true">OS Version</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div role="devicepanel" class="tab-pane" id="raspberrypi">sdfweroiweuroi</div>
+                      </div>
+
                     </div>
                 </div>
             </div>
