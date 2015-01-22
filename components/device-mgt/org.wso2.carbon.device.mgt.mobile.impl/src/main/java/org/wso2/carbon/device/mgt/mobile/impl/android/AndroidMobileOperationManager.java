@@ -58,7 +58,7 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 					mobileDeviceOperation.setDeviceId(deviceIdentifier.getId());
 					status = MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
 					                                         .addMobileDeviceOperation(
-							                                         new MobileDeviceOperation());
+							                                         mobileDeviceOperation);
 				}
 			}
 		} catch (MobileDeviceManagementDAOException e) {
@@ -75,6 +75,7 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 			throws OperationManagementException {
 		List<Operation> operations = new ArrayList<Operation>();
 		List<MobileDeviceOperation> mobileDeviceOperations = null;
+		List<MobileOperationProperty> operationProperties = null;
 		MobileOperation mobileOperation = null;
 		try {
 			mobileDeviceOperations = MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
@@ -88,6 +89,11 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 					mobileOperation = MobileDeviceManagementDAOFactory.getMobileOperationDAO()
 					                                                  .getMobileOperation(
 							                                                  operationId);
+					operationProperties =
+							MobileDeviceManagementDAOFactory.getMobileOperationPropertyDAO()
+							                                .getAllMobileOperationPropertiesOfOperation(
+									                                operationId);
+					mobileOperation.setProperties(operationProperties);
 					operations.add(MobileDeviceManagementUtil
 							               .convertMobileOperationToOperation(mobileOperation));
 				}
