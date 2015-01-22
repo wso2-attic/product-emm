@@ -15,10 +15,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function identifierFormatter(value, row, index) {
-    return [
-        '<a class="like" href="/cdm/devices/' + row["deviceType"] + '/' + value + '" title="Like">',
-        value,
-        '</a>'
-    ].join('');
+
+//temporary
+
+var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext,
+    Class = java.lang.Class;
+
+osgiService = function (clazz) {
+    return PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(Class.forName(clazz));
+};
+var getDeviceManagementService= function(){
+    //server.authenticate("admin", "admin");
+    var realmService = osgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementService');
+    //var realmService = null;
+    return realmService;
 }

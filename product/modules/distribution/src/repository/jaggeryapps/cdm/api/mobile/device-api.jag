@@ -1,3 +1,4 @@
+<%
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -15,10 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function identifierFormatter(value, row, index) {
-    return [
-        '<a class="like" href="/cdm/devices/' + row["deviceType"] + '/' + value + '" title="Like">',
-        value,
-        '</a>'
-    ].join('');
+
+var verb = request.getMethod();
+var uri = request.getRequestURI();
+var callPath=uri.replace("/cdm/api/","");
+var log = new Log();
+var deviceModule = require("/modules/device.js");
+if (uri != null) {
+    var uriMatcher = new URIMatcher(callPath);
+    log.info(callPath);
+    if (uriMatcher.match("devices/mobile/{type}/{deviceid}/")) {
+        var deviceId = uriMatcher.elements().deviceid;
+        var type = uriMatcher.elements().type;
+        var result = deviceModule.viewDevice(type, deviceId);
+        print(result);
+    }
+    if (uriMatcher.match("devices/mobile/")) {
+        var result = deviceModule.listDevices();
+        print(result);
+    }
 }
+%>

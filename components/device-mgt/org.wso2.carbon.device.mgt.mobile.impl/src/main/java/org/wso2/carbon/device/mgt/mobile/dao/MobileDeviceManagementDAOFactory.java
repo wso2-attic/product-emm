@@ -62,7 +62,7 @@ public class MobileDeviceManagementDAOFactory {
 			throw new RuntimeException("Device Management Repository data source configuration " +
 			                           "is null and thus, is not initialized");
 		}
-		JNDILookupDefinition jndiConfig = config.getJndiLookupDefintion();
+		JNDILookupDefinition jndiConfig = config.getJndiLookupDefinition();
 		if (jndiConfig != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Initializing Device Management Repository data source using the JNDI " +
