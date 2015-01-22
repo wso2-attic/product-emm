@@ -211,6 +211,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.identity.authenticator.saml2.sso.server.feature:${carbon.platform.version}
                                 </featureArtifactDef>
+				<featureArtifactDef>
+				    org.wso2.carbon:org.wso2.carbon.um.ws.service.client.feature:${carbon.platform.version}
+				</featureArtifactDef>
 
                                 <!-- registry features -->
                                 <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.registry.core.feature:${carbon.platform.version}</featureArtifactDef>
@@ -438,6 +441,10 @@
                                     <id>org.wso2.carbon.governance.lifecycle.management.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+				<feature>
+				    <id>org.wso2.carbon.um.ws.service.client.feature.group</id>
+				    <version>${carbon.platform.version}</version>
+				</feature>
                             </features>
                         </configuration>
                     </execution>
