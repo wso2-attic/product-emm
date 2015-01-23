@@ -32,7 +32,7 @@ public interface MobileFeaturePropertyDAO {
 	 * @return The status of the operation. If the insert was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean addFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
+	boolean addMobileFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -42,7 +42,7 @@ public interface MobileFeaturePropertyDAO {
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
+	boolean updateMobileFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -52,7 +52,7 @@ public interface MobileFeaturePropertyDAO {
 	 * @return The status of the operation. If the operationId was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteFeatureProperty(String property) throws MobileDeviceManagementDAOException;
+	boolean deleteMobileFeatureProperty(String property) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a given feature property from feature property table.
@@ -61,7 +61,7 @@ public interface MobileFeaturePropertyDAO {
 	 * @return Feature property object that holds data of the feature property represented by propertyId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	MobileFeatureProperty getFeatureProperty(String property) throws MobileDeviceManagementDAOException;
+	MobileFeatureProperty getMobileFeatureProperty(String property) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a list of feature property corresponds to a feature id .

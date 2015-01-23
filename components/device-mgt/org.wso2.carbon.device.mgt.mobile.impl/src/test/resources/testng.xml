@@ -18,10 +18,18 @@
 <suite name="CDM-Mobile-Tests">
     <parameter name="useDefaultListeners" value="false"/>
 
-    <test name="DAO Unit Tests" preserve-order="true">
+    <test name="Config Unit Tests" preserve-order="true">
         <parameter name="dbType" value="H2"/>
         <classes>
-            <class name="org.wso2.carbon.device.mgt.mobile.impl.dao.FeatureDAOTestSuite"/>
+            <class name="org.wso2.carbon.device.mgt.mobile.impl.MobileDeviceManagementConfigTests"/>
         </classes>
     </test>
+
+    <!--test name="DAO Unit Tests" preserve-order="true">
+        <parameter name="dbType" value="H2"/>
+        <classes>
+            <class name="org.wso2.carbon.device.mgt.mobile.impl.dao.MobileFeatureDAOTestSuite"/>
+        </classes>
+    </test-->
+
 </suite>
