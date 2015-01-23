@@ -22,3 +22,21 @@ function identifierFormatter(value, row, index) {
         '</a>'
     ].join('');
 }
+
+var currentDeviceOperation;
+var currentDevice;
+var currentDeviceType;
+function performOperation(){
+    currentDevice = $("#deviceMain").data("deviceid");
+    currentDeviceType = $("#deviceMain").data("devicetype");
+    $.post("/cdm/api/operation/"+currentDeviceType+"/"+currentDevice+"/"+currentDeviceOperation,function(){
+        $('#confirmModel').modal('hide');
+    });
+}
+
+$(document).ready(function(){
+    $(".device-operation").click(function(){
+        currentDeviceOperation = $(this).data("operation");
+        $('#confirmModel').modal('show');
+    });
+});

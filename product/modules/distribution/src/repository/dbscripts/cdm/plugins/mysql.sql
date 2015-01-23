@@ -20,6 +20,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `MBL_FEATURE` (
   `FEATURE_ID` INT NOT NULL AUTO_INCREMENT,
+  `DEVICE_TYPE_ID` INT NOT NULL,
   `CODE` VARCHAR(45) NULL,
   `NAME` VARCHAR(100) NULL,
   `DESCRIPTION` VARCHAR(200) NULL,
@@ -97,4 +98,8 @@ CREATE TABLE IF NOT EXISTS `MBL_FEATURE_PROPERTY` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Inserts
+-- -----------------------------------------------------
+Insert into MBL_FEATURE (DEVICE_TYPE_ID,CODE, NAME, DESCRIPTION) VALUES ('android', "503A", "DEVICE_LOCK", "Device lock");
 

@@ -166,6 +166,7 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 				feature.setId(mobileFeature.getId());
 				feature.setDeviceType(mobileFeature.getDeviceType());
 				feature.setName(mobileFeature.getName());
+				feature.setDescription(mobileFeature.getDescription());
 				List<Feature.MetadataEntry> metadataEntries = new ArrayList<Feature.MetadataEntry>();
 				List<MobileFeatureProperty> properties =
 						featurePropertyDAO.getFeaturePropertyOfFeature(mobileFeature.getId());

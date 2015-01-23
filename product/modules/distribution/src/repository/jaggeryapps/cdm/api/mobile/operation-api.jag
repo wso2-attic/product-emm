@@ -25,16 +25,16 @@ var deviceModule = require("/modules/device.js");
 
 if (uri != null) {
     var uriMatcher = new URIMatcher(callPath);
-    log.info(callPath);
-    if (uriMatcher.match("devices/mobile/{type}/{deviceid}/")) {
+    //log.info(callPath);
+    log.info(uriMatcher.match("operation/{type}/{deviceid}/{operation}"));
+    if (uriMatcher.match("operation/{type}/{deviceid}/{operation}")) {
+
         var deviceId = uriMatcher.elements().deviceid;
         var type = uriMatcher.elements().type;
-        var result = deviceModule.viewDevice(type, deviceId);
-        print(result);
-    }
-    if (uriMatcher.match("devices/mobile/")) {
-        var result = deviceModule.listDevices();
-        print(result);
+        var operation = uriMatcher.elements().operation;
+        var result = deviceModule.performOperation(deviceId, operation,[],type);
+        <!--log.info(result);-->
+        <!--print(result);-->
     }
 }
 %>
