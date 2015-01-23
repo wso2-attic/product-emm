@@ -216,13 +216,38 @@
             <outputDirectory>${project.artifactId}-${project.version}/repository/resources
             </outputDirectory>
         </fileSet>
-        <!-- copy cdm jaggery app -->
+
+        <!-- Copying CDM Jaggery app -->
         <fileSet>
             <directory>src/repository/jaggeryapps</directory>
             <outputDirectory>wso2mdm-${project.version}/repository/deployment/server/jaggeryapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
+
+	<!-- Copying API Manager Publisher and Store Jaggery apps -->
+	<fileSet>
+             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.platform.version}/repository/deployment/server/jaggeryapps/publisher/</directory>
+             <outputDirectory>wso2am-${pom.version}/repository/deployment/server/jaggeryapps/publisher</outputDirectory>
+             <excludes>
+                <exclude>publisherLogo/**</exclude>
+                <exclude>publisherTheme/**</exclude>
+                <exclude>publisherSite/**</exclude>
+                <exclude>footer/**</exclude>
+                <exclude>localstyles.css</exclude>
+             </excludes>
+         </fileSet>
+         <fileSet>
+             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.platform.version}/repository/deployment/server/jaggeryapps/store/</directory>
+             <outputDirectory>wso2am-${pom.version}/repository/deployment/server/jaggeryapps/store</outputDirectory>
+             <excludes>
+                <exclude>storeLogo/**</exclude>
+                <exclude>storeSite/**</exclude>
+                <exclude>base-page/**</exclude>
+                <exclude>login/**</exclude>
+                <exclude>styles-layout.css</exclude>
+             </excludes>
+         </fileSet>
     </fileSets>
     
     <dependencySets>
