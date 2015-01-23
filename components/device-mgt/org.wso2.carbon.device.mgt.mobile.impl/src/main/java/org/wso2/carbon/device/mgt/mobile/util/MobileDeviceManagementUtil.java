@@ -54,11 +54,11 @@ public class MobileDeviceManagementUtil {
 			DocumentBuilder docBuilder = factory.newDocumentBuilder();
 			return docBuilder.parse(file);
 		} catch (Exception e) {
-			throw new DeviceManagementException(
-					"Error occurred while parsing file, while converting " +
-					"to a org.w3c.dom.Document : " + e.getMessage(), e);
+			throw new DeviceManagementException("Error occurred while parsing file, while converting " +
+			                                    "to a org.w3c.dom.Document : " + e.getMessage(), e);
 		}
 	}
+
 	private static String getPropertyValue(Device device, String property) {
 		for (Device.Property prop : device.getProperties()) {
 			if (property.equals(prop.getName())) {
@@ -78,6 +78,7 @@ public class MobileDeviceManagementUtil {
 		}
 		return prop;
 	}
+
 	public static MobileDevice convertToMobileDevice(Device device) {
 		MobileDevice mobileDevice = null;
 		if (device != null) {
@@ -114,8 +115,7 @@ public class MobileDeviceManagementUtil {
 		return device;
 	}
 
-	public static MobileOperation convertToMobileOperation(
-			org.wso2.carbon.device.mgt.common.Operation operation) {
+	public static MobileOperation convertToMobileOperation(org.wso2.carbon.device.mgt.common.Operation operation) {
 		MobileOperation mobileOperation = new MobileOperation();
 		MobileOperationProperty operationProperty = null;
 		List<MobileOperationProperty> properties = new LinkedList<MobileOperationProperty>();
@@ -135,18 +135,18 @@ public class MobileDeviceManagementUtil {
 	public static List<Integer> getMobileOperationIdsFromMobileDeviceOperations(
 			List<MobileDeviceOperationMapping> mobileDeviceOperationMappings) {
 		List<Integer> mobileOperationIds = new ArrayList<Integer>();
-		for(MobileDeviceOperationMapping mobileDeviceOperationMapping : mobileDeviceOperationMappings){
+		for (MobileDeviceOperationMapping mobileDeviceOperationMapping : mobileDeviceOperationMappings) {
 			mobileOperationIds.add(mobileDeviceOperationMapping.getOperationId());
 		}
 		return mobileOperationIds;
 	}
 
-	public static Operation convertMobileOperationToOperation(MobileOperation mobileOperation){
+	public static Operation convertMobileOperationToOperation(MobileOperation mobileOperation) {
 		Operation operation = new Operation();
 		Properties properties = new Properties();
 		operation.setCode(mobileOperation.getFeatureCode());
-		for(MobileOperationProperty mobileOperationProperty:mobileOperation.getProperties()){
-			properties.put(mobileOperationProperty.getProperty(),mobileOperationProperty.getValue());
+		for (MobileOperationProperty mobileOperationProperty : mobileOperation.getProperties()) {
+			properties.put(mobileOperationProperty.getProperty(), mobileOperationProperty.getValue());
 		}
 		operation.setProperties(properties);
 		return operation;
