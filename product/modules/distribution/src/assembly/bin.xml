@@ -128,13 +128,6 @@
         </fileSet>
 
         <fileSet>
-            <directory>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/rxts/
-            </directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/resources/rxts/</outputDirectory>
-        </fileSet>
-
-        <fileSet>
             <directory>src/repository/conf/datasources</directory>
             <outputDirectory>wso2mdm-${project.version}/repository/conf/datasources
             </outputDirectory>
