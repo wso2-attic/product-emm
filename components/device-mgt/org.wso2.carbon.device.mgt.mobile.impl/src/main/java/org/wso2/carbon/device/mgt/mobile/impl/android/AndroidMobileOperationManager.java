@@ -59,7 +59,7 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 					mobileDeviceOperationMapping.setDeviceId(deviceIdentifier.getId());
 					mobileDeviceOperationMapping.setStatus(MobileDeviceOperationMapping.Status.NEW);
 					status = MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
-					                                         .addMobileDeviceOperation(
+					                                         .addMobileDeviceOperationMapping(
 							                                         mobileDeviceOperationMapping);
 				}
 			}
@@ -81,7 +81,7 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 		MobileOperation mobileOperation = null;
 		try {
 			mobileDeviceOperationMappings = MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
-			                                                         .getAllMobileDeviceOperationsOfDevice(
+			                                                         .getAllMobileDeviceOperationNappingsOfDevice(
 					                                                         deviceIdentifier
 							                                                         .getId());
 			if (mobileDeviceOperationMappings.size() > 0) {
@@ -121,7 +121,7 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 		try {
 			//Get the list of pending operations for the given device
 			mobileDeviceOperationMappings = MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
-			                                                         .getAllPendingOperationsOfMobileDevice(
+			                                                         .getAllPendingOperationMappingsOfMobileDevice(
 					                                                         deviceIdentifier
 							                                                         .getId());
 			//Go through each operation mapping for retrieving the data corresponding to each operation
@@ -142,7 +142,7 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 				operation.setStatus(MobileDeviceOperationMapping.Status.INPROGRESS);
 				operation.setSentDate(new Date().getTime());
 				MobileDeviceManagementDAOFactory.getMobileDeviceOperationDAO()
-				                                .updateMobileDeviceOperationToInProgress(
+				                                .updateMobileDeviceOperationMappingToInProgress(
 						                                operation.getDeviceId(),
 						                                operation.getOperationId());
 			}

@@ -44,7 +44,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 	}
 
 	@Override
-	public boolean addFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
+	public boolean addMobileFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -73,7 +73,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 	}
 
 	@Override
-	public boolean updateFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
+	public boolean updateMobileFeatureProperty(MobileFeatureProperty mobileFeatureProperty)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -101,7 +101,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 	}
 
 	@Override
-	public boolean deleteFeatureProperty(String property)
+	public boolean deleteMobileFeatureProperty(String property)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -128,7 +128,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 	}
 
 	@Override
-	public MobileFeatureProperty getFeatureProperty(String property)
+	public MobileFeatureProperty getMobileFeatureProperty(String property)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;

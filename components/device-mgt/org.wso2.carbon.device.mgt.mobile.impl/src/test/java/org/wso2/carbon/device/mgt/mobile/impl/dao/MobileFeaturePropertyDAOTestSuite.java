@@ -16,5 +16,5 @@
 
 package org.wso2.carbon.device.mgt.mobile.impl.dao;
 
-public class FeaturePropertyDAOTestSuite {
+public class MobileFeaturePropertyDAOTestSuite {
 }

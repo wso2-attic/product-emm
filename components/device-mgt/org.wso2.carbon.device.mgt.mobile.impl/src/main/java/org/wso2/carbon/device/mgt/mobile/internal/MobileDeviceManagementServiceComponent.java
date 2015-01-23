@@ -55,6 +55,7 @@ import java.util.List;
  */
 public class MobileDeviceManagementServiceComponent {
 
+	private static final String SETUP_COMMAND = "setup";
 	private ServiceRegistration androidServiceRegRef;
 	private ServiceRegistration iOSServiceRegRef;
 	private ServiceRegistration windowsServiceRegRef;
@@ -77,7 +78,7 @@ public class MobileDeviceManagementServiceComponent {
 
 			MobileDeviceManagementDAOFactory.setMobileDataSourceConfig(dsConfig);
 			MobileDeviceManagementDAOFactory.init();
-			String setupOption = System.getProperty("setup");
+			String setupOption = System.getProperty(SETUP_COMMAND);
 			if (setupOption != null) {
 				if (log.isDebugEnabled()) {
 					log.debug(

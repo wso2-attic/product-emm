@@ -32,7 +32,7 @@ public interface MobileDeviceOperationMappingDAO {
 	 * @return The status of the operation. If the insert was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean addMobileDeviceOperation(MobileDeviceOperationMapping deviceOperation)
+	boolean addMobileDeviceOperationMapping(MobileDeviceOperationMapping deviceOperation)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -42,7 +42,7 @@ public interface MobileDeviceOperationMappingDAO {
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateMobileDeviceOperation(MobileDeviceOperationMapping deviceOperation)
+	boolean updateMobileDeviceOperationMapping(MobileDeviceOperationMapping deviceOperation)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -53,7 +53,7 @@ public interface MobileDeviceOperationMappingDAO {
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateMobileDeviceOperationToInProgress(String deviceId, int operationId)
+	boolean updateMobileDeviceOperationMappingToInProgress(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -64,7 +64,7 @@ public interface MobileDeviceOperationMappingDAO {
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateMobileDeviceOperationToCompleted(String deviceId, int operationId)
+	boolean updateMobileDeviceOperationMappingToCompleted(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -75,7 +75,7 @@ public interface MobileDeviceOperationMappingDAO {
 	 * @return The status of the operation. If the deletion was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteMobileDeviceOperation(String deviceId, int operationId)
+	boolean deleteMobileDeviceOperationMapping(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -87,7 +87,7 @@ public interface MobileDeviceOperationMappingDAO {
 	 * deviceId and operationId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	MobileDeviceOperationMapping getMobileDeviceOperation(String deviceId, int operationId)
+	MobileDeviceOperationMapping getMobileDeviceOperationMapping(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -96,7 +96,7 @@ public interface MobileDeviceOperationMappingDAO {
 	 * @return Device operation mapping object list.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	List<MobileDeviceOperationMapping> getAllMobileDeviceOperationsOfDevice(String deviceId)
+	List<MobileDeviceOperationMapping> getAllMobileDeviceOperationNappingsOfDevice(String deviceId)
 			throws MobileDeviceManagementDAOException;
 
 	/**
@@ -105,6 +105,6 @@ public interface MobileDeviceOperationMappingDAO {
 	 * @return Device operation mapping object list.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	List<MobileDeviceOperationMapping> getAllPendingOperationsOfMobileDevice(String deviceId)
+	List<MobileDeviceOperationMapping> getAllPendingOperationMappingsOfMobileDevice(String deviceId)
 			throws MobileDeviceManagementDAOException;
 }
