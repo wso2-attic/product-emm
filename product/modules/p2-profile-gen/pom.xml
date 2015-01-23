@@ -20,15 +20,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.wso2.cdmserver</groupId>
-        <artifactId>wso2cdmserver-product</artifactId>
+        <groupId>org.wso2.mdmserver</groupId>
+        <artifactId>wso2mdmserver-product</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>wso2cdm-profile-gen</artifactId>
-    <name>WSO2 Connected Device Manager (CDM) - P2 Profile Gen</name>
+    <artifactId>wso2mdm-profile-gen</artifactId>
+    <name>WSO2 Mobile Device Manager (MDM) - P2 Profile Gen</name>
     <packaging>pom</packaging>
 
     <build>
@@ -104,13 +104,13 @@
                                     org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.platform.version}
                                 </featureArtifactDef>-->
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.device.mgt.server.feature:${project.version}
+                                    org.wso2.carbon:org.wso2.carbon.device.mgt.server.feature:${cdm.core.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.device.mgt.mobile.feature:${project.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.policy.mgt.server.feature:${project.version}
+                                    org.wso2.carbon:org.wso2.carbon.policy.mgt.server.feature:${cdm.core.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.webapp.mgt.feature:${carbon.platform.version}
@@ -126,6 +126,9 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.jaggeryjs.modules:uuid.feature:${uuid.feature.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.jaggeryjs.modules:sso.feature:${sso.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.jaggeryjs.modules:jaggery-test.feature:${jaggery-test.feature.version}
@@ -211,6 +214,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.identity.authenticator.saml2.sso.server.feature:${carbon.platform.version}
                                 </featureArtifactDef>
+				<featureArtifactDef>
+				    org.wso2.carbon:org.wso2.carbon.um.ws.service.client.feature:${carbon.platform.version}
+				</featureArtifactDef>
 
                                 <!-- registry features -->
                                 <featureArtifactDef>org.wso2.carbon:org.wso2.carbon.registry.core.feature:${carbon.platform.version}</featureArtifactDef>
@@ -251,7 +257,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.server.feature.group</id>
-                                    <version>${project.version}</version>
+                                    <version>${cdm.core.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.mobile.feature.group</id>
@@ -259,7 +265,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.policy.mgt.server.feature.group</id>
-                                    <version>${project.version}</version>
+                                    <version>${cdm.core.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.webapp.mgt.feature.group</id>
@@ -280,6 +286,10 @@
                                 <feature>
                                     <id>org.jaggeryjs.modules.uuid.feature.group</id>
                                     <version>${uuid.feature.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.sso.feature.group</id>
+                                    <version>${sso.feature.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.jaggery-test.feature.group</id>
@@ -438,6 +448,10 @@
                                     <id>org.wso2.carbon.governance.lifecycle.management.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+				<feature>
+				    <id>org.wso2.carbon.um.ws.service.client.feature.group</id>
+				    <version>${carbon.platform.version}</version>
+				</feature>
                             </features>
                         </configuration>
                     </execution>

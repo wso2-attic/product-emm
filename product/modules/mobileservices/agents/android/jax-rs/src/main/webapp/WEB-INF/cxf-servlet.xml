@@ -23,9 +23,9 @@
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
-    <jaxrs:server id="customerService" address="/register">
+    <jaxrs:server id="operationService" address="/operations">
         <jaxrs:serviceBeans>
-            <ref bean="deviceMgtServiceBean"/>
+            <ref bean="operationServiceBean"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"/>
@@ -53,6 +53,7 @@
 
     <bean id="deviceMgtServiceBean" class="org.wso2.cdmserver.mobileservices.android.Device"/>
     <bean id="enrollmentServiceBean" class="org.wso2.cdmserver.mobileservices.android.Enrollment"/>
+    <bean id="operationServiceBean" class="org.wso2.cdmserver.mobileservices.android.Operation"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
     <bean id="errorHandler" class="org.wso2.cdmserver.mobileservices.android.common.ErrorHandler"/>
 </beans>

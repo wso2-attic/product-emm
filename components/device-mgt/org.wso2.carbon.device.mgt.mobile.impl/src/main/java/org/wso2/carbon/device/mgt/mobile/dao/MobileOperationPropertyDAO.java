@@ -21,7 +21,7 @@ import org.wso2.carbon.device.mgt.mobile.dto.MobileOperationProperty;
 import java.util.List;
 
 /**
- * This class represents the key operations associated with persisting operation property related
+ * This class represents the key operations associated with persisting mobile operation property related
  * information.
  */
 public interface MobileOperationPropertyDAO {

@@ -28,8 +28,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.cdmserver</groupId>
-    <artifactId>wso2cdmserver-product</artifactId>
+    <groupId>org.wso2.mdmserver</groupId>
+    <artifactId>wso2mdmserver-product</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Connected Device Manager (CDM) - Parent</name>
 
