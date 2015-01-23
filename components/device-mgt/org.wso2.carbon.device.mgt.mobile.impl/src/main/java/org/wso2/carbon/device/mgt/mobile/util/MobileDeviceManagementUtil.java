@@ -59,20 +59,38 @@ public class MobileDeviceManagementUtil {
 					"to a org.w3c.dom.Document : " + e.getMessage(), e);
 		}
 	}
+	private static String getPropertyValue(Device device, String property) {
+		for (Device.Property prop : device.getProperties()) {
+			if (property.equals(prop.getName())) {
+				return prop.getValue();
+			}
+		}
+		return null;
+	}
 
+	private static Device.Property getProperty(String property, String value) {
+		Device.Property prop = null;
+		if (property != null) {
+			prop = new Device.Property();
+			prop.setName(property);
+			prop.setValue(value);
+			return prop;
+		}
+		return prop;
+	}
 	public static MobileDevice convertToMobileDevice(Device device) {
 		MobileDevice mobileDevice = null;
 		if (device != null) {
 			mobileDevice = new MobileDevice();
 			mobileDevice.setMobileDeviceId(device.getDeviceIdentifier());
-			mobileDevice.setImei(device.getProperties().get(MOBILE_DEVICE_IMEI));
-			mobileDevice.setImsi(device.getProperties().get(MOBILE_DEVICE_IMSI));
-			mobileDevice.setRegId(device.getProperties().get(MOBILE_DEVICE_REG_ID));
-			mobileDevice.setModel(device.getProperties().get(MOBILE_DEVICE_MODEL));
-			mobileDevice.setOsVersion(device.getProperties().get(MOBILE_DEVICE_OS_VERSION));
-			mobileDevice.setVendor(device.getProperties().get(MOBILE_DEVICE_VENDOR));
-			mobileDevice.setLatitude(device.getProperties().get(MOBILE_DEVICE_LATITUDE));
-			mobileDevice.setLongitude(device.getProperties().get(MOBILE_DEVICE_LONGITUDE));
+			mobileDevice.setImei(getPropertyValue(device, MOBILE_DEVICE_IMEI));
+			mobileDevice.setImsi(getPropertyValue(device, MOBILE_DEVICE_IMSI));
+			mobileDevice.setRegId(getPropertyValue(device, MOBILE_DEVICE_REG_ID));
+			mobileDevice.setModel(getPropertyValue(device, MOBILE_DEVICE_MODEL));
+			mobileDevice.setOsVersion(getPropertyValue(device, MOBILE_DEVICE_OS_VERSION));
+			mobileDevice.setVendor(getPropertyValue(device, MOBILE_DEVICE_VENDOR));
+			mobileDevice.setLatitude(getPropertyValue(device, MOBILE_DEVICE_LATITUDE));
+			mobileDevice.setLongitude(getPropertyValue(device, MOBILE_DEVICE_LONGITUDE));
 		}
 		return mobileDevice;
 	}
@@ -81,16 +99,16 @@ public class MobileDeviceManagementUtil {
 		Device device = null;
 		if (mobileDevice != null) {
 			device = new Device();
-			Map<String, String> propertyMap = new HashMap<String, String>();
-			propertyMap.put(MOBILE_DEVICE_IMEI, mobileDevice.getImei());
-			propertyMap.put(MOBILE_DEVICE_IMSI, mobileDevice.getImsi());
-			propertyMap.put(MOBILE_DEVICE_REG_ID, mobileDevice.getRegId());
-			propertyMap.put(MOBILE_DEVICE_MODEL, mobileDevice.getModel());
-			propertyMap.put(MOBILE_DEVICE_OS_VERSION, mobileDevice.getOsVersion());
-			propertyMap.put(MOBILE_DEVICE_VENDOR, mobileDevice.getVendor());
-			propertyMap.put(MOBILE_DEVICE_LATITUDE, mobileDevice.getLatitude());
-			propertyMap.put(MOBILE_DEVICE_LONGITUDE, mobileDevice.getLongitude());
-			device.setProperties(propertyMap);
+			List<Device.Property> propertyList = new ArrayList<Device.Property>();
+			propertyList.add(getProperty(MOBILE_DEVICE_IMEI, mobileDevice.getImei()));
+			propertyList.add(getProperty(MOBILE_DEVICE_IMSI, mobileDevice.getImsi()));
+			propertyList.add(getProperty(MOBILE_DEVICE_REG_ID, mobileDevice.getRegId()));
+			propertyList.add(getProperty(MOBILE_DEVICE_MODEL, mobileDevice.getModel()));
+			propertyList.add(getProperty(MOBILE_DEVICE_OS_VERSION, mobileDevice.getOsVersion()));
+			propertyList.add(getProperty(MOBILE_DEVICE_VENDOR, mobileDevice.getVendor()));
+			propertyList.add(getProperty(MOBILE_DEVICE_LATITUDE, mobileDevice.getLatitude()));
+			propertyList.add(getProperty(MOBILE_DEVICE_LONGITUDE, mobileDevice.getLongitude()));
+			device.setProperties(propertyList);
 			device.setDeviceIdentifier(mobileDevice.getMobileDeviceId());
 		}
 		return device;
