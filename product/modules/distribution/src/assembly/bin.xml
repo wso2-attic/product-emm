@@ -227,8 +227,8 @@
 
 	<!-- Copying API Manager Publisher and Store Jaggery apps -->
 	<fileSet>
-             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.platform.version}/repository/deployment/server/jaggeryapps/publisher/</directory>
-             <outputDirectory>wso2am-${pom.version}/repository/deployment/server/jaggeryapps/publisher</outputDirectory>
+             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/publisher/</directory>
+             <outputDirectory>wso2mdm-${project.version}/repository/deployment/server/jaggeryapps/publisher</outputDirectory>
              <excludes>
                 <exclude>publisherLogo/**</exclude>
                 <exclude>publisherTheme/**</exclude>
@@ -238,8 +238,8 @@
              </excludes>
          </fileSet>
          <fileSet>
-             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.platform.version}/repository/deployment/server/jaggeryapps/store/</directory>
-             <outputDirectory>wso2am-${pom.version}/repository/deployment/server/jaggeryapps/store</outputDirectory>
+             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/store/</directory>
+             <outputDirectory>wso2mdm-${project.version}/repository/deployment/server/jaggeryapps/store</outputDirectory>
              <excludes>
                 <exclude>storeLogo/**</exclude>
                 <exclude>storeSite/**</exclude>
