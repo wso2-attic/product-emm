@@ -100,7 +100,7 @@ public class MobileDeviceDAOImpl implements MobileDeviceDAO {
 			stmt.setString(6, mobileDevice.getModel());
 			stmt.setString(7, mobileDevice.getVendor());
 			stmt.setString(8, mobileDevice.getLatitude());
-			stmt.setString(8, mobileDevice.getLongitude());
+			stmt.setString(9, mobileDevice.getLongitude());
 			int rows = stmt.executeUpdate();
 			if(rows>0){
 				status = true;

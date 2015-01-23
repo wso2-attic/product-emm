@@ -18,25 +18,30 @@
 
 var utility = require("/modules/utility.js");
 var DeviceIdentifier = Packages.org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+var DeviceManagerUtil = Packages.org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 var log = new Log();
-
 var deviceManagementService = utility.getDeviceManagementService();
 
 var listDevices = function () {
+
     var devices = deviceManagementService.getAllDevices("android");
+
     var deviceList = [];
+
 
     for (i = 0; i < devices.size(); i++) {
         var device = devices.get(i);
+
+        var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
         deviceList.push({
             "identifier": device.getDeviceIdentifier(),
             "name": device.getName(),
             "ownership": device.getOwnership(),
             "owner": device.getOwner(),
             "deviceType": device.getType(),
-            "vendor": device.getProperties().get("vendor"),
-            "model": device.getProperties().get("model"),
-            "osVersion": device.getProperties().get("osVersion")
+            "vendor": propertiesList.get("vendor"),
+            "model": propertiesList.get("model"),
+            "osVersion": propertiesList.get("osVersion")
         });
     }
     return deviceList;
@@ -50,9 +55,11 @@ var getDevice = function(type, deviceId){
 }
 
 var viewDevice = function(type, deviceId){
+
     var device = this.getDevice(type, deviceId);
 
-    var entries = device.getProperties().entrySet();
+    var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
+    var entries = propertiesList.entrySet();
     var iterator = entries.iterator();
     var properties = {};
     while(iterator.hasNext()){
@@ -67,9 +74,9 @@ var viewDevice = function(type, deviceId){
         "ownership": device.getOwnership(),
         "owner": device.getOwner(),
         "deviceType": device.getType(),
-        "vendor": device.getProperties().get("vendor"),
-        "model": device.getProperties().get("model"),
-        "osVersion": device.getProperties().get("osVersion"),
+        "vendor": propertiesList.get("vendor"),
+        "model": propertiesList.get("model"),
+        "osVersion": propertiesList.get("osVersion"),
         "properties": properties
     };
 }

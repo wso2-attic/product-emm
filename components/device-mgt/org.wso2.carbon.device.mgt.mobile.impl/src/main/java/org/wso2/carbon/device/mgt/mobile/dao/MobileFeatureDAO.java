@@ -33,7 +33,7 @@ public interface MobileFeatureDAO {
 	 * @return The status of the operation. If the insert was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean addFeature(MobileFeature mobileFeature) throws MobileDeviceManagementDAOException;
+	boolean addMobileFeature(MobileFeature mobileFeature) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Update a feature in the feature table.
@@ -42,7 +42,7 @@ public interface MobileFeatureDAO {
 	 * @return The status of the operation. If the update was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean updateFeature(MobileFeature mobileFeature) throws MobileDeviceManagementDAOException;
+	boolean updateMobileFeature(MobileFeature mobileFeature) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Delete a feature from feature table when the feature id is given.
@@ -51,7 +51,7 @@ public interface MobileFeatureDAO {
 	 * @return The status of the operation. If the operationId was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteFeatureById(String featureId) throws MobileDeviceManagementDAOException;
+	boolean deleteMobileFeatureById(int featureId) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Delete a feature from feature table when the feature code is given.
@@ -60,7 +60,7 @@ public interface MobileFeatureDAO {
 	 * @return The status of the operation. If the operationId was successful or not.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	boolean deleteFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
+	boolean deleteMobileFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a given feature from feature table when the feature id is given.
@@ -69,7 +69,7 @@ public interface MobileFeatureDAO {
 	 * @return Feature object that holds data of the feature represented by featureId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	MobileFeature getFeatureById(String featureId) throws MobileDeviceManagementDAOException;
+	MobileFeature getMobileFeatureById(int featureId) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve a given feature from feature table when the feature code is given.
@@ -78,7 +78,7 @@ public interface MobileFeatureDAO {
 	 * @return Feature object that holds data of the feature represented by featureCode.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	MobileFeature getFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
+	MobileFeature getMobileFeatureByCode(String featureCode) throws MobileDeviceManagementDAOException;
 
 	/**
 	 * Retrieve all the features from plugin specific database.
@@ -86,5 +86,5 @@ public interface MobileFeatureDAO {
 	 * @return Feature object list.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	List<MobileFeature> getAllFeatures() throws MobileDeviceManagementDAOException;
+	List<MobileFeature> getAllMobileFeatures() throws MobileDeviceManagementDAOException;
 }

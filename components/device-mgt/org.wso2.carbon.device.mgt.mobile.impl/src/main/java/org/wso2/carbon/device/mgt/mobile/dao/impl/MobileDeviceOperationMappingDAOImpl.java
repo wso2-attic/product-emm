@@ -45,7 +45,7 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public boolean addMobileDeviceOperation(MobileDeviceOperationMapping deviceOperation)
+	public boolean addMobileDeviceOperationMapping(MobileDeviceOperationMapping deviceOperation)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -81,7 +81,7 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public boolean updateMobileDeviceOperation(MobileDeviceOperationMapping deviceOperation)
+	public boolean updateMobileDeviceOperationMapping(MobileDeviceOperationMapping deviceOperation)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -114,7 +114,7 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public boolean updateMobileDeviceOperationToInProgress(String deviceId, int operationId)
+	public boolean updateMobileDeviceOperationMappingToInProgress(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -147,8 +147,8 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public boolean updateMobileDeviceOperationToCompleted(String deviceId,
-	                                                      int operationId)
+	public boolean updateMobileDeviceOperationMappingToCompleted(String deviceId,
+	                                                             int operationId)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -181,7 +181,7 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public boolean deleteMobileDeviceOperation(String deviceId, int operationId)
+	public boolean deleteMobileDeviceOperationMapping(String deviceId, int operationId)
 			throws MobileDeviceManagementDAOException {
 		boolean status = false;
 		Connection conn = null;
@@ -210,7 +210,8 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public MobileDeviceOperationMapping getMobileDeviceOperation(String deviceId, int operationId)
+	public MobileDeviceOperationMapping getMobileDeviceOperationMapping(String deviceId,
+	                                                                    int operationId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -246,7 +247,8 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public List<MobileDeviceOperationMapping> getAllMobileDeviceOperationsOfDevice(String deviceId)
+	public List<MobileDeviceOperationMapping> getAllMobileDeviceOperationNappingsOfDevice(
+			String deviceId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -282,7 +284,8 @@ public class MobileDeviceOperationMappingDAOImpl implements MobileDeviceOperatio
 	}
 
 	@Override
-	public List<MobileDeviceOperationMapping> getAllPendingOperationsOfMobileDevice(String deviceId)
+	public List<MobileDeviceOperationMapping> getAllPendingOperationMappingsOfMobileDevice(
+			String deviceId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
