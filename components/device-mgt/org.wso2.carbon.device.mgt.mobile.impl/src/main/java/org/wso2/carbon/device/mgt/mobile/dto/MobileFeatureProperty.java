@@ -22,13 +22,13 @@ package org.wso2.carbon.device.mgt.mobile.dto;
 public class MobileFeatureProperty {
 
 	private String property;
-	private String featureID;
+	private Integer featureID;
 
-	public String getFeatureID() {
+	public Integer getFeatureID() {
 		return featureID;
 	}
 
-	public void setFeatureID(String featureID) {
+	public void setFeatureID(Integer featureID) {
 		this.featureID = featureID;
 	}
 

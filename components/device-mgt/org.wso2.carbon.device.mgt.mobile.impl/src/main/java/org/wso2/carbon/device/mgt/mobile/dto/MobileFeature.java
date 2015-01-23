@@ -24,6 +24,7 @@ import java.io.Serializable;
 public class MobileFeature implements Serializable {
 
 	private int id;
+	private String deviceType;
 	private String code;
 	private String name;
 	private String description;
@@ -60,4 +61,11 @@ public class MobileFeature implements Serializable {
 		this.description = description;
 	}
 
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
+	}
 }

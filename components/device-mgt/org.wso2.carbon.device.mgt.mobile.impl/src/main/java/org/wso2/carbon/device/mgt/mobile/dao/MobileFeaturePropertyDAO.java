@@ -70,7 +70,7 @@ public interface MobileFeaturePropertyDAO {
 	 * @return Feature property object that holds data of the feature property represented by propertyId.
 	 * @throws MobileDeviceManagementDAOException
 	 */
-	List<MobileFeatureProperty> getFeaturePropertyOfFeature(String featureId)
+	List<MobileFeatureProperty> getFeaturePropertyOfFeature(Integer featureId)
 			throws MobileDeviceManagementDAOException;
 
 }

@@ -73,6 +73,7 @@ var title="WSO2 CDM";
             </div>
         </div>
         <%
+        include("/includes/footer.jag");
         include("/includes/layout-footer.jag");
         %>
     </body>
