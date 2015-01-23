@@ -1,4 +1,4 @@
-product-cdm
+product-mdm
 ===========
 WSO2 MOBILE DEVICE MANAGER
 
