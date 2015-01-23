@@ -259,12 +259,18 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.governance.lifecycle.management.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-
-
-                                <featureArtifactDef>
+                                
+				<featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.identity.self.registration.server.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-
+				
+				<!-- API Manager Publisher and Store Features -->
+				<featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.apimgt.publisher.feature:${carbon.platform.version}
+                                </featureArtifactDef>
+				<featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.apimgt.store.feature:${carbon.platform.version}
+                                </featureArtifactDef>
 
 
                             </featureArtifacts>
@@ -429,14 +435,12 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-
                                 <feature>
                                     <id>org.wso2.carbon.identity.self.registration.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
                                 <!-- registry features -->
-
                                 <feature>
                                     <id>org.wso2.carbon.registry.core.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -492,6 +496,16 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.um.ws.service.client.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
+
+				<!-- API Manager Publisher and Store Features -->
+				<feature>
+                                    <id>org.wso2.carbon.apimgt.publisher.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.apimgt.store.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                             </features>
