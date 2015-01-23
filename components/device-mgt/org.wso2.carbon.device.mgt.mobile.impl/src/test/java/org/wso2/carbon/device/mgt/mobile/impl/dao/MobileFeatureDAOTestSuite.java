@@ -19,6 +19,8 @@
 package org.wso2.carbon.device.mgt.mobile.impl.dao;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -44,6 +46,7 @@ import java.util.List;
 
 public class MobileFeatureDAOTestSuite {
 
+	private static final Log log = LogFactory.getLog(MobileFeatureDAOTestSuite.class);
 	public static final String MBL_FEATURE_NAME = "Camera";
 	private static final String MBL_FEATURE_CODE = "500A";
 	public static final String MBL_FEATURE_DESCRIPTION = "Camera enable or disable";
@@ -139,6 +142,7 @@ public class MobileFeatureDAOTestSuite {
 			}
 			conn.close();
 		} catch (SQLException e) {
+			log.error("Error in retrieving Mobile Feature data ", e);
 			throw new MobileDeviceManagementDAOException("Error in retrieving Mobile Feature data ",
 			                                             e);
 		} finally {
@@ -182,6 +186,7 @@ public class MobileFeatureDAOTestSuite {
 			}
 			conn.close();
 		} catch (SQLException e) {
+			log.error("Error in deleting Mobile Feature data ", e);
 			throw new MobileDeviceManagementDAOException("Error in deleting Mobile Feature data ",
 			                                             e);
 		} finally {
@@ -228,6 +233,7 @@ public class MobileFeatureDAOTestSuite {
 			}
 			conn.close();
 		} catch (SQLException e) {
+			log.error("Error in deleting Mobile Feature data ", e);
 			throw new MobileDeviceManagementDAOException("Error in deleting Mobile Feature data ",
 			                                             e);
 		} finally {
@@ -252,8 +258,8 @@ public class MobileFeatureDAOTestSuite {
 			stmt = conn.createStatement();
 			ResultSet resultSet = stmt
 					.executeQuery(
-							"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE CODE = " +
-							MBL_FEATURE_UPDATED_CODE);
+							"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE CODE = '" +
+							MBL_FEATURE_UPDATED_CODE + "'");
 			while (resultSet.next()) {
 				testMblFeature.setId(resultSet.getInt(1));
 				testMblFeature.setCode(resultSet.getString(2));
@@ -262,6 +268,7 @@ public class MobileFeatureDAOTestSuite {
 			}
 			conn.close();
 		} catch (SQLException e) {
+			log.error("Error in updating Mobile Feature data ", e);
 			throw new MobileDeviceManagementDAOException("Error in updating Mobile Feature data ",
 			                                             e);
 		} finally {
