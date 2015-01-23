@@ -56,7 +56,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 
 			stmt = conn.prepareStatement(createDBQuery);
 			stmt.setString(1, mobileFeatureProperty.getProperty());
-			stmt.setString(2, mobileFeatureProperty.getFeatureID());
+			stmt.setInt(2, mobileFeatureProperty.getFeatureID());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
@@ -83,7 +83,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 			String updateDBQuery =
 					"UPDATE MBL_FEATURE_PROPERTY SET FEATURE_ID = ? WHERE PROPERTY = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
-			stmt.setString(1, mobileFeatureProperty.getFeatureID());
+			stmt.setInt(1, mobileFeatureProperty.getFeatureID());
 			stmt.setString(2, mobileFeatureProperty.getProperty());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
@@ -143,7 +143,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 			while (resultSet.next()) {
 				mobileFeatureProperty = new MobileFeatureProperty();
 				mobileFeatureProperty.setProperty(resultSet.getString(1));
-				mobileFeatureProperty.setFeatureID(resultSet.getString(2));
+				mobileFeatureProperty.setFeatureID(resultSet.getInt(2));
 				break;
 			}
 		} catch (SQLException e) {
@@ -158,7 +158,7 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 	}
 
 	@Override
-	public List<MobileFeatureProperty> getFeaturePropertyOfFeature(String featureId)
+	public List<MobileFeatureProperty> getFeaturePropertyOfFeature(Integer featureId)
 			throws MobileDeviceManagementDAOException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -169,12 +169,12 @@ public class MobileFeaturePropertyDAOImpl implements MobileFeaturePropertyDAO {
 			String selectDBQuery =
 					"SELECT PROPERTY, FEATURE_ID FROM MBL_FEATURE_PROPERTY WHERE FEATURE_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, featureId);
+			stmt.setInt(1, featureId);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
 				mobileFeatureProperty = new MobileFeatureProperty();
 				mobileFeatureProperty.setProperty(resultSet.getString(1));
-				mobileFeatureProperty.setFeatureID(resultSet.getString(2));
+				mobileFeatureProperty.setFeatureID(resultSet.getInt(2));
 				FeatureProperties.add(mobileFeatureProperty);
 			}
 			return FeatureProperties;

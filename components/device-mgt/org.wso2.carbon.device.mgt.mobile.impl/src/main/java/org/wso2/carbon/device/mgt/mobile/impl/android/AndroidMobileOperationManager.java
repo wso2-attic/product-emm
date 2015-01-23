@@ -17,15 +17,13 @@ package org.wso2.carbon.device.mgt.mobile.impl.android;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.Operation;
-import org.wso2.carbon.device.mgt.common.OperationManagementException;
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.mobile.AbstractMobileOperationManager;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOFactory;
-import org.wso2.carbon.device.mgt.mobile.dto.MobileDeviceOperationMapping;
-import org.wso2.carbon.device.mgt.mobile.dto.MobileOperation;
-import org.wso2.carbon.device.mgt.mobile.dto.MobileOperationProperty;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileFeatureDAO;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileFeaturePropertyDAO;
+import org.wso2.carbon.device.mgt.mobile.dto.*;
 import org.wso2.carbon.device.mgt.mobile.util.MobileDeviceManagementUtil;
 
 import java.util.ArrayList;
@@ -154,5 +152,39 @@ public class AndroidMobileOperationManager extends AbstractMobileOperationManage
 			throw new OperationManagementException(msg, e);
 		}
 		return operations;
+	}
+
+	@Override
+	public List<Feature> getFeaturesForDeviceType(String deviceType) throws FeatureManagementException {
+		MobileFeatureDAO featureDAO = MobileDeviceManagementDAOFactory.getFeatureDAO();
+		MobileFeaturePropertyDAO featurePropertyDAO = MobileDeviceManagementDAOFactory.getFeaturePropertyDAO();
+		List<Feature> features = new ArrayList<Feature>();
+		try {
+			List<MobileFeature> mobileFeatures = featureDAO.getFeatureByDeviceType(deviceType);
+			for (MobileFeature mobileFeature : mobileFeatures) {
+				Feature feature = new Feature();
+				feature.setId(mobileFeature.getId());
+				feature.setDeviceType(mobileFeature.getDeviceType());
+				feature.setName(mobileFeature.getName());
+				List<Feature.MetadataEntry> metadataEntries = new ArrayList<Feature.MetadataEntry>();
+				List<MobileFeatureProperty> properties =
+						featurePropertyDAO.getFeaturePropertyOfFeature(mobileFeature.getId());
+				for (MobileFeatureProperty property : properties) {
+					Feature.MetadataEntry metaEntry = new Feature.MetadataEntry();
+					metaEntry.setId(property.getFeatureID());
+					metaEntry.setValue(property.getProperty());
+					metadataEntries.add(metaEntry);
+				}
+				feature.setMetadataEntries(metadataEntries);
+				features.add(feature);
+			}
+		} catch (MobileDeviceManagementDAOException e) {
+			String msg =
+					"Error while fetching the features for the device type " +
+					deviceType;
+			log.error(msg, e);
+			throw new FeatureManagementException(msg, e);
+		}
+		return features;
 	}
 }

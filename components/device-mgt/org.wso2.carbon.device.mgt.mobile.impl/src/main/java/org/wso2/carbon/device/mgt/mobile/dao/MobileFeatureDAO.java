@@ -87,4 +87,13 @@ public interface MobileFeatureDAO {
 	 * @throws MobileDeviceManagementDAOException
 	 */
 	List<MobileFeature> getAllFeatures() throws MobileDeviceManagementDAOException;
+
+	/**
+	 * Retrieve all the features from plugin specific database for a Device Type.
+	 * @param deviceType - Device type.
+	 * @return Feature object list.
+	 * @throws MobileDeviceManagementDAOException
+	 */
+	List<MobileFeature> getFeatureByDeviceType(String deviceType) throws MobileDeviceManagementDAOException;
+
 }

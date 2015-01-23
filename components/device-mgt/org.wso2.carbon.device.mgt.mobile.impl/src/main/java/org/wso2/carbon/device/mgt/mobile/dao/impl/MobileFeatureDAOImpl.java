@@ -18,8 +18,8 @@ package org.wso2.carbon.device.mgt.mobile.dao.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.mobile.dao.MobileFeatureDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.MobileDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.mobile.dao.MobileFeatureDAO;
 import org.wso2.carbon.device.mgt.mobile.dao.util.MobileDeviceManagementDAOUtil;
 import org.wso2.carbon.device.mgt.mobile.dto.MobileFeature;
 
@@ -51,12 +51,13 @@ public class MobileFeatureDAOImpl implements MobileFeatureDAO {
 		try {
 			conn = this.getConnection();
 			String createDBQuery =
-					"INSERT INTO MBL_FEATURE(CODE, NAME, DESCRIPTION) VALUES (?, ?, ?)";
+					"INSERT INTO MBL_FEATURE(CODE, NAME, DESCRIPTION, DEVICE_TYPE) VALUES (?, ?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
 			stmt.setString(1, mobileFeature.getCode());
 			stmt.setString(2, mobileFeature.getName());
 			stmt.setString(3, mobileFeature.getDescription());
+			stmt.setString(4, mobileFeature.getDeviceType());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
@@ -81,12 +82,13 @@ public class MobileFeatureDAOImpl implements MobileFeatureDAO {
 		try {
 			conn = this.getConnection();
 			String updateDBQuery =
-					"UPDATE MBL_FEATURE SET CODE = ?, NAME = ?, DESCRIPTION = ? WHERE FEATURE_ID = ?";
+					"UPDATE MBL_FEATURE SET CODE = ?, NAME = ?, DESCRIPTION = ?, DEVICE_TYPE = ? WHERE FEATURE_ID = ?";
 			stmt = conn.prepareStatement(updateDBQuery);
 			stmt.setString(1, mobileFeature.getCode());
 			stmt.setString(2, mobileFeature.getName());
 			stmt.setString(3, mobileFeature.getDescription());
-			stmt.setInt(4, mobileFeature.getId());
+			stmt.setString(4, mobileFeature.getDeviceType());
+			stmt.setInt(5, mobileFeature.getId());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
@@ -163,16 +165,17 @@ public class MobileFeatureDAOImpl implements MobileFeatureDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE CODE = ?";
+					"SELECT FEATURE_ID,DEVICE_TYPE, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE CODE = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
 			stmt.setString(1, featureCode);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
 				mobileFeature = new MobileFeature();
 				mobileFeature.setId(resultSet.getInt(1));
-				mobileFeature.setCode(resultSet.getString(2));
-				mobileFeature.setName(resultSet.getString(3));
-				mobileFeature.setDescription(resultSet.getString(4));
+				mobileFeature.setDeviceType(resultSet.getString(2));
+				mobileFeature.setCode(resultSet.getString(3));
+				mobileFeature.setName(resultSet.getString(4));
+				mobileFeature.setDescription(resultSet.getString(5));
 				break;
 			}
 		} catch (SQLException e) {
@@ -195,16 +198,17 @@ public class MobileFeatureDAOImpl implements MobileFeatureDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE FEATURE_ID = ?";
+					"SELECT FEATURE_ID,DEVICE_TYPE, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE FEATURE_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
 			stmt.setString(1, featureID);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
 				mobileFeature = new MobileFeature();
 				mobileFeature.setId(resultSet.getInt(1));
-				mobileFeature.setCode(resultSet.getString(2));
-				mobileFeature.setName(resultSet.getString(3));
-				mobileFeature.setDescription(resultSet.getString(4));
+				mobileFeature.setDeviceType(resultSet.getString(2));
+				mobileFeature.setCode(resultSet.getString(3));
+				mobileFeature.setName(resultSet.getString(4));
+				mobileFeature.setDescription(resultSet.getString(5));
 				break;
 			}
 		} catch (SQLException e) {
@@ -227,15 +231,16 @@ public class MobileFeatureDAOImpl implements MobileFeatureDAO {
 		try {
 			conn = this.getConnection();
 			String selectDBQuery =
-					"SELECT FEATURE_ID, CODE, NAME, DESCRIPTION FROM MBL_FEATURE";
+					"SELECT FEATURE_ID,DEVICE_TYPE, CODE, NAME, DESCRIPTION FROM MBL_FEATURE";
 			stmt = conn.prepareStatement(selectDBQuery);
 			ResultSet resultSet = stmt.executeQuery();
 			while (resultSet.next()) {
 				mobileFeature = new MobileFeature();
 				mobileFeature.setId(resultSet.getInt(1));
-				mobileFeature.setCode(resultSet.getString(2));
-				mobileFeature.setName(resultSet.getString(3));
-				mobileFeature.setDescription(resultSet.getString(4));
+				mobileFeature.setDeviceType(resultSet.getString(2));
+				mobileFeature.setCode(resultSet.getString(3));
+				mobileFeature.setName(resultSet.getString(4));
+				mobileFeature.setDescription(resultSet.getString(5));
 				mobileFeatures.add(mobileFeature);
 			}
 			return mobileFeatures;
@@ -244,6 +249,38 @@ public class MobileFeatureDAOImpl implements MobileFeatureDAO {
 			log.error(msg, e);
 			throw new MobileDeviceManagementDAOException(msg, e);
 		} finally {
+			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
+		}
+	}
+
+	@Override
+	public List<MobileFeature> getFeatureByDeviceType(String deviceType) throws MobileDeviceManagementDAOException {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		MobileFeature mobileFeature;
+		List<MobileFeature> mobileFeatures = new ArrayList<MobileFeature>();
+		try {
+			conn = this.getConnection();
+			String selectDBQuery =
+					"SELECT FEATURE_ID, DEVICE_TYPE, CODE, NAME, DESCRIPTION FROM MBL_FEATURE WHERE DEVICE_TYPE = ?";
+			stmt = conn.prepareStatement(selectDBQuery);
+			stmt.setString(1, deviceType);
+			ResultSet resultSet = stmt.executeQuery();
+			while (resultSet.next()) {
+				mobileFeature = new MobileFeature();
+				mobileFeature.setId(resultSet.getInt(1));
+				mobileFeature.setDeviceType(resultSet.getString(2));
+				mobileFeature.setCode(resultSet.getString(3));
+				mobileFeature.setName(resultSet.getString(4));
+				mobileFeature.setDescription(resultSet.getString(5));
+				mobileFeatures.add(mobileFeature);
+			}
+			return mobileFeatures;
+		} catch (SQLException e) {
+			String msg = "Error occurred while fetching all features.'";
+			log.error(msg, e);
+			throw new MobileDeviceManagementDAOException(msg, e);
+		}finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
 		}
 	}
