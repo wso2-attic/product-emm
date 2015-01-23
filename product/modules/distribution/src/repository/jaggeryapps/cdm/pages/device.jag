@@ -35,22 +35,26 @@ var title="WSO2 CDM";
         var deviceId = uriMatcher.elements().deviceid;
         var type = uriMatcher.elements().type;
         var device = deviceModule.viewDevice(type, deviceId);
+        var operations = deviceModule.getOperations("android");
         %>
-        <div class="container-fluid">
+        <div id="deviceMain" data-deviceId="<%=deviceId%>" data-deviceType="<%=type%>" class="container-fluid">
             <div class="row">
                 <div class="col-sm-9 main col-centered">
                     <h2 class="sub-header"><%=device.name%></h2>
                     <div class="row">
                     </div>
                     <div class="row">
-                      <button class="device-operation btn btn-default">
+                       <%
+                            for (i = 0; i < operations.length; i++) {
+                                var operation = operations[i]
+                                %>
+                                  <button data-operation="<%=operation.featureName%>" class="device-operation btn btn-default">
                         <img src="/cdm/client/img/operations/lock.png" />
-                        <p>Lock</p>
+                        <p><%=operation.featureDescription %></p>
                       </button>
-                      <button class="device-operation btn btn-default">
-                        <img src="/cdm/client/img/operations/lock.png" />
-                        <p>Lock</p>
-                      </button>
+                                                            <%
+                        }
+%>
                     </div>
                     <div class="row">
                        <div class="col-md-3 device-model-holder well well-lg">
@@ -97,6 +101,7 @@ var title="WSO2 CDM";
     </div>
 </div>
 <%
+        include("/includes/footer.jag");
         include("/includes/layout-footer.jag");
         %>
     </body>

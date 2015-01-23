@@ -20,6 +20,7 @@ CREATE  TABLE IF NOT EXISTS `MBL_DEVICE` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `MBL_FEATURE` (
   `FEATURE_ID` INT NOT NULL AUTO_INCREMENT ,
+  `DEVICE_TYPE` VARCHAR(45) NOT NULL ,
   `CODE` VARCHAR(45) NOT NULL ,
   `NAME` VARCHAR(100) NULL ,
   `DESCRIPTION` VARCHAR(200) NULL ,
@@ -74,10 +75,15 @@ CREATE  TABLE IF NOT EXISTS `MBL_OPERATION_PROPERTY` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `MBL_FEATURE_PROPERTY` (
   `PROPERTY` VARCHAR(45) NOT NULL ,
-  `FEATURE_ID` VARCHAR(45) NOT NULL ,
+  `FEATURE_ID` INT NOT NULL ,
   PRIMARY KEY (`PROPERTY`) ,
   CONSTRAINT `fk_MBL_FEATURE_PROPERTY_MBL_FEATURE1`
     FOREIGN KEY (`FEATURE_ID` )
     REFERENCES `MBL_FEATURE` (`FEATURE_ID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+-- -----------------------------------------------------
+-- Inserts
+-- -----------------------------------------------------
+Insert into MBL_FEATURE (DEVICE_TYPE_ID,CODE, NAME, DESCRIPTION) VALUES ('android', "503A", "DEVICE_LOCK", "Device lock");

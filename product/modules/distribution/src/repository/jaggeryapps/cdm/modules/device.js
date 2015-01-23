@@ -19,16 +19,16 @@
 var utility = require("/modules/utility.js");
 var DeviceIdentifier = Packages.org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 var DeviceManagerUtil = Packages.org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
+var Operation = Packages.org.wso2.carbon.device.mgt.common.Operation;
+var Type =  Packages.org.wso2.carbon.device.mgt.common.Operation.Type;
+var Properties = Packages.java.util.Properties;
+var ArrayList = Packages.java.util.ArrayList;
 var log = new Log();
 var deviceManagementService = utility.getDeviceManagementService();
 
 var listDevices = function () {
-
     var devices = deviceManagementService.getAllDevices("android");
-
     var deviceList = [];
-
-
     for (i = 0; i < devices.size(); i++) {
         var device = devices.get(i);
 
@@ -54,10 +54,38 @@ var getDevice = function(type, deviceId){
     return device;
 }
 
+var getOperations = function(type){
+    var features = deviceManagementService.getOperationManager("android").getFeaturesForDeviceType(type);
+    var featuresConverted = [];
+    for (i = 0; i < features.size(); i++) {
+        var feature = features.get(i);
+        featuresConverted.push({
+            "featureName": feature.getName(),
+            "featureDescription": feature.getDescription()
+        });
+    }
+    return featuresConverted;
+}
+var performOperation = function(deviceId, featureName, properties, type){
+    var operation = new Operation();
+    operation.setCode(featureName);
+    operation.setType(Type.COMMAND);
+    var props = new Properties();
+    for (i = 0; i < properties.length; i++) {
+        var object = properties[i];
+        props.setProperty(object.key,object.value);
+    }
+    operation.setProperties(props);
+    var deviceIdentifier = new DeviceIdentifier();
+    deviceIdentifier.setId(deviceId)
+    deviceIdentifier.setType(type);
+    var deviceList = new ArrayList();
+    deviceList.add(deviceIdentifier);
+    deviceManagementService.getOperationManager("android").addOperation(operation, deviceList);
+}
+
 var viewDevice = function(type, deviceId){
-
     var device = this.getDevice(type, deviceId);
-
     var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
     var entries = propertiesList.entrySet();
     var iterator = entries.iterator();
