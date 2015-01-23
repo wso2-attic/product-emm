@@ -17,15 +17,13 @@
  */
 package org.wso2.cdmserver.mobileservices.android;
 
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
 import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
 import org.wso2.cdmserver.mobileservices.android.util.Message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -132,12 +130,24 @@ public class Device {
         }
     }
 
-    @POST
+    @GET
     @Path("/device/license")
     @Produces("text/plain")
     public String getLicense() {
         //TODO: need to implement fetch license from core
-     //   AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device);
-        return "License Agreement";
+        License license = null;
+        try {
+            try {
+                license = AndroidAPIUtils.getLicenseManagerService().getLicense(DeviceManagementConstants
+                        .MobileDeviceTypes
+                        .MOBILE_DEVICE_TYPE_ANDROID, DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
+            } catch (LicenseManagementException e) {
+                e.printStackTrace();
+            }
+        }catch(DeviceManagementServiceException deviceMgtEx){
+            deviceMgtEx.printStackTrace();
+        }
+
+        return license.getLicenseText();
     }
 }
