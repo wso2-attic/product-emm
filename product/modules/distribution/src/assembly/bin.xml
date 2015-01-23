@@ -210,7 +210,7 @@
 
         <!-- Copying Device Management related dbscripts -->
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm</directory>
+            <directory>../distribution/src/repository/dbscripts/cdm</directory>
             <outputDirectory>wso2mdm-${project.version}/dbscripts/cdm</outputDirectory>
             <includes>
                 <include>*/**</include>
@@ -468,6 +468,12 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/database</outputDirectory>
             <destName>WSO2MobileDM_DB.h2.db</destName>
             <fileMode>644</fileMode>
+        </file>
+
+	<file>
+            <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/carbon.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+            <filtered>true</filtered>
         </file>
 
     </files>
