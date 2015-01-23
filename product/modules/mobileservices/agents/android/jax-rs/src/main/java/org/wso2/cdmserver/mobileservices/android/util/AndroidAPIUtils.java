@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.core.service.LicenseManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -56,4 +57,24 @@ public class AndroidAPIUtils {
         PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
 	}
+
+    public static LicenseManagementService getLicenseManagerService() throws DeviceManagementServiceException{
+
+        //TODO: complete login change super tenent context
+        LicenseManagementService licenseManagementService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        licenseManagementService = (LicenseManagementService) ctx.getOSGiService(LicenseManagementService.class, null);
+
+        if (licenseManagementService == null){
+            String msg = "License management service not initialized";
+            log.error(msg);
+            throw new DeviceManagementServiceException(msg);
+        }
+        PrivilegedCarbonContext.endTenantFlow();
+        return licenseManagementService;
+    }
+
 }
