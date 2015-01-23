@@ -79,6 +79,8 @@ public class Operation {
 		Message responseMsg = new Message();
 		try {
 			dmService = AndroidAPIUtils.getDeviceManagementService();
+
+            //TODO: need to complete getOperation logic
 			boolean result = dmService.getOperationManager("").addOperation(null, null);
 			if (result) {
 				Response.status(HttpStatus.SC_OK);

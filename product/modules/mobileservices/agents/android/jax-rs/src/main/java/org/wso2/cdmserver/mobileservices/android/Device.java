@@ -137,6 +137,7 @@ public class Device {
     @Produces("text/plain")
     public String getLicense() {
         //TODO: need to implement fetch license from core
+     //   AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device);
         return "License Agreement";
     }
 }
