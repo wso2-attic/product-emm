@@ -1,15 +1,18 @@
 <?xml version="1.0"?>
 <artifactType type="application/vnd.wso2-license+xml" shortName="license" singularLabel="License" pluralLabel="Licenses"
               hasNamespace="false" iconSet="10">
-    <storagePath>/license/@{overview_provider}/@{overview_name}/@{overview_version}</storagePath>
+    <storagePath>/license/@{overview_provider}/@{overview_name}/@{overview_language}/@{overview_version}</storagePath>
     <nameAttribute>overview_name</nameAttribute>
     <ui>
         <list>
-            <column name="Provider">
+            <column name="Device Type">
                 <data type="path" value="overview_provider" href="@{storagePath}"/>
             </column>
             <column name="Name">
                 <data type="path" value="overview_name" href="@{storagePath}"/>
+            </column>
+            <column name="Language">
+                <data type="path" value="overview_language" href="@{storagePath}"/>
             </column>
             <column name="Version">
                 <data type="path" value="overview_version" href="@{storagePath}"/>
@@ -25,10 +28,16 @@
                 <name>Name</name>
             </field>
             <field type="text" required="true">
+                <name>Language</name>
+            </field>
+            <field type="text" required="true">
                 <name>Version</name>
             </field>
             <field type="text">
-                <name>Createdtime</name>
+                <name>Validity From</name>
+            </field>
+            <field type="text">
+                <name>Validity To</name>
             </field>
             <field type="text-area">
                 <name>License</name>
