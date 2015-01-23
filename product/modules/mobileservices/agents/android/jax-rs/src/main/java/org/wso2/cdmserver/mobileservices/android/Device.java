@@ -131,10 +131,9 @@ public class Device {
     }
 
     @GET
-    @Path("/device/license")
+    @Path("/license")
     @Produces("text/plain")
     public String getLicense() {
-        //TODO: need to implement fetch license from core
         License license = null;
         try {
             try {
@@ -147,7 +146,6 @@ public class Device {
         }catch(DeviceManagementServiceException deviceMgtEx){
             deviceMgtEx.printStackTrace();
         }
-
         return license.getLicenseText();
     }
 }

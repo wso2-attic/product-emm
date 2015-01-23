@@ -69,7 +69,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	String wapProvisioningXmlFile;
 	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 
-	@Override public void RequestSecurityToken(String TokenType, String RequestType,
+	//@Override
+    public void RequestSecurityToken(String TokenType, String RequestType,
 	                                           String BinarySecurityToken,
 	                                           AdditionalContext AdditionalContext,
 	                                           Holder<RequestSecurityTokenResponse> response) {
@@ -109,18 +110,20 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 			NodeList wapParm = dDoc.getElementsByTagName("parm");
 			/////////
-			wapParm.item(0).getParentNode().getAttributes().getNamedItem("type").setTextContent(String.valueOf(
+		/*	wapParm.item(0).getParentNode().getAttributes().getNamedItem("type").setTextContent(String.valueOf(
 					DigestUtils.sha1Hex(rooCACertificate.getEncoded())));
-			/////////
+		*/	/////////
 			NamedNodeMap rootCertAttributes = wapParm.item(0).getAttributes();
 			Node b64Encoded = rootCertAttributes.getNamedItem("value");
 			rootCertEncodedString=rootCertEncodedString.replaceAll("\n","");
 			b64Encoded.setTextContent(rootCertEncodedString);
 			System.out.println("COPY_ROOT_CERT:"+rootCertEncodedString);
 
-			/////////
-			wapParm.item(1).getParentNode().getAttributes().getNamedItem("type").setTextContent(String.valueOf(DigestUtils.sha1Hex(signedCert.getEncoded())));
-			/////////
+            /////////
+            /////////
+/*
+            wapParm.item(1).getParentNode().getAttributes().getNamedItem("type").setTextContent(String.valueOf(DigestUtils.sha1Hex(signedCert.getEncoded())));
+*/
 
 
 
