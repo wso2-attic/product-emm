@@ -242,6 +242,7 @@
         <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
         <apim.version>1.2.1</apim.version>
         <orbit.version.tomcat>7.0.52.wso2v5</orbit.version.tomcat>
+        <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
     </properties>
 
 
