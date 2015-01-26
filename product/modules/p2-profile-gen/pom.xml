@@ -305,6 +305,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.identity.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.claim.mgt.server.feature:${carbon.platform.version}
+                                </featureArtifactDef>
                                 <!-- End of SSO Fixes -->
 
                             </featureArtifacts>
@@ -586,7 +589,10 @@
                                     <id>org.wso2.carbon.identity.mgt.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-
+                                <feature>
+                                    <id>org.wso2.carbon.claim.mgt.server.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
                                 <!--SSO FIX OVER-->
 
                             </features>

@@ -112,7 +112,7 @@
             <outputDirectory>wso2mdm-${project.version}/repository/conf</outputDirectory>
             <includes>
                 <include>**/api-manager.xml</include>
-                <include>**/sso-idp-config.xml</include>
+                <include>**/security/</include>
                 <!-- <include>**/emm-config.xml</include>-->
             </includes>
         </fileSet>
@@ -126,7 +126,15 @@
                 <include>**/trusted-idp-config.xml</include>
             </includes>
         </fileSet>
-
+        <fileSet>
+            <directory>
+                src/repository/conf/identity/
+            </directory>
+            <outputDirectory>wso2mdm-${project.version}/repository/conf/identity/</outputDirectory>
+            <includes>
+                <include>**/**</include>
+            </includes>
+        </fileSet>
         <fileSet>
             <directory>src/repository/conf/datasources</directory>
             <outputDirectory>wso2mdm-${project.version}/repository/conf/datasources
@@ -224,6 +232,16 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
+        <!-- Copying Authentication Endpoint webapp -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <includes>
+                <include>authenticationendpoint.war</include>
+            </includes>
+        </fileSet>
 
 	<!-- Copying API Manager Publisher and Store Jaggery apps -->
 	<fileSet>
@@ -280,6 +298,7 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
+
         <!-- <file>
              <source>
                  ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml
@@ -377,6 +396,7 @@
             <fileMode>644</fileMode>
         </file>
 
+
         <!-- Copying thrift-authentication.xml -->
         <file>
             <source>
@@ -414,6 +434,11 @@
         <file>
             <source>src/repository/conf/identity.xml</source>
             <outputDirectory>wso2mdm-${project.version}/repository/conf</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>src/repository/conf/security/sso-idp-config.xml</source>
+            <outputDirectory>wso2mdm-${project.version}/repository/conf/security</outputDirectory>
             <fileMode>644</fileMode>
         </file>
 
