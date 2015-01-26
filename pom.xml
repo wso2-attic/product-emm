@@ -502,6 +502,7 @@
         <apim.version>4.3.0-SNAPSHOT</apim.version>
         <orbit.version.tomcat>7.0.52.wso2v5</orbit.version.tomcat>
         <tomcat.jdbc.pooling.version>7.0.34.wso2v2</tomcat.jdbc.pooling.version>
+        <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
     </properties>
 
 

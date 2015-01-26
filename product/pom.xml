@@ -35,6 +35,7 @@
 
     <modules>
         <module>modules/mobileservices</module>
+        <module>modules/tools</module>
         <module>modules/rest-api</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
