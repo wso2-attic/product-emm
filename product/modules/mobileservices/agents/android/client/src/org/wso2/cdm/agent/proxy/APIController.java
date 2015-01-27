@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.cdm.agent.proxy;
 
 import java.util.HashMap;
@@ -61,16 +76,16 @@ public class APIController implements TokenCallBack {
 		protected Map<String, String> doInBackground(APIUtilities... params) {
 			APIUtilities apiUtilities = params[0];
 
-			Map<String, String> response_params = null;
+			Map<String, String> responseParams = null;
 			try {
 				String accessToken = token.getAccessToken();
 				Map<String, String> headers = new HashMap<String, String>();
-				headers.put("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+				headers.put("Content-Type", "application/json");
 				headers.put("Accept", "*/*");
 				headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
 				headers.put("Authorization", "Bearer " + accessToken);
-				response_params = ServerUtilitiesTemp.postData(apiUtilities, headers);
-				return response_params;
+				responseParams = ServerApiAccess.postData(apiUtilities, headers);
+				return responseParams;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

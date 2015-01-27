@@ -41,14 +41,14 @@ import android.widget.SpinnerAdapter;
  * the left, followed by the activity title. If your activity has an options menu, you can make
  * select items accessible directly from the action bar as "action items". You can also
  * modify various characteristics of the action bar or remove it completely.</p>
- * <p>From your activity, you can retrieve an instance of {@link com.actionbarsherlock.app.ActionBar} by calling {@link
+ * <p>From your activity, you can retrieve an instance of {@link ActionBar} by calling {@link
  * android.app.Activity#getActionBar getActionBar()}.</p>
  * <p>In some cases, the action bar may be overlayed by another bar that enables contextual actions,
  * using an {@link android.view.ActionMode}. For example, when the user selects one or more items in
  * your activity, you can enable an action mode that offers actions specific to the selected
  * items, with a UI that temporarily replaces the action bar. Although the UI may occupy the
  * same space, the {@link android.view.ActionMode} APIs are distinct and independent from those for
- * {@link com.actionbarsherlock.app.ActionBar}.
+ * {@link ActionBar}.
  * <div class="special reference">
  * <h3>Developer Guides</h3>
  * <p>For information about how to use the action bar, including how to add action items, navigation
@@ -496,7 +496,7 @@ public abstract class ActionBar {
     public abstract int getDisplayOptions();
 
     /**
-     * Create and return a new {@link com.actionbarsherlock.app.ActionBar.Tab}.
+     * Create and return a new {@link Tab}.
      * This tab will not be included in the action bar until it is added.
      *
      * <p>Very often tabs will be used to switch between {@link Fragment}
@@ -507,7 +507,7 @@ public abstract class ActionBar {
      *
      * @return A new Tab
      *
-     * @see #addTab(com.actionbarsherlock.app.ActionBar.Tab)
+     * @see #addTab(Tab)
      */
     public abstract Tab newTab();
 
@@ -807,7 +807,7 @@ public abstract class ActionBar {
         public abstract Object getTag();
 
         /**
-         * Set the {@link com.actionbarsherlock.app.ActionBar.TabListener} that will handle switching to and from this tab.
+         * Set the {@link TabListener} that will handle switching to and from this tab.
          * All tabs must have a TabListener set before being added to the ActionBar.
          *
          * @param listener Listener to handle tab selection events

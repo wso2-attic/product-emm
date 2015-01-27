@@ -26,20 +26,22 @@ import android.os.SystemClock;
  * polls to server based on a predefined to retrieve pending data.
  */
 public class LocalNotification {
+	public static boolean localNoticicationInvoked=false;
+	
 	public static void startPolling(Context context) {
 		int interval=10000;
-//		int interval=Preference.getInt(context, context.getResources().getString(R.string.shared_pref_interval));
-		//TODO:remove hard coded value
 		
 		long firstTime = SystemClock.elapsedRealtime();
 		firstTime += 1000;
-
-		Intent downloader = new Intent(context, AlarmReceiver.class);
-		PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
-				0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
-		AlarmManager alarms = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
-		alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,
-			                    interval, recurringDownload);
+		if(localNoticicationInvoked==false){
+			localNoticicationInvoked=true;
+    		Intent downloader = new Intent(context, AlarmReceiver.class);
+    		PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
+    				0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+    		AlarmManager alarms = (AlarmManager) context
+    				.getSystemService(Context.ALARM_SERVICE);
+    		alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,
+    			                    interval, recurringDownload);
+		}
 	}
 }

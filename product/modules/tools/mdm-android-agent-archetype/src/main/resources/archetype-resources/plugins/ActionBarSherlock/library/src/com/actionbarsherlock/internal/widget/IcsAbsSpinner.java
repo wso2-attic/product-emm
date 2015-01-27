@@ -261,7 +261,7 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
 
     void recycleAllViews() {
         final int childCount = getChildCount();
-        final RecycleBin recycleBin = mRecycler;
+        final IcsAbsSpinner.RecycleBin recycleBin = mRecycler;
         final int position = mFirstPosition;
 
         // All views go in recycler

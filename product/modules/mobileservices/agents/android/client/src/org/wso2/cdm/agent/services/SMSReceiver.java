@@ -1,18 +1,18 @@
-/*
- ~ Copyright (c) 2014, WSO2 Inc. (http://wso2.com/) All Rights Reserved.
- ~
- ~ Licensed under the Apache License, Version 2.0 (the "License");
- ~ you may not use this file except in compliance with the License.
- ~ You may obtain a copy of the License at
- ~
- ~      http://www.apache.org/licenses/LICENSE-2.0
- ~
- ~ Unless required by applicable law or agreed to in writing, software
- ~ distributed under the License is distributed on an "AS IS" BASIS,
- ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- ~ See the License for the specific language governing permissions and
- ~ limitations under the License.
-*/
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.cdm.agent.services;
 
 import org.wso2.cdm.agent.utils.CommonUtilities;
@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 
 public class SMSReceiver extends BroadcastReceiver {
-	ProcessMessage processMsg = null;
+	MessageProcessor processMsg = null;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -54,9 +54,9 @@ public class SMSReceiver extends BroadcastReceiver {
 					}
 				}
 
-				processMsg = new ProcessMessage(context,
-						CommonUtilities.MESSAGE_MODE_SMS, fullMessage,
-						recipient);
+//				processMsg = new MessageProcessor(context,
+//						CommonUtilities.MESSAGE_MODE_SMS, fullMessage,
+//						recipient);
 
 			}
 		} catch (Exception ex) {

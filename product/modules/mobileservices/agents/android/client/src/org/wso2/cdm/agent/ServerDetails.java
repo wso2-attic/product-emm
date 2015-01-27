@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.wso2.cdm.agent.api.DeviceInfo;
+import org.wso2.cdm.agent.services.MessageProcessor;
 import org.wso2.cdm.agent.utils.CommonDialogUtils;
 import org.wso2.cdm.agent.utils.CommonUtilities;
 import org.wso2.cdm.agent.utils.Preference;
@@ -73,18 +74,23 @@ public class ServerDetails extends Activity {
 			tvSeverAddress.setVisibility(View.GONE);
 			evServerIP.setVisibility(View.GONE);
 			alertDialog =
-			              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-			                                                                    getResources().getString(R.string.error_authorization_failed),
-			                                                                    getResources().getString(compatibility.getDescriptionResourceID()),
-			                                                                    getResources().getString(R.string.button_ok),
-			                                                                    onRootedClickListner);
+					CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+					                                                      getResources().getString(
+							                                                      R.string.error_authorization_failed),
+					                                                      getResources().getString(
+							                                                      compatibility
+									                                                      .getDescriptionResourceID()),
+					                                                      getResources().getString(
+							                                                      R.string.button_ok),
+					                                                      onRootedClickListner);
 		} else {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
 			String ipSaved =
-			                 Preference.get(context.getApplicationContext(),
-			                                getResources().getString(R.string.shared_pref_ip));
-			regId = Preference.get(context.getApplicationContext(), getResources().getString(R.string.shared_pref_regId));
+					Preference.get(context.getApplicationContext(),
+					               getResources().getString(R.string.shared_pref_ip));
+			regId = Preference.get(context.getApplicationContext(),
+			                       getResources().getString(R.string.shared_pref_regId));
 
 			//check if we have the IP saved previously.
 			if (ipSaved != null) {
@@ -94,23 +100,31 @@ public class ServerDetails extends Activity {
 			} else {
 				evServerIP.setText(CommonUtilities.SERVER_IP);
 			}
-
+			
+			String deviceActive=Preference.get(context, context.getResources().getString(R.string.shared_pref_device_active));
+			if(deviceActive!=null && deviceActive.equals("1")){
+				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
 			// on click handler for start registration
 			btnStartRegistration.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ServerDetails.this);
 					StringBuilder messageBuilder = new StringBuilder();
-					messageBuilder.append(getResources().getString(R.string.dialog_init_confirmation));
+					messageBuilder
+							.append(getResources().getString(R.string.dialog_init_confirmation));
 					messageBuilder.append(" ");
 					messageBuilder.append(evServerIP.getText().toString());
 					messageBuilder.append(" ");
-					messageBuilder.append(getResources().getString(R.string.dialog_init_end_general));
+					messageBuilder
+							.append(getResources().getString(R.string.dialog_init_end_general));
 					alertBuilder.setMessage(messageBuilder.toString())
-					       .setPositiveButton(getResources().getString(R.string.yes),
-					                          dialogClickListener)
-					       .setNegativeButton(getResources().getString(R.string.no),
-					                          dialogClickListener).show();
+					            .setPositiveButton(getResources().getString(R.string.yes),
+					                               dialogClickListener)
+					            .setNegativeButton(getResources().getString(R.string.no),
+					                               dialogClickListener).show();
 				}
 			});
 
@@ -120,7 +134,8 @@ public class ServerDetails extends Activity {
 					switch (which) {
 						case DialogInterface.BUTTON_POSITIVE:
 							if (!evServerIP.getText().toString().trim().equals("")) {
-								CommonUtilities.setServerURL(evServerIP.getText().toString().trim());
+								CommonUtilities
+										.setServerURL(evServerIP.getText().toString().trim());
 								Preference.put(context.getApplicationContext(),
 								               getResources().getString(R.string.shared_pref_ip),
 								               evServerIP.getText().toString().trim());
@@ -128,7 +143,8 @@ public class ServerDetails extends Activity {
 
 							} else {
 								Toast.makeText(context.getApplicationContext(),
-								               getResources().getString(R.string.toast_message_enter_server_address),
+								               getResources().getString(
+										               R.string.toast_message_enter_server_address),
 								               Toast.LENGTH_LONG).show();
 							}
 							break;
@@ -151,7 +167,7 @@ public class ServerDetails extends Activity {
 	};
 
 	/**
-	 *  This method is called to open AuthenticationActivity.
+	 * This method is called to open AuthenticationActivity.
 	 */
 	private void startAuthenticationActivity() {
 		Intent intent = new Intent(ServerDetails.this, AuthenticationActivity.class);
@@ -169,190 +185,4 @@ public class ServerDetails extends Activity {
 		context = null;
 		super.onDestroy();
 	}
-	
-	
-	
-	
-
-	// Old API manager communication code.
-	//
-	// Bundle extras = getIntent().getExtras();
-	//
-	// if (extras != null) {
-	// if
-	// (extras.containsKey(getResources().getString(R.string.intent_extra_from_activity)))
-	// {
-	// fromActivity =
-	// extras.getString(
-	// getResources().getString(R.string.intent_extra_from_activity));
-	// }
-	// }
-	//
-	//
-	// public class ServerDetails extends Activity implements APIResultCallBack,
-	// TokenCallBack {
-	// @Override
-	// public void onBackPressed() {
-	// Intent i = new Intent();
-	// i.setAction(Intent.ACTION_MAIN);
-	// i.addCategory(Intent.CATEGORY_HOME);
-	// this.startActivity(i);
-	// super.onBackPressed();
-	// }
-	//
-	// @Override
-	// public boolean onKeyDown(int keyCode, KeyEvent event) {
-	// if (keyCode == KeyEvent.KEYCODE_BACK && fromActivity != null &&
-	// fromActivity.equals(AlreadyRegisteredActivity.class.getSimpleName())) {
-	// Intent i = new Intent();
-	// i.setAction(Intent.ACTION_MAIN);
-	// i.addCategory(Intent.CATEGORY_HOME);
-	// this.startActivity(i);
-	// this.finish();
-	// return true;
-	// } else if (keyCode == KeyEvent.KEYCODE_BACK && fromActivity != null &&
-	// fromActivity.equals(AuthenticationActivity.class.getSimpleName())) {
-	// int pid = android.os.Process.myPid();
-	// android.os.Process.killProcess(pid);
-	// return true;
-	// } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-	// Intent i = new Intent();
-	// i.setAction(Intent.ACTION_MAIN);
-	// i.addCategory(Intent.CATEGORY_HOME);
-	// this.startActivity(i);
-	// this.finish();
-	// return true;
-	// }
-	// return super.onKeyDown(keyCode, event);
-	// }
-	//
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// // Inflate the menu; this adds items to the action bar if it is present.
-	// getMenuInflater().inflate(R.menu.settings, menu);
-	// return true;
-	// }
-	//
-	// public void onReceiveAPIResult(Map<String, String> result, int
-	// requestCode) {
-	// String responseStatus = CommonUtilities.EMPTY_STRING;
-	// if (result != null) {
-	// responseStatus = result.get(CommonUtilities.STATUS_KEY);
-	//
-	// if (responseStatus.equals(CommonUtilities.REQUEST_SUCCESSFUL) &&
-	// requestCode == CommonUtilities.IS_REGISTERED_REQUEST_CODE) {
-	// Intent intent = null;
-	// if (progressDialog != null) {
-	// progressDialog.dismiss();
-	// }
-	// intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
-	// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	// startActivity(intent);
-	//
-	// } else if (responseStatus.equals(CommonUtilities.INTERNAL_SERVER_ERROR))
-	// {
-	// Log.e(TAG, "The value of status is null in onAPIAccessRecive()");
-	//
-	// String isRegistered =
-	// CommonUtilities.getPref(context,
-	// context.getResources()
-	// .getString(R.string.shared_pref_registered)
-	// );
-	// if (isRegistered.equals("1")) {
-	// Intent intent = null;
-	// intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
-	// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	// startActivity(intent);
-	// } else {
-	// alertDialog =
-	// CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-	// getResources()
-	// .getString(
-	// R.string.title_head_connection_error),
-	// getResources()
-	// .getString(
-	// R.string.error_internal_server),
-	// getResources()
-	// .getString(
-	// R.string.button_ok),
-	// null);
-	// Log.e("null", alertDialog.getClass().getPackage().toString());
-	// alertDialog.show();
-	// }
-	// // ServerUtils.clearAppData(context);
-	// } else {
-	// Log.e(TAG, "The value of status is : " + responseStatus);
-	// ServerUtils.clearAppData(context);
-	//
-	// alertDialog =
-	// CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-	// getResources()
-	// .getString(
-	// R.string.title_head_registration_error),
-	// getResources()
-	// .getString(
-	// R.string.error_internal_server),
-	// getResources()
-	// .getString(
-	// R.string.button_ok),
-	// null);
-	// alertDialog.show();
-	// }
-	// } else {
-	// Log.e(TAG, "The result is null in onReceiveAPIResult()");
-	// ServerUtils.clearAppData(context);
-	//
-	// alertDialog =
-	// CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-	// getResources().getString(
-	// R.string.title_head_registration_error),
-	// getResources().getString(
-	// R.string.error_for_all_unknown_registration_failures),
-	// getResources().getString(
-	// R.string.button_ok),
-	// null);
-	// alertDialog.show();
-	// }
-	// }
-	//
-	// @Override
-	// public void onReceiveTokenResult(Token token, String status) {
-	// if (token != null) {
-	// if (regId != null && !regId.equals("")) {
-	// // Check registration.
-	// isRegistered();
-	//
-	// progressDialog =
-	// ProgressDialog.show(ServerDetails.this,
-	// getResources().getString(R.string.dialog_sender_id),
-	// getResources().getString(R.string.dialog_please_wait),
-	// true);
-	// }
-	// }
-	// }
-	//
-	// /**
-	// * Checks whether device is registered or NOT.
-	// */
-	// private void isRegistered() {
-	// Log.e("isReg", "isReg");
-	// Map<String, String> requestParams = new HashMap<String, String>();
-	// requestParams.put("regid", regId);
-	// Log.e("regID", regId);
-	//
-	// // Check network connection availability before calling the API.
-	// if (PhoneState.isNetworkAvailable(context)) {
-	// // Call isRegistered API.
-	// ServerUtils.callSecuredAPI(ServerDetails.this,
-	// CommonUtilities.IS_REGISTERED_ENDPOINT,
-	// CommonUtilities.POST_METHOD, requestParams,
-	// ServerDetails.this,
-	// CommonUtilities.IS_REGISTERED_REQUEST_CODE);
-	// } else {
-	// CommonDialogUtils.stopProgressDialog(progressDialog);
-	// CommonDialogUtils.showNetworkUnavailableMessage(ServerDetails.this);
-	// }
-	//
-	// }
-
 }

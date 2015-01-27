@@ -68,8 +68,8 @@ public interface MenuItem {
      * Interface definition for a callback to be invoked when a menu item is
      * clicked.
      *
-     * @see Activity#onContextItemSelected(com.actionbarsherlock.view.MenuItem)
-     * @see Activity#onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
+     * @see Activity#onContextItemSelected(MenuItem)
+     * @see Activity#onOptionsItemSelected(MenuItem)
      */
     public interface OnMenuItemClickListener {
         /**
@@ -87,16 +87,16 @@ public interface MenuItem {
 
     /**
      * Interface definition for a callback to be invoked when a menu item
-     * marked with {@link com.actionbarsherlock.view.MenuItem#SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW} is
+     * marked with {@link MenuItem#SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW} is
      * expanded or collapsed.
      *
-     * @see com.actionbarsherlock.view.MenuItem#expandActionView()
-     * @see com.actionbarsherlock.view.MenuItem#collapseActionView()
-     * @see com.actionbarsherlock.view.MenuItem#setShowAsActionFlags(int)
+     * @see MenuItem#expandActionView()
+     * @see MenuItem#collapseActionView()
+     * @see MenuItem#setShowAsActionFlags(int)
      */
     public interface OnActionExpandListener {
         /**
-         * Called when a menu item with {@link com.actionbarsherlock.view.MenuItem#SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW}
+         * Called when a menu item with {@link MenuItem#SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW}
          * is expanded.
          * @param item Item that was expanded
          * @return true if the item should expand, false if expansion should be suppressed.
@@ -104,7 +104,7 @@ public interface MenuItem {
         public boolean onMenuItemActionExpand(MenuItem item);
 
         /**
-         * Called when a menu item with {@link com.actionbarsherlock.view.MenuItem#SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW}
+         * Called when a menu item with {@link MenuItem#SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW}
          * is collapsed.
          * @param item Item that was collapsed
          * @return true if the item should collapse, false if collapsing should be suppressed.
@@ -421,15 +421,15 @@ public interface MenuItem {
     /**
      * Set a custom listener for invocation of this menu item. In most
      * situations, it is more efficient and easier to use
-     * {@link Activity#onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)} or
-     * {@link Activity#onContextItemSelected(com.actionbarsherlock.view.MenuItem)}.
+     * {@link Activity#onOptionsItemSelected(MenuItem)} or
+     * {@link Activity#onContextItemSelected(MenuItem)}.
      *
      * @param menuItemClickListener The object to receive invokations.
      * @return This Item so additional setters can be called.
-     * @see Activity#onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
-     * @see Activity#onContextItemSelected(com.actionbarsherlock.view.MenuItem)
+     * @see Activity#onOptionsItemSelected(MenuItem)
+     * @see Activity#onContextItemSelected(MenuItem)
      */
-    public MenuItem setOnMenuItemClickListener(OnMenuItemClickListener menuItemClickListener);
+    public MenuItem setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener menuItemClickListener);
 
     /**
      * Gets the extra information linked to this menu item.  This extra
@@ -552,8 +552,8 @@ public interface MenuItem {
      * Expand the action view associated with this menu item.
      * The menu item must have an action view set, as well as
      * the showAsAction flag {@link #SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW}.
-     * If a listener has been set using {@link #setOnActionExpandListener(com.actionbarsherlock.view.MenuItem.OnActionExpandListener)}
-     * it will have its {@link com.actionbarsherlock.view.MenuItem.OnActionExpandListener#onMenuItemActionExpand(com.actionbarsherlock.view.MenuItem)}
+     * If a listener has been set using {@link #setOnActionExpandListener(OnActionExpandListener)}
+     * it will have its {@link OnActionExpandListener#onMenuItemActionExpand(MenuItem)}
      * method invoked. The listener may return false from this method to prevent expanding
      * the action view.
      *
@@ -565,8 +565,8 @@ public interface MenuItem {
      * Collapse the action view associated with this menu item.
      * The menu item must have an action view set, as well as the showAsAction flag
      * {@link #SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW}. If a listener has been set using
-     * {@link #setOnActionExpandListener(com.actionbarsherlock.view.MenuItem.OnActionExpandListener)} it will have its
-     * {@link com.actionbarsherlock.view.MenuItem.OnActionExpandListener#onMenuItemActionCollapse(com.actionbarsherlock.view.MenuItem)} method invoked.
+     * {@link #setOnActionExpandListener(OnActionExpandListener)} it will have its
+     * {@link OnActionExpandListener#onMenuItemActionCollapse(MenuItem)} method invoked.
      * The listener may return false from this method to prevent collapsing the action view.
      *
      * @return true if the action view was collapsed, false otherwise.
@@ -581,12 +581,12 @@ public interface MenuItem {
      * @see #expandActionView()
      * @see #collapseActionView()
      * @see #SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
-     * @see com.actionbarsherlock.view.MenuItem.OnActionExpandListener
+     * @see OnActionExpandListener
      */
     public boolean isActionViewExpanded();
 
     /**
-     * Set an {@link com.actionbarsherlock.view.MenuItem.OnActionExpandListener} on this menu item to be notified when
+     * Set an {@link OnActionExpandListener} on this menu item to be notified when
      * the associated action view is expanded or collapsed. The menu item must
      * be configured to expand or collapse its action view using the flag
      * {@link #SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW}.

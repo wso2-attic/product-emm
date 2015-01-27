@@ -26,7 +26,7 @@ import android.view.KeyEvent;
  * By default, every Activity supports an options menu of actions or options.
  * You can add items to this menu and handle clicks on your additions. The
  * easiest way of adding menu items is inflating an XML file into the
- * {@link com.actionbarsherlock.view.Menu} via {@link MenuInflater}. The easiest way of attaching code to
+ * {@link Menu} via {@link MenuInflater}. The easiest way of attaching code to
  * clicks is via {@link Activity#onOptionsItemSelected(MenuItem)} and
  * {@link Activity#onContextItemSelected(MenuItem)}.
  * <p>

@@ -115,8 +115,8 @@ public abstract class ActionBarSherlock {
      * Register an ActionBarSherlock implementation.
      *
      * @param implementationClass Target implementation class which extends
-     * {@link com.actionbarsherlock.ActionBarSherlock}. This class must also be annotated with
-     * {@link com.actionbarsherlock.ActionBarSherlock.Implementation}.
+     * {@link ActionBarSherlock}. This class must also be annotated with
+     * {@link Implementation}.
      */
     public static void registerImplementation(Class<? extends ActionBarSherlock> implementationClass) {
         if (!implementationClass.isAnnotationPresent(Implementation.class)) {
@@ -332,7 +332,7 @@ public abstract class ActionBarSherlock {
 
     /**
      * Indicate that the menu should be recreated by calling
-     * {@link com.actionbarsherlock.ActionBarSherlock.OnCreateOptionsMenuListener#onCreateOptionsMenu(com.actionbarsherlock.view.Menu)}.
+     * {@link OnCreateOptionsMenuListener#onCreateOptionsMenu(com.actionbarsherlock.view.Menu)}.
      */
     public abstract void dispatchInvalidateOptionsMenu();
 

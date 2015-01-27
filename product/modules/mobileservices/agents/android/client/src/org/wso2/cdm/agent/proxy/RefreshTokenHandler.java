@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.cdm.agent.proxy;
 
 import android.annotation.SuppressLint;
@@ -52,7 +67,7 @@ public class RefreshTokenHandler {
             apiUtilities.setEndPoint(IdentityProxy.getInstance()
                                      .getAccessTokenURL());
             apiUtilities.setHttpMethod("POST");
-            apiUtilities.setRequestParams(request_params);
+            apiUtilities.setRequestParamsMap(request_params);
 			
 			Map<String, String> headers = new HashMap<String, String>();
 			Log.e("proxy",IdentityProxy.clientID + ":" + IdentityProxy.clientSecret);
@@ -60,7 +75,7 @@ public class RefreshTokenHandler {
             headers.put("Authorization", authorizationString);
             headers.put("Content-Type", "application/x-www-form-urlencoded");
             
-            Map<String, String> response_params = ServerUtilitiesTemp.postData(apiUtilities,headers);
+            Map<String, String> response_params = ServerApiAccess.postDataAPI(apiUtilities,headers);
 			
 			response = response_params.get("response");
 			responseCode = response_params.get("status");

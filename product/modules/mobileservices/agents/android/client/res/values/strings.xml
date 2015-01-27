@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <string name="client_id">${clientKey}</string>
+    <string name="client_secret">${clientSecret}</string>
 
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
     <string name="already_registered">Device is already registered on server.</string>
@@ -52,6 +55,7 @@
     <string name="device_enroll_type_cope">COPE</string>
     <string name="title_init_msg_error">Initialization Failed. Please try again.</string>
    	<string name="title_head_init_error">Initialization Failed</string>
+   	<string name="title_head_confirm_pin">Re-type the PIN to Confirm</string>
 
     <!-- TEXT FIELD HINTS -->
     <string name="hint_new_pin">New PIN Code</string>
@@ -88,6 +92,8 @@
     <string name="shared_pref_sender_id">senderID</string>
     <string name="shared_pref_message_mode">mode</string>
     <string name="shared_pref_interval">interval</string>
+    
+    <string name="username">username</string>
     
     <string name="shared_pref_device_active">0</string>
     <string name="shared_pref_client_id">ClientID</string>
@@ -156,6 +162,7 @@
 
     <!-- BUTTON TITLES -->
     <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
 
     <!-- APPLICATION MANAGER -->
     <string name="application_mgr_download_location">/Download/</string>
@@ -171,5 +178,8 @@
     
     <!--  Headings -->
      <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com</string>
+     
+     <!--  Validation Errors -->
+     <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>
 
 </resources>

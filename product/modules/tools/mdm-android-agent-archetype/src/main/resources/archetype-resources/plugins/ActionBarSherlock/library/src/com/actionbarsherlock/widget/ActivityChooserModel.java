@@ -95,12 +95,12 @@ import java.util.concurrent.Executors;
 class ActivityChooserModel extends DataSetObservable {
 
     /**
-     * Client that utilizes an {@link com.actionbarsherlock.widget.ActivityChooserModel}.
+     * Client that utilizes an {@link ActivityChooserModel}.
      */
     public interface ActivityChooserModelClient {
 
         /**
-         * Sets the {@link com.actionbarsherlock.widget.ActivityChooserModel}.
+         * Sets the {@link ActivityChooserModel}.
          *
          * @param dataModel The model.
          */
@@ -124,7 +124,7 @@ class ActivityChooserModel extends DataSetObservable {
         // This cannot be done by a simple comparator since an Activity weight
         // is computed from history. Note that Activity implements Comparable.
         public void sort(Intent intent, List<ActivityResolveInfo> activities,
-                         List<HistoricalRecord> historicalRecords);
+                List<HistoricalRecord> historicalRecords);
     }
 
     /**
@@ -135,7 +135,7 @@ class ActivityChooserModel extends DataSetObservable {
         /**
          * Called when an activity has been chosen. The client can decide whether
          * an activity can be chosen and if so the caller of
-         * {@link com.actionbarsherlock.widget.ActivityChooserModel#chooseActivity(int)} will receive and {@link Intent}
+         * {@link ActivityChooserModel#chooseActivity(int)} will receive and {@link Intent}
          * for launching it.
          * <p>
          * <strong>Note:</strong> Modifying the intent is not permitted and
@@ -146,7 +146,7 @@ class ActivityChooserModel extends DataSetObservable {
          * @param intent The intent for launching the chosen activity.
          * @return Whether the intent is handled and should not be delivered to clients.
          *
-         * @see com.actionbarsherlock.widget.ActivityChooserModel#chooseActivity(int)
+         * @see ActivityChooserModel#chooseActivity(int)
          */
         public boolean onChooseActivity(ActivityChooserModel host, Intent intent);
     }
@@ -407,7 +407,7 @@ class ActivityChooserModel extends DataSetObservable {
      *
      * @return The activity.
      *
-     * @see com.actionbarsherlock.widget.ActivityChooserModel.ActivityResolveInfo
+     * @see ActivityResolveInfo
      * @see #setIntent(Intent)
      */
     public ResolveInfo getActivity(int index) {
@@ -449,8 +449,8 @@ class ActivityChooserModel extends DataSetObservable {
      * @return An {@link Intent} for launching the activity or null if the
      *         policy has consumed the intent.
      *
-     * @see com.actionbarsherlock.widget.ActivityChooserModel.HistoricalRecord
-     * @see com.actionbarsherlock.widget.ActivityChooserModel.OnChooseActivityListener
+     * @see HistoricalRecord
+     * @see OnChooseActivityListener
      */
     public Intent chooseActivity(int index) {
         ActivityResolveInfo chosenActivity = mActivites.get(index);
@@ -593,7 +593,7 @@ class ActivityChooserModel extends DataSetObservable {
      *
      * @param activitySorter The sorter.
      *
-     * @see com.actionbarsherlock.widget.ActivityChooserModel.ActivitySorter
+     * @see ActivitySorter
      */
     public void setActivitySorter(ActivitySorter activitySorter) {
         synchronized (mInstanceLock) {
@@ -609,7 +609,7 @@ class ActivityChooserModel extends DataSetObservable {
      * Sorts the activities based on history and an intent. If
      * a sorter is not specified this a default implementation is used.
      *
-     * @see #setActivitySorter(com.actionbarsherlock.widget.ActivityChooserModel.ActivitySorter)
+     * @see #setActivitySorter(ActivitySorter)
      */
     private void sortActivities() {
         synchronized (mInstanceLock) {

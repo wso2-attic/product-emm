@@ -301,7 +301,7 @@ public class ShareActionProvider extends ActionProvider {
     }
 
     /**
-     * Policy that delegates to the {@link com.actionbarsherlock.widget.ShareActionProvider.OnShareTargetSelectedListener}, if such.
+     * Policy that delegates to the {@link OnShareTargetSelectedListener}, if such.
      */
     private class ShareAcitivityChooserModelPolicy implements OnChooseActivityListener {
         @Override

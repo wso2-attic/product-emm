@@ -19,7 +19,7 @@ package org.wso2.cdm.agent;
 import org.wso2.cdm.agent.R;
 import org.wso2.cdm.agent.api.ApplicationManager;
 import org.wso2.cdm.agent.services.Config;
-import org.wso2.cdm.agent.services.ProcessMessage;
+import org.wso2.cdm.agent.services.MessageProcessor;
 import org.wso2.cdm.agent.utils.CommonUtilities;
 
 import android.app.Notification;
@@ -41,7 +41,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	DevicePolicyManager devicePolicyManager;
 	ApplicationManager appList;
 	static final int ACTIVATION_REQUEST = 47; 
-	ProcessMessage processMsg = null;
+	MessageProcessor processMsg = null;
 		
     @SuppressWarnings("hiding")
     private static final String TAG = "GCMIntentService";
@@ -89,8 +89,8 @@ public class GCMIntentService extends GCMBaseIntentService {
         String mode=CommonUtilities.getPref(context, context.getResources().getString(R.string.shared_pref_message_mode));
 		if(mode.trim().toUpperCase().equals("GCM")){
 			Log.e("onmsg","GCM");
-			ProcessMessage msg=new ProcessMessage(context);
-			msg.getOperations(null);
+			MessageProcessor msg=new MessageProcessor(context);
+			msg.getMessages();
 		}
 		else{
 			Log.e("onmsg","mode");

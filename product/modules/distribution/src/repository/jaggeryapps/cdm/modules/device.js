@@ -26,6 +26,14 @@ var ArrayList = Packages.java.util.ArrayList;
 var log = new Log();
 var deviceManagementService = utility.getDeviceManagementService();
 
+var unspecifiedFilter = function(prop){
+    if(prop==null){
+        return "Unspecified";
+    }else{
+        return prop;
+    }
+}
+
 var listDevices = function () {
     var devices = deviceManagementService.getAllDevices("android");
     var deviceList = [];
@@ -34,14 +42,14 @@ var listDevices = function () {
 
         var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
         deviceList.push({
-            "identifier": device.getDeviceIdentifier(),
-            "name": device.getName(),
-            "ownership": device.getOwnership(),
-            "owner": device.getOwner(),
-            "deviceType": device.getType(),
-            "vendor": propertiesList.get("vendor"),
-            "model": propertiesList.get("model"),
-            "osVersion": propertiesList.get("osVersion")
+            "identifier": unspecifiedFilter(device.getDeviceIdentifier()),
+            "name": unspecifiedFilter(device.getName()),
+            "ownership": unspecifiedFilter(device.getOwnership()),
+            "owner": unspecifiedFilter(device.getOwner()),
+            "deviceType": unspecifiedFilter(device.getType()),
+            "vendor": unspecifiedFilter(propertiesList.get("vendor")),
+            "model": unspecifiedFilter(propertiesList.get("model")),
+            "osVersion": unspecifiedFilter(propertiesList.get("osVersion"))
         });
     }
     return deviceList;
@@ -94,17 +102,17 @@ var viewDevice = function(type, deviceId){
         var entry = iterator.next();
         var key = entry.getKey();
         var value = entry.getValue();
-        properties[key]= value;
+        properties[key]= unspecifiedFilter(value);
     }
     return {
-        "identifier": device.getDeviceIdentifier(),
-        "name": device.getName(),
-        "ownership": device.getOwnership(),
-        "owner": device.getOwner(),
-        "deviceType": device.getType(),
-        "vendor": propertiesList.get("vendor"),
-        "model": propertiesList.get("model"),
-        "osVersion": propertiesList.get("osVersion"),
+        "identifier": unspecifiedFilter(device.getDeviceIdentifier()),
+        "name": unspecifiedFilter(device.getName()),
+        "ownership": unspecifiedFilter(device.getOwnership()),
+        "owner": unspecifiedFilter(device.getOwner()),
+        "deviceType": unspecifiedFilter(device.getType()),
+        "vendor": unspecifiedFilter(propertiesList.get("vendor")),
+        "model": unspecifiedFilter(propertiesList.get("model")),
+        "osVersion": unspecifiedFilter(propertiesList.get("osVersion")),
         "properties": properties
     };
 }

@@ -23,5 +23,8 @@ public class Constant {
 	public static final String PASSWORD = "password";
 	public static final String STATUS = "status";
 	public static final String RESPONSE = "response";
+    public static final String PROPERTIES = "properties";
+    public static final String CODE = "code";
+    public static final String LOCAL = "LOCAL";
 
 }
