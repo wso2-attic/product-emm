@@ -1,15 +1,15 @@
 <%
-var user = session.get("emmConsoleUser");
+var user = session.get("USER");
 if (user === null) {
-    response.sendRedirect('/emm');
+    response.sendRedirect('/cdm/dashboard');
 } else {
-    var dataConfi = require('/config/emm.js').config();
+    var dataConfi = require('/modules/mdm-props.js').config();
     var sso = require("/modules/sso.js").sso;
     var keyStoreParams = {
         keyStoreName: dataConfi.ssoConfiguration.keyStoreName,
         keyStorePassword: dataConfi.ssoConfiguration.keyStorePassword,
         identityAlias: dataConfi.ssoConfiguration.identityAlias
     }
-    sso.configure(dataConfi.ssoConfiguration.issuer, "emm", keyStoreParams, dataConfi.ssoConfiguration.identityProviderURL);
+    sso.configure(dataConfi.ssoConfiguration.issuer, "cdm", keyStoreParams, dataConfi.ssoConfiguration.identityProviderURL);
     sso.logout(user);
 } %>

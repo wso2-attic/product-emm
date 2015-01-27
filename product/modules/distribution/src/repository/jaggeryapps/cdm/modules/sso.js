@@ -49,9 +49,16 @@ var ssoMod = require("sso");
  		sso.sessionId = session.getId();
  		var referer = request.getHeader("referer");
  		sso.relayState = (referer ? referer : sso.relayState);
- 		sso.relayState = sso.relayState + request.getQueryString(); // append query string
+ 		sso.relayState = sso.relayState;// append query string
+		var log = new Log();
+
+		if(request.getQueryString()){
+
+			sso.relayState += request.getQueryString();
+		}
  		sso.encodedSAMLAuthRequest = ssoMod.client.getEncodedSAMLAuthRequest(sso.issuer);
  		var postUrl = sso.address + sso.ssoService;
+		log.info(sso.relayState);
  		print("<div><p>You are now being redirected to SSO Provider. If the redirection fails, please click on the button below.</p> <form method='post' action='"+postUrl+"'><p><input type='hidden' name='SAMLRequest' value='"+sso.encodedSAMLAuthRequest+"'/><input type='hidden' name='RelayState' value='"+sso.relayState+"'/><input type='hidden' name='SSOAuthSessionID' value='"+sso.sessionId+"'/><button type='submit'>Redirect manually</button></p></form></div><script type = 'text/javascript' >document.forms[0].submit();</script>");
  	}
  	sso.logout = function(user){

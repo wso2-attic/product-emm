@@ -18,6 +18,7 @@
             <li><a href="/cdm/dashboard">Dashboard</a></li>
             <li><a href="#">Configuration</a></li>
             <li><a href="#">Management</a></li>
+            <li><a href="/cdm/logout">Logout</a></li>
           </ul>
         </div>
       </div>

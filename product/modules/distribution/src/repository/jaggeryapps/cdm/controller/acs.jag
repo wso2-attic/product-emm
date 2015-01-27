@@ -1,76 +1,18 @@
 <%
-var dataConfi = require('/config/emm.js').config();
+var dataConfig = require('/modules/mdm-props.js').config();
 var sso = require("/modules/sso.js").sso;
 var log = new Log();
 var keyStoreParams = {
-    keyStoreName: dataConfi.ssoConfiguration.keyStoreName,
-    keyStorePassword: dataConfi.ssoConfiguration.keyStorePassword,
-    identityAlias: dataConfi.ssoConfiguration.identityAlias
+    keyStoreName: dataConfig.ssoConfiguration.keyStoreName,
+    keyStorePassword: dataConfig.ssoConfiguration.keyStorePassword,
+    identityAlias: dataConfig.ssoConfiguration.identityAlias
 }
-sso.configure(dataConfi.ssoConfiguration.issuer, "emm", keyStoreParams, dataConfi.ssoConfiguration.identityProviderURL);
+sso.configure(dataConfig.ssoConfiguration.issuer, "cdm", keyStoreParams, dataConfig.ssoConfiguration.identityProviderURL);
 sso.acs(function(loggedInUser) {
-    session.put("LOGGED_IN_USER", loggedInUser);
-    session.put("Loged", "true");
+    session.put("USER", loggedInUser);
     var username = loggedInUser;
-    var userModule = require('/modules/user.js').user;
-    var db = common.getDatabase();
-    var user = new userModule(db);
-    var objUser = user.getUser({
-        'userid': username,
-        login: true
-    });
-    if (objUser != null) {
-        var userFeed = {};
-        userFeed.tenantId = stringify(objUser["tenantId"]);
-        userFeed.username = objUser["username"];
-        userFeed.email = objUser["email"];
-        userFeed.firstName = objUser["firstName"];
-        userFeed.lastName = objUser["lastName"];
-        userFeed.mobile = objUser["mobile"];
-        userFeed.tenantDomain = user.getTenantDomainFromID(stringify(objUser["tenantId"]));
-        var parsedRoles = parse(objUser["roles"]);
-        userFeed.roles = parsedRoles;
-        var isEMMAdmin = false;
-        var isAdmin = false;
-        for (var i = 0; i < parsedRoles.length; i++) {
-            if (parsedRoles[i] == 'Internal/emmadmin') {
-                isEMMAdmin = true;
-                break;
-            }
-            if (parsedRoles[i] == 'admin') {
-                isAdmin = true;
-                isEMMAdmin = true;
-                break;
-            }
-        }
-        userFeed.isEMMAdmin = isEMMAdmin;
-        userFeed.isAdmin = isAdmin;
-        session.put("emmConsoleUserLogin", "true");
-        session.put("emmConsoleUser", userFeed);
-        //var db = common.getDatabase();
-
-        var startupModule = require('/modules/startup.js').startup;
-        var startup = new startupModule(db);
-        startup.onUserLogin(userFeed);
-
-        var groupModule = require('/modules/group.js').group;
-        var group = new groupModule(db);
-
-        if (!group.roleExists("Internal/emmadmin")) {
-            var userList = new Array();
-            group.addGroup({
-                'name': 'Internal/emmadmin',
-                'users': userList
-            });
-        }
-        var appController = require('/controller/app.js');
-
-        if (isAdmin || isEMMAdmin) {
-            response.sendRedirect('console/dashboard');
-        } else {
-            response.sendRedirect(appController.appInfo().server_url + 'users/devices?user=' + userFeed.username);
-        }
-    }
+    log.debug("User logged in: "+username);
+    response.sendRedirect('/cdm/dashboard');
 }, function() {
-    response.sendRedirect('/emm');
+    response.sendRedirect('/cdm');
 }); %>
