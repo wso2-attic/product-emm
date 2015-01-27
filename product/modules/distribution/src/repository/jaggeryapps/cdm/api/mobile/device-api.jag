@@ -25,7 +25,6 @@ var deviceModule = require("/modules/device.js");
 
 if (uri != null) {
     var uriMatcher = new URIMatcher(callPath);
-    log.info(callPath);
     if (uriMatcher.match("devices/mobile/{type}/{deviceid}/")) {
         var deviceId = uriMatcher.elements().deviceid;
         var type = uriMatcher.elements().type;
