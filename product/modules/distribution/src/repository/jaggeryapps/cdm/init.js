@@ -17,7 +17,6 @@
  */
 //Init js to execute
 var logger = new Log();
-logger.debug("running debug");
 var app_TENANT_CONFIGS = 'tenant.configs';
 var app_carbon = require('carbon');
 var app_configs = {

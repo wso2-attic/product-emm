@@ -18,6 +18,7 @@
  * under the License.
  */
 var title="WSO2 CDM";
+include("/includes/auth-header.jag");
 %>
 <html lang="en">
     <%
