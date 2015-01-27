@@ -98,12 +98,17 @@
              <outputDirectory>wso2cdm-${project.version}/repository/deployment/server/webapps/STRATOS_ROOT</outputDirectory>
              <fileMode>755</fileMode>
          </fileSet>-->
+        <!--Removed -->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/modules
             </directory>
             <outputDirectory>${pom.artifactId}-${project.version}/modules/</outputDirectory>
             <includes>
-                <include>*/**</include>
+                <include>**/carbon/</include>
+                <include>**/jaggery-test/</include>
+                <include>**/process/</include>
+                <include>**/uuid/</include>
+                <include>**/i18n/</include>
             </includes>
         </fileSet>
 
@@ -198,12 +203,26 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
-
+        <!--Copying modules-->
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules
             </directory>
             <outputDirectory>wso2mdm-${project.version}/modules/</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>src/repository/modules/encode</directory>
+            <outputDirectory>wso2mdm-${project.version}/modules/encode</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>src/repository/modules/sso</directory>
+            <outputDirectory>wso2mdm-${project.version}/modules/sso</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
