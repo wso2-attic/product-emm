@@ -22,69 +22,69 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "DBType")
+@XmlRootElement(name = "Type")
 public class TestDBConfiguration {
 
-    private String connectionUrl;
-    private String driverClass;
-    private String userName;
-    private String pwd;
+    private String connectionURL;
+    private String driverClassName;
+    private String username;
+    private String password;
 
     @Override public String toString() {
-        return "TestDBConfiguration{" +
-                "connectionUrl='" + connectionUrl + '\'' +
-                ", driverClass='" + driverClass + '\'' +
-                ", userName='" + userName + '\'' +
-                ", pwd='" + pwd + '\'' +
-                ", dbType='" + dbType + '\'' +
+        return "TestDataSourceConfiguration{" +
+                "ConnectionURL='" + connectionURL + '\'' +
+                ", DriverClassName='" + driverClassName + '\'' +
+                ", Username='" + username + '\'' +
+                ", Password='" + password + '\'' +
+                ", Type='" + dbType + '\'' +
                 '}';
     }
 
     private String dbType;
 
-    @XmlElement(name = "connectionurl", nillable = false)
-    public String getConnectionUrl() {
-        return connectionUrl;
+    @XmlElement(name = "ConnectionURL", nillable = false)
+    public String getConnectionURL() {
+        return connectionURL;
     }
 
-    public void setConnectionUrl(String connectionUrl) {
-        this.connectionUrl = connectionUrl;
+    public void setConnectionURL(String connectionURL) {
+        this.connectionURL = connectionURL;
     }
 
-    @XmlElement(name = "driverclass", nillable = false)
-    public String getDriverClass() {
-        return driverClass;
+    @XmlElement(name = "DriverClassName", nillable = false)
+    public String getDriverClassName() {
+        return driverClassName;
     }
 
-    public void setDriverClass(String driverClass) {
-        this.driverClass = driverClass;
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
     }
 
-    @XmlElement(name = "userName", nillable = false)
-    public String getUserName() {
-        return userName;
+    @XmlElement(name = "Username", nillable = false)
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    @XmlElement(name = "pwd", nillable = false)
-    public String getPwd() {
-        return pwd;
+    @XmlElement(name = "Password", nillable = false)
+    public String getPassword() {
+        return password;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @XmlAttribute(name = "typeName")
-    public String getDbType() {
+    @XmlAttribute(name = "name")
+    public String getType() {
         return dbType;
     }
 
-    public void setDbType(String dbType) {
-        this.dbType = dbType;
+    public void setType(String type) {
+        this.dbType = type;
     }
 
 }

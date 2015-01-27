@@ -67,14 +67,13 @@
                     </instructions>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.18</version>
                 <configuration>
-		    <systemPropertyVariables>
-                         <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
+                    <systemPropertyVariables>
+                        <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
@@ -90,8 +89,8 @@
             <artifactId>org.eclipse.osgi</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>org.eclipse.equinox.common</artifactId>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
@@ -111,16 +110,19 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
+            <artifactId>org.wso2.carbon.apimgt.api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.apimgt.core</artifactId>
+            <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.wso2</groupId>
+            <artifactId>jdbc-pool</artifactId>
+        </dependency>
     </dependencies>
-
 </project>

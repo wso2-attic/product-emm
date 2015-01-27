@@ -14,11 +14,11 @@
   ~ under the License.
   -->
 
-<DeviceMgtTestDBConfigurations>
-    <DBType typeName="H2">
-        <connectionurl>jdbc:h2:mem:cdm-mobile-test-db;DB_CLOSE_DELAY=-1</connectionurl>
-        <driverclass>org.h2.Driver</driverclass>
-        <userName></userName>
-        <pwd></pwd>
-    </DBType>
-</DeviceMgtTestDBConfigurations>
+<TestDataSourceConfigurations>
+    <Type name="H2">
+        <ConnectionURL>jdbc:h2:mem:cdm-mobile-test-db;DB_CLOSE_DELAY=-1</ConnectionURL>
+        <DriverClassName>org.h2.Driver</DriverClassName>
+        <Username></Username>
+        <Password></Password>
+    </Type>
+</TestDataSourceConfigurations>
