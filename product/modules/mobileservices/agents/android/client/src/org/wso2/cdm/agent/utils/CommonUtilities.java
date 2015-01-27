@@ -36,20 +36,22 @@ public class CommonUtilities {
 	public static String SERVER_PORT = "9763";
 	public static String SERVER_PROTOCOL = "http://";
 	public static String API_VERSION = "1.0.0";
+	public static String API_SERVER_PORT = "8280";
 	
 	public static String SERVER_APP_ENDPOINT = "/cdm-android-api/";
 	public static String SERVER_AUTHENTICATION_ENDPOINT="register/authenticate/device";
-	public static String LICENSE_ENDPOINT = "register/authenticate/device/license";
-	public static String REGISTER_ENDPOINT = "enrollment/authenticate/device/enroll";
+	public static String LICENSE_ENDPOINT = "/license/"+API_VERSION;
+	public static String REGISTER_ENDPOINT = "/enroll/"+API_VERSION;
 	
 	public static String OAUTH_ENDPOINT = "/oauth2/token";
 	public static String SENDER_ID_ENDPOINT = "devices/sender_id/";
 	public static String IS_REGISTERED_ENDPOINT = "devices/isregistered/";
 	public static String UNREGISTER_ENDPOINT = "devices/unregister/";
-	public static String NOTIFICATION_ENDPOINT = "notifications/pendingOperations/";
+	public static String NOTIFICATION_ENDPOINT = "/operation/"+API_VERSION;
 	
 	public static String SERVER_URL = SERVER_PROTOCOL + SERVER_IP + ":"
-			+ SERVER_PORT + SERVER_APP_ENDPOINT;
+			+ SERVER_PORT ;
+	public static String API_SERVER_URL;
 	
 
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
@@ -86,7 +88,7 @@ public class CommonUtilities {
 		SERVER_IP = serverIP;
 		SERVER_URL = SERVER_PROTOCOL + serverIP + ":" + SERVER_PORT
 				+SERVER_APP_ENDPOINT;
-		
+		API_SERVER_URL=SERVER_PROTOCOL + SERVER_IP + ":" + API_SERVER_PORT ;
 	}
 
 	/**
@@ -140,7 +142,7 @@ public class CommonUtilities {
 	public static final String OPERATION_DEVICE_INFO = "500A";
 	public static final String OPERATION_DEVICE_LOCATION = "501A";
 	public static final String OPERATION_GET_APPLICATION_LIST = "502A";
-	public static final String OPERATION_LOCK_DEVICE = "503A";
+	public static final String OPERATION_LOCK_DEVICE = "DEVICE_LOCK";
 	public static final String OPERATION_WIPE_DATA = "504A";//reset device
 	public static final String OPERATION_CLEAR_PASSWORD = "505A";
 	public static final String OPERATION_NOTIFICATION = "506A";

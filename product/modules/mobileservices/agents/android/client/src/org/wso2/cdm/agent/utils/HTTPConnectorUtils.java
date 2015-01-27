@@ -44,7 +44,6 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.wso2.cdm.agent.R;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ParseException;
 import android.util.Log;
 
@@ -53,25 +52,6 @@ public class HTTPConnectorUtils {
 	public static String TAG = ServerUtils.class.getSimpleName();
 
 	private static final int MAX_ATTEMPTS = 2;
-
-	// public static Map<String, String> getClientKey(String username, String
-	// password, Context context) {
-	// Map<String, String> params = new HashMap<String, String>();
-	// Map<String, String> response = new HashMap<String, String>();
-	//
-	// params.put("username", username);
-	// params.put("password", password);
-	//
-	// try {
-	// response =
-	// postData("services/register/authenticate/device", params,
-	// context);
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// return response;
-	// }
-	// return response;
-	// }
 
 	public static Map<String, String> postData(Context context, String url,
 	                                           Map<String, String> params) {
@@ -121,7 +101,6 @@ public class HTTPConnectorUtils {
 		}
 
 		String body = bodyBuilder.toString();
-		Log.v(TAG, "Posting '" + body + "' to " + url);
 		byte[] postData = body.getBytes();
 
 		HttpPost httppost = new HttpPost(url);

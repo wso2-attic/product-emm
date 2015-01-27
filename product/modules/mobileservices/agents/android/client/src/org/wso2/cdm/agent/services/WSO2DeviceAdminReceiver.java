@@ -1,25 +1,26 @@
-/*
- ~ Copyright (c) 2014, WSO2 Inc. (http://wso2.com/) All Rights Reserved.
- ~
- ~ Licensed under the Apache License, Version 2.0 (the "License");
- ~ you may not use this file except in compliance with the License.
- ~ You may obtain a copy of the License at
- ~
- ~      http://www.apache.org/licenses/LICENSE-2.0
- ~
- ~ Unless required by applicable law or agreed to in writing, software
- ~ distributed under the License is distributed on an "AS IS" BASIS,
- ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- ~ See the License for the specific language governing permissions and
- ~ limitations under the License.
-*/
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.cdm.agent.services;
 
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.cdm.agent.R;
 import org.wso2.cdm.agent.proxy.APIResultCallBack;
 import org.wso2.cdm.agent.utils.CommonUtilities;
@@ -48,12 +49,12 @@ public class WSO2DeviceAdminReceiver extends DeviceAdminReceiver implements APIR
 	String regId="";
 	Operation operation;
 	boolean unregState=false;
+	
 	/** Called when this application is approved to be a device administrator. */
 	@Override
 	public void onEnabled(Context context, Intent intent) {
 		super.onEnabled(context, intent);
 		String policy;
-		JSONArray jArray = null;
 		operation = new Operation(context);
 		SharedPreferences mainPref = context.getSharedPreferences("com.mdm",
 				Context.MODE_PRIVATE);
@@ -61,8 +62,8 @@ public class WSO2DeviceAdminReceiver extends DeviceAdminReceiver implements APIR
 		editor.putString(context.getResources().getString(R.string.shared_pref_device_active), "1");
 		editor.commit();
 		
-		ProcessMessage pm=new ProcessMessage(context);
-		pm.getOperations(null);
+		MessageProcessor pm=new MessageProcessor(context);
+		pm.getMessages();
 		try {	
 			policy = mainPref.getString("policy", "");
 			if(policy!=null && !policy.equals("")){
@@ -74,6 +75,7 @@ public class WSO2DeviceAdminReceiver extends DeviceAdminReceiver implements APIR
 		Toast.makeText(context, R.string.device_admin_enabled,
 				Toast.LENGTH_LONG).show();
 		Log.d(TAG, "onEnabled");
+		LocalNotification.startPolling(context);
 		
 	}
 
@@ -98,8 +100,12 @@ public class WSO2DeviceAdminReceiver extends DeviceAdminReceiver implements APIR
 		String regId = CommonUtilities.getPref(app_context, app_context
 				.getResources().getString(R.string.shared_pref_regId));
 
-		Map<String, String> requestParams = new HashMap<String, String>();
-		requestParams.put("regid", regId);
+		JSONObject requestParams = new JSONObject();
+		try {
+	        requestParams.put("regid", regId);
+        } catch (JSONException e) {
+	        e.printStackTrace();
+        }
 		ServerUtils.clearAppData(app_context);
 		ServerUtils.callSecuredAPI(app_context,
 				CommonUtilities.UNREGISTER_ENDPOINT,
