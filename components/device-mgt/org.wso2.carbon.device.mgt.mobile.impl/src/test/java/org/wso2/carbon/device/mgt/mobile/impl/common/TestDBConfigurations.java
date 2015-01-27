@@ -22,12 +22,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@XmlRootElement(name = "DeviceMgtTestDBConfigurations")
+@XmlRootElement(name = "TestDataSourceConfigurations")
 public class TestDBConfigurations {
 
     private List<TestDBConfiguration> dbTypesList;
 
-    @XmlElement(name = "DBType")
+    @XmlElement(name = "Type")
     public List<TestDBConfiguration> getDbTypesList() {
         return dbTypesList;
     }

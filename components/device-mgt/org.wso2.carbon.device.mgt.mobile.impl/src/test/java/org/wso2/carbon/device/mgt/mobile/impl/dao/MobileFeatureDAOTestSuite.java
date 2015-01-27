@@ -112,12 +112,16 @@ public class MobileFeatureDAOTestSuite {
     }
 
     private void createH2DB(TestDBConfiguration testDBConf) throws Exception {
-        Class.forName(testDBConf.getDriverClassName());
-        conn = DriverManager.getConnection(testDBConf.getConnectionURL());
-        stmt = conn.createStatement();
-        stmt.executeUpdate("RUNSCRIPT FROM './src/test/resources/sql/CreateH2TestDB.sql'");
-        stmt.close();
-        conn.close();
+        try {
+            Class.forName(testDBConf.getDriverClassName());
+            conn = DriverManager.getConnection(testDBConf.getConnectionURL());
+            stmt = conn.createStatement();
+            stmt.executeUpdate("RUNSCRIPT FROM './src/test/resources/sql/CreateH2TestDB.sql'");
+        } finally {
+            stmt.close();
+            conn.close();
+            TestUtils.cleanupResources(conn, stmt, null);
+        }
     }
 
     @Test
