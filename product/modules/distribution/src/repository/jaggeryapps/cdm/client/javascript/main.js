@@ -27,7 +27,7 @@ var currentDeviceOperation;
 var currentDevice;
 var currentDeviceType;
 function performOperation(){
-    currentDevice = $("#deviceMain").data("deviceid");
+    currentDevice = escape($("#deviceMain").data("deviceid"));
     currentDeviceType = $("#deviceMain").data("devicetype");
     $.post("/cdm/api/operation/"+currentDeviceType+"/"+currentDevice+"/"+currentDeviceOperation,function(){
         $('#confirmModel').modal('hide');
