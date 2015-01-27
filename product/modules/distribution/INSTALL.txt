@@ -1,4 +1,4 @@
-(1) Installing  WSO2 Enterprise Mobility Management Solution ${product.version}
+(1) Installing  WSO2 Mobile Device Manager 2.0.0-SNAPSHOT
 
 Running the server
 ---------------
@@ -38,9 +38,4 @@ System Requirements
    NOTE:
      On Windows Server 2003, it is not allowed to go below the medium security
      level in Internet Explorer 6.x.
-
-For more details see
-https://docs.wso2.org/display/EMM110/Prerequisites
-
-
 

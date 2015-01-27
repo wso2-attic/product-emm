@@ -1,29 +1,43 @@
-WSO2 Enterprise Mobility Manager (EMM)
+WSO2 Mobile Device Manager (MDM)
 ----------------------
-Welcome to the WSO2 Enterprise Mobility Manager (EMM) ${product.version} release
+Welcome to the WSO2 Mobile Device Manager Manager (MDM) 2.0.0-SNAPSHOT release
 =======
 
 Key Features
 ------------
 1.  Self-service device enrollment and management with end-user MDM console
-2.  Policy-driven device management for security, data, and device features (Camera, Password Policy)
-3.  Deploy policies over-the-air 
-4.  Compliance monitoring for reporting, alerting, and device deprovisioning
-5.  Role based permissions for device management
-6.  Provisioning and deprovisioning applications to enrolled devices
-7.  Blacklisting of applications for Android
-8.  Supports App management
-9.  App approval process through a lifecycle
-10. Discover mobile apps through an Enterprise App Store
-11. Self-provisioning of mobile apps to devices
 
 
 Installation & Running
 ----------------------
-1. extract the downloaded zip file
+1. Extract the downloaded zip file
 2. Run the wso2server.sh or wso2server.bat file in the bin directory
 3. Once the server starts, point your Web browser to
    https://localhost:9443/
+4. An external API manager is necessary to access the APIs MDM exposes for Android agent.
+   Create the following APIs,
+	i. http://<HOST_NAME>:9763/cdm-android-api/enrollment/
+   	   Keeps the context as /enroll and version as 1.0.0
+	ii. http://<HOST_NAME>:9763/cdm-android-ap/devices/license
+           Keeps the context as /license and version as 1.0.0
+	iii. http://<HOST_NAME>:9763/cdm-android-ap/operations/
+   	   Keeps the context as /operation and version as 1.0.0
+
+5. After publishing these APIs, subscribe to these APIs with default app/any app.
+   In API store, go to my subscriptions and find client ID and secret.
+
+6. Please find the maven-archetype in <PRODUCT_HOME>repository/tools to generate the mdm-android-agent project & follow the README file.
+
+7. Go to MDM admin console.
+    Add a license with following properties.
+    Ex -: Provider -: Any text
+             Name -: android
+             Language -: en-us
+             Valid From -: date in {dd-mm-yyyy} format.
+  	     Valid To -: date in {dd-mm-yyyy} format.
+             License -: License Text
+
+
 
 For more details, see the Installation Guide
 
@@ -33,13 +47,10 @@ System Requirements
 1. Minimum memory - 2GB
 2. Portal app requires full Javascript enablement of the Web browser
 
-For more details see
-https://docs.wso2.org/display/EMM110/Prerequisites
-
 For known issues see
 https://wso2.org/jira/issues/?filter=11791
 
-WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
+WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
 -----------------------------------------------------
 
   EMM_HOME
@@ -121,7 +132,7 @@ WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
       This document contains information on installing WSO2 Enterprise Mobility Manager.
 
     - release-notes.html
-      Release information for WSO2 Enterprise Mobility Manager ${product.version}
+      Release information for WSO2 Enterprise Mobility Manager 2.0.0-SNAPSHOT
 
 Secure sensitive information in carbon configuration files
 ----------------------------------------------------------
@@ -180,4 +191,4 @@ development methodology and is provided by the very same engineers who build the
 For additional support information please refer to http://wso2.com/support/
 
 ---------------------------------------------------------------------------
-(c) Copyright 2013 WSO2 Inc.
+(c) Copyright 2015 WSO2 Inc.
