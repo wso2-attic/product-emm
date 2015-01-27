@@ -38,7 +38,7 @@ import java.util.HashMap;
  * <p>By default, ValueAnimator uses non-linear time interpolation, via the
  * {@link AccelerateDecelerateInterpolator} class, which accelerates into and decelerates
  * out of an animation. This behavior can be changed by calling
- * {@link com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator#setInterpolator(TimeInterpolator)}.</p>
+ * {@link ValueAnimator#setInterpolator(TimeInterpolator)}.</p>
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ValueAnimator extends Animator {
@@ -733,7 +733,7 @@ public class ValueAnimator extends Animator {
      * The most recent value calculated by this <code>ValueAnimator</code> when there is just one
      * property being animated. This value is only sensible while the animation is running. The main
      * purpose for this read-only property is to retrieve the value from the <code>ValueAnimator</code>
-     * during a call to {@link com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener#onAnimationUpdate(com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator)}, which
+     * during a call to {@link AnimatorUpdateListener#onAnimationUpdate(ValueAnimator)}, which
      * is called during each animation frame, immediately after the value is calculated.
      *
      * @return animatedValue The value most recently calculated by this <code>ValueAnimator</code> for
@@ -753,7 +753,7 @@ public class ValueAnimator extends Animator {
      * The most recent value calculated by this <code>ValueAnimator</code> for <code>propertyName</code>.
      * The main purpose for this read-only property is to retrieve the value from the
      * <code>ValueAnimator</code> during a call to
-     * {@link com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener#onAnimationUpdate(com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator)}, which
+     * {@link AnimatorUpdateListener#onAnimationUpdate(ValueAnimator)}, which
      * is called during each animation frame, immediately after the value is calculated.
      *
      * @return animatedValue The value most recently calculated for the named property

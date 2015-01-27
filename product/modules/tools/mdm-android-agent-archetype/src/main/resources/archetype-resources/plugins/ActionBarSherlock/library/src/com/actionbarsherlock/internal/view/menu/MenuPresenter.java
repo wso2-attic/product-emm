@@ -51,7 +51,7 @@ public interface MenuPresenter {
     /**
      * Initialize this presenter for the given context and menu.
      * This method is called by MenuBuilder when a presenter is
-     * added. See {@link MenuBuilder#addMenuPresenter(com.actionbarsherlock.internal.view.menu.MenuPresenter)}
+     * added. See {@link MenuBuilder#addMenuPresenter(MenuPresenter)}
      *
      * @param context Context for this presenter; used for view creation and resource management
      * @param menu Menu to host

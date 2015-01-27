@@ -96,6 +96,7 @@
 	         android:layout_centerHorizontal="true"
 	         android:textSize="16sp"
 	         android:textColor="#372c24"
+	         android:textAlignment="center"
 	         android:gravity="center"
 	         android:text="Registration failed, check your internet connection and click to retry" />
 

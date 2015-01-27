@@ -60,14 +60,14 @@ public class AccessTokenHandler extends Activity {
             APIUtilities apiUtilities = new APIUtilities();
             apiUtilities.setEndPoint(tokenEndPoint);
             apiUtilities.setHttpMethod("POST");
-            apiUtilities.setRequestParams(request_params);
+            apiUtilities.setRequestParamsMap(request_params);
                
             Map<String, String> headers = new HashMap<String, String>();
             String authorizationString = "Basic " + new String(Base64.encodeBase64((clientID + ":" + clientSecret).getBytes()));
             headers.put("Authorization", authorizationString);
             headers.put("Content-Type", "application/x-www-form-urlencoded");
             
-            Map<String, String> response_params = ServerUtilitiesTemp.postData(apiUtilities,headers);
+            Map<String, String> response_params = ServerApiAccess.postDataAPI(apiUtilities,headers);
             response = response_params.get("response");
             responseCode = response_params.get("status");
             return response;
@@ -84,7 +84,7 @@ public class AccessTokenHandler extends Activity {
 
                 if (responseCode != null && responseCode.equals("200")) {
                 	JSONObject response = new JSONObject(result);
-                    
+                    Log.d("sdf",response.toString());
                     try{
                     	accessToken = response.getString("access_token");
                     	refreshToken = response.getString("refresh_token");
@@ -99,6 +99,7 @@ public class AccessTokenHandler extends Activity {
                         Editor editor = mainPref.edit();
                         editor.putString("access_token", accessToken);
                         editor.putString("refresh_token",refreshToken);
+                        editor.putString("username", username);
                         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                         Date date = new Date();
                         long expiresIN=date.getTime()+(timeToExpireSecond*1000);

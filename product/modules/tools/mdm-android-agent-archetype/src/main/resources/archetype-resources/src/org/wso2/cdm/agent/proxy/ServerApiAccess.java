@@ -1,14 +1,26 @@
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.cdm.agent.proxy;
 
-import android.content.Context;
 import android.util.Log;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -19,11 +31,13 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONObject;
 import org.wso2.cdm.agent.R;
 import org.wso2.cdm.agent.utils.CommonUtilities;
 
@@ -31,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +55,7 @@ import java.util.Map.Entry;
 /**
  * Handle network communication between SDK and authorization server
  */
-public class ServerUtilitiesTemp {
+public class ServerApiAccess {
     private final static String TAG = "ServerUtilities";
     private static boolean isSSLEnable = false;
     private static InputStream inputStream;
@@ -84,7 +99,70 @@ public class ServerUtilitiesTemp {
     public static Map<String, String> postData(APIUtilities apiUtilities, Map<String, String> headers) {
     	String httpMethod = apiUtilities.getHttpMethod();
     	String url = apiUtilities.getEndPoint();
-       	Map<String, String> params = apiUtilities.getRequestParams();
+       	JSONObject params = apiUtilities.getRequestParams();   	 	
+    	Map<String, String> responseParams = new HashMap<String, String>();
+    	HttpClient httpclient = getCertifiedHttpClient();
+    	
+
+    	if(httpMethod.equals("POST")){
+    		HttpPost httpPost = new HttpPost(url);
+    		if(params!=null){
+    			try {
+	                httpPost.setEntity(new StringEntity(params.toString()));
+                } catch (UnsupportedEncodingException e) {
+	                e.printStackTrace();
+                }
+    		}else{
+    			httpPost.setEntity(null);
+    		}
+    		Log.e("url",""+url);
+    		HttpPost httpPostWithHeaders = (HttpPost)buildHeaders(httpPost,headers,httpMethod);
+    	    try {
+    	        HttpResponse response = httpclient.execute(httpPostWithHeaders);
+    	        String status = String.valueOf(response.getStatusLine().getStatusCode());
+    	        Log.d(TAG,status);
+    	        responseParams.put("response", getResponseBody(response));
+    	        responseParams.put("status", status);
+    	        return responseParams;
+    	    } catch (ClientProtocolException e) {
+    	    	Log.d(TAG, "ClientProtocolException :"+e.toString());
+    	        return null;
+    	    } catch (IOException e) {
+    	        Log.d(TAG, e.toString());
+    	        responseParams.put("response", "Internal Server Error");
+    	        responseParams.put("status", "500");
+    	        return responseParams;
+    	    }  
+    	}
+    	else if(httpMethod.equals("GET")){ 
+//    		if(payload!=null){
+//    			url = url+"?"+payload;
+//    		}
+    		HttpGet httpGet = new HttpGet(url);
+    		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet,headers,httpMethod);
+    		Log.d(TAG,httpGetWithHeaders.toString()+" GET");
+    	    try {
+    	        HttpResponse response = httpclient.execute(httpGetWithHeaders);
+    	        responseParams.put("response", getResponseBody(response));
+    	        responseParams.put("status", String.valueOf(response.getStatusLine().getStatusCode()));
+    	        return responseParams;
+    	    } catch (ClientProtocolException e) {
+    	    	Log.d(TAG, "ClientProtocolException :"+e.toString());
+    	        return null;
+    	    } catch (IOException e) {
+    	    	Log.d(TAG, e.toString());
+    	        responseParams.put("response", "Internal Server Error");
+    	        responseParams.put("status", "500");
+    	        return responseParams;
+    	    }  
+    	}
+    	return null;   
+    }
+    
+    public static Map<String, String> postDataAPI(APIUtilities apiUtilities, Map<String, String> headers) {
+    	String httpMethod = apiUtilities.getHttpMethod();
+    	String url = apiUtilities.getEndPoint();
+       	Map<String, String> params = apiUtilities.getRequestParamsMap();
     	 	
     	Map<String, String> response_params = new HashMap<String, String>();
     	HttpClient httpclient = getCertifiedHttpClient();
@@ -108,67 +186,6 @@ public class ServerUtilitiesTemp {
     	        return null;
     	    } catch (IOException e) {
     	        Log.d(TAG, e.toString());
-    	        response_params.put("response", "Internal Server Error");
-    	        response_params.put("status", "500");
-    	        return response_params;
-    	    }  
-    	}else if(httpMethod.equals("PUT")){
-    		HttpPut httpPut = new HttpPut(url);
-    		HttpPut httpPutWithHeaders = (HttpPut)buildHeaders(httpPut,headers,httpMethod);
-    		byte[] putData = payload.getBytes();             
-    	    try {
-    	    	httpPutWithHeaders.setEntity(new ByteArrayEntity(putData));
-    	        HttpResponse response = httpclient.execute(httpPutWithHeaders);
-    	        response_params.put("response", getResponseBody(response));
-    	        response_params.put("status", String.valueOf(response.getStatusLine().getStatusCode()));
-    	        return response_params;
-    	    } catch (ClientProtocolException e) {
-    	    	Log.d(TAG, "ClientProtocolException :"+e.toString());
-    	        return null;
-    	    } catch (IOException e) {
-    	    	Log.d(TAG, e.toString());
-    	        response_params.put("response", "Internal Server Error");
-    	        response_params.put("status", "500");
-    	        return response_params;
-    	    }  
-    	}else if(httpMethod.equals("GET")){ 
-    		if(payload!=null){
-    			url = url+"?"+payload;
-    		}
-    		HttpGet httpGet = new HttpGet(url);
-    		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet,headers,httpMethod);
-    		Log.d(TAG,httpGetWithHeaders.toString());
-    	    try {
-    	        HttpResponse response = httpclient.execute(httpGetWithHeaders);
-    	        response_params.put("response", getResponseBody(response));
-    	        response_params.put("status", String.valueOf(response.getStatusLine().getStatusCode()));
-    	        return response_params;
-    	    } catch (ClientProtocolException e) {
-    	    	Log.d(TAG, "ClientProtocolException :"+e.toString());
-    	        return null;
-    	    } catch (IOException e) {
-    	    	Log.d(TAG, e.toString());
-    	        response_params.put("response", "Internal Server Error");
-    	        response_params.put("status", "500");
-    	        return response_params;
-    	    }  
-    	}else if(httpMethod.equals("Delete")){ 
-    		if(payload!=null){
-    			url = url+"?"+payload;
-    		}
-    		HttpDelete httpDelete = new HttpDelete(url);
-    		HttpDelete httpDeleteWithHeaders = (HttpDelete) buildHeaders(httpDelete,headers,httpMethod);
-    		Log.d(TAG,httpDeleteWithHeaders.toString());
-    	    try {
-    	        HttpResponse response = httpclient.execute(httpDeleteWithHeaders);
-    	        response_params.put("response", getResponseBody(response));
-    	        response_params.put("status", String.valueOf(response.getStatusLine().getStatusCode()));
-    	        return response_params;
-    	    } catch (ClientProtocolException e) {
-    	    	Log.d(TAG, "ClientProtocolException :"+e.toString());
-    	        return null;
-    	    } catch (IOException e) {
-    	    	Log.d(TAG, e.toString());
     	        response_params.put("response", "Internal Server Error");
     	        response_params.put("status", "500");
     	        return response_params;
@@ -215,7 +232,7 @@ public class ServerUtilitiesTemp {
         HttpEntity entity = null;
         try {
             entity = response.getEntity();
-            response_text = _getResponseBody(entity);
+            response_text = getResponseBodyContent(entity);
         } catch (ParseException e) {
             Log.d(TAG, e.toString());
         } catch (IOException e) {
@@ -230,7 +247,7 @@ public class ServerUtilitiesTemp {
         return response_text;
     }
 
-    public static String _getResponseBody(final HttpEntity entity) throws IOException, ParseException {
+    public static String getResponseBodyContent(final HttpEntity entity) throws IOException, ParseException {
 
         if (entity == null) {
             throw new IllegalArgumentException("HTTP entity may not be null");

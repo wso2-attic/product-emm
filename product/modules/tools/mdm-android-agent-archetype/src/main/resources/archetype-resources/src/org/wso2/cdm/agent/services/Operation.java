@@ -402,11 +402,11 @@ public class Operation {
 
 	@SuppressWarnings("static-access")
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	public JSONArray doTask(String code_in, String data_in, int req_mode) {
+	public JSONArray doTask(String codeIn, String dataIn, int req_mode) {
 		
-		Log.e("doTask","code:"+code_in+"\n"+data_in);
-		String data_input=data_in;
-		String code_input = code_in;
+		Log.e("doTask","code:"+codeIn+"\n"+dataIn);
+		String dataInput=dataIn;
+		String codeInput = codeIn;
 		String notification = "";
 		String ssid = "";
 		String password = "";
@@ -421,7 +421,7 @@ public class Operation {
 		
 		JSONArray resultArr= new JSONArray();
 		JSONObject result= new JSONObject();
-		if (code_input.equals(CommonUtilities.OPERATION_DEVICE_INFO)) {
+		if (codeInput.equals(CommonUtilities.OPERATION_DEVICE_INFO)) {
 
 			PhoneState phoneState = new PhoneState(context);
 			JSONObject obj = new JSONObject();
@@ -459,7 +459,7 @@ public class Operation {
 				obj.put("operator", deviceInfo.getNetworkOperatorName());
 
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				params.put("data", obj.toString());
@@ -467,7 +467,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", obj);
 				
 				Map<String, String> as = new HashMap<String, String>();
@@ -500,7 +500,7 @@ public class Operation {
 				e1.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_DEVICE_LOCATION)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_DEVICE_LOCATION)) {
 
 			LocationServices ls = new LocationServices(context);
 			Log.v("Latitude", ls.getLatitude());
@@ -520,10 +520,10 @@ public class Operation {
 				params.put("data", obj.toString());
 				
 				
-				//for local notification\
+				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", obj);
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
@@ -540,7 +540,7 @@ public class Operation {
 				e1.printStackTrace();
 			}
 
-		} else if (code_input
+		} else if (codeInput
 				.equals(CommonUtilities.OPERATION_GET_APPLICATION_LIST)) {
 			ArrayList<PInfo> apps = appList.getInstalledApps(false); /*
 																	 * false =
@@ -572,7 +572,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", jsonArray);
 				
 				
@@ -588,7 +588,7 @@ public class Operation {
 				params.put("status", "200");
 				//params.put("data", Uri.encode(jsonArray.toString()));
 				Log.e("PASSING MSG ID : ",token);
-				Log.e("PASSING CODE : ",code_input);
+				Log.e("PASSING CODE : ",codeInput);
 				
 				
 				
@@ -604,19 +604,19 @@ public class Operation {
 				e1.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_LOCK_DEVICE)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_LOCK_DEVICE)) {
 
 			Log.d(TAG, "Locking device now");
 			try {
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				if (req_mode == REQUEST_MODE_NORMAL) {
 					if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
@@ -639,7 +639,7 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_WIPE_DATA)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_WIPE_DATA)) {
 
 
 			Log.d(TAG,
@@ -650,10 +650,10 @@ public class Operation {
 			String pinSaved = mainPref.getString("pin", "");
 
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				pin = (String) jobj.get("pin");
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 
 				
@@ -670,7 +670,7 @@ public class Operation {
 				}
 				
 				
-				result.put("code", code_input);
+				result.put("code", codeInput);
 
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(params, context);
@@ -703,20 +703,20 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_CLEAR_PASSWORD)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_CLEAR_PASSWORD)) {
 			ComponentName demoDeviceAdmin = new ComponentName(context,
 					WSO2DeviceAdminReceiver.class);
 
 			try {
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 
 				if (req_mode == REQUEST_MODE_NORMAL) {
 					if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
@@ -745,11 +745,11 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_NOTIFICATION)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_NOTIFICATION)) {
 
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				if (jobj.get("notification").toString() != null
 						|| jobj.get("notification").toString().equals("")) {
 					notification = jobj.get("notification").toString();
@@ -762,14 +762,14 @@ public class Operation {
 
 				Log.v("Notification", notification);
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(params, context);
@@ -787,12 +787,12 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_WIFI)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_WIFI)) {
 			boolean wifistatus = false;
 
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				if (!jobj.isNull("ssid")) {
 					ssid = (String) jobj.get("ssid");
 				}
@@ -804,7 +804,7 @@ public class Operation {
 				e.printStackTrace();
 			}
 			Map<String, String> inparams = new HashMap<String, String>();
-			inparams.put("code", code_input);
+			inparams.put("code", codeInput);
 			inparams.put("msgID", token);
 			WiFiConfig config = new WiFiConfig(context);
 			
@@ -812,7 +812,7 @@ public class Operation {
 			try {
 				//for local notification
 				resultArr.put(result);
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				wifistatus = config.saveWEPConfig(ssid, password);
 				if (wifistatus) {
@@ -841,12 +841,12 @@ public class Operation {
 				}
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_DISABLE_CAMERA)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_DISABLE_CAMERA)) {
 
 			boolean camFunc = false;
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				if (!jobj.isNull("function")
 						&& jobj.get("function").toString()
 								.equalsIgnoreCase("enable")) {
@@ -863,14 +863,14 @@ public class Operation {
 				ComponentName cameraAdmin = new ComponentName(context,
 						WSO2DeviceAdminReceiver.class);
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				
 				String cammode = "Disabled";
@@ -904,29 +904,29 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input
+		} else if (codeInput
 				.equals(CommonUtilities.OPERATION_INSTALL_APPLICATION)
-				|| code_input
+				|| codeInput
 						.equals(CommonUtilities.OPERATION_INSTALL_APPLICATION_BUNDLE)) {
 
 			try {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
-				if (code_input
+				if (codeInput
 						.equals(CommonUtilities.OPERATION_INSTALL_APPLICATION)) {
-					JSONObject jobj = new JSONObject(data_input);
-					installApplication(jobj, code_input);
-				} else if (code_input
+					JSONObject jobj = new JSONObject(dataInput);
+					installApplication(jobj, codeInput);
+				} else if (codeInput
 						.equals(CommonUtilities.OPERATION_INSTALL_APPLICATION_BUNDLE)) {
 					JSONArray jArray = null;
-					jArray = new JSONArray(data_input);
+					jArray = new JSONArray(dataInput);
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject appObj = (JSONObject) jArray
 								.getJSONObject(i);
-						installApplication(appObj, code_input);
+						installApplication(appObj, codeInput);
 					}
 				}
 
@@ -935,18 +935,18 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input
+		} else if (codeInput
 				.equals(CommonUtilities.OPERATION_UNINSTALL_APPLICATION)) {
 
 			String packageName = "";
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				packageName = (String) jobj.get("identity");
 
 				Log.v("Package Name : ", packageName);
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
@@ -954,7 +954,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(params, context);
@@ -968,13 +968,13 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_ENCRYPT_STORAGE)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_ENCRYPT_STORAGE)) {
 			boolean encryptFunc = true;
 			String pass = "";
 
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				if (!jobj.isNull("function")
 						&& jobj.get("function").toString()
 								.equalsIgnoreCase("encrypt")) {
@@ -991,7 +991,7 @@ public class Operation {
 				ComponentName admin = new ComponentName(context,
 						WSO2DeviceAdminReceiver.class);
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 
 				if (encryptFunc
@@ -1020,7 +1020,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				if (devicePolicyManager.getStorageEncryptionStatus() != devicePolicyManager.ENCRYPTION_STATUS_UNSUPPORTED) {
 					params.put("status", "200");
 					result.put("status", "true");
@@ -1045,19 +1045,19 @@ public class Operation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (code_input.equals(CommonUtilities.OPERATION_MUTE)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_MUTE)) {
 
 			Log.d(TAG, "Muting Device");
 			try {
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				if (req_mode == REQUEST_MODE_NORMAL) {
 					if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
@@ -1079,7 +1079,7 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_TRACK_CALLS)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_TRACK_CALLS)) {
 			try {
 				Map<String, String> params = new HashMap<String, String>();
 
@@ -1091,7 +1091,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", new JSONObject(conversations.getCallDetails().toString()));
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
@@ -1104,7 +1104,7 @@ public class Operation {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} else if (code_input.equals(CommonUtilities.OPERATION_TRACK_SMS)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_TRACK_SMS)) {
 			int MESSAGE_TYPE_INBOX = 1;
 			int MESSAGE_TYPE_SENT = 2;
 			JSONObject smsObj = new JSONObject();
@@ -1123,7 +1123,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", smsObj);
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
@@ -1136,7 +1136,7 @@ public class Operation {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} else if (code_input.equals(CommonUtilities.OPERATION_DATA_USAGE)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_DATA_USAGE)) {
 			JSONObject dataObj = new JSONObject();
 
 			try {
@@ -1152,7 +1152,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", new JSONObject(deviceState.takeDataUsageSnapShot()
 				          						.toString()));
 				
@@ -1166,7 +1166,7 @@ public class Operation {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} else if (code_input.equals(CommonUtilities.OPERATION_STATUS)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_STATUS)) {
 			boolean encryptStatus = false;
 			boolean passCodeStatus = false;
 			try {
@@ -1195,7 +1195,7 @@ public class Operation {
 
 				Map<String, String> params = new HashMap<String, String>();
 
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				params.put("data", dataObj.toString());
@@ -1203,7 +1203,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", dataObj);
 
 				if (req_mode == REQUEST_MODE_NORMAL) {
@@ -1224,26 +1224,26 @@ public class Operation {
 				e1.printStackTrace();
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_WEBCLIP)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_WEBCLIP)) {
 			String appUrl = "";
 			String title = "";
 
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				Log.v("WEBCLIP DATA : ", data.toString());
 				appUrl = (String) jobj.get("identity");
 				title = (String) jobj.get("title");
 				Log.v("Web App URL : ", appUrl);
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(params, context);
@@ -1256,7 +1256,7 @@ public class Operation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (code_input.equals(CommonUtilities.OPERATION_PASSWORD_POLICY)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_PASSWORD_POLICY)) {
 			ComponentName demoDeviceAdmin = new ComponentName(context,
 					WSO2DeviceAdminReceiver.class);
 
@@ -1273,8 +1273,8 @@ public class Operation {
 			
 			
 			try {
-				result.put("code", code_input);
-				JSONObject jobj = new JSONObject(data_input);
+				result.put("code", codeInput);
+				JSONObject jobj = new JSONObject(dataInput);
 				if (!jobj.isNull("maxFailedAttempts")
 						&& jobj.get("maxFailedAttempts") != null) {
 					attempts = Integer.parseInt((String) jobj
@@ -1356,7 +1356,7 @@ public class Operation {
 				String policy = mainPref.getString("policy", "");
 				
 				
-				inparams.put("code", code_input);
+				inparams.put("code", codeInput);
 				inparams.put("msgID", token);
 				inparams.put("status", "200");
 				result.put("status", "true");
@@ -1393,7 +1393,7 @@ public class Operation {
 				}
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_EMAIL_CONFIGURATION)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_EMAIL_CONFIGURATION)) {
 			String emailname="", emailtype="", ic_username="", ic_password="", ic_hostname="";
 			long timout;
 			Map<String, String> inparams = new HashMap<String, String>();
@@ -1404,8 +1404,8 @@ public class Operation {
 			
 			JSONParser jp = new JSONParser();
 			try {
-				result.put("code", code_input);
-				JSONObject jobj = new JSONObject(data_input);
+				result.put("code", codeInput);
+				JSONObject jobj = new JSONObject(dataInput);
 				if (!jobj.isNull("type")
 						&& jobj.get("type") != null) {
 					emailtype = (String) jobj
@@ -1438,7 +1438,7 @@ public class Operation {
 					ic_hostname = "";
 				}
 				
-				inparams.put("code", code_input);
+				inparams.put("code", codeInput);
 				inparams.put("msgID", token);
 				inparams.put("status", "200");
 				result.put("status", "true");
@@ -1475,25 +1475,25 @@ public class Operation {
 				}
 			}
 
-		}else if (code_input
+		}else if (codeInput
 				.equals(CommonUtilities.OPERATION_INSTALL_GOOGLE_APP)) {
 
 			String packageName = "";
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				packageName = (String) jobj.get("package");
 
 				Log.v("Package Name : ", packageName);
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("code", code_input);
+				params.put("code", codeInput);
 				params.put("msgID", token);
 				params.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(params, context);
 				} else if (mode == CommonUtilities.MESSAGE_MODE_SMS) {
@@ -1509,7 +1509,7 @@ public class Operation {
 				e.printStackTrace();
 			}
 
-		} else if (code_input
+		} else if (codeInput
 				.equals(CommonUtilities.OPERATION_CHANGE_LOCK_CODE)) {
 			ComponentName demoDeviceAdmin = new ComponentName(context,
 					WSO2DeviceAdminReceiver.class);
@@ -1519,19 +1519,19 @@ public class Operation {
 
 			JSONParser jp = new JSONParser();
 			try {
-				JSONObject jobj = new JSONObject(data_input);
+				JSONObject jobj = new JSONObject(dataInput);
 				if (!jobj.isNull("password")) {
 					pass = (String) jobj.get("password");
 				}
 
-				inparams.put("code", code_input);
+				inparams.put("code", codeInput);
 				inparams.put("msgID", token);
 				inparams.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(inparams, context);
@@ -1570,7 +1570,7 @@ public class Operation {
 				}
 			}
 
-		} else if (code_input.equals(CommonUtilities.OPERATION_POLICY_BUNDLE)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_POLICY_BUNDLE)) {
 			Map<String, String> params = new HashMap<String, String>();
 			try {
 				params.put("code", code);
@@ -1581,7 +1581,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", new JSONObject(bundle_params.toString()));
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
@@ -1593,7 +1593,7 @@ public class Operation {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		} else if (code_input.equals(CommonUtilities.OPERATION_POLICY_MONITOR)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_POLICY_MONITOR)) {
 			JSONArray sendjArray;
 			JSONObject jobj=null;
 			try {
@@ -1610,7 +1610,7 @@ public class Operation {
 				}
 
 				Log.e("PASSING MSG ID : ",policy_token);
-				Log.e("PASSING CODE : ",code_input);
+				Log.e("PASSING CODE : ",codeInput);
 				Log.e("PASSING TYPE : ",String.valueOf(type));
 				PolicyTester tester = new PolicyTester(context, sendjArray,
 						type, policy_token);
@@ -1620,19 +1620,19 @@ public class Operation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (code_input.equals(CommonUtilities.OPERATION_POLICY_REVOKE)) {
+		} else if (codeInput.equals(CommonUtilities.OPERATION_POLICY_REVOKE)) {
 			try {
 				Map<String, String> inparams = new HashMap<String, String>();
 
 				
-				inparams.put("code", code_input);
+				inparams.put("code", codeInput);
 				inparams.put("msgID", token);
 				inparams.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(inparams, context);
 				} else if (mode == CommonUtilities.MESSAGE_MODE_SMS) {
@@ -1644,19 +1644,19 @@ public class Operation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}else if (code_input.equals(CommonUtilities.OPERATION_ENTERPRISE_WIPE_DATA)) {
+		}else if (codeInput.equals(CommonUtilities.OPERATION_ENTERPRISE_WIPE_DATA)) {
 			try {
 				Map<String, String> inparams = new HashMap<String, String>();
 
 				
-				inparams.put("code", code_input);
+				inparams.put("code", codeInput);
 				inparams.put("msgID", token);
 				inparams.put("status", "200");
 				
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {
 					//ServerUtilities.pushData(inparams, context);
 				} else if (mode == CommonUtilities.MESSAGE_MODE_SMS) {
@@ -1674,7 +1674,7 @@ public class Operation {
 				e.printStackTrace();
 			}
 		}
-		else if (code_input
+		else if (codeInput
 				.equals(CommonUtilities.OPERATION_BLACKLIST_APPS)) {
 			ArrayList<PInfo> apps = appList.getInstalledApps(false); /*
 																	 * false =
@@ -1692,7 +1692,7 @@ public class Operation {
 
 			try{
 
-					JSONObject appsObj = new JSONObject(data_input);
+					JSONObject appsObj = new JSONObject(dataInput);
 					if (!appsObj.isNull("data")) {
 						appsObj = (JSONObject) appsObj.get("data");
 					}
@@ -1737,7 +1737,7 @@ public class Operation {
 				//for local notification
 				resultArr.put(result);
 				result.put("status", "true");
-				result.put("code", code_input);
+				result.put("code", codeInput);
 				result.put("data", jsonArray);
 				
 				if (mode == CommonUtilities.MESSAGE_MODE_GCM) {

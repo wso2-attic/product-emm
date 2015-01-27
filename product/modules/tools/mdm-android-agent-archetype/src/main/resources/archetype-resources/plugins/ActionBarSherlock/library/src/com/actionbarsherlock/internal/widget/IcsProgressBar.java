@@ -1080,7 +1080,7 @@ public class IcsProgressBar extends View {
         int secondaryProgress;
 
         /**
-         * Constructor called from {@link com.actionbarsherlock.internal.widget.IcsProgressBar#onSaveInstanceState()}
+         * Constructor called from {@link IcsProgressBar#onSaveInstanceState()}
          */
         SavedState(Parcelable superState) {
             super(superState);

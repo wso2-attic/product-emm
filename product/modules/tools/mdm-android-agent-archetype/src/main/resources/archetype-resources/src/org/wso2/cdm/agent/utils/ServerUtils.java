@@ -1,34 +1,23 @@
+/**
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.cdm.agent.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
 
-import org.apache.http.HeaderElement;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
+import org.json.JSONObject;
 import org.wso2.cdm.agent.R;
 import org.wso2.cdm.agent.proxy.APIController;
 import org.wso2.cdm.agent.proxy.APIResultCallBack;
@@ -40,16 +29,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.ParseException;
 import android.util.Log;
 
 public class ServerUtils {
 	
 	public static String TAG = ServerUtils.class.getSimpleName();
-	
-	private static final int MAX_ATTEMPTS = 2;
-	private static final int BACKOFF_MILLI_SECONDS = 2000;
-	private static final Random random = new Random();
 
 	/**
 	 * calls the secured API
@@ -69,18 +53,13 @@ public class ServerUtils {
 	 * @param requestCode
 	 *            the request code
 	 */
-	public static void callSecuredAPI(Context context, String endpoint,
-			String methodType, Map<String, String> requestParams,
+	public static void callSecuredAPI(Context context, String endpoint, 
+	                                  String methodType, JSONObject requestParams,
 			APIResultCallBack apiResultCallBack, int requestCode) {
-		String serverIP = CommonUtilities.getPref(context, context
-				.getResources().getString(R.string.shared_pref_ip));
-		String serverURL = CommonUtilities.SERVER_PROTOCOL + serverIP + ":"
-				+ CommonUtilities.SERVER_PORT
-				+ CommonUtilities.SERVER_APP_ENDPOINT;
-
+		
+		Log.e("",endpoint);
 		APIUtilities apiUtilities = new APIUtilities();
-		apiUtilities.setEndPoint(serverURL + endpoint
-				+ CommonUtilities.API_VERSION);
+		apiUtilities.setEndPoint(endpoint);
 		apiUtilities.setHttpMethod(methodType);
 		if (requestParams != null) {
 			apiUtilities.setRequestParams(requestParams);

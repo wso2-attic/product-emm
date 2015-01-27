@@ -15,9 +15,9 @@
  */
 package org.wso2.cdm.agent;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.cdm.agent.R;
@@ -26,25 +26,21 @@ import org.wso2.cdm.agent.api.PhoneState;
 import org.wso2.cdm.agent.proxy.APIResultCallBack;
 import org.wso2.cdm.agent.utils.CommonDialogUtils;
 import org.wso2.cdm.agent.utils.CommonUtilities;
-import org.wso2.cdm.agent.utils.HTTPConnectorUtils;
 import org.wso2.cdm.agent.utils.Preference;
 import org.wso2.cdm.agent.utils.ServerUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 public class RegistrationActivity extends Activity implements APIResultCallBack {
 
@@ -77,7 +73,6 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 
 		DeviceInfo deviceInfo = new DeviceInfo(RegistrationActivity.this);
 		JSONObject jsObject = new JSONObject();
-		String osVersion = "";
 		SharedPreferences mainPref =
 		                             RegistrationActivity.this.getSharedPreferences(RegistrationActivity.this.getResources()
 		                                                                                                     .getString(R.string.shared_pref_package),
@@ -86,33 +81,54 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		              mainPref.getString(RegistrationActivity.this.getResources()
 		                                                          .getString(R.string.shared_pref_reg_type),
 		                                 "");
+		String username =
+	              mainPref.getString(RegistrationActivity.this.getResources()
+	                                                          .getString(R.string.username),
+	                                 "");
 
-		osVersion = deviceInfo.getOsVersion();
 		try {
-			jsObject.put("device", deviceInfo.getDevice());
-			jsObject.put("imei", deviceInfo.getDeviceId());
-			jsObject.put("imsi", deviceInfo.getIMSINumber());
-			jsObject.put("model", deviceInfo.getDeviceModel());
-
-			Map<String, String> requestParams = new HashMap<String, String>();
-			requestParams.put("regid", regId);
-			requestParams.put("properties", jsObject.toString());
-			requestParams.put("osversion", osVersion);
-			requestParams.put("username", username);
-			requestParams.put("platform", "Android");
-			requestParams.put("vendor", deviceInfo.getDeviceManufacturer());
-			requestParams.put("type", type);
-			requestParams.put("mac", deviceInfo.getMACAddress());
+			jsObject.put("deviceIdentifier", deviceInfo.getMACAddress());
+			jsObject.put("description", deviceInfo.getDevice());
+			jsObject.put("ownership", type);
+			JSONArray propertiesArray=new JSONArray();
+			JSONObject property= new JSONObject();			
+			property.put("name", "username");
+			property.put("value", username);
+			propertiesArray.put(property);
+			property= new JSONObject();	
+			property.put("name",  "device");
+			property.put("value", deviceInfo.getDevice());
+			propertiesArray.put(property);
+			property= new JSONObject();	
+			property.put("name",  "imei");
+			property.put("value", deviceInfo.getDeviceId());
+			propertiesArray.put(property);
+			property= new JSONObject();	
+			property.put("name",  "imsi");
+			property.put("value", deviceInfo.getIMSINumber());
+			propertiesArray.put(property);
+			property= new JSONObject();	
+			property.put("name",  "model");
+			property.put("value", deviceInfo.getDeviceModel());
+			propertiesArray.put(property);
+			property= new JSONObject();	
+			property.put("name",  "vendor");
+			property.put("value", deviceInfo.getOsVersion());
+			propertiesArray.put(property);
+			property= new JSONObject();		
+			property.put("name",  "osVersion");
+			property.put("value", deviceInfo.getOsVersion());
+			propertiesArray.put(property);
+			jsObject.put("properties", propertiesArray);
 
 			// Check network connection availability before calling the API.
 			if (PhoneState.isNetworkAvailable(context)) {
 				// Call device registration API.
-				sendDeviceDetails(requestParams);
-//				ServerUtils.callSecuredAPI(RegistrationActivity.this,
-//				                           CommonUtilities.REGISTER_ENDPOINT,
-//				                           CommonUtilities.POST_METHOD, requestParams,
-//				                           RegistrationActivity.this,
-//				                           CommonUtilities.REGISTER_REQUEST_CODE);
+				ServerUtils.callSecuredAPI(RegistrationActivity.this,
+				                           CommonUtilities.API_SERVER_URL + CommonUtilities.REGISTER_ENDPOINT,
+				                           CommonUtilities.POST_METHOD, jsObject,
+				                           RegistrationActivity.this,
+				                           CommonUtilities.REGISTER_REQUEST_CODE);
 			} else {
 				CommonDialogUtils.stopProgressDialog(progressDialog);
 				CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
@@ -123,83 +139,6 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		}
 
 	}
-
-    private void sendDeviceDetails(final Map<String, String> requestParams) {
-
-		AsyncTask<Void, Void, Map<String, String>> mLicenseTask =
-				new AsyncTask<Void, Void, Map<String, String>>() {
-
-					@Override
-					protected Map<String, String> doInBackground(Void... params) {
-						Map<String, String> response;						
-						response =
-								HTTPConnectorUtils.postData(context,CommonUtilities.SERVER_URL+CommonUtilities.REGISTER_ENDPOINT,requestParams
-								                                );
-						return response;
-					}
-
-					@Override
-					protected void onPreExecute() {};
-
-					@Override
-					protected void onPostExecute(Map<String, String> result) {
-						CommonDialogUtils.stopProgressDialog(progressDialog);
-						manipulateDeviceDetails(result);
-					}
-
-				};
-
-		mLicenseTask.execute();
-
-	}
-    
-    private void manipulateDeviceDetails(Map<String, String> result){
-    	CommonDialogUtils.stopProgressDialog(progressDialog);
-		String responseStatus = "";
-		if (result != null) {
-			responseStatus = result.get(CommonUtilities.STATUS_KEY);
-
-				if (responseStatus.equals(CommonUtilities.REGISTERATION_SUCCESSFUL)) {
-					Intent intent =
-					                new Intent(RegistrationActivity.this,
-					                           AlreadyRegisteredActivity.class);
-					intent.putExtra(getResources().getString(R.string.intent_extra_fresh_reg_flag),
-					                true);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(intent);
-				} else if (responseStatus.equals(CommonUtilities.INTERNAL_SERVER_ERROR)) {
-					Log.e(TAG, "The value of status is : " + responseStatus);
-					alertDialog =
-					              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-					                                                                    getResources().getString(R.string.title_head_connection_error),
-					                                                                    getResources().getString(R.string.error_internal_server),
-					                                                                    getResources().getString(R.string.button_ok),
-					                                                                    registrationFailedOKBtnClickListerner);
-				} else {
-					Log.e(TAG, "The value of status is : " + responseStatus);
-					Log.e(TAG, "The responseStatus is : " + responseStatus);
-					alertDialog =
-					              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-					                                                                    getResources().getString(R.string.title_head_registration_error),
-					                                                                    getResources().getString(R.string.error_for_all_unknown_registration_failures),
-					                                                                    getResources().getString(R.string.button_ok),
-					                                                                    registrationFailedOKBtnClickListerner);
-					alertDialog.show();
-				}
-			
-		} else {
-			Log.e(TAG, "The result is null in onReceiveAPIResult(). ");
-			Log.e(TAG, "The responseStatus is : " + responseStatus);
-			alertDialog =
-			              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-			                                                                    getResources().getString(R.string.title_head_registration_error),
-			                                                                    getResources().getString(R.string.error_for_all_unknown_registration_failures),
-			                                                                    getResources().getString(R.string.button_ok),
-			                                                                    registrationFailedOKBtnClickListerner);
-			alertDialog.show();
-
-		}
-    }
     
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -242,7 +181,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		if (result != null) {
 			responseStatus = result.get(CommonUtilities.STATUS_KEY);
 
-				if (responseStatus.equals(CommonUtilities.REGISTERATION_SUCCESSFUL)) {
+				if (responseStatus.equals(CommonUtilities.REQUEST_SUCCESSFUL)) {
 					Intent intent =
 					                new Intent(RegistrationActivity.this,
 					                           AlreadyRegisteredActivity.class);
@@ -261,8 +200,6 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 					                                                                    registrationFailedOKBtnClickListerner);
 					alertDialog.show();
 				} else {
-					Log.e(TAG, "The value of status is : " + responseStatus);
-					Log.e(TAG, "The responseStatus is : " + responseStatus);
 					alertDialog =
 					              CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
 					                                                                    getResources().getString(R.string.title_head_registration_error),
