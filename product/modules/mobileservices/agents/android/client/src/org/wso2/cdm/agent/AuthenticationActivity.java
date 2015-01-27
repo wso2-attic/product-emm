@@ -28,7 +28,6 @@ import org.wso2.cdm.agent.proxy.IdentityProxy;
 import org.wso2.cdm.agent.services.AlarmReceiver;
 import org.wso2.cdm.agent.utils.CommonDialogUtils;
 import org.wso2.cdm.agent.utils.CommonUtilities;
-import org.wso2.cdm.agent.utils.Constant;
 import org.wso2.cdm.agent.utils.HTTPConnectorUtils;
 import org.wso2.cdm.agent.utils.Preference;
 import org.wso2.cdm.agent.utils.ServerUtils;

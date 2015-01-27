@@ -527,7 +527,7 @@ int string application_package_prefix 0x7f0b0099
 int string button_cancel 0x7f0b0095
 int string button_ok 0x7f0b0094
 int string client_id 0x7f0b000f
-int string client_secreat 0x7f0b0010
+int string client_secret 0x7f0b0010
 int string device_admin_disabled 0x7f0b0030
 int string device_admin_enable_alert 0x7f0b003f
 int string device_admin_enabled 0x7f0b002f

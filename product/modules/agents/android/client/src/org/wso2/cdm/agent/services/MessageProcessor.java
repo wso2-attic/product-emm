@@ -16,10 +16,14 @@
 package org.wso2.cdm.agent.services;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.cdm.agent.R;
 import org.wso2.cdm.agent.RegistrationActivity;
 import org.wso2.cdm.agent.api.DeviceInfo;
 import org.wso2.cdm.agent.proxy.APIResultCallBack;
@@ -82,11 +86,20 @@ public class MessageProcessor implements APIResultCallBack {
 	 * pending.
 	 */
 	public void getMessages() {
-		
-		ServerUtils.callSecuredAPI(context, CommonUtilities.SERVER_URL + CommonUtilities.NOTIFICATION_ENDPOINT+File.separator+deviceId,
-		                           CommonUtilities.POST_METHOD, null, MessageProcessor.this,
+		String ipSaved =
+				Preference.get(context.getApplicationContext(),
+				               context.getResources().getString(R.string.shared_pref_ip));
+		CommonUtilities.setServerURL(ipSaved);
+		String deviceIdentifier = "";
+		try {
+	         deviceIdentifier = URLEncoder.encode(deviceId, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+	        e.printStackTrace();
+        }
+		ServerUtils.callSecuredAPI(context, CommonUtilities.API_SERVER_URL +
+		                           CommonUtilities.NOTIFICATION_ENDPOINT+File.separator+deviceIdentifier,
+		                           CommonUtilities.GET_METHOD, new JSONObject(), MessageProcessor.this,
 		                           CommonUtilities.NOTIFICATION_REQUEST_CODE);
-		Log.e("sadfs",CommonUtilities.SERVER_URL + CommonUtilities.NOTIFICATION_ENDPOINT);
 	}
 
 	@Override

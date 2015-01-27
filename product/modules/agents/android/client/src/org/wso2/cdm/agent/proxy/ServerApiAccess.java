@@ -112,6 +112,8 @@ public class ServerApiAccess {
                 } catch (UnsupportedEncodingException e) {
 	                e.printStackTrace();
                 }
+    		}else{
+    			httpPost.setEntity(null);
     		}
     		Log.e("url",""+url);
     		HttpPost httpPostWithHeaders = (HttpPost)buildHeaders(httpPost,headers,httpMethod);
@@ -138,7 +140,7 @@ public class ServerApiAccess {
 //    		}
     		HttpGet httpGet = new HttpGet(url);
     		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet,headers,httpMethod);
-    		Log.d(TAG,httpGetWithHeaders.toString());
+    		Log.d(TAG,httpGetWithHeaders.toString()+" GET");
     	    try {
     	        HttpResponse response = httpclient.execute(httpGetWithHeaders);
     	        responseParams.put("response", getResponseBody(response));

@@ -32,10 +32,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(DEBUG_TAG, "Recurring alarm; requesting download service.");
         String mode=CommonUtilities.getPref(context, context.getResources().getString(R.string.shared_pref_message_mode));
-		if(mode.trim().toUpperCase().equals(Constant.LOCAL)){
+		//if(mode.trim().toUpperCase().equals(Constant.LOCAL)){
 			MessageProcessor messageProcessor=new MessageProcessor(context);
 			messageProcessor.getMessages();
-		}
+		//}
     }
  
 }

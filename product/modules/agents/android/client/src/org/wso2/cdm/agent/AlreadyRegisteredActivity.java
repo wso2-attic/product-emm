@@ -150,6 +150,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+		LocalNotification.startPolling(context);
 		
 	}
 

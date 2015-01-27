@@ -228,7 +228,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		// Check network connection availability before calling the API.
 		if (PhoneState.isNetworkAvailable(context)) {
 			initializeIDPLib(getResources().getString(R.string.client_id),
-			                 getResources().getString(R.string.client_secreat));
+			                 getResources().getString(R.string.client_secret));
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(context);

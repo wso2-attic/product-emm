@@ -101,10 +101,10 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			propertiesArray.put(property);
 			property= new JSONObject();	
 			property.put("name",  "imei");
-			property.put("value", deviceInfo.getIMSINumber());
+			property.put("value", deviceInfo.getDeviceId());
 			propertiesArray.put(property);
 			property= new JSONObject();	
-			property.put("name",  "imei");
+			property.put("name",  "imsi");
 			property.put("value", deviceInfo.getIMSINumber());
 			propertiesArray.put(property);
 			property= new JSONObject();	
@@ -115,11 +115,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			property.put("name",  "vendor");
 			property.put("value", deviceInfo.getOsVersion());
 			propertiesArray.put(property);
-			property= new JSONObject();	
-			property.put("name",  "vendor");
-			property.put("value", deviceInfo.getDeviceManufacturer());
-			propertiesArray.put(property);
-			property= new JSONObject();	
+			property= new JSONObject();		
 			property.put("name",  "osVersion");
 			property.put("value", deviceInfo.getOsVersion());
 			propertiesArray.put(property);
