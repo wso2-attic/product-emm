@@ -487,6 +487,7 @@
         <process.feature.version>1.0.0</process.feature.version>
         <uuid.feature.version>1.0.0</uuid.feature.version>
         <sso.feature.version>1.1.0-SNAPSHOT</sso.feature.version>
+        <i18n.feature.version>1.1.0-SNAPSHOT</i18n.feature.version>
         <jaggery-test.feature.version>1.1.0</jaggery-test.feature.version>
         <!--Testing -->
         <test.framework.version>4.3.1</test.framework.version>
