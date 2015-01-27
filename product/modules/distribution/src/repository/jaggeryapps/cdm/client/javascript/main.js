@@ -17,7 +17,7 @@
  */
 function identifierFormatter(value, row, index) {
     return [
-        '<a class="like" href="/cdm/devices/' + row["deviceType"] + '/' + value + '" title="Like">',
+        '<a class="like" href="/cdm/devices/' + row["deviceType"] + '/' + escape(value) + '" title="Like">',
         value,
         '</a>'
     ].join('');
