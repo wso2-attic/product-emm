@@ -50,7 +50,7 @@ include("/includes/auth-header.jag");
                                 var operation = operations[i]
                                 %>
                                   <button data-operation="<%=operation.featureName%>" class="device-operation btn btn-default">
-                        <img src="/cdm/client/img/operations/lock.png" />
+                        <img src="/cdm/client/img/operations/<%=operation.featureName%>.png" />
                         <p><%=operation.featureDescription %></p>
                       </button>
                                                             <%
