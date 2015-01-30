@@ -326,7 +326,7 @@
             <fileMode>755</fileMode>
         </file>
         <file>
-            <source>../tools/mdm-android-agent-archetype/readme.txt</source>
+            <source>../tools/mdm-android-agent-archetype/README.txt</source>
             <outputDirectory>wso2mdm-${pom.version}/repository/tools
             </outputDirectory>
             <fileMode>755</fileMode>
