@@ -119,22 +119,22 @@
                                     org.jaggeryjs:org.jaggeryjs.feature:${jaggery.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:carbon.feature:${carbon.feature.version}
+                                    org.jaggeryjs.modules:carbon.feature:${jaggery.carbon.module.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:process.feature:${process.feature.version}
+                                    org.jaggeryjs.modules:process.feature:${jaggery.process.module.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:uuid.feature:${uuid.feature.version}
+                                    org.jaggeryjs.modules:uuid.feature:${jaggery.uuid.module.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:sso.feature:${sso.feature.version}
+                                    org.jaggeryjs.modules:sso.feature:${jaggery.sso.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:i18n.feature:${sso.feature.version}
+                                    org.jaggeryjs.modules:i18n.feature:${jaggery.i18n.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:jaggery-test.feature:${jaggery-test.feature.version}
+                                    org.jaggeryjs.modules:jaggery-test.feature:${jaggery.test.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.transport.mgt.feature:${carbon.platform.version}
@@ -357,27 +357,27 @@
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.carbon.feature.group</id>
-                                    <version>${carbon.feature.version}</version>
+                                    <version>${jaggery.carbon.module.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.process.feature.group</id>
-                                    <version>${process.feature.version}</version>
+                                    <version>${jaggery.process.module.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.uuid.feature.group</id>
-                                    <version>${uuid.feature.version}</version>
+                                    <version>${jaggery.uuid.module.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.sso.feature.group</id>
-                                    <version>${sso.feature.version}</version>
+                                    <version>${jaggery.sso.feature.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.i18n.feature.group</id>
-                                    <version>${i18n.feature.version}</version>
+                                    <version>${jaggery.i18n.feature.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.jaggery-test.feature.group</id>
-                                    <version>${jaggery-test.feature.version}</version>
+                                    <version>${jaggery.test.feature.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.transport.mgt.feature.group</id>

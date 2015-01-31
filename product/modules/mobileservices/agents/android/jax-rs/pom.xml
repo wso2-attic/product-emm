@@ -125,11 +125,6 @@
             <artifactId>cxf-rt-transports-http</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
             <scope>provided</scope>
@@ -141,22 +136,24 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.logging</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-jaxrs</artifactId>
+        </dependency>
+
+        <!--CDM Dependencies-->
+        <dependency>
+            <groupId>org.wso2.carbon.cdm</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.cdm</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
