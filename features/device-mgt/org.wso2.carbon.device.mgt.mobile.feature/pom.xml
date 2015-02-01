@@ -94,14 +94,13 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.device.mgt.mobile.impl:${project.version}
+                                <bundleDef>
+                                    org.wso2.carbon:org.wso2.carbon.device.mgt.mobile.impl:${carbon.mobile.device.mgt.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}
-                                </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.device.mgt.server:${cdm.core.version}
-                                </importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.device.mgt.server:${carbon.device.mgt.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>

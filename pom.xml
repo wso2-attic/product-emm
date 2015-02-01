@@ -44,10 +44,7 @@
 
     <dependencyManagement>
         <dependencies>
-
-
-            <!--Test automation dependencies-->
-
+            <!-- Test automation dependencies -->
             <dependency>
                 <groupId>org.wso2.carbon.automation</groupId>
                 <artifactId>org.wso2.carbon.automation.engine</artifactId>
@@ -72,7 +69,6 @@
                 <version>${test.framework.version}</version>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.integration.common.admin.client</artifactId>
@@ -81,7 +77,6 @@
             </dependency>
 
             <!--Carbon Kernel Dependencies-->
-
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.user.core</artifactId>
@@ -237,16 +232,6 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.ndatasource.core</artifactId>
-                <version>${carbon.kernel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.ndatasource.rdbms</artifactId>
-                <version>${carbon.kernel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
                 <version>${carbon.kernel.version}</version>
             </dependency>
@@ -256,9 +241,7 @@
                 <version>${carbon.kernel.version}</version>
             </dependency>
 
-
             <!--CDM core dependencies-->
-
             <dependency>
                 <groupId>org.wso2.carbon.cdm</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
@@ -280,15 +263,12 @@
                 <version>${cdm.core.version}</version>
             </dependency>
 
-
             <!--MDM dependencies-->
-
             <dependency>
                 <groupId>org.wso2.carbon.mdm</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.mobile.impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
 
             <!--Osgi dependencies-->
             <dependency>
@@ -326,9 +306,7 @@
                 <version>3.3.100.v20120522-1822</version>
             </dependency>
 
-
             <!--Orbit dependencies-->
-
             <dependency>
                 <groupId>com.h2database.wso2</groupId>
                 <artifactId>h2-database-engine</artifactId>
@@ -345,9 +323,7 @@
                 <version>${orbit.tomcat.jdbc.pooling.version}</version>
             </dependency>
 
-
             <!--APIM dependencies-->
-
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.apimgt.core</artifactId>
@@ -483,7 +459,6 @@
             </dependency>
 
             <!--CXF dependencies (needed for mobile Jax_RS web apps)-->
-
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -511,9 +486,7 @@
                 <scope>provided</scope>
             </dependency>
 
-
             <!--Windows Jax-RS dependencies-->
-
             <dependency>
                 <groupId>org.apache.wss4j</groupId>
                 <artifactId>wss4j-ws-security-common</artifactId>
@@ -544,7 +517,6 @@
                 <artifactId>cxf-rt-ws-security</artifactId>
                 <version>2.6.1</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -558,9 +530,7 @@
         <cdm.core.version>1.0.0-SNAPSHOT</cdm.core.version>
         <cdm.core.version.range>[1.0.0, 2.0.0)</cdm.core.version.range>
 
-
         <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
-
 
         <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
 
@@ -570,13 +540,9 @@
         <!--<carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>-->
 
         <!--Jaggery -->
-        <jaggery.feature.version>0.9.0-SNAPSHOT</jaggery.feature.version>
-        <jaggery.carbon.module.version>1.1.0</jaggery.carbon.module.version>
-        <jaggery.process.module.version>1.0.0</jaggery.process.module.version>
-        <jaggery.uuid.module.version>1.0.0</jaggery.uuid.module.version>
-        <jaggery.sso.feature.version>1.1.0-SNAPSHOT</jaggery.sso.feature.version>
-        <jaggery.i18n.feature.version>1.1.0-SNAPSHOT</jaggery.i18n.feature.version>
-        <jaggery.test.feature.version>1.1.0</jaggery.test.feature.version>
+        <jaggery.version>0.9.0.ALPHA6</jaggery.version>
+        <jaggery.extensions.version>1.0.0</jaggery.extensions.version>
+        <jaggery.extensions.sso.version>1.1.0-SNAPSHOT</jaggery.extensions.sso.version>
 
         <!--Testing -->
         <test.framework.version>4.3.1</test.framework.version>
@@ -606,6 +572,39 @@
         <cxf.version>2.6.1</cxf.version>
         <jackson.version>1.9.0</jackson.version>
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
+
+        <!-- Carbon Commons -->
+        <carbon.commons.version>4.3.1</carbon.commons.version>
+
+        <!-- Carbon Utils -->
+        <carbon.utils.version>4.3.0-SNAPSHOT</carbon.utils.version>
+
+        <!-- Carbon Deployment -->
+        <carbon.deployment.version>4.3.0-SNAPSHOT</carbon.deployment.version>
+
+        <!-- Identity -->
+        <carbon.identity.version>4.3.0</carbon.identity.version>
+
+        <!-- Multi-tenancy -->
+        <carbon.multitenancy.version>4.3.0</carbon.multitenancy.version>
+
+        <!-- Registry -->
+        <carbon.registry.version>4.3.0</carbon.registry.version>
+
+        <!-- Governance -->
+        <carbon.governance.version>4.3.0-SNAPSHOT</carbon.governance.version>
+
+        <!-- Transport Management -->
+        <carbon.transport.mgt.version>4.3.0-SNAPSHOT</carbon.transport.mgt.version>
+
+        <!-- Device Management -->
+        <carbon.device.mgt.version>1.0.0-SNAPSHOT</carbon.device.mgt.version>
+
+        <!-- Mobile Device Management -->
+        <carbon.mobile.device.mgt.version>2.0.0-SNAPSHOT</carbon.mobile.device.mgt.version>
+
+        <!-- API Management -->
+        <carbon.api.mgt.version>4.3.0-SNAPSHOT</carbon.api.mgt.version>
 
     </properties>
 
