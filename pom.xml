@@ -574,13 +574,13 @@
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
         <!-- Carbon Commons -->
-        <carbon.commons.version>4.3.1</carbon.commons.version>
+        <carbon.commons.version>4.3.2</carbon.commons.version>
 
         <!-- Carbon Utils -->
         <carbon.utils.version>4.3.0-SNAPSHOT</carbon.utils.version>
 
         <!-- Carbon Deployment -->
-        <carbon.deployment.version>4.3.0-SNAPSHOT</carbon.deployment.version>
+        <carbon.deployment.version>4.3.0</carbon.deployment.version>
 
         <!-- Identity -->
         <carbon.identity.version>4.3.0</carbon.identity.version>

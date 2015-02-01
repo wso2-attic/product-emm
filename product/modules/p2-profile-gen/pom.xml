@@ -121,10 +121,10 @@
 
                                 <!-- Carbon Deployment Features -->
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.webapp.mgt.feature:${carbon.deployment.version}
+                                    org.wso2.carbon.deployment:org.wso2.carbon.webapp.mgt.feature:${carbon.deployment.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.module.mgt.feature:${carbon.deployment.version}
+                                    org.wso2.carbon.deployment:org.wso2.carbon.module.mgt.feature:${carbon.deployment.version}
                                 </featureArtifactDef>
                                 <!-- End of Carbon Deployment Features -->
 
@@ -154,7 +154,7 @@
 
                                 <!-- Misc Features -->
                                 <featureArtifactDef>
-                                org.wso2.carbon:org.wso2.carbon.transport.mgt.feature:${carbon.transport.mgt.version}
+                                    org.wso2.carbon:org.wso2.carbon.transport.mgt.feature:${carbon.transport.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.as.runtimes.cxf.feature:${carbon.platform.version}
@@ -163,13 +163,13 @@
 
                                 <!-- API Management Features -->
                                 <featureArtifactDef>
-                                org.wso2.carbon:org.wso2.carbon.apimgt.core.feature:${carbon.api.mgt.version}
+                                    org.wso2.carbon:org.wso2.carbon.apimgt.core.feature:${carbon.api.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                org.wso2.carbon:org.wso2.carbon.apimgt.publisher.feature:${carbon.api.mgt.version}
+                                    org.wso2.carbon:org.wso2.carbon.apimgt.publisher.feature:${carbon.api.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                org.wso2.carbon:org.wso2.carbon.apimgt.store.feature:${carbon.api.mgt.version}
+                                    org.wso2.carbon:org.wso2.carbon.apimgt.store.feature:${carbon.api.mgt.version}
                                 </featureArtifactDef>
                                 <!-- End of API Management Features -->
 
@@ -330,11 +330,11 @@
                                 <!-- Carbon Deployment Features -->
                                 <feature>
                                     <id>org.wso2.carbon.webapp.mgt.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>${carbon.deployment.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.module.mgt.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>${carbon.deployment.version}</version>
                                 </feature>
                                 <!-- End of Carbon Deployment Features -->
 
@@ -371,8 +371,8 @@
 
                                 <!-- Misc Features -->
                                 <feature>
-                                <id>org.wso2.carbon.transport.mgt.feature.group</id>
-                                <version>${carbon.transport.mgt.version}</version>
+                                    <id>org.wso2.carbon.transport.mgt.feature.group</id>
+                                    <version>${carbon.transport.mgt.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.as.runtimes.cxf.feature.group</id>
@@ -382,17 +382,17 @@
 
                                 <!-- API Management Features -->
                                 <feature>
-                                <id>org.wso2.carbon.apimgt.core.feature.group</id>
-                                <version>${carbon.api.mgt.version}</version>
+                                    <id>org.wso2.carbon.apimgt.core.feature.group</id>
+                                    <version>${carbon.api.mgt.version}</version>
                                 </feature>
                                 <!-- API Manager Publisher and Store Features -->
                                 <feature>
-                                <id>org.wso2.carbon.apimgt.publisher.feature.group</id>
-                                <version>${carbon.api.mgt.version}</version>
+                                    <id>org.wso2.carbon.apimgt.publisher.feature.group</id>
+                                    <version>${carbon.api.mgt.version}</version>
                                 </feature>
                                 <feature>
-                                <id>org.wso2.carbon.apimgt.store.feature.group</id>
-                                <version>${carbon.api.mgt.version}</version>
+                                    <id>org.wso2.carbon.apimgt.store.feature.group</id>
+                                    <version>${carbon.api.mgt.version}</version>
                                 </feature>
                                 <!-- End of API Management Features -->
 
