@@ -15,12 +15,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.cdmserver.mobileservices.android;
+package org.wso2.carbon.mdm.mobileservices.android;
 
 import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
-import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
-import org.wso2.cdmserver.mobileservices.android.util.Message;
+import org.wso2.carbon.mdm.mobileservices.android.util.AndroidAPIUtils;
+import org.wso2.carbon.mdm.mobileservices.android.util.Message;
+import org.wso2.carbon.mdm.mobileservices.android.common.AndroidAgentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

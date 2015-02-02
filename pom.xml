@@ -490,32 +490,32 @@
             <dependency>
                 <groupId>org.apache.wss4j</groupId>
                 <artifactId>wss4j-ws-security-common</artifactId>
-                <version>2.0.0</version>
+                <version>${apache.wss4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpkix-jdk15on</artifactId>
-                <version>1.49</version>
+                <version>${bouncycastle.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk15on</artifactId>
-                <version>1.49</version>
+                <version>${bouncycastle.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
-                <version>3.0.21</version>
+                <version>${codehaus.plexus.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.madgag.spongycastle</groupId>
                 <artifactId>pkix</artifactId>
-                <version>1.51.0.0</version>
+                <version>${spongycastle.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-ws-security</artifactId>
-                <version>2.6.1</version>
+                <version>${cxf.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -605,6 +605,19 @@
 
         <!-- API Management -->
         <carbon.api.mgt.version>4.3.0-SNAPSHOT</carbon.api.mgt.version>
+
+        <!-- Spongycastle Management-->
+        <spongycastle.version>1.51.0.0</spongycastle.version>
+
+        <!-- Bouncycastle Management-->
+        <bouncycastle.version>1.49</bouncycastle.version>
+
+        <!-- Apache wss4j Management-->
+        <apache.wss4j.version>2.0.0</apache.wss4j.version>
+
+        <!-- Codehaus Plexus Management-->
+        <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
+
 
     </properties>
 

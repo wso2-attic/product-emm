@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.cdmserver.mobileservices.android.common;
+package org.wso2.carbon.mdm.mobileservices.android.common;
 
 
 public class ErrorMessage {

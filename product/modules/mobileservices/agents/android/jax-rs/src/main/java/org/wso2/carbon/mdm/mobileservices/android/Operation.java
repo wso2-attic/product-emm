@@ -17,16 +17,17 @@
  * under the License.
  */
 
-package org.wso2.cdmserver.mobileservices.android;
+package org.wso2.carbon.mdm.mobileservices.android;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.cdmserver.mobileservices.android.common.AndroidAgentException;
-import org.wso2.cdmserver.mobileservices.android.util.AndroidAPIUtils;
-import org.wso2.cdmserver.mobileservices.android.util.Message;
+import org.wso2.carbon.mdm.mobileservices.android.common.AndroidAgentException;
+import org.wso2.carbon.mdm.mobileservices.android.util.AndroidAPIUtils;
+import org.wso2.carbon.mdm.mobileservices.android.util.Message;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;

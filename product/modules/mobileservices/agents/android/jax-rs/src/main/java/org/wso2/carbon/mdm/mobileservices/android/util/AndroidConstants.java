@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.cdmserver.mobileservices.android.util;
+package org.wso2.carbon.mdm.mobileservices.android.util;
 
 /**
  * Defines constants used in Android-REST API bundle.
