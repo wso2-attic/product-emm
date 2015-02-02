@@ -28,8 +28,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.carbon</groupId>
-    <artifactId>cdm-windows-api</artifactId>
+    <groupId>org.wso2.carbon.mdm</groupId>
+    <artifactId>mdm-windows-api</artifactId>
     <name>JAX-RS Windows API</name>
     <description>JAX-RS Windows API</description>
     <packaging>war</packaging>

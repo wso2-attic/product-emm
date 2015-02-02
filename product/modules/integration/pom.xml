@@ -27,8 +27,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>wso2cdm-integration</artifactId>
-    <name>WSO2 CDM - Integration Tests</name>
+    <artifactId>wso2mdm-integration</artifactId>
+    <name>WSO2 MDM - Integration Tests</name>
     <packaging>pom</packaging>
 
     <modules>

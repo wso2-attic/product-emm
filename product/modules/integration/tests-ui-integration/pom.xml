@@ -20,15 +20,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.wso2.emm</groupId>
-        <artifactId>wso2emm-integration</artifactId>
-        <version>1.1.0</version>
+        <groupId>org.wso2.mdmserver</groupId>
+        <artifactId>wso2mdm-integration</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 EMM - Integration Test UI Module</name>
-    <artifactId>org.wso2.carbon.emm.integration.test.ui.integration</artifactId>
+    <name>WSO2 MDM - Integration Test UI Module</name>
+    <artifactId>org.wso2.carbon.mdm.integration.test.ui.integration</artifactId>
     <packaging>jar</packaging>
 
     <build>

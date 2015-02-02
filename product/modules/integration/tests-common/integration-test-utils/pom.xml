@@ -23,16 +23,16 @@
 
     <parent>
         <groupId>org.wso2.mdmserver</groupId>
-        <artifactId>cdm-integration-tests-common</artifactId>
+        <artifactId>mdm-integration-tests-common</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.cdm.integration.common.utils</artifactId>
-    <groupId>org.wso2.cdm</groupId>
+    <artifactId>org.wso2.carbon.mdm.integration.common.utils</artifactId>
+    <groupId>org.wso2.carbon.mdm</groupId>
     <packaging>jar</packaging>
-    <name>WSO2 CDM - Integration Test Utils</name>
+    <name>WSO2 MDM - Integration Test Utils</name>
 
     <licenses>
         <license>
