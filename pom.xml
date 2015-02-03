@@ -574,25 +574,25 @@
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
         <!-- Carbon Commons -->
-        <carbon.commons.version>4.3.2</carbon.commons.version>
+        <carbon.commons.version>4.3.4</carbon.commons.version>
 
         <!-- Carbon Utils -->
         <carbon.utils.version>4.3.0-SNAPSHOT</carbon.utils.version>
 
         <!-- Carbon Deployment -->
-        <carbon.deployment.version>4.3.0</carbon.deployment.version>
+        <carbon.deployment.version>4.3.1</carbon.deployment.version>
 
         <!-- Identity -->
-        <carbon.identity.version>4.3.0</carbon.identity.version>
+        <carbon.identity.version>4.3.2</carbon.identity.version>
 
         <!-- Multi-tenancy -->
-        <carbon.multitenancy.version>4.3.0</carbon.multitenancy.version>
+        <carbon.multitenancy.version>4.3.3</carbon.multitenancy.version>
 
         <!-- Registry -->
         <carbon.registry.version>4.3.0</carbon.registry.version>
 
         <!-- Governance -->
-        <carbon.governance.version>4.3.0-SNAPSHOT</carbon.governance.version>
+        <carbon.governance.version>4.3.0</carbon.governance.version>
 
         <!-- Transport Management -->
         <carbon.transport.mgt.version>4.3.0-SNAPSHOT</carbon.transport.mgt.version>
@@ -606,18 +606,11 @@
         <!-- API Management -->
         <carbon.api.mgt.version>4.3.0-SNAPSHOT</carbon.api.mgt.version>
 
-        <!-- Spongycastle Management-->
+        <!-- Third Party Dependencies-->
         <spongycastle.version>1.51.0.0</spongycastle.version>
-
-        <!-- Bouncycastle Management-->
         <bouncycastle.version>1.49</bouncycastle.version>
-
-        <!-- Apache wss4j Management-->
         <apache.wss4j.version>2.0.0</apache.wss4j.version>
-
-        <!-- Codehaus Plexus Management-->
         <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
-
 
     </properties>
 
