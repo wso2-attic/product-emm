@@ -133,7 +133,7 @@
                                     org.jaggeryjs:org.jaggeryjs.feature:${jaggery.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:carbon.feature:${jaggery.extensions.version}
+                                    org.jaggeryjs.modules:carbon.feature:${jaggery.extensions.carbon.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.jaggeryjs.modules:process.feature:${jaggery.extensions.version}
@@ -141,14 +141,14 @@
                                 <featureArtifactDef>
                                     org.jaggeryjs.modules:uuid.feature:${jaggery.extensions.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.jaggeryjs.modules:sso.feature:${jaggery.extensions.sso.version}
-                                </featureArtifactDef>
+                                <!--<featureArtifactDef>-->
+                                    <!--org.jaggeryjs.modules:sso.feature:${jaggery.extensions.sso.version}-->
+                                <!--</featureArtifactDef>-->
                                 <featureArtifactDef>
                                     org.jaggeryjs.modules:i18n.feature:${jaggery.extensions.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:jaggery-test.feature:${jaggery.extensions.version}
+                                    org.jaggeryjs.modules:jaggery-test.feature:${jaggery.extensions.test.version}
                                 </featureArtifactDef>
                                 <!-- End of Jaggery Features -->
 
@@ -186,9 +186,9 @@
                                 <!-- End of Carbon Commons Features -->
 
                                 <!-- Carbon Multi-tenancy Features -->
-                                <!--<featureArtifactDef>-->
-                                <!--org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.common.server.feature:${carbon.multitenancy.version}-->
-                                <!--</featureArtifactDef>-->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.common.server.feature:${carbon.multitenancy.version}
+                                </featureArtifactDef>
                                 <!-- End of Carbon Multi-tenancy Features -->
 
                                 <!-- Identity Features -->
@@ -342,7 +342,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.carbon.feature.group</id>
-                                    <version>${jaggery.extensions.version}</version>
+                                    <version>${jaggery.extensions.carbon.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.process.feature.group</id>
@@ -352,17 +352,17 @@
                                     <id>org.jaggeryjs.modules.uuid.feature.group</id>
                                     <version>${jaggery.extensions.version}</version>
                                 </feature>
-                                <feature>
-                                    <id>org.jaggeryjs.modules.sso.feature.group</id>
-                                    <version>${jaggery.extensions.sso.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.jaggeryjs.modules.sso.feature.group</id>-->
+                                    <!--<version>${jaggery.extensions.sso.version}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.jaggeryjs.modules.i18n.feature.group</id>
                                     <version>${jaggery.extensions.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.jaggery-test.feature.group</id>
-                                    <version>${jaggery.extensions.version}</version>
+                                    <version>${jaggery.extensions.test.version}</version>
                                 </feature>
                                 <!-- End of Jaggery Features -->
 
@@ -409,10 +409,10 @@
                                 <!-- End of Carbon Commons Features -->
 
                                 <!-- Carbon Multi-tenancy Features -->
-                                <!--<feature>-->
-                                <!--<id>org.wso2.carbon.tenant.common.server.feature.group</id>-->
-                                <!--<version>${carbon.multitenancy.version}</version>-->
-                                <!--</feature>-->
+                                <feature>
+                                    <id>org.wso2.carbon.tenant.common.server.feature.group</id>
+                                    <version>${carbon.multitenancy.version}</version>
+                                </feature>
                                 <!-- End of Carbon Multi-tenancy Features -->
 
                                 <!-- Identity Features -->
