@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2015, WSO2 Inc. (http:www.wso2.org) All Rights Reserved.
  *
@@ -227,6 +226,9 @@ public class MobileFeatureDAOTestSuite {
     @Test(dependsOnMethods = {"addMobileFeatureTest"})
     public void deleteMobileFeatureByIdTest()
             throws MobileDeviceManagementDAOException {
+        Connection conn = null;
+        Statement stmt = null;
+
         boolean status = mblFeatureDAO.deleteMobileFeatureById(mblFeatureId);
         try {
             conn = DriverManager.getConnection(testDBConfiguration.getConnectionURL());
@@ -237,7 +239,6 @@ public class MobileFeatureDAOTestSuite {
             while (resultSet.next()) {
                 status = false;
             }
-            conn.close();
         } catch (SQLException e) {
             log.error("Error in deleting Mobile Feature data ", e);
             throw new MobileDeviceManagementDAOException("Error in deleting Mobile Feature data ",
@@ -251,6 +252,9 @@ public class MobileFeatureDAOTestSuite {
     @Test(dependsOnMethods = {"deleteMobileFeatureByCodeTest", "addMobileFeatureTest"})
     public void updateMobileFeatureTest()
             throws MobileDeviceManagementDAOException {
+
+        Connection conn = null;
+        Statement stmt = null;
 
         MobileFeature mobileFeature = new MobileFeature();
         MobileFeature testMblFeature = new MobileFeature();
@@ -272,7 +276,6 @@ public class MobileFeatureDAOTestSuite {
                 testMblFeature.setName(resultSet.getString(3));
                 testMblFeature.setDescription(resultSet.getString(4));
             }
-            conn.close();
         } catch (SQLException e) {
             log.error("Error in updating Mobile Feature data ", e);
             throw new MobileDeviceManagementDAOException("Error in updating Mobile Feature data ",

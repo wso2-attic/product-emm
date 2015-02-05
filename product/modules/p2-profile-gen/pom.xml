@@ -126,6 +126,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.deployment:org.wso2.carbon.module.mgt.feature:${carbon.deployment.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.deployment:org.wso2.carbon.as.runtimes.cxf.feature:${carbon.deployment.version}
+                                </featureArtifactDef>
                                 <!-- End of Carbon Deployment Features -->
 
                                 <!-- Jaggery Features -->
@@ -133,7 +136,7 @@
                                     org.jaggeryjs:org.jaggeryjs.feature:${jaggery.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:carbon.feature:${jaggery.extensions.version}
+                                    org.jaggeryjs.modules:carbon.feature:${jaggery.extensions.carbon.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.jaggeryjs.modules:process.feature:${jaggery.extensions.version}
@@ -148,18 +151,9 @@
                                     org.jaggeryjs.modules:i18n.feature:${jaggery.extensions.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.jaggeryjs.modules:jaggery-test.feature:${jaggery.extensions.version}
+                                    org.jaggeryjs.modules:jaggery-test.feature:${jaggery.extensions.test.version}
                                 </featureArtifactDef>
                                 <!-- End of Jaggery Features -->
-
-                                <!-- Misc Features -->
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.transport.mgt.feature:${carbon.transport.mgt.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.as.runtimes.cxf.feature:${carbon.platform.version}
-                                </featureArtifactDef>
-                                <!-- End of Misc Features -->
 
                                 <!-- API Management Features -->
                                 <featureArtifactDef>
@@ -189,14 +183,14 @@
                                 <!-- End of Carbon Commons Features -->
 
                                 <!-- Carbon Multi-tenancy Features -->
-                                <!--<featureArtifactDef>-->
-                                <!--org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.common.server.feature:${carbon.multitenancy.version}-->
-                                <!--</featureArtifactDef>-->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.common.server.feature:${carbon.multitenancy.version}
+                                </featureArtifactDef>
                                 <!-- End of Carbon Multi-tenancy Features -->
 
                                 <!-- Identity Features -->
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.security.mgt.feature:${carbon.platform.version}
+                                    org.wso2.carbon.identity:org.wso2.carbon.security.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.um.ws.service.client.feature:${carbon.identity.version}
@@ -284,13 +278,13 @@
 
                                 <!-- Governance Features -->
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.governance.metadata.feature:${carbon.governance.version}
+                                    org.wso2.carbon.governance:org.wso2.carbon.governance.metadata.feature:${carbon.governance.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.governance.lifecycle.management.feature:${carbon.governance.version}
+                                    org.wso2.carbon.governance:org.wso2.carbon.governance.lifecycle.management.feature:${carbon.governance.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.registry.extensions.feature:${carbon.governance.version}
+                                    org.wso2.carbon.governance:org.wso2.carbon.registry.extensions.feature:${carbon.governance.version}
                                 </featureArtifactDef>
                                 <!-- End of Governance Features -->
 
@@ -336,6 +330,10 @@
                                     <id>org.wso2.carbon.module.mgt.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
                                 </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.as.runtimes.cxf.feature.group</id>
+                                    <version>${carbon.deployment.version}</version>
+                                </feature>
                                 <!-- End of Carbon Deployment Features -->
 
                                 <!-- Jaggery Features -->
@@ -345,7 +343,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.carbon.feature.group</id>
-                                    <version>${jaggery.extensions.version}</version>
+                                    <version>${jaggery.extensions.carbon.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.process.feature.group</id>
@@ -365,20 +363,9 @@
                                 </feature>
                                 <feature>
                                     <id>org.jaggeryjs.modules.jaggery-test.feature.group</id>
-                                    <version>${jaggery.extensions.version}</version>
+                                    <version>${jaggery.extensions.test.version}</version>
                                 </feature>
                                 <!-- End of Jaggery Features -->
-
-                                <!-- Misc Features -->
-                                <feature>
-                                    <id>org.wso2.carbon.transport.mgt.feature.group</id>
-                                    <version>${carbon.transport.mgt.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.as.runtimes.cxf.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
-                                <!-- End of Misc Features -->
 
                                 <!-- API Management Features -->
                                 <feature>
@@ -416,16 +403,16 @@
                                 <!-- End of Carbon Commons Features -->
 
                                 <!-- Carbon Multi-tenancy Features -->
-                                <!--<feature>-->
-                                <!--<id>org.wso2.carbon.tenant.common.server.feature.group</id>-->
-                                <!--<version>${carbon.multitenancy.version}</version>-->
-                                <!--</feature>-->
+                                <feature>
+                                    <id>org.wso2.carbon.tenant.common.server.feature.group</id>
+                                    <version>${carbon.multitenancy.version}</version>
+                                </feature>
                                 <!-- End of Carbon Multi-tenancy Features -->
 
                                 <!-- Identity Features -->
                                 <feature>
                                     <id>org.wso2.carbon.security.mgt.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>${carbon.identity.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.um.ws.service.client.feature.group</id>

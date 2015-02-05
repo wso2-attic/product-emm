@@ -26,9 +26,9 @@
     <artifactId>wso2mdm-parent</artifactId>
     <packaging>pom</packaging>
     <version>2.0.0-SNAPSHOT</version>
-    <name>WSO2 CDM - Parent</name>
+    <name>WSO2 MDM - Parent</name>
     <url>http://wso2.org</url>
-    <description>WSO2 Connected Device Manager</description>
+    <description>WSO2 Mobile Device Manager</description>
 
     <parent>
         <groupId>org.wso2</groupId>
@@ -64,16 +64,100 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
+                <groupId>org.wso2.carbon.automationutils</groupId>
                 <artifactId>org.wso2.carbon.integration.common.extensions</artifactId>
-                <version>${test.framework.version}</version>
+                <version>${automation.utils.version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.ftpserver</groupId>
+                        <artifactId>ftpserver-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.activemq</groupId>
+                        <artifactId>activemq-all</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.tomcat.embed</groupId>
+                        <artifactId>tomcat-embed-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.tomcat.embed</groupId>
+                        <artifactId>tomcat-embed-logging-juli</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.ws.wso2</groupId>
+                        <artifactId>spring.framework</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-java</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.opera</groupId>
+                        <artifactId>operadriver</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.jmeter</groupId>
+                        <artifactId>ApacheJMeter_core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.saucelabs.selenium</groupId>
+                        <artifactId>sauce-ondemand-driver</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.saucelabs.selenium</groupId>
+                        <artifactId>selenium-client-factory</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.axis2.wso2</groupId>
+                        <artifactId>axis2</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.ws.commons.axiom.wso2</groupId>
+                        <artifactId>axiom</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>net.lingala.zip4j</groupId>
+                        <artifactId>zip4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
+                <groupId>org.wso2.carbon.automationutils</groupId>
                 <artifactId>org.wso2.carbon.integration.common.admin.client</artifactId>
-                <version>${test.automation.stub.version}</version>
+                <version>${automation.utils.version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.wso2.carbon.commons</groupId>
+                        <artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon.commons</groupId>
+                        <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon.commons</groupId>
+                        <artifactId>org.wso2.carbon.ndatasource.stub</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon.commons</groupId>
+                        <artifactId>org.wso2.carbon.authenticator.stub</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon.commons</groupId>
+                        <artifactId>org.wso2.carbon.authenticator.stub</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.utils</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!--Carbon Kernel Dependencies-->
@@ -364,7 +448,7 @@
                         <artifactId>org.wso2.carbon.user.core</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
+                        <groupId>org.wso2.carbon.governance</groupId>
                         <artifactId>org.wso2.carbon.governance.api</artifactId>
                     </exclusion>
                     <exclusion>
@@ -542,12 +626,14 @@
         <!--Jaggery -->
         <jaggery.version>0.9.0.ALPHA6</jaggery.version>
         <jaggery.extensions.version>1.0.0</jaggery.extensions.version>
-        <jaggery.extensions.sso.version>1.1.0-SNAPSHOT</jaggery.extensions.sso.version>
+        <jaggery.extensions.sso.version>1.2.0</jaggery.extensions.sso.version>
+        <jaggery.extensions.carbon.version>1.1.0</jaggery.extensions.carbon.version>
+        <jaggery.extensions.test.version>1.1.0</jaggery.extensions.test.version>
 
         <!--Testing -->
         <test.framework.version>4.3.1</test.framework.version>
         <testng.version>6.8</testng.version>
-        <test.automation.stub.version>4.3.0-SNAPSHOT</test.automation.stub.version>
+        <automation.utils.version>4.3.0</automation.utils.version>
         <test.automation.emm.ui.version>1.1.0</test.automation.emm.ui.version>
 
         <!--Eclipse Osgi-->
@@ -574,25 +660,25 @@
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
         <!-- Carbon Commons -->
-        <carbon.commons.version>4.3.2</carbon.commons.version>
+        <carbon.commons.version>4.3.4</carbon.commons.version>
 
         <!-- Carbon Utils -->
         <carbon.utils.version>4.3.0-SNAPSHOT</carbon.utils.version>
 
         <!-- Carbon Deployment -->
-        <carbon.deployment.version>4.3.0</carbon.deployment.version>
+        <carbon.deployment.version>4.3.1</carbon.deployment.version>
 
         <!-- Identity -->
-        <carbon.identity.version>4.3.0</carbon.identity.version>
+        <carbon.identity.version>4.3.2</carbon.identity.version>
 
         <!-- Multi-tenancy -->
-        <carbon.multitenancy.version>4.3.0</carbon.multitenancy.version>
+        <carbon.multitenancy.version>4.3.3</carbon.multitenancy.version>
 
         <!-- Registry -->
         <carbon.registry.version>4.3.0</carbon.registry.version>
 
         <!-- Governance -->
-        <carbon.governance.version>4.3.0-SNAPSHOT</carbon.governance.version>
+        <carbon.governance.version>4.3.0</carbon.governance.version>
 
         <!-- Transport Management -->
         <carbon.transport.mgt.version>4.3.0-SNAPSHOT</carbon.transport.mgt.version>
@@ -606,18 +692,11 @@
         <!-- API Management -->
         <carbon.api.mgt.version>4.3.0-SNAPSHOT</carbon.api.mgt.version>
 
-        <!-- Spongycastle Management-->
+        <!-- Third Party Dependencies-->
         <spongycastle.version>1.51.0.0</spongycastle.version>
-
-        <!-- Bouncycastle Management-->
         <bouncycastle.version>1.49</bouncycastle.version>
-
-        <!-- Apache wss4j Management-->
         <apache.wss4j.version>2.0.0</apache.wss4j.version>
-
-        <!-- Codehaus Plexus Management-->
         <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
-
 
     </properties>
 
