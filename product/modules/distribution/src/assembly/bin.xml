@@ -48,7 +48,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/multitenancy
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/multitenancy
             </outputDirectory>
             <includes>
                 <include>**/stratos.xml</include>
@@ -62,7 +62,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf</outputDirectory>
             <includes>
                 <include>**/tenant-mgt.xml</include>
             </includes>
@@ -70,7 +70,7 @@
 
         <fileSet>
             <directory>src/repository/resources/styles/css</directory>
-            <outputDirectory>wso2mdm-${project.version}/resources/allthemes/Default/admin
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/resources/allthemes/Default/admin
             </outputDirectory>
             <includes>
                 <include>**/**.css</include>
@@ -78,7 +78,7 @@
         </fileSet>
         <fileSet>
             <directory>src/repository/resources/styles/images</directory>
-            <outputDirectory>wso2mdm-${project.version}/resources/allthemes/Default/images
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/resources/allthemes/Default/images
             </outputDirectory>
             <includes>
                 <include>**/**.gif</include>
@@ -89,20 +89,20 @@
         <!-- copy documentation -->
         <fileSet>
             <directory>target/site</directory>
-            <outputDirectory>wso2mdm-${project.version}/docs</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/docs</outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
         <!-- copy the landing page webapp -->
         <!-- <fileSet>
              <directory>src/repository/resources/stratos_root</directory>
-             <outputDirectory>wso2cdm-${project.version}/repository/deployment/server/webapps/STRATOS_ROOT</outputDirectory>
+             <outputDirectory>wso2cdm-${carbon.mobile.device.mgt.version}/repository/deployment/server/webapps/STRATOS_ROOT</outputDirectory>
              <fileMode>755</fileMode>
          </fileSet>-->
         <!--Removed -->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/modules
             </directory>
-            <outputDirectory>${pom.artifactId}-${project.version}/modules/</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${carbon.mobile.device.mgt.version}/modules/</outputDirectory>
             <includes>
                 <include>**/carbon/</include>
                 <include>**/jaggery-test/</include>
@@ -114,7 +114,7 @@
 
         <fileSet>
             <directory>src/repository/conf</directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf</outputDirectory>
             <includes>
                 <include>**/api-manager.xml</include>
                 <include>**/security/</include>
@@ -125,7 +125,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/security/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/security/</outputDirectory>
             <includes>
                 <include>**/entitlement.properties</include>
                 <include>**/trusted-idp-config.xml</include>
@@ -135,14 +135,14 @@
             <directory>
                 src/repository/conf/identity/
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/identity/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/identity/</outputDirectory>
             <includes>
                 <include>**/**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/conf/datasources</directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/datasources
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/datasources
             </outputDirectory>
             <includes>
                 <include>**/master-datasources.xml</include>
@@ -151,7 +151,7 @@
         </fileSet>
         <fileSet>
             <directory>src/repository/resources</directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/resources</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/resources</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -159,7 +159,7 @@
         <!--data-bridge configuration-->
         <fileSet>
             <directory>src/repository/conf/data-bridge</directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/data-bridge
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/data-bridge
             </outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
@@ -167,7 +167,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/runtimes
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/lib/runtimes/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/lib/runtimes/</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -176,7 +176,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/service-provider
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/dbscripts/service-provider</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/dbscripts/service-provider</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -187,7 +187,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/dbscripts/identity</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/dbscripts/identity</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -198,7 +198,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/dbscripts/apimgt</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/dbscripts/apimgt</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -208,21 +208,21 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules
             </directory>
-            <outputDirectory>wso2mdm-${project.version}/modules/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/modules/</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/modules/encode</directory>
-            <outputDirectory>wso2mdm-${project.version}/modules/encode</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/modules/encode</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>src/repository/modules/sso</directory>
-            <outputDirectory>wso2mdm-${project.version}/modules/sso</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/modules/sso</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -231,7 +231,7 @@
         <!-- Copying Device Management related dbscripts -->
         <fileSet>
             <directory>../distribution/src/repository/dbscripts/cdm</directory>
-            <outputDirectory>wso2mdm-${project.version}/dbscripts/cdm</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/dbscripts/cdm</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -240,14 +240,14 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources
             </directory>
-            <outputDirectory>${project.artifactId}-${project.version}/repository/resources
+            <outputDirectory>${project.artifactId}-${carbon.mobile.device.mgt.version}/repository/resources
             </outputDirectory>
         </fileSet>
 
         <!-- Copying CDM Jaggery app -->
         <fileSet>
             <directory>src/repository/jaggeryapps</directory>
-            <outputDirectory>wso2mdm-${project.version}/repository/deployment/server/jaggeryapps
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/deployment/server/jaggeryapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </fileSet>
@@ -265,7 +265,7 @@
 	<!-- Copying API Manager Publisher and Store Jaggery apps -->
 	<fileSet>
              <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/publisher/</directory>
-             <outputDirectory>wso2mdm-${project.version}/repository/deployment/server/jaggeryapps/publisher</outputDirectory>
+             <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/deployment/server/jaggeryapps/publisher</outputDirectory>
              <excludes>
                 <exclude>publisherLogo/**</exclude>
                 <exclude>publisherTheme/**</exclude>
@@ -276,7 +276,7 @@
          </fileSet>
          <fileSet>
              <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/store/</directory>
-             <outputDirectory>wso2mdm-${project.version}/repository/deployment/server/jaggeryapps/store</outputDirectory>
+             <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/deployment/server/jaggeryapps/store</outputDirectory>
              <excludes>
                 <exclude>storeLogo/**</exclude>
                 <exclude>storeSite/**</exclude>
@@ -289,13 +289,13 @@
     
     <dependencySets>
         <dependencySet>
-            <outputDirectory>wso2mdm-${project.version}/lib/endorsed</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/lib/endorsed</outputDirectory>
             <includes>
                 <include>javax.el:el-api:jar</include>
             </includes>
         </dependencySet>
         <dependencySet>
-            <outputDirectory>wso2mdm-${project.version}/repository/deployment/client/modules
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/deployment/client/modules
             </outputDirectory>
             <includes>
                 <include>org.hibernate.wso2:hibernate:jar</include>
@@ -335,7 +335,7 @@
              <source>
                  ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml
              </source>
-             <outputDirectory>wso2cdm-${project.version}/repository/conf/tomcat</outputDirectory>
+             <outputDirectory>wso2cdm-${carbon.mobile.device.mgt.version}/repository/conf/tomcat</outputDirectory>
              <filtered>true</filtered>
              <fileMode>644</fileMode>
          </file>
@@ -343,57 +343,57 @@
              <source>
                  ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml
              </source>
-             <outputDirectory>wso2cdm-${project.version}/repository/conf/tomcat</outputDirectory>
+             <outputDirectory>wso2cdm-${carbon.mobile.device.mgt.version}/repository/conf/tomcat</outputDirectory>
              <filtered>true</filtered>
              <fileMode>644</fileMode>
          </file>-->
         <file>
             <source>src/repository/conf/tomcat/context.xml</source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/tomcat</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <!--        <file>
                     <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/event-broker.xml
                     </source>
-                    <outputDirectory>wso2cdm-${project.version}/repository/conf/</outputDirectory>
+                    <outputDirectory>wso2cdm-${carbon.mobile.device.mgt.version}/repository/conf/</outputDirectory>
                     <filtered>true</filtered>
                     <fileMode>644</fileMode>
                 </file>-->
 
         <file>
             <source>INSTALL.txt</source>
-            <outputDirectory>wso2mdm-${project.version}</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>README.txt</source>
-            <outputDirectory>wso2mdm-${project.version}</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>LICENSE.txt</source>
-            <outputDirectory>wso2mdm-${project.version}</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>release-notes.html</source>
-            <outputDirectory>wso2mdm-${project.version}</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/bin/README.txt</source>
-            <outputDirectory>wso2mdm-${project.version}/bin/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/bin/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/bin/version.txt</source>
-            <outputDirectory>wso2mdm-${project.version}/bin/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/bin/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
@@ -403,7 +403,7 @@
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/logging-config.xml
             </source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/etc</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/etc</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
@@ -413,7 +413,7 @@
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/event-broker.xml
             </source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
@@ -423,7 +423,7 @@
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/application-authentication.xml
             </source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/security</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/security</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
@@ -434,43 +434,43 @@
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/thrift-authentication.xml
             </source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
 
         <file>
             <source>src/repository/conf/multitenancy/cloud-services-desc.xml</source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/multitenancy/
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/multitenancy/
             </outputDirectory>
             <filtered>true</filtered>
         </file>
         <!--<file>
             <source>src/repository/conf/axis2/axis2.xml</source>
-            <outputDirectory>wso2cdm-${project.version}/repository/conf/axis2/</outputDirectory>
+            <outputDirectory>wso2cdm-${carbon.mobile.device.mgt.version}/repository/conf/axis2/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>-->
         <file>
             <source>src/repository/conf/application-authenticators.xml</source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/security/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/security/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/README</source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>src/repository/conf/identity.xml</source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf</outputDirectory>
             <fileMode>644</fileMode>
         </file>
         <file>
             <source>src/repository/conf/security/sso-idp-config.xml</source>
-            <outputDirectory>wso2mdm-${project.version}/repository/conf/security</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/security</outputDirectory>
             <fileMode>644</fileMode>
         </file>
 

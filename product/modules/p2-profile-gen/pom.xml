@@ -366,7 +366,6 @@
                                     <version>${jaggery.extensions.test.version}</version>
                                 </feature>
                                 <!-- End of Jaggery Features -->
-
                                 <!-- API Management Features -->
                                 <feature>
                                     <id>org.wso2.carbon.apimgt.core.feature.group</id>

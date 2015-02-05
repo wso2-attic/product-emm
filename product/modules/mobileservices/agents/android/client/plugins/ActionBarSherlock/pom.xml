@@ -182,7 +182,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<message>Creating site for ${project.version}.</message>
+					<message>Creating site for ${carbon.mobile.device.mgt.version}.</message>
 					<outputDirectory>website</outputDirectory>
 				</configuration>
 			</plugin>

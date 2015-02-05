@@ -62,7 +62,7 @@
                         <property>
                             <name>carbon.zip</name>
                             <value>
-                                ${basedir}/../../distribution/target/wso2emm-${project.version}.zip
+                                ${basedir}/../../distribution/target/wso2mdm-${carbon.mobile.device.mgt.version}.zip
                             </value>
                         </property>
                         <property>
@@ -130,9 +130,9 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.wso2.emm</groupId>
-                                    <artifactId>wso2emm</artifactId>
-                                    <version>${project.version}</version>
+                                    <groupId>org.wso2.carbon.mdm</groupId>
+                                    <artifactId>wso2mdm</artifactId>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/target/tobeCopied/</outputDirectory>
@@ -192,7 +192,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/target/tobeCopied/wso2emm-${project.version}/repository/resources/security/
+                                        ${basedir}/target/tobeCopied/wso2mdm-${carbon.mobile.device.mgt.version}/repository/resources/security/
                                     </directory>
                                     <includes>
                                         <include>**/*.jks</include>
@@ -213,7 +213,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/target/tobeCopied/wso2emm-${project.version}/repository/conf/axis2/
+                                        ${basedir}/target/tobeCopied/wso2mdm-${carbon.mobile.device.mgt.version}/repository/conf/axis2/
                                     </directory>
                                     <includes>
                                         <include>**/*.xml</include>
@@ -234,7 +234,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/target/tobeCopied/wso2emm-${project.version}/repository/deployment/client/modules
+                                        ${basedir}/target/tobeCopied/wso2mdm-${carbon.mobile.device.mgt.version}/repository/deployment/client/modules
                                     </directory>
                                     <includes>
                                         <include>**/*.mar</include>
@@ -250,8 +250,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.emm</groupId>
-            <artifactId>org.wso2.emm.integration.ui.pages</artifactId>
+            <groupId>org.wso2.carbon.mdm</groupId>
+            <artifactId>org.wso2.carbon.mdm.integration.ui.pages</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>

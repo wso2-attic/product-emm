@@ -351,7 +351,7 @@
             <dependency>
                 <groupId>org.wso2.carbon.mdm</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.mobile.impl</artifactId>
-                <version>${project.version}</version>
+                <version>${carbon.mobile.device.mgt.version}</version>
             </dependency>
 
             <!--Osgi dependencies-->
@@ -411,7 +411,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.apimgt.core</artifactId>
-                <version>${apim.version}</version>
+                <version>${carbon.api.mgt.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.wso2.carbon</groupId>
@@ -422,7 +422,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.apimgt.api</artifactId>
-                <version>${apim.version}</version>
+                <version>${carbon.api.mgt.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.googlecode.json-simple.wso2</groupId>
@@ -433,7 +433,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
-                <version>${apim.version}</version>
+                <version>${carbon.api.mgt.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.wso2.carbon</groupId>
@@ -614,17 +614,13 @@
         <cdm.core.version>1.0.0-SNAPSHOT</cdm.core.version>
         <cdm.core.version.range>[1.0.0, 2.0.0)</cdm.core.version.range>
 
-        <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
-
         <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
 
         <!--Maven build number plugin-->
         <maven-buildnumber-plugin.version>1.3</maven-buildnumber-plugin.version>
 
-        <!--<carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>-->
-
         <!--Jaggery -->
-        <jaggery.version>0.9.0.ALPHA6</jaggery.version>
+        <jaggery.version>0.9.0</jaggery.version>
         <jaggery.extensions.version>1.0.0</jaggery.extensions.version>
         <jaggery.extensions.sso.version>1.2.0</jaggery.extensions.sso.version>
         <jaggery.extensions.carbon.version>1.1.0</jaggery.extensions.carbon.version>
@@ -646,10 +642,6 @@
         <orbit.tomcat.version>7.0.52.wso2v5</orbit.tomcat.version>
         <orbit.tomcat.jdbc.pooling.version>7.0.34.wso2v2</orbit.tomcat.jdbc.pooling.version>
 
-        <!--API Manager-->
-
-        <apim.version>4.3.0-SNAPSHOT</apim.version>
-
         <!--MDM android Agent-->
 
         <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
@@ -661,9 +653,6 @@
 
         <!-- Carbon Commons -->
         <carbon.commons.version>4.3.4</carbon.commons.version>
-
-        <!-- Carbon Utils -->
-        <carbon.utils.version>4.3.0-SNAPSHOT</carbon.utils.version>
 
         <!-- Carbon Deployment -->
         <carbon.deployment.version>4.3.1</carbon.deployment.version>
@@ -679,9 +668,6 @@
 
         <!-- Governance -->
         <carbon.governance.version>4.3.0</carbon.governance.version>
-
-        <!-- Transport Management -->
-        <carbon.transport.mgt.version>4.3.0-SNAPSHOT</carbon.transport.mgt.version>
 
         <!-- Device Management -->
         <carbon.device.mgt.version>1.0.0-SNAPSHOT</carbon.device.mgt.version>
@@ -745,7 +731,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <preparationGoals>clean install</preparationGoals>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <autoVersionSubmodules>false</autoVersionSubmodules>
                 </configuration>
             </plugin>
             <plugin>
@@ -896,6 +882,11 @@
             <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
         </repository>
 
+        <repository>
+            <id>nexus-service-releases</id>
+            <name>WSO2 Release Service Repository</name>
+            <url>http://maven.wso2.org/nexus/service/local/repositories/releases/content/</url>
+        </repository>
     </repositories>
 
 </project>
