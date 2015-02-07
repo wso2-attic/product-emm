@@ -133,7 +133,8 @@ public class Device {
     @GET
     @Path("/license")
     @Produces("text/plain")
-    public String getLicense() {
+    public String getLicense() throws AndroidAgentException{
+
         License license = null;
         try {
             try {
@@ -141,10 +142,12 @@ public class Device {
                         .MobileDeviceTypes
                         .MOBILE_DEVICE_TYPE_ANDROID, DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
             } catch (LicenseManagementException e) {
-                e.printStackTrace();
+                String errorMsg  = "License management service error";
+                throw new AndroidAgentException(errorMsg, e);
             }
         }catch(DeviceManagementServiceException deviceMgtEx){
-            deviceMgtEx.printStackTrace();
+            String errorMsg = "Device management service error";
+            throw new AndroidAgentException(errorMsg, deviceMgtEx);
         }
         return license.getLicenseText();
     }
