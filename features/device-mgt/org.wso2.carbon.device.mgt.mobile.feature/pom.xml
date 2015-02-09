@@ -97,7 +97,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon:org.wso2.carbon.device.mgt.mobile.impl:${carbon.mobile.device.mgt.version}
+                                    org.wso2.carbon.mdm:org.wso2.carbon.device.mgt.mobile.impl:${carbon.mobile.device.mgt.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>
