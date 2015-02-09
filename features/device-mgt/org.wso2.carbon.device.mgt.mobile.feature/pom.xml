@@ -43,7 +43,7 @@
             <artifactId>org.wso2.carbon.device.mgt.mobile.impl</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.cdm</groupId>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
         </dependency>
     </dependencies>

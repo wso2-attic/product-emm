@@ -29,7 +29,7 @@
         </fileSet>
         <fileSet>
             <directory>../../modules/documentation/src/site/xdoc/user-core</directory>
-            <outputDirectory>wso2mobileserver-${carbon.mobile.device.mgt.version}-docs/user-core</outputDirectory>
+            <outputDirectory>wso2mdm-${carbon.mobile.device.mgt.version}-docs/user-core</outputDirectory>
             <fileMode>755</fileMode>
             <includes>
                 <include>user-mgt-actdir.xml</include>

@@ -306,13 +306,13 @@
 
     <files>
         <file>
-            <source>../mobileservices/agents/android/jax-rs/target/cdm-android-api.war</source>
+            <source>../mobileservices/agents/android/jax-rs/target/mdm-android-api.war</source>
             <outputDirectory>wso2mdm-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
         <file>
-            <source>../rest-api/target/wso2cdm-api.war</source>
+            <source>../rest-api/target/wso2mdm-api.war</source>
             <outputDirectory>wso2mdm-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>

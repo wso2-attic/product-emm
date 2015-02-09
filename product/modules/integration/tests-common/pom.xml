@@ -39,7 +39,7 @@
     <modules>
         <module>admin-clients</module>
         <module>integration-test-utils</module>
-        <module>ui-pages</module>
+        <!--<module>ui-pages</module>-->
     </modules>
 
 </project>
