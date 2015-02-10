@@ -1,4 +1,3 @@
-<%
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,23 +15,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var WEB_APP_TITLE = "WSO2 MDM";
+var UNSPECIFIED = "Unspecified";
+var USER_SESSION_KEY = "USER";
 
-var verb = request.getMethod();
-var uri = request.getRequestURI();
-var log = new Log();
-var deviceModule = require("/modules/device.js");
+var DEVICE_IDENTIFIER = "identifier";
+var DEVICE_NAME = "name";
+var DEVICE_OWNERSHIP = "ownership";
+var DEVICE_OWNER = "owner";
+var DEVICE_TYPE ="deviceType";
+var DEVICE_VENDOR = "vendor";
+var DEVICE_MODEL = "model";
+var DEVICE_OS_VERSION = "osVersion";
+var DEVICE_PROPERTIES = "properties";
 
-if (uri != null) {
-    var callPath=uri.replace("/cdm/api/","");
-    var uriMatcher = new URIMatcher(callPath);
-    if (uriMatcher.match("operation/{type}/{deviceid}/{operation}")) {
+var FEATURE_NAME = "featureName";
+var FEATURE_DESCRIPTION = "featureDescription";
 
-        var deviceId = uriMatcher.elements().deviceid;
-        var type = uriMatcher.elements().type;
-        var operation = uriMatcher.elements().operation;
-        var result = deviceModule.performOperation(deviceId, operation,[],type);
-    }
-} else{
-    log.error("URI is null");
-}
-%>
+var PLATFORM_ANDROID = "android"

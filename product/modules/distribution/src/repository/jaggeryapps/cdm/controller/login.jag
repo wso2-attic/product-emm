@@ -17,19 +17,20 @@
  * under the License.
  */
 (function(){
-    if (!session.get("USER")) {
+    var constants = require('/modules/constants.js');
+    if (!session.get(constants.USER_SESSION_KEY)) {
         var dataConfig = require('/modules/mdm-props.js').config();
-        var sso = require("/modules/sso.js").sso;
-
+        var sso = require('/modules/sso.js').sso;
         var keyStoreParams = {
             keyStoreName : dataConfig.ssoConfiguration.keyStoreName,
             keyStorePassword : dataConfig.ssoConfiguration.keyStorePassword,
             identityAlias : dataConfig.ssoConfiguration.identityAlias
         }
-        sso.configure(dataConfig.ssoConfiguration.issuer, "cdm", keyStoreParams, dataConfig.ssoConfiguration.identityProviderURL);
+        sso.configure(dataConfig.ssoConfiguration.issuer, dataConfig.ssoConfiguration.appName, keyStoreParams,
+        dataConfig.ssoConfiguration.identityProviderURL);
         sso.login();
     }else{
-        response.sendRedirect("/cdm");
+        response.sendRedirect(dataConfig.appContext);
     }
 }());
 %>

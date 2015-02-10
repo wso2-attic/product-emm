@@ -16,8 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var loggedUser = session.get("USER");
-if(loggedUser==null){
-     response.sendRedirect("/cdm/login");
+var constants = require('/modules/constants.js');
+var loggedUser = session.get(constants.USER_SESSION_KEY);
+var dataConfig = require('/modules/mdm-props.js').config();
+if(loggedUser == null){
+     response.sendRedirect(dataConfig.appContext+"login");
 }
 %>

@@ -16,7 +16,8 @@
  * under the License.
  */
 
-var utility = require("/modules/utility.js");
+var utility = require('/modules/utility.js');
+var constants = require('/modules/constants.js');
 var DeviceIdentifier = Packages.org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 var DeviceManagerUtil = Packages.org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 var Operation = Packages.org.wso2.carbon.device.mgt.common.Operation;
@@ -28,29 +29,28 @@ var deviceManagementService = utility.getDeviceManagementService();
 
 var unspecifiedFilter = function(prop){
     if(prop==null){
-        return "Unspecified";
+        return constants.UNSPECIFIED;
     }else{
         return prop;
     }
 }
 
 var listDevices = function () {
-    var devices = deviceManagementService.getAllDevices("android");
+    var devices = deviceManagementService.getAllDevices(constants.PLATFORM_ANDROID);
     var deviceList = [];
     for (i = 0; i < devices.size(); i++) {
         var device = devices.get(i);
-
         var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
-        deviceList.push({
-            "identifier": unspecifiedFilter(device.getDeviceIdentifier()),
-            "name": unspecifiedFilter(device.getName()),
-            "ownership": unspecifiedFilter(device.getOwnership()),
-            "owner": unspecifiedFilter(device.getOwner()),
-            "deviceType": unspecifiedFilter(device.getType()),
-            "vendor": unspecifiedFilter(propertiesList.get("vendor")),
-            "model": unspecifiedFilter(propertiesList.get("model")),
-            "osVersion": unspecifiedFilter(propertiesList.get("osVersion"))
-        });
+        var deviceObject = {};
+        deviceObject[constants.DEVICE_IDENTIFIER] = unspecifiedFilter(device.getDeviceIdentifier());
+        deviceObject[constants.DEVICE_NAME] = unspecifiedFilter(device.getName());
+        deviceObject[constants.DEVICE_OWNERSHIP] =  unspecifiedFilter(device.getOwnership());
+        deviceObject[constants.DEVICE_OWNER] = unspecifiedFilter(device.getOwner());
+        deviceObject[constants.DEVICE_TYPE] = unspecifiedFilter(device.getType());
+        deviceObject[constants.DEVICE_VENDOR] = unspecifiedFilter(propertiesList.get(constants.DEVICE_VENDOR));
+        deviceObject[constants.DEVICE_MODEL] = unspecifiedFilter(propertiesList.get(constants.DEVICE_MODEL));
+        deviceObject[constants.DEVICE_OS_VERSION] = unspecifiedFilter(propertiesList.get(constants.DEVICE_OS_VERSION));
+        deviceList.push(deviceObject);
     }
     return deviceList;
 }
@@ -63,14 +63,14 @@ var getDevice = function(type, deviceId){
 }
 
 var getOperations = function(type){
-    var features = deviceManagementService.getOperationManager("android").getFeaturesForDeviceType(type);
+    var features = deviceManagementService.getOperationManager(constants.PLATFORM_ANDROID).getFeaturesForDeviceType(type);
     var featuresConverted = [];
     for (i = 0; i < features.size(); i++) {
         var feature = features.get(i);
-        featuresConverted.push({
-            "featureName": feature.getName(),
-            "featureDescription": feature.getDescription()
-        });
+        var featureObject = {};
+        featureObject[constants.FEATURE_NAME] = feature.getName();
+        featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription()
+        featuresConverted.push(featureObject);
     }
     return featuresConverted;
 }
@@ -89,7 +89,7 @@ var performOperation = function(deviceId, featureName, properties, type){
     deviceIdentifier.setType(type);
     var deviceList = new ArrayList();
     deviceList.add(deviceIdentifier);
-    deviceManagementService.getOperationManager("android").addOperation(operation, deviceList);
+    deviceManagementService.getOperationManager(constants.PLATFORM_ANDROID).addOperation(operation, deviceList);
 }
 
 var viewDevice = function(type, deviceId){
@@ -104,15 +104,15 @@ var viewDevice = function(type, deviceId){
         var value = entry.getValue();
         properties[key]= unspecifiedFilter(value);
     }
-    return {
-        "identifier": unspecifiedFilter(device.getDeviceIdentifier()),
-        "name": unspecifiedFilter(device.getName()),
-        "ownership": unspecifiedFilter(device.getOwnership()),
-        "owner": unspecifiedFilter(device.getOwner()),
-        "deviceType": unspecifiedFilter(device.getType()),
-        "vendor": unspecifiedFilter(propertiesList.get("vendor")),
-        "model": unspecifiedFilter(propertiesList.get("model")),
-        "osVersion": unspecifiedFilter(propertiesList.get("osVersion")),
-        "properties": properties
-    };
+    var deviceObject = {};
+    deviceObject[constants.DEVICE_IDENTIFIER] = unspecifiedFilter(device.getDeviceIdentifier());
+    deviceObject[constants.DEVICE_NAME] = unspecifiedFilter(device.getName());
+    deviceObject[constants.DEVICE_OWNERSHIP] =  unspecifiedFilter(device.getOwnership());
+    deviceObject[constants.DEVICE_OWNER] = unspecifiedFilter(device.getOwner());
+    deviceObject[constants.DEVICE_TYPE] = unspecifiedFilter(device.getType());
+    deviceObject[constants.DEVICE_VENDOR] = unspecifiedFilter(propertiesList.get(constants.DEVICE_VENDOR));
+    deviceObject[constants.DEVICE_MODEL] = unspecifiedFilter(propertiesList.get(constants.DEVICE_MODEL));
+    deviceObject[constants.DEVICE_OS_VERSION] = unspecifiedFilter(propertiesList.get(constants.DEVICE_OS_VERSION));
+    deviceObject[constants.DEVICE_PROPERTIES] = properties
+    return deviceObject;
 }

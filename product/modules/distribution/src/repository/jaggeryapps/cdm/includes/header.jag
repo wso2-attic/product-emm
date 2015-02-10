@@ -17,7 +17,7 @@
  * under the License.
  */
 // header includes
-	var ui_config = require("/config/ui.json");
+var ui_config = require("/config/ui.json");
 %>
  <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">

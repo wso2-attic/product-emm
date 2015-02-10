@@ -17,19 +17,23 @@
  * under the License.
  */
 var dataConfig = require('/modules/mdm-props.js').config();
-var sso = require("/modules/sso.js").sso;
+var sso = require('/modules/sso.js').sso;
+var constants = require('/modules/constants.js');
 var log = new Log();
 var keyStoreParams = {
     keyStoreName: dataConfig.ssoConfiguration.keyStoreName,
     keyStorePassword: dataConfig.ssoConfiguration.keyStorePassword,
     identityAlias: dataConfig.ssoConfiguration.identityAlias
 }
-sso.configure(dataConfig.ssoConfiguration.issuer, "cdm", keyStoreParams, dataConfig.ssoConfiguration.identityProviderURL);
+sso.configure(dataConfig.ssoConfiguration.issuer, dataConfig.ssoConfiguration.appName, keyStoreParams,
+dataConfig.ssoConfiguration.identityProviderURL);
 sso.acs(function(loggedInUser) {
-    session.put("USER", loggedInUser);
+    session.put(constants.USER_SESSION_KEY, loggedInUser);
     var username = loggedInUser;
     log.debug("User logged in: "+username);
-    response.sendRedirect('/cdm/dashboard');
+    response.sendRedirect(dataConfig.appContext+'dashboard');
 }, function() {
-    response.sendRedirect('/cdm');
-}); %>
+    log.debug("User logged out");
+    response.sendRedirect(dataConfig.appContext);
+});
+%>

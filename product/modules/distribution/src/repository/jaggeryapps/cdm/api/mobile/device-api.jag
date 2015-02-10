@@ -19,11 +19,11 @@
 
 var verb = request.getMethod();
 var uri = request.getRequestURI();
-var callPath=uri.replace("/cdm/api/","");
 var log = new Log();
 var deviceModule = require("/modules/device.js");
 
 if (uri != null) {
+    var callPath=uri.replace("/cdm/api/","");
     var uriMatcher = new URIMatcher(callPath);
     if (uriMatcher.match("devices/mobile/{type}/{deviceid}/")) {
         var deviceId = uriMatcher.elements().deviceid;
@@ -35,5 +35,7 @@ if (uri != null) {
         var result = deviceModule.listDevices();
         print(result);
     }
+}else{
+    log.error("URI is null");
 }
 %>

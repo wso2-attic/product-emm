@@ -17,7 +17,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var title="WSO2 CDM";
+var constants = require("/modules/constants.js");
+var title = constants.WEB_APP_TITLE;
 include("/includes/auth-header.jag");
 %>
 <html lang="en">

@@ -16,8 +16,6 @@
  * under the License.
  */
 
-//temporary
-
 var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext,
     Class = java.lang.Class;
 
@@ -25,8 +23,6 @@ osgiService = function (clazz) {
     return PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(Class.forName(clazz));
 };
 var getDeviceManagementService= function(){
-    //server.authenticate("admin", "admin");
     var realmService = osgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementService');
-    //var realmService = null;
     return realmService;
 }
