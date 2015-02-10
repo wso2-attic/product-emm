@@ -22,7 +22,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.carbon.mdm</groupId>
+    <groupId>org.wso2.mdm</groupId>
     <artifactId>wso2mdm-parent</artifactId>
     <packaging>pom</packaging>
     <version>2.0.0-SNAPSHOT</version>
@@ -37,9 +37,12 @@
     </parent>
 
     <modules>
-        <module>components/device-mgt</module>
-        <module>features/device-mgt</module>
-        <module>product</module>
+        <module>modules/mobileservices</module>
+        <module>modules/tools</module>
+        <module>modules/rest-api</module>
+        <module>modules/p2-profile-gen</module>
+        <module>modules/distribution</module>
+        <module>modules/integration</module>
     </modules>
 
     <dependencyManagement>
@@ -673,7 +676,7 @@
         <carbon.device.mgt.version>0.9.0</carbon.device.mgt.version>
 
         <!-- Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.0.0-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>1.9.0-SNAPSHOT</carbon.mobile.device.mgt.version>
 
         <!-- API Management -->
         <carbon.api.mgt.version>1.3.1</carbon.api.mgt.version>
