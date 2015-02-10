@@ -878,18 +878,6 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-
-        <repository>
-            <id>nexus-releases</id>
-            <name>WSO2 Release Distribution Repository</name>
-            <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
-        </repository>
-
-        <repository>
-            <id>nexus-service-releases</id>
-            <name>WSO2 Release Service Repository</name>
-            <url>http://maven.wso2.org/nexus/service/local/repositories/releases/content/</url>
-        </repository>
     </repositories>
 
 </project>
