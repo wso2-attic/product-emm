@@ -647,7 +647,7 @@
 
         <!--MDM android Agent-->
 
-        <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
+        <mdm.android.agent.archetype.version>1.0.0-M2</mdm.android.agent.archetype.version>
 
          <!--CXF properties-->
         <cxf.version>2.6.1</cxf.version>
