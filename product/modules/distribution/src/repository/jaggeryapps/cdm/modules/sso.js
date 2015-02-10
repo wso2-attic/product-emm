@@ -29,7 +29,7 @@ var ssoMod = require("sso");
 	        sso_sessions = application.get('sso_sessions');
 	    }
 	    return sso_sessions;
- 	}
+ 	};
  	sso.configure = function(issuer, appName, keyStoreParams, address, transport, ssoService, responseSign){
  		sso.issuer = issuer;
  		sso.appName = appName;
@@ -44,7 +44,7 @@ var ssoMod = require("sso");
                 KEY_STORE_PASSWORD: keyStoreParams.keyStorePassword,
                 IDP_ALIAS: keyStoreParams.identityAlias
         };
- 	}
+ 	};
  	sso.login = function(){
  		sso.sessionId = session.getId();
  		var referer = request.getHeader("referer");
@@ -58,9 +58,9 @@ var ssoMod = require("sso");
 		}
  		sso.encodedSAMLAuthRequest = ssoMod.client.getEncodedSAMLAuthRequest(sso.issuer);
  		var postUrl = sso.address + sso.ssoService;
-		log.info(sso.relayState);
+		log.debug(sso.relayState);
  		print("<div><p>You are now being redirected to SSO Provider. If the redirection fails, please click on the button below.</p> <form method='post' action='"+postUrl+"'><p><input type='hidden' name='SAMLRequest' value='"+sso.encodedSAMLAuthRequest+"'/><input type='hidden' name='RelayState' value='"+sso.relayState+"'/><input type='hidden' name='SSOAuthSessionID' value='"+sso.sessionId+"'/><button type='submit'>Redirect manually</button></p></form></div><script type = 'text/javascript' >document.forms[0].submit();</script>");
- 	}
+ 	};
  	sso.logout = function(user){
  		var sso_sessions = getSSOSessions();
  		sso.sessionId = session.getId();
@@ -73,9 +73,9 @@ var ssoMod = require("sso");
  		sso.log.debug("Logout request recieved from session id ###: " + sso.sessionId );
  		
  		var postUrl = sso.address + sso.ssoService;
- 		sso.log.info(sso.sessionId);
+ 		sso.log.debug(sso.sessionId);
  		print("<div><p>You are now redirected to Stratos Identity. If theredirection fails, please click the post button.</p> <form id='logoutForm' method='post' action='"+postUrl+"'> <p> <input type='hidden' name='SAMLRequest' value='"+sso.encodedSAMLLogoutRequest+"'/> <input type='hidden' name='RelayState' value='"+sso.relayState+"'/> <input type='hidden' name='SSOAuthSessionID' value='"+sso.sessionId+"'/> <button type='submit'>POST</button> </p> </form> </div> <script type = 'text/javascript' > document.forms[0].submit(); </script>");
- 	}
+ 	};
  	sso.acs = function(loginCallback, logoutCallback){
 	    var sso_sessions = getSSOSessions();
 	    sso.sessionId = session.getId();
