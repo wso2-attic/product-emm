@@ -17,9 +17,7 @@
  ~ under the License.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.mdm</groupId>
@@ -647,7 +645,7 @@
 
         <!--MDM android Agent-->
 
-        <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
+        <mdm.android.agent.archetype.version>1.0.0-M2</mdm.android.agent.archetype.version>
 
          <!--CXF properties-->
         <cxf.version>2.6.1</cxf.version>
@@ -676,7 +674,7 @@
         <carbon.device.mgt.version>0.9.0</carbon.device.mgt.version>
 
         <!-- Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>1.9.0-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>1.9.0</carbon.mobile.device.mgt.version>
 
         <!-- API Management -->
         <carbon.api.mgt.version>1.3.1</carbon.api.mgt.version>
@@ -877,18 +875,6 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
-        </repository>
-
-        <repository>
-            <id>nexus-releases</id>
-            <name>WSO2 Release Distribution Repository</name>
-            <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
-        </repository>
-
-        <repository>
-            <id>nexus-service-releases</id>
-            <name>WSO2 Release Service Repository</name>
-            <url>http://maven.wso2.org/nexus/service/local/repositories/releases/content/</url>
         </repository>
     </repositories>
 
