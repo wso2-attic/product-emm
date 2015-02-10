@@ -16,7 +16,8 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>org.wso2.mdm</groupId>
         <artifactId>wso2mdm-parent</artifactId>
@@ -28,7 +29,7 @@
     <groupId>org.wso2.mdm</groupId>
     <artifactId>wso2mdm-api</artifactId>
     <packaging>war</packaging>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>WSO2 MDM REST API</name>
     <url>http://maven.apache.org</url>
 
@@ -71,9 +72,10 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <copy todir="${basedir}/../../../repository/deployment/server/webapps" overwrite="true">
+                                        <copy todir="${basedir}/../../../repository/deployment/server/webapps"
+                                              overwrite="true">
                                             <fileset dir="${basedir}/target">
-                                                <include name="${project.artifactId}.war" />
+                                                <include name="${project.artifactId}.war"/>
                                             </fileset>
                                         </copy>
                                     </tasks>

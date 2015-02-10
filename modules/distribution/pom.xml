@@ -17,7 +17,9 @@
 ~ under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>org.wso2.mdm</groupId>
@@ -103,21 +105,29 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <echo message="########### Create Device Management H2 Schema ###########" />
+                                <echo
+                                        message="########### Create Device Management H2 Schema ###########"/>
 
-                                <property name="db.dir" value="target/wso2carbon-core-${carbon.kernel.version}/repository/database" />
-                                <property name="userid" value="wso2carbon" />
-                                <property name="password" value="wso2carbon" />
-                                <property name="dbURL" value="jdbc:h2:file:${basedir}/${db.dir}/WSO2DM_DB;DB_CLOSE_ON_EXIT=FALSE" />
+                                <property name="db.dir"
+                                          value="target/wso2carbon-core-${carbon.kernel.version}/repository/database"/>
+                                <property name="userid" value="wso2carbon"/>
+                                <property name="password" value="wso2carbon"/>
+                                <property name="dbURL"
+                                          value="jdbc:h2:file:${basedir}/${db.dir}/WSO2DM_DB;DB_CLOSE_ON_EXIT=FALSE"/>
 
-                                <sql driver="org.h2.Driver" url="${dbURL}" userid="${userid}" password="${password}" autocommit="true" onerror="continue">
-                                    <classpath refid="maven.dependency.classpath" />
-                                    <classpath refid="maven.compile.classpath" />
-                                    <classpath refid="maven.runtime.classpath" />
+                                <sql driver="org.h2.Driver"
+                                     url="${dbURL}"
+                                     userid="${userid}" password="${password}"
+                                     autocommit="true" onerror="continue">
+                                    <classpath refid="maven.dependency.classpath"/>
+                                    <classpath refid="maven.compile.classpath"/>
+                                    <classpath refid="maven.runtime.classpath"/>
 
-                                    <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/h2.sql" />
+                                    <fileset
+                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/h2.sql"/>
                                 </sql>
-                                <echo message="##################### END ####################" />
+                                <echo
+                                        message="##################### END ####################"/>
                             </tasks>
                         </configuration>
                     </execution>
@@ -130,21 +140,29 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <echo message="########### Create IDP Management H2 Schema ###########" />
+                                <echo
+                                        message="########### Create IDP Management H2 Schema ###########"/>
 
-                                <property name="db.dir" value="target/wso2carbon-core-${carbon.kernel.version}/repository/database" />
-                                <property name="userid" value="wso2carbon" />
-                                <property name="password" value="wso2carbon" />
-                                <property name="dbURL" value="jdbc:h2:file:${basedir}/${db.dir}/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE" />
+                                <property name="db.dir"
+                                          value="target/wso2carbon-core-${carbon.kernel.version}/repository/database"/>
+                                <property name="userid" value="wso2carbon"/>
+                                <property name="password" value="wso2carbon"/>
+                                <property name="dbURL"
+                                          value="jdbc:h2:file:${basedir}/${db.dir}/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE"/>
 
-                                <sql driver="org.h2.Driver" url="${dbURL}" userid="${userid}" password="${password}" autocommit="true" onerror="continue">
-                                    <classpath refid="maven.dependency.classpath" />
-                                    <classpath refid="maven.compile.classpath" />
-                                    <classpath refid="maven.runtime.classpath" />
+                                <sql driver="org.h2.Driver"
+                                     url="${dbURL}"
+                                     userid="${userid}" password="${password}"
+                                     autocommit="true" onerror="continue">
+                                    <classpath refid="maven.dependency.classpath"/>
+                                    <classpath refid="maven.compile.classpath"/>
+                                    <classpath refid="maven.runtime.classpath"/>
 
-                                    <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/application-mgt/h2.sql" />
+                                    <fileset
+                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/application-mgt/h2.sql"/>
                                 </sql>
-                                <echo message="##################### END ####################" />
+                                <echo
+                                        message="##################### END ####################"/>
                             </tasks>
                         </configuration>
                     </execution>
@@ -157,21 +175,29 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <echo message="########### Create API Management H2 Schema ###########" />
+                                <echo
+                                        message="########### Create API Management H2 Schema ###########"/>
 
-                                <property name="db.dir" value="target/wso2carbon-core-${carbon.kernel.version}/repository/database" />
-                                <property name="userid" value="wso2carbon" />
-                                <property name="password" value="wso2carbon" />
-                                <property name="dbURL" value="jdbc:h2:file:${basedir}/${db.dir}/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE" />
+                                <property name="db.dir"
+                                          value="target/wso2carbon-core-${carbon.kernel.version}/repository/database"/>
+                                <property name="userid" value="wso2carbon"/>
+                                <property name="password" value="wso2carbon"/>
+                                <property name="dbURL"
+                                          value="jdbc:h2:file:${basedir}/${db.dir}/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE"/>
 
-                                <sql driver="org.h2.Driver" url="${dbURL}" userid="${userid}" password="${password}" autocommit="true" onerror="continue">
-                                    <classpath refid="maven.dependency.classpath" />
-                                    <classpath refid="maven.compile.classpath" />
-                                    <classpath refid="maven.runtime.classpath" />
+                                <sql driver="org.h2.Driver"
+                                     url="${dbURL}"
+                                     userid="${userid}" password="${password}"
+                                     autocommit="true" onerror="continue">
+                                    <classpath refid="maven.dependency.classpath"/>
+                                    <classpath refid="maven.compile.classpath"/>
+                                    <classpath refid="maven.runtime.classpath"/>
 
-                                    <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt/h2.sql" />
+                                    <fileset
+                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt/h2.sql"/>
                                 </sql>
-                                <echo message="##################### END ####################" />
+                                <echo
+                                        message="##################### END ####################"/>
                             </tasks>
                         </configuration>
                     </execution>
@@ -183,42 +209,48 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <property name="tempdir" value="target/docs-temp" />
-                                <property name="jardir" value="target/jars" />
-                                <!--<property name="shindig.version" value="2.5.0-beta5" />-->
+                                <property name="tempdir" value="target/docs-temp"/>
+                                <property name="jardir" value="target/jars"/>
+                                <!--<property name="shindig.version" value="2.5.0-beta5"/>-->
 
-                                <mkdir dir="${tempdir}" />
-                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/components" />
-                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/deployment/server" />
-                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/deployment/server/webapps" />
+                                <mkdir dir="${tempdir}"/>
+                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/components"/>
+                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/deployment/server"/>
+                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/deployment/server/webapps"/>
                                 <unzip dest="${tempdir}">
                                     <fileset dir="target">
-                                        <include name="wso2mdm-${project.version}.zip" />
+                                        <include name="wso2mdm-${project.version}.zip"/>
                                     </fileset>
                                 </unzip>
-                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components" overwrite="true">
-                                    <fileset dir="${tempdir}/wso2mdm-${project.version}/repository/components" />
+                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components"
+                                      overwrite="true">
+                                    <fileset
+                                            dir="${tempdir}/wso2mdm-${project.version}/repository/components"></fileset>
                                 </copy>
                                 <!--testing -->
-                                <!--<unzip src="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar" dest="${jardir}/shindig-common-${shindig.version}">
+                                <!--<unzip src="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar"
+                                       dest="${jardir}/shindig-common-${shindig.version}">
                                     <patternset>
-                                        <exclude name="**/shindig.properties" />
+                                        <exclude name="**/shindig.properties"/>
                                     </patternset>
                                 </unzip>
-                                <copy file="src/repository/conf/shindig.properties" todir="${jardir}/shindig-common-${shindig.version}" />
-                                <delete file="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar" />
-                                <zip destfile="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar" basedir="${jardir}/shindig-common-${shindig.version}" />
+                                <copy file="src/repository/conf/shindig.properties"
+                                      todir="${jardir}/shindig-common-${shindig.version}"/>
+                                <delete file="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar"/>
+                                <zip destfile="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar"
+                                     basedir="${jardir}/shindig-common-${shindig.version}"/>
                                 <delete>
-                                    <fileset dir="target/shindig/WEB-INF/lib" includes="slf4j*" />
+                                    <fileset dir="target/shindig/WEB-INF/lib" includes="slf4j*"/>
                                 </delete>
-                                <copy file="src/repository/resources/shindig/index.jsp" todir="target/shindig" />-->
+                                <copy file="src/repository/resources/shindig/index.jsp"
+                                      todir="target/shindig"/>-->
 
                                 <concat destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/log4j.properties">
                                     og4j.logger.net.sf.ehcache=ERROR
                                 </concat>
 
-                                <delete file="target/wso2mdm-${project.version}.zip" />
-                                <delete dir="${tempdir}" />
+                                <delete file="target/wso2mdm-${project.version}.zip"/>
+                                <delete dir="${tempdir}"/>
                             </tasks>
                         </configuration>
                     </execution>
@@ -227,16 +259,19 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <mkdir dir="target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps" />
+                                <mkdir dir="target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps"/>
 
-                                <!--<copy todir="target/wso2carbon-core-${carbon.kernel.version}/modules" overwrite="true">
+                                <!--<copy todir="target/wso2carbon-core-${carbon.kernel.version}/modules"
+                                      overwrite="true">
                                     <fileset dir="src/repository/modules"></fileset>
                                 </copy>
-                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps" overwrite="true">
+                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps"
+                                      overwrite="true">
                                     <fileset dir="../apps"></fileset>
                                 </copy>
 
-                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins" overwrite="true">
+                                <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins"
+                                      overwrite="true">
                                     <fileset dir="src/repository/components/patches/apimgt"></fileset>
                                 </copy>-->
 
@@ -251,20 +286,20 @@
                         <phase>install</phase>
                         <configuration>
                             <tasks>
-                                <delete dir="target/jars" />
-                                <delete dir="target/*.xml" />
-                                <delete dir="target/archive-tmp" />
-                                <delete dir="target/dependency-maven-plugin-markers" />
-                                <delete dir="target/maven-archiver" />
-                                <delete dir="target/wso2carbon-core-${carbon.kernel.version}" />
-                                <delete dir="target/wso2carbon-core-${carbon.kernel.version}" />
-                                <delete file="target/wso2mdm-${project.version}.jar" />
-                                <delete dir="target/sources" />
-                                <delete dir="target/site" />
-                                <delete dir="target/antrun" />
-                                <delete dir="src/site" />
-                                <!--<delete dir="target/shindig" />-->
-                                <delete dir="target/jaxwebapps" />
+                                <delete dir="target/jars"/>
+                                <delete dir="target/*.xml"/>
+                                <delete dir="target/archive-tmp"/>
+                                <delete dir="target/dependency-maven-plugin-markers"/>
+                                <delete dir="target/maven-archiver"/>
+                                <delete dir="target/wso2carbon-core-${carbon.kernel.version}"/>
+                                <delete dir="target/wso2carbon-core-${carbon.kernel.version}"/>
+                                <delete file="target/wso2mdm-${project.version}.jar"/>
+                                <delete dir="target/sources"/>
+                                <delete dir="target/site"/>
+                                <delete dir="target/antrun"/>
+                                <delete dir="src/site"/>
+                                <!--<delete dir="target/shindig"/>-->
+                                <delete dir="target/jaxwebapps"/>
                             </tasks>
                         </configuration>
                         <goals>
