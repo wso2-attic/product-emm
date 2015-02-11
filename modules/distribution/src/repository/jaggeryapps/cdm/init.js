@@ -16,16 +16,7 @@
  * under the License.
  */
 //Init js to execute
-var logger = new Log();
-var app_TENANT_CONFIGS = 'tenant.configs';
-var app_carbon = require('carbon');
-var app_configs = {
-    "HTTPS_URL": "https://localhost:9443"
-};
+var log = new Log();
+var dataConfig = require('/modules/mdm-props.js').config();
 
-var app_server = new app_carbon.server.Server({
-    tenanted: app_configs.tenanted,
-    url: app_configs.HTTPS_URL + '/admin'
-});
-application.put("SERVER", app_server);
-application.put(app_TENANT_CONFIGS, {});
+log.info("CDM Console URL  : "+dataConfig.httpsURL+dataConfig.appContext);

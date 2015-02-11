@@ -16,17 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var user = session.get("USER");
+var constants = require('/modules/constants.js');
+var user = session.get(constants.USER_SESSION_KEY);
+var dataConfig = require('/modules/mdm-props.js').config();
+var log = new Log();
 if (user === null) {
-    response.sendRedirect('/cdm/dashboard');
+    log.debug("Cannot perform logout. No user session found.");
+    response.sendRedirect(dataConfig.appContext+'dashboard');
 } else {
-    var dataConfi = require('/modules/mdm-props.js').config();
-    var sso = require("/modules/sso.js").sso;
+    var sso = require('/modules/sso.js').sso;
     var keyStoreParams = {
-        keyStoreName: dataConfi.ssoConfiguration.keyStoreName,
-        keyStorePassword: dataConfi.ssoConfiguration.keyStorePassword,
-        identityAlias: dataConfi.ssoConfiguration.identityAlias
+        keyStoreName: dataConfig.ssoConfiguration.keyStoreName,
+        keyStorePassword: dataConfig.ssoConfiguration.keyStorePassword,
+        identityAlias: dataConfig.ssoConfiguration.identityAlias
     }
-    sso.configure(dataConfi.ssoConfiguration.issuer, "cdm", keyStoreParams, dataConfi.ssoConfiguration.identityProviderURL);
+    sso.configure(dataConfig.ssoConfiguration.issuer, dataConfig.ssoConfiguration.appName, keyStoreParams,
+    dataConfig.ssoConfiguration.identityProviderURL);
     sso.logout(user);
-} %>
+}
+%>
