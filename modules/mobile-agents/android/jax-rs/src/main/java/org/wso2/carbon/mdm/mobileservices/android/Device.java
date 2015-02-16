@@ -32,14 +32,15 @@ import java.util.List;
  * Android Device Management REST-API implementation.
  * All end points supports JSON, XMl with content negotiation.
  */
-@Produces({ "application/json", "application/xml" })
-@Consumes({ "application/json", "application/xml" })
+@Produces({"application/json", "application/xml"})
+@Consumes({"application/json", "application/xml"})
 public class Device {
 
     private static Log log = LogFactory.getLog(Device.class);
 
     /**
      * Get all devices.Returns list of devices registered in the CDM.
+     *
      * @return Device List
      * @throws AndroidAgentException
      */
@@ -65,6 +66,7 @@ public class Device {
 
     /**
      * Fetch device details of given device Id.
+     *
      * @param id Device Id
      * @return Device
      * @throws AndroidAgentException
@@ -96,8 +98,9 @@ public class Device {
 
     /**
      * Update device details of given device id.
-     * @param id Device Id
-     * @param device  Device Details
+     *
+     * @param id     Device Id
+     * @param device Device Details
      * @return Message
      * @throws AndroidAgentException
      */
@@ -119,36 +122,38 @@ public class Device {
                 responseMessage.setResponseMessage("Device not found for the update.");
             }
             return responseMessage;
-        } catch (DeviceManagementServiceException deviceManagementServiceException) {
-            String errorMsg = "Device management service error";
-            log.error(errorMsg, deviceManagementServiceException);
-            throw new AndroidAgentException(errorMsg, deviceManagementServiceException);
-        } catch (DeviceManagementException deviceMgtEx) {
+        } catch (DeviceManagementServiceException e) {
+            String msg = "Device management service error";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
+        } catch (DeviceManagementException e) {
             String msg = "Error occurred while modifying the device information.";
-            log.error(msg, deviceMgtEx);
-            throw new AndroidAgentException(msg, deviceMgtEx);
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
         }
     }
 
     @GET
     @Path("/license")
     @Produces("text/plain")
-    public String getLicense() throws AndroidAgentException{
+    public String getLicense() throws AndroidAgentException {
 
-        License license = null;
+        License license;
         try {
-            try {
-                license = AndroidAPIUtils.getLicenseManagerService().getLicense(DeviceManagementConstants
-                        .MobileDeviceTypes
-                        .MOBILE_DEVICE_TYPE_ANDROID, DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
-            } catch (LicenseManagementException e) {
-                String errorMsg  = "License management service error";
-                throw new AndroidAgentException(errorMsg, e);
-            }
-        }catch(DeviceManagementServiceException deviceMgtEx){
-            String errorMsg = "Device management service error";
-            throw new AndroidAgentException(errorMsg, deviceMgtEx);
+            license = AndroidAPIUtils.getLicenseManagerService().getLicense(DeviceManagementConstants
+                    .MobileDeviceTypes
+                    .MOBILE_DEVICE_TYPE_ANDROID, DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
+
+        } catch (DeviceManagementServiceException e) {
+            String msg = "Device management service error";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
+        } catch (LicenseManagementException e) {
+            String msg = "Error occurred while retrieving the license configured for Andriod device enrolment";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
         }
-        return license.getLicenseText();
+        return license.getText();
     }
+
 }

@@ -307,7 +307,7 @@
                                 <!-- Device Management Features -->
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.server.feature.group</id>
-                                    <version>${cdm.core.version}</version>
+                                    <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.mobile.feature.group</id>

@@ -308,7 +308,7 @@
 
     <files>
         <file>
-            <source>../mobileservices/agents/android/jax-rs/target/mdm-android-api.war</source>
+            <source>../mobile-agents/android/jax-rs/target/mdm-android-api.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
