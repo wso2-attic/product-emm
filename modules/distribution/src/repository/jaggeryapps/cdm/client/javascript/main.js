@@ -17,7 +17,7 @@
  */
 function identifierFormatter(value, row, index) {
     return [
-        '<a class="like" href="/cdm/devices/' + row["deviceType"] + '/' + escape(value) + '" title="Like">',
+        '<a class="like" href="/cdm/devices/' + row["deviceType"] + '/' + encodeURIComponent(value) + '" title="Like">',
         value,
         '</a>'
     ].join('');
@@ -27,16 +27,16 @@ var currentDeviceOperation;
 var currentDevice;
 var currentDeviceType;
 function performOperation(){
-    currentDevice = escape($("#deviceMain").data("deviceid"));
-    currentDeviceType = $("#deviceMain").data("devicetype");
+    currentDevice = encodeURIComponent($("#device-main").data("deviceId"));
+    currentDeviceType = $("#device-main").data("deviceType");
     $.post("/cdm/api/operation/"+currentDeviceType+"/"+currentDevice+"/"+currentDeviceOperation,function(){
-        $('#confirmModel').modal('hide');
+        $('#confirm-model').modal('hide');
     });
 }
 
 $(document).ready(function(){
     $(".device-operation").click(function(){
         currentDeviceOperation = $(this).data("operation");
-        $('#confirmModel').modal('show');
+        $('#confirm-model').modal('show');
     });
 });

@@ -17,17 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var constants = require("/modules/constants.js");
-var title = constants.WEB_APP_TITLE;
-include("/includes/auth-header.jag");
+    var constants = require("/modules/constants.js");
+    var title = constants.WEB_APP_TITLE;
+    include("/includes/auth-header.jag");
 %>
 <html lang="en">
     <%
-    include("/includes/layout-header.jag")
+        include("/includes/layout-header.jag")
     %>
     <body>
         <%
-        include("/includes/header.jag");
+            include("/includes/header.jag");
         %>
         <div class="container-fluid">
             <div class="row">
@@ -67,16 +67,15 @@ include("/includes/auth-header.jag");
                                 </table>
                             </div>
                         </div>
-                        <div role="devicepanel" class="tab-pane" id="raspberrypi">sdfweroiweuroi</div>
+                        <div role="devicepanel" class="tab-pane" id="raspberrypi">Display RaspberryPis</div>
                       </div>
-
                     </div>
                 </div>
             </div>
         </div>
         <%
-        include("/includes/footer.jag");
-        include("/includes/layout-footer.jag");
+            include("/includes/footer.jag");
+            include("/includes/layout-footer.jag");
         %>
     </body>
 </html>
