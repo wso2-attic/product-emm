@@ -17,88 +17,85 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var constants = require("/modules/constants.js");
-var title = constants.WEB_APP_TITLE;
-include("/includes/auth-header.jag");
+  var constants = require("/modules/constants.js");
+  var title = constants.WEB_APP_TITLE;
+  include("/includes/auth-header.jag");
 %>
 <html lang="en">
     <%
-    include("/includes/layout-header.jag")
+        include("/includes/layout-header.jag");
     %>
     <body>
         <%
-        include("/includes/header.jag");
-
-        var deviceModule = require("/modules/device.js");
-        var uri = request.getRequestURI();
-        var callPath=uri.replace("/cdm/","");
-        var uriMatcher = new URIMatcher(callPath);
-        uriMatcher.match("devices/{type}/{deviceid}/");
-        var deviceId = uriMatcher.elements().deviceid;
-        var type = uriMatcher.elements().type;
-        var device = deviceModule.viewDevice(type, deviceId);
-        var operations = deviceModule.getOperations("android");
+            include("/includes/header.jag");
+            var deviceModule = require("/modules/device.js");
+            var uri = request.getRequestURI();
+            var callPath=uri.replace("/cdm/","");
+            var uriMatcher = new URIMatcher(callPath);
+            uriMatcher.match("devices/{type}/{id}/");
+            var deviceId = uriMatcher.elements().id;
+            var type = uriMatcher.elements().type;
+            var device = deviceModule.viewDevice(type, deviceId);
+            var operations = deviceModule.getOperations(constants.PLATFORM_ANDROID);
         %>
-        <div id="deviceMain" data-deviceId="<%=deviceId%>" data-deviceType="<%=type%>" class="container-fluid">
+        <div id="device-main" data-device-id="<%=deviceId%>" data-device-type="<%=type%>" class="container-fluid">
             <div class="row">
                 <div class="col-sm-9 main col-centered">
                     <h2 class="sub-header"><%=device.name%></h2>
                     <div class="row">
                     </div>
                     <div class="row">
-                       <%
-                            for (i = 0; i < operations.length; i++) {
-                                var operation = operations[i]
-                                %>
-                                  <button data-operation="<%=operation.featureName%>" class="device-operation btn btn-default">
-                        <img src="/cdm/client/img/operations/<%=operation.featureName%>.png" />
-                        <p><%=operation.featureDescription %></p>
-                      </button>
-                                                            <%
+                      <%
+                        for (var i = 0; i < operations.length; i++) {
+                          var operation = operations[i];
+                          %>
+                            <button data-operation="<%=operation.featureName%>" class="device-operation btn btn-default">
+                            <img src="/cdm/client/img/operations/<%=operation.featureName%>.png" />
+                            <p><%=operation.featureDescription%></p>
+                            </button>
+                          <%
                         }
-%>
+                      %>
                     </div>
                     <div class="row">
-                       <div class="col-md-3 device-model-holder well well-lg">
-                         <img src="/cdm/client/img/models/iphone.png" width="200"/>
-                       </div>
-                       <div class="col-md-8">
-                         <div class="row">
-                           <div class="col-md-12 well well-lg device-static-data">
-
-                                                          <%
-                            for (var property in device.properties) {
-                                if (device.properties.hasOwnProperty(property)) {
-                                    var value = device.properties[property];
-                                    %>
-                                      <p><%=property %>: <span><%=value %></span> </p>
-                                    <%
-                                }
-                            }
+                      <div class="col-md-3 device-model-holder well well-lg">
+                        <img src="/cdm/client/img/models/iphone.png" width="200"/>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="row">
+                          <div class="col-md-12 well well-lg device-static-data">
+                            <%
+                              for (var property in device.properties) {
+                                  if (device.properties.hasOwnProperty(property)) {
+                                      var value = device.properties[property];
+                                      %>
+                                        <p><%=property%>: <span><%=value%></span></p>
+                                      <%
+                                  }
+                              }
                             %>
-                   </div>
-                 </div>
-                
-                 <div class="row">
-                   <div class="col-md-12 well well-lg device-static-data">
-                     <table id="table-pagination" data-toggle="table"  data-url="/cdm/data3.json" data-query-params="queryParams" data-height="300" data-pagination="true" data-search="true">
-                          <thead>
-                              <tr>
-                                  <th data-field="appName" data-align="right" data-sortable="true">App name</th>
-                                  <th data-field="packageName" data-align="center" data-sortable="true">Package name</th>
-                              </tr>
-                          </thead>
-                      </table>
-                   </div>
-                 </div>
-               </div>
+                          </div>
+                        </div>             
+                        <div class="row">
+                          <div class="col-md-12 well well-lg device-static-data">
+                            <table id="table-pagination" data-toggle="table"  data-url="/cdm/data3.json" data-query-params="queryParams" data-height="300" data-pagination="true" data-search="true">
+                                  <thead>
+                                      <tr>
+                                          <th data-field="appName" data-align="right" data-sortable="true">App name</th>
+                                          <th data-field="packageName" data-align="center" data-sortable="true">Package name</th>
+                                      </tr>
+                                  </thead>
+                              </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<%
-        include("/includes/footer.jag");
-        include("/includes/layout-footer.jag");
+        <%
+          include("/includes/footer.jag");
+          include("/includes/layout-footer.jag");
         %>
     </body>
 </html>

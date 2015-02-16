@@ -16,23 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-var verb = request.getMethod();
 var uri = request.getRequestURI();
-var log = new Log();
+var log = new Log("operation-api");
 var deviceModule = require("/modules/device.js");
-
-if (uri != null) {
-    var callPath=uri.replace("/cdm/api/","");
-    var uriMatcher = new URIMatcher(callPath);
-    if (uriMatcher.match("operation/{type}/{deviceid}/{operation}")) {
-
-        var deviceId = uriMatcher.elements().deviceid;
-        var type = uriMatcher.elements().type;
-        var operation = uriMatcher.elements().operation;
-        var result = deviceModule.performOperation(deviceId, operation,[],type);
-    }
-} else{
-    log.error("URI is null");
+var uriMatcher = new URIMatcher(uri);
+if (uriMatcher.match("{context}/api/operation/{type}/{deviceId}/{operation}")) {
+    var elements = uriMatcher.elements();
+    var deviceId = elements.deviceId;
+    var type = elements.type;
+    var operation = elements.operation;
+    var result = deviceModule.performOperation(deviceId, operation,[],type);
 }
 %>

@@ -29,7 +29,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/cdm/client/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.5.0/bootstrap-table.min.css" rel="stylesheet"/>
+    <link href="/cdm/client/css/bootstrap-table.min.css" rel="stylesheet"/>
 
     <!-- Custom styles for this template -->
     <link href="/cdm/client/css/dashboard.css" rel="stylesheet">

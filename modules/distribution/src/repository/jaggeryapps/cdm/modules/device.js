@@ -24,56 +24,59 @@ var Operation = Packages.org.wso2.carbon.device.mgt.common.Operation;
 var Type =  Packages.org.wso2.carbon.device.mgt.common.Operation.Type;
 var Properties = Packages.java.util.Properties;
 var ArrayList = Packages.java.util.ArrayList;
-var log = new Log();
+var log = new Log("device-module");
 var deviceManagementService = utility.getDeviceManagementService();
-
-var unspecifiedFilter = function(prop){
+/*
+    Replace the null word with 'unspecified'. This is used to construct the view model object
+ */
+var replaceNull = function(prop){
     if(prop==null){
         return constants.UNSPECIFIED;
     }else{
         return prop;
     }
-}
+};
 
 var listDevices = function () {
     var devices = deviceManagementService.getAllDevices(constants.PLATFORM_ANDROID);
     var deviceList = [];
-    for (i = 0; i < devices.size(); i++) {
+    for (var i = 0; i < devices.size(); i++) {
         var device = devices.get(i);
         var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
         var deviceObject = {};
-        deviceObject[constants.DEVICE_IDENTIFIER] = unspecifiedFilter(device.getDeviceIdentifier());
-        deviceObject[constants.DEVICE_NAME] = unspecifiedFilter(device.getName());
-        deviceObject[constants.DEVICE_OWNERSHIP] =  unspecifiedFilter(device.getOwnership());
-        deviceObject[constants.DEVICE_OWNER] = unspecifiedFilter(device.getOwner());
-        deviceObject[constants.DEVICE_TYPE] = unspecifiedFilter(device.getType());
-        deviceObject[constants.DEVICE_VENDOR] = unspecifiedFilter(propertiesList.get(constants.DEVICE_VENDOR));
-        deviceObject[constants.DEVICE_MODEL] = unspecifiedFilter(propertiesList.get(constants.DEVICE_MODEL));
-        deviceObject[constants.DEVICE_OS_VERSION] = unspecifiedFilter(propertiesList.get(constants.DEVICE_OS_VERSION));
+        deviceObject[constants.DEVICE_IDENTIFIER] = replaceNull(device.getDeviceIdentifier());
+        deviceObject[constants.DEVICE_NAME] = replaceNull(device.getName());
+        deviceObject[constants.DEVICE_OWNERSHIP] =  replaceNull(device.getOwnership());
+        deviceObject[constants.DEVICE_OWNER] = replaceNull(device.getOwner());
+        deviceObject[constants.DEVICE_TYPE] = replaceNull(device.getType());
+        deviceObject[constants.DEVICE_VENDOR] = replaceNull(propertiesList.get(constants.DEVICE_VENDOR));
+        deviceObject[constants.DEVICE_MODEL] = replaceNull(propertiesList.get(constants.DEVICE_MODEL));
+        deviceObject[constants.DEVICE_OS_VERSION] = replaceNull(propertiesList.get(constants.DEVICE_OS_VERSION));
         deviceList.push(deviceObject);
     }
     return deviceList;
-}
+};
 var getDevice = function(type, deviceId){
     var deviceIdentifier =  new DeviceIdentifier();
     deviceIdentifier.setType(type);
     deviceIdentifier.setId(deviceId);
-    var device = deviceManagementService.getDevice(deviceIdentifier);
-    return device;
-}
-
-var getOperations = function(type){
-    var features = deviceManagementService.getOperationManager(constants.PLATFORM_ANDROID).getFeaturesForDeviceType(type);
+    return deviceManagementService.getDevice(deviceIdentifier);
+};
+/*
+    Get the supported operations by the device type
+ */
+var getOperations = function(deviceType){
+    var features = deviceManagementService.getOperationManager(constants.PLATFORM_ANDROID).getFeaturesForDeviceType(deviceType);
     var featuresConverted = [];
-    for (i = 0; i < features.size(); i++) {
+    for (var i = 0; i < features.size(); i++) {
         var feature = features.get(i);
         var featureObject = {};
         featureObject[constants.FEATURE_NAME] = feature.getName();
-        featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription()
+        featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription();
         featuresConverted.push(featureObject);
     }
     return featuresConverted;
-}
+};
 var performOperation = function(deviceId, featureName, properties, type){
     var operation = new Operation();
     operation.setCode(featureName);
@@ -90,7 +93,7 @@ var performOperation = function(deviceId, featureName, properties, type){
     var deviceList = new ArrayList();
     deviceList.add(deviceIdentifier);
     deviceManagementService.getOperationManager(constants.PLATFORM_ANDROID).addOperation(operation, deviceList);
-}
+};
 
 var viewDevice = function(type, deviceId){
     var device = this.getDevice(type, deviceId);
@@ -102,17 +105,17 @@ var viewDevice = function(type, deviceId){
         var entry = iterator.next();
         var key = entry.getKey();
         var value = entry.getValue();
-        properties[key]= unspecifiedFilter(value);
+        properties[key]= replaceNull(value);
     }
     var deviceObject = {};
-    deviceObject[constants.DEVICE_IDENTIFIER] = unspecifiedFilter(device.getDeviceIdentifier());
-    deviceObject[constants.DEVICE_NAME] = unspecifiedFilter(device.getName());
-    deviceObject[constants.DEVICE_OWNERSHIP] =  unspecifiedFilter(device.getOwnership());
-    deviceObject[constants.DEVICE_OWNER] = unspecifiedFilter(device.getOwner());
-    deviceObject[constants.DEVICE_TYPE] = unspecifiedFilter(device.getType());
-    deviceObject[constants.DEVICE_VENDOR] = unspecifiedFilter(propertiesList.get(constants.DEVICE_VENDOR));
-    deviceObject[constants.DEVICE_MODEL] = unspecifiedFilter(propertiesList.get(constants.DEVICE_MODEL));
-    deviceObject[constants.DEVICE_OS_VERSION] = unspecifiedFilter(propertiesList.get(constants.DEVICE_OS_VERSION));
+    deviceObject[constants.DEVICE_IDENTIFIER] = replaceNull(device.getDeviceIdentifier());
+    deviceObject[constants.DEVICE_NAME] = replaceNull(device.getName());
+    deviceObject[constants.DEVICE_OWNERSHIP] =  replaceNull(device.getOwnership());
+    deviceObject[constants.DEVICE_OWNER] = replaceNull(device.getOwner());
+    deviceObject[constants.DEVICE_TYPE] = replaceNull(device.getType());
+    deviceObject[constants.DEVICE_VENDOR] = replaceNull(propertiesList.get(constants.DEVICE_VENDOR));
+    deviceObject[constants.DEVICE_MODEL] = replaceNull(propertiesList.get(constants.DEVICE_MODEL));
+    deviceObject[constants.DEVICE_OS_VERSION] = replaceNull(propertiesList.get(constants.DEVICE_OS_VERSION));
     deviceObject[constants.DEVICE_PROPERTIES] = properties
     return deviceObject;
-}
+};

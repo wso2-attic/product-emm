@@ -20,11 +20,11 @@
 <!-- Bootstrap core JavaScript
 === === === === === === === === === === === === === === === === == -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" > </script>
-    <script src="/cdm/client/javascript/bootstrap.min.js"></script>
-    <script src="/cdm/client/javascript/docs.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="/cdm/client/javascript/ie10-viewport-bug-workaround.js"></script>
-    <script src="/cdm/client/javascript/ie10-viewport-bug-workaround.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.5.0/bootstrap-table.min.js"> </script>
-    <script src="/cdm/client/javascript/main.js"></script>
+<script src = "/cdm/client/javascript/jquery.min.js" > </script>
+<script src="/cdm/client/javascript/bootstrap.min.js"></script>
+<script src="/cdm/client/javascript/docs.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="/cdm/client/javascript/ie10-viewport-bug-workaround.js"></script>
+<script src="/cdm/client/javascript/ie10-viewport-bug-workaround.js"></script>
+<script src="/cdm/client/javascript/bootstrap-table.min.js"> </script>
+<script src="/cdm/client/javascript/main.js"></script>
