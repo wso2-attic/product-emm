@@ -153,7 +153,7 @@ public class Device {
             log.error(msg, e);
             throw new AndroidAgentException(msg, e);
         }
-        return license.getText();
+        return license.getLicenseText();
     }
 
 }

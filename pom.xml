@@ -667,7 +667,7 @@
         <carbon.governance.version>4.3.0</carbon.governance.version>
 
         <!-- Device Management -->
-        <carbon.device.mgt.version>0.9.1-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>0.9.0</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[0.8.0, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Mobile Device Management -->
