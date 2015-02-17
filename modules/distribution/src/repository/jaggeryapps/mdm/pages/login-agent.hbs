@@ -1,0 +1,41 @@
+{{layout "enrollment"}}
+{{#zone "body"}}
+    <div class="row">
+        <h1>Please sign in</h1>
+        <div class="col-lg-12 text-center">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                               BYOD (This device is my own device)
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                COPE (This device is a corporate device)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">Sign in</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{{/zone}}
