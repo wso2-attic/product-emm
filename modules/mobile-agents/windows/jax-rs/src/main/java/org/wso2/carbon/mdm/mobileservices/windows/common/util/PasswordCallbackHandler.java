@@ -34,8 +34,8 @@ public class PasswordCallbackHandler implements CallbackHandler {
 			throws IOException, UnsupportedCallbackException {
 		WSPasswordCallback pc = (WSPasswordCallback) callbacks[0];
 
-		if ("asok@wso2.com".equals(pc.getIdentifier())) {
-			pc.setPassword("admin");
+		if ("test@wso2.com".equals(pc.getIdentifier())) {
+			pc.setPassword("testpassword");
 		}
 	}
 }
