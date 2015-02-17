@@ -90,4 +90,17 @@ public class Constants {
 	public static final String OID_DEFAULT_NAME = "szOID_OIWSEC_sha1RSASign";
 	public static final int OID_GROUP = 1;
 	public static final int OID_REFERENCE_ID = 0;
+
+	/*SynclML service related constants*/
+	public static final String SYNCML_RESPONSE = "reply.xml";
+	public static final String SYNC_ML = "SyncML";
+	public static final String SYNCML_MSG_ID = "MsgID";
+	public static final String SYNCML_TARGET = "Target";
+	public static final String SYNCML_SOURCE = "Source";
+	public static final String SYNCML_CRED = "Cred";
+	public static final String SYNCML_RESULTS = "Results";
+	public static final String SYNCML_SOURCE_URI = "SOURCE_URI";
+	public static final String SYNCML_TARGET_URI = "TARGET_URI";
+	public static final String SYNCML_MESSAGE_ONE = "1";
+	public static final String SYNCML_MESSAGE_TWO = "2";
 }

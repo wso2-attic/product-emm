@@ -35,23 +35,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 
 /**
  * Implementing class of SyncmlImpl interface.
  */
 public class SyncmlServiceImpl implements SyncmlService {
 
-	private static final String SYNCML_RESPONSE = "reply.xml";
-	private static final String SYNC_ML = "SyncML";
-	private static final String MSG_ID = "MsgID";
-	private static final String TARGET = "Target";
-	private static final String SOURCE = "Source";
-	private static final String CRED = "Cred";
-	private static final String RESULTS = "Results";
-	private static final String SOURCE_URI = "SOURCE_URI";
-	private static final String TARGET_URI = "TARGET_URI";
-	private static final String FIRST_MESSAGE = "1";
-	private static final String SECOND_MESSAGE = "2";
+	public static final String MESSEGE_ID_ONE_TEMP = "1";
+	public static final String MESSAGE_ID_TWO_TEMP = "2";
 
 	private Node HeaderNode;
 	private Node BodyNode;
@@ -68,11 +60,11 @@ public class SyncmlServiceImpl implements SyncmlService {
 	@Override public Response getInitialResponse(Document request)
 			throws DeviceManagementException, DeviceManagementServiceException {
 
-		File file = new File(getClass().getClassLoader().getResource(SYNCML_RESPONSE).getFile());
+		File file = new File(getClass().getClassLoader().getResource(Constants.SYNCML_RESPONSE).getFile());
 		String replypath = file.getPath();
 
-		HeaderNode = request.getElementsByTagName(SYNC_ML).item(0).getFirstChild();
-		BodyNode = request.getElementsByTagName(SYNC_ML).item(0).getChildNodes().item(1);
+		HeaderNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getFirstChild();
+		BodyNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getChildNodes().item(1);
 		nList_hdr = HeaderNode.getChildNodes();
 		nList_body = BodyNode.getChildNodes();
 
@@ -99,19 +91,19 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 				String NodeName = nNode.getNodeName();
 
-				if (NodeName.equals(MSG_ID)) {
+				if (Constants.SYNCML_MSG_ID.equals(NodeName)) {
 					MsgID = nNode.getTextContent().trim();
 					if (logger.isDebugEnabled()) {
 						logger.debug("Msg ID: " + MsgID);
 					}
 				}
-				if (MsgID.equals(FIRST_MESSAGE)) {
-					if (NodeName.equals(TARGET)) {
+				if (Constants.SYNCML_MESSAGE_ONE.equals(MsgID)) {
+					if (Constants.SYNCML_TARGET.equals(NodeName)) {
 						TargetURI = nNode.getFirstChild().getTextContent().trim();
-					} else if (NodeName.equals(SOURCE)) {
+					} else if (Constants.SYNCML_SOURCE.equals(NodeName)) {
 						SourceURI = nNode.getFirstChild().getTextContent().trim();
 						SourceLocName = nNode.getChildNodes().item(1).getTextContent().trim();
-					} else if (NodeName.equals(CRED)) {
+					} else if (Constants.SYNCML_CRED.equals(NodeName)) {
 						CredData = nNode.getChildNodes().item(1).getTextContent().trim();
 					}
 				}
@@ -125,8 +117,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 				String NodeName = nNode.getNodeName();
 
-				if (MsgID.equals(SECOND_MESSAGE)) {
-					if (NodeName.equals(RESULTS)) {
+				if (Constants.SYNCML_MESSAGE_TWO.equals(MsgID)) {
+					if (Constants.SYNCML_RESULTS.equals(NodeName)) {
 
 						OSversion = nNode.getChildNodes().item(3).getChildNodes().item(1)
 						                 .getTextContent();
@@ -171,10 +163,10 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 		try {
 			//Change this when proceeding with operations..
-			if (MsgID.equals("1")||MsgID.equals("2")) {
+			if (MESSEGE_ID_ONE_TEMP.equals(MsgID)|| MESSAGE_ID_TWO_TEMP.equals(MsgID)) {
 				response = new String(Files.readAllBytes(Paths.get(replypath)));
-				response = response.replaceAll(SOURCE_URI, TargetURI);
-				response = response.replaceAll(TARGET_URI, SourceURI);
+				response = response.replaceAll(Constants.SYNCML_SOURCE_URI, TargetURI);
+				response = response.replaceAll(Constants.SYNCML_TARGET_URI, SourceURI);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -299,10 +299,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throw new PropertyFileReadingException("XML property file reading exception",e);
 		}
 
-		if(entity.equals(Constants.EMMJKS_ENTRY)){
+		if(Constants.EMMJKS_ENTRY.equals(entity)){
 			entityPassword=document.getElementsByTagName(Constants.EMMPASSWORD).item(0).getTextContent();
 		}
-		else if(entity.equals(Constants.EMMPRIVATEKEY_ENTRY)){
+		else if(Constants.EMMPRIVATEKEY_ENTRY.equals(entity)){
 			entityPassword=document.getElementsByTagName(Constants.EMMPRIVATEKEYPASSWORD).item(0).getTextContent();
 		}
 
