@@ -214,13 +214,13 @@
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-            <version>0.9.1-SNAPSHOT</version>
+            <!--<version>0.9.1-SNAPSHOT</version>-->
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
-            <version>0.9.1-SNAPSHOT</version>
+            <!--<version>0.9.1-SNAPSHOT</version>-->
             <scope>provided</scope>
         </dependency>
 
