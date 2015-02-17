@@ -207,14 +207,13 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	}
 
 	/**
-	 *
+	 * Method for setting privateKey and rootCACertificate variables.
 	 * @throws KeyStoreGenerationException
 	 * @throws java.security.KeyStoreException
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnrecoverableKeyException
 	 * @throws CertificateException
 	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileReadingException
-	 * Method for setting privateKey and rootCACertificate variables.
 	 */
 	public void certificateSign()
 			throws KeyStoreGenerationException, java.security.KeyStoreException,
@@ -271,11 +270,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	}
 
 	/**
-	 *
+	 * Method for reading the property XML file and returning the required passwords.
 	 * @param entity - Entity which needs to get the password from property xml file
 	 * @return - Entity password
 	 * @throws PropertyFileReadingException
-	 * Method for reading the property XML file and returning the required passwords.
 	 */
 	private String getCredentials(String entity) throws PropertyFileReadingException {
 
@@ -292,7 +290,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throw new PropertyFileReadingException("XML parsing configuration exception");
 		}
 
-		Document document = null;
+		Document document;
 		try {
 			document = docBuilder.parse(propertyFile);
 		} catch (SAXException e) {

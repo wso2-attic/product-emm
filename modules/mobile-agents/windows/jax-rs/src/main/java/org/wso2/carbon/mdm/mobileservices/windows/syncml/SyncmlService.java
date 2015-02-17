@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response;
  * Interface for Syncml message flow.
  */
 @Path("/example")
-public interface Syncml {
+public interface SyncmlService {
 
 	@Path("/sync")
 	@POST

@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.syncml.impl;
 
-import org.wso2.carbon.mdm.mobileservices.windows.syncml.Syncml;
+import org.wso2.carbon.mdm.mobileservices.windows.syncml.SyncmlService;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -39,7 +39,7 @@ import java.nio.file.Paths;
 /**
  * Implementing class of SyncmlImpl interface.
  */
-public class SyncmlImpl implements Syncml {
+public class SyncmlServiceImpl implements SyncmlService {
 
 	private static final String SYNCML_RESPONSE = "reply.xml";
 	private static final String SYNC_ML = "SyncML";
@@ -57,14 +57,13 @@ public class SyncmlImpl implements Syncml {
 	private Node BodyNode;
 	private NodeList nList_hdr;
 	private NodeList nList_body;
-	private Logger logger = Logger.getLogger(SyncmlImpl.class);
+	private Logger logger = Logger.getLogger(SyncmlServiceImpl.class);
 
 	/**
-	 *
-	 * @param request - Syncml requesy comes through the device
-	 * @return - Syncml response generated for the request
 	 * This method resolves the Syncml messages received through device and send the
 	 * response accordingly.
+	 * @param request - Syncml requesy comes through the device
+	 * @return - Syncml response generated for the request
 	 */
 	@Override public Response getInitialResponse(Document request)
 			throws DeviceManagementException, DeviceManagementServiceException {

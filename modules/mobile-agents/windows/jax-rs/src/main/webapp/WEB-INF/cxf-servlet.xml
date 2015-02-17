@@ -92,7 +92,7 @@
             </map>
         </property>
     </bean>
-    <bean id="Syncml_initial_bean" class="org.wso2.carbon.mdm.mobileservices.windows.syncml.impl.SyncmlImpl"/>
+    <bean id="Syncml_initial_bean" class="org.wso2.carbon.mdm.mobileservices.windows.syncml.impl.SyncmlServiceImpl"/>
     <bean id="passwordCallback" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.PasswordCallbackHandler"/>
 
 </beans>

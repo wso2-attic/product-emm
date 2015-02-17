@@ -38,18 +38,15 @@ import java.util.*;
  */
 public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
-
-
 	@Override
 	public Set<QName> getHeaders() {
 		return null;
 	}
 
 	/**
-	 *
-	 * @param context
 	 * This method adds Timestamp for SOAP header, and adds Content-length for HTTP header for
 	 * avoiding HTTP chunking.
+	 * @param context
 	 */
 	@Override
 	public boolean handleMessage(SOAPMessageContext context){

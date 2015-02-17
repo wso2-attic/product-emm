@@ -32,8 +32,9 @@ public class DeviceMgtServiceProvider {
 	private static Logger logger = Logger.getLogger(DeviceMgtServiceProvider.class);
 
 	/**
+	 * This method returns Device Management Object for certain tasks such as Device enrollment etc.
 	 * @return DeviceManagementServiceObject
-	 * @throws DeviceManagementServiceException This method returns Device Management Object for certain tasks such as Device enrollment etc.
+	 * @throws DeviceManagementServiceException
 	 */
 	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException {
 

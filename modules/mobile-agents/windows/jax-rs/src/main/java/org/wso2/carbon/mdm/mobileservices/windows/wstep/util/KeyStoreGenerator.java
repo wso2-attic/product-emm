@@ -36,12 +36,11 @@ public class KeyStoreGenerator {
 	private static final Log logger = LogFactory.getLog(KeyStoreGenerator.class);
 
 	/**
-	 *
+	 * This method loads the MDM keystore.
 	 * @param keyStore - MDM Keystore
 	 * @param storePass - Keystore Password
 	 * @param resultFile - Keystore path
 	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException
-	 * This method loads the MDM keystore.
 	 */
 	public static void loadToStore(KeyStore keyStore, char[] storePass, String resultFile)
 			throws KeyStoreGenerationException {

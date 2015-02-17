@@ -88,5 +88,6 @@ public class Constants {
 	public static final int OID_REFERENCE = 0;
 	public static final String OID = "1.3.14.3.2.29";
 	public static final String OID_DEFAULT_NAME = "szOID_OIWSEC_sha1RSASign";
-
+	public static final int OID_GROUP = 1;
+	public static final int OID_REFERENCE_ID = 0;
 }

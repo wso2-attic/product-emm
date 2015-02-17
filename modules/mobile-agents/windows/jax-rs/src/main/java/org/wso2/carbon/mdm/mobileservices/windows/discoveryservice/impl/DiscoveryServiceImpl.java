@@ -41,11 +41,11 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	private Logger logger = Logger.getLogger(DiscoveryServiceImpl.class);
 
 	/**
-	 * @param disRequest - Request bean comes via mobile phone
-	 * @return discoveryResponse - Response bean
 	 * This method returns the OnPremise AuthPolicy and next two endpoint the mobile device should call if
 	 * this response to received successfully at the device end. This method is called by device immediately after the
 	 * first GET method calling for the same endpoint.
+	 * @param disRequest - Request bean comes via mobile phone
+	 * @return discoveryResponse - Response bean
 	 */
 	@Override
 	public DiscoveryResponse Discover(DiscoveryRequest disRequest) {
@@ -66,9 +66,9 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	}
 
 	/**
-	 * @return HTTP 200OK message
 	 * This is the first method called through device. The device checks the availability of the
 	 * Service end point by calling this method.
+	 * @return HTTP 200OK message
 	 */
 	@Override
 	public Response DiscoverGet() {

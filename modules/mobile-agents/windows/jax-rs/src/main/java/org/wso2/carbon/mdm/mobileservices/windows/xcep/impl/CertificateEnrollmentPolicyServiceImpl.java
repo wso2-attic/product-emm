@@ -37,7 +37,6 @@ import javax.xml.ws.soap.SOAPBinding;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnrollmentPolicyService {
 
-
 	private static Logger logger = Logger.getLogger(CertificateEnrollmentPolicyServiceImpl.class);
 
 	/**
@@ -84,8 +83,8 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 
 		OID oid = new OID();
 		oid.setValue(Constants.OID);
-		oid.setGroup(1);
-		oid.setOIDReferenceID(0);
+		oid.setGroup(Constants.OID_GROUP);
+		oid.setOIDReferenceID(Constants.OID_REFERENCE_ID);
 		oid.setDefaultName(Constants.OID_DEFAULT_NAME);
 
 		oidc.getOID().add(oid);
