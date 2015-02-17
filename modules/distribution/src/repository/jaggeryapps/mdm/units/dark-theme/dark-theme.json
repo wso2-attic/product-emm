@@ -1,0 +1,5 @@
+{
+  "extends": "theme",
+//  "predicate": "config.theme == 'dark'"
+  "predicate": "false"
+}

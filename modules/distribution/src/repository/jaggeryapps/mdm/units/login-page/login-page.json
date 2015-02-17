@@ -1,0 +1,6 @@
+{
+  "predicate": "urlMatch('/login')",
+  "dependencies": [
+    "login-input"
+  ]
+}
