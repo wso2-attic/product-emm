@@ -1,0 +1,97 @@
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ *  WSO2 Inc. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied. See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+package org.wso2.carbon.mdm.mobileservices.windows.wstep.util;
+
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.*;
+import java.security.cert.CertificateException;
+
+/**
+ * Class for MDM Keystore operations.
+ */
+public class KeyStoreGenerator {
+
+	private static final Log LOG = LogFactory.getLog(KeyStoreGenerator.class);
+
+	/**
+	 *
+	 * @param keyStore - MDM Keystore
+	 * @param storePass - Keystore Password
+	 * @param resultFile - Keystore path
+	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException
+	 * This method loads the MDM keystore.
+	 */
+	public static void loadToStore(KeyStore keyStore, char[] storePass, String resultFile)
+			throws KeyStoreGenerationException {
+		FileInputStream fileInputStream = null;
+
+		try {
+			if (resultFile != null) {
+				fileInputStream=new FileInputStream(resultFile);
+				keyStore.load(fileInputStream, storePass);
+			}
+		} catch (NoSuchAlgorithmException e) {
+			String message = "cryptographic algorithm is requested but" +
+			                 " it is not available in the environment.";
+			LOG.error(message, e);
+			throw new KeyStoreGenerationException(message);
+		} catch (CertificateException e) {
+			String message = "Error working with certificate related to, " + resultFile;
+			LOG.error(message, e);
+			throw new KeyStoreGenerationException(message);
+		} catch (IOException e) {
+			String message = "File error while working with file, " + resultFile;
+			LOG.error(message, e);
+			throw new KeyStoreGenerationException(message);
+		} finally {
+			try {
+				if (fileInputStream != null) {
+					fileInputStream.close();
+				}
+			} catch (IOException e) {
+				String message = "File error while closing the file, " + resultFile;
+				LOG.error(message, e);
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @return Keystore object
+	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException
+	 */
+	public static KeyStore getKeyStore() throws KeyStoreGenerationException {
+		try {
+			return KeyStore.getInstance(Constants.JKS);
+		} catch (java.security.KeyStoreException e) {
+			String message = "KeyStore error while creating new JKS.";
+			LOG.error(message, e);
+			throw new KeyStoreGenerationException(message);
+		}
+
+	}
+
+
+}

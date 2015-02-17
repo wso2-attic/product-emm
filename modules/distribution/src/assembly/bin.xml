@@ -314,6 +314,12 @@
             <fileMode>755</fileMode>
         </file>
         <file>
+            <source>../mobile-agents/windows/jax-rs/target/mdm-windows-api.war</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
             <source>../rest-api/target/wso2mdm-api.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>

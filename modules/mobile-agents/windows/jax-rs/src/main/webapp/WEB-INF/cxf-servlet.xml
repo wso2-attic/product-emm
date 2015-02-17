@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~  WSO2 Inc. licenses this file to you under the Apache License,
   ~  Version 2.0 (the "License"); you may not use this file except
@@ -17,42 +16,58 @@
   ~  specific language governing permissions and limitations
   ~  under the License.
   -->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-         http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+         http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+         http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-    <jaxws:endpoint
-            id="DiscoveryService"
-            implementor="cdm.api.windows.DiscoveryService.impl.DiscoveryServiceGetImpl"
-            address="/test/send"/>
 
     <jaxrs:server id="DiscoveryService_rest" address="/test/send2">
         <jaxrs:serviceBeans>
             <ref bean="DiscoveryService_rest_bean"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
-    <bean id="DiscoveryService_rest_bean" class="cdm.api.windows.DiscoveryService.impl.DiscoveryServiceGetImpl"/>
-
-
-
-
-
-
-
+    <jaxws:endpoint
+            id="DiscoveryService"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"
+            address="/test/send"/>
     <jaxws:endpoint
             id="EnrollmentPolicyService"
-            implementor="cdm.api.windows.xcep.impl.xcepimpl"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.xcep.impl.CertificateEnrollmentPolicyServiceImpl"
             address="/test/xcep">
         <jaxws:inInterceptors>
             <ref bean="wss4jInInterceptor1"/>
         </jaxws:inInterceptors>
     </jaxws:endpoint>
+    <jaxws:endpoint
+            id="CertificateEnrollmentService"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.wstep.impl.CertificateEnrollmentServiceImpl"
+            address="/cert">
+        <jaxws:inInterceptors>
+            <ref bean="wss4jInInterceptor2"/>
+        </jaxws:inInterceptors>
+        <jaxws:handlers>
+            <bean id="serviceOptionsHandler"
+                  class="org.wso2.carbon.mdm.mobileservices.windows.wstep.util.MessageHandler"/>
+        </jaxws:handlers>
+    </jaxws:endpoint>
+    <jaxrs:server id="Syncmlinitial" address="/initial">
+        <jaxrs:serviceBeans>
+            <ref bean="Syncml_initial_bean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+
+    <bean id="DiscoveryService_rest_bean"
+          class="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"/>
     <bean id="wss4jInInterceptor1" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
         <property name="properties">
             <map>
@@ -61,27 +76,10 @@
                 <entry key="isBSPCompliant" value="false"/>
                 <entry key="allowNamespaceQualifiedPasswordTypes"
                        value="true"/>
-                <entry key="passwordCallbackRef" value-ref="passwordCallback1"/>
+                <entry key="passwordCallbackRef" value-ref="passwordCallback"/>
             </map>
         </property>
     </bean>
-    <bean id="passwordCallback1" class="cdm.api.windows.xcep.util.ServerPasswordCallback"/>
-
-
-
-
-
-
-
-
-    <jaxws:endpoint
-            id="CertificateEnrollmentService"
-            implementor="cdm.api.windows.wstep.impl.CertificateEnrollmentServiceImpl"
-            address="/cert">
-        <jaxws:inInterceptors>
-            <ref bean="wss4jInInterceptor2"/>
-        </jaxws:inInterceptors>
-    </jaxws:endpoint>
     <bean id="wss4jInInterceptor2" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
         <property name="properties">
             <map>
@@ -90,12 +88,12 @@
                 <entry key="isBSPCompliant" value="false"/>
                 <entry key="allowNamespaceQualifiedPasswordTypes"
                        value="true"/>
-                <entry key="passwordCallbackRef" value-ref="passwordCallback2"/>
+                <entry key="passwordCallbackRef" value-ref="passwordCallback"/>
             </map>
         </property>
     </bean>
-    <bean id="passwordCallback2" class="cdm.api.windows.wstep.util.PasswordCallbackHandler"/>
-
+    <bean id="Syncml_initial_bean" class="org.wso2.carbon.mdm.mobileservices.windows.syncml.impl.SyncmlImpl"/>
+    <bean id="passwordCallback" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.PasswordCallbackHandler"/>
 
 </beans>
 
