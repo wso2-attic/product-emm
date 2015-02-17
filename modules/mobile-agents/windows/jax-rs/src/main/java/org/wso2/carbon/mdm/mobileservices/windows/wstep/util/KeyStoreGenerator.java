@@ -33,7 +33,7 @@ import java.security.cert.CertificateException;
  */
 public class KeyStoreGenerator {
 
-	private static final Log LOG = LogFactory.getLog(KeyStoreGenerator.class);
+	private static final Log logger = LogFactory.getLog(KeyStoreGenerator.class);
 
 	/**
 	 *
@@ -55,15 +55,15 @@ public class KeyStoreGenerator {
 		} catch (NoSuchAlgorithmException e) {
 			String message = "cryptographic algorithm is requested but" +
 			                 " it is not available in the environment.";
-			LOG.error(message, e);
+			logger.error(message, e);
 			throw new KeyStoreGenerationException(message);
 		} catch (CertificateException e) {
 			String message = "Error working with certificate related to, " + resultFile;
-			LOG.error(message, e);
+			logger.error(message, e);
 			throw new KeyStoreGenerationException(message);
 		} catch (IOException e) {
 			String message = "File error while working with file, " + resultFile;
-			LOG.error(message, e);
+			logger.error(message, e);
 			throw new KeyStoreGenerationException(message);
 		} finally {
 			try {
@@ -72,7 +72,7 @@ public class KeyStoreGenerator {
 				}
 			} catch (IOException e) {
 				String message = "File error while closing the file, " + resultFile;
-				LOG.error(message, e);
+				logger.error(message, e);
 			}
 		}
 	}
@@ -87,7 +87,7 @@ public class KeyStoreGenerator {
 			return KeyStore.getInstance(Constants.JKS);
 		} catch (java.security.KeyStoreException e) {
 			String message = "KeyStore error while creating new JKS.";
-			LOG.error(message, e);
+			logger.error(message, e);
 			throw new KeyStoreGenerationException(message);
 		}
 
