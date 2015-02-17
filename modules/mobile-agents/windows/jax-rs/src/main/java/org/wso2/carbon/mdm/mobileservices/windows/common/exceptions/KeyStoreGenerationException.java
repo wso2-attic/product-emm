@@ -18,14 +18,41 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 
-
 /**
  * Exception class for Keystore generation failures.
  */
 public class KeyStoreGenerationException extends Exception {
 
+	private String errorMessage;
+
 	public KeyStoreGenerationException(String message) {
 		super(message);
+		setErrorMessage(message);
 	}
 
+	public KeyStoreGenerationException(String message, Throwable cause) {
+		super(message, cause);
+		setErrorMessage(message);
+	}
+
+	public KeyStoreGenerationException(String message, Exception nestedEx) {
+		super(message, nestedEx);
+		setErrorMessage(message);
+	}
+
+	public KeyStoreGenerationException(Throwable cause) {
+		super(cause);
+	}
+
+	public KeyStoreGenerationException() {
+		super();
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 }

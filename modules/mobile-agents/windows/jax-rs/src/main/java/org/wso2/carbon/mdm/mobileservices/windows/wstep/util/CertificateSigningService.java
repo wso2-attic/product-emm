@@ -83,9 +83,9 @@ public class CertificateSigningService {
 			                                                     jcaRequest
 					                                                     .getPublicKey());
 		} catch (InvalidKeyException e) {
-			throw new CertificateGenerationException("CSR's public key is invalid");
+			throw new CertificateGenerationException("CSR's public key is invalid",e);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CertificateGenerationException("Certificate cannot be generated");
+			throw new CertificateGenerationException("Certificate cannot be generated",e);
 		}
 
 		if (certificateBuilder != null) {
@@ -98,7 +98,7 @@ public class CertificateSigningService {
 				certificateBuilder.addExtension(X509Extensions.BasicConstraints, true,
 				                                new BasicConstraints(false));
 			} catch (CertIOException e) {
-				throw new CertificateGenerationException("Cannot add extensions to signed certificate");
+				throw new CertificateGenerationException("Cannot add extensions to signed certificate",e);
 			}
 		}
 
@@ -107,7 +107,7 @@ public class CertificateSigningService {
 		try {
 			signer = new JcaContentSignerBuilder(Constants.ALGORITHM).setProvider(Constants.PROVIDER).build(privateKey);
 		} catch (OperatorCreationException e) {
-			throw new CertificateGenerationException("Content signer cannot be created");
+			throw new CertificateGenerationException("Content signer cannot be created",e);
 		}
 
 		X509Certificate theCert;
@@ -117,7 +117,7 @@ public class CertificateSigningService {
 					                                           certificateBuilder
 							                                           .build(signer));
 		} catch (CertificateException e) {
-         throw new CertificateGenerationException("Signed certificate cannot generated");
+         throw new CertificateGenerationException("Signed certificate cannot generated",e);
  		}
 
 

@@ -55,15 +55,15 @@ public class KeyStoreGenerator {
 			String message = "cryptographic algorithm is requested but" +
 			                 " it is not available in the environment.";
 			logger.error(message, e);
-			throw new KeyStoreGenerationException(message);
+			throw new KeyStoreGenerationException(message,e);
 		} catch (CertificateException e) {
 			String message = "Error working with certificate related to, " + resultFile;
 			logger.error(message, e);
-			throw new KeyStoreGenerationException(message);
+			throw new KeyStoreGenerationException(message,e);
 		} catch (IOException e) {
 			String message = "File error while working with file, " + resultFile;
 			logger.error(message, e);
-			throw new KeyStoreGenerationException(message);
+			throw new KeyStoreGenerationException(message,e);
 		} finally {
 			try {
 				if (fileInputStream != null) {
@@ -87,7 +87,7 @@ public class KeyStoreGenerator {
 		} catch (java.security.KeyStoreException e) {
 			String message = "KeyStore error while creating new JKS.";
 			logger.error(message, e);
-			throw new KeyStoreGenerationException(message);
+			throw new KeyStoreGenerationException(message,e);
 		}
 
 	}

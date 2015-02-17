@@ -227,7 +227,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		try {
 			securityJks = KeyStoreGenerator.getKeyStore();
 		} catch (KeyStoreGenerationException e) {
-			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store");
+			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store",e);
 		}
 
 		String pass = getCredentials(Constants.EMMJKS);
@@ -237,7 +237,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		try {
 			KeyStoreGenerator.loadToStore(securityJks, pass.toCharArray(), jksPath);
 		} catch (KeyStoreGenerationException e) {
-			throw new KeyStoreGenerationException("Cannot load the MDM key store");
+			throw new KeyStoreGenerationException("Cannot load the MDM key store",e);
 		}
 
 
@@ -287,16 +287,16 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			throw new PropertyFileReadingException("XML parsing configuration exception");
+			throw new PropertyFileReadingException("XML parsing configuration exception",e);
 		}
 
 		Document document;
 		try {
 			document = docBuilder.parse(propertyFile);
 		} catch (SAXException e) {
-			throw new PropertyFileReadingException("XML Parsing Exception");
+			throw new PropertyFileReadingException("XML Parsing Exception",e);
 		} catch (IOException e) {
-			throw new PropertyFileReadingException("XML property file reading exception");
+			throw new PropertyFileReadingException("XML property file reading exception",e);
 		}
 
 		if(entity.equals(Constants.EMMJKS_ENTRY)){

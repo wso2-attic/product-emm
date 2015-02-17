@@ -23,9 +23,41 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
  */
 public class CertificateGenerationException extends Exception {
 
+	private String errorMessage;
+
 	public CertificateGenerationException(String message)
 	{
 		super(message);
+		setErrorMessage(message);
 	}
 
+	public CertificateGenerationException(String message, Throwable cause)
+	{
+		super(message, cause);
+		setErrorMessage(message);
+	}
+
+	public CertificateGenerationException(String message, Exception nestedEx)
+	{
+		super(message, nestedEx);
+		setErrorMessage(message);
+	}
+
+	public CertificateGenerationException(Throwable cause)
+	{
+		super(cause);
+	}
+
+	public CertificateGenerationException()
+	{
+		super();
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 }

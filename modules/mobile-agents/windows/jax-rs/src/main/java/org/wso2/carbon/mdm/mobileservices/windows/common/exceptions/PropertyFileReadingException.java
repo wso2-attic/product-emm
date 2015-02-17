@@ -23,8 +23,36 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
  */
 public class PropertyFileReadingException extends Exception {
 
+	private String errorMessage;
+
 	public PropertyFileReadingException(String message) {
 		super(message);
+		setErrorMessage(message);
 	}
 
+	public PropertyFileReadingException(String message, Throwable cause) {
+		super(message, cause);
+		setErrorMessage(message);
+	}
+
+	public PropertyFileReadingException(String message, Exception nestedEx) {
+		super(message, nestedEx);
+		setErrorMessage(message);
+	}
+
+	public PropertyFileReadingException(Throwable cause) {
+		super(cause);
+	}
+
+	public PropertyFileReadingException() {
+		super();
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 }
