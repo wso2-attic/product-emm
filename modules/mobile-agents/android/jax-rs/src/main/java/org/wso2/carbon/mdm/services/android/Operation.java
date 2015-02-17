@@ -17,16 +17,16 @@
  * under the License.
  */
 
-package org.wso2.carbon.mdm.mobileservices.android;
+package org.wso2.carbon.mdm.services.android;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.carbon.mdm.mobileservices.android.common.AndroidAgentException;
-import org.wso2.carbon.mdm.mobileservices.android.util.AndroidAPIUtils;
-import org.wso2.carbon.mdm.mobileservices.android.util.Message;
+import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
+import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
+import org.wso2.carbon.mdm.services.android.util.Message;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -59,10 +59,10 @@ public class Operation {
 			                      .getPendingOperations(deviceIdentifier);
 			Response.status(HttpStatus.SC_OK);
 			return operations;
-		} catch (DeviceManagementServiceException deviceMgtServiceEx) {
+		} catch (DeviceManagementServiceException e) {
 			msg = "Device management service error";
-			log.error(msg, deviceMgtServiceEx);
-			throw new AndroidAgentException(msg, deviceMgtServiceEx);
+			log.error(msg, e);
+			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while fetching the operation manager for the device type.";
 			log.error(msg, e);
@@ -94,10 +94,10 @@ public class Operation {
 				responseMsg.setResponseMessage("Operation not found");
 			}
 			return responseMsg;
-		} catch (DeviceManagementServiceException deviceMgtServiceEx) {
+		} catch (DeviceManagementServiceException e) {
 			msg = "Device management service error";
-			log.error(msg, deviceMgtServiceEx);
-			throw new AndroidAgentException(msg, deviceMgtServiceEx);
+			log.error(msg, e);
+			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while fetching the operation manager for the device type.";
 			log.error(msg, e);

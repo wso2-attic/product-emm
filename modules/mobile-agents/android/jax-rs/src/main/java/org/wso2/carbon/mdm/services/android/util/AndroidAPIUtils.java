@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.mdm.mobileservices.android.util;
+package org.wso2.carbon.mdm.services.android.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,11 +27,11 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
- * AndroidAPIUtil class provides utility function used by Android REST-API classes.
+ * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
  */
 public class AndroidAPIUtils {
 
-    private static Log log = LogFactory.getLog(AndroidAPIUtils.class);
+	private static Log log = LogFactory.getLog(AndroidAPIUtils.class);
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
 		DeviceIdentifier identifier = new DeviceIdentifier();
@@ -40,43 +40,46 @@ public class AndroidAPIUtils {
 		return identifier;
 	}
 
+	public static DeviceManagementService getDeviceManagementService()
+			throws DeviceManagementServiceException {
 
-	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException{
-
-        //TODO: complete login change super tenent context
+		//TODO: complete login change super tenent context
 		DeviceManagementService dmService;
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
+		dmService =
+				(DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
 
-        if (dmService == null){
-	        String msg = "Device management service not initialized";
-	        log.error(msg);
-            throw new DeviceManagementServiceException(msg);
-        }
-        PrivilegedCarbonContext.endTenantFlow();
+		if (dmService == null) {
+			String msg = "Device management service not initialized";
+			log.error(msg);
+			throw new DeviceManagementServiceException(msg);
+		}
+		PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
 	}
 
-    public static LicenseManagementService getLicenseManagerService() throws DeviceManagementServiceException{
+	public static LicenseManagementService getLicenseManagerService()
+			throws DeviceManagementServiceException {
 
-        //TODO: complete login change super tenent context
-        LicenseManagementService licenseManagementService;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        licenseManagementService = (LicenseManagementService) ctx.getOSGiService(LicenseManagementService.class, null);
+		//TODO: complete login change super tenent context
+		LicenseManagementService licenseManagementService;
+		PrivilegedCarbonContext.startTenantFlow();
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+		licenseManagementService =
+				(LicenseManagementService) ctx.getOSGiService(LicenseManagementService.class, null);
 
-        if (licenseManagementService == null){
-            String msg = "License management service not initialized";
-            log.error(msg);
-            throw new DeviceManagementServiceException(msg);
-        }
-        PrivilegedCarbonContext.endTenantFlow();
-        return licenseManagementService;
-    }
+		if (licenseManagementService == null) {
+			String msg = "License management service not initialized";
+			log.error(msg);
+			throw new DeviceManagementServiceException(msg);
+		}
+		PrivilegedCarbonContext.endTenantFlow();
+		return licenseManagementService;
+	}
 
 }

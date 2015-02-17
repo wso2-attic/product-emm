@@ -15,12 +15,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.mdm.mobileservices.android.common;
+package org.wso2.carbon.mdm.services.android.common;
 
-public class AndroidAgentException extends Exception{
 
-    private static final long serialVersionUID = 7950151650447893900L;
+public class ErrorMessage {
+
     private String errorMessage;
+    private String errorCode;
 
     public String getErrorMessage() {
         return errorMessage;
@@ -30,29 +31,11 @@ public class AndroidAgentException extends Exception{
         this.errorMessage = errorMessage;
     }
 
-    public AndroidAgentException(String msg, Exception nestedEx) {
-        super(msg, nestedEx);
-        setErrorMessage(msg);
+    public String getErrorCode() {
+        return errorCode;
     }
 
-    public AndroidAgentException(String message, Throwable cause) {
-        super(message, cause);
-        setErrorMessage(message);
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
-
-    public AndroidAgentException(String msg) {
-        super(msg);
-        setErrorMessage(msg);
-    }
-
-    public AndroidAgentException() {
-        super();
-    }
-
-    public AndroidAgentException(Throwable cause) {
-        super(cause);
-    }
-
-
-
 }

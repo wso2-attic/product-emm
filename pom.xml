@@ -35,7 +35,7 @@
     </parent>
 
     <modules>
-        <module>modules/mobileservices</module>
+        <module>modules/mobile-agents</module>
         <module>modules/tools</module>
         <module>modules/rest-api</module>
         <module>modules/p2-profile-gen</module>
@@ -330,22 +330,22 @@
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
-                <version>${cdm.core.version}</version>
+                <version>${carbon.device.mgt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-                <version>${cdm.core.version}</version>
+                <version>${carbon.device.mgt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt</groupId>
                 <artifactId>org.wso2.carbon.policy.mgt.common</artifactId>
-                <version>${cdm.core.version}</version>
+                <version>${carbon.device.mgt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt</groupId>
                 <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
-                <version>${cdm.core.version}</version>
+                <version>${carbon.device.mgt.version}</version>
             </dependency>
 
             <!--MDM dependencies-->
@@ -611,10 +611,6 @@
         <carbon.kernel.version>4.3.0</carbon.kernel.version>
         <carbon.kernel.version.range>[4.3.0, 4.4.0)</carbon.kernel.version.range>
 
-        <!--CDM versions-->
-        <cdm.core.version>0.9.0</cdm.core.version>
-        <cdm.core.version.range>[0.8.0, 2.0.0)</cdm.core.version.range>
-
         <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
 
         <!--Maven build number plugin-->
@@ -672,6 +668,7 @@
 
         <!-- Device Management -->
         <carbon.device.mgt.version>0.9.0</carbon.device.mgt.version>
+        <carbon.device.mgt.version.range>[0.8.0, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Mobile Device Management -->
         <carbon.mobile.device.mgt.version>1.9.0</carbon.mobile.device.mgt.version>
