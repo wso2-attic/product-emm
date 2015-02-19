@@ -44,6 +44,7 @@ public class KeyStoreGenerator {
 	 */
 	public static void loadToStore(KeyStore keyStore, char[] storePass, String resultFile)
 			throws KeyStoreGenerationException {
+
 		FileInputStream fileInputStream = null;
 
 		try {
@@ -52,8 +53,7 @@ public class KeyStoreGenerator {
 				keyStore.load(fileInputStream, storePass);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			String message = "cryptographic algorithm is requested but" +
-			                 " it is not available in the environment.";
+			String message = "Requested cryptographic algorithm is not available in the environment.";
 			logger.error(message, e);
 			throw new KeyStoreGenerationException(message,e);
 		} catch (CertificateException e) {

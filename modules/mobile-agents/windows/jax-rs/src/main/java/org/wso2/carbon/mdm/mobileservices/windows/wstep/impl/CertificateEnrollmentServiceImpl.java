@@ -75,11 +75,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	PrivateKey privateKey;
 	X509Certificate rootCACertificate;
 
-	JcaPKCS10CertificationRequest csrReq;
+	JcaPKCS10CertificationRequest CSRRequest;
 
 	PKCS10CertificationRequest certificationRequest;
 
-	String wapProvisioningXmlFile;
+	String wapProvisioningFilePath;
 	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 
 	/**
@@ -104,27 +104,23 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			logger.debug("Received CSR from Device:" + binarySecurityToken);
 		}
 
-		File file =
-				new File(getClass().getClassLoader().getResource(Constants.WAP_PROVISIONING_XML)
-				                   .getFile());
-		wapProvisioningXmlFile = file.getPath();
+		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(Constants.WAP_PROVISIONING_XML).getFile());
+		wapProvisioningFilePath = wapProvisioningFile.getPath();
 
-		RequestSecurityTokenResponse rs = new RequestSecurityTokenResponse();
-		rs.setTokenType(Constants.TOKEN_TYPE);
+		RequestSecurityTokenResponse requestSecurityTokenResponse = new RequestSecurityTokenResponse();
+		requestSecurityTokenResponse.setTokenType(Constants.TOKEN_TYPE);
 
-		byte[] derByteArray =
-				javax.xml.bind.DatatypeConverter.parseBase64Binary(binarySecurityToken);
+		byte[] DERByteArray = javax.xml.bind.DatatypeConverter.parseBase64Binary(binarySecurityToken);
 
 		try {
-			certificationRequest = new PKCS10CertificationRequest(derByteArray);
+			certificationRequest = new PKCS10CertificationRequest(DERByteArray);
 		} catch (IOException e) {
 			throw new CertificateGenerationException("CSR cannot be recovered", e);
 		}
 
-		csrReq = new JcaPKCS10CertificationRequest(certificationRequest);
+		CSRRequest = new JcaPKCS10CertificationRequest(certificationRequest);
 
-		X509Certificate signedCert =
-				CertificateSigningService.signCSR(csrReq, privateKey, rootCACertificate);
+		X509Certificate signedCertificate = CertificateSigningService.signCSR(CSRRequest, privateKey, rootCACertificate);
 
 		BASE64Encoder base64Encoder = new BASE64Encoder();
 
@@ -135,30 +131,29 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throw new CertificateGenerationException("CA certificate cannot be encoded",e);
 		}
 
-		String signedCertEncoded;
+		String signedCertEncodedString;
 		try {
-			signedCertEncoded = base64Encoder.encode(signedCert.getEncoded());
+			signedCertEncodedString = base64Encoder.encode(signedCertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
 			throw new CertificateGenerationException("Singed certificate cannot be encoded",e);
 		}
 
 		DocumentBuilder builder;
-		String wapProvisioning;
+		String wapProvisioningString;
 		try {
 			builder = domFactory.newDocumentBuilder();
-			Document dDoc = builder.parse(wapProvisioningXmlFile);
+			Document dDoc = builder.parse(wapProvisioningFilePath);
 
 			NodeList wapParm = dDoc.getElementsByTagName(Constants.PARM);
 
-			wapParm.item(0).getParentNode().getAttributes().getNamedItem(Constants.TYPE)
-			       .setTextContent(
-					       String.valueOf(DigestUtils.shaHex(rootCACertificate.getEncoded()))
-					             .toUpperCase());
+			wapParm.item(0).getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
+					String.valueOf(DigestUtils.shaHex(rootCACertificate.getEncoded()))
+					      .toUpperCase());
 
 			NamedNodeMap rootCertAttributes = wapParm.item(0).getAttributes();
-			Node b64Encoded = rootCertAttributes.getNamedItem(Constants.VALUE);
+			Node rootCertNode = rootCertAttributes.getNamedItem(Constants.VALUE);
 			rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
-			b64Encoded.setTextContent(rootCertEncodedString);
+			rootCertNode.setTextContent(rootCertEncodedString);
 
 			if (logger.isDebugEnabled()) {
 				logger.debug("Root certificate:" + rootCertEncodedString);
@@ -166,38 +161,36 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 			wapParm.item(1).getParentNode().getAttributes().getNamedItem(Constants.TYPE)
 			       .setTextContent(
-					       String.valueOf(DigestUtils.shaHex(signedCert.getEncoded()))
+					       String.valueOf(DigestUtils.shaHex(signedCertificate.getEncoded()))
 					             .toUpperCase());
 
 			NamedNodeMap clientCertAttributes = wapParm.item(1).getAttributes();
-			Node b64CliendEncoded = clientCertAttributes.getNamedItem(Constants.VALUE);
-			signedCertEncoded = signedCertEncoded.replaceAll("\n", "");
-			b64CliendEncoded.setTextContent(signedCertEncoded);
+			Node clientEncodedNode = clientCertAttributes.getNamedItem(Constants.VALUE);
+			signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
+			clientEncodedNode.setTextContent(signedCertEncodedString);
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("Signed certificate:" + signedCertEncoded);
+				logger.debug("Signed certificate:" + signedCertEncodedString);
 			}
 
-			wapProvisioning = convertDocumentToString(dDoc);
+			wapProvisioningString = convertDocumentToString(dDoc);
 
 		    } catch (Exception e) {
 			  throw new PropertyFileException("Problem occurred with wap-provisioning.xml file", e);
 		    }
 
-		encodedWap = base64Encoder.encode(wapProvisioning.getBytes());
+		encodedWap = base64Encoder.encode(wapProvisioningString.getBytes());
 
-		RequestedSecurityToken rst = new RequestedSecurityToken();
-		BinarySecurityToken BinarySecToken = new BinarySecurityToken();
-		BinarySecToken.setValueType(
-				Constants.VALUE_TYPE);
-		BinarySecToken.setEncodingType(
-				Constants.ENCODING_TYPE);
-		BinarySecToken.setToken(encodedWap);
-		rst.setBinarySecurityToken(BinarySecToken);
+		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
+		BinarySecurityToken binarySecToken = new BinarySecurityToken();
+		binarySecToken.setValueType(Constants.VALUE_TYPE);
+		binarySecToken.setEncodingType(Constants.ENCODING_TYPE);
+		binarySecToken.setToken(encodedWap);
+		requestedSecurityToken.setBinarySecurityToken(binarySecToken);
 
-		rs.setRequestedSecurityToken(rst);
-		rs.setRequestID(0);
-		response.value = rs;
+		requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
+		requestSecurityTokenResponse.setRequestID(0);
+		response.value = requestSecurityTokenResponse;
 
 	}
 
@@ -213,10 +206,9 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();
 		transformer.transform(domSource, result);
-		String wapProvisioning = writer.toString();
+		String wapProvisioningString = writer.toString();
 
-		return wapProvisioning;
-
+		return wapProvisioningString;
 	}
 
 	/**
@@ -228,9 +220,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	public void certificateSign()
 			throws KeyStoreGenerationException,PropertyFileException,CertificateGenerationException {
 
-		File file = new File(
-				getClass().getClassLoader().getResource(Constants.WSO2EMM_JKS_FILE).getFile());
-		String jksPath = file.getPath();
+		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.WSO2EMM_JKS_FILE).getFile());
+		String JKSFilePath = JKSFile.getPath();
 
 		KeyStore securityJKS;
 		try {
@@ -243,14 +234,14 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		String keyPassword = getCredentials(Constants.EMMPRIVATEKEY);
 
 		try {
-			KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), jksPath);
+			KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), JKSFilePath);
 		} catch (KeyStoreGenerationException e) {
 			throw new KeyStoreGenerationException("Cannot load the MDM key store", e);
 		}
 
-		PrivateKey privateKeyCA;
+		PrivateKey CAPrivateKey;
 		try {
-			privateKeyCA = (PrivateKey) securityJKS.getKey(Constants.CACERT, keyPassword.toCharArray());
+			CAPrivateKey = (PrivateKey) securityJKS.getKey(Constants.CACERT, keyPassword.toCharArray());
 		} catch (java.security.KeyStoreException e) {
 			throw new CertificateGenerationException("Cannot generate private key due to Key store error",e);
 		} catch (NoSuchAlgorithmException e){
@@ -260,37 +251,37 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		}
 
 
-		privateKey = privateKeyCA;
+		privateKey = CAPrivateKey;
 
-		Certificate certificateCA;
+		Certificate CACertificate;
 		try {
-			certificateCA = securityJKS.getCertificate(Constants.CACERT);
+			CACertificate = securityJKS.getCertificate(Constants.CACERT);
 		} catch (KeyStoreException e) {
 			throw new KeyStoreGenerationException("Keystore cannot be accessed",e);
 		}
-		CertificateFactory cf;
+		CertificateFactory certificateFactory;
 
 		try {
-			cf = CertificateFactory.getInstance(Constants.X_509);
+			certificateFactory = CertificateFactory.getInstance(Constants.X_509);
 		} catch (CertificateException e) {
 			throw new CertificateGenerationException("Cannot initiate certificate factory",e);
 		}
 
 		ByteArrayInputStream byteArrayInputStream;
 		try {
-			byteArrayInputStream = new ByteArrayInputStream(certificateCA.getEncoded());
+			byteArrayInputStream = new ByteArrayInputStream(CACertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
 			throw new CertificateGenerationException("CA certificate cannot be encoded",e);
 		}
 
-		X509Certificate certificateCAX509;
+		X509Certificate X509CACertificate;
 		try {
-			certificateCAX509 = (X509Certificate) cf.generateCertificate(byteArrayInputStream);
+			X509CACertificate = (X509Certificate) certificateFactory.generateCertificate(byteArrayInputStream);
 		} catch (CertificateException e) {
 			throw new CertificateGenerationException("X509 CA certificate cannot be generated");
 		}
 
-		rootCACertificate = certificateCAX509;
+		rootCACertificate = X509CACertificate;
 
 	}
 

@@ -51,10 +51,10 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	@Override
 	public boolean handleMessage(SOAPMessageContext context){
 
-		Boolean outboundProperty = (Boolean)
+		Boolean outBoundProperty = (Boolean)
 				context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
-		if (outboundProperty) {
+		if (outBoundProperty) {
 
 			SOAPMessage message = context.getMessage();
 			SOAPHeader header = null;
@@ -74,10 +74,10 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 						Response.serverError().build();
 					}
 				}
-			SOAPFactory sf = null;
+			SOAPFactory soapFactory = null;
 
 			try {
-				sf = SOAPFactory.newInstance();
+				soapFactory = SOAPFactory.newInstance();
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -96,7 +96,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			Name attributeName = null;
 			try {
-				attributeName = sf.createName(Constants.TIMESTAMP_ID, Constants.TIMESTAMP_U,
+				attributeName = soapFactory.createName(Constants.TIMESTAMP_ID, Constants.TIMESTAMP_U,
 				                              Constants.WSS_SECURITY_UTILITY);
 			} catch (SOAPException e) {
 				Response.serverError().build();
@@ -106,32 +106,30 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			QName qNameTimestamp = new QName(
 						Constants.WSS_SECURITY_UTILITY,
 						Constants.TIMESTAMP);
-			SOAPHeaderElement Timestamp = null;
+			SOAPHeaderElement timestamp = null;
 
 			try {
-				Timestamp = header.addHeaderElement(qNameTimestamp);
-				Timestamp.addAttribute(attributeName, Constants.TIMESTAMP_0);
+				timestamp = header.addHeaderElement(qNameTimestamp);
+				timestamp.addAttribute(attributeName, Constants.TIMESTAMP_0);
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
 
 			DateTime dateTime = new DateTime();
-				DateTime dateTimeEx = dateTime.plusMinutes(5);
-				String CreatedTime = dateTime.toString(ISODateTimeFormat.dateTime());
-				String ExpiredTime = dateTimeEx.toString(ISODateTimeFormat.dateTime());
-				CreatedTime = CreatedTime.substring(0, CreatedTime.length() - 6);
-				CreatedTime = CreatedTime + "Z";
-				ExpiredTime = ExpiredTime.substring(0, ExpiredTime.length() - 6);
-				ExpiredTime = ExpiredTime + "Z";
+				DateTime expiredDateTime = dateTime.plusMinutes(5);
+				String createdISOTime = dateTime.toString(ISODateTimeFormat.dateTime());
+				String expiredISOTime = expiredDateTime.toString(ISODateTimeFormat.dateTime());
+				createdISOTime = createdISOTime.substring(0, createdISOTime.length() - 6);
+				createdISOTime = createdISOTime + "Z";
+				expiredISOTime = expiredISOTime.substring(0, expiredISOTime.length() - 6);
+				expiredISOTime = expiredISOTime + "Z";
 
-				QName qNameCreated = new QName(
-						Constants.WSS_SECURITY_UTILITY,
-						Constants.CREATED);
-			SOAPHeaderElement Created = null;
+			QName qNameCreated = new QName(Constants.WSS_SECURITY_UTILITY, Constants.CREATED);
+			SOAPHeaderElement SOAPHeaderCreated = null;
 
 			try {
-				Created = header.addHeaderElement(qNameCreated);
-				Created.addTextNode(CreatedTime);
+				SOAPHeaderCreated = header.addHeaderElement(qNameCreated);
+				SOAPHeaderCreated.addTextNode(createdISOTime);
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -140,22 +138,20 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			QName qNameExpires = new QName(
 						Constants.WSS_SECURITY_UTILITY,
 						Constants.EXPIRES);
-			SOAPHeaderElement Expires = null;
-
-
+			SOAPHeaderElement SOAPHeaderExpires = null;
 
 			try {
-				Expires = header.addHeaderElement(qNameExpires);
-				Expires.addTextNode(ExpiredTime);
+				SOAPHeaderExpires = header.addHeaderElement(qNameExpires);
+				SOAPHeaderExpires.addTextNode(expiredISOTime);
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
 
 
 			try {
-				Timestamp.addChildElement(Created);
-				Timestamp.addChildElement(Expires);
-				Security.addChildElement(Timestamp);
+				timestamp.addChildElement(SOAPHeaderCreated);
+				timestamp.addChildElement(SOAPHeaderExpires);
+				Security.addChildElement(timestamp);
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -167,10 +163,10 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
             catch(SOAPException e){
 	            Response.serverError().build();
             }
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 			try {
-				message.writeTo(stream);
+				message.writeTo(outputStream);
 			} catch (IOException e){
 				Response.serverError().build();
 			}catch (SOAPException e){
@@ -180,18 +176,16 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			String messageString=null;
 			try {
-				messageString = new String(stream.toByteArray(), Constants.UTF_8);
+				messageString = new String(outputStream.toByteArray(), Constants.UTF_8);
 			}
 			catch(UnsupportedEncodingException e){
 				Response.serverError().build();
 			}
 
 
-				Map<String, List<String>> headers = (Map<String, List<String>>) context
-						.get(MessageContext.HTTP_REQUEST_HEADERS);
+				Map<String, List<String>> headers = (Map<String, List<String>>) context.get(MessageContext.HTTP_REQUEST_HEADERS);
 				headers = new HashMap<String, List<String>>();
-				headers.put(Constants.CONTENT_LENGTH,
-				            Arrays.asList(String.valueOf(messageString.length())));
+				headers.put(Constants.CONTENT_LENGTH, Arrays.asList(String.valueOf(messageString.length())));
 				context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
 
 		}

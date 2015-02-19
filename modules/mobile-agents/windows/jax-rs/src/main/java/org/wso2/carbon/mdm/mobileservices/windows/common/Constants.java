@@ -103,4 +103,6 @@ public class Constants {
 	public static final String SYNCML_TARGET_URI = "TARGET_URI";
 	public static final String SYNCML_MESSAGE_ONE = "1";
 	public static final String SYNCML_MESSAGE_TWO = "2";
+	public static final int NOT_BEFORE_DATE = 3;
+	public static final int NOT_AFTER_DATE = 300;
 }
