@@ -54,7 +54,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 		Boolean outboundProperty = (Boolean)
 				context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
-		if (outboundProperty.booleanValue()) {
+		if (outboundProperty) {
 
 			SOAPMessage message = context.getMessage();
 			SOAPHeader header = null;
@@ -165,7 +165,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
             }
 
             catch(SOAPException e){
-
+	            Response.serverError().build();
             }
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -178,9 +178,9 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			}
 
 
-			String messagestring=null;
+			String messageString=null;
 			try {
-				messagestring = new String(stream.toByteArray(), Constants.UTF_8);
+				messageString = new String(stream.toByteArray(), Constants.UTF_8);
 			}
 			catch(UnsupportedEncodingException e){
 				Response.serverError().build();
@@ -191,7 +191,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 						.get(MessageContext.HTTP_REQUEST_HEADERS);
 				headers = new HashMap<String, List<String>>();
 				headers.put(Constants.CONTENT_LENGTH,
-				            Arrays.asList(String.valueOf(messagestring.length())));
+				            Arrays.asList(String.valueOf(messageString.length())));
 				context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
 
 		}

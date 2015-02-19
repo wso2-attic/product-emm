@@ -18,7 +18,12 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.syncml.util;
 
+import org.apache.log4j.Logger;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +31,15 @@ import java.util.List;
 /**
  * Class for generate Device object from the received data.
  */
-public class DeviceGenerator {
+public class SyncmlDeviceGenerator {
 
 	private static final String OS_VERSION = "osVersion";
 	private static final String IMSI = "imsi";
 	private static final String IMEI = "imei";
 	private static final String VENDOR = "vendor";
 	private static final String MODEL = "model";
+
+	private static Logger logger = Logger.getLogger(SyncmlDeviceGenerator.class);
 
 	/**
 	 * This method is used to generate and return Device object from the received information at the Syncml step.
@@ -54,11 +61,11 @@ public class DeviceGenerator {
 		OSVersionProperty.setValue(OSVersion);
 
 		Device.Property IMSEIProperty = new Device.Property();
-		IMSEIProperty.setName(DeviceGenerator.IMSI);
+		IMSEIProperty.setName(SyncmlDeviceGenerator.IMSI);
 		IMSEIProperty.setValue(IMSI);
 
 		Device.Property IMEIProperty = new Device.Property();
-		IMEIProperty.setName(DeviceGenerator.IMEI);
+		IMEIProperty.setName(SyncmlDeviceGenerator.IMEI);
 		IMEIProperty.setValue(IMEI);
 
 		Device.Property DevManProperty = new Device.Property();
@@ -81,5 +88,28 @@ public class DeviceGenerator {
 		generatedDevice.setType(type);
 
 		return generatedDevice;
+	}
+
+	/**
+	 * This method returns Device Management Object for certain tasks such as Device enrollment etc.
+	 * @return DeviceManagementServiceObject
+	 * @throws org.wso2.carbon.device.mgt.common.DeviceManagementServiceException
+	 */
+	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException {
+
+		DeviceManagementService dmService;
+		PrivilegedCarbonContext.startTenantFlow();
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
+
+		if (dmService == null) {
+			String msg = "Device management service not initialized";
+			logger.error(msg);
+			throw new DeviceManagementServiceException(msg);
+		}
+		PrivilegedCarbonContext.endTenantFlow();
+		return dmService;
 	}
 }

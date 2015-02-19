@@ -28,9 +28,7 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
-import org.wso2.carbon.mdm.mobileservices.windows.syncml.util.DeviceGenerator;
-import org.wso2.carbon.mdm.mobileservices.windows.syncml.util.DeviceMgtServiceProvider;
-
+import org.wso2.carbon.mdm.mobileservices.windows.syncml.util.SyncmlDeviceGenerator;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
@@ -144,12 +142,12 @@ public class SyncmlServiceImpl implements SyncmlService {
 									", DevMod: " + DevMod + ", DevLang: " + DevLang);
 						}
 
-						Device generatedDevice = DeviceGenerator.generateDevice(
+						Device generatedDevice = SyncmlDeviceGenerator.generateDevice(
 								DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS,
 								DevID, OSversion, IMSI, IMEI, DevMan, DevMod);
 
 						try {
-							DeviceMgtServiceProvider.getDeviceManagementService()
+							SyncmlDeviceGenerator.getDeviceManagementService()
 							                        .enrollDevice(generatedDevice);
 						} catch (DeviceManagementException e) {
 							throw new DeviceManagementException("Exception while getting Device Management Service",e);

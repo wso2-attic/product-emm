@@ -287,9 +287,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		String entityPassword = null;
 
-		File propertyFile =
-				new File(getClass().getClassLoader().getResource(Constants.PROPERTIES_XML)
-				                   .getFile());
+		File propertyFile = new File(getClass().getClassLoader().getResource(Constants.PROPERTIES_XML).getFile());
+
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 
 		DocumentBuilder docBuilder;
