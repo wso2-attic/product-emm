@@ -1,24 +1,20 @@
 {{layout "enrollment"}}
-{{#zone "body"}}
-    <div class="container c-both">
 
-        {{unit "wizard"}}
+{{#zone "main"}}
+    <div>
         <div class="row">
-
             <div class="container col-md-8 wr-text">
-                <div class="wr-head"><h2>Step 2. Download the Root Certificate</h2></div>
-                <p>The Root Certificate needs to be downloaded to your device before you can enroll to the Mobile Device Manager.</p>
+                <div class="wr-agreement">
+                    {{defineZone "licenseZone"}}
+                </div>
             </div>
-
             <div class="container col-md-4">
             </div>
-
         </div>
-
         <div class="row">
 
             <div class="container col-md-4 wr-buttons">
-                <a href="#" class="btn-download-agent">Download Root Certifcate</a>
+                <a href="#" class="btn-download-agent">I Accept</a>
             </div>
 
             <div class="container col-md-9">
@@ -26,6 +22,5 @@
             </div>
 
         </div>
-
     </div>
 {{/zone}}
