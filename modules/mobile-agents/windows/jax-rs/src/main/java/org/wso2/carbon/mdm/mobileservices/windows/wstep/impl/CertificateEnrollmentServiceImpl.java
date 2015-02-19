@@ -83,16 +83,16 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 
 	/**
-	 * @param TokenType           - Device Enrolment Token type is received via device
-	 * @param RequestType
-	 * @param BinarySecurityToken - CSR from device
-	 * @param AdditionalContext   - Device type and OS version is received
+	 * @param tokenType           - Device Enrolment Token type is received via device
+	 * @param requestType
+	 * @param binarySecurityToken - CSR from device
+	 * @param additionalContext   - Device type and OS version is received
 	 * @param response            - Response will include wap-provisioning xml
 	 */
 	@Override
-	public void requestSecurityToken(String TokenType, String RequestType,
-	                                           String BinarySecurityToken,
-	                                           AdditionalContext AdditionalContext,
+	public void requestSecurityToken(String tokenType, String requestType,
+	                                           String binarySecurityToken,
+	                                           AdditionalContext additionalContext,
 	                                           Holder<RequestSecurityTokenResponse> response)
 			throws KeyStoreGenerationException, PropertyFileException, CertificateGenerationException {
 
@@ -101,7 +101,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		certificateSign();
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Received CSR from Device:" + BinarySecurityToken);
+			logger.debug("Received CSR from Device:" + binarySecurityToken);
 		}
 
 		File file =
@@ -113,7 +113,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		rs.setTokenType(Constants.TOKEN_TYPE);
 
 		byte[] derByteArray =
-				javax.xml.bind.DatatypeConverter.parseBase64Binary(BinarySecurityToken);
+				javax.xml.bind.DatatypeConverter.parseBase64Binary(binarySecurityToken);
 
 		try {
 			certificationRequest = new PKCS10CertificationRequest(derByteArray);

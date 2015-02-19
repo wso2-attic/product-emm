@@ -32,10 +32,10 @@ public class PasswordCallbackHandler implements CallbackHandler {
 	@Override
 	public void handle(Callback[] callbacks)
 			throws IOException, UnsupportedCallbackException {
-		WSPasswordCallback pc = (WSPasswordCallback) callbacks[0];
+		WSPasswordCallback passwordCallback = (WSPasswordCallback) callbacks[0];
 
-		if ("test@wso2.com".equals(pc.getIdentifier())) {
-			pc.setPassword("testpassword");
+		if ("test@wso2.com".equals(passwordCallback.getIdentifier())) {
+			passwordCallback.setPassword("testpassword");
 		}
 	}
 }

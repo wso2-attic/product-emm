@@ -44,10 +44,10 @@ public class SyncmlServiceImpl implements SyncmlService {
 	public static final String MESSAGE_ID_ONE_TEMP = "1";
 	public static final String MESSAGE_ID_TWO_TEMP = "2";
 
-	private Node HeaderNode;
-	private Node BodyNode;
-	private NodeList nList_hdr;
-	private NodeList nList_body;
+	private Node headerNode;
+	private Node bodyNode;
+	private NodeList nListHeader;
+	private NodeList nListBody;
 	private Logger logger = Logger.getLogger(SyncmlServiceImpl.class);
 
 	/**
@@ -63,88 +63,88 @@ public class SyncmlServiceImpl implements SyncmlService {
 		File file = new File(getClass().getClassLoader().getResource(Constants.SYNCML_RESPONSE).getFile());
 		String replyPath = file.getPath();
 
-		HeaderNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getFirstChild();
-		BodyNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getChildNodes().item(1);
-		nList_hdr = HeaderNode.getChildNodes();
-		nList_body = BodyNode.getChildNodes();
+		headerNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getFirstChild();
+		bodyNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getChildNodes().item(1);
+		nListHeader = headerNode.getChildNodes();
+		nListBody = bodyNode.getChildNodes();
 
-		String TargetURI = null;
-		String SourceURI = null;
-		String SourceLocName;
-		String CredData;
-		String MsgID = "0";
+		String targetURI = null;
+		String sourceURI = null;
+		String sourceLocName;
+		String credData;
+		String msgID = "0";
 
-		String OSversion;
+		String OSVersion;
 		String IMSI;
 		String IMEI;
-		String DevID;
-		String DevMan;
-		String DevMod;
-		String DevLang;
+		String devID;
+		String devMan;
+		String devMod;
+		String devLang;
 
 		String response = null;
 
-		for (int i = 0; i < nList_hdr.getLength(); i++) {
-			Node nNode = nList_hdr.item(i);
+		for (int i = 0; i < nListHeader.getLength(); i++) {
+			Node nNode = nListHeader.item(i);
 
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 				String NodeName = nNode.getNodeName();
 
 				if (Constants.SYNCML_MSG_ID.equals(NodeName)) {
-					MsgID = nNode.getTextContent().trim();
+					msgID = nNode.getTextContent().trim();
 					if (logger.isDebugEnabled()) {
-						logger.debug("Msg ID: " + MsgID);
+						logger.debug("Msg ID: " + msgID);
 					}
 				}
-				if (Constants.SYNCML_MESSAGE_ONE.equals(MsgID)) {
+				if (Constants.SYNCML_MESSAGE_ONE.equals(msgID)) {
 					if (Constants.SYNCML_TARGET.equals(NodeName)) {
-						TargetURI = nNode.getFirstChild().getTextContent().trim();
+						targetURI = nNode.getFirstChild().getTextContent().trim();
 					} else if (Constants.SYNCML_SOURCE.equals(NodeName)) {
-						SourceURI = nNode.getFirstChild().getTextContent().trim();
-						SourceLocName = nNode.getChildNodes().item(1).getTextContent().trim();
+						sourceURI = nNode.getFirstChild().getTextContent().trim();
+						sourceLocName = nNode.getChildNodes().item(1).getTextContent().trim();
 					} else if (Constants.SYNCML_CRED.equals(NodeName)) {
-						CredData = nNode.getChildNodes().item(1).getTextContent().trim();
+						credData = nNode.getChildNodes().item(1).getTextContent().trim();
 					}
 				}
 			}
 		}
 
-		for (int i = 0; i < nList_body.getLength(); i++) {
-			Node nNode = nList_body.item(i);
+		for (int i = 0; i < nListBody.getLength(); i++) {
+			Node nNode = nListBody.item(i);
 
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
-				String NodeName = nNode.getNodeName();
+				String nodeName = nNode.getNodeName();
 
-				if (Constants.SYNCML_MESSAGE_TWO.equals(MsgID)) {
-					if (Constants.SYNCML_RESULTS.equals(NodeName)) {
+				if (Constants.SYNCML_MESSAGE_TWO.equals(msgID)) {
+					if (Constants.SYNCML_RESULTS.equals(nodeName)) {
 
-						OSversion = nNode.getChildNodes().item(3).getChildNodes().item(1)
+						OSVersion = nNode.getChildNodes().item(3).getChildNodes().item(1)
 						                 .getTextContent();
 						IMSI = nNode.getChildNodes().item(4).getChildNodes().item(1)
 						            .getTextContent();
 						IMEI = nNode.getChildNodes().item(5).getChildNodes().item(1)
 						            .getTextContent();
-						DevID = nNode.getChildNodes().item(6).getChildNodes().item(1)
+						devID = nNode.getChildNodes().item(6).getChildNodes().item(1)
 						             .getTextContent();
-						DevMan = nNode.getChildNodes().item(7).getChildNodes().item(1)
+						devMan = nNode.getChildNodes().item(7).getChildNodes().item(1)
 						              .getTextContent();
-						DevMod = nNode.getChildNodes().item(8).getChildNodes().item(1)
+						devMod = nNode.getChildNodes().item(8).getChildNodes().item(1)
 						              .getTextContent();
-						DevLang = nNode.getChildNodes().item(9).getChildNodes().item(1)
+						devLang = nNode.getChildNodes().item(9).getChildNodes().item(1)
 						               .getTextContent();
 
 						if (logger.isDebugEnabled()) {
 							logger.debug(
-									"OS Version:" + OSversion + ", IMSI: " + IMSI + ", IMEI: " +
-									IMEI + ", DevID: " + DevID + ", DevMan: " + DevMan +
-									", DevMod: " + DevMod + ", DevLang: " + DevLang);
+									"OS Version:" + OSVersion + ", IMSI: " + IMSI + ", IMEI: " +
+									IMEI + ", DevID: " + devID + ", DevMan: " + devMan +
+									", DevMod: " + devMod + ", DevLang: " + devLang);
 						}
 
 						Device generatedDevice = SyncmlDeviceGenerator.generateDevice(
 								DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS,
-								DevID, OSversion, IMSI, IMEI, DevMan, DevMod);
+								devID, OSVersion, IMSI, IMEI, devMan, devMod);
 
 						try {
 							SyncmlDeviceGenerator.getDeviceManagementService()
@@ -162,10 +162,10 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 		try {
 			//Change this when proceeding with operations..
-			if (MESSAGE_ID_ONE_TEMP.equals(MsgID)|| MESSAGE_ID_TWO_TEMP.equals(MsgID)) {
+			if (MESSAGE_ID_ONE_TEMP.equals(msgID)|| MESSAGE_ID_TWO_TEMP.equals(msgID)) {
 				response = new String(Files.readAllBytes(Paths.get(replyPath)));
-				response = response.replaceAll(Constants.SYNCML_SOURCE_URI, TargetURI);
-				response = response.replaceAll(Constants.SYNCML_TARGET_URI, SourceURI);
+				response = response.replaceAll(Constants.SYNCML_SOURCE_URI, targetURI);
+				response = response.replaceAll(Constants.SYNCML_TARGET_URI, sourceURI);
 			}
 		} catch (IOException e) {
 			throw new FileOperationException("Syncml response file cannot be read",e);

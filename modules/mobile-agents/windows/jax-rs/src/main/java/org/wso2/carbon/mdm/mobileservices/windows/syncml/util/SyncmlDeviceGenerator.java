@@ -97,19 +97,19 @@ public class SyncmlDeviceGenerator {
 	 */
 	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException {
 
-		DeviceManagementService dmService;
+		DeviceManagementService deviceManagementService;
 		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
+		PrivilegedCarbonContext context = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		context.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+		context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+		deviceManagementService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class, null);
 
-		if (dmService == null) {
+		if (deviceManagementService == null) {
 			String msg = "Device management service not initialized";
 			logger.error(msg);
 			throw new DeviceManagementServiceException(msg);
 		}
 		PrivilegedCarbonContext.endTenantFlow();
-		return dmService;
+		return deviceManagementService;
 	}
 }

@@ -48,15 +48,14 @@ public interface CertificateEnrollmentService {
 	@ResponseWrapper(localName = "RequestSecurityTokenResponseCollection", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 	public void requestSecurityToken(
 			@WebParam(name = "TokenType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
-			String TokenType,
+			String tokenType,
 			@WebParam(name = "RequestType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
-			String RequestType,
+			String requestType,
 			@WebParam(name = "BinarySecurityToken", targetNamespace = Constants.WS_SECURITY_TARGET_NAMESPACE)
-			String BinarySecurityToken,
+			String binarySecurityToken,
 			@WebParam(name = "AdditionalContext", targetNamespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
-			AdditionalContext AdditionalContext,
+			AdditionalContext additionalContext,
 			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<RequestSecurityTokenResponse> response
 	) throws KeyStoreGenerationException, PropertyFileException, CertificateGenerationException;
-
 }
