@@ -57,8 +57,6 @@ public interface CertificateEnrollmentService {
 			AdditionalContext AdditionalContext,
 			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<RequestSecurityTokenResponse> response
-	) throws KeyStoreException, CertificateException, NoSuchAlgorithmException,
-	         KeyStoreGenerationException, UnrecoverableKeyException, PropertyFileException,
-	         CertificateGenerationException;
+	) throws KeyStoreGenerationException, PropertyFileException, CertificateGenerationException;
 
 }
