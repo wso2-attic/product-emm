@@ -69,7 +69,7 @@ Handlebars.registerHelper('defineZone', function (zoneName, zoneContent) {
 Handlebars.registerHelper('zone', function (zoneName, zoneContent) {
     var currentZone = fuseState.currentZone[fuseState.currentZone.length - 1];
     if (currentZone == null) {
-        return 'zone_' + zoneName;
+        return 'zone_' + zoneName + ' ';
     }
 
     // if it's exact zone match or if any in inner zone matches we render zone.
