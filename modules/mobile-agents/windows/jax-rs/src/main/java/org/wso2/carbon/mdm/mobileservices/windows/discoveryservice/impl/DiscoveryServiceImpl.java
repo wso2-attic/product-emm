@@ -48,7 +48,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	 * @return discoveryResponse - Response bean
 	 */
 	@Override
-	public DiscoveryResponse Discover(DiscoveryRequest disRequest) {
+	public DiscoveryResponse discover(DiscoveryRequest disRequest) {
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
 		discoveryResponse.setAuthPolicy(Constants.AUTH_POLICY);
@@ -71,7 +71,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	 * @return HTTP 200OK message
 	 */
 	@Override
-	public Response DiscoverGet() {
+	public Response discoverGet() {
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Discovery service end point was triggered via GET method");

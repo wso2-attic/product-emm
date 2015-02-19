@@ -90,7 +90,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @param response            - Response will include wap-provisioning xml
 	 */
 	@Override
-	public void RequestSecurityToken(String TokenType, String RequestType,
+	public void requestSecurityToken(String TokenType, String RequestType,
 	                                           String BinarySecurityToken,
 	                                           AdditionalContext AdditionalContext,
 	                                           Holder<RequestSecurityTokenResponse> response)

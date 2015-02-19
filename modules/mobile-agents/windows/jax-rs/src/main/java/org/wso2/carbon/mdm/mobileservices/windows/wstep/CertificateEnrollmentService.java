@@ -46,7 +46,7 @@ public interface CertificateEnrollmentService {
 	@RequestWrapper(localName = "RequestSecurityToken", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 	@WebMethod(operationName = "RequestSecurityToken")
 	@ResponseWrapper(localName = "RequestSecurityTokenResponseCollection", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
-	public void RequestSecurityToken(
+	public void requestSecurityToken(
 			@WebParam(name = "TokenType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			String TokenType,
 			@WebParam(name = "RequestType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)

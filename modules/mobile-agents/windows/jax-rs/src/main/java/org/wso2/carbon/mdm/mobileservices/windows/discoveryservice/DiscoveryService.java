@@ -44,12 +44,12 @@ public interface DiscoveryService {
 	@WebMethod(operationName = "Discover")
 	@RequestWrapper(targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 	@ResponseWrapper(targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
-	@WebResult(name = "DiscoverResult") DiscoveryResponse Discover(
+	@WebResult(name = "DiscoverResult") DiscoveryResponse discover(
 			@WebParam(name = "request", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 			DiscoveryRequest request);
 
 	@GET
 	@WebMethod
-	@WebResult() Response DiscoverGet();
+	@WebResult() Response discoverGet();
 
 }
