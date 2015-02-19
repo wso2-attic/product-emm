@@ -39,14 +39,14 @@
             <parm name="AAUTHLEVEL" value="CLIENT"/>
             <parm name="AAUTHTYPE" value="DIGEST"/>
             <parm name="AAUTHSECRET" value="dummy"/>
-            <parm name="AAUTHDATA" value="ZHVtbXl1c2Vybm9uY2U="/>
+            <parm name="AAUTHDATA" value="ZHVtbXk="/>
         </characteristic>
         <characteristic type="APPAUTH">
             <parm name="AAUTHLEVEL" value="APPSRV"/>
             <parm name="AAUTHTYPE" value="DIGEST"/>
             <parm name="AAUTHNAME" value="dummy"/>
             <parm name="AAUTHSECRET" value="dummy"/>
-            <parm name="AAUTHDATA" value="ZHVtbXl1c2Vybm9uY2U="/>
+            <parm name="AAUTHDATA" value="ZHVtbXk="/>
         </characteristic>
     </characteristic>
     <characteristic type="DMClient">

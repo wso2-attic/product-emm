@@ -19,8 +19,9 @@
 package org.wso2.carbon.mdm.mobileservices.windows.wstep.impl;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileReadingException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.CertificateEnrollmentService;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.beans.BinarySecurityToken;
@@ -99,9 +100,9 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	                                           Holder<RequestSecurityTokenResponse> response)
 			throws java.security.KeyStoreException, CertificateException, NoSuchAlgorithmException,
 			       KeyStoreGenerationException, UnrecoverableKeyException,
-			       PropertyFileReadingException {
+			       PropertyFileException, CertificateGenerationException {
 
-		String encodedWap = null;
+		String encodedWap;
 
 		certificateSign();
 
@@ -110,39 +111,43 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		}
 
 		File file =
-				new File(getClass().getClassLoader().getResource(Constants.WAP_PROVISIONING_XML).getFile());
+				new File(getClass().getClassLoader().getResource(Constants.WAP_PROVISIONING_XML)
+				                   .getFile());
 		wapProvisioningXmlFile = file.getPath();
 
 		RequestSecurityTokenResponse rs = new RequestSecurityTokenResponse();
 		rs.setTokenType(Constants.TOKEN_TYPE);
 
+		byte[] derByteArray =
+				javax.xml.bind.DatatypeConverter.parseBase64Binary(BinarySecurityToken);
+
 		try {
-			byte[] derByteArray =
-					javax.xml.bind.DatatypeConverter.parseBase64Binary(BinarySecurityToken);
 			certificationRequest = new PKCS10CertificationRequest(derByteArray);
+		} catch (IOException e) {
+			throw new CertificateGenerationException("CSR cannot be recovered", e);
+		}
 
-			csrReq = new JcaPKCS10CertificationRequest(certificationRequest);
+		csrReq = new JcaPKCS10CertificationRequest(certificationRequest);
 
-			X509Certificate signedCert = CertificateSigningService
-					.signCSR(csrReq, privateKey, rootCACertificate);
+		X509Certificate signedCert =
+				CertificateSigningService.signCSR(csrReq, privateKey, rootCACertificate);
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("Public key of Signed Certificate :" + signedCert.getPublicKey() +
-				             "\nPublic key of CSR :" + csrReq.getPublicKey());
-			}
+		BASE64Encoder base64Encoder = new BASE64Encoder();
+		String rootCertEncodedString = base64Encoder.encode(rootCACertificate.getEncoded());
+		String signedCertEncoded = base64Encoder.encode(signedCert.getEncoded());
 
-			BASE64Encoder base64Encoder = new BASE64Encoder();
-			String rootCertEncodedString = base64Encoder.encode(rootCACertificate.getEncoded());
-			String signedCertEncoded = base64Encoder.encode(signedCert.getEncoded());
-
-			DocumentBuilder builder = domFactory.newDocumentBuilder();
+		DocumentBuilder builder;
+		String wapProvisioning;
+		try {
+			builder = domFactory.newDocumentBuilder();
 			Document dDoc = builder.parse(wapProvisioningXmlFile);
 
 			NodeList wapParm = dDoc.getElementsByTagName(Constants.PARM);
 
-			wapParm.item(0).getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
-					String.valueOf(DigestUtils.shaHex(rootCACertificate.getEncoded()))
-					      .toUpperCase());
+			wapParm.item(0).getParentNode().getAttributes().getNamedItem(Constants.TYPE)
+			       .setTextContent(
+					       String.valueOf(DigestUtils.shaHex(rootCACertificate.getEncoded()))
+					             .toUpperCase());
 
 			NamedNodeMap rootCertAttributes = wapParm.item(0).getAttributes();
 			Node b64Encoded = rootCertAttributes.getNamedItem(Constants.VALUE);
@@ -153,8 +158,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 				logger.debug("Root certificate:" + rootCertEncodedString);
 			}
 
-			wapParm.item(1).getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
-					String.valueOf(DigestUtils.shaHex(signedCert.getEncoded())).toUpperCase());
+			wapParm.item(1).getParentNode().getAttributes().getNamedItem(Constants.TYPE)
+			       .setTextContent(
+					       String.valueOf(DigestUtils.shaHex(signedCert.getEncoded()))
+					             .toUpperCase());
 
 			NamedNodeMap clientCertAttributes = wapParm.item(1).getAttributes();
 			Node b64CliendEncoded = clientCertAttributes.getNamedItem(Constants.VALUE);
@@ -165,12 +172,13 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 				logger.debug("Signed certificate:" + signedCertEncoded);
 			}
 
-			String wapProvisioning = convertDocumentToString(dDoc);
-			encodedWap = base64Encoder.encode(wapProvisioning.getBytes());
+			wapProvisioning = convertDocumentToString(dDoc);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		    } catch (Exception e) {
+			  throw new PropertyFileException("Problem occurred with wap-provisioning.xml file", e);
+		    }
+
+		encodedWap = base64Encoder.encode(wapProvisioning.getBytes());
 
 		RequestedSecurityToken rst = new RequestedSecurityToken();
 		BinarySecurityToken BinarySecToken = new BinarySecurityToken();
@@ -188,7 +196,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	}
 
 	/**
-	 *
 	 * @param document - Wap provisioning XML document
 	 * @return - String representation of wap provisioning XML document
 	 * @throws Exception
@@ -208,40 +215,40 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	/**
 	 * Method for setting privateKey and rootCACertificate variables.
+	 *
 	 * @throws KeyStoreGenerationException
 	 * @throws java.security.KeyStoreException
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnrecoverableKeyException
 	 * @throws CertificateException
-	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileReadingException
+	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException
 	 */
 	public void certificateSign()
 			throws KeyStoreGenerationException, java.security.KeyStoreException,
 			       NoSuchAlgorithmException,
-			       UnrecoverableKeyException, CertificateException, PropertyFileReadingException {
+			       UnrecoverableKeyException, CertificateException, PropertyFileException {
 
-		File file = new File(getClass().getClassLoader().getResource(Constants.WSO2EMM_JKS_FILE).getFile());
+		File file = new File(
+				getClass().getClassLoader().getResource(Constants.WSO2EMM_JKS_FILE).getFile());
 		String jksPath = file.getPath();
 
-		KeyStore securityJks = null;
+		KeyStore securityJks;
 		try {
 			securityJks = KeyStoreGenerator.getKeyStore();
 		} catch (KeyStoreGenerationException e) {
-			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store",e);
+			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store", e);
 		}
 
 		String pass = getCredentials(Constants.EMMJKS);
 		String passem = getCredentials(Constants.EMMPRIVATEKEY);
 
-
 		try {
 			KeyStoreGenerator.loadToStore(securityJks, pass.toCharArray(), jksPath);
 		} catch (KeyStoreGenerationException e) {
-			throw new KeyStoreGenerationException("Cannot load the MDM key store",e);
+			throw new KeyStoreGenerationException("Cannot load the MDM key store", e);
 		}
 
-
-		PrivateKey privateKeyCA = null;
+		PrivateKey privateKeyCA;
 		try {
 			privateKeyCA = (PrivateKey) securityJks.getKey(Constants.CACERT, passem.toCharArray());
 		} catch (java.security.KeyStoreException e) {
@@ -256,7 +263,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		privateKey = privateKeyCA;
 
 		Certificate cartificateCA = securityJks.getCertificate(Constants.CACERT);
-		CertificateFactory cf = null;
+		CertificateFactory cf;
 		try {
 			cf = CertificateFactory.getInstance(Constants.X_509);
 		} catch (CertificateException e) {
@@ -271,42 +278,45 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	/**
 	 * Method for reading the property XML file and returning the required passwords.
+	 *
 	 * @param entity - Entity which needs to get the password from property xml file
 	 * @return - Entity password
-	 * @throws PropertyFileReadingException
+	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException
 	 */
-	private String getCredentials(String entity) throws PropertyFileReadingException {
+	private String getCredentials(String entity) throws PropertyFileException {
 
-		String entityPassword=null;
+		String entityPassword = null;
 
-			File propertyFile =
-					new File(getClass().getClassLoader().getResource(Constants.PROPERTIES_XML).getFile());
-			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		File propertyFile =
+				new File(getClass().getClassLoader().getResource(Constants.PROPERTIES_XML)
+				                   .getFile());
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 
-		DocumentBuilder docBuilder = null;
+		DocumentBuilder docBuilder;
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			throw new PropertyFileReadingException("XML parsing configuration exception",e);
+			throw new PropertyFileException("XML parsing configuration exception", e);
 		}
 
 		Document document;
 		try {
 			document = docBuilder.parse(propertyFile);
 		} catch (SAXException e) {
-			throw new PropertyFileReadingException("XML Parsing Exception",e);
+			throw new PropertyFileException("XML Parsing Exception", e);
 		} catch (IOException e) {
-			throw new PropertyFileReadingException("XML property file reading exception",e);
+			throw new PropertyFileException("XML property file reading exception", e);
 		}
 
-		if(Constants.EMMJKS_ENTRY.equals(entity)){
-			entityPassword=document.getElementsByTagName(Constants.EMMPASSWORD).item(0).getTextContent();
-		}
-		else if(Constants.EMMPRIVATEKEY_ENTRY.equals(entity)){
-			entityPassword=document.getElementsByTagName(Constants.EMMPRIVATEKEYPASSWORD).item(0).getTextContent();
+		if (Constants.EMMJKS_ENTRY.equals(entity)) {
+			entityPassword =
+					document.getElementsByTagName(Constants.EMMPASSWORD).item(0).getTextContent();
+		} else if (Constants.EMMPRIVATEKEY_ENTRY.equals(entity)) {
+			entityPassword = document.getElementsByTagName(Constants.EMMPRIVATEKEYPASSWORD).item(0)
+			                         .getTextContent();
 		}
 
-    return entityPassword;
+		return entityPassword;
 
 	}
 

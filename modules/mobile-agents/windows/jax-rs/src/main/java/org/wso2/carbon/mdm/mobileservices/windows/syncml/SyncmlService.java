@@ -21,6 +21,8 @@ package org.wso2.carbon.mdm.mobileservices.windows.syncml;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,6 +40,7 @@ public interface SyncmlService {
 	@Consumes({"application/vnd.syncml.dm+xml;charset=utf-8", "application/xml"})
 	@Produces("application/vnd.syncml.dm+xml;charset=utf-8")
 	Response getInitialResponse(Document request)
-			throws DeviceManagementException, DeviceManagementServiceException;
+			throws DeviceManagementException, DeviceManagementServiceException,
+			       FileOperationException;
 
 }

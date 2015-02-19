@@ -18,8 +18,9 @@
 package org.wso2.carbon.mdm.mobileservices.windows.wstep;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileReadingException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.beans.RequestSecurityTokenResponse;
 
@@ -57,6 +58,7 @@ public interface CertificateEnrollmentService {
 			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<RequestSecurityTokenResponse> response
 	) throws KeyStoreException, CertificateException, NoSuchAlgorithmException,
-	         KeyStoreGenerationException, UnrecoverableKeyException, PropertyFileReadingException;
+	         KeyStoreGenerationException, UnrecoverableKeyException, PropertyFileException,
+	         CertificateGenerationException;
 
 }

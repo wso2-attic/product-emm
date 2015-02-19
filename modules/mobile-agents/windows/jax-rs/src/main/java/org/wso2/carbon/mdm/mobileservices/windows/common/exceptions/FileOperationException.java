@@ -19,32 +19,37 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 
 /**
- * Exception class for property XML file reading failures.
+ * Exception class for file reading/writing failures.
  */
-public class PropertyFileReadingException extends Exception {
+public class FileOperationException extends Exception{
 
 	private String errorMessage;
 
-	public PropertyFileReadingException(String message) {
+	public FileOperationException(String message)
+	{
 		super(message);
 		setErrorMessage(message);
 	}
 
-	public PropertyFileReadingException(String message, Throwable cause) {
+	public FileOperationException(String message, Throwable cause)
+	{
 		super(message, cause);
 		setErrorMessage(message);
 	}
 
-	public PropertyFileReadingException(String message, Exception nestedEx) {
+	public FileOperationException(String message, Exception nestedEx)
+	{
 		super(message, nestedEx);
 		setErrorMessage(message);
 	}
 
-	public PropertyFileReadingException(Throwable cause) {
+	public FileOperationException(Throwable cause)
+	{
 		super(cause);
 	}
 
-	public PropertyFileReadingException() {
+	public FileOperationException()
+	{
 		super();
 	}
 

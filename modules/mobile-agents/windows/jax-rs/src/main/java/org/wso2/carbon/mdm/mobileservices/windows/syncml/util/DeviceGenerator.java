@@ -34,17 +34,6 @@ public class DeviceGenerator {
 	private static final String VENDOR = "vendor";
 	private static final String MODEL = "model";
 
-	Device generatedDevice;
-
-	/**
-	 * Generated Device object will have Windows device type.
-	 * @param type - Device Type
-	 */
-	public DeviceGenerator(String type) {
-		generatedDevice = new Device();
-		generatedDevice.setType(type);
-	}
-
 	/**
 	 * This method is used to generate and return Device object from the received information at the Syncml step.
 	 * @param deviceID     - Unique device ID received from the Device
@@ -55,8 +44,10 @@ public class DeviceGenerator {
 	 * @param model        - Device Model
 	 * @return - Device Object
 	 */
-	public Device generateDevice(String deviceID, String OSVersion, String IMSI, String IMEI,
+	public static Device generateDevice(String type,String deviceID, String OSVersion, String IMSI, String IMEI,
 	                             String manufacturer, String model) {
+
+		Device generatedDevice=new Device();
 
 		Device.Property OSVersionProperty = new Device.Property();
 		OSVersionProperty.setName(OS_VERSION);
@@ -87,6 +78,7 @@ public class DeviceGenerator {
 
 		generatedDevice.setDeviceIdentifier(deviceID);
 		generatedDevice.setProperties(propertyList);
+		generatedDevice.setType(type);
 
 		return generatedDevice;
 	}
