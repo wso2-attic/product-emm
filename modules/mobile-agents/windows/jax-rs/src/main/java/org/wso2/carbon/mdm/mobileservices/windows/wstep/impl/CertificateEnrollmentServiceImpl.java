@@ -58,14 +58,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.UnrecoverableKeyException;
+import java.security.*;
+import java.security.cert.*;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 
 /**
  * Implementation class of CertificateEnrollmentService interface. This class implements MS-WSTEP protocol.
@@ -94,13 +89,12 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @param AdditionalContext   - Device type and OS version is received
 	 * @param response            - Response will include wap-provisioning xml
 	 */
-	@Override public void RequestSecurityToken(String TokenType, String RequestType,
+	@Override
+	public void RequestSecurityToken(String TokenType, String RequestType,
 	                                           String BinarySecurityToken,
 	                                           AdditionalContext AdditionalContext,
 	                                           Holder<RequestSecurityTokenResponse> response)
-			throws java.security.KeyStoreException, CertificateException, NoSuchAlgorithmException,
-			       KeyStoreGenerationException, UnrecoverableKeyException,
-			       PropertyFileException, CertificateGenerationException {
+			throws KeyStoreGenerationException, PropertyFileException, CertificateGenerationException {
 
 		String encodedWap;
 
@@ -133,8 +127,20 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 				CertificateSigningService.signCSR(csrReq, privateKey, rootCACertificate);
 
 		BASE64Encoder base64Encoder = new BASE64Encoder();
-		String rootCertEncodedString = base64Encoder.encode(rootCACertificate.getEncoded());
-		String signedCertEncoded = base64Encoder.encode(signedCert.getEncoded());
+
+		String rootCertEncodedString;
+		try {
+			rootCertEncodedString = base64Encoder.encode(rootCACertificate.getEncoded());
+		} catch (CertificateEncodingException e) {
+			throw new CertificateGenerationException("CA certificate cannot be encoded",e);
+		}
+
+		String signedCertEncoded;
+		try {
+			signedCertEncoded = base64Encoder.encode(signedCert.getEncoded());
+		} catch (CertificateEncodingException e) {
+			throw new CertificateGenerationException("Singed certificate cannot be encoded",e);
+		}
 
 		DocumentBuilder builder;
 		String wapProvisioning;
@@ -215,64 +221,76 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	/**
 	 * Method for setting privateKey and rootCACertificate variables.
-	 *
 	 * @throws KeyStoreGenerationException
-	 * @throws java.security.KeyStoreException
-	 * @throws NoSuchAlgorithmException
-	 * @throws UnrecoverableKeyException
-	 * @throws CertificateException
-	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException
+	 * @throws PropertyFileException
+	 * @throws CertificateGenerationException
 	 */
 	public void certificateSign()
-			throws KeyStoreGenerationException, java.security.KeyStoreException,
-			       NoSuchAlgorithmException,
-			       UnrecoverableKeyException, CertificateException, PropertyFileException {
+			throws KeyStoreGenerationException,PropertyFileException,CertificateGenerationException {
 
 		File file = new File(
 				getClass().getClassLoader().getResource(Constants.WSO2EMM_JKS_FILE).getFile());
 		String jksPath = file.getPath();
 
-		KeyStore securityJks;
+		KeyStore securityJKS;
 		try {
-			securityJks = KeyStoreGenerator.getKeyStore();
+			securityJKS = KeyStoreGenerator.getKeyStore();
 		} catch (KeyStoreGenerationException e) {
 			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store", e);
 		}
 
-		String pass = getCredentials(Constants.EMMJKS);
-		String passem = getCredentials(Constants.EMMPRIVATEKEY);
+		String storePassword = getCredentials(Constants.EMMJKS);
+		String keyPassword = getCredentials(Constants.EMMPRIVATEKEY);
 
 		try {
-			KeyStoreGenerator.loadToStore(securityJks, pass.toCharArray(), jksPath);
+			KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), jksPath);
 		} catch (KeyStoreGenerationException e) {
 			throw new KeyStoreGenerationException("Cannot load the MDM key store", e);
 		}
 
 		PrivateKey privateKeyCA;
 		try {
-			privateKeyCA = (PrivateKey) securityJks.getKey(Constants.CACERT, passem.toCharArray());
+			privateKeyCA = (PrivateKey) securityJKS.getKey(Constants.CACERT, keyPassword.toCharArray());
 		} catch (java.security.KeyStoreException e) {
-			throw new java.security.KeyStoreException(
-					"Cannot generate private key due to Key store error");
-		} catch (NoSuchAlgorithmException e) {
-			throw new NoSuchAlgorithmException();
+			throw new CertificateGenerationException("Cannot generate private key due to Key store error",e);
+		} catch (NoSuchAlgorithmException e){
+			throw new CertificateGenerationException("Cannot retrieve private key",e);
 		} catch (UnrecoverableKeyException e) {
-			throw new UnrecoverableKeyException("Cannot recover private key");
+			throw new CertificateGenerationException("Cannot recover private key",e);
 		}
+
 
 		privateKey = privateKeyCA;
 
-		Certificate cartificateCA = securityJks.getCertificate(Constants.CACERT);
+		Certificate certificateCA;
+		try {
+			certificateCA = securityJKS.getCertificate(Constants.CACERT);
+		} catch (KeyStoreException e) {
+			throw new KeyStoreGenerationException("Keystore cannot be accessed",e);
+		}
 		CertificateFactory cf;
+
 		try {
 			cf = CertificateFactory.getInstance(Constants.X_509);
 		} catch (CertificateException e) {
-			throw new CertificateException("Cannot initiate certificate factory");
+			throw new CertificateGenerationException("Cannot initiate certificate factory",e);
 		}
-		ByteArrayInputStream bais = new ByteArrayInputStream(cartificateCA.getEncoded());
-		X509Certificate cartificateCAX509 = (X509Certificate) cf.generateCertificate(bais);
 
-		rootCACertificate = cartificateCAX509;
+		ByteArrayInputStream byteArrayInputStream;
+		try {
+			byteArrayInputStream = new ByteArrayInputStream(certificateCA.getEncoded());
+		} catch (CertificateEncodingException e) {
+			throw new CertificateGenerationException("CA certificate cannot be encoded",e);
+		}
+
+		X509Certificate certificateCAX509;
+		try {
+			certificateCAX509 = (X509Certificate) cf.generateCertificate(byteArrayInputStream);
+		} catch (CertificateException e) {
+			throw new CertificateGenerationException("X509 CA certificate cannot be generated");
+		}
+
+		rootCACertificate = certificateCAX509;
 
 	}
 
@@ -281,7 +299,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 *
 	 * @param entity - Entity which needs to get the password from property xml file
 	 * @return - Entity password
-	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException
+	 * @throws PropertyFileException
 	 */
 	private String getCredentials(String entity) throws PropertyFileException {
 
@@ -311,10 +329,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			entityPassword =
 					document.getElementsByTagName(Constants.EMMPASSWORD).item(0).getTextContent();
 		} else if (Constants.EMMPRIVATEKEY_ENTRY.equals(entity)) {
-			entityPassword = document.getElementsByTagName(Constants.EMMPRIVATEKEYPASSWORD).item(0)
-			                         .getTextContent();
+			entityPassword = document.getElementsByTagName(Constants.EMMPRIVATEKEYPASSWORD).item(0).getTextContent();
 		}
-
 		return entityPassword;
 
 	}
