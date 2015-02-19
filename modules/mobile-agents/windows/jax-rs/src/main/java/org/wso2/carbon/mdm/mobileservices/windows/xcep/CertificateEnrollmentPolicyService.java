@@ -49,9 +49,9 @@ public interface CertificateEnrollmentPolicyService {
 			@WebParam(mode = WebParam.Mode.OUT, name = "response", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<Response> response,
 			@WebParam(mode = WebParam.Mode.OUT, name = "cAs", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
-			javax.xml.ws.Holder<CACollection> cAs,
+			javax.xml.ws.Holder<CACollection> CACollection,
 			@WebParam(mode = WebParam.Mode.OUT, name = "oIDs", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
-			javax.xml.ws.Holder<OIDCollection> oIDs
+			javax.xml.ws.Holder<OIDCollection> OIDCollection
 	);
 
 }

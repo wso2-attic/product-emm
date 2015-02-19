@@ -44,52 +44,52 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 	 * @param client
 	 * @param requestFilter
 	 * @param response - response which includes minimal key length, hash algorithm, policy schema, policy OID reference
-	 * @param cAs
-	 * @param oIDs
+	 * @param CACollection
+	 * @param OIDCollection
 	 */
 	@Override
 	public void getPolicies(Client client, RequestFilter requestFilter,
-	                        Holder<Response> response, Holder<CACollection> cAs,
-	                        Holder<OIDCollection> oIDs) {
+	                        Holder<Response> response, Holder<CACollection> CACollection,
+	                        Holder<OIDCollection> OIDCollection) {
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Enrolment certificate policy end point was triggered by device");
 		}
 
-		Response rs = new Response();
-		OIDCollection oidc = new OIDCollection();
-		CACollection cac = new CACollection();
+		Response responseElement = new Response();
+		OIDCollection OIDCollectionElement = new OIDCollection();
+		CACollection CACollectionElement = new CACollection();
 
-		PolicyCollection pc = new PolicyCollection();
+		PolicyCollection policyCollectionElement = new PolicyCollection();
 
-		CertificateEnrollmentPolicy cnp = new CertificateEnrollmentPolicy();
-		Attributes at = new Attributes();
-		PrivateKeyAttributes pkat = new PrivateKeyAttributes();
+		CertificateEnrollmentPolicy certEnrollmentPolicyElement = new CertificateEnrollmentPolicy();
+		Attributes attributeElement = new Attributes();
+		PrivateKeyAttributes privateKeyAttributeElement = new PrivateKeyAttributes();
 
-		pkat.setMinimalKeyLength(Constants.MINIMAL_KEY_LENGTH);
+		privateKeyAttributeElement.setMinimalKeyLength(Constants.MINIMAL_KEY_LENGTH);
 
-		at.setPolicySchema(Constants.POLICY_SCHEMA);
-		at.setPrivateKeyAttributes(pkat);
-		at.setHashAlgorithmOIDReference(Constants.HASH_ALGORITHM_OID_REFERENCE);
+		attributeElement.setPolicySchema(Constants.POLICY_SCHEMA);
+		attributeElement.setPrivateKeyAttributes(privateKeyAttributeElement);
+		attributeElement.setHashAlgorithmOIDReference(Constants.HASH_ALGORITHM_OID_REFERENCE);
 
-		cnp.setPolicyOIDReference(Constants.OID_REFERENCE);
-		cnp.setAttributes(at);
+		certEnrollmentPolicyElement.setPolicyOIDReference(Constants.OID_REFERENCE);
+		certEnrollmentPolicyElement.setAttributes(attributeElement);
 
-		pc.getPolicy().add(cnp);
+		policyCollectionElement.getPolicy().add(certEnrollmentPolicyElement);
 
-		rs.setPolicies(pc);
+		responseElement.setPolicies(policyCollectionElement);
 
-		response.value = rs;
+		response.value = responseElement;
 
-		OID oid = new OID();
-		oid.setValue(Constants.OID);
-		oid.setGroup(Constants.OID_GROUP);
-		oid.setOIDReferenceID(Constants.OID_REFERENCE_ID);
-		oid.setDefaultName(Constants.OID_DEFAULT_NAME);
+		OID OIDElement = new OID();
+		OIDElement.setValue(Constants.OID);
+		OIDElement.setGroup(Constants.OID_GROUP);
+		OIDElement.setOIDReferenceID(Constants.OID_REFERENCE_ID);
+		OIDElement.setDefaultName(Constants.OID_DEFAULT_NAME);
 
-		oidc.getOID().add(oid);
-		cAs.value = cac;
-		oIDs.value = oidc;
+		OIDCollectionElement.getOID().add(OIDElement);
+		CACollection.value = CACollectionElement;
+		OIDCollection.value = OIDCollectionElement;
 
 	}
 
