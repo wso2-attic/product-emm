@@ -41,7 +41,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
  */
 public class SyncmlServiceImpl implements SyncmlService {
 
-	public static final String MESSEGE_ID_ONE_TEMP = "1";
+	public static final String MESSAGE_ID_ONE_TEMP = "1";
 	public static final String MESSAGE_ID_TWO_TEMP = "2";
 
 	private Node HeaderNode;
@@ -162,7 +162,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 		try {
 			//Change this when proceeding with operations..
-			if (MESSEGE_ID_ONE_TEMP.equals(MsgID)|| MESSAGE_ID_TWO_TEMP.equals(MsgID)) {
+			if (MESSAGE_ID_ONE_TEMP.equals(MsgID)|| MESSAGE_ID_TWO_TEMP.equals(MsgID)) {
 				response = new String(Files.readAllBytes(Paths.get(replyPath)));
 				response = response.replaceAll(Constants.SYNCML_SOURCE_URI, TargetURI);
 				response = response.replaceAll(Constants.SYNCML_TARGET_URI, SourceURI);
