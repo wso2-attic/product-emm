@@ -1,4 +1,4 @@
 {
 	"extends" : "license-agreement-box",
-	"predicate": "true"
+	"predicate": "false"
 }
