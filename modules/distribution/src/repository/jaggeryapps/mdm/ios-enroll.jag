@@ -3,12 +3,13 @@ var username = session.get("username");
 if (username) {
     var password = session.get("password");
     var ownership = session.get("ownership");
-    var mdmProps = require('/modules/mdm-props.js').config();
-    var iOSEnrollUrl = mdmProps.httpURL+"/"+mdmProps.iOSConfigRoot+'/enroll';;
+    var mdmProps = require('/config/mdm-props.js').config();
+    var iOSEnrollUrl = mdmProps.httpsURL+mdmProps.iOSConfigRoot+'enroll';
 
-    var result = post(iOSEnrollUrl, {"username": username,  "password": password, "ownership", ownership}, {
+    var result = post(iOSEnrollUrl, {"username": username,  "password": password, "ownership": ownership}, {
         "User-Agent": "Jaggery-XHR",
-        "Country": "LK"
+        "Country": "LK",
+        "Content-Type": "application/json"
     });
     if (result.xhr.status == 200) {
         session.put("enrollUser", username);

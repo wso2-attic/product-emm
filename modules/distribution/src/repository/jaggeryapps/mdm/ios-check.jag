@@ -1,12 +1,13 @@
 <%
    var username = session.get("enrollUser");
    if(username){
-       var mdmProps = require('/modules/mdm-props.js').config();
-       var iOSCheckUrl = mdmProps.httpURL+"/"+mdmProps.iOSConfigRoot+'/enrolled';
+       var mdmProps = require('/config/mdm-props.js').config();
+       var iOSCheckUrl = mdmProps.httpsURL+mdmProps.iOSConfigRoot+'enrolled';
 
        var result = post(iOSCheckUrl, {"username": username}, {
            "User-Agent" : "Jaggery-XHR",
-           "Country" : "LK"
+           "Country" : "LK",
+           "Content-Type": "application/json"
        });
        if(result.xhr.status==200){
            response.status = "200";

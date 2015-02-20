@@ -7,7 +7,9 @@ $( document ).ready(function() {
                     window.location = "/mdm/thank-you-agent"
                 }
             }).fail(function(jqXHR, textStatus){
+                if(jqXHR.status==403){
                     window.location = "/mdm/login-agent#error"
+                }
             });
         })(), 5000);
 });

@@ -4,12 +4,12 @@ var log = new Log();
 var username = request.getParameter("username");
 var password = request.getParameter("password");
 var ownership = request.getParameter("ownership");
-var mdmProps = require('/modules/mdm-props.js').config();
-var iOSAuthUrl = mdmProps.httpURL+"/"+mdmProps.iOSConfigRoot+'/authenticate';;
-
+var mdmProps = require('/config/mdm-props.js').config();
+var iOSAuthUrl = mdmProps.httpsURL+mdmProps.iOSConfigRoot+'authenticate';
 var result = post(iOSAuthUrl, {"username": username, "password": password}, {
-    "User-Agent" : "Jaggery-XHR",
-    "Country" : "LK"
+    "User-Agent": "Jaggery-XHR",
+    "Country": "LK",
+    "Content-Type": "application/json"
 });
 log.info(result.xhr.status);
 if(result.xhr.status==200){
