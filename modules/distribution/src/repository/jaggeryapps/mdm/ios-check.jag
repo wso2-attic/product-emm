@@ -1,20 +1,19 @@
 <%
-   var username = session.get("enrollUser");
-   if(username){
-       var mdmProps = require('/config/mdm-props.js').config();
-       var iOSCheckUrl = mdmProps.httpsURL+mdmProps.iOSConfigRoot+'enrolled';
-
-       var result = post(iOSCheckUrl, {"username": username}, {
-           "User-Agent" : "Jaggery-XHR",
-           "Country" : "LK",
-           "Content-Type": "application/json"
-       });
-       if(result.xhr.status==200){
-           response.status = "200";
-       }else if(result.xhr.status==403){
-           response.sendRedirect("/mdm/login-agent#auth-failed");
-       }
-   }else{
-       response.sendError(400);
-   }
+var username = session.get("enrollUser");
+if (username) {
+    var mdmProps = require('/config/mdm-props.js').config();
+    var iOSCheckUrl = mdmProps.httpsURL + mdmProps.iOSConfigRoot + 'enrolled';
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", iOSCheckUrl);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send({"username": username});
+    log.info(xhr.status);
+    if (xhr.status == 200) {
+        response.status = "200";
+    } else if (xhr.status == 403) {
+        response.sendRedirect("/mdm/login-agent#auth-failed");
+    }
+} else {
+    response.sendError(400);
+}
 %>
