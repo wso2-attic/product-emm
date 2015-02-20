@@ -1,13 +1,15 @@
 {{layout "enrollment"}}
 {{#zone "body"}}
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1>License Agreement</h1>
-            <h2>WSO2 BYOD Policy</h2>
-            <p>text</p>
-            <button class="btn btn-default">
-                I agree
-            </button>
+    <div class="container c-both">
+        <div class="clearfix"> </div>
+        {{unit "wizard" page=4}}
+        <div class="row">
+            <div class="container col-md-8 wr-text">
+                <div class="wr-head"><h2>Step 4. Complete MDM Registration</h2></div>
+            </div>
         </div>
+        {{unit "license-agreement-box-enrollment"}}
+
     </div>
+
 {{/zone}}

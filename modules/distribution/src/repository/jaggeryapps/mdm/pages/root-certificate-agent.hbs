@@ -1,19 +1,20 @@
 {{layout "enrollment"}}
 {{#zone "body"}}
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <p><strong>The Root certificate needs to be downloaded to your device before you can enroll to the EMM</strong></p>
-            <button class="btn btn-default">
-                Download the Root Certificate
-            </button>
+    <div class="container c-both">
+
+        {{unit "wizard" page=2}}
+        <div class="row">
+
+            <div class="container col-md-8 wr-text">
+                <div class="wr-head"><h2>Step 2. Download the Root Certificate</h2></div>
+                <p>The Root Certificate needs to be downloaded to your device before you can enroll to the Mobile Device Manager.</p>
+            </div>
+
+            <div class="container col-md-4">
+            </div>
+
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <p><strong>After downloading the Root Certificate to your device,</strong></p>
-            <button class="btn btn-default">
-                EMM Login Page
-            </button>
-        </div>
+        {{unit "asset-download-ca"}}
+
     </div>
 {{/zone}}
