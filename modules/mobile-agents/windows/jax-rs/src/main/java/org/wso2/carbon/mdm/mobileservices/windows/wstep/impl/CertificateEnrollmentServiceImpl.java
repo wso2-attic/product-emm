@@ -80,6 +80,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 
 	/**
+	 * This method implements MS-WSTEP for Certificate Enrollment Service.
 	 * @param tokenType           - Device Enrolment Token type is received via device
 	 * @param requestType         - WS-Trust request type
 	 * @param binarySecurityToken - CSR from device
