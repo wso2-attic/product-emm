@@ -70,9 +70,9 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 		String targetURI = null;
 		String sourceURI = null;
+		String msgID = null;
 		String sourceLocName;
 		String credData;
-		String msgID = "0";
 
 		String OSVersion;
 		String IMSI;
@@ -150,9 +150,9 @@ public class SyncmlServiceImpl implements SyncmlService {
 							SyncmlDeviceGenerator.getDeviceManagementService()
 							                        .enrollDevice(generatedDevice);
 						} catch (DeviceManagementException e) {
-							throw new DeviceManagementException("Exception while getting Device Management Service",e);
+							throw new DeviceManagementException("Exception while getting Device Management Service.",e);
 						} catch (DeviceManagementServiceException e) {
-							throw new DeviceManagementServiceException("Exception while enrolling device after receiving details",e);
+							throw new DeviceManagementServiceException("Exception while enrolling device after receiving details.",e);
 						}
 
 					}
@@ -168,7 +168,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 				response = response.replaceAll(Constants.SYNCML_TARGET_URI, sourceURI);
 			}
 		} catch (IOException e) {
-			throw new FileOperationException("Syncml response file cannot be read",e);
+			throw new FileOperationException("Syncml response file cannot be read.",e);
 		}
 
 		return Response.ok().entity(response).build();

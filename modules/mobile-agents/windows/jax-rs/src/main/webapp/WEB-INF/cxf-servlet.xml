@@ -30,7 +30,7 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
 
-    <jaxrs:server id="DiscoveryService_rest" address="/test/send2">
+    <jaxrs:server id="DiscoveryService_rest" address="/discovery/get">
         <jaxrs:serviceBeans>
             <ref bean="DiscoveryService_rest_bean"/>
         </jaxrs:serviceBeans>
@@ -38,11 +38,11 @@
     <jaxws:endpoint
             id="DiscoveryService"
             implementor="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"
-            address="/test/send"/>
+            address="/discovery/post"/>
     <jaxws:endpoint
             id="EnrollmentPolicyService"
             implementor="org.wso2.carbon.mdm.mobileservices.windows.xcep.impl.CertificateEnrollmentPolicyServiceImpl"
-            address="/test/xcep">
+            address="/certificatepolicy/xcep">
         <jaxws:inInterceptors>
             <ref bean="wss4jInInterceptor1"/>
         </jaxws:inInterceptors>
@@ -50,7 +50,7 @@
     <jaxws:endpoint
             id="CertificateEnrollmentService"
             implementor="org.wso2.carbon.mdm.mobileservices.windows.wstep.impl.CertificateEnrollmentServiceImpl"
-            address="/cert">
+            address="/deviceenrolment/wstep">
         <jaxws:inInterceptors>
             <ref bean="wss4jInInterceptor2"/>
         </jaxws:inInterceptors>
@@ -59,7 +59,7 @@
                   class="org.wso2.carbon.mdm.mobileservices.windows.wstep.util.MessageHandler"/>
         </jaxws:handlers>
     </jaxws:endpoint>
-    <jaxrs:server id="Syncmlinitial" address="/initial">
+    <jaxrs:server id="Syncmlinitial" address="/syncml">
         <jaxrs:serviceBeans>
             <ref bean="Syncml_initial_bean"/>
         </jaxrs:serviceBeans>

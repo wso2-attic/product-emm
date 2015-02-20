@@ -32,10 +32,10 @@ import javax.ws.rs.core.Response;
 /**
  * Interface for Syncml message flow.
  */
-@Path("/example")
+@Path("/devicemanagement")
 public interface SyncmlService {
 
-	@Path("/sync")
+	@Path("/request")
 	@POST
 	@Consumes({"application/vnd.syncml.dm+xml;charset=utf-8", "application/xml"})
 	@Produces("application/vnd.syncml.dm+xml;charset=utf-8")

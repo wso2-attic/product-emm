@@ -31,7 +31,8 @@ import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
 
 /**
- * Implementation class of Discovery Request.
+ * Implementation class of Discovery Request. This class implements the first two services
+ * of device enrolment stage.
  */
 @WebService(endpointInterface = Constants.DISCOVERY_SERVICE_ENDPOINT, targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 @Addressing(enabled = true, required = true)
@@ -74,7 +75,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	public Response discoverGet() {
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Discovery service end point was triggered via GET method");
+			logger.debug("Discovery service end point was triggered via GET method.");
 		}
 		return Response.ok().build();
 	}

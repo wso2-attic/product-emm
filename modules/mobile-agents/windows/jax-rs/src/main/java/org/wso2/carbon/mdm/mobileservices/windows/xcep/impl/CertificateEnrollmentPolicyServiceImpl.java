@@ -53,7 +53,7 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 	                        Holder<OIDCollection> OIDCollection) {
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Enrolment certificate policy end point was triggered by device");
+			logger.debug("Enrolment certificate policy end point was triggered by device.");
 		}
 
 		Response responseElement = new Response();

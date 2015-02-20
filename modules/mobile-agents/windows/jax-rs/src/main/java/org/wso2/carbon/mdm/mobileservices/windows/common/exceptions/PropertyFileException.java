@@ -19,7 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 
 /**
- * Exception class for property XML file reading failures.
+ * Exception class for property/provisioning XML file reading failures.
  */
 public class PropertyFileException extends Exception {
 

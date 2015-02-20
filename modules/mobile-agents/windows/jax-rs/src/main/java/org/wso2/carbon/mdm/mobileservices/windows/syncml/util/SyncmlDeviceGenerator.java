@@ -105,7 +105,7 @@ public class SyncmlDeviceGenerator {
 		deviceManagementService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class, null);
 
 		if (deviceManagementService == null) {
-			String msg = "Device management service not initialized";
+			String msg = "Device management service not initialized.";
 			logger.error(msg);
 			throw new DeviceManagementServiceException(msg);
 		}

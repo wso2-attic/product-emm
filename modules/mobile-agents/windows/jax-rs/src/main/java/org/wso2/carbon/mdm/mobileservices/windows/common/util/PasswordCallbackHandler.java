@@ -25,7 +25,8 @@ import java.io.IOException;
 import org.apache.ws.security.WSPasswordCallback;
 
 /**
- * Check security credentials of receiving SOAP message and verify.
+ * Check security credentials of receiving SOAP message and verify. This handler class
+ * is used at XCEP and WSTEP stages of the enrollment.
  */
 public class PasswordCallbackHandler implements CallbackHandler {
 
@@ -34,6 +35,8 @@ public class PasswordCallbackHandler implements CallbackHandler {
 			throws IOException, UnsupportedCallbackException {
 		WSPasswordCallback passwordCallback = (WSPasswordCallback) callbacks[0];
 
+		//Temporarily using fix credentials for device enrollment. This should be later
+		//associated with a user DB
 		if ("test@wso2.com".equals(passwordCallback.getIdentifier())) {
 			passwordCallback.setPassword("testpassword");
 		}

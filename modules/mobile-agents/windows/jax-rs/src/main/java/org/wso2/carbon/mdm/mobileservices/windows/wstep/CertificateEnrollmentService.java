@@ -27,14 +27,10 @@ import org.wso2.carbon.mdm.mobileservices.windows.wstep.beans.RequestSecurityTok
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.xml.ws.BindingType;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.SOAPBinding;
-import javax.xml.ws.BindingType;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 
 /**
  * Interface of WSTEP implementation.
