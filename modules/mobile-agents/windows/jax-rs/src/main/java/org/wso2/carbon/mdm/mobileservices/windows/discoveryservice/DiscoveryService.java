@@ -34,22 +34,24 @@ import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.SOAPBinding;
 
 /**
- * Interface for Discovery Request.
+ * Interface for Discovery service related operations.
  */
-@WebService(targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE, name = "IDiscoveryService")
+@WebService(targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE,
+		name = "IDiscoveryService")
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public interface DiscoveryService {
 
 	@POST
 	@WebMethod(operationName = "Discover")
-	@RequestWrapper(targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
-	@ResponseWrapper(targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
-	@WebResult(name = "DiscoverResult") DiscoveryResponse discover(
+	@RequestWrapper(localName = "Discover", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@ResponseWrapper(localName = "DiscoverResponse", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	DiscoveryResponse discover(
 			@WebParam(name = "request", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 			DiscoveryRequest request);
 
 	@GET
 	@WebMethod
-	@WebResult() Response discoverGet();
+	@WebResult()
+	Response discoverGet();
 
 }

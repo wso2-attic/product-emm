@@ -58,8 +58,6 @@ public class CertificateSigningService {
 
 		X509v3CertificateBuilder certificateBuilder;
 
-
-
 		try {
 			certificateBuilder = new JcaX509v3CertificateBuilder(CACert,
 			                                                     BigInteger.valueOf(new SecureRandom().nextInt(Integer.MAX_VALUE)),
@@ -68,9 +66,9 @@ public class CertificateSigningService {
 			                                                     new X500Principal(Constants.CN),
 			                                                     jcaRequest.getPublicKey());
 		} catch (InvalidKeyException e) {
-			throw new CertificateGenerationException("CSR's public key is invalid",e);
+			throw new CertificateGenerationException("CSR's public key is invalid", e);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CertificateGenerationException("Certificate cannot be generated",e);
+			throw new CertificateGenerationException("Certificate cannot be generated", e);
 		}
 
 		try {
@@ -82,7 +80,7 @@ public class CertificateSigningService {
 			certificateBuilder.addExtension(X509Extensions.BasicConstraints, true,
 			                                new BasicConstraints(false));
 		} catch (CertIOException e) {
-			throw new CertificateGenerationException("Cannot add extension(s) to signed certificate",e);
+			throw new CertificateGenerationException("Cannot add extension(s) to signed certificate", e);
 		}
 
 		ContentSigner signer;

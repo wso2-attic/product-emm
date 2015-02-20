@@ -21,11 +21,12 @@ package org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.beans;
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
-@XmlRootElement
+@XmlRootElement(name = "DiscoveryRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
+@SuppressWarnings("unused")
 public class DiscoveryRequest implements Serializable {
 
-	@XmlElement(name = "EmailAddress")
+	@XmlElement(name = "EmailAddress", required = true)
 	private String emailId;
 
 	@XmlElement(name = "RequestVersion")

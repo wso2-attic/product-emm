@@ -41,7 +41,7 @@ public interface CertificateEnrollmentPolicyService {
 	@RequestWrapper(localName = "GetPolicies", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.REQUEST_WRAPPER_CLASS_NAME)
 	@WebMethod(operationName = "GetPolicies")
 	@ResponseWrapper(localName = "GetPoliciesResponse", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.RESPONSE_WRAPPER_CLASS_NAME)
-	public void getPolicies(
+	void getPolicies(
 			@WebParam(name = "client", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			Client client,
 			@WebParam(name = "requestFilter", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)

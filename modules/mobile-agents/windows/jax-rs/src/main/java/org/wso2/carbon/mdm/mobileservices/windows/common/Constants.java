@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.common;
 /**
  * Constants class for Windows plugin.
  */
-public class Constants {
+public final class Constants {
 
 	/*Service endpoints*/
 	public static final String DISCOVERY_SERVICE_ENDPOINT = "org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.DiscoveryService";
@@ -66,7 +66,7 @@ public class Constants {
 	public static final String EMMPASSWORD = "emmpassword";
 	public static final String EMMPRIVATEKEYPASSWORD = "emmprivatekeypassword";
 	public static final String WAP_PROVISIONING_XML = "wap-provisioning.xml";
-	public static final String CN = "CN=mdmcn";
+	public static final String CN = "CN=mdmcn";  //TODO move to config file
 	public static final String PROVIDER = "BC";
 	public static final String ALGORITHM = "SHA1withRSA";
 	public static final String JKS = "JKS";

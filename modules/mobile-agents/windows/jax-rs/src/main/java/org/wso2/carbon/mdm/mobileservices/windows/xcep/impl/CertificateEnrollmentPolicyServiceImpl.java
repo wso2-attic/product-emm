@@ -79,6 +79,7 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 
 		responseElement.setPolicies(policyCollectionElement);
 
+		//TODO use setters
 		response.value = responseElement;
 
 		OID OIDElement = new OID();

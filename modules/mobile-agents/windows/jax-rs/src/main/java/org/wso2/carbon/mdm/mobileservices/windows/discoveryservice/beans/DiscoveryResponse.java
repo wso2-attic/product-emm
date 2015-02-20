@@ -21,24 +21,28 @@ package org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.beans;
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
-@XmlRootElement
+@XmlRootElement(name = "DiscoverResult")
+@XmlAccessorType(XmlAccessType.FIELD)
+@SuppressWarnings("unused")
 public class DiscoveryResponse implements Serializable {
 
+	@XmlElement(name = "AuthPolicy", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
 	private String authPolicy;
+
+	@XmlElement(name = "EnrollmentPolicyServiceUrl", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
 	private String enrollmentPolicyServiceUrl;
+
+	@XmlElement(name = "EnrollmentServiceUrl", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
 	private String enrollmentServiceUrl;
 
-	@XmlElement(name = "AuthPolicy", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
 	public String getAuthPolicy() {
 		return authPolicy;
 	}
 
-	@XmlElement(name = "EnrollmentPolicyServiceUrl", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
 	public String getEnrollmentPolicyServiceUrl() {
 		return enrollmentPolicyServiceUrl;
 	}
 
-	@XmlElement(name = "EnrollmentServiceUrl", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
 	public String getEnrollmentServiceUrl() {
 		return enrollmentServiceUrl;
 	}
@@ -54,4 +58,5 @@ public class DiscoveryResponse implements Serializable {
 	public void setEnrollmentServiceUrl(String enrollmentServiceUrl) {
 		this.enrollmentServiceUrl = enrollmentServiceUrl;
 	}
+
 }
