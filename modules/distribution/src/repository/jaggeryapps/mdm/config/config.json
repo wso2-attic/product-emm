@@ -1,0 +1,7 @@
+{
+  "appContext" : "/mdm/",
+  "apiContext" : "api",
+  "httpsURL": "%https.ip%",
+  "httpURL": "%http.ip%",
+  "iOSConfigRoot": "cdm-ios-api"
+}
