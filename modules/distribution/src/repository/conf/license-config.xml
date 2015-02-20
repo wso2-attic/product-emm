@@ -25,7 +25,7 @@
             <Provider>wso2</Provider>
             <Name>android</Name>
             <Version>1.0.0</Version>
-            <Language>1.0.0</Language>
+            <Language>en-us</Language>
             <ValidFrom>01-01-2014</ValidFrom>
             <ValidTo>31-12-2035</ValidTo>
             <Text><![CDATA[Test License]]></Text>
