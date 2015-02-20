@@ -1,5 +1,4 @@
 <%
-new Log('sdfsdfsdfdsf').error('sdfdsfsdfdsfsdf');
 
 //global object to pass request stat among fuse framework files.
 var fuseState = {
