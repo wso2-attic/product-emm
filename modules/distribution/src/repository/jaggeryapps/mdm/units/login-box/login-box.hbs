@@ -1,0 +1,44 @@
+{{layout "enrollment"}}
+
+{{#zone "main"}}
+    <div>
+        <form class="form-login-box" action="/mdm/controller/login" method="POST">
+            <div class="row">
+                <div class="container col-md-8 wr-text">
+                    <!-- validation -->
+                    <span class="wr-validation-summary hidden">
+                        <p></p>
+                    </span>
+
+                    <div class="spcr-2"></div>
+
+                    <label class="input-label">Username</label>
+                    <div class="input-control text">
+                        <input name="username" type="text" value="" placeholder="eg:- johndoe"/>
+                    </div>
+
+                    <label class="input-label">Password</label>
+                    <div class="input-control text">
+                        <input name="password" type="password" value="" placeholder=""/>
+                    </div>
+                    {{defineZone "additionalInput"}}
+                </div>
+                <div class="container col-md-9">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="container col-md-4 wr-buttons">
+                    <a href="#" class="btn-download-agent">Login</a>
+                </div>
+                <div class="container col-md-9">
+
+                </div>
+            </div>
+        </form>
+    </div>
+{{/zone}}
+
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/login-box.js"></script>
+{{/zone}}

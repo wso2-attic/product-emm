@@ -1,0 +1,25 @@
+<%
+// Call the iOS end point with the Username/ Password. If a 403 is returned redirect to the agent-login page with a hash
+var log = new Log();
+var username = request.getParameter("username");
+var password = request.getParameter("password");
+var ownership = request.getParameter("ownership");
+var mdmProps = require('/config/mdm-props.js').config();
+var iOSAuthUrl = mdmProps.httpsURL+mdmProps.iOSConfigRoot+'authenticate';
+var result = post(iOSAuthUrl, {"username": username, "password": password}, {
+    "User-Agent": "Jaggery-XHR",
+    "Country": "LK",
+    "Content-Type": "application/json"
+});
+log.info(result.xhr.status);
+if(result.xhr.status==200){
+    session.put("username", username);
+    session.put("password", password);
+    session.put("ownership", ownership);
+    response.sendRedirect("/mdm/license-agent");
+}else if(result.xhr.status==403){
+    response.sendRedirect("/mdm/login-agent#auth-failed");
+}else{
+    response.sendRedirect("/mdm/login-agent#error");
+}
+%>

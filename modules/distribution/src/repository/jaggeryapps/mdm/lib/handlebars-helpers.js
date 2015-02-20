@@ -3,12 +3,37 @@ var log = new Log('fuse.handlebars');
 
 var Handlebars = require('handlebars-v2.0.0.js').Handlebars;
 
-var getScope = function (unit) {
+var getScope = function (unit,configs) {
     var jsFile = fuse.getFile(unit, '', '.js');
+    var templateConfigs = configs || {};
+    var script;
+    var onRequestCb = function(){}; //Assume that onRequest function will not be defined by the user
     var viewModel = {};
+    var cbResult;
     if (jsFile.isExists()) {
-        log.error(jsFile.getPath());
-        viewModel = require(jsFile.getPath()).onRequest();
+        script = require(jsFile.getPath());
+        //Eagerly make the viewModel the template configs
+        viewModel = templateConfigs;
+        //Check if the unit author has specified an onRequest
+        //callback
+        if(script.hasOwnProperty('onRequest')){
+            onRequestCb = script.onRequest;
+            cbResult = onRequestCb(templateConfigs);
+            log.info("passing configs to unit "+unit+" configs: "+stringify(templateConfigs));
+            //If the execution does not yield an object we will print
+            //a warning as the unit author may have forgotten to return a data object
+            if(cbResult===undefined){
+                cbResult = {}; //Give an empty data object
+                log.warn('[' + requestId + '] unit "' + unit + '" has a onRequest method which does not return a value.This may lead to the '
+                    +'unit not been rendered correctly.');
+            }
+            viewModel = cbResult;
+        }
+    }
+    else{
+        //If there is no script then the view should get the configurations
+        //passed in the unit call
+        viewModel = templateConfigs;
     }
     viewModel.app = {
         url: '/' + fuseState.appName
@@ -43,7 +68,7 @@ Handlebars.registerHelper('defineZone', function (zoneName, zoneContent) {
         if (Handlebars.innerZonesFromUnit == null || Handlebars.innerZonesFromUnit.unitName == unit.unitName) {
             var template = fuse.getFile(unit.originUnitName || unit.unitName, '', '.hbs');
             log.debug('[' + requestId + '] for zone "' + zone + '" including template :"' + template.getPath() + '"');
-            result += Handlebars.compileFile(template)(getScope(unit.unitName));
+            result += Handlebars.compileFile(template)(getScope(unit.unitName, zoneContent.data.root));
         }
     }
 
@@ -69,7 +94,7 @@ Handlebars.registerHelper('defineZone', function (zoneName, zoneContent) {
 Handlebars.registerHelper('zone', function (zoneName, zoneContent) {
     var currentZone = fuseState.currentZone[fuseState.currentZone.length - 1];
     if (currentZone == null) {
-        return 'zone_' + zoneName;
+        return 'zone_' + zoneName + ' ';
     }
 
     // if it's exact zone match or if any in inner zone matches we render zone.
@@ -91,12 +116,31 @@ Handlebars.registerHelper('layout', function (layoutName) {
     }
 });
 
-Handlebars.registerHelper('unit', function (unitName) {
+Handlebars.registerHelper('unit', function (unitName,options) {
+    var unitDef = fuse.getUnitDefinition(unitName);
+    var baseUnit = null;
+    var templateConfigs = options.hash || {};
+    for (var i = 0; i < unitDef.zones.length; i++) {
+        var zone = unitDef.zones[i];
+        if (zone.name == 'main') {
+            baseUnit = zone.origin;
+        } else {
+            var golbalZone = fuseState.zones[zone.name];
+            if (!golbalZone) {
+                fuseState.zones[zone.name] = [{"unitName": unitName}];
+            } else {
+                fuseState.zones[zone.name].push({"unitName": unitName});
+            }
+        }
+    }
+    if (baseUnit == null) {
+        log.error('unit does not have a main zone');
+    }
     //TODO warn when unspecified decencies are included.
     fuseState.currentZone.push('main');
-    var template = fuse.getFile(unitName, '', '.hbs');
-    log.info('[' + requestId + '] including "' + unitName + '"');
-    var result = new Handlebars.SafeString(Handlebars.compileFile(template)(getScope(unitName)))
+    var template = fuse.getFile(baseUnit, '', '.hbs');
+    log.info('[' + requestId + '] including "' + baseUnit + '"'+" with configs "+stringify(templateConfigs));
+    var result = new Handlebars.SafeString(Handlebars.compileFile(template)(getScope(baseUnit,templateConfigs)));
     fuseState.currentZone.pop();
     return result;
 });
