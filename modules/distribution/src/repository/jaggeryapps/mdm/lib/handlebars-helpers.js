@@ -68,7 +68,7 @@ Handlebars.registerHelper('defineZone', function (zoneName, zoneContent) {
         if (Handlebars.innerZonesFromUnit == null || Handlebars.innerZonesFromUnit.unitName == unit.unitName) {
             var template = fuse.getFile(unit.originUnitName || unit.unitName, '', '.hbs');
             log.debug('[' + requestId + '] for zone "' + zone + '" including template :"' + template.getPath() + '"');
-            result += Handlebars.compileFile(template)(getScope(unit.unitName));
+            result += Handlebars.compileFile(template)(getScope(unit.unitName, zoneContent.data.root));
         }
     }
 
