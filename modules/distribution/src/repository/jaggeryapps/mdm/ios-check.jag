@@ -1,0 +1,19 @@
+<%
+   var username = session.get("enrollUser");
+   if(username){
+       var mdmProps = require('/modules/mdm-props.js').config();
+       var iOSCheckUrl = mdmProps.httpURL+"/"+mdmProps.iOSConfigRoot+'/enrolled';
+
+       var result = post(iOSCheckUrl, {"username": username}, {
+           "User-Agent" : "Jaggery-XHR",
+           "Country" : "LK"
+       });
+       if(result.xhr.status==200){
+           response.status = "200";
+       }else if(result.xhr.status==403){
+           response.sendRedirect("/mdm/login-agent#auth-failed");
+       }
+   }else{
+       response.sendError(400);
+   }
+%>
