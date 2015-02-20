@@ -4,16 +4,16 @@ if (username) {
     var password = session.get("password");
     var ownership = session.get("ownership");
     var mdmProps = require('/config/mdm-props.js').config();
-    var iOSEnrollUrl = mdmProps.httpsURL+mdmProps.iOSConfigRoot+'enroll';
+    var iOSEnrollUrl = mdmProps.httpsURL + mdmProps.iOSConfigRoot + 'enroll';
 
-    var result = post(iOSEnrollUrl, {"username": username,  "password": password, "ownership": ownership}, {
-        "User-Agent": "Jaggery-XHR",
-        "Country": "LK",
-        "Content-Type": "application/json"
-    });
-    if (result.xhr.status == 200) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", iOSEnrollUrl);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send({"username": username, "password": password, "ownership": ownership});
+    log.info(xhr.status);
+    if (xhr.status == 200) {
         session.put("enrollUser", username);
-    } else if (result.xhr.status == 403) {
+    } else if (xhr.status == 403) {
         response.sendRedirect("/mdm/login-agent#auth-failed");
     }
 } else {
