@@ -29,7 +29,6 @@
     <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-
     <jaxrs:server id="DiscoveryService_rest" address="/discovery/get">
         <jaxrs:serviceBeans>
             <ref bean="DiscoveryService_rest_bean"/>
@@ -64,8 +63,6 @@
             <ref bean="Syncml_initial_bean"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
-
-
     <bean id="DiscoveryService_rest_bean"
           class="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"/>
     <bean id="wss4jInInterceptor1" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
@@ -94,6 +91,5 @@
     </bean>
     <bean id="Syncml_initial_bean" class="org.wso2.carbon.mdm.mobileservices.windows.syncml.impl.SyncmlServiceImpl"/>
     <bean id="passwordCallback" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.PasswordCallbackHandler"/>
-
 </beans>
 

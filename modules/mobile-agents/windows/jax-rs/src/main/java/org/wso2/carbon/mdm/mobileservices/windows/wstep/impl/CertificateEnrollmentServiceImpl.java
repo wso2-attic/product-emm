@@ -30,6 +30,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -67,6 +68,9 @@ import java.security.cert.Certificate;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentService {
 
+	private static final int REQUEST_ID = 0;
+	private static final int CA_CERTIFICATE_POSITION = 0;
+	private static final int SIGNED_CERTIFICATE_POSITION = 1;
 	private Logger logger = Logger.getLogger(CertificateEnrollmentServiceImpl.class);
 
 	PrivateKey privateKey;
@@ -140,17 +144,20 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		try {
 			builder = domFactory.newDocumentBuilder();
 
-			//TODO change variable name
-			Document dDoc = builder.parse(wapProvisioningFilePath);
+			Document document = builder.parse(wapProvisioningFilePath);
 
-			NodeList wapParm = dDoc.getElementsByTagName(Constants.PARM);
+			NodeList wapParm = document.getElementsByTagName(Constants.PARM);
 
-//TODO add comment explaining , and constant, warParm to single variable
-			wapParm.item(0).getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
+
+			Node CACertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
+
+			//Adding SHA1 CA certificate finger print to wap-provisioning xml.
+			CACertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
 					String.valueOf(DigestUtils.shaHex(rootCACertificate.getEncoded()))
 					      .toUpperCase());
 
-			NamedNodeMap rootCertAttributes = wapParm.item(0).getAttributes();
+			//Adding encoded CA certificate to wap-provisioning file after removing new line characters.
+			NamedNodeMap rootCertAttributes = CACertificatePosition.getAttributes();
 			Node rootCertNode = rootCertAttributes.getNamedItem(Constants.VALUE);
 			rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
 			rootCertNode.setTextContent(rootCertEncodedString);
@@ -159,12 +166,16 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 				logger.debug("Root certificate:" + rootCertEncodedString);
 			}
 
-			wapParm.item(1).getParentNode().getAttributes().getNamedItem(Constants.TYPE)
+			Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
+
+			//Adding SHA1 signed certificate finger print to wap-provisioning xml.
+			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE)
 			       .setTextContent(
 					       String.valueOf(DigestUtils.shaHex(signedCertificate.getEncoded()))
 					             .toUpperCase());
 
-			NamedNodeMap clientCertAttributes = wapParm.item(1).getAttributes();
+			//Adding encoded signed certificate to wap-provisioning file after removing new line characters.
+			NamedNodeMap clientCertAttributes = signedCertificatePosition.getAttributes();
 			Node clientEncodedNode = clientCertAttributes.getNamedItem(Constants.VALUE);
 			signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
 			clientEncodedNode.setTextContent(signedCertEncodedString);
@@ -173,9 +184,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 				logger.debug("Signed certificate:" + signedCertEncodedString);
 			}
 
-			wapProvisioningString = convertDocumentToString(dDoc);
+			wapProvisioningString = convertDocumentToString(document);
 
-		} catch (Exception e) { //TODO add a comment explaining why generic exception is caught
+		//Generic exception is caught here as there is no need of taking different actions for different exceptions.
+		} catch (Exception e) {
 		    throw new PropertyFileException("Problem occurred with wap-provisioning.xml file.", e);
 	    }
 
@@ -187,15 +199,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		binarySecToken.setEncodingType(Constants.ENCODING_TYPE);
 		binarySecToken.setToken(encodedWap);
 		requestedSecurityToken.setBinarySecurityToken(binarySecToken);
-
 		requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
+		requestSecurityTokenResponse.setRequestID(REQUEST_ID);
 
-		//TODO constant
-		requestSecurityTokenResponse.setRequestID(0);
-
-		//TODO setters
 		response.value = requestSecurityTokenResponse;
-
 	}
 
 	/**
@@ -203,15 +210,14 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @return - String representation of wap provisioning XML document
 	 * @throws Exception
 	 */
-	//TODO throw specific exception
-	private String convertDocumentToString(Document document) throws Exception {
-		DOMSource domSource = new DOMSource(document);
-		StringWriter writer = new StringWriter();
-		StreamResult result = new StreamResult(writer);
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = tf.newTransformer();
-		transformer.transform(domSource, result);
-		String wapProvisioningString = writer.toString();
+	private String convertDocumentToString(Document document) throws TransformerException {
+		DOMSource DOMSource = new DOMSource(document);
+		StringWriter stringWriter = new StringWriter();
+		StreamResult streamResult = new StreamResult(stringWriter);
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.transform(DOMSource, streamResult);
+		String wapProvisioningString = stringWriter.toString();
 
 		return wapProvisioningString;
 	}
@@ -225,7 +231,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	public void signCertificate()
 			throws KeyStoreGenerationException, PropertyFileException, CertificateGenerationException {
 
-		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.WSO2EMM_JKS_FILE).getFile());
+		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.WSO2_MDM_JKS_FILE).getFile());
 		String JKSFilePath = JKSFile.getPath();
 
 		KeyStore securityJKS;
@@ -235,8 +241,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store.", e);
 		}
 
-		String storePassword = getCredentials(Constants.EMMJKS);
-		String keyPassword = getCredentials(Constants.EMMPRIVATEKEY);
+		String storePassword = getCredentials(Constants.KEY_STORE);
+		String keyPassword = getCredentials(Constants.KEY_STORE_PRIVATE_KEY);
 
 		try {
 			KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), JKSFilePath);
@@ -246,7 +252,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		PrivateKey CAPrivateKey;
 		try {
-			CAPrivateKey = (PrivateKey) securityJKS.getKey(Constants.CACERT, keyPassword.toCharArray());
+			CAPrivateKey = (PrivateKey) securityJKS.getKey(Constants.CA_CERT, keyPassword.toCharArray());
 		} catch (java.security.KeyStoreException e) {
 			throw new CertificateGenerationException("Cannot generate private key due to Key store error.", e);
 		} catch (NoSuchAlgorithmException e){
@@ -259,7 +265,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		Certificate CACertificate;
 		try {
-			CACertificate = securityJKS.getCertificate(Constants.CACERT);
+			CACertificate = securityJKS.getCertificate(Constants.CA_CERT);
 		} catch (KeyStoreException e) {
 			throw new KeyStoreGenerationException("Keystore cannot be accessed.", e);
 		}
@@ -319,15 +325,18 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		}
 
 		String entityPassword = null;
-		//TODO null check
-		if (Constants.EMMJKS_ENTRY.equals(entity)) {
-			entityPassword =
-					document.getElementsByTagName(Constants.EMMPASSWORD).item(0).getTextContent();
-		} else if (Constants.EMMPRIVATEKEY_ENTRY.equals(entity)) {
-			entityPassword = document.getElementsByTagName(Constants.EMMPRIVATEKEYPASSWORD).item(0).getTextContent();
+
+		if (Constants.MDM_JKS_ENTRY.equals(entity)) {
+			entityPassword = document.getElementsByTagName(Constants.MDM_PASSWORD).item(0).getTextContent();
+		} else if (Constants.MDM_PRIVATEKEY_ENTRY.equals(entity)) {
+			entityPassword = document.getElementsByTagName(Constants.MDM_PRIVATE_KEY_PASSWORD).item(0).getTextContent();
 		}
-		return entityPassword;
+
+		if(entityPassword!=null) {
+			return entityPassword;
+		} else{
+			throw new PropertyFileException("Password cannot be read from property file.");
+		}
 
 	}
-
 }

@@ -53,7 +53,6 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
 		discoveryResponse.setAuthPolicy(Constants.AUTH_POLICY);
-
 		discoveryResponse.setEnrollmentPolicyServiceUrl(
 				Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
 		discoveryResponse.setEnrollmentServiceUrl(
