@@ -38,20 +38,28 @@
             id="DiscoveryService"
             implementor="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"
             address="/discovery/post"/>
+
     <jaxws:endpoint
             id="EnrollmentPolicyService"
             implementor="org.wso2.carbon.mdm.mobileservices.windows.xcep.impl.CertificateEnrollmentPolicyServiceImpl"
             address="/certificatepolicy/xcep">
+        <jaxws:properties>
+            <entry key="ws-security.ut.validator" value-ref="customvalidator"/>
+        </jaxws:properties>
         <jaxws:inInterceptors>
-            <ref bean="wss4jInInterceptor1"/>
+            <ref bean="wss4jInInterceptor"/>
         </jaxws:inInterceptors>
     </jaxws:endpoint>
+
     <jaxws:endpoint
             id="CertificateEnrollmentService"
             implementor="org.wso2.carbon.mdm.mobileservices.windows.wstep.impl.CertificateEnrollmentServiceImpl"
             address="/deviceenrolment/wstep">
+        <jaxws:properties>
+            <entry key="ws-security.ut.validator" value-ref="customvalidator"/>
+        </jaxws:properties>
         <jaxws:inInterceptors>
-            <ref bean="wss4jInInterceptor2"/>
+            <ref bean="wss4jInInterceptor"/>
         </jaxws:inInterceptors>
         <jaxws:handlers>
             <bean id="serviceOptionsHandler"
@@ -65,31 +73,19 @@
     </jaxrs:server>
     <bean id="DiscoveryService_rest_bean"
           class="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"/>
-    <bean id="wss4jInInterceptor1" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+    <bean id="wss4jInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
         <property name="properties">
             <map>
                 <entry key="action" value="UsernameToken"/>
                 <entry key="passwordType" value="PasswordText"/>
                 <entry key="isBSPCompliant" value="false"/>
-                <entry key="allowNamespaceQualifiedPasswordTypes"
-                       value="true"/>
-                <entry key="passwordCallbackRef" value-ref="passwordCallback"/>
+                <entry key="allowNamespaceQualifiedPasswordTypes" value="true"/>
             </map>
         </property>
     </bean>
-    <bean id="wss4jInInterceptor2" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
-        <property name="properties">
-            <map>
-                <entry key="action" value="UsernameToken"/>
-                <entry key="passwordType" value="PasswordText"/>
-                <entry key="isBSPCompliant" value="false"/>
-                <entry key="allowNamespaceQualifiedPasswordTypes"
-                       value="true"/>
-                <entry key="passwordCallbackRef" value-ref="passwordCallback"/>
-            </map>
-        </property>
-    </bean>
-    <bean id="Syncml_initial_bean" class="org.wso2.carbon.mdm.mobileservices.windows.syncml.impl.SyncmlServiceImpl"/>
-    <bean id="passwordCallback" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.PasswordCallbackHandler"/>
+    <bean id="Syncml_initial_bean"
+          class="org.wso2.carbon.mdm.mobileservices.windows.syncml.impl.SyncmlServiceImpl"/>
+    <bean id="customvalidator"
+          class="org.wso2.carbon.mdm.mobileservices.windows.common.util.UsernameTokenValidator"/>
 </beans>
 
