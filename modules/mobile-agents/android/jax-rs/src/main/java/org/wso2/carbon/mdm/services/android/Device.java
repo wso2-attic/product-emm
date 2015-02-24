@@ -18,6 +18,8 @@
 package org.wso2.carbon.mdm.services.android;
 
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.core.config.license.License;
+import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
@@ -161,7 +163,7 @@ public class Device {
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
 		}
-		return license.getLicenseText();
+		return license.getText();
 	}
 
 }
