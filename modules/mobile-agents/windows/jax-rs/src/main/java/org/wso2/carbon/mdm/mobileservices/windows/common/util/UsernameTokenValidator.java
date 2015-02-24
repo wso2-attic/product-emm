@@ -76,7 +76,7 @@ public class UsernameTokenValidator implements Validator {
 			RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
 
 			if (realmService == null) {
-				String msg = "RealmService not initialized";
+				String msg = "RealmService not initialized.";
 				throw new AuthenticationException(msg);
 			}
 
@@ -89,7 +89,7 @@ public class UsernameTokenValidator implements Validator {
 			}
 
 			if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-				logger.error("Invalid tenant domain." + tenantDomain);
+				logger.error("Invalid tenant domain " + tenantDomain);
 				return false;
 			}
 

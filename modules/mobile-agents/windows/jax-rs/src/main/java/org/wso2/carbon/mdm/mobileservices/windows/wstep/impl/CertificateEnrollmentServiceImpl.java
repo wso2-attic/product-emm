@@ -68,8 +68,9 @@ import java.security.cert.Certificate;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentService {
 
-	private static final int REQUEST_ID = 0;
-	private static final int CA_CERTIFICATE_POSITION = 0;
+	public static final int FIRST_ITEM = 0;
+	private static final int REQUEST_ID = FIRST_ITEM;
+	private static final int CA_CERTIFICATE_POSITION = FIRST_ITEM;
 	private static final int SIGNED_CERTIFICATE_POSITION = 1;
 	private Logger logger = Logger.getLogger(CertificateEnrollmentServiceImpl.class);
 
@@ -304,7 +305,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 */
 	private String getCredentials(String entity) throws PropertyFileException {
 
-		File propertyFile = new File(getClass().getClassLoader().getResource(Constants.PROPERTIES_XML).getFile());
+		File propertyFile = new File(CertificateEnrollmentServiceImpl.class.getClassLoader().getResource(Constants.PROPERTIES_XML).getFile());
 
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 
@@ -327,9 +328,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		String entityPassword = null;
 
 		if (Constants.MDM_JKS_ENTRY.equals(entity)) {
-			entityPassword = document.getElementsByTagName(Constants.MDM_PASSWORD).item(0).getTextContent();
+			entityPassword = document.getElementsByTagName(Constants.MDM_PASSWORD).item(FIRST_ITEM).getTextContent();
 		} else if (Constants.MDM_PRIVATEKEY_ENTRY.equals(entity)) {
-			entityPassword = document.getElementsByTagName(Constants.MDM_PRIVATE_KEY_PASSWORD).item(0).getTextContent();
+			entityPassword = document.getElementsByTagName(Constants.MDM_PRIVATE_KEY_PASSWORD).item(
+					FIRST_ITEM).getTextContent();
 		}
 
 		if(entityPassword!=null) {

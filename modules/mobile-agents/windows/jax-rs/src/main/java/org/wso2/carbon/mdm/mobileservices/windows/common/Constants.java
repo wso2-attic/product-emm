@@ -55,7 +55,7 @@ public final class Constants {
 	public static final String VALUE = "value";
 	public static final String VALUE_TYPE = "http://schemas.microsoft.com/5.0.0.0/ConfigurationManager/Enrollment/DeviceEnrollmentProvisionDoc";
 	public static final String ENCODING_TYPE = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd#base64binary";
-	public static final String WSO2_MDM_JKS_FILE = "wso2emm.jks";
+	public static final String WSO2_MDM_JKS_FILE = "wso2mdm.jks";
 	public static final String KEY_STORE = "emmjks";
 	public static final String KEY_STORE_PRIVATE_KEY = "emmprivatekey";
 	public static final String CA_CERT = "cacert";
@@ -66,7 +66,6 @@ public final class Constants {
 	public static final String MDM_PASSWORD = "emmpassword";
 	public static final String MDM_PRIVATE_KEY_PASSWORD = "emmprivatekeypassword";
 	public static final String WAP_PROVISIONING_XML = "wap-provisioning.xml";
-	public static final String CN = "CN=mdmcn";
 	public static final String PROVIDER = "BC";
 	public static final String ALGORITHM = "SHA1withRSA";
 	public static final String JKS = "JKS";
@@ -103,6 +102,5 @@ public final class Constants {
 	public static final String SYNCML_TARGET_URI = "TARGET_URI";
 	public static final String SYNCML_MESSAGE_ONE = "1";
 	public static final String SYNCML_MESSAGE_TWO = "2";
-	public static final int NOT_BEFORE_DATE = 3;
-	public static final int NOT_AFTER_DATE = 300;
+
 }
