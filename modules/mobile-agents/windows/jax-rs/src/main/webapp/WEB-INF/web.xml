@@ -26,6 +26,10 @@
     <param-value>/WEB-INF/cxf-servlet.xml</param-value>
   </context-param>
 
+  <listener>
+    <listener-class>org.wso2.carbon.mdm.mobileservices.windows.common.util.ContextListener</listener-class>
+  </listener>
+
   <servlet>
     <description>JAX-WS/JAX-RS-windows Endpoint</description>
     <display-name>JAX-WS/JAX-RS-windows Servlet</display-name>

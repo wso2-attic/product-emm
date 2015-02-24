@@ -33,11 +33,14 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException;
 import org.xml.sax.SAXException;
-
+import javax.annotation.Resource;
 import javax.security.auth.x500.X500Principal;
+import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -45,6 +48,7 @@ import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Class for generating signed certificate for CSR form device.
@@ -52,37 +56,38 @@ import java.util.Date;
 public class CertificateSigningService {
 
 	private static final long DAYS = 1000L * 60 * 60 * 24;
-	private static final int FIRST_ITEM = 0;
-	private static final String SIGNED_CERT_CN = "signedcertCN";
-	private static final String SIGNED_CERT_NOT_BEFORE = "signedcertnotbefore";
-	private static final String SIGNED_CERT_NOT_AFTER = "signedcertnotafter";
+	public static final int FIRST_ITEM = 0;
+	public static final int SECOND_ITEM = 1;
+	public static final int THIRD_ITEM = 2;
 	private static Logger logger = Logger.getLogger(CertificateSigningService.class);
-	private static String signedCertCommonName;
-	private static int signedCertNotBeforeDate;
-	private static int signedCertNotAfterDate;
 
 	/**
 	 * @param jcaRequest - CSR from the device
 	 * @param privateKey - Private key of CA certificate in MDM server
 	 * @param CACert     - CA certificate in MDM server
+	 * @param certParameterList
 	 * @return - Signed certificate for CSR from device
 	 * @throws Exception
 	 */
 	public static X509Certificate signCSR(JcaPKCS10CertificationRequest jcaRequest,
-	                                      PrivateKey privateKey, X509Certificate CACert)
-			throws CertificateGenerationException, PropertyFileException {
+	                                      PrivateKey privateKey, X509Certificate CACert,
+	                                      List certParameterList)
+									throws CertificateGenerationException, PropertyFileException {
+
+
+		String commonName=(String)certParameterList.get(FIRST_ITEM);
+		int notBeforeDate=(Integer)certParameterList.get(SECOND_ITEM);
+		int notAfterDate=(Integer)certParameterList.get(THIRD_ITEM);
 
 		X509v3CertificateBuilder certificateBuilder;
-
-		getCertificateProperties();
 
 		try {
 
 			certificateBuilder = new JcaX509v3CertificateBuilder(CACert,
 			                                                     BigInteger.valueOf(new SecureRandom().nextInt(Integer.MAX_VALUE)),
-			                                                     new Date(System.currentTimeMillis() - (DAYS * signedCertNotBeforeDate)),
-			                                                     new Date(System.currentTimeMillis() + (DAYS * signedCertNotAfterDate)),
-			                                                     new X500Principal(signedCertCommonName),
+			                                                     new Date(System.currentTimeMillis() - (DAYS * notBeforeDate)),
+			                                                     new Date(System.currentTimeMillis() + (DAYS * notAfterDate)),
+			                                                     new X500Principal(commonName),
 			                                                     jcaRequest.getPublicKey());
 
 
@@ -121,38 +126,5 @@ public class CertificateSigningService {
 
 		return signedCertificate;
 
-	}
-
-	/**
-	 * Reading the property file for retrieving certificate parameters(common-name, not-before-date, not-after-date).
-	 * @throws PropertyFileException
-	 */
-	private static void getCertificateProperties() throws PropertyFileException {
-
-		File propertyFile = new File(CertificateSigningService.class.getClassLoader().getResource(Constants.PROPERTIES_XML).getFile());
-
-		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-
-		DocumentBuilder docBuilder;
-		try {
-			docBuilder = docBuilderFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			throw new PropertyFileException("XML parsing configuration exception.", e);
-		}
-
-		Document document;
-		try {
-			document = docBuilder.parse(propertyFile);
-		} catch (SAXException e) {
-			throw new PropertyFileException("XML Parsing Exception", e);
-		} catch (IOException e) {
-			throw new PropertyFileException("XML property file reading exception.", e);
-		}
-
-		signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).getTextContent();
-		signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
-				SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).getTextContent());
-		signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
-				SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).getTextContent());
 	}
 }

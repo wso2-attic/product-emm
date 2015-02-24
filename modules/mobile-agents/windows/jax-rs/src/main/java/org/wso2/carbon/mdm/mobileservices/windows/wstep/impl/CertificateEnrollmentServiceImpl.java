@@ -25,7 +25,10 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFile
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.CertificateEnrollmentService;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.beans.BinarySecurityToken;
+
+import javax.annotation.Resource;
 import javax.jws.WebService;
+import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,6 +39,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.Holder;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
 import org.wso2.carbon.mdm.mobileservices.windows.wstep.util.CertificateSigningService;
@@ -59,6 +64,8 @@ import java.io.StringWriter;
 import java.security.*;
 import java.security.cert.*;
 import java.security.cert.Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation class of CertificateEnrollmentService interface. This class implements MS-WSTEP protocol.
@@ -76,13 +83,13 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	PrivateKey privateKey;
 	X509Certificate rootCACertificate;
-
 	JcaPKCS10CertificationRequest CSRRequest;
-
 	PKCS10CertificationRequest certificationRequest;
-
 	String wapProvisioningFilePath;
 	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+
+	@Resource
+	private WebServiceContext context;
 
 	/**
 	 * This method implements MS-WSTEP for Certificate Enrollment Service.
@@ -100,13 +107,27 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throws KeyStoreGenerationException, PropertyFileException, CertificateGenerationException {
 
 
-		signCertificate();
+		ServletContext ctx =(ServletContext)context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
+		File wapProvisioningFile=(File)ctx.getAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE);
+
+		String storePassword=(String)ctx.getAttribute(Constants.CONTEXT_MDM_PASSWORD);
+		String keyPassword=(String)ctx.getAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD);
+
+		List certPropertyList = new ArrayList();
+		String commonName=(String)ctx.getAttribute(Constants.CONTEXT_COMMON_NAME);
+		certPropertyList.add(commonName);
+		int notBeforeDate=(Integer)ctx.getAttribute(Constants.CONTEXT_NOT_BEFORE_DATE);
+		certPropertyList.add(notBeforeDate);
+		int notAfterDate=(Integer)ctx.getAttribute(Constants.CONTEXT_NOT_AFTER_DATE);
+		certPropertyList.add(notAfterDate);
+
+
+		signCertificate(storePassword, keyPassword);
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Received CSR from Device:" + binarySecurityToken);
 		}
 
-		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(Constants.WAP_PROVISIONING_XML).getFile());
 		wapProvisioningFilePath = wapProvisioningFile.getPath();
 
 		RequestSecurityTokenResponse requestSecurityTokenResponse = new RequestSecurityTokenResponse();
@@ -122,7 +143,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		CSRRequest = new JcaPKCS10CertificationRequest(certificationRequest);
 
-		X509Certificate signedCertificate = CertificateSigningService.signCSR(CSRRequest, privateKey, rootCACertificate);
+		X509Certificate signedCertificate = CertificateSigningService.signCSR(CSRRequest, privateKey, rootCACertificate, certPropertyList);
 
 		BASE64Encoder base64Encoder = new BASE64Encoder();
 
@@ -229,7 +250,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @throws PropertyFileException
 	 * @throws CertificateGenerationException
 	 */
-	public void signCertificate()
+	public void signCertificate(String storePassword,String keyPassword)
 			throws KeyStoreGenerationException, PropertyFileException, CertificateGenerationException {
 
 		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.WSO2_MDM_JKS_FILE).getFile());
@@ -241,9 +262,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		} catch (KeyStoreGenerationException e) {
 			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store.", e);
 		}
-
-		String storePassword = getCredentials(Constants.KEY_STORE);
-		String keyPassword = getCredentials(Constants.KEY_STORE_PRIVATE_KEY);
 
 		try {
 			KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), JKSFilePath);
@@ -293,52 +311,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		}
 
 		rootCACertificate = X509CACertificate;
-
-	}
-
-	/**
-	 * Method for reading the property XML file and returning the required passwords.
-	 *
-	 * @param entity - Entity which needs to get the password from property xml file
-	 * @return - Entity password
-	 * @throws PropertyFileException
-	 */
-	private String getCredentials(String entity) throws PropertyFileException {
-
-		File propertyFile = new File(CertificateEnrollmentServiceImpl.class.getClassLoader().getResource(Constants.PROPERTIES_XML).getFile());
-
-		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-
-		DocumentBuilder docBuilder;
-		try {
-			docBuilder = docBuilderFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			throw new PropertyFileException("XML parsing configuration exception.", e);
-		}
-
-		Document document;
-		try {
-			document = docBuilder.parse(propertyFile);
-		} catch (SAXException e) {
-			throw new PropertyFileException("XML Parsing Exception", e);
-		} catch (IOException e) {
-			throw new PropertyFileException("XML property file reading exception.", e);
-		}
-
-		String entityPassword = null;
-
-		if (Constants.MDM_JKS_ENTRY.equals(entity)) {
-			entityPassword = document.getElementsByTagName(Constants.MDM_PASSWORD).item(FIRST_ITEM).getTextContent();
-		} else if (Constants.MDM_PRIVATEKEY_ENTRY.equals(entity)) {
-			entityPassword = document.getElementsByTagName(Constants.MDM_PRIVATE_KEY_PASSWORD).item(
-					FIRST_ITEM).getTextContent();
-		}
-
-		if(entityPassword!=null) {
-			return entityPassword;
-		} else{
-			throw new PropertyFileException("Password cannot be read from property file.");
-		}
 
 	}
 }

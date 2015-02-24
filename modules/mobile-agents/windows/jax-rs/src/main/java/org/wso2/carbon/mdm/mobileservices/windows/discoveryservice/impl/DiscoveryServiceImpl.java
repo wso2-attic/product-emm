@@ -23,7 +23,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.beans.Discove
 import org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.DiscoveryService;
 import org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.beans.DiscoveryResponse;
 import org.apache.log4j.Logger;
-
 import javax.jws.WebService;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.BindingType;

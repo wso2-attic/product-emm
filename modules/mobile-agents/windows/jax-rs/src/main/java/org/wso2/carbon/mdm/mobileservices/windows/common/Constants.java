@@ -56,13 +56,9 @@ public final class Constants {
 	public static final String VALUE_TYPE = "http://schemas.microsoft.com/5.0.0.0/ConfigurationManager/Enrollment/DeviceEnrollmentProvisionDoc";
 	public static final String ENCODING_TYPE = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd#base64binary";
 	public static final String WSO2_MDM_JKS_FILE = "wso2mdm.jks";
-	public static final String KEY_STORE = "emmjks";
-	public static final String KEY_STORE_PRIVATE_KEY = "emmprivatekey";
 	public static final String CA_CERT = "cacert";
 	public static final String X_509 = "X.509";
 	public static final String PROPERTIES_XML = "properties.xml";
-	public static final String MDM_JKS_ENTRY = "emmjks";
-	public static final String MDM_PRIVATEKEY_ENTRY = "emmprivatekey";
 	public static final String MDM_PASSWORD = "emmpassword";
 	public static final String MDM_PRIVATE_KEY_PASSWORD = "emmprivatekeypassword";
 	public static final String WAP_PROVISIONING_XML = "wap-provisioning.xml";
@@ -103,4 +99,11 @@ public final class Constants {
 	public static final String SYNCML_MESSAGE_ONE = "1";
 	public static final String SYNCML_MESSAGE_TWO = "2";
 
+	/*Servlet Context attributes names*/
+	public static final String CONTEXT_WAP_PROVISIONING_FILE = "WAP_PROVISIONING_FILE";
+	public static final String CONTEXT_MDM_PASSWORD = "MDM_PASSWORD";
+	public static final String CONTEXT_MDM_PRIVATE_KEY_PASSWORD = "MDM_PRIVATE_KEY_PASSWORD";
+	public static final String CONTEXT_COMMON_NAME = "COMMON_NAME";
+	public static final String CONTEXT_NOT_BEFORE_DATE = "NOT_BEFORE_DATE";
+	public static final String CONTEXT_NOT_AFTER_DATE = "NOT_AFTER_DATE";
 }
