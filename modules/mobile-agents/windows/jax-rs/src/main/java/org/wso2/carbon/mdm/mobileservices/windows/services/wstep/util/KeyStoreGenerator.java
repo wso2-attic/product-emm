@@ -24,7 +24,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.security.*;
+import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
 /**

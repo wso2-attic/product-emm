@@ -19,8 +19,12 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.xcep;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.*;
-
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.CACollection;
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Client;
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.OIDCollection;
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.ObjectFactory;
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.RequestFilter;
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Response;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;

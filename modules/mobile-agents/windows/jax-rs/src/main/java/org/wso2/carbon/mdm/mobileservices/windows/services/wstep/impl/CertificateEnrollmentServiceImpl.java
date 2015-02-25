@@ -25,7 +25,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOpera
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.CertificateEnrollmentService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.BinarySecurityToken;
-
 import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
@@ -59,9 +58,16 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.security.*;
-import java.security.cert.*;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +84,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	private static final int CA_CERTIFICATE_POSITION = FIRST_ITEM;
 	private static final int SIGNED_CERTIFICATE_POSITION = 1;
 	private static Log logger = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
-
 	private PrivateKey privateKey;
 	private X509Certificate rootCACertificate;
 
@@ -103,7 +108,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		ServletContext ctx =(ServletContext)context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
 		File wapProvisioningFile=(File)ctx.getAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE);
-
 		String storePassword=(String)ctx.getAttribute(Constants.CONTEXT_MDM_PASSWORD);
 		String keyPassword=(String)ctx.getAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD);
 
@@ -115,20 +119,15 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		int notAfterDate=(Integer)ctx.getAttribute(Constants.CONTEXT_NOT_AFTER_DATE);
 		certPropertyList.add(notAfterDate);
 
-
 		setRootCertAndKey(storePassword, keyPassword);
-
 		if (logger.isDebugEnabled()) {
 			logger.debug("Received CSR from Device:" + binarySecurityToken);
 		}
 
 		String wapProvisioningFilePath = wapProvisioningFile.getPath();
-
 		RequestSecurityTokenResponse requestSecurityTokenResponse = new RequestSecurityTokenResponse();
 		requestSecurityTokenResponse.setTokenType(Constants.TOKEN_TYPE);
-
 		String encodedWap=prepareWapProvisioningXML(binarySecurityToken, certPropertyList, wapProvisioningFilePath);
-
 		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
 		BinarySecurityToken binarySecToken = new BinarySecurityToken();
 		binarySecToken.setValueType(Constants.VALUE_TYPE);
@@ -137,7 +136,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		requestedSecurityToken.setBinarySecurityToken(binarySecToken);
 		requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
 		requestSecurityTokenResponse.setRequestID(REQUEST_ID);
-
 		response.value = requestSecurityTokenResponse;
 	}
 
@@ -169,19 +167,16 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.WSO2_MDM_JKS_FILE).getFile());
 		String JKSFilePath = JKSFile.getPath();
-
 		KeyStore securityJKS;
 		try {
 			securityJKS = KeyStoreGenerator.getKeyStore();
 		} catch (KeyStoreGenerationException e) {
-			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store.", e);
-		}
+			throw new KeyStoreGenerationException("Cannot retrieve the MDM key store.", e); }
 
 		try {
 			KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), JKSFilePath);
 		} catch (KeyStoreGenerationException e) {
-			throw new KeyStoreGenerationException("Cannot load the MDM key store.", e);
-		}
+			throw new KeyStoreGenerationException("Cannot load the MDM key store.", e); }
 
 		PrivateKey CAPrivateKey;
 		try {
@@ -195,37 +190,30 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		}
 
 		privateKey = CAPrivateKey;
-
 		Certificate CACertificate;
 		try {
 			CACertificate = securityJKS.getCertificate(Constants.CA_CERT);
 		} catch (KeyStoreException e) {
-			throw new KeyStoreGenerationException("Keystore cannot be accessed.", e);
-		}
+			throw new KeyStoreGenerationException("Keystore cannot be accessed.", e); }
 		CertificateFactory certificateFactory;
 
 		try {
 			certificateFactory = CertificateFactory.getInstance(Constants.X_509);
 		} catch (CertificateException e) {
-			throw new CertificateGenerationException("Cannot initiate certificate factory.",e);
-		}
+			throw new CertificateGenerationException("Cannot initiate certificate factory.",e); }
 
 		ByteArrayInputStream byteArrayInputStream;
 		try {
 			byteArrayInputStream = new ByteArrayInputStream(CACertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
-			throw new CertificateGenerationException("CA certificate cannot be encoded.",e);
-		}
+			throw new CertificateGenerationException("CA certificate cannot be encoded.",e); }
 
 		X509Certificate X509CACertificate;
 		try {
 			X509CACertificate = (X509Certificate) certificateFactory.generateCertificate(byteArrayInputStream);
 		} catch (CertificateException e) {
-			throw new CertificateGenerationException("X509 CA certificate cannot be generated.");
-		}
-
+			throw new CertificateGenerationException("X509 CA certificate cannot be generated."); }
 		rootCACertificate = X509CACertificate;
-
 	}
 
 	/**
