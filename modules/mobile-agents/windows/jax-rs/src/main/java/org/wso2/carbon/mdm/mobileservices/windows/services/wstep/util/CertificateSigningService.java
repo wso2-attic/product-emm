@@ -126,6 +126,5 @@ public class CertificateSigningService {
  		}
 
 		return signedCertificate;
-
 	}
 }

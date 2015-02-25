@@ -170,14 +170,15 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				Response.serverError().build();
 			}
 
-             try {
+            try {
 	           message.saveChanges();
             }
 
             catch(SOAPException e){
 	            Response.serverError().build();
             }
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 			try {
 				message.writeTo(outputStream);

@@ -19,34 +19,32 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 
 /**
- * Exception class for Certificate generation failures in WSTEP stage.
+ * Exception class for general WSTEP messaging/message generation failures.
  */
-public class CertificateGenerationException extends Exception {
+public class WSTEPMessagingException extends Exception {
 
 	private String errorMessage;
 
-	public CertificateGenerationException(String message) {
+	public WSTEPMessagingException(String message) {
 		super(message);
 		setErrorMessage(message);
 	}
 
-	public CertificateGenerationException(String message, Throwable cause) {
+	public WSTEPMessagingException(String message, Throwable cause) {
 		super(message, cause);
 		setErrorMessage(message);
 	}
 
-	public CertificateGenerationException(String message, Exception nestedEx) {
+	public WSTEPMessagingException(String message, Exception nestedEx) {
 		super(message, nestedEx);
 		setErrorMessage(message);
 	}
 
-	public CertificateGenerationException(Throwable cause)
-	{
+	public WSTEPMessagingException(Throwable cause) {
 		super(cause);
 	}
 
-	public CertificateGenerationException()
-	{
+	public WSTEPMessagingException() {
 		super();
 	}
 
@@ -57,4 +55,5 @@ public class CertificateGenerationException extends Exception {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
+
 }

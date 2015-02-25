@@ -20,6 +20,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.wstep;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WSTEPMessagingException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestSecurityTokenResponse;
@@ -53,5 +54,5 @@ public interface CertificateEnrollmentService {
 			AdditionalContext additionalContext,
 			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<RequestSecurityTokenResponse> response
-	) throws KeyStoreGenerationException, XMLFileOperationException, CertificateGenerationException;
+	) throws WSTEPMessagingException;
 }

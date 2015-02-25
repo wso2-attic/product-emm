@@ -21,6 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.impl;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WSTEPMessagingException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.CertificateEnrollmentService;
@@ -102,9 +103,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	public void requestSecurityToken(String tokenType, String requestType,
 	                                 String binarySecurityToken,
 	                                 AdditionalContext additionalContext,
-	                                 Holder<RequestSecurityTokenResponse> response)
-			throws KeyStoreGenerationException, XMLFileOperationException, CertificateGenerationException {
-
+	                                 Holder<RequestSecurityTokenResponse> response) throws WSTEPMessagingException {
 
 		ServletContext ctx =(ServletContext)context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
 		File wapProvisioningFile=(File)ctx.getAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE);
@@ -118,16 +117,24 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		certPropertyList.add(notBeforeDate);
 		int notAfterDate=(Integer)ctx.getAttribute(Constants.CONTEXT_NOT_AFTER_DATE);
 		certPropertyList.add(notAfterDate);
+		try {
+			setRootCertAndKey(storePassword, keyPassword); }
+		//Generic exception is caught here as there is no need of taking different actions for different exceptions.
+		catch (Exception e){
+			throw new WSTEPMessagingException("Root certificate and private key couldn't be extracted from keystore.",e); }
 
-		setRootCertAndKey(storePassword, keyPassword);
 		if (logger.isDebugEnabled()) {
-			logger.debug("Received CSR from Device:" + binarySecurityToken);
-		}
-
+			logger.debug("Received CSR from Device:" + binarySecurityToken);}
 		String wapProvisioningFilePath = wapProvisioningFile.getPath();
 		RequestSecurityTokenResponse requestSecurityTokenResponse = new RequestSecurityTokenResponse();
 		requestSecurityTokenResponse.setTokenType(Constants.CertificateEnrolment.TOKEN_TYPE);
-		String encodedWap=prepareWapProvisioningXML(binarySecurityToken, certPropertyList, wapProvisioningFilePath);
+		String encodedWap;
+		try {
+			encodedWap = prepareWapProvisioningXML(binarySecurityToken, certPropertyList, wapProvisioningFilePath); }
+		//Generic exception is caught here as there is no need of taking different actions for different exceptions.
+		catch (Exception e){
+			throw new WSTEPMessagingException("Wap provisioning file couldn't be prepared.",e);
+		}
 		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
 		BinarySecurityToken binarySecToken = new BinarySecurityToken();
 		binarySecToken.setValueType(Constants.CertificateEnrolment.VALUE_TYPE);
@@ -212,7 +219,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		try {
 			X509CACertificate = (X509Certificate) certificateFactory.generateCertificate(byteArrayInputStream);
 		} catch (CertificateException e) {
-			throw new CertificateGenerationException("X509 CA certificate cannot be generated."); }
+			throw new CertificateGenerationException("X509 CA certificate cannot be generated.", e); }
 		rootCACertificate = X509CACertificate;
 	}
 
