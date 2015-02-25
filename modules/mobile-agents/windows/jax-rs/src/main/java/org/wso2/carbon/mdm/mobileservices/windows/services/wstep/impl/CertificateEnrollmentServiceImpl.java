@@ -79,12 +79,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	private static final int SIGNED_CERTIFICATE_POSITION = 1;
 	private static Log logger = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
 
-	PrivateKey privateKey;
-	X509Certificate rootCACertificate;
-	JcaPKCS10CertificationRequest CSRRequest;
-	PKCS10CertificationRequest certificationRequest;
-	String wapProvisioningFilePath;
-	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+	private PrivateKey privateKey;
+	private X509Certificate rootCACertificate;
 
 	@Resource
 	private WebServiceContext context;
@@ -120,98 +116,18 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		certPropertyList.add(notAfterDate);
 
 
-		signCertificate(storePassword, keyPassword);
+		setRootCertAndKey(storePassword, keyPassword);
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Received CSR from Device:" + binarySecurityToken);
 		}
 
-		wapProvisioningFilePath = wapProvisioningFile.getPath();
+		String wapProvisioningFilePath = wapProvisioningFile.getPath();
 
 		RequestSecurityTokenResponse requestSecurityTokenResponse = new RequestSecurityTokenResponse();
 		requestSecurityTokenResponse.setTokenType(Constants.TOKEN_TYPE);
 
-		byte[] DERByteArray = javax.xml.bind.DatatypeConverter.parseBase64Binary(binarySecurityToken);
-
-		try {
-			certificationRequest = new PKCS10CertificationRequest(DERByteArray);
-		} catch (IOException e) {
-			throw new CertificateGenerationException("CSR cannot be recovered.", e);
-		}
-
-		CSRRequest = new JcaPKCS10CertificationRequest(certificationRequest);
-
-		X509Certificate signedCertificate = CertificateSigningService.signCSR(CSRRequest, privateKey, rootCACertificate, certPropertyList);
-
-		BASE64Encoder base64Encoder = new BASE64Encoder();
-
-		String rootCertEncodedString;
-		try {
-			rootCertEncodedString = base64Encoder.encode(rootCACertificate.getEncoded());
-		} catch (CertificateEncodingException e) {
-			throw new CertificateGenerationException("CA certificate cannot be encoded.", e);
-		}
-
-		String signedCertEncodedString;
-		try {
-			signedCertEncodedString = base64Encoder.encode(signedCertificate.getEncoded());
-		} catch (CertificateEncodingException e) {
-			throw new CertificateGenerationException("Singed certificate cannot be encoded.", e);
-		}
-
-		DocumentBuilder builder;
-		String wapProvisioningString;
-		try {
-			builder = domFactory.newDocumentBuilder();
-
-			Document document = builder.parse(wapProvisioningFilePath);
-
-			NodeList wapParm = document.getElementsByTagName(Constants.PARM);
-
-
-			Node CACertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
-
-			//Adding SHA1 CA certificate finger print to wap-provisioning xml.
-			CACertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
-					String.valueOf(DigestUtils.sha1Hex(rootCACertificate.getEncoded()))
-					      .toUpperCase());
-
-			//Adding encoded CA certificate to wap-provisioning file after removing new line characters.
-			NamedNodeMap rootCertAttributes = CACertificatePosition.getAttributes();
-			Node rootCertNode = rootCertAttributes.getNamedItem(Constants.VALUE);
-			rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
-			rootCertNode.setTextContent(rootCertEncodedString);
-
-			if (logger.isDebugEnabled()) {
-				logger.debug("Root certificate:" + rootCertEncodedString);
-			}
-
-			Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
-
-			//Adding SHA1 signed certificate finger print to wap-provisioning xml.
-			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE)
-			       .setTextContent(
-					       String.valueOf(DigestUtils.shaHex(signedCertificate.getEncoded()))
-					             .toUpperCase());
-
-			//Adding encoded signed certificate to wap-provisioning file after removing new line characters.
-			NamedNodeMap clientCertAttributes = signedCertificatePosition.getAttributes();
-			Node clientEncodedNode = clientCertAttributes.getNamedItem(Constants.VALUE);
-			signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
-			clientEncodedNode.setTextContent(signedCertEncodedString);
-
-			if (logger.isDebugEnabled()) {
-				logger.debug("Signed certificate:" + signedCertEncodedString);
-			}
-
-			wapProvisioningString = convertDocumentToString(document);
-
-		//Generic exception is caught here as there is no need of taking different actions for different exceptions.
-		} catch (Exception e) {
-		    throw new XMLFileOperationException("Problem occurred with wap-provisioning.xml file.", e);
-	    }
-
-		String encodedWap = base64Encoder.encode(wapProvisioningString.getBytes());
+		String encodedWap=prepareWapProvisioningXML(binarySecurityToken, certPropertyList, wapProvisioningFilePath);
 
 		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
 		BinarySecurityToken binarySecToken = new BinarySecurityToken();
@@ -248,7 +164,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOperationException
 	 * @throws CertificateGenerationException
 	 */
-	public void signCertificate(String storePassword,String keyPassword)
+	public void setRootCertAndKey(String storePassword, String keyPassword)
 			throws KeyStoreGenerationException, XMLFileOperationException, CertificateGenerationException {
 
 		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.WSO2_MDM_JKS_FILE).getFile());
@@ -310,5 +226,94 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		rootCACertificate = X509CACertificate;
 
+	}
+
+	/**
+	 * This method prepares the wap-provisioning file by including relevant certificates etc
+	 * @param binarySecurityToken - CSR from device
+	 * @param certPropertyList - property list for signed certificate
+	 * @param wapProvisioningFilePath - File path of wap-provisioning file
+	 * @return - base64 encoded final wap-provisioning file
+	 * @throws CertificateGenerationException
+	 * @throws XMLFileOperationException
+	 */
+	public String prepareWapProvisioningXML(String binarySecurityToken, List certPropertyList, String wapProvisioningFilePath)
+			throws CertificateGenerationException, XMLFileOperationException {
+
+		byte[] DERByteArray = javax.xml.bind.DatatypeConverter.parseBase64Binary(binarySecurityToken);
+		PKCS10CertificationRequest certificationRequest;
+		try {
+			certificationRequest = new PKCS10CertificationRequest(DERByteArray);
+		} catch (IOException e) {
+			throw new CertificateGenerationException("CSR cannot be recovered.", e);}
+
+		JcaPKCS10CertificationRequest CSRRequest = new JcaPKCS10CertificationRequest(certificationRequest);
+
+		X509Certificate signedCertificate = CertificateSigningService.signCSR(CSRRequest,
+		                                                                      privateKey,
+		                                                                      rootCACertificate,
+		                                                                      certPropertyList);
+
+		BASE64Encoder base64Encoder = new BASE64Encoder();
+		String rootCertEncodedString;
+		try {
+			rootCertEncodedString = base64Encoder.encode(rootCACertificate.getEncoded());
+		} catch (CertificateEncodingException e) {
+			throw new CertificateGenerationException("CA certificate cannot be encoded.", e);}
+		String signedCertEncodedString;
+		try {
+			signedCertEncodedString = base64Encoder.encode(signedCertificate.getEncoded());
+		} catch (CertificateEncodingException e) {
+			throw new CertificateGenerationException("Singed certificate cannot be encoded.", e);
+		}
+
+		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		String wapProvisioningString;
+		try {
+			builder = domFactory.newDocumentBuilder();
+			Document document = builder.parse(wapProvisioningFilePath);
+			NodeList wapParm = document.getElementsByTagName(Constants.PARM);
+			Node CACertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
+
+			//Adding SHA1 CA certificate finger print to wap-provisioning xml.
+			CACertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
+					String.valueOf(DigestUtils.sha1Hex(rootCACertificate.getEncoded()))
+					      .toUpperCase());
+
+			//Adding encoded CA certificate to wap-provisioning file after removing new line characters.
+			NamedNodeMap rootCertAttributes = CACertificatePosition.getAttributes();
+			Node rootCertNode = rootCertAttributes.getNamedItem(Constants.VALUE);
+			rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
+			rootCertNode.setTextContent(rootCertEncodedString);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("Root certificate:" + rootCertEncodedString);
+			}
+
+			Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
+
+			//Adding SHA1 signed certificate finger print to wap-provisioning xml.
+			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE)
+			                         .setTextContent(
+					                         String.valueOf(DigestUtils.shaHex(signedCertificate.getEncoded()))
+					                               .toUpperCase());
+
+			//Adding encoded signed certificate to wap-provisioning file after removing new line characters.
+			NamedNodeMap clientCertAttributes = signedCertificatePosition.getAttributes();
+			Node clientEncodedNode = clientCertAttributes.getNamedItem(Constants.VALUE);
+			signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
+			clientEncodedNode.setTextContent(signedCertEncodedString);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Signed certificate:" + signedCertEncodedString);
+			}
+			wapProvisioningString = convertDocumentToString(document);
+			//Generic exception is caught here as there is no need of taking different actions for different exceptions.
+		} catch (Exception e) {
+			throw new XMLFileOperationException("Problem occurred with wap-provisioning.xml file.", e);
+		}
+		String encodedWap = base64Encoder.encode(wapProvisioningString.getBytes());
+
+		return encodedWap;
 	}
 }
