@@ -47,8 +47,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestSecurityTokenResponse;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestedSecurityToken;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.KeyStoreGenerator;
-import org.apache.log4j.Logger;
-import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -77,7 +77,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	private static final int REQUEST_ID = FIRST_ITEM;
 	private static final int CA_CERTIFICATE_POSITION = FIRST_ITEM;
 	private static final int SIGNED_CERTIFICATE_POSITION = 1;
-	private Logger logger = Logger.getLogger(CertificateEnrollmentServiceImpl.class);
+	private static Log logger = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
 
 	PrivateKey privateKey;
 	X509Certificate rootCACertificate;

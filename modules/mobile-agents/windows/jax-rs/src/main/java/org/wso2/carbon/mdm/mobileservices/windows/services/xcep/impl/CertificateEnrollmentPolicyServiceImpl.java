@@ -20,9 +20,9 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.xcep.impl;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.CertificateEnrollmentPolicyService;
-import org.apache.log4j.Logger;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.*;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import javax.jws.WebService;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.Holder;
@@ -37,7 +37,7 @@ import javax.xml.ws.soap.SOAPBinding;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnrollmentPolicyService {
 
-	private static Logger logger = Logger.getLogger(CertificateEnrollmentPolicyServiceImpl.class);
+	private static Log logger = LogFactory.getLog(CertificateEnrollmentPolicyServiceImpl.class);
 
 	/**
 	 * This method implements the MS-XCEP protocol for certificate enrollment policy service.

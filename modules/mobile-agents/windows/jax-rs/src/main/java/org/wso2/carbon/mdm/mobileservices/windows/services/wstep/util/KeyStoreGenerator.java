@@ -22,7 +22,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGene
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.*;

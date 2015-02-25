@@ -20,7 +20,8 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
@@ -49,7 +50,8 @@ public class CertificateSigningService {
 	public static final int FIRST_ITEM = 0;
 	public static final int SECOND_ITEM = 1;
 	public static final int THIRD_ITEM = 2;
-	private static Logger logger = Logger.getLogger(CertificateSigningService.class);
+	private static Log logger = LogFactory.getLog(CertificateSigningService.class);
+
 
 	/**
 	 * @param jcaRequest - CSR from the device

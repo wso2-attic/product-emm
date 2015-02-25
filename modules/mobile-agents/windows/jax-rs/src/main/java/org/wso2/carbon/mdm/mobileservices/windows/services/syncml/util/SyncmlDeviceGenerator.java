@@ -18,7 +18,8 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
@@ -39,7 +40,8 @@ public class SyncmlDeviceGenerator {
 	private static final String VENDOR = "vendor";
 	private static final String MODEL = "model";
 
-	private static Logger logger = Logger.getLogger(SyncmlDeviceGenerator.class);
+	private static Log logger = LogFactory.getLog(SyncmlDeviceGenerator.class);
+
 
 	/**
 	 * This method is used to generate and return Device object from the received information at the Syncml step.

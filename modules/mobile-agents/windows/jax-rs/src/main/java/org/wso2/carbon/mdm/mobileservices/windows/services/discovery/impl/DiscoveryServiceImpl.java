@@ -18,11 +18,12 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.DiscoveryService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryResponse;
-import org.apache.log4j.Logger;
 import javax.jws.WebService;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.BindingType;
@@ -38,7 +39,7 @@ import javax.xml.ws.soap.SOAPBinding;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class DiscoveryServiceImpl implements DiscoveryService {
 
-	private Logger logger = Logger.getLogger(DiscoveryServiceImpl.class);
+	private static Log logger = LogFactory.getLog(DiscoveryServiceImpl.class);
 
 	/**
 	 * This method returns the OnPremise AuthPolicy and next two endpoint the mobile device should call if

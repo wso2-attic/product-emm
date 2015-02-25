@@ -18,7 +18,8 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.xml.sax.SAXException;
@@ -36,7 +37,7 @@ import java.io.IOException;
  */
 public class ContextListener implements ServletContextListener {
 
-	private Logger logger = Logger.getLogger(ContextListener.class);
+	private static Log logger = LogFactory.getLog(ContextListener.class);
 	private static final int FIRST_ITEM = 0;
 	private static final String SIGNED_CERT_CN = "signedcertCN";
 	private static final String SIGNED_CERT_NOT_BEFORE = "signedcertnotbefore";

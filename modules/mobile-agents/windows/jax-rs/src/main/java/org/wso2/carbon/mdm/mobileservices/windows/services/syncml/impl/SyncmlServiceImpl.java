@@ -20,7 +20,8 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -48,7 +49,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 	private Node bodyNode;
 	private NodeList nListHeader;
 	private NodeList nListBody;
-	private Logger logger = Logger.getLogger(SyncmlServiceImpl.class);
+	private static Log logger = LogFactory.getLog(SyncmlServiceImpl.class);
 
 	/**
 	 * This method resolves the Syncml messages received through device and send the

@@ -18,7 +18,8 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.RequestData;
 import org.apache.ws.security.validate.Credential;
@@ -36,8 +37,7 @@ public class UsernameTokenValidator implements Validator {
 	private static final int DOMAIN_PART = 1;
 	private static final String DELIMITER = "@";
 	private static final String EMPTY_STRING = "";
-
-	private Logger logger = Logger.getLogger(UsernameTokenValidator.class);
+	private static Log logger = LogFactory.getLog(UsernameTokenValidator.class);
 
 	@Override public Credential validate(Credential credential, RequestData requestData)
 			throws WSSecurityException {
