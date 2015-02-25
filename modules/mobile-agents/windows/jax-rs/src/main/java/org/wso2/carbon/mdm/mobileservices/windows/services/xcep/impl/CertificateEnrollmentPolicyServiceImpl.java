@@ -75,13 +75,13 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		Attributes attributeElement = new Attributes();
 		PrivateKeyAttributes privateKeyAttributeElement = new PrivateKeyAttributes();
 
-		privateKeyAttributeElement.setMinimalKeyLength(Constants.MINIMAL_KEY_LENGTH);
+		privateKeyAttributeElement.setMinimalKeyLength(Constants.CertificateEnrolmentPolicy.MINIMAL_KEY_LENGTH);
 
-		attributeElement.setPolicySchema(Constants.POLICY_SCHEMA);
+		attributeElement.setPolicySchema(Constants.CertificateEnrolmentPolicy.POLICY_SCHEMA);
 		attributeElement.setPrivateKeyAttributes(privateKeyAttributeElement);
-		attributeElement.setHashAlgorithmOIDReference(Constants.HASH_ALGORITHM_OID_REFERENCE);
+		attributeElement.setHashAlgorithmOIDReference(Constants.CertificateEnrolmentPolicy.HASH_ALGORITHM_OID_REFERENCE);
 
-		certEnrollmentPolicyElement.setPolicyOIDReference(Constants.OID_REFERENCE);
+		certEnrollmentPolicyElement.setPolicyOIDReference(Constants.CertificateEnrolmentPolicy.OID_REFERENCE);
 		certEnrollmentPolicyElement.setAttributes(attributeElement);
 
 		policyCollectionElement.getPolicy().add(certEnrollmentPolicyElement);
@@ -91,10 +91,10 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		response.value = responseElement;
 
 		OID OIDElement = new OID();
-		OIDElement.setValue(Constants.OID);
-		OIDElement.setGroup(Constants.OID_GROUP);
-		OIDElement.setOIDReferenceID(Constants.OID_REFERENCE_ID);
-		OIDElement.setDefaultName(Constants.OID_DEFAULT_NAME);
+		OIDElement.setValue(Constants.CertificateEnrolmentPolicy.OID);
+		OIDElement.setGroup(Constants.CertificateEnrolmentPolicy.OID_GROUP);
+		OIDElement.setOIDReferenceID(Constants.CertificateEnrolmentPolicy.OID_REFERENCE_ID);
+		OIDElement.setDefaultName(Constants.CertificateEnrolmentPolicy.OID_DEFAULT_NAME);
 
 		OIDCollectionElement.getOID().add(OIDElement);
 		CACollection.value = CACollectionElement;

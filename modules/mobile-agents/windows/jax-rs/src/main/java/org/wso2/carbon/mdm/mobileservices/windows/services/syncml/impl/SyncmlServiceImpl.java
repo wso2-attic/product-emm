@@ -61,11 +61,11 @@ public class SyncmlServiceImpl implements SyncmlService {
 			throws DeviceManagementException, DeviceManagementServiceException,
 			       FileOperationException {
 
-		File file = new File(getClass().getClassLoader().getResource(Constants.SYNCML_RESPONSE).getFile());
+		File file = new File(getClass().getClassLoader().getResource(Constants.SyncML.SYNCML_RESPONSE).getFile());
 		String replyPath = file.getPath();
 
-		headerNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getFirstChild();
-		bodyNode = request.getElementsByTagName(Constants.SYNC_ML).item(0).getChildNodes().item(1);
+		headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0).getFirstChild();
+		bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0).getChildNodes().item(1);
 		nListHeader = headerNode.getChildNodes();
 		nListBody = bodyNode.getChildNodes();
 
@@ -92,19 +92,19 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 				String NodeName = nNode.getNodeName();
 
-				if (Constants.SYNCML_MSG_ID.equals(NodeName)) {
+				if (Constants.SyncML.SYNCML_MSG_ID.equals(NodeName)) {
 					msgID = nNode.getTextContent().trim();
 					if (logger.isDebugEnabled()) {
 						logger.debug("Msg ID: " + msgID);
 					}
 				}
-				if (Constants.SYNCML_MESSAGE_ONE.equals(msgID)) {
-					if (Constants.SYNCML_TARGET.equals(NodeName)) {
+				if (Constants.SyncML.SYNCML_MESSAGE_ONE.equals(msgID)) {
+					if (Constants.SyncML.SYNCML_TARGET.equals(NodeName)) {
 						targetURI = nNode.getFirstChild().getTextContent().trim();
-					} else if (Constants.SYNCML_SOURCE.equals(NodeName)) {
+					} else if (Constants.SyncML.SYNCML_SOURCE.equals(NodeName)) {
 						sourceURI = nNode.getFirstChild().getTextContent().trim();
 						sourceLocName = nNode.getChildNodes().item(1).getTextContent().trim();
-					} else if (Constants.SYNCML_CRED.equals(NodeName)) {
+					} else if (Constants.SyncML.SYNCML_CRED.equals(NodeName)) {
 						credData = nNode.getChildNodes().item(1).getTextContent().trim();
 					}
 				}
@@ -118,8 +118,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 				String nodeName = nNode.getNodeName();
 
-				if (Constants.SYNCML_MESSAGE_TWO.equals(msgID)) {
-					if (Constants.SYNCML_RESULTS.equals(nodeName)) {
+				if (Constants.SyncML.SYNCML_MESSAGE_TWO.equals(msgID)) {
+					if (Constants.SyncML.SYNCML_RESULTS.equals(nodeName)) {
 
 						OSVersion = nNode.getChildNodes().item(3).getChildNodes().item(1)
 						                 .getTextContent();
@@ -165,8 +165,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 			//Change this when proceeding with operations..
 			if (MESSAGE_ID_ONE_TEMP.equals(msgID)|| MESSAGE_ID_TWO_TEMP.equals(msgID)) {
 				response = new String(Files.readAllBytes(Paths.get(replyPath)));
-				response = response.replaceAll(Constants.SYNCML_SOURCE_URI, targetURI);
-				response = response.replaceAll(Constants.SYNCML_TARGET_URI, sourceURI);
+				response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
+				response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
 			}
 		} catch (IOException e) {
 			throw new FileOperationException("Syncml response file cannot be read.",e);

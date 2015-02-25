@@ -113,14 +113,14 @@ public class CertificateSigningService {
 		ContentSigner signer;
 
 		try {
-			signer = new JcaContentSignerBuilder(Constants.ALGORITHM).setProvider(Constants.PROVIDER).build(privateKey);
+			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM).setProvider(Constants.CertificateEnrolment.PROVIDER).build(privateKey);
 		} catch (OperatorCreationException e) {
 			throw new CertificateGenerationException("Content signer cannot be created",e);
 		}
 
 		X509Certificate signedCertificate;
 		try {
-			signedCertificate = new JcaX509CertificateConverter().setProvider(Constants.PROVIDER).getCertificate(certificateBuilder.build(signer));
+			signedCertificate = new JcaX509CertificateConverter().setProvider(Constants.CertificateEnrolment.PROVIDER).getCertificate(certificateBuilder.build(signer));
 		} catch (CertificateException e) {
          throw new CertificateGenerationException("Signed certificate cannot generated",e);
  		}

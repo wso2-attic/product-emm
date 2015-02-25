@@ -98,7 +98,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			QName qNamesSecurity = new QName(
 					Constants.WS_SECURITY_TARGET_NAMESPACE,
-					Constants.SECURITY);
+					Constants.CertificateEnrolment.SECURITY);
 
 			SOAPHeaderElement Security = null;
 
@@ -110,21 +110,21 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			Name attributeName = null;
 			try {
-				attributeName = soapFactory.createName(Constants.TIMESTAMP_ID, Constants.TIMESTAMP_U,
-				                              Constants.WSS_SECURITY_UTILITY);
+				attributeName = soapFactory.createName(Constants.CertificateEnrolment.TIMESTAMP_ID, Constants.CertificateEnrolment.TIMESTAMP_U,
+				                              Constants.CertificateEnrolment.WSS_SECURITY_UTILITY);
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
 
 
 			QName qNameTimestamp = new QName(
-						Constants.WSS_SECURITY_UTILITY,
-						Constants.TIMESTAMP);
+						Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+						Constants.CertificateEnrolment.TIMESTAMP);
 			SOAPHeaderElement timestamp = null;
 
 			try {
 				timestamp = header.addHeaderElement(qNameTimestamp);
-				timestamp.addAttribute(attributeName, Constants.TIMESTAMP_0);
+				timestamp.addAttribute(attributeName, Constants.CertificateEnrolment.TIMESTAMP_0);
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -138,7 +138,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				expiredISOTime = expiredISOTime.substring(0, expiredISOTime.length() - 6);
 				expiredISOTime = expiredISOTime + "Z";
 
-			QName qNameCreated = new QName(Constants.WSS_SECURITY_UTILITY, Constants.CREATED);
+			QName qNameCreated = new QName(Constants.CertificateEnrolment.WSS_SECURITY_UTILITY, Constants.CertificateEnrolment.CREATED);
 			SOAPHeaderElement SOAPHeaderCreated = null;
 
 			try {
@@ -150,8 +150,8 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 
 			QName qNameExpires = new QName(
-						Constants.WSS_SECURITY_UTILITY,
-						Constants.EXPIRES);
+						Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+						Constants.CertificateEnrolment.EXPIRES);
 			SOAPHeaderElement SOAPHeaderExpires = null;
 
 			try {
@@ -190,7 +190,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			String messageString=null;
 			try {
-				messageString = new String(outputStream.toByteArray(), Constants.UTF_8);
+				messageString = new String(outputStream.toByteArray(), Constants.CertificateEnrolment.UTF_8);
 			}
 			catch(UnsupportedEncodingException e){
 				Response.serverError().build();
@@ -199,7 +199,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 				Map<String, List<String>> headers = (Map<String, List<String>>) context.get(MessageContext.HTTP_REQUEST_HEADERS);
 				headers = new HashMap<String, List<String>>();
-				headers.put(Constants.CONTENT_LENGTH, Arrays.asList(String.valueOf(messageString.length())));
+				headers.put(Constants.CertificateEnrolment.CONTENT_LENGTH, Arrays.asList(String.valueOf(messageString.length())));
 				context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
 
 		}

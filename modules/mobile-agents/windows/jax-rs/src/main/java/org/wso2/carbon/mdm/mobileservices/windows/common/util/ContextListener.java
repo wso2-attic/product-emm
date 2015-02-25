@@ -52,7 +52,7 @@ public class ContextListener implements ServletContextListener {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
-		File propertyFile = new File(getClass().getClassLoader().getResource(Constants.PROPERTIES_XML).getFile());
+		File propertyFile = new File(getClass().getClassLoader().getResource(Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder=null;
 		try {
@@ -69,8 +69,8 @@ public class ContextListener implements ServletContextListener {
 			logger.error("XML property file reading exception.");
 		}
 
-		String MDMPassword = document.getElementsByTagName(Constants.MDM_PASSWORD).item(FIRST_ITEM).getTextContent();
-        String MDMPrivateKeyPassword = document.getElementsByTagName(Constants.MDM_PRIVATE_KEY_PASSWORD).item(FIRST_ITEM).getTextContent();
+		String MDMPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PASSWORD).item(FIRST_ITEM).getTextContent();
+        String MDMPrivateKeyPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PRIVATE_KEY_PASSWORD).item(FIRST_ITEM).getTextContent();
 		String signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).getTextContent();
 		int signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).getTextContent());
 		int signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).getTextContent());
@@ -81,7 +81,7 @@ public class ContextListener implements ServletContextListener {
 		servletContext.setAttribute(Constants.CONTEXT_NOT_BEFORE_DATE,signedCertNotBeforeDate);
 		servletContext.setAttribute(Constants.CONTEXT_NOT_AFTER_DATE,signedCertNotAfterDate);
 
-		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(Constants.WAP_PROVISIONING_XML).getFile());
+		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
 		servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE,wapProvisioningFile);
 	}
 

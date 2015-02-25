@@ -126,12 +126,12 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		String wapProvisioningFilePath = wapProvisioningFile.getPath();
 		RequestSecurityTokenResponse requestSecurityTokenResponse = new RequestSecurityTokenResponse();
-		requestSecurityTokenResponse.setTokenType(Constants.TOKEN_TYPE);
+		requestSecurityTokenResponse.setTokenType(Constants.CertificateEnrolment.TOKEN_TYPE);
 		String encodedWap=prepareWapProvisioningXML(binarySecurityToken, certPropertyList, wapProvisioningFilePath);
 		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
 		BinarySecurityToken binarySecToken = new BinarySecurityToken();
-		binarySecToken.setValueType(Constants.VALUE_TYPE);
-		binarySecToken.setEncodingType(Constants.ENCODING_TYPE);
+		binarySecToken.setValueType(Constants.CertificateEnrolment.VALUE_TYPE);
+		binarySecToken.setEncodingType(Constants.CertificateEnrolment.ENCODING_TYPE);
 		binarySecToken.setToken(encodedWap);
 		requestedSecurityToken.setBinarySecurityToken(binarySecToken);
 		requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
@@ -165,7 +165,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	public void setRootCertAndKey(String storePassword, String keyPassword)
 			throws KeyStoreGenerationException, XMLFileOperationException, CertificateGenerationException {
 
-		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.WSO2_MDM_JKS_FILE).getFile());
+		File JKSFile = new File(getClass().getClassLoader().getResource(Constants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
 		String JKSFilePath = JKSFile.getPath();
 		KeyStore securityJKS;
 		try {
@@ -180,7 +180,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		PrivateKey CAPrivateKey;
 		try {
-			CAPrivateKey = (PrivateKey) securityJKS.getKey(Constants.CA_CERT, keyPassword.toCharArray());
+			CAPrivateKey = (PrivateKey) securityJKS.getKey(Constants.CertificateEnrolment.CA_CERT, keyPassword.toCharArray());
 		} catch (java.security.KeyStoreException e) {
 			throw new CertificateGenerationException("Cannot generate private key due to Key store error.", e);
 		} catch (NoSuchAlgorithmException e){
@@ -192,13 +192,13 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		privateKey = CAPrivateKey;
 		Certificate CACertificate;
 		try {
-			CACertificate = securityJKS.getCertificate(Constants.CA_CERT);
+			CACertificate = securityJKS.getCertificate(Constants.CertificateEnrolment.CA_CERT);
 		} catch (KeyStoreException e) {
 			throw new KeyStoreGenerationException("Keystore cannot be accessed.", e); }
 		CertificateFactory certificateFactory;
 
 		try {
-			certificateFactory = CertificateFactory.getInstance(Constants.X_509);
+			certificateFactory = CertificateFactory.getInstance(Constants.CertificateEnrolment.X_509);
 		} catch (CertificateException e) {
 			throw new CertificateGenerationException("Cannot initiate certificate factory.",e); }
 
@@ -261,17 +261,19 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		try {
 			builder = domFactory.newDocumentBuilder();
 			Document document = builder.parse(wapProvisioningFilePath);
-			NodeList wapParm = document.getElementsByTagName(Constants.PARM);
+			NodeList wapParm = document.getElementsByTagName(Constants.CertificateEnrolment.PARM);
 			Node CACertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
 
 			//Adding SHA1 CA certificate finger print to wap-provisioning xml.
-			CACertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE).setTextContent(
-					String.valueOf(DigestUtils.sha1Hex(rootCACertificate.getEncoded()))
-					      .toUpperCase());
+			CACertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.CertificateEnrolment.TYPE)
+			                     .setTextContent(
+					                     String.valueOf(DigestUtils.sha1Hex(
+							                     rootCACertificate.getEncoded()))
+					                           .toUpperCase());
 
 			//Adding encoded CA certificate to wap-provisioning file after removing new line characters.
 			NamedNodeMap rootCertAttributes = CACertificatePosition.getAttributes();
-			Node rootCertNode = rootCertAttributes.getNamedItem(Constants.VALUE);
+			Node rootCertNode = rootCertAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
 			rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
 			rootCertNode.setTextContent(rootCertEncodedString);
 
@@ -282,14 +284,14 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
 
 			//Adding SHA1 signed certificate finger print to wap-provisioning xml.
-			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.TYPE)
+			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.CertificateEnrolment.TYPE)
 			                         .setTextContent(
-					                         String.valueOf(DigestUtils.shaHex(signedCertificate.getEncoded()))
-					                               .toUpperCase());
+					                         String.valueOf(DigestUtils.shaHex(signedCertificate
+							                                                           .getEncoded())).toUpperCase());
 
 			//Adding encoded signed certificate to wap-provisioning file after removing new line characters.
 			NamedNodeMap clientCertAttributes = signedCertificatePosition.getAttributes();
-			Node clientEncodedNode = clientCertAttributes.getNamedItem(Constants.VALUE);
+			Node clientEncodedNode = clientCertAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
 			signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
 			clientEncodedNode.setTextContent(signedCertEncodedString);
 			if (logger.isDebugEnabled()) {

@@ -83,7 +83,7 @@ public class KeyStoreGenerator {
 	 */
 	public static KeyStore getKeyStore() throws KeyStoreGenerationException {
 		try {
-			return KeyStore.getInstance(Constants.JKS);
+			return KeyStore.getInstance(Constants.CertificateEnrolment.JKS);
 		} catch (java.security.KeyStoreException e) {
 			String message = "KeyStore error while creating new JKS.";
 			logger.error(message, e);

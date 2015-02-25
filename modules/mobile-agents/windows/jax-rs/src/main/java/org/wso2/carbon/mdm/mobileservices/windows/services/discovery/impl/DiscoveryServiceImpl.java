@@ -52,11 +52,11 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	public DiscoveryResponse discover(DiscoveryRequest discoveryRequest) {
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
-		discoveryResponse.setAuthPolicy(Constants.AUTH_POLICY);
+		discoveryResponse.setAuthPolicy(Constants.Discovery.AUTH_POLICY);
 		discoveryResponse.setEnrollmentPolicyServiceUrl(
-				Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
+				Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
 		discoveryResponse.setEnrollmentServiceUrl(
-				Constants.CERTIFICATE_ENROLLMENT_SERVICE_URL);
+				Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Discovery service end point was triggered via POST method");
