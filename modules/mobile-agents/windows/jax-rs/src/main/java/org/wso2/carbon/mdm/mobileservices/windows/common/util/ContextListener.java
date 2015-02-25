@@ -21,9 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.PropertyFileException;
 import org.xml.sax.SAXException;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -33,6 +31,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This class performs one time operations.
+ */
 public class ContextListener implements ServletContextListener {
 
 	private Logger logger = Logger.getLogger(ContextListener.class);
@@ -41,7 +42,11 @@ public class ContextListener implements ServletContextListener {
 	private static final String SIGNED_CERT_NOT_BEFORE = "signedcertnotbefore";
 	private static final String SIGNED_CERT_NOT_AFTER = "signedcertnotafter";
 
-
+	/**
+	 * This method loads wap-provisioning file / property file, sets wap-provisioning file and
+	 * extracted properties as attributes in servlet context.
+	 * @param servletContextEvent
+	 */
 	@Override public void contextInitialized(ServletContextEvent servletContextEvent) {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
@@ -77,10 +82,8 @@ public class ContextListener implements ServletContextListener {
 
 		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(Constants.WAP_PROVISIONING_XML).getFile());
 		servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE,wapProvisioningFile);
-
 	}
 
 	@Override public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
 	}
 }

@@ -36,12 +36,12 @@
     </jaxrs:server>
     <jaxws:endpoint
             id="DiscoveryService"
-            implementor="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl.DiscoveryServiceImpl"
             address="/discovery/post"/>
 
     <jaxws:endpoint
             id="EnrollmentPolicyService"
-            implementor="org.wso2.carbon.mdm.mobileservices.windows.xcep.impl.CertificateEnrollmentPolicyServiceImpl"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.xcep.impl.CertificateEnrollmentPolicyServiceImpl"
             address="/certificatepolicy/xcep">
         <jaxws:properties>
             <entry key="ws-security.ut.validator" value-ref="customvalidator"/>
@@ -53,7 +53,7 @@
 
     <jaxws:endpoint
             id="CertificateEnrollmentService"
-            implementor="org.wso2.carbon.mdm.mobileservices.windows.wstep.impl.CertificateEnrollmentServiceImpl"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.impl.CertificateEnrollmentServiceImpl"
             address="/deviceenrolment/wstep">
         <jaxws:properties>
             <entry key="ws-security.ut.validator" value-ref="customvalidator"/>
@@ -63,7 +63,7 @@
         </jaxws:inInterceptors>
         <jaxws:handlers>
             <bean id="serviceOptionsHandler"
-                  class="org.wso2.carbon.mdm.mobileservices.windows.wstep.util.MessageHandler"/>
+                  class="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.MessageHandler"/>
         </jaxws:handlers>
     </jaxws:endpoint>
     <jaxrs:server id="Syncmlinitial" address="/syncml">
@@ -72,7 +72,7 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
     <bean id="DiscoveryService_rest_bean"
-          class="org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.impl.DiscoveryServiceImpl"/>
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl.DiscoveryServiceImpl"/>
     <bean id="wss4jInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
         <property name="properties">
             <map>
@@ -84,7 +84,7 @@
         </property>
     </bean>
     <bean id="Syncml_initial_bean"
-          class="org.wso2.carbon.mdm.mobileservices.windows.syncml.impl.SyncmlServiceImpl"/>
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl.SyncmlServiceImpl"/>
     <bean id="customvalidator"
           class="org.wso2.carbon.mdm.mobileservices.windows.common.util.UsernameTokenValidator"/>
 </beans>

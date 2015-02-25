@@ -24,9 +24,9 @@ package org.wso2.carbon.mdm.mobileservices.windows.common;
 public final class Constants {
 
 	/*Service endpoints*/
-	public static final String DISCOVERY_SERVICE_ENDPOINT = "org.wso2.carbon.mdm.mobileservices.windows.discoveryservice.DiscoveryService";
-	public static final String CERTIFICATE_ENROLLMENT_SERVICE_ENDPOINT = "org.wso2.carbon.mdm.mobileservices.windows.wstep.CertificateEnrollmentService";
-	public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT = "org.wso2.carbon.mdm.mobileservices.windows.xcep.CertificateEnrollmentPolicyService";
+	public static final String DISCOVERY_SERVICE_ENDPOINT = "org.wso2.carbon.mdm.mobileservices.windows.services.discovery.DiscoveryService";
+	public static final String CERTIFICATE_ENROLLMENT_SERVICE_ENDPOINT = "org.wso2.carbon.mdm.mobileservices.windows.services.wstep.CertificateEnrollmentService";
+	public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT = "org.wso2.carbon.mdm.mobileservices.windows.services.xcep.CertificateEnrollmentPolicyService";
 
 	/*Services' target namespaces*/
 	public static final String DISCOVERY_SERVICE_TARGET_NAMESPACE = "http://schemas.microsoft.com/windows/management/2012/01/enrollment";
