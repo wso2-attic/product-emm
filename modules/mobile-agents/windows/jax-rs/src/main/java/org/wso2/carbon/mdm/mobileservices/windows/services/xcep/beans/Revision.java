@@ -23,12 +23,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
  * <p>Java class for Revision complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="Revision">
  *   &lt;complexContent>
@@ -41,51 +40,45 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Revision", propOrder = {
-    "majorRevision",
-    "minorRevision"
+		"majorRevision",
+		"minorRevision"
 })
 public class Revision {
 
-    @XmlSchemaType(name = "unsignedInt")
-    protected long majorRevision;
-    @XmlSchemaType(name = "unsignedInt")
-    protected long minorRevision;
+	@XmlSchemaType(name = "unsignedInt")
+	protected long majorRevision;
+	@XmlSchemaType(name = "unsignedInt")
+	protected long minorRevision;
 
-    /**
-     * Gets the value of the majorRevision property.
-     * 
-     */
-    public long getMajorRevision() {
-        return majorRevision;
-    }
+	/**
+	 * Gets the value of the majorRevision property.
+	 */
+	public long getMajorRevision() {
+		return majorRevision;
+	}
 
-    /**
-     * Sets the value of the majorRevision property.
-     * 
-     */
-    public void setMajorRevision(long value) {
-        this.majorRevision = value;
-    }
+	/**
+	 * Sets the value of the majorRevision property.
+	 */
+	public void setMajorRevision(long value) {
+		this.majorRevision = value;
+	}
 
-    /**
-     * Gets the value of the minorRevision property.
-     * 
-     */
-    public long getMinorRevision() {
-        return minorRevision;
-    }
+	/**
+	 * Gets the value of the minorRevision property.
+	 */
+	public long getMinorRevision() {
+		return minorRevision;
+	}
 
-    /**
-     * Sets the value of the minorRevision property.
-     * 
-     */
-    public void setMinorRevision(long value) {
-        this.minorRevision = value;
-    }
+	/**
+	 * Sets the value of the minorRevision property.
+	 */
+	public void setMinorRevision(long value) {
+		this.minorRevision = value;
+	}
 
 }

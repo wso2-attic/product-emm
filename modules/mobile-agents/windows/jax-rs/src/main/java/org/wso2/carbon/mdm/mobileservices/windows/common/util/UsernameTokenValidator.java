@@ -44,20 +44,21 @@ public class UsernameTokenValidator implements Validator {
 
 		String domainUser = credential.getUsernametoken().getName();
 		String[] domainUserArray = domainUser.split(DELIMITER);
-		Credential returnCredentials=null;
+		Credential returnCredentials = null;
 
 		String user = domainUserArray[USER_PART];
 		String domain = domainUserArray[DOMAIN_PART];
 		String password = credential.getUsernametoken().getPassword();
 
-		//Generic exception is caught here as there is no need of taking different actions for different exceptions.
+		//Generic exception is caught here as there is no need of taking different actions for
+		//different exceptions.
 		try {
-			domain=""; //remove later...
-			if(authenticate(user, password, domain)){
-				returnCredentials=credential;
-			}
-			else{
-				throw new WSSecurityException("Authentication failure due to incorrect credentials.");
+			domain = ""; //remove later...
+			if (authenticate(user, password, domain)) {
+				returnCredentials = credential;
+			} else {
+				throw new WSSecurityException(
+						"Authentication failure due to incorrect credentials.");
 			}
 		} catch (Exception e) {
 			throw new WSSecurityException("Failure occurred in the credential validator.");

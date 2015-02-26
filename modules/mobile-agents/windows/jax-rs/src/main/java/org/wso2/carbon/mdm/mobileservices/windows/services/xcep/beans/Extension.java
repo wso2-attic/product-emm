@@ -23,12 +23,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
  * <p>Java class for Extension complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="Extension">
  *   &lt;complexContent>
@@ -42,75 +41,67 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Extension", propOrder = {
-    "oidReference",
-    "critical",
-    "value"
+		"oidReference",
+		"critical",
+		"value"
 })
 public class Extension {
 
-    @XmlElement(name = "oIDReference")
-    protected int oidReference;
-    protected boolean critical;
-    @XmlElement(required = true, nillable = true)
-    protected byte[] value;
+	@XmlElement(name = "oIDReference")
+	protected int oidReference;
+	protected boolean critical;
+	@XmlElement(required = true, nillable = true)
+	protected byte[] value;
 
-    /**
-     * Gets the value of the oidReference property.
-     * 
-     */
-    public int getOIDReference() {
-        return oidReference;
-    }
+	/**
+	 * Gets the value of the oidReference property.
+	 */
+	public int getOIDReference() {
+		return oidReference;
+	}
 
-    /**
-     * Sets the value of the oidReference property.
-     * 
-     */
-    public void setOIDReference(int value) {
-        this.oidReference = value;
-    }
+	/**
+	 * Sets the value of the oidReference property.
+	 */
+	public void setOIDReference(int value) {
+		this.oidReference = value;
+	}
 
-    /**
-     * Gets the value of the critical property.
-     * 
-     */
-    public boolean isCritical() {
-        return critical;
-    }
+	/**
+	 * Gets the value of the critical property.
+	 */
+	public boolean isCritical() {
+		return critical;
+	}
 
-    /**
-     * Sets the value of the critical property.
-     * 
-     */
-    public void setCritical(boolean value) {
-        this.critical = value;
-    }
+	/**
+	 * Sets the value of the critical property.
+	 */
+	public void setCritical(boolean value) {
+		this.critical = value;
+	}
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     byte[]
-     */
-    public byte[] getValue() {
-        return value;
-    }
+	/**
+	 * Gets the value of the value property.
+	 *
+	 * @return possible object is
+	 * byte[]
+	 */
+	public byte[] getValue() {
+		return value;
+	}
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     byte[]
-     */
-    public void setValue(byte[] value) {
-        this.value = value;
-    }
+	/**
+	 * Sets the value of the value property.
+	 *
+	 * @param value allowed object is
+	 *              byte[]
+	 */
+	public void setValue(byte[] value) {
+		this.value = value;
+	}
 
 }

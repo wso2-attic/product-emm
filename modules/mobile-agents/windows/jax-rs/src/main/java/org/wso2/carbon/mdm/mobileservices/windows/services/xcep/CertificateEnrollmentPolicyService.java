@@ -25,6 +25,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.OIDCollect
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.ObjectFactory;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.RequestFilter;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Response;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -37,25 +38,32 @@ import javax.xml.ws.soap.SOAPBinding;
 /**
  * Interface for MS-XCEP implementation.
  */
-@WebService(targetNamespace = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE, name = "IPolicy")
+@WebService(targetNamespace = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE,
+		name = "IPolicy")
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 @XmlSeeAlso({ ObjectFactory.class })
 public interface CertificateEnrollmentPolicyService {
 
-	@RequestWrapper(localName = "GetPolicies", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.REQUEST_WRAPPER_CLASS_NAME)
+	@RequestWrapper(localName = "GetPolicies", targetNamespace = Constants.
+			ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.REQUEST_WRAPPER_CLASS_NAME)
 	@WebMethod(operationName = "GetPolicies")
-	@ResponseWrapper(localName = "GetPoliciesResponse", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.RESPONSE_WRAPPER_CLASS_NAME)
-	void getPolicies(
-			@WebParam(name = "client", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
+	@ResponseWrapper(localName = "GetPoliciesResponse", targetNamespace = Constants.
+			ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.
+			RESPONSE_WRAPPER_CLASS_NAME) void getPolicies(
+			@WebParam(name = "client", targetNamespace = Constants.
+					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			Client client,
-			@WebParam(name = "requestFilter", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
+			@WebParam(name = "requestFilter", targetNamespace = Constants.
+					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			RequestFilter requestFilter,
-			@WebParam(mode = WebParam.Mode.OUT, name = "response", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
+			@WebParam(mode = WebParam.Mode.OUT, name = "response", targetNamespace = Constants.
+					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<Response> response,
-			@WebParam(mode = WebParam.Mode.OUT, name = "cAs", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
+			@WebParam(mode = WebParam.Mode.OUT, name = "cAs", targetNamespace = Constants.
+					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<CACollection> CACollection,
-			@WebParam(mode = WebParam.Mode.OUT, name = "oIDs", targetNamespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
+			@WebParam(mode = WebParam.Mode.OUT, name = "oIDs", targetNamespace = Constants.
+					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<OIDCollection> OIDCollection
 	);
-
 }

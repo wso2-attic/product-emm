@@ -30,11 +30,13 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlDeviceGenerator;
+
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 
 /**
@@ -54,6 +56,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 	/**
 	 * This method resolves the Syncml messages received through device and send the
 	 * response accordingly.
+	 *
 	 * @param request - Syncml requesy comes through the device
 	 * @return - Syncml response generated for the request
 	 */
@@ -61,11 +64,15 @@ public class SyncmlServiceImpl implements SyncmlService {
 			throws DeviceManagementException, DeviceManagementServiceException,
 			       FileOperationException {
 
-		File file = new File(getClass().getClassLoader().getResource(Constants.SyncML.SYNCML_RESPONSE).getFile());
+		File file = new File(
+				getClass().getClassLoader().getResource(Constants.SyncML.SYNCML_RESPONSE)
+				          .getFile());
 		String replyPath = file.getPath();
 
-		headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0).getFirstChild();
-		bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0).getChildNodes().item(1);
+		headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0)
+		                    .getFirstChild();
+		bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0).getChildNodes()
+		                  .item(1);
 		nListHeader = headerNode.getChildNodes();
 		nListBody = bodyNode.getChildNodes();
 
@@ -144,16 +151,20 @@ public class SyncmlServiceImpl implements SyncmlService {
 						}
 
 						Device generatedDevice = SyncmlDeviceGenerator.generateDevice(
-								DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS,
+								DeviceManagementConstants.MobileDeviceTypes
+										.MOBILE_DEVICE_TYPE_WINDOWS,
 								devID, OSVersion, IMSI, IMEI, devMan, devMod);
 
 						try {
 							SyncmlDeviceGenerator.getDeviceManagementService()
-							                        .enrollDevice(generatedDevice);
+							                     .enrollDevice(generatedDevice);
 						} catch (DeviceManagementException e) {
-							throw new DeviceManagementException("Exception while getting Device Management Service.",e);
+							throw new DeviceManagementException(
+									"Exception while getting Device Management Service.", e);
 						} catch (DeviceManagementServiceException e) {
-							throw new DeviceManagementServiceException("Exception while enrolling device after receiving details.",e);
+							throw new DeviceManagementServiceException(
+									"Exception while enrolling device after receiving details.",
+									e);
 						}
 
 					}
@@ -163,13 +174,13 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 		try {
 			//Change this when proceeding with operations..
-			if (MESSAGE_ID_ONE_TEMP.equals(msgID)|| MESSAGE_ID_TWO_TEMP.equals(msgID)) {
+			if (MESSAGE_ID_ONE_TEMP.equals(msgID) || MESSAGE_ID_TWO_TEMP.equals(msgID)) {
 				response = new String(Files.readAllBytes(Paths.get(replyPath)));
 				response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
 				response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
 			}
 		} catch (IOException e) {
-			throw new FileOperationException("Syncml response file cannot be read.",e);
+			throw new FileOperationException("Syncml response file cannot be read.", e);
 		}
 
 		return Response.ok().entity(response).build();

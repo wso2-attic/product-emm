@@ -21,10 +21,13 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
+
 import javax.ws.rs.core.Response;
 import javax.xml.namespace.QName;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -60,10 +63,11 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	/**
 	 * This method adds Timestamp for SOAP header, and adds Content-length for HTTP header for
 	 * avoiding HTTP chunking.
+	 *
 	 * @param context
 	 */
 	@Override
-	public boolean handleMessage(SOAPMessageContext context){
+	public boolean handleMessage(SOAPMessageContext context) {
 
 		Boolean outBoundProperty = (Boolean)
 				context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
@@ -72,7 +76,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			SOAPMessage message = context.getMessage();
 			SOAPHeader header = null;
-			SOAPEnvelope envelope=null;
+			SOAPEnvelope envelope = null;
 
 			try {
 				header = message.getSOAPHeader();
@@ -81,13 +85,13 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				Response.serverError().build();
 			}
 
-				if (header == null) {
-					try {
-						header = envelope.addHeader();
-					} catch (SOAPException e) {
-						Response.serverError().build();
-					}
+			if (header == null) {
+				try {
+					header = envelope.addHeader();
+				} catch (SOAPException e) {
+					Response.serverError().build();
 				}
+			}
 			SOAPFactory soapFactory = null;
 
 			try {
@@ -110,16 +114,17 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			Name attributeName = null;
 			try {
-				attributeName = soapFactory.createName(Constants.CertificateEnrolment.TIMESTAMP_ID, Constants.CertificateEnrolment.TIMESTAMP_U,
-				                              Constants.CertificateEnrolment.WSS_SECURITY_UTILITY);
+				attributeName = soapFactory.createName(Constants.CertificateEnrolment.TIMESTAMP_ID,
+				                                       Constants.CertificateEnrolment.TIMESTAMP_U,
+				                                       Constants.CertificateEnrolment.
+						                                         WSS_SECURITY_UTILITY);
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
 
-
 			QName qNameTimestamp = new QName(
-						Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
-						Constants.CertificateEnrolment.TIMESTAMP);
+					Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+					Constants.CertificateEnrolment.TIMESTAMP);
 			SOAPHeaderElement timestamp = null;
 
 			try {
@@ -130,15 +135,16 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			}
 
 			DateTime dateTime = new DateTime();
-				DateTime expiredDateTime = dateTime.plusMinutes(5);
-				String createdISOTime = dateTime.toString(ISODateTimeFormat.dateTime());
-				String expiredISOTime = expiredDateTime.toString(ISODateTimeFormat.dateTime());
-				createdISOTime = createdISOTime.substring(0, createdISOTime.length() - 6);
-				createdISOTime = createdISOTime + "Z";
-				expiredISOTime = expiredISOTime.substring(0, expiredISOTime.length() - 6);
-				expiredISOTime = expiredISOTime + "Z";
+			DateTime expiredDateTime = dateTime.plusMinutes(5);
+			String createdISOTime = dateTime.toString(ISODateTimeFormat.dateTime());
+			String expiredISOTime = expiredDateTime.toString(ISODateTimeFormat.dateTime());
+			createdISOTime = createdISOTime.substring(0, createdISOTime.length() - 6);
+			createdISOTime = createdISOTime + "Z";
+			expiredISOTime = expiredISOTime.substring(0, expiredISOTime.length() - 6);
+			expiredISOTime = expiredISOTime + "Z";
 
-			QName qNameCreated = new QName(Constants.CertificateEnrolment.WSS_SECURITY_UTILITY, Constants.CertificateEnrolment.CREATED);
+			QName qNameCreated = new QName(Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+			                               Constants.CertificateEnrolment.CREATED);
 			SOAPHeaderElement SOAPHeaderCreated = null;
 
 			try {
@@ -148,10 +154,9 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				Response.serverError().build();
 			}
 
-
 			QName qNameExpires = new QName(
-						Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
-						Constants.CertificateEnrolment.EXPIRES);
+					Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+					Constants.CertificateEnrolment.EXPIRES);
 			SOAPHeaderElement SOAPHeaderExpires = null;
 
 			try {
@@ -161,7 +166,6 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				Response.serverError().build();
 			}
 
-
 			try {
 				timestamp.addChildElement(SOAPHeaderCreated);
 				timestamp.addChildElement(SOAPHeaderExpires);
@@ -170,38 +174,36 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				Response.serverError().build();
 			}
 
-            try {
-	           message.saveChanges();
-            }
-
-            catch(SOAPException e){
-	            Response.serverError().build();
-            }
+			try {
+				message.saveChanges();
+			} catch (SOAPException e) {
+				Response.serverError().build();
+			}
 
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 			try {
 				message.writeTo(outputStream);
-			} catch (IOException e){
+			} catch (IOException e) {
 				Response.serverError().build();
-			}catch (SOAPException e){
+			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
 
-
-			String messageString=null;
+			String messageString = null;
 			try {
-				messageString = new String(outputStream.toByteArray(), Constants.CertificateEnrolment.UTF_8);
-			}
-			catch(UnsupportedEncodingException e){
+				messageString = new String(outputStream.toByteArray(),
+				                           Constants.CertificateEnrolment.UTF_8);
+			} catch (UnsupportedEncodingException e) {
 				Response.serverError().build();
 			}
 
-
-				Map<String, List<String>> headers = (Map<String, List<String>>) context.get(MessageContext.HTTP_REQUEST_HEADERS);
-				headers = new HashMap<String, List<String>>();
-				headers.put(Constants.CertificateEnrolment.CONTENT_LENGTH, Arrays.asList(String.valueOf(messageString.length())));
-				context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
+			Map<String, List<String>> headers =
+					(Map<String, List<String>>) context.get(MessageContext.HTTP_REQUEST_HEADERS);
+			headers = new HashMap<String, List<String>>();
+			headers.put(Constants.CertificateEnrolment.CONTENT_LENGTH,
+			            Arrays.asList(String.valueOf(messageString.length())));
+			context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
 
 		}
 		return true;

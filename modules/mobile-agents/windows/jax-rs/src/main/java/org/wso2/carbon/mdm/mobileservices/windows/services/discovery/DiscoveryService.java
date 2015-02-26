@@ -44,15 +44,16 @@ public interface DiscoveryService {
 
 	@POST
 	@WebMethod(operationName = "Discover")
-	@RequestWrapper(localName = "Discover", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
-	@ResponseWrapper(localName = "DiscoverResponse", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
-	DiscoveryResponse discover(
-			@WebParam(name = "request", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@RequestWrapper(localName = "Discover", targetNamespace = Constants
+			.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@ResponseWrapper(localName = "DiscoverResponse", targetNamespace = Constants
+			.DISCOVERY_SERVICE_TARGET_NAMESPACE) DiscoveryResponse discover(
+			@WebParam(name = "request", targetNamespace = Constants
+					.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 			DiscoveryRequest request);
 
 	@GET
 	@WebMethod
-	@WebResult()
-	Response discoverGet();
+	@WebResult() Response discoverGet();
 
 }

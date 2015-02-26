@@ -36,6 +36,7 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOperationException;
+
 import javax.security.auth.x500.X500Principal;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -58,37 +59,37 @@ public class CertificateSigningService {
 	public static final int THIRD_ITEM = 2;
 	private static Log logger = LogFactory.getLog(CertificateSigningService.class);
 
-
 	/**
-	 * @param jcaRequest - CSR from the device
-	 * @param privateKey - Private key of CA certificate in MDM server
-	 * @param CACert     - CA certificate in MDM server
-	 * @param certParameterList
+	 * @param jcaRequest        - CSR from the device
+	 * @param privateKey        - Private key of CA certificate in MDM server
+	 * @param CACert            - CA certificate in MDM server
+	 * @param certParameterList - Parameter list for Signed certificate generation
 	 * @return - Signed certificate for CSR from device
 	 * @throws Exception
 	 */
 	public static X509Certificate signCSR(JcaPKCS10CertificationRequest jcaRequest,
 	                                      PrivateKey privateKey, X509Certificate CACert,
 	                                      List certParameterList)
-									throws CertificateGenerationException,
-									       XMLFileOperationException {
+			throws CertificateGenerationException,
+			       XMLFileOperationException {
 
-
-		String commonName=(String)certParameterList.get(FIRST_ITEM);
-		int notBeforeDate=(Integer)certParameterList.get(SECOND_ITEM);
-		int notAfterDate=(Integer)certParameterList.get(THIRD_ITEM);
+		String commonName = (String) certParameterList.get(FIRST_ITEM);
+		int notBeforeDate = (Integer) certParameterList.get(SECOND_ITEM);
+		int notAfterDate = (Integer) certParameterList.get(THIRD_ITEM);
 
 		X509v3CertificateBuilder certificateBuilder;
 
 		try {
 
-			certificateBuilder = new JcaX509v3CertificateBuilder(CACert,
-			                                                     BigInteger.valueOf(new SecureRandom().nextInt(Integer.MAX_VALUE)),
-			                                                     new Date(System.currentTimeMillis() - (DAYS * notBeforeDate)),
-			                                                     new Date(System.currentTimeMillis() + (DAYS * notAfterDate)),
+			certificateBuilder = new JcaX509v3CertificateBuilder(CACert, BigInteger.valueOf(
+					                                                     new SecureRandom().nextInt(
+									                                     Integer.MAX_VALUE)),
+			                                                     new Date(System.currentTimeMillis()
+			                                                              - (DAYS * notBeforeDate)),
+			                                                     new Date(System.currentTimeMillis()
+			                                                              + (DAYS * notAfterDate)),
 			                                                     new X500Principal(commonName),
 			                                                     jcaRequest.getPublicKey());
-
 
 		} catch (InvalidKeyException e) {
 			throw new CertificateGenerationException("CSR's public key is invalid", e);
@@ -101,30 +102,31 @@ public class CertificateSigningService {
 			certificateBuilder.addExtension(Extension.keyUsage, true,
 			                                new KeyUsage(KeyUsage.digitalSignature));
 			certificateBuilder.addExtension(Extension.extendedKeyUsage, false,
-			                                new ExtendedKeyUsage(
-					                                KeyPurposeId.id_kp_clientAuth));
+			                                new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
 			certificateBuilder.addExtension(Extension.basicConstraints, true,
 			                                new BasicConstraints(false));
 
 		} catch (CertIOException e) {
-			throw new CertificateGenerationException("Cannot add extension(s) to signed certificate", e);
+			throw new CertificateGenerationException(
+					"Cannot add extension(s) to signed certificate", e);
 		}
 
 		ContentSigner signer;
-
 		try {
-			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM).setProvider(Constants.CertificateEnrolment.PROVIDER).build(privateKey);
+			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM)
+					.setProvider(Constants.CertificateEnrolment.PROVIDER).build(privateKey);
 		} catch (OperatorCreationException e) {
-			throw new CertificateGenerationException("Content signer cannot be created",e);
+			throw new CertificateGenerationException("Content signer cannot be created", e);
 		}
 
 		X509Certificate signedCertificate;
 		try {
-			signedCertificate = new JcaX509CertificateConverter().setProvider(Constants.CertificateEnrolment.PROVIDER).getCertificate(certificateBuilder.build(signer));
+			signedCertificate = new JcaX509CertificateConverter()
+					.setProvider(Constants.CertificateEnrolment.PROVIDER)
+					.getCertificate(certificateBuilder.build(signer));
 		} catch (CertificateException e) {
-         throw new CertificateGenerationException("Signed certificate cannot generated",e);
- 		}
-
+			throw new CertificateGenerationException("Signed certificate cannot generated", e);
+		}
 		return signedCertificate;
 	}
 }

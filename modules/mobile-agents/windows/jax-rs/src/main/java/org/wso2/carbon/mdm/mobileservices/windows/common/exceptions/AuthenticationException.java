@@ -21,35 +21,30 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 /**
  * Exception class for authentication failures in windows device enrollment.
  */
-public class AuthenticationException extends Exception{
+public class AuthenticationException extends Exception {
 
 	private String errorMessage;
 
-	public AuthenticationException(String message)
-	{
+	public AuthenticationException(String message) {
 		super(message);
 		setErrorMessage(message);
 	}
 
-	public AuthenticationException(String message, Throwable cause)
-	{
+	public AuthenticationException(String message, Throwable cause) {
 		super(message, cause);
 		setErrorMessage(message);
 	}
 
-	public AuthenticationException(String message, Exception nestedEx)
-	{
+	public AuthenticationException(String message, Exception nestedEx) {
 		super(message, nestedEx);
 		setErrorMessage(message);
 	}
 
-	public AuthenticationException(Throwable cause)
-	{
+	public AuthenticationException(Throwable cause) {
 		super(cause);
 	}
 
-	public AuthenticationException()
-	{
+	public AuthenticationException() {
 		super();
 	}
 

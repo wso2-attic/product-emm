@@ -25,20 +25,22 @@ import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RequestSecurityTokenResponse", namespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512", propOrder = {
-		"TokenType",
-		"RequestedSecurityToken",
-		"RequestID"
-})
+@XmlType(name = "RequestSecurityTokenResponse", namespace = "http://docs.oasis-open" +
+                                                            ".org/ws-sx/ws-trust/200512",
+		propOrder = { "TokenType", "RequestedSecurityToken", "RequestID" })
+
 public class RequestSecurityTokenResponse implements Serializable {
 
 	@XmlElement(name = "TokenType", namespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512")
 	private String TokenType;
 
-	@XmlElement(name = "RequestedSecurityToken", required = true, namespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512")
+	@XmlElement(name = "RequestedSecurityToken", required = true, namespace = "http://docs" +
+	                                                                          ".oasis-open" +
+	                                                                          ".org/ws-sx/ws-trust/200512")
 	private RequestedSecurityToken RequestedSecurityToken;
 
-	@XmlElement(name = "RequestID", namespace = "http://schemas.microsoft.com/windows/pki/2009/01/enrollment")
+	@XmlElement(name = "RequestID", namespace = "http://schemas.microsoft" +
+	                                            ".com/windows/pki/2009/01/enrollment")
 	private int RequestID;
 
 	public String getTokenType() {

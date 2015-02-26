@@ -32,6 +32,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.PolicyColl
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.PrivateKeyAttributes;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.RequestFilter;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Response;
+
 import javax.jws.WebService;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.Holder;
@@ -41,7 +42,8 @@ import javax.xml.ws.soap.SOAPBinding;
 /**
  * Implementation class for CertificateEnrollmentPolicyService.
  */
-@WebService(endpointInterface = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT, targetNamespace = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE)
+@WebService(endpointInterface = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT,
+		targetNamespace = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE)
 @Addressing(enabled = true, required = true)
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnrollmentPolicyService {
@@ -50,10 +52,12 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 
 	/**
 	 * This method implements the MS-XCEP protocol for certificate enrollment policy service.
-	 * @param client  - Included lastUpdate and preferredLanguage tags
+	 *
+	 * @param client        - Included lastUpdate and preferredLanguage tags
 	 * @param requestFilter - Policy constrain tag
-	 * @param response - Response which includes minimal key length, hash algorithm, policy schema, policy OID reference
-	 * @param CACollection - Contains the issuers for the certificate enrollment policies
+	 * @param response      - Response which includes minimal key length, hash algorithm, policy
+	 *                         schema, policy OID reference
+	 * @param CACollection  - Contains the issuers for the certificate enrollment policies
 	 * @param OIDCollection - Contains the collection of OIDs for the response
 	 */
 	@Override
@@ -75,19 +79,18 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		Attributes attributeElement = new Attributes();
 		PrivateKeyAttributes privateKeyAttributeElement = new PrivateKeyAttributes();
 
-		privateKeyAttributeElement.setMinimalKeyLength(Constants.CertificateEnrolmentPolicy.MINIMAL_KEY_LENGTH);
+		privateKeyAttributeElement.
+				setMinimalKeyLength(Constants.CertificateEnrolmentPolicy.MINIMAL_KEY_LENGTH);
 
 		attributeElement.setPolicySchema(Constants.CertificateEnrolmentPolicy.POLICY_SCHEMA);
 		attributeElement.setPrivateKeyAttributes(privateKeyAttributeElement);
-		attributeElement.setHashAlgorithmOIDReference(Constants.CertificateEnrolmentPolicy.HASH_ALGORITHM_OID_REFERENCE);
-
-		certEnrollmentPolicyElement.setPolicyOIDReference(Constants.CertificateEnrolmentPolicy.OID_REFERENCE);
+		attributeElement.setHashAlgorithmOIDReference(
+				Constants.CertificateEnrolmentPolicy.HASH_ALGORITHM_OID_REFERENCE);
+		certEnrollmentPolicyElement.
+				 setPolicyOIDReference(Constants.CertificateEnrolmentPolicy.OID_REFERENCE);
 		certEnrollmentPolicyElement.setAttributes(attributeElement);
-
 		policyCollectionElement.getPolicy().add(certEnrollmentPolicyElement);
-
 		responseElement.setPolicies(policyCollectionElement);
-
 		response.value = responseElement;
 
 		OID OIDElement = new OID();
@@ -99,7 +102,5 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		OIDCollectionElement.getOID().add(OIDElement);
 		CACollection.value = CACollectionElement;
 		OIDCollection.value = OIDCollectionElement;
-
 	}
-
 }

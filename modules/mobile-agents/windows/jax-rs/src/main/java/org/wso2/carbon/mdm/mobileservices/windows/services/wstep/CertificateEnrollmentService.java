@@ -37,19 +37,24 @@ import javax.xml.ws.soap.SOAPBinding;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public interface CertificateEnrollmentService {
 
-	@RequestWrapper(localName = "RequestSecurityToken", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
+	@RequestWrapper(localName = "RequestSecurityToken", targetNamespace = Constants
+			.WS_TRUST_TARGET_NAMESPACE)
 	@WebMethod(operationName = "RequestSecurityToken")
-	@ResponseWrapper(localName = "RequestSecurityTokenResponseCollection", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
+	@ResponseWrapper(localName = "RequestSecurityTokenResponseCollection", targetNamespace =
+			Constants.WS_TRUST_TARGET_NAMESPACE)
 	public void requestSecurityToken(
 			@WebParam(name = "TokenType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			String tokenType,
 			@WebParam(name = "RequestType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			String requestType,
-			@WebParam(name = "BinarySecurityToken", targetNamespace = Constants.WS_SECURITY_TARGET_NAMESPACE)
+			@WebParam(name = "BinarySecurityToken", targetNamespace = Constants
+					.WS_SECURITY_TARGET_NAMESPACE)
 			String binarySecurityToken,
-			@WebParam(name = "AdditionalContext", targetNamespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
+			@WebParam(name = "AdditionalContext", targetNamespace = Constants
+					.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
 			AdditionalContext additionalContext,
-			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
-			javax.xml.ws.Holder<RequestSecurityTokenResponse> response
-	) throws WindowsDeviceEnrolmentException;
+			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse",
+					targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
+			javax.xml.ws.Holder<RequestSecurityTokenResponse> response)
+			throws WindowsDeviceEnrolmentException;
 }

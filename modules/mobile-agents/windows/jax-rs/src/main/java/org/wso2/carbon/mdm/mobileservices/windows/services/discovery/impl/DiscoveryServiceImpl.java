@@ -24,6 +24,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.DiscoveryService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryResponse;
+
 import javax.jws.WebService;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.BindingType;
@@ -34,7 +35,8 @@ import javax.xml.ws.soap.SOAPBinding;
  * Implementation class of Discovery Request. This class implements the first two services
  * of device enrolment stage.
  */
-@WebService(endpointInterface = Constants.DISCOVERY_SERVICE_ENDPOINT, targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+@WebService(endpointInterface = Constants.DISCOVERY_SERVICE_ENDPOINT, targetNamespace = Constants
+		.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 @Addressing(enabled = true, required = true)
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class DiscoveryServiceImpl implements DiscoveryService {
@@ -42,9 +44,10 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	private static Log logger = LogFactory.getLog(DiscoveryServiceImpl.class);
 
 	/**
-	 * This method returns the OnPremise AuthPolicy and next two endpoint the mobile device should call if
-	 * this response to received successfully at the device end. This method is called by device immediately after the
-	 * first GET method calling for the same endpoint.
+	 * This method returns the OnPremise AuthPolicy and next two endpoint the mobile device should
+	 * call if this response to received successfully at the device end. This method is called by
+	 * device immediately after the first GET method calling for the same endpoint.
+	 *
 	 * @param discoveryRequest - Request bean comes via mobile phone
 	 * @return discoveryResponse - Response bean
 	 */
@@ -68,6 +71,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	/**
 	 * This is the first method called through device. The device checks the availability of the
 	 * Service end point by calling this method.
+	 *
 	 * @return HTTP 200OK message
 	 */
 	@Override

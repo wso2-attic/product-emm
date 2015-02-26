@@ -42,9 +42,10 @@ public class SyncmlDeviceGenerator {
 
 	private static Log logger = LogFactory.getLog(SyncmlDeviceGenerator.class);
 
-
 	/**
-	 * This method is used to generate and return Device object from the received information at the Syncml step.
+	 * This method is used to generate and return Device object from the received information at
+	 * the Syncml step.
+	 *
 	 * @param deviceID     - Unique device ID received from the Device
 	 * @param OSVersion    - Device OS version
 	 * @param IMSI         - Device IMSI
@@ -53,10 +54,10 @@ public class SyncmlDeviceGenerator {
 	 * @param model        - Device Model
 	 * @return - Device Object
 	 */
-	public static Device generateDevice(String type,String deviceID, String OSVersion, String IMSI, String IMEI,
-	                             String manufacturer, String model) {
+	public static Device generateDevice(String type, String deviceID, String OSVersion, String IMSI,
+	                                    String IMEI, String manufacturer, String model) {
 
-		Device generatedDevice=new Device();
+		Device generatedDevice = new Device();
 
 		Device.Property OSVersionProperty = new Device.Property();
 		OSVersionProperty.setName(OS_VERSION);
@@ -94,17 +95,20 @@ public class SyncmlDeviceGenerator {
 
 	/**
 	 * This method returns Device Management Object for certain tasks such as Device enrollment etc.
+	 *
 	 * @return DeviceManagementServiceObject
 	 * @throws org.wso2.carbon.device.mgt.common.DeviceManagementServiceException
 	 */
-	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException {
+	public static DeviceManagementService getDeviceManagementService()
+			throws DeviceManagementServiceException {
 
 		DeviceManagementService deviceManagementService;
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext context = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		context.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 		context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		deviceManagementService = (DeviceManagementService) context.getOSGiService(DeviceManagementService.class, null);
+		deviceManagementService = (DeviceManagementService) context
+				.getOSGiService(DeviceManagementService.class, null);
 
 		if (deviceManagementService == null) {
 			String msg = "Device management service not initialized.";

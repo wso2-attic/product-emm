@@ -26,12 +26,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OIDCollection", namespace = "http://schemas.xmlsoap.org/ws/2006/12/authorization", propOrder = {
-		"contextitem"
-})
+@XmlType(name = "OIDCollection", namespace = "http://schemas.xmlsoap" +
+                                             ".org/ws/2006/12/authorization", propOrder = {
+										     "contextitem" })
 public class AdditionalContext {
 
-	@XmlElement(name = "ContextItem", required = true, namespace = "http://schemas.xmlsoap.org/ws/2006/12/authorization")
+	@XmlElement(name = "ContextItem", required = true, namespace = "http://schemas.xmlsoap" +
+	                                                               ".org/ws/2006/12/authorization")
 	protected List<ContextItem> contextitem;
 
 	public List<ContextItem> getcontextitem() {
@@ -40,6 +41,5 @@ public class AdditionalContext {
 		}
 		return this.contextitem;
 	}
-
 }
 

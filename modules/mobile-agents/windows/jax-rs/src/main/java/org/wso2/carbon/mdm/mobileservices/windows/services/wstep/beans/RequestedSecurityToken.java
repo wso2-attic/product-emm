@@ -24,18 +24,18 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RequestedSecurityToken", namespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512", propOrder = {
-		"binarySecurityToken"
-})
+@XmlType(name = "RequestedSecurityToken", namespace = "http://docs.oasis-open" +
+                                                      ".org/ws-sx/ws-trust/200512", propOrder = {
+												      "binarySecurityToken" })
 public class RequestedSecurityToken {
 
-	@XmlElement(name = "BinarySecurityToken", required = true, namespace = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd")
+	@XmlElement(name = "BinarySecurityToken", required = true, namespace = "http://docs.oasis-open" +
+	                                                                       ".org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd")
 
 	protected BinarySecurityToken binarySecurityToken;
 
 	public void setBinarySecurityToken(BinarySecurityToken binarysecuritytoken) {
 		this.binarySecurityToken = binarysecuritytoken;
 	}
-
 }
 

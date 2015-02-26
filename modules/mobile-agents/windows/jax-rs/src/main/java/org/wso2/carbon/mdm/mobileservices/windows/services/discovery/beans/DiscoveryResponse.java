@@ -29,13 +29,16 @@ import java.io.Serializable;
 @SuppressWarnings("unused")
 public class DiscoveryResponse implements Serializable {
 
-	@XmlElement(name = "AuthPolicy", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
+	@XmlElement(name = "AuthPolicy", namespace = "http://schemas.microsoft" +
+	                                             ".com/windows/management/2012/01/enrollment")
 	private String authPolicy;
 
-	@XmlElement(name = "EnrollmentPolicyServiceUrl", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
+	@XmlElement(name = "EnrollmentPolicyServiceUrl", namespace = "http://schemas.microsoft" +
+	                                                             ".com/windows/management/2012/01/enrollment")
 	private String enrollmentPolicyServiceUrl;
 
-	@XmlElement(name = "EnrollmentServiceUrl", namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment")
+	@XmlElement(name = "EnrollmentServiceUrl", namespace = "http://schemas.microsoft" +
+	                                                       ".com/windows/management/2012/01/enrollment")
 	private String enrollmentServiceUrl;
 
 	public String getAuthPolicy() {

@@ -40,13 +40,11 @@ public class CertificateGenerationException extends Exception {
 		setErrorMessage(message);
 	}
 
-	public CertificateGenerationException(Throwable cause)
-	{
+	public CertificateGenerationException(Throwable cause) {
 		super(cause);
 	}
 
-	public CertificateGenerationException()
-	{
+	public CertificateGenerationException() {
 		super();
 	}
 

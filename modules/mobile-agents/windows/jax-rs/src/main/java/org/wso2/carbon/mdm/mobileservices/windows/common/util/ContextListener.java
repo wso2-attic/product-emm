@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.xml.sax.SAXException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -46,21 +47,23 @@ public class ContextListener implements ServletContextListener {
 	/**
 	 * This method loads wap-provisioning file / property file, sets wap-provisioning file and
 	 * extracted properties as attributes in servlet context.
-	 * @param servletContextEvent
+	 *
+	 * @param servletContextEvent - Uses when servlet communicating with servlet container.
 	 */
 	@Override public void contextInitialized(ServletContextEvent servletContextEvent) {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
-		File propertyFile = new File(getClass().getClassLoader().getResource(Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
+		File propertyFile = new File(getClass().getClassLoader().getResource(
+				Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder=null;
+		DocumentBuilder docBuilder = null;
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
 			logger.error("XML parsing configuration exception.");
 		}
-		Document document=null;
+		Document document = null;
 		try {
 			document = docBuilder.parse(propertyFile);
 		} catch (SAXException e) {
@@ -69,20 +72,30 @@ public class ContextListener implements ServletContextListener {
 			logger.error("XML property file reading exception.");
 		}
 
-		String MDMPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PASSWORD).item(FIRST_ITEM).getTextContent();
-        String MDMPrivateKeyPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PRIVATE_KEY_PASSWORD).item(FIRST_ITEM).getTextContent();
-		String signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).getTextContent();
-		int signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).getTextContent());
-		int signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).getTextContent());
+		String MDMPassword = document.getElementsByTagName(
+				Constants.CertificateEnrolment.MDM_PASSWORD).item(FIRST_ITEM).getTextContent();
+		String MDMPrivateKeyPassword = document.getElementsByTagName(
+				Constants.CertificateEnrolment.MDM_PRIVATE_KEY_PASSWORD).
+				                                       item(FIRST_ITEM).getTextContent();
+		String signedCertCommonName =
+				document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).getTextContent();
+		int signedCertNotBeforeDate = Integer.valueOf(
+				document.getElementsByTagName(SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).
+						getTextContent());
+		int signedCertNotAfterDate = Integer.valueOf(
+				document.getElementsByTagName(SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).
+						getTextContent());
 
-		servletContext.setAttribute(Constants.CONTEXT_MDM_PASSWORD,MDMPassword);
-		servletContext.setAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD,MDMPrivateKeyPassword);
-		servletContext.setAttribute(Constants.CONTEXT_COMMON_NAME,signedCertCommonName);
-		servletContext.setAttribute(Constants.CONTEXT_NOT_BEFORE_DATE,signedCertNotBeforeDate);
-		servletContext.setAttribute(Constants.CONTEXT_NOT_AFTER_DATE,signedCertNotAfterDate);
+		servletContext.setAttribute(Constants.CONTEXT_MDM_PASSWORD, MDMPassword);
+		servletContext.
+			        setAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD, MDMPrivateKeyPassword);
+		servletContext.setAttribute(Constants.CONTEXT_COMMON_NAME, signedCertCommonName);
+		servletContext.setAttribute(Constants.CONTEXT_NOT_BEFORE_DATE, signedCertNotBeforeDate);
+		servletContext.setAttribute(Constants.CONTEXT_NOT_AFTER_DATE, signedCertNotAfterDate);
 
-		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
-		servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE,wapProvisioningFile);
+		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(
+				Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
+		servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
 	}
 
 	@Override public void contextDestroyed(ServletContextEvent servletContextEvent) {

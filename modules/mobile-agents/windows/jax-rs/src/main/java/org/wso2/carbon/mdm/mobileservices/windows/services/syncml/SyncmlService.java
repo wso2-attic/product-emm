@@ -37,9 +37,9 @@ public interface SyncmlService {
 
 	@Path("/request")
 	@POST
-	@Consumes({"application/vnd.syncml.dm+xml;charset=utf-8", "application/xml"})
-	@Produces("application/vnd.syncml.dm+xml;charset=utf-8")
-	Response getInitialResponse(Document request)
+	@Consumes({ "application/vnd.syncml.dm+xml;charset=utf-8", "application/xml" })
+	@Produces("application/vnd.syncml.dm+xml;charset=utf-8") Response getInitialResponse(
+			Document request)
 			throws DeviceManagementException, DeviceManagementServiceException,
 			       FileOperationException;
 

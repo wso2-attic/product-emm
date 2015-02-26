@@ -25,14 +25,15 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "BinarySecurityToken", namespace = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" , propOrder = {"ValueType","EncodingType"})
+@XmlType(name = "BinarySecurityToken", namespace = "http://docs.oasis-open" +
+                                                   ".org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", propOrder = {
+		                                           "ValueType", "EncodingType" })
 public class BinarySecurityToken {
 
 	@XmlAttribute(name = "ValueType")
 	protected String ValueType;
 	@XmlAttribute(name = "EncodingType")
 	protected String EncodingType;
-
 	@XmlValue
 	protected String Token;
 

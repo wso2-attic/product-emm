@@ -25,62 +25,58 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
  * <p>Java class for SupersededPolicies complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="SupersededPolicies">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://schemas.microsoft.com/windows/pki/2009/01/enrollmentpolicy}commonName" maxOccurs="unbounded"/>
+ *         &lt;element ref="{http://schemas.microsoft
+ *         .com/windows/pki/2009/01/enrollmentpolicy}commonName" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SupersededPolicies", propOrder = {
-    "commonName"
+		"commonName"
 })
 public class SupersededPolicies {
 
-    @XmlElement(required = true)
-    protected List<String> commonName;
+	@XmlElement(required = true)
+	protected List<String> commonName;
 
-    /**
-     * Gets the value of the commonName property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the commonName property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCommonName().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getCommonName() {
-        if (commonName == null) {
-            commonName = new ArrayList<String>();
-        }
-        return this.commonName;
-    }
+	/**
+	 * Gets the value of the commonName property.
+	 * <p/>
+	 * <p/>
+	 * This accessor method returns a reference to the live list,
+	 * not a snapshot. Therefore any modification you make to the
+	 * returned list will be present inside the JAXB object.
+	 * This is why there is not a <CODE>set</CODE> method for the commonName property.
+	 * <p/>
+	 * <p/>
+	 * For example, to add a new item, do as follows:
+	 * <pre>
+	 *    getCommonName().add(newItem);
+	 * </pre>
+	 * <p/>
+	 * <p/>
+	 * <p/>
+	 * Objects of the following type(s) are allowed in the list
+	 * {@link String }
+	 */
+	public List<String> getCommonName() {
+		if (commonName == null) {
+			commonName = new ArrayList<String>();
+		}
+		return this.commonName;
+	}
 
 }
