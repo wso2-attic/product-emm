@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ExtensionCollection", propOrder = {
 		"extension"
 })
+@SuppressWarnings("unused")
 public class ExtensionCollection {
 
 	@XmlElement(required = true)

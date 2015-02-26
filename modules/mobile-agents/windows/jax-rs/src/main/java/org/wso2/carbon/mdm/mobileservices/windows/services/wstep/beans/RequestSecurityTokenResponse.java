@@ -29,7 +29,7 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RequestSecurityTokenResponse", namespace = Constants.WS_TRUST_TARGET_NAMESPACE,
 		propOrder = { "TokenType", "RequestedSecurityToken", "RequestID" })
-
+@SuppressWarnings("unused")
 public class RequestSecurityTokenResponse implements Serializable {
 
 	@XmlElement(name = "TokenType", namespace = Constants.WS_TRUST_TARGET_NAMESPACE)

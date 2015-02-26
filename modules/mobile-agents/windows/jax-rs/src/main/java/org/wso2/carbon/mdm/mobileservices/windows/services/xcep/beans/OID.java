@@ -58,6 +58,7 @@ import org.w3c.dom.Element;
 		"defaultName",
 		"any"
 })
+@SuppressWarnings("unused")
 public class OID {
 
 	@XmlElement(required = true)

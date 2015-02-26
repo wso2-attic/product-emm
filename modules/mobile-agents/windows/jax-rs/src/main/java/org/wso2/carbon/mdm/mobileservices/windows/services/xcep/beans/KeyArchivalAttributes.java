@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlType;
 		"symmetricAlgorithmOIDReference",
 		"symmetricAlgorithmKeyLength"
 })
+@SuppressWarnings("unused")
 public class KeyArchivalAttributes {
 
 	protected int symmetricAlgorithmOIDReference;

@@ -53,6 +53,7 @@ import javax.xml.bind.annotation.XmlType;
 		"oiDs"
 })
 @XmlRootElement(name = "GetPoliciesResponse")
+@SuppressWarnings("unused")
 public class GetPoliciesResponse {
 
 	@XmlElement(required = true, nillable = true)

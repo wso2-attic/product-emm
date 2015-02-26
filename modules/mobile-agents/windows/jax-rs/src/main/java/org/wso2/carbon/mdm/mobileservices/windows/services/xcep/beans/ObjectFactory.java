@@ -37,6 +37,7 @@ import javax.xml.namespace.QName;
  * provided in this class.
  */
 @XmlRegistry
+@SuppressWarnings("unused")
 public class ObjectFactory {
 
 	private final static QName _CommonName_QNAME =

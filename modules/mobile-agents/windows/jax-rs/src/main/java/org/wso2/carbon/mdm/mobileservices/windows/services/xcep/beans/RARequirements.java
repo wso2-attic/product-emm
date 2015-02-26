@@ -51,6 +51,7 @@ import javax.xml.bind.annotation.XmlType;
 		"raekUs",
 		"raPolicies"
 })
+@SuppressWarnings("unused")
 public class RARequirements {
 
 	@XmlElement(name = "rASignatures")

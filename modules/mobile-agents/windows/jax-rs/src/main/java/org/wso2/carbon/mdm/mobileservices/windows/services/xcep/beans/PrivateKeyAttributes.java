@@ -58,6 +58,7 @@ import javax.xml.bind.annotation.XmlType;
 		"algorithmOIDReference",
 		"cryptoProviders"
 })
+@SuppressWarnings("unused")
 public class PrivateKeyAttributes {
 
 	@XmlSchemaType(name = "unsignedInt")

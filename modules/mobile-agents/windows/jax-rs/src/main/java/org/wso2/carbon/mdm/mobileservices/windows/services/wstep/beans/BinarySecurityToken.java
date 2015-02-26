@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BinarySecurityToken", namespace = Constants.WS_SECURITY_TARGET_NAMESPACE,
 		propOrder = { "ValueType", "EncodingType" })
+@SuppressWarnings("unused")
 public class BinarySecurityToken {
 
 	@XmlAttribute(name = "ValueType")

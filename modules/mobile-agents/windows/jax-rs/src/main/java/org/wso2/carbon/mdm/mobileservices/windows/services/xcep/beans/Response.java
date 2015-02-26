@@ -61,6 +61,7 @@ import org.w3c.dom.Element;
 		"policies",
 		"any"
 })
+@SuppressWarnings("unused")
 public class Response {
 
 	@XmlElement(required = true)

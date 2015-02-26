@@ -50,6 +50,7 @@ import javax.xml.bind.annotation.XmlType;
 		"requestFilter"
 })
 @XmlRootElement(name = "GetPolicies")
+@SuppressWarnings("unused")
 public class GetPolicies {
 
 	@XmlElement(required = true)

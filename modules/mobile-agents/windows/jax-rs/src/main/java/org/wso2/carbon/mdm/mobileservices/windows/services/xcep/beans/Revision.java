@@ -46,6 +46,7 @@ import javax.xml.bind.annotation.XmlType;
 		"majorRevision",
 		"minorRevision"
 })
+@SuppressWarnings("unused")
 public class Revision {
 
 	@XmlSchemaType(name = "unsignedInt")

@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CryptoProviders", propOrder = {
 		"provider"
 })
+@SuppressWarnings("unused")
 public class CryptoProviders {
 
 	@XmlElement(required = true)

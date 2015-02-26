@@ -57,6 +57,7 @@ import org.w3c.dom.Element;
 		"attributes",
 		"any"
 })
+@SuppressWarnings("unused")
 public class CertificateEnrollmentPolicy {
 
 	protected int policyOIDReference;

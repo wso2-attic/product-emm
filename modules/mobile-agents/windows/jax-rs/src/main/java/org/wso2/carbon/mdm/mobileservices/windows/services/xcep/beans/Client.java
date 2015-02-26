@@ -57,6 +57,7 @@ import org.w3c.dom.Element;
 		"preferredLanguage",
 		"any"
 })
+@SuppressWarnings("unused")
 public class Client {
 
 	@XmlElement(required = true, nillable = true)

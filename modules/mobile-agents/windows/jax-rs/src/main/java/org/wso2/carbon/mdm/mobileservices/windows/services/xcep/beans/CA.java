@@ -58,6 +58,7 @@ import org.w3c.dom.Element;
 		"caReferenceID",
 		"any"
 })
+@SuppressWarnings("unused")
 public class CA {
 
 	@XmlElement(required = true)

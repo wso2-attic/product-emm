@@ -90,6 +90,7 @@ import org.w3c.dom.Element;
 		"extensions",
 		"any"
 })
+@SuppressWarnings("unused")
 public class Attributes {
 
 	@XmlElement(required = true)

@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CAURICollection", propOrder = {
 		"cauri"
 })
+@SuppressWarnings("unused")
 public class CAURICollection {
 
 	@XmlElement(name = "cAURI", required = true)

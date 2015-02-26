@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlType;
 		"enroll",
 		"autoEnroll"
 })
+@SuppressWarnings("unused")
 public class EnrollmentPermission {
 
 	protected boolean enroll;

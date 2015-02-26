@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CAReferenceCollection", propOrder = {
 		"caReference"
 })
+@SuppressWarnings("unused")
 public class CAReferenceCollection {
 
 	@XmlElement(name = "cAReference", type = Integer.class)

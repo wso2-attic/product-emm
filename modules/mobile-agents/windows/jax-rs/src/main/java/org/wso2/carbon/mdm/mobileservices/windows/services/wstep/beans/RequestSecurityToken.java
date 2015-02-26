@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RequestedSecurityToken", namespace = Constants.WS_TRUST_TARGET_NAMESPACE,
 		propOrder = { "binarySecurityToken" })
+@SuppressWarnings("unused")
 public class RequestSecurityToken {
 
 	@XmlElement(name = "BinarySecurityToken", required = true,

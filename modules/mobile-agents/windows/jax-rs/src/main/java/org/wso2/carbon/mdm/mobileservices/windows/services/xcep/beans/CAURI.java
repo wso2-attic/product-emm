@@ -59,6 +59,7 @@ import org.w3c.dom.Element;
 		"renewalOnly",
 		"any"
 })
+@SuppressWarnings("unused")
 public class CAURI {
 
 	@XmlSchemaType(name = "unsignedInt")

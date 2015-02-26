@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "PolicyCollection", propOrder = {
 		"policy"
 })
+@SuppressWarnings("unused")
 public class PolicyCollection {
 
 	@XmlElement(required = true)

@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "OIDCollection", namespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE,
 		propOrder = { "contextitem" })
+@SuppressWarnings("unused")
 public class AdditionalContext {
 
 	@XmlElement(name = "ContextItem", required = true,

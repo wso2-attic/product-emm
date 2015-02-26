@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "SupersededPolicies", propOrder = {
 		"commonName"
 })
+@SuppressWarnings("unused")
 public class SupersededPolicies {
 
 	@XmlElement(required = true)

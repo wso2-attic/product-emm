@@ -50,6 +50,7 @@ import javax.xml.bind.annotation.XmlType;
 		"validityPeriodSeconds",
 		"renewalPeriodSeconds"
 })
+@SuppressWarnings("unused")
 public class CertificateValidity {
 
 	@XmlElement(required = true)

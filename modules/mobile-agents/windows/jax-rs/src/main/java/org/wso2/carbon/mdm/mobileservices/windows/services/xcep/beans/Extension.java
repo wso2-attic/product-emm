@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlType;
 		"critical",
 		"value"
 })
+@SuppressWarnings("unused")
 public class Extension {
 
 	@XmlElement(name = "oIDReference")

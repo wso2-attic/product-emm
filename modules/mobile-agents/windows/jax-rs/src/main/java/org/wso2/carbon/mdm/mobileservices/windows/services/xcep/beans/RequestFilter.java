@@ -52,6 +52,7 @@ import org.w3c.dom.Element;
 		"policyOIDs",
 		"any"
 })
+@SuppressWarnings("unused")
 public class RequestFilter {
 
 	@XmlElement(required = true, nillable = true)

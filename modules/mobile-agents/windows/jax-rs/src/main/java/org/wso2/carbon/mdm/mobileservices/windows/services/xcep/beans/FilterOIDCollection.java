@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "FilterOIDCollection", propOrder = {
 		"oid"
 })
+@SuppressWarnings("unused")
 public class FilterOIDCollection {
 
 	@XmlElement(required = true)

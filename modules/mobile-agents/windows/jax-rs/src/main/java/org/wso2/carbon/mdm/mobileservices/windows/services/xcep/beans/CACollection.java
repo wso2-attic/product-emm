@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CACollection", propOrder = {
 		"ca"
 })
+@SuppressWarnings("unused")
 public class CACollection {
 
 	@XmlElement(name = "cA", required = true)
