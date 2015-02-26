@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.impl;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WSTEPMessagingException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.CertificateEnrollmentService;
@@ -103,7 +103,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	public void requestSecurityToken(String tokenType, String requestType,
 	                                 String binarySecurityToken,
 	                                 AdditionalContext additionalContext,
-	                                 Holder<RequestSecurityTokenResponse> response) throws WSTEPMessagingException {
+	                                 Holder<RequestSecurityTokenResponse> response) throws
+	                                                                                WindowsDeviceEnrolmentException {
 
 		ServletContext ctx =(ServletContext)context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
 		File wapProvisioningFile=(File)ctx.getAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE);
@@ -121,7 +122,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			setRootCertAndKey(storePassword, keyPassword); }
 		//Generic exception is caught here as there is no need of taking different actions for different exceptions.
 		catch (Exception e){
-			throw new WSTEPMessagingException("Root certificate and private key couldn't be extracted from keystore.",e); }
+			throw new WindowsDeviceEnrolmentException("Root certificate and private key couldn't be extracted from keystore.",e); }
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Received CSR from Device:" + binarySecurityToken);}
@@ -133,7 +134,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			encodedWap = prepareWapProvisioningXML(binarySecurityToken, certPropertyList, wapProvisioningFilePath); }
 		//Generic exception is caught here as there is no need of taking different actions for different exceptions.
 		catch (Exception e){
-			throw new WSTEPMessagingException("Wap provisioning file couldn't be prepared.",e);
+			throw new WindowsDeviceEnrolmentException("Wap provisioning file couldn't be prepared.",e);
 		}
 		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
 		BinarySecurityToken binarySecToken = new BinarySecurityToken();

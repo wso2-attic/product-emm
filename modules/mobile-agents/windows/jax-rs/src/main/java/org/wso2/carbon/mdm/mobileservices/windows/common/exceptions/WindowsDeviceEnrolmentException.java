@@ -21,30 +21,30 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 /**
  * Exception class for general WSTEP messaging/message generation failures.
  */
-public class WSTEPMessagingException extends Exception {
+public class WindowsDeviceEnrolmentException extends Exception {
 
 	private String errorMessage;
 
-	public WSTEPMessagingException(String message) {
+	public WindowsDeviceEnrolmentException(String message) {
 		super(message);
 		setErrorMessage(message);
 	}
 
-	public WSTEPMessagingException(String message, Throwable cause) {
+	public WindowsDeviceEnrolmentException(String message, Throwable cause) {
 		super(message, cause);
 		setErrorMessage(message);
 	}
 
-	public WSTEPMessagingException(String message, Exception nestedEx) {
+	public WindowsDeviceEnrolmentException(String message, Exception nestedEx) {
 		super(message, nestedEx);
 		setErrorMessage(message);
 	}
 
-	public WSTEPMessagingException(Throwable cause) {
+	public WindowsDeviceEnrolmentException(Throwable cause) {
 		super(cause);
 	}
 
-	public WSTEPMessagingException() {
+	public WindowsDeviceEnrolmentException() {
 		super();
 	}
 
