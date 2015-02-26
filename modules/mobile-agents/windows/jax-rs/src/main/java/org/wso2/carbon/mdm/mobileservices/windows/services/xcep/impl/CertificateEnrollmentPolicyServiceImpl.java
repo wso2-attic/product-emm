@@ -84,10 +84,10 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 
 		attributeElement.setPolicySchema(Constants.CertificateEnrolmentPolicy.POLICY_SCHEMA);
 		attributeElement.setPrivateKeyAttributes(privateKeyAttributeElement);
-		attributeElement.setHashAlgorithmOIDReference(
-				Constants.CertificateEnrolmentPolicy.HASH_ALGORITHM_OID_REFERENCE);
-		certEnrollmentPolicyElement.
-				 setPolicyOIDReference(Constants.CertificateEnrolmentPolicy.OID_REFERENCE);
+		attributeElement.setHashAlgorithmOIDReference(Constants.CertificateEnrolmentPolicy.
+				                                              HASH_ALGORITHM_OID_REFERENCE);
+		certEnrollmentPolicyElement.setPolicyOIDReference(Constants.CertificateEnrolmentPolicy.
+				                                              OID_REFERENCE);
 		certEnrollmentPolicyElement.setAttributes(attributeElement);
 		policyCollectionElement.getPolicy().add(certEnrollmentPolicyElement);
 		responseElement.setPolicies(policyCollectionElement);

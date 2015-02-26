@@ -18,6 +18,8 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,22 +27,18 @@ import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RequestSecurityTokenResponse", namespace = "http://docs.oasis-open" +
-                                                            ".org/ws-sx/ws-trust/200512",
+@XmlType(name = "RequestSecurityTokenResponse", namespace = Constants.WS_TRUST_TARGET_NAMESPACE,
 		propOrder = { "TokenType", "RequestedSecurityToken", "RequestID" })
 
 public class RequestSecurityTokenResponse implements Serializable {
 
-	@XmlElement(name = "TokenType", namespace = "http://docs.oasis-open.org/ws-sx/ws-trust/200512")
+	@XmlElement(name = "TokenType", namespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 	private String TokenType;
 
-	@XmlElement(name = "RequestedSecurityToken", required = true, namespace = "http://docs" +
-	                                                                          ".oasis-open" +
-	                                                                          ".org/ws-sx/ws-trust/200512")
+	@XmlElement(name = "RequestedSecurityToken", required = true, namespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 	private RequestedSecurityToken RequestedSecurityToken;
 
-	@XmlElement(name = "RequestID", namespace = "http://schemas.microsoft" +
-	                                            ".com/windows/pki/2009/01/enrollment")
+	@XmlElement(name = "RequestID", namespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
 	private int RequestID;
 
 	public String getTokenType() {

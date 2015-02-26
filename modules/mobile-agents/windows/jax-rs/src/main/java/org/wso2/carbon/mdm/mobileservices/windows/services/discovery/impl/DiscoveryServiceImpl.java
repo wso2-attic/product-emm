@@ -28,6 +28,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.Disco
 import javax.jws.WebService;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.BindingType;
+import javax.xml.ws.Holder;
 import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
 
@@ -52,7 +53,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	 * @return discoveryResponse - Response bean
 	 */
 	@Override
-	public DiscoveryResponse discover(DiscoveryRequest discoveryRequest) {
+	public void discover(DiscoveryRequest discoveryRequest, Holder<DiscoveryResponse> response) {
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
 		discoveryResponse.setAuthPolicy(Constants.Discovery.AUTH_POLICY);
@@ -61,11 +62,11 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 		discoveryResponse.setEnrollmentServiceUrl(
 				Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
 
+		response.value = discoveryResponse;
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("Discovery service end point was triggered via POST method");
 		}
-
-		return discoveryResponse;
 	}
 
 	/**

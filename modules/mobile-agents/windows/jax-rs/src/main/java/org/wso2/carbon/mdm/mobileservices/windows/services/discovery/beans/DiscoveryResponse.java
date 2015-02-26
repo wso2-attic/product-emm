@@ -18,27 +18,21 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
-@XmlRootElement(name = "DiscoverResult")
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "DiscoveryResponse")
 @SuppressWarnings("unused")
 public class DiscoveryResponse implements Serializable {
 
-	@XmlElement(name = "AuthPolicy", namespace = "http://schemas.microsoft" +
-	                                             ".com/windows/management/2012/01/enrollment")
+	@XmlElement(name = "AuthPolicy")
 	private String authPolicy;
 
-	@XmlElement(name = "EnrollmentPolicyServiceUrl", namespace = "http://schemas.microsoft" +
-	                                                             ".com/windows/management/2012/01/enrollment")
+	@XmlElement(name = "EnrollmentPolicyServiceUrl")
 	private String enrollmentPolicyServiceUrl;
 
-	@XmlElement(name = "EnrollmentServiceUrl", namespace = "http://schemas.microsoft" +
-	                                                       ".com/windows/management/2012/01/enrollment")
+	@XmlElement(name = "EnrollmentServiceUrl")
 	private String enrollmentServiceUrl;
 
 	public String getAuthPolicy() {

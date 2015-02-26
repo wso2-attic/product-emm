@@ -18,19 +18,20 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RequestedSecurityToken", namespace = "http://docs.oasis-open" +
-                                                      ".org/ws-sx/ws-trust/200512", propOrder = {
-													  "binarySecurityToken" })
+@XmlType(name = "RequestedSecurityToken", namespace = Constants.WS_TRUST_TARGET_NAMESPACE,
+		propOrder = { "binarySecurityToken" })
 public class RequestSecurityToken {
 
-	@XmlElement(name = "BinarySecurityToken", required = true, namespace = "http://docs.oasis-open" +
-	                                                                       ".org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd")
+	@XmlElement(name = "BinarySecurityToken", required = true,
+			namespace = Constants.WS_SECURITY_TARGET_NAMESPACE)
 
 	protected BinarySecurityToken binarySecurityToken;
 

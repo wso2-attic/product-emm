@@ -18,6 +18,8 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -25,9 +27,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "BinarySecurityToken", namespace = "http://docs.oasis-open" +
-                                                   ".org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", propOrder = {
-		                                           "ValueType", "EncodingType" })
+@XmlType(name = "BinarySecurityToken", namespace = Constants.WS_SECURITY_TARGET_NAMESPACE,
+		propOrder = { "ValueType", "EncodingType" })
 public class BinarySecurityToken {
 
 	@XmlAttribute(name = "ValueType")

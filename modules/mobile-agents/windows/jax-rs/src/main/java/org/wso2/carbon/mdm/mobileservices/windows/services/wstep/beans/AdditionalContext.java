@@ -18,6 +18,8 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,13 +28,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OIDCollection", namespace = "http://schemas.xmlsoap" +
-                                             ".org/ws/2006/12/authorization", propOrder = {
-										     "contextitem" })
+@XmlType(name = "OIDCollection", namespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE,
+		propOrder = { "contextitem" })
 public class AdditionalContext {
 
-	@XmlElement(name = "ContextItem", required = true, namespace = "http://schemas.xmlsoap" +
-	                                                               ".org/ws/2006/12/authorization")
+	@XmlElement(name = "ContextItem", required = true,
+			namespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
+
 	protected List<ContextItem> contextitem;
 
 	public List<ContextItem> getcontextitem() {
