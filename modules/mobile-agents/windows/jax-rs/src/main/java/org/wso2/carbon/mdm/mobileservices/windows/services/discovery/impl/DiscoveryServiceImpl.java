@@ -50,7 +50,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	 * device immediately after the first GET method calling for the same endpoint.
 	 *
 	 * @param discoveryRequest - Request bean comes via mobile phone
-	 * @return discoveryResponse - Response bean
+	 * @param response - DiscoveryResponse bean for response
 	 */
 	@Override
 	public void discover(DiscoveryRequest discoveryRequest, Holder<DiscoveryResponse> response) {
@@ -73,7 +73,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	 * This is the first method called through device. The device checks the availability of the
 	 * Service end point by calling this method.
 	 *
-	 * @return HTTP 200OK message
+	 * @return - HTTP 200OK message
 	 */
 	@Override
 	public Response discoverGet() {

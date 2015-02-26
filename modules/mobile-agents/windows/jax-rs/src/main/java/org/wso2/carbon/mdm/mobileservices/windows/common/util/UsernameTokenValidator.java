@@ -31,6 +31,9 @@ import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+/**
+ * Validator class for user authentication checking the default carbon user store.
+ */
 public class UsernameTokenValidator implements Validator {
 
 	private static final int USER_PART = 0;
@@ -39,7 +42,16 @@ public class UsernameTokenValidator implements Validator {
 	private static final String EMPTY_STRING = "";
 	private static Log logger = LogFactory.getLog(UsernameTokenValidator.class);
 
-	@Override public Credential validate(Credential credential, RequestData requestData)
+	/**
+	 * This method validates the username token in SOAP message coming from the device.
+	 *
+	 * @param credential - Username token credentials coming from device
+	 * @param requestData - Request data associated with the request
+	 * @return - Credential object if authentication is success, or null if not success
+	 * @throws WSSecurityException
+	 */
+	@Override
+	public Credential validate(Credential credential, RequestData requestData)
 			throws WSSecurityException {
 
 		String domainUser = credential.getUsernametoken().getName();
@@ -66,6 +78,15 @@ public class UsernameTokenValidator implements Validator {
 		return returnCredentials;
 	}
 
+	/**
+	 * This method authenticate the user checking the carbon default user store.
+	 *
+	 * @param username - Username in username token
+	 * @param password - Password in username token
+	 * @param tenantDomain - Tenant domain is extracted from the username
+	 * @return - Returns boolean representing authentication result
+	 * @throws AuthenticationException
+	 */
 	public boolean authenticate(String username, String password, String tenantDomain)
 			throws AuthenticationException {
 

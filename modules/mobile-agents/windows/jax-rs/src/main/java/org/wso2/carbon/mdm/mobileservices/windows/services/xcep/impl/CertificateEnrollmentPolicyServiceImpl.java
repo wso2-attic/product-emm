@@ -56,7 +56,7 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 	 * @param client        - Included lastUpdate and preferredLanguage tags
 	 * @param requestFilter - Policy constrain tag
 	 * @param response      - Response which includes minimal key length, hash algorithm, policy
-	 *                         schema, policy OID reference
+	 *                        schema, policy OID reference
 	 * @param CACollection  - Contains the issuers for the certificate enrollment policies
 	 * @param OIDCollection - Contains the collection of OIDs for the response
 	 */

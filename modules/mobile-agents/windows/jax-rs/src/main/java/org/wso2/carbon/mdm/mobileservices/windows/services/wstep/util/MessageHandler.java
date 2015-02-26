@@ -64,27 +64,23 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	 * This method adds Timestamp for SOAP header, and adds Content-length for HTTP header for
 	 * avoiding HTTP chunking.
 	 *
-	 * @param context
+	 * @param context - Context of the SOAP Message
 	 */
 	@Override
 	public boolean handleMessage(SOAPMessageContext context) {
 
-		Boolean outBoundProperty = (Boolean)
-				context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+		Boolean outBoundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
 		if (outBoundProperty) {
-
 			SOAPMessage message = context.getMessage();
 			SOAPHeader header = null;
 			SOAPEnvelope envelope = null;
-
 			try {
 				header = message.getSOAPHeader();
 				envelope = message.getSOAPPart().getEnvelope();
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
-
 			if (header == null) {
 				try {
 					header = envelope.addHeader();
@@ -92,20 +88,18 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 					Response.serverError().build();
 				}
 			}
-			SOAPFactory soapFactory = null;
 
+			SOAPFactory soapFactory = null;
 			try {
 				soapFactory = SOAPFactory.newInstance();
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
-
 			QName qNamesSecurity = new QName(
 					Constants.WS_SECURITY_TARGET_NAMESPACE,
 					Constants.CertificateEnrolment.SECURITY);
 
 			SOAPHeaderElement Security = null;
-
 			try {
 				Security = header.addHeaderElement(qNamesSecurity);
 			} catch (SOAPException e) {
@@ -204,7 +198,6 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			headers.put(Constants.CertificateEnrolment.CONTENT_LENGTH,
 			            Arrays.asList(String.valueOf(messageString.length())));
 			context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
-
 		}
 		return true;
 	}
@@ -214,7 +207,5 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	}
 
 	@Override public void close(MessageContext context) {
-
 	}
-
 }

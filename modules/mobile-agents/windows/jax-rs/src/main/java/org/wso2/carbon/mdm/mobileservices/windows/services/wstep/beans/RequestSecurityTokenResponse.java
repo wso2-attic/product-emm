@@ -35,7 +35,8 @@ public class RequestSecurityTokenResponse implements Serializable {
 	@XmlElement(name = "TokenType", namespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 	private String TokenType;
 
-	@XmlElement(name = "RequestedSecurityToken", required = true, namespace = Constants.WS_TRUST_TARGET_NAMESPACE)
+	@XmlElement(name = "RequestedSecurityToken", required = true,
+			    namespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 	private RequestedSecurityToken RequestedSecurityToken;
 
 	@XmlElement(name = "RequestID", namespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)

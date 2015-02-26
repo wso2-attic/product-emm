@@ -60,12 +60,14 @@ public class CertificateSigningService {
 	private static Log logger = LogFactory.getLog(CertificateSigningService.class);
 
 	/**
+	 *
 	 * @param jcaRequest        - CSR from the device
 	 * @param privateKey        - Private key of CA certificate in MDM server
 	 * @param CACert            - CA certificate in MDM server
 	 * @param certParameterList - Parameter list for Signed certificate generation
 	 * @return - Signed certificate for CSR from device
-	 * @throws Exception
+	 * @throws CertificateGenerationException
+	 * @throws XMLFileOperationException
 	 */
 	public static X509Certificate signCSR(JcaPKCS10CertificationRequest jcaRequest,
 	                                      PrivateKey privateKey, X509Certificate CACert,
@@ -80,7 +82,6 @@ public class CertificateSigningService {
 		X509v3CertificateBuilder certificateBuilder;
 
 		try {
-
 			certificateBuilder = new JcaX509v3CertificateBuilder(CACert, BigInteger.valueOf(
 					                                                     new SecureRandom().nextInt(
 									                                     Integer.MAX_VALUE)),
@@ -90,7 +91,6 @@ public class CertificateSigningService {
 			                                                              + (DAYS * notAfterDate)),
 			                                                     new X500Principal(commonName),
 			                                                     jcaRequest.getPublicKey());
-
 		} catch (InvalidKeyException e) {
 			throw new CertificateGenerationException("CSR's public key is invalid", e);
 		} catch (NoSuchAlgorithmException e) {
@@ -98,14 +98,12 @@ public class CertificateSigningService {
 		}
 
 		try {
-
 			certificateBuilder.addExtension(Extension.keyUsage, true,
 			                                new KeyUsage(KeyUsage.digitalSignature));
 			certificateBuilder.addExtension(Extension.extendedKeyUsage, false,
 			                                new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
 			certificateBuilder.addExtension(Extension.basicConstraints, true,
 			                                new BasicConstraints(false));
-
 		} catch (CertIOException e) {
 			throw new CertificateGenerationException(
 					"Cannot add extension(s) to signed certificate", e);

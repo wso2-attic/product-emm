@@ -81,6 +81,8 @@ public class KeyStoreGenerator {
 	}
 
 	/**
+	 * This method is for retrieving instance of Key Store.
+	 *
 	 * @return Keystore object
 	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions
 	 * .KeyStoreGenerationException
@@ -93,7 +95,5 @@ public class KeyStoreGenerator {
 			logger.error(message, e);
 			throw new KeyStoreGenerationException(message, e);
 		}
-
 	}
-
 }

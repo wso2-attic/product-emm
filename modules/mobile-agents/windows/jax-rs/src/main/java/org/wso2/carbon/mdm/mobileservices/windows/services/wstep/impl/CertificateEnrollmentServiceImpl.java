@@ -168,9 +168,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	}
 
 	/**
+	 * Method used to Convert the Document object into a String.
+	 *
 	 * @param document - Wap provisioning XML document
 	 * @return - String representation of wap provisioning XML document
-	 * @throws Exception
+	 * @throws TransformerException
 	 */
 	private String convertDocumentToString(Document document) throws TransformerException {
 		DOMSource DOMSource = new DOMSource(document);
@@ -185,11 +187,12 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	}
 
 	/**
-	 * Method for setting privateKey and rootCACertificate variables.
+	 * Method for reading MDM Keystore and setting privateKey and rootCACertificate variables.
 	 *
+	 * @param storePassword - MDM Keystore password
+	 * @param keyPassword   - MDM Private key password
 	 * @throws KeyStoreGenerationException
-	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions
-	 * .XMLFileOperationException
+	 * @throws XMLFileOperationException
 	 * @throws CertificateGenerationException
 	 */
 	public void setRootCertAndKey(String storePassword, String keyPassword)
@@ -265,7 +268,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @param binarySecurityToken     - CSR from device
 	 * @param certPropertyList        - property list for signed certificate
 	 * @param wapProvisioningFilePath - File path of wap-provisioning file
-	 * @return - base64 encoded final wap-provisioning file
+	 * @return - base64 encoded final wap-provisioning file as a String
 	 * @throws CertificateGenerationException
 	 * @throws XMLFileOperationException
 	 */
@@ -284,12 +287,9 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		JcaPKCS10CertificationRequest CSRRequest =
 				new JcaPKCS10CertificationRequest(certificationRequest);
-
-		X509Certificate signedCertificate = CertificateSigningService.signCSR(CSRRequest,
-		                                                                      privateKey,
+		X509Certificate signedCertificate = CertificateSigningService.signCSR(CSRRequest,privateKey,
 		                                                                      rootCACertificate,
 		                                                                      certPropertyList);
-
 		BASE64Encoder base64Encoder = new BASE64Encoder();
 		String rootCertEncodedString;
 		try {
@@ -315,9 +315,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 			//Adding SHA1 CA certificate finger print to wap-provisioning xml.
 			CACertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.
-					              CertificateEnrolment.TYPE).setTextContent(String.
-					              valueOf(DigestUtils.sha1Hex(rootCACertificate.getEncoded())).
-					              toUpperCase());
+					            CertificateEnrolment.TYPE).setTextContent(String.valueOf(
+					            DigestUtils.sha1Hex(rootCACertificate.getEncoded())).toUpperCase());
 
 			//Adding encoded CA certificate to wap-provisioning file after removing new line
 			// characters.
@@ -335,9 +334,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 			//Adding SHA1 signed certificate finger print to wap-provisioning xml.
 			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.
-					                  CertificateEnrolment.TYPE).setTextContent(String.
-					                  valueOf(DigestUtils.sha1Hex(signedCertificate.getEncoded())).
-					                  toUpperCase());
+					            CertificateEnrolment.TYPE).setTextContent(String.valueOf(
+					            DigestUtils.sha1Hex(signedCertificate.getEncoded())).toUpperCase());
 
 			//Adding encoded signed certificate to wap-provisioning file after removing new line
 			// characters.
@@ -351,7 +349,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			}
 			wapProvisioningString = convertDocumentToString(document);
 		//Generic exception is caught here as there is no need of taking different actions for
-		// different exceptions.
+		//different exceptions.
 		} catch (Exception e) {
 		 throw new XMLFileOperationException("Problem occurred with wap-provisioning.xml file.", e);
 		}
