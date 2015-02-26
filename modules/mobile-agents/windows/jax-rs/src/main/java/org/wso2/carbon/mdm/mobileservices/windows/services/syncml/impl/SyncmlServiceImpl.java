@@ -44,13 +44,11 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
  */
 public class SyncmlServiceImpl implements SyncmlService {
 
-	public static final String MESSAGE_ID_ONE_TEMP = "1";
-	public static final String MESSAGE_ID_TWO_TEMP = "2";
+	private static final String MESSAGE_ID_ONE_TEMP = "1";
+	private static final String MESSAGE_ID_TWO_TEMP = "2";
+	private static final int FIRST_ITEM = 0;
+	private static final int SECOND_ITEM = 1;
 
-	private Node headerNode;
-	private Node bodyNode;
-	private NodeList nListHeader;
-	private NodeList nListBody;
 	private static Log logger = LogFactory.getLog(SyncmlServiceImpl.class);
 
 	/**
@@ -64,24 +62,21 @@ public class SyncmlServiceImpl implements SyncmlService {
 			throws DeviceManagementException, DeviceManagementServiceException,
 			       FileOperationException {
 
-		File file = new File(
-				getClass().getClassLoader().getResource(Constants.SyncML.SYNCML_RESPONSE)
-				          .getFile());
+		File file = new File(getClass().getClassLoader().getResource(Constants.SyncML.
+				             SYNCML_RESPONSE).getFile());
 		String replyPath = file.getPath();
-
-		headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0)
-		                    .getFirstChild();
-		bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(0).getChildNodes()
-		                  .item(1);
-		nListHeader = headerNode.getChildNodes();
-		nListBody = bodyNode.getChildNodes();
+		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(FIRST_ITEM).
+				          getFirstChild();
+		Node bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(FIRST_ITEM).
+				        getChildNodes().item(SECOND_ITEM);
+		NodeList nListHeader = headerNode.getChildNodes();
+		NodeList nListBody = bodyNode.getChildNodes();
 
 		String targetURI = null;
 		String sourceURI = null;
 		String msgID = null;
 		String sourceLocName;
 		String credData;
-
 		String OSVersion;
 		String IMSI;
 		String IMEI;
@@ -89,7 +84,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 		String devMan;
 		String devMod;
 		String devLang;
-
 		String response = null;
 
 		for (int i = 0; i < nListHeader.getLength(); i++) {
@@ -159,14 +153,14 @@ public class SyncmlServiceImpl implements SyncmlService {
 							SyncmlDeviceGenerator.getDeviceManagementService()
 							                     .enrollDevice(generatedDevice);
 						} catch (DeviceManagementException e) {
-							throw new DeviceManagementException(
-									"Exception while getting Device Management Service.", e);
+							String msg = "Exception while getting Device Management Service.";
+							logger.error(msg,e);
+							throw new DeviceManagementException(msg, e);
 						} catch (DeviceManagementServiceException e) {
-							throw new DeviceManagementServiceException(
-									"Exception while enrolling device after receiving details.",
-									e);
+							String msg = "Exception while enrolling device after receiving data.";
+							logger.error(msg,e);
+							throw new DeviceManagementServiceException(msg, e);
 						}
-
 					}
 				}
 			}
@@ -176,14 +170,16 @@ public class SyncmlServiceImpl implements SyncmlService {
 			//Change this when proceeding with operations..
 			if (MESSAGE_ID_ONE_TEMP.equals(msgID) || MESSAGE_ID_TWO_TEMP.equals(msgID)) {
 				response = new String(Files.readAllBytes(Paths.get(replyPath)));
-				response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
-				response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
+				if ((targetURI != null)&&(sourceURI != null)) {
+					response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
+					response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
+				}
 			}
 		} catch (IOException e) {
-			throw new FileOperationException("Syncml response file cannot be read.", e);
+			String msg = "Syncml response file cannot be read.";
+			logger.error(msg,e);
+			throw new FileOperationException(msg, e);
 		}
-
 		return Response.ok().entity(response).build();
 	}
-
 }

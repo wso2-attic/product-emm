@@ -38,6 +38,7 @@ import java.io.IOException;
  */
 public class ContextListener implements ServletContextListener {
 
+	public static final int INITIAL_VALUE = 0;
 	private static Log logger = LogFactory.getLog(ContextListener.class);
 	private static final int FIRST_ITEM = 0;
 	private static final String SIGNED_CERT_CN = "signedcertCN";
@@ -65,30 +66,39 @@ public class ContextListener implements ServletContextListener {
 		}
 		Document document = null;
 		try {
-			document = docBuilder.parse(propertyFile);
+			if (docBuilder != null) {
+				document = docBuilder.parse(propertyFile);
+			}
 		} catch (SAXException e) {
 			logger.error("XML Parsing Exception.");
 		} catch (IOException e) {
 			logger.error("XML property file reading exception.");
 		}
 
-		String MDMPassword = document.getElementsByTagName(
-				Constants.CertificateEnrolment.MDM_PASSWORD).item(FIRST_ITEM).getTextContent();
-		String MDMPrivateKeyPassword = document.getElementsByTagName(
-				Constants.CertificateEnrolment.MDM_PRIVATE_KEY_PASSWORD).
-				                                       item(FIRST_ITEM).getTextContent();
-		String signedCertCommonName =
-				document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).getTextContent();
-		int signedCertNotBeforeDate = Integer.valueOf(
-				document.getElementsByTagName(SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).
-						getTextContent());
-		int signedCertNotAfterDate = Integer.valueOf(
-				document.getElementsByTagName(SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).
-						getTextContent());
+		String MDMPassword = null;
+		if (document != null) {
+		   MDMPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PASSWORD).
+				         item(FIRST_ITEM).getTextContent();
+		}
+
+		String MDMPrivateKeyPassword = null;
+		String signedCertCommonName = null;
+		int signedCertNotBeforeDate = INITIAL_VALUE;
+		int signedCertNotAfterDate = INITIAL_VALUE;
+		if (document != null) {
+			MDMPrivateKeyPassword = document.getElementsByTagName(Constants.CertificateEnrolment.
+					                MDM_PRIVATE_KEY_PASSWORD).item(FIRST_ITEM).getTextContent();
+			signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(
+					                      FIRST_ITEM).getTextContent();
+			signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
+					                     SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).getTextContent());
+			signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
+					                      SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).getTextContent());
+		}
 
 		servletContext.setAttribute(Constants.CONTEXT_MDM_PASSWORD, MDMPassword);
-		servletContext.
-			        setAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD, MDMPrivateKeyPassword);
+		servletContext.setAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD,
+		                            MDMPrivateKeyPassword);
 		servletContext.setAttribute(Constants.CONTEXT_COMMON_NAME, signedCertCommonName);
 		servletContext.setAttribute(Constants.CONTEXT_NOT_BEFORE_DATE, signedCertNotBeforeDate);
 		servletContext.setAttribute(Constants.CONTEXT_NOT_AFTER_DATE, signedCertNotAfterDate);

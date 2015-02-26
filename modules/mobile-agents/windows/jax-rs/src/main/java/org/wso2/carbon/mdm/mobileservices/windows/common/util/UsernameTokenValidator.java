@@ -26,6 +26,7 @@ import org.apache.ws.security.validate.Credential;
 import org.apache.ws.security.validate.Validator;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
@@ -56,7 +57,7 @@ public class UsernameTokenValidator implements Validator {
 
 		String domainUser = credential.getUsernametoken().getName();
 		String[] domainUserArray = domainUser.split(DELIMITER);
-		Credential returnCredentials = null;
+		Credential returnCredentials;
 
 		String user = domainUserArray[USER_PART];
 		String domain = domainUserArray[DOMAIN_PART];
@@ -69,11 +70,14 @@ public class UsernameTokenValidator implements Validator {
 			if (authenticate(user, password, domain)) {
 				returnCredentials = credential;
 			} else {
-				throw new WSSecurityException(
-						"Authentication failure due to incorrect credentials.");
+				String msg="Authentication failure due to incorrect credentials.";
+				logger.error(msg);
+				throw new WindowsDeviceEnrolmentException(msg);
 			}
 		} catch (Exception e) {
-			throw new WSSecurityException("Failure occurred in the credential validator.");
+			String msg = "Failure occurred in the credential validator.";
+			logger.error(msg);
+			throw new WSSecurityException(msg);
 		}
 		return returnCredentials;
 	}
@@ -99,6 +103,7 @@ public class UsernameTokenValidator implements Validator {
 
 			if (realmService == null) {
 				String msg = "RealmService not initialized.";
+				logger.error(msg);
 				throw new AuthenticationException(msg);
 			}
 
@@ -121,8 +126,8 @@ public class UsernameTokenValidator implements Validator {
 					username, password);
 		} catch (UserStoreException e) {
 			String msg = "User store not initialized.";
-			logger.error(msg);
-			throw new AuthenticationException(msg);
+			logger.error(msg,e);
+			throw new AuthenticationException(msg,e);
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}

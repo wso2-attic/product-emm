@@ -92,9 +92,13 @@ public class CertificateSigningService {
 			                                                     new X500Principal(commonName),
 			                                                     jcaRequest.getPublicKey());
 		} catch (InvalidKeyException e) {
-			throw new CertificateGenerationException("CSR's public key is invalid", e);
+			String msg = "CSR's public key is invalid";
+			logger.error(msg,e);
+			throw new CertificateGenerationException(msg, e);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CertificateGenerationException("Certificate cannot be generated", e);
+			String msg = "Certificate cannot be generated";
+			logger.error(msg,e);
+			throw new CertificateGenerationException(msg, e);
 		}
 
 		try {
@@ -105,8 +109,9 @@ public class CertificateSigningService {
 			certificateBuilder.addExtension(Extension.basicConstraints, true,
 			                                new BasicConstraints(false));
 		} catch (CertIOException e) {
-			throw new CertificateGenerationException(
-					"Cannot add extension(s) to signed certificate", e);
+			String msg = "Cannot add extension(s) to signed certificate";
+			logger.error(msg,e);
+			throw new CertificateGenerationException(msg, e);
 		}
 
 		ContentSigner signer;
@@ -114,7 +119,9 @@ public class CertificateSigningService {
 			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM)
 					.setProvider(Constants.CertificateEnrolment.PROVIDER).build(privateKey);
 		} catch (OperatorCreationException e) {
-			throw new CertificateGenerationException("Content signer cannot be created", e);
+			String msg = "Content signer cannot be created";
+			logger.error(msg,e);
+			throw new CertificateGenerationException(msg, e);
 		}
 
 		X509Certificate signedCertificate;
@@ -123,7 +130,9 @@ public class CertificateSigningService {
 					.setProvider(Constants.CertificateEnrolment.PROVIDER)
 					.getCertificate(certificateBuilder.build(signer));
 		} catch (CertificateException e) {
-			throw new CertificateGenerationException("Signed certificate cannot generated", e);
+			String msg = "Signed certificate cannot generated";
+			logger.error(msg,e);
+			throw new CertificateGenerationException(msg, e);
 		}
 		return signedCertificate;
 	}

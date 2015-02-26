@@ -83,7 +83,9 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			}
 			if (header == null) {
 				try {
-					header = envelope.addHeader();
+					if (envelope != null) {
+						header = envelope.addHeader();
+					}
 				} catch (SOAPException e) {
 					Response.serverError().build();
 				}
@@ -101,17 +103,21 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 
 			SOAPHeaderElement Security = null;
 			try {
-				Security = header.addHeaderElement(qNamesSecurity);
+				if (header != null) {
+					Security = header.addHeaderElement(qNamesSecurity);
+				}
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
 
 			Name attributeName = null;
 			try {
-				attributeName = soapFactory.createName(Constants.CertificateEnrolment.TIMESTAMP_ID,
-				                                       Constants.CertificateEnrolment.TIMESTAMP_U,
-				                                       Constants.CertificateEnrolment.
-						                                         WSS_SECURITY_UTILITY);
+				if (soapFactory != null) {
+				 attributeName = soapFactory.createName(Constants.CertificateEnrolment.TIMESTAMP_ID,
+					                                    Constants.CertificateEnrolment.TIMESTAMP_U,
+					                                    Constants.CertificateEnrolment.
+							                                      WSS_SECURITY_UTILITY);
+				}
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -122,8 +128,10 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			SOAPHeaderElement timestamp = null;
 
 			try {
-				timestamp = header.addHeaderElement(qNameTimestamp);
-				timestamp.addAttribute(attributeName, Constants.CertificateEnrolment.TIMESTAMP_0);
+				if (header != null) {
+					timestamp = header.addHeaderElement(qNameTimestamp);
+					timestamp.addAttribute(attributeName, Constants.CertificateEnrolment.TIMESTAMP_0);
+				}
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -142,8 +150,10 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			SOAPHeaderElement SOAPHeaderCreated = null;
 
 			try {
-				SOAPHeaderCreated = header.addHeaderElement(qNameCreated);
-				SOAPHeaderCreated.addTextNode(createdISOTime);
+				if (header != null) {
+					SOAPHeaderCreated = header.addHeaderElement(qNameCreated);
+					SOAPHeaderCreated.addTextNode(createdISOTime);
+				}
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -154,16 +164,20 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			SOAPHeaderElement SOAPHeaderExpires = null;
 
 			try {
-				SOAPHeaderExpires = header.addHeaderElement(qNameExpires);
-				SOAPHeaderExpires.addTextNode(expiredISOTime);
+				if (header != null) {
+					SOAPHeaderExpires = header.addHeaderElement(qNameExpires);
+					SOAPHeaderExpires.addTextNode(expiredISOTime);
+				}
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
 
 			try {
-				timestamp.addChildElement(SOAPHeaderCreated);
-				timestamp.addChildElement(SOAPHeaderExpires);
-				Security.addChildElement(timestamp);
+				if ((timestamp != null)&&(Security != null)) {
+					timestamp.addChildElement(SOAPHeaderCreated);
+					timestamp.addChildElement(SOAPHeaderExpires);
+					Security.addChildElement(timestamp);
+				}
 			} catch (SOAPException e) {
 				Response.serverError().build();
 			}
@@ -195,8 +209,10 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			Map<String, List<String>> headers =
 					(Map<String, List<String>>) context.get(MessageContext.HTTP_REQUEST_HEADERS);
 			headers = new HashMap<String, List<String>>();
-			headers.put(Constants.CertificateEnrolment.CONTENT_LENGTH,
-			            Arrays.asList(String.valueOf(messageString.length())));
+			if (messageString != null) {
+				headers.put(Constants.CertificateEnrolment.CONTENT_LENGTH, Arrays.asList(String.
+						    valueOf(messageString.length())));
+			}
 			context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
 		}
 		return true;

@@ -56,18 +56,17 @@ public class KeyStoreGenerator {
 				keyStore.load(fileInputStream, storePass);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			String message =
-					"Requested cryptographic algorithm is not available in the environment.";
-			logger.error(message, e);
-			throw new KeyStoreGenerationException(message, e);
+			String msg = "Requested cryptographic algorithm is not available in the environment.";
+			logger.error(msg, e);
+			throw new KeyStoreGenerationException(msg, e);
 		} catch (CertificateException e) {
-			String message = "Error working with certificate related to, " + resultFile;
-			logger.error(message, e);
-			throw new KeyStoreGenerationException(message, e);
+			String msg = "Error working with certificate related to, " + resultFile;
+			logger.error(msg, e);
+			throw new KeyStoreGenerationException(msg, e);
 		} catch (IOException e) {
-			String message = "File error while working with file, " + resultFile;
-			logger.error(message, e);
-			throw new KeyStoreGenerationException(message, e);
+			String msg = "File error while working with file, " + resultFile;
+			logger.error(msg, e);
+			throw new KeyStoreGenerationException(msg, e);
 		} finally {
 			try {
 				if (fileInputStream != null) {
@@ -91,9 +90,9 @@ public class KeyStoreGenerator {
 		try {
 			return KeyStore.getInstance(Constants.CertificateEnrolment.JKS);
 		} catch (java.security.KeyStoreException e) {
-			String message = "KeyStore error while creating new JKS.";
-			logger.error(message, e);
-			throw new KeyStoreGenerationException(message, e);
+			String msg = "KeyStore error while creating new JKS.";
+			logger.error(msg, e);
+			throw new KeyStoreGenerationException(msg, e);
 		}
 	}
 }
