@@ -35,7 +35,7 @@ import java.security.cert.CertificateException;
  */
 public class KeyStoreGenerator {
 
-	private static final Log logger = LogFactory.getLog(KeyStoreGenerator.class);
+	private static final Log log = LogFactory.getLog(KeyStoreGenerator.class);
 
 	/**
 	 * This method loads the MDM keystore.
@@ -56,26 +56,22 @@ public class KeyStoreGenerator {
 				keyStore.load(fileInputStream, keyStorePassword);
 			}
 		} catch (NoSuchAlgorithmException e) {
-			String msg = "Requested cryptographic algorithm is not available in the environment.";
-			logger.error(msg, e);
-			throw new KeyStoreGenerationException(msg, e);
+			throw new KeyStoreGenerationException(
+					"Requested cryptographic algorithm is not available in the environment.", e);
 		} catch (CertificateException e) {
-			String msg = "Error working with certificate related to, " + keyStorePath;
-			logger.error(msg, e);
-			throw new KeyStoreGenerationException(msg, e);
+			throw new KeyStoreGenerationException("Error working with certificate related to, " +
+			                                      keyStorePath, e);
 		} catch (IOException e) {
-			String msg = "File error while working with file, " + keyStorePath;
-			logger.error(msg, e);
-			throw new KeyStoreGenerationException(msg, e);
+			throw new KeyStoreGenerationException("File error while working with file, " +
+			                                      keyStorePath, e);
 		} finally {
 			try {
 				if (fileInputStream != null) {
 					fileInputStream.close();
 				}
 			} catch (IOException e) {
-				String msg = "File error while closing the file, " + keyStorePath;
-				logger.error(msg, e);
-				throw new KeyStoreGenerationException(msg,e);
+				throw new KeyStoreGenerationException("File error while closing the file, " +
+				                                      keyStorePath,e);
 			}
 		}
 	}
@@ -91,7 +87,7 @@ public class KeyStoreGenerator {
 			return KeyStore.getInstance(Constants.CertificateEnrolment.JKS);
 		} catch (KeyStoreException e) {
 			String msg = "KeyStore error while creating new JKS.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new KeyStoreGenerationException(msg, e);
 		}
 	}

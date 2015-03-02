@@ -16,5 +16,7 @@
 *  under the License.
 */
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://schemas.microsoft.com/windows/management/2012/01/enrollment", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace =
+		"http://schemas.microsoft.com/windows/management/2012/01/enrollment",
+		elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans;

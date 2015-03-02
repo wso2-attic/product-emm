@@ -35,7 +35,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOperationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException;
 
 import javax.security.auth.x500.X500Principal;
 import java.math.BigInteger;
@@ -57,7 +57,7 @@ public class CertificateSigningService {
 	public static final int FIRST_ITEM = 0;
 	public static final int SECOND_ITEM = 1;
 	public static final int THIRD_ITEM = 2;
-	private static Log logger = LogFactory.getLog(CertificateSigningService.class);
+	private static Log log = LogFactory.getLog(CertificateSigningService.class);
 
 	/**
 	 * Implement certificate signing task using CSR received from the device and the MDM server key
@@ -69,12 +69,12 @@ public class CertificateSigningService {
 	 * @param certParameterList - Parameter list for Signed certificate generation
 	 * @return - Signed certificate for CSR from device
 	 * @throws CertificateGenerationException
-	 * @throws XMLFileOperationException
+	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException
 	 */
 	public static X509Certificate signCSR(JcaPKCS10CertificationRequest jcaRequest,
 	                                      PrivateKey privateKey, X509Certificate CACert,
-	                                      List certParameterList)
-			      throws CertificateGenerationException, XMLFileOperationException {
+	                                      List certParameterList) throws
+	                                      CertificateGenerationException, WAPProvisioningException {
 
 		String commonName = (String) certParameterList.get(FIRST_ITEM);
 		int notBeforeDays = (Integer) certParameterList.get(SECOND_ITEM);
@@ -84,7 +84,8 @@ public class CertificateSigningService {
 
 		try {
 			ContentSigner signer;
-			BigInteger serialNumber = BigInteger.valueOf(new SecureRandom().nextInt(Integer.MAX_VALUE));
+			BigInteger serialNumber = BigInteger.valueOf(new SecureRandom().
+					                                     nextInt(Integer.MAX_VALUE));
 			Date notBeforeDate = new Date(System.currentTimeMillis() -
 			                             (MILLI_SECONDS * notBeforeDays));
 			Date notAfterDate = new Date(System.currentTimeMillis() +
@@ -102,35 +103,26 @@ public class CertificateSigningService {
 			certificateBuilder.addExtension(Extension.basicConstraints, true,
 			                                new BasicConstraints(false));
 
-			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM).setProvider(
-					Constants.CertificateEnrolment.PROVIDER).build(privateKey);
+			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM).
+					 setProvider(Constants.CertificateEnrolment.PROVIDER).build(privateKey);
 
 			signedCertificate = new JcaX509CertificateConverter().setProvider(
 					Constants.CertificateEnrolment.PROVIDER).getCertificate(
 					certificateBuilder.build(signer));
 		} catch (InvalidKeyException e) {
-			String msg = "CSR's public key is invalid";
-			logger.error(msg, e);
-			throw new CertificateGenerationException(msg, e);
+			throw new CertificateGenerationException("CSR's public key is invalid", e);
 		} catch (NoSuchAlgorithmException e) {
-			String msg = "Certificate cannot be generated";
-			logger.error(msg, e);
-			throw new CertificateGenerationException(msg, e);
+			throw new CertificateGenerationException("Certificate cannot be generated", e);
 		}
 		catch (CertIOException e) {
-			String msg = "Cannot add extension(s) to signed certificate";
-			logger.error(msg, e);
-			throw new CertificateGenerationException(msg, e);
+			throw new CertificateGenerationException(
+					  "Cannot add extension(s) to signed certificate", e);
 		}
 		catch (OperatorCreationException e) {
-			String msg = "Content signer cannot be created";
-			logger.error(msg, e);
-			throw new CertificateGenerationException(msg, e);
+			throw new CertificateGenerationException("Content signer cannot be created", e);
 		}
 		catch (CertificateException e) {
-			String msg = "Signed certificate cannot generated";
-			logger.error(msg, e);
-			throw new CertificateGenerationException(msg, e);
+			throw new CertificateGenerationException("Signed certificate cannot generated", e);
 		}
 		return signedCertificate;
 	}

@@ -54,6 +54,13 @@ public class CryptoProviders {
 	protected List<String> provider;
 
 	/**
+	 * Instantiate provider list in the constructor
+	 */
+	public CryptoProviders() {
+		this.provider = new ArrayList<String>();
+	}
+
+	/**
 	 * Gets the value of the provider property.
 	 * <p/>
 	 * <p/>
@@ -74,9 +81,6 @@ public class CryptoProviders {
 	 * {@link String }
 	 */
 	public List<String> getProvider() {
-		if (provider == null) {
-			provider = new ArrayList<String>();
-		}
 		return this.provider;
 	}
 

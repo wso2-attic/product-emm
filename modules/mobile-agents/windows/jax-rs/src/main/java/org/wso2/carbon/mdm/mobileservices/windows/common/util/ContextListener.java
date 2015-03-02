@@ -39,13 +39,12 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProp
 public class ContextListener implements ServletContextListener {
 
 	public static final int INITIAL_VALUE = 0;
-	private static Log logger = LogFactory.getLog(ContextListener.class);
-	private static final int FIRST_ITEM = 0;
+	private static Log log = LogFactory.getLog(ContextListener.class);
 	private static final String SIGNED_CERT_CN = "signedcertCN";
 	private static final String SIGNED_CERT_NOT_BEFORE = "signedcertnotbefore";
 	private static final String SIGNED_CERT_NOT_AFTER = "signedcertnotafter";
-	private static final String MDM_PASSWORD = "mdmpassword";
-	private static final String MDM_PRIVATE_KEY_PASSWORD = "mdmprivatekeypassword";
+	private static final String PASSWORD = "mdmpassword";
+	private static final String PRIVATE_KEY_PASSWORD = "mdmprivatekeypassword";
 
 	/**
 	 * This method loads wap-provisioning file / property file, sets wap-provisioning file and
@@ -64,17 +63,17 @@ public class ContextListener implements ServletContextListener {
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			logger.error("XML parsing configuration exception.");
+			log.error("XML parsing configuration exception.");
 		}
 		Document document = null;
 		try {
-			if (docBuilder != null) {
+		    if (docBuilder != null) {
 				document = docBuilder.parse(propertyFile);
 			}
 		} catch (SAXException e) {
-			logger.error("XML Parsing Exception.");
+			log.error("XML Parsing Exception.");
 		} catch (IOException e) {
-			logger.error("XML property file reading exception.");
+			log.error("XML property file reading exception.");
 		}
 
 		String MDMPassword = null;
@@ -84,21 +83,21 @@ public class ContextListener implements ServletContextListener {
 		int signedCertNotAfterDate = INITIAL_VALUE;
 
 		if (document != null) {
-		   MDMPassword = document.getElementsByTagName(MDM_PASSWORD).item(FIRST_ITEM).
+		   MDMPassword = document.getElementsByTagName(PASSWORD).item(0).
 				         getTextContent();
-		   MDMPrivateKeyPassword = document.getElementsByTagName(MDM_PRIVATE_KEY_PASSWORD).
-				                   item(FIRST_ITEM).getTextContent();
-		   signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).
+		   MDMPrivateKeyPassword = document.getElementsByTagName(PRIVATE_KEY_PASSWORD).
+				                   item(0).getTextContent();
+		   signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(0).
 				                  getTextContent();
 		   signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
-				                     SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).getTextContent());
+				                     SIGNED_CERT_NOT_BEFORE).item(0).getTextContent());
 		   signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
-					                SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).getTextContent());
+					                SIGNED_CERT_NOT_AFTER).item(0).getTextContent());
 		}
 
 		WindowsPluginProperties properties = new WindowsPluginProperties();
-		properties.setMDMKeyStorePassword(MDMPassword);
-		properties.setMDMPrivateKeyPassword(MDMPrivateKeyPassword);
+		properties.setKeyStorePassword(MDMPassword);
+		properties.setPrivateKeyPassword(MDMPrivateKeyPassword);
 		properties.setCommonName(signedCertCommonName);
 		properties.setNotBeforeDays(signedCertNotBeforeDate);
 		properties.setNotAfterDays(signedCertNotAfterDate);

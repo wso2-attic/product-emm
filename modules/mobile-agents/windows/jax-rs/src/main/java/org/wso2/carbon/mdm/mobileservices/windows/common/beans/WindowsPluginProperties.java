@@ -23,18 +23,18 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.beans;
  */
 public class WindowsPluginProperties {
 
-	private String MDMKeyStorePassword;
-	private String MDMPrivateKeyPassword;
+	private String keyStorePassword;
+	private String privateKeyPassword;
 	private String commonName;
 	private int notBeforeDays;
 	private int notAfterDays;
 
-	public String getMDMKeyStorePassword() {
-		return MDMKeyStorePassword;
+	public String getKeyStorePassword() {
+		return keyStorePassword;
 	}
 
-	public String getMDMPrivateKeyPassword() {
-		return MDMPrivateKeyPassword;
+	public String getPrivateKeyPassword() {
+		return privateKeyPassword;
 	}
 
 	public String getCommonName() {
@@ -49,12 +49,12 @@ public class WindowsPluginProperties {
 		return notAfterDays;
 	}
 
-	public void setMDMKeyStorePassword(String MDMKeyStorePassword) {
-		this.MDMKeyStorePassword = MDMKeyStorePassword;
+	public void setKeyStorePassword(String keyStorePassword) {
+		this.keyStorePassword = keyStorePassword;
 	}
 
-	public void setMDMPrivateKeyPassword(String MDMPrivateKeyPassword) {
-		this.MDMPrivateKeyPassword = MDMPrivateKeyPassword;
+	public void setPrivateKeyPassword(String privateKeyPassword) {
+		this.privateKeyPassword = privateKeyPassword;
 	}
 
 	public void setCommonName(String commonName) {

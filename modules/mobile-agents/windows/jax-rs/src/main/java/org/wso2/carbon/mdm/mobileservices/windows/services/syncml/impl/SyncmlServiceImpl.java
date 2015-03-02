@@ -70,7 +70,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 			return this.itemPosition;
 		}
 	}
-	private static Log logger = LogFactory.getLog(SyncmlServiceImpl.class);
+	private static Log log = LogFactory.getLog(SyncmlServiceImpl.class);
 
 	/**
 	 * This method resolves the Syncml messages received through device and send the
@@ -80,9 +80,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 	 * @return - Syncml response generated for the request
 	 */
 	@Override
-	public Response getInitialResponse(Document request)
-			throws DeviceManagementException, DeviceManagementServiceException,
-			       FileOperationException {
+	public Response getInitialResponse(Document request) throws DeviceManagementException,
+	                                   DeviceManagementServiceException, FileOperationException {
 
 		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(FIRST_ITEM).
 				          getFirstChild();
@@ -111,8 +110,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 				if (Constants.SyncML.SYNCML_MSG_ID.equals(nodeName)) {
 					msgID = node.getTextContent().trim();
-					if (logger.isDebugEnabled()) {
-						logger.debug("Request SyncML message ID: " + msgID);
+					if (log.isDebugEnabled()) {
+						log.debug("Request SyncML message ID: " + msgID);
 					}
 					System.out.println("MSG ID : " + msgID);
 				}
@@ -122,8 +121,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 					} else if (Constants.SyncML.SYNCML_SOURCE.equals(nodeName)) {
 						sourceURI = node.getFirstChild().getTextContent().trim();
 					} else if (Constants.SyncML.SYNCML_CRED.equals(nodeName)) {
-						if (logger.isDebugEnabled()) {
-							logger.debug("Credentials: " + node.getChildNodes().item(SECOND_ITEM).
+						if (log.isDebugEnabled()) {
+							log.debug("Credentials: " + node.getChildNodes().item(SECOND_ITEM).
 									getTextContent().trim());
 						}
 						//Credentials can be used to verify device to server SyncML messages.
@@ -158,8 +157,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 					devLang = childNodes.item(DevicePropertyIndex.DEVICE_LANGUAGE.getValue()).
 							getChildNodes().item(SECOND_ITEM).getTextContent();
 
-					if (logger.isDebugEnabled()) {
-						logger.debug(
+					if (log.isDebugEnabled()) {
+						log.debug(
 								"OS Version:" + OSVersion + ", IMSI: " + IMSI + ", IMEI: " +
 								IMEI + ", DevID: " + devID + ", DevMan: " + devMan +
 								", DevMod: " + devMod + ", DevLang: " + devLang);
@@ -173,11 +172,11 @@ public class SyncmlServiceImpl implements SyncmlService {
 						                     .enrollDevice(generatedDevice);
 					} catch (DeviceManagementException e) {
 						String msg = "Exception while getting Device Management Service.";
-						logger.error(msg, e);
+						log.error(msg, e);
 						throw new DeviceManagementException(msg, e);
 					} catch (DeviceManagementServiceException e) {
 						String msg = "Exception while enrolling device after receiving data.";
-						logger.error(msg, e);
+						log.error(msg, e);
 						throw new DeviceManagementServiceException(msg, e);
 					}
 				}
@@ -247,8 +246,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 	 * @return - Returns the SyncML response as a String
 	 * @throws FileOperationException
 	 */
-	private String prepareResponse(String msgID, String targetURI, String sourceURI)
-			throws FileOperationException {
+	private String prepareResponse(String msgID, String targetURI, String sourceURI) throws
+	                               FileOperationException {
 
 		String response = null;
         String responseFilePath;
@@ -277,7 +276,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 			}
 		} catch (IOException e) {
 			String msg = "Syncml response file cannot be read.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new FileOperationException(msg, e);
 		}
 		return response;

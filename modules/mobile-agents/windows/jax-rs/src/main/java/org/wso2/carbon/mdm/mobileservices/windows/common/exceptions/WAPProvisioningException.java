@@ -21,30 +21,30 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 /**
  * Exception class for property/provisioning XML file reading failures.
  */
-public class XMLFileOperationException extends Exception {
+public class WAPProvisioningException extends Exception {
 
 	private String errorMessage;
 
-	public XMLFileOperationException(String message) {
+	public WAPProvisioningException(String message) {
 		super(message);
 		setErrorMessage(message);
 	}
 
-	public XMLFileOperationException(String message, Throwable cause) {
+	public WAPProvisioningException(String message, Throwable cause) {
 		super(message, cause);
 		setErrorMessage(message);
 	}
 
-	public XMLFileOperationException(String message, Exception nestedEx) {
+	public WAPProvisioningException(String message, Exception nestedEx) {
 		super(message, nestedEx);
 		setErrorMessage(message);
 	}
 
-	public XMLFileOperationException(Throwable cause) {
+	public WAPProvisioningException(Throwable cause) {
 		super(cause);
 	}
 
-	public XMLFileOperationException() {
+	public WAPProvisioningException() {
 		super();
 	}
 

@@ -42,7 +42,7 @@ import javax.xml.ws.soap.SOAPBinding;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class DiscoveryServiceImpl implements DiscoveryService {
 
-	private static Log logger = LogFactory.getLog(DiscoveryServiceImpl.class);
+	private static Log log = LogFactory.getLog(DiscoveryServiceImpl.class);
 
 	/**
 	 * This method returns the OnPremise AuthPolicy and next two endpoint the mobile device should
@@ -64,8 +64,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
 		response.value = discoveryResponse;
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Discovery service end point was triggered via POST method");
+		if (log.isDebugEnabled()) {
+			log.debug("Discovery service end point was triggered via POST method");
 		}
 	}
 
@@ -78,8 +78,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	@Override
 	public Response discoverGet() {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Discovery service end point was triggered via GET method.");
+		if (log.isDebugEnabled()) {
+			log.debug("Discovery service end point was triggered via GET method.");
 		}
 		return Response.ok().build();
 	}

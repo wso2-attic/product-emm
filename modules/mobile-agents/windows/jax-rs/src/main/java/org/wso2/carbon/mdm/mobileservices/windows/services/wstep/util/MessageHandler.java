@@ -56,7 +56,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	public static final int VALIDITY_TIME = 5;
 	public static final int TIMESTAMP_END_INDEX = 6;
 	public static final int TIMESTAMP_BEGIN_INDEX = 0;
-	private static Log logger = LogFactory.getLog(MessageHandler.class);
+	private static Log log = LogFactory.getLog(MessageHandler.class);
 
 	@Override
 	public Set<QName> getHeaders() {

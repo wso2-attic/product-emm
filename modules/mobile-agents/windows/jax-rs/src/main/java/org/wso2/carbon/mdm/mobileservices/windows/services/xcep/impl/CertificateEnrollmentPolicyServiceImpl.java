@@ -48,7 +48,7 @@ import javax.xml.ws.soap.SOAPBinding;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnrollmentPolicyService {
 
-	private static Log logger = LogFactory.getLog(CertificateEnrollmentPolicyServiceImpl.class);
+	private static Log log = LogFactory.getLog(CertificateEnrollmentPolicyServiceImpl.class);
 
 	/**
 	 * This method implements the MS-XCEP protocol for certificate enrollment policy service.
@@ -65,8 +65,8 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 	                        Holder<Response> response, Holder<CACollection> CACollection,
 	                        Holder<OIDCollection> OIDCollection) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Enrolment certificate policy end point was triggered by device.");
+		if (log.isDebugEnabled()) {
+			log.debug("Enrolment certificate policy end point was triggered by device.");
 		}
 
 		Response responseElement = new Response();

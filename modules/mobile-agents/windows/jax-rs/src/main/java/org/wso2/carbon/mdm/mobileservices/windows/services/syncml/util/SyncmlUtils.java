@@ -30,7 +30,7 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  */
 public class SyncmlUtils {
 
-	private static Log logger = LogFactory.getLog(SyncmlUtils.class);
+	private static Log log = LogFactory.getLog(SyncmlUtils.class);
 
 	/**
 	 * This method returns Device Management Object for certain tasks such as Device enrollment etc.
@@ -51,7 +51,7 @@ public class SyncmlUtils {
 
 		if (deviceManagementService == null) {
 			String msg = "Device management service not initialized.";
-			logger.error(msg);
+			log.error(msg);
 			throw new DeviceManagementServiceException(msg);
 		}
 		PrivilegedCarbonContext.endTenantFlow();

@@ -40,7 +40,7 @@ public class UsernameTokenValidator implements Validator {
 	private static final int USER_SEGMENT = 0;
 	private static final int DOMAIN_SEGMENT = 1;
 	private static final String DELIMITER = "@";
-	private static Log logger = LogFactory.getLog(UsernameTokenValidator.class);
+	private static Log log = LogFactory.getLog(UsernameTokenValidator.class);
 
 	/**
 	 * This method validates the username token in SOAP message coming from the device.
@@ -66,14 +66,14 @@ public class UsernameTokenValidator implements Validator {
 				returnCredentials = credential;
 			} else {
 				String msg="Authentication failure due to incorrect credentials.";
-				logger.error(msg);
+				log.error(msg);
 				throw new WindowsDeviceEnrolmentException(msg);
 			}
 		//Generic exception is caught here as there is no need of taking different actions for
 		//different exceptions.
 		} catch (Exception e) {
 			String msg = "Failure occurred in the credential validator.";
-			logger.error(msg);
+			log.error(msg);
 			throw new WSSecurityException(msg);
 		}
 		return returnCredentials;
@@ -92,7 +92,7 @@ public class UsernameTokenValidator implements Validator {
 			throws AuthenticationException {
 
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
+		    PrivilegedCarbonContext.startTenantFlow();
 			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
@@ -100,7 +100,7 @@ public class UsernameTokenValidator implements Validator {
 
 			if (realmService == null) {
 				String msg = "RealmService not initialized.";
-				logger.error(msg);
+				log.error(msg);
 				throw new AuthenticationException(msg);
 			}
 
@@ -114,7 +114,7 @@ public class UsernameTokenValidator implements Validator {
 
 			if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
 				String msg = "Invalid tenant domain " + tenantDomain;
-				logger.error(msg);
+				log.error(msg);
 				throw new AuthenticationException(msg);
 			}
 			UserRealm userRealm = realmService.getTenantUserRealm(tenantId);
@@ -122,7 +122,7 @@ public class UsernameTokenValidator implements Validator {
 			return userRealm.getUserStoreManager().authenticate(username, password);
 		} catch (UserStoreException e) {
 			String msg = "User store not initialized.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new AuthenticationException(msg, e);
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();

@@ -54,6 +54,13 @@ public class ExtensionCollection {
 	protected List<Extension> extension;
 
 	/**
+	 * Instantiate extension list in the constructor
+	 */
+	public ExtensionCollection() {
+		this.extension = new ArrayList<Extension>();
+	}
+
+	/**
 	 * Gets the value of the extension property.
 	 * <p/>
 	 * <p/>
@@ -74,9 +81,6 @@ public class ExtensionCollection {
 	 * {@link Extension }
 	 */
 	public List<Extension> getExtension() {
-		if (extension == null) {
-			extension = new ArrayList<Extension>();
-		}
 		return this.extension;
 	}
 

@@ -54,6 +54,13 @@ public class FilterOIDCollection {
 	protected List<String> oid;
 
 	/**
+	 * Instantiate oid list in the constructor
+	 */
+	public FilterOIDCollection() {
+		this.oid = new ArrayList<String>();
+	}
+
+	/**
 	 * Gets the value of the oid property.
 	 * <p/>
 	 * <p/>
@@ -74,9 +81,6 @@ public class FilterOIDCollection {
 	 * {@link String }
 	 */
 	public List<String> getOid() {
-		if (oid == null) {
-			oid = new ArrayList<String>();
-		}
 		return this.oid;
 	}
 

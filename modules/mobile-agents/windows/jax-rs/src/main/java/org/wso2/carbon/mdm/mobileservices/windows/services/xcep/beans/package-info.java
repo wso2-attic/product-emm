@@ -16,5 +16,8 @@
  *  under the License.
  */
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://schemas.microsoft.com/windows/pki/2009/01/enrollmentpolicy", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://schemas.microsoft" +
+                                                 ".com/windows/pki/2009/01/enrollmentpolicy",
+		elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+
 package org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans;

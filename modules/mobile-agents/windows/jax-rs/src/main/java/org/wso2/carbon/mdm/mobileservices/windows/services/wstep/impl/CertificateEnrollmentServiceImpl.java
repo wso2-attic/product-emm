@@ -22,7 +22,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.XMLFileOperationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.CertificateEnrollmentService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.BinarySecurityToken;
@@ -87,11 +87,10 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProp
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentService {
 
-	public static final int FIRST_ITEM = 0;
-	private static final int REQUEST_ID = FIRST_ITEM;
-	private static final int CA_CERTIFICATE_POSITION = FIRST_ITEM;
+	private static final int REQUEST_ID = 0;
+	private static final int CA_CERTIFICATE_POSITION = 0;
 	private static final int SIGNED_CERTIFICATE_POSITION = 1;
-	private static Log logger = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
+	private static Log log = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
 	private PrivateKey privateKey;
 	private X509Certificate rootCACertificate;
 
@@ -120,8 +119,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		WindowsPluginProperties windowsPluginProperties = (WindowsPluginProperties)ctx.getAttribute(
 				                                               Constants.WINDOWS_PLUGIN_PROPERTIES);
-		String keyStorePassword = windowsPluginProperties.getMDMKeyStorePassword();
-		String privateKeyPassword = windowsPluginProperties.getMDMPrivateKeyPassword();
+		String keyStorePassword = windowsPluginProperties.getKeyStorePassword();
+		String privateKeyPassword = windowsPluginProperties.getPrivateKeyPassword();
 		String commonName = windowsPluginProperties.getCommonName();
 		int notBeforeDate = windowsPluginProperties.getNotBeforeDays();
 		int notAfterDate = windowsPluginProperties.getNotAfterDays();
@@ -137,12 +136,12 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		//different exceptions.
 		catch (Exception e) {
 			String msg = "Root certificate and private key couldn't be extracted from keystore.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new WindowsDeviceEnrolmentException(msg, e);
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Received CSR from Device:" + binarySecurityToken);
+		if (log.isDebugEnabled()) {
+			log.debug("Received CSR from Device:" + binarySecurityToken);
 		}
 		String wapProvisioningFilePath = wapProvisioningFile.getPath();
 		RequestSecurityTokenResponse requestSecurityTokenResponse =
@@ -157,7 +156,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		//different exceptions.
 		catch (Exception e) {
 			String msg = "Wap provisioning file couldn't be prepared.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new WindowsDeviceEnrolmentException(msg, e);
 		}
 		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
@@ -195,11 +194,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @param storePassword - MDM Keystore password
 	 * @param keyPassword   - MDM Private key password
 	 * @throws KeyStoreGenerationException
-	 * @throws XMLFileOperationException
+	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException
 	 * @throws CertificateGenerationException
 	 */
 	public void setRootCertAndKey(String storePassword, String keyPassword)
-			throws KeyStoreGenerationException, XMLFileOperationException,
+			throws KeyStoreGenerationException, WAPProvisioningException,
 			       CertificateGenerationException {
 
 		File JKSFile = new File(getClass().getClassLoader().getResource(
@@ -210,7 +209,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			securityJKS = KeyStoreGenerator.getKeyStore();
 		} catch (KeyStoreGenerationException e) {
 			String msg = "Cannot retrieve the MDM key store.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new KeyStoreGenerationException(msg, e);
 		}
 
@@ -218,7 +217,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), JKSFilePath);
 		} catch (KeyStoreGenerationException e) {
 			String msg = "Cannot load the MDM key store.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new KeyStoreGenerationException(msg, e);
 		}
 
@@ -228,15 +227,15 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 					.getKey(Constants.CertificateEnrolment.CA_CERT, keyPassword.toCharArray());
 		} catch (java.security.KeyStoreException e) {
 			String msg = "Cannot generate private key due to Key store error.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		} catch (NoSuchAlgorithmException e) {
 			String msg = "Requested cryptographic algorithm is not available in the environment.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		} catch (UnrecoverableKeyException e) {
 			String msg = "Cannot recover private key.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 
@@ -246,7 +245,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			CACertificate = securityJKS.getCertificate(Constants.CertificateEnrolment.CA_CERT);
 		} catch (KeyStoreException e) {
 			String msg = "Keystore cannot be accessed.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new KeyStoreGenerationException(msg, e);
 		}
 		CertificateFactory certificateFactory;
@@ -256,7 +255,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 					CertificateFactory.getInstance(Constants.CertificateEnrolment.X_509);
 		} catch (CertificateException e) {
 			String msg = "Cannot initiate certificate factory.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 
@@ -265,7 +264,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			byteArrayInputStream = new ByteArrayInputStream(CACertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
 			String msg = "CA certificate cannot be encoded.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 
@@ -275,7 +274,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 					(X509Certificate) certificateFactory.generateCertificate(byteArrayInputStream);
 		} catch (CertificateException e) {
 			String msg = "X509 CA certificate cannot be generated.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 		rootCACertificate = X509CACertificate;
@@ -289,11 +288,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @param wapProvisioningFilePath - File path of wap-provisioning file
 	 * @return - base64 encoded final wap-provisioning file as a String
 	 * @throws CertificateGenerationException
-	 * @throws XMLFileOperationException
+	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException
 	 */
 	public String prepareWapProvisioningXML(String binarySecurityToken, List<java.io.Serializable> certPropertyList,
 	                                        String wapProvisioningFilePath)
-			throws CertificateGenerationException, XMLFileOperationException {
+			throws CertificateGenerationException, WAPProvisioningException {
 
 		byte[] DERByteArray =
 				DatatypeConverter.parseBase64Binary(binarySecurityToken);
@@ -302,7 +301,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			certificationRequest = new PKCS10CertificationRequest(DERByteArray);
 		} catch (IOException e) {
 			String msg = "CSR cannot be recovered.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 
@@ -316,7 +315,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			rootCertEncodedString = base64Encoder.encodeAsString(rootCACertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
 			String msg = "CA certificate cannot be encoded.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 		String signedCertEncodedString;
@@ -324,7 +323,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			signedCertEncodedString = base64Encoder.encodeAsString(signedCertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
 			String msg = "Singed certificate cannot be encoded.";
-			logger.error(msg, e);
+			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 
@@ -350,8 +349,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
 			rootCertNode.setTextContent(rootCertEncodedString);
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("Root certificate: " + rootCertEncodedString);
+			if (log.isDebugEnabled()) {
+				log.debug("Root certificate: " + rootCertEncodedString);
 			}
 
 			Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
@@ -369,8 +368,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
 			clientEncodedNode.setTextContent(signedCertEncodedString);
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("Signed certificate: " + signedCertEncodedString);
+			if (log.isDebugEnabled()) {
+				log.debug("Signed certificate: " + signedCertEncodedString);
 			}
 			wapProvisioningString = convertDocumentToString(document);
 
@@ -378,8 +377,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		//different exceptions.
 		} catch (Exception e) {
 			String msg = "Problem occurred with wap-provisioning.xml file.";
-			logger.error(msg, e);
-			throw new XMLFileOperationException(msg, e);
+			log.error(msg, e);
+			throw new WAPProvisioningException(msg, e);
 		}
 		return base64Encoder.encodeAsString(wapProvisioningString.getBytes());
 	}
