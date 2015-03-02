@@ -83,5 +83,4 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 		}
 		return Response.ok().build();
 	}
-
 }

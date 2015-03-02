@@ -53,13 +53,15 @@ import java.util.List;
  */
 public class CertificateSigningService {
 
-	private static final long DAYS = 1000L * 60 * 60 * 24;
+	private static final long MILLI_SECONDS = 1000L * 60 * 60 * 24;
 	public static final int FIRST_ITEM = 0;
 	public static final int SECOND_ITEM = 1;
 	public static final int THIRD_ITEM = 2;
 	private static Log logger = LogFactory.getLog(CertificateSigningService.class);
 
 	/**
+	 * Implement certificate signing task using CSR received from the device and the MDM server key
+	 * store.
 	 *
 	 * @param jcaRequest        - CSR from the device
 	 * @param privateKey        - Private key of CA certificate in MDM server
@@ -72,66 +74,62 @@ public class CertificateSigningService {
 	public static X509Certificate signCSR(JcaPKCS10CertificationRequest jcaRequest,
 	                                      PrivateKey privateKey, X509Certificate CACert,
 	                                      List certParameterList)
-			throws CertificateGenerationException,
-			       XMLFileOperationException {
+			      throws CertificateGenerationException, XMLFileOperationException {
 
 		String commonName = (String) certParameterList.get(FIRST_ITEM);
-		int notBeforeDate = (Integer) certParameterList.get(SECOND_ITEM);
-		int notAfterDate = (Integer) certParameterList.get(THIRD_ITEM);
-
+		int notBeforeDays = (Integer) certParameterList.get(SECOND_ITEM);
+		int notAfterDays = (Integer) certParameterList.get(THIRD_ITEM);
 		X509v3CertificateBuilder certificateBuilder;
+		X509Certificate signedCertificate;
 
 		try {
-			certificateBuilder = new JcaX509v3CertificateBuilder(CACert, BigInteger.valueOf(
-					                                                     new SecureRandom().nextInt(
-									                                     Integer.MAX_VALUE)),
-			                                                     new Date(System.currentTimeMillis()
-			                                                              - (DAYS * notBeforeDate)),
-			                                                     new Date(System.currentTimeMillis()
-			                                                              + (DAYS * notAfterDate)),
-			                                                     new X500Principal(commonName),
-			                                                     jcaRequest.getPublicKey());
-		} catch (InvalidKeyException e) {
-			String msg = "CSR's public key is invalid";
-			logger.error(msg,e);
-			throw new CertificateGenerationException(msg, e);
-		} catch (NoSuchAlgorithmException e) {
-			String msg = "Certificate cannot be generated";
-			logger.error(msg,e);
-			throw new CertificateGenerationException(msg, e);
-		}
+			ContentSigner signer;
+			BigInteger serialNumber = BigInteger.valueOf(new SecureRandom().nextInt(Integer.MAX_VALUE));
+			Date notBeforeDate = new Date(System.currentTimeMillis() -
+			                             (MILLI_SECONDS * notBeforeDays));
+			Date notAfterDate = new Date(System.currentTimeMillis() +
+			                             (MILLI_SECONDS * notAfterDays));
+			certificateBuilder =
+				  new JcaX509v3CertificateBuilder(CACert, serialNumber, notBeforeDate, notAfterDate,
+				                                  new X500Principal(commonName),
+				                                  jcaRequest.getPublicKey());
 
-		try {
+			//Adding extensions to the signed certificate.
 			certificateBuilder.addExtension(Extension.keyUsage, true,
 			                                new KeyUsage(KeyUsage.digitalSignature));
 			certificateBuilder.addExtension(Extension.extendedKeyUsage, false,
 			                                new ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth));
 			certificateBuilder.addExtension(Extension.basicConstraints, true,
 			                                new BasicConstraints(false));
-		} catch (CertIOException e) {
+
+			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM).setProvider(
+					Constants.CertificateEnrolment.PROVIDER).build(privateKey);
+
+			signedCertificate = new JcaX509CertificateConverter().setProvider(
+					Constants.CertificateEnrolment.PROVIDER).getCertificate(
+					certificateBuilder.build(signer));
+		} catch (InvalidKeyException e) {
+			String msg = "CSR's public key is invalid";
+			logger.error(msg, e);
+			throw new CertificateGenerationException(msg, e);
+		} catch (NoSuchAlgorithmException e) {
+			String msg = "Certificate cannot be generated";
+			logger.error(msg, e);
+			throw new CertificateGenerationException(msg, e);
+		}
+		catch (CertIOException e) {
 			String msg = "Cannot add extension(s) to signed certificate";
-			logger.error(msg,e);
+			logger.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
-
-		ContentSigner signer;
-		try {
-			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM)
-					.setProvider(Constants.CertificateEnrolment.PROVIDER).build(privateKey);
-		} catch (OperatorCreationException e) {
+		catch (OperatorCreationException e) {
 			String msg = "Content signer cannot be created";
-			logger.error(msg,e);
+			logger.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
-
-		X509Certificate signedCertificate;
-		try {
-			signedCertificate = new JcaX509CertificateConverter()
-					.setProvider(Constants.CertificateEnrolment.PROVIDER)
-					.getCertificate(certificateBuilder.build(signer));
-		} catch (CertificateException e) {
+		catch (CertificateException e) {
 			String msg = "Signed certificate cannot generated";
-			logger.error(msg,e);
+			logger.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
 		return signedCertificate;

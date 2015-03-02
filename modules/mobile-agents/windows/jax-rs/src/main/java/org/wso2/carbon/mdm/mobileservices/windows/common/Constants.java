@@ -65,6 +65,7 @@ public final class Constants {
 	public static final String CONTEXT_COMMON_NAME = "COMMON_NAME";
 	public static final String CONTEXT_NOT_BEFORE_DATE = "NOT_BEFORE_DATE";
 	public static final String CONTEXT_NOT_AFTER_DATE = "NOT_AFTER_DATE";
+	public static final String CONTENT_LENGTH = "Content-Length";
 
 	/**
 	 * Discovery service related other constants
@@ -132,7 +133,6 @@ public final class Constants {
 		public static final String CREATED = "Created";
 		public static final String EXPIRES = "Expires";
 		public static final String UTF_8 = "utf-8";
-		public static final String CONTENT_LENGTH = "Content-Length";
 	}
 
 	/**
@@ -140,6 +140,7 @@ public final class Constants {
 	 */
 	public final class SyncML {
 		public static final String SYNCML_RESPONSE = "reply.xml";
+		public static final String SYNCML_SECOND_RESPONSE = "reply2.xml";
 		public static final String SYNC_ML = "SyncML";
 		public static final String SYNCML_MSG_ID = "MsgID";
 		public static final String SYNCML_TARGET = "Target";

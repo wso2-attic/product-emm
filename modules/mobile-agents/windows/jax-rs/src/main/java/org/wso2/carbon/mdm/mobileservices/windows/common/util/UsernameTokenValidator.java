@@ -37,10 +37,9 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  */
 public class UsernameTokenValidator implements Validator {
 
-	private static final int USER_PART = 0;
-	private static final int DOMAIN_PART = 1;
+	private static final int USER_SEGMENT = 0;
+	private static final int DOMAIN_SEGMENT = 1;
 	private static final String DELIMITER = "@";
-	private static final String EMPTY_STRING = "";
 	private static Log logger = LogFactory.getLog(UsernameTokenValidator.class);
 
 	/**
@@ -58,15 +57,11 @@ public class UsernameTokenValidator implements Validator {
 		String domainUser = credential.getUsernametoken().getName();
 		String[] domainUserArray = domainUser.split(DELIMITER);
 		Credential returnCredentials;
-
-		String user = domainUserArray[USER_PART];
-		String domain = domainUserArray[DOMAIN_PART];
+		String user = domainUserArray[USER_SEGMENT];
+		String domain = domainUserArray[DOMAIN_SEGMENT];
 		String password = credential.getUsernametoken().getPassword();
 
-		//Generic exception is caught here as there is no need of taking different actions for
-		//different exceptions.
 		try {
-			domain = ""; //remove later...
 			if (authenticate(user, password, domain)) {
 				returnCredentials = credential;
 			} else {
@@ -74,6 +69,8 @@ public class UsernameTokenValidator implements Validator {
 				logger.error(msg);
 				throw new WindowsDeviceEnrolmentException(msg);
 			}
+		//Generic exception is caught here as there is no need of taking different actions for
+		//different exceptions.
 		} catch (Exception e) {
 			String msg = "Failure occurred in the credential validator.";
 			logger.error(msg);
@@ -109,25 +106,24 @@ public class UsernameTokenValidator implements Validator {
 
 			int tenantId;
 
-			if (tenantDomain == null || EMPTY_STRING.equals(tenantDomain.trim())) {
+			if (tenantDomain == null || tenantDomain.trim().isEmpty()) {
 				tenantId = MultitenantConstants.SUPER_TENANT_ID;
 			} else {
 				tenantId = realmService.getTenantManager().getTenantId(tenantDomain);
 			}
 
 			if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-				logger.error("Invalid tenant domain " + tenantDomain);
-				return false;
+				String msg = "Invalid tenant domain " + tenantDomain;
+				logger.error(msg);
+				throw new AuthenticationException(msg);
 			}
-
 			UserRealm userRealm = realmService.getTenantUserRealm(tenantId);
 
-			return userRealm.getUserStoreManager().authenticate(
-					username, password);
+			return userRealm.getUserStoreManager().authenticate(username, password);
 		} catch (UserStoreException e) {
 			String msg = "User store not initialized.";
-			logger.error(msg,e);
-			throw new AuthenticationException(msg,e);
+			logger.error(msg, e);
+			throw new AuthenticationException(msg, e);
 		} finally {
 			PrivilegedCarbonContext.endTenantFlow();
 		}

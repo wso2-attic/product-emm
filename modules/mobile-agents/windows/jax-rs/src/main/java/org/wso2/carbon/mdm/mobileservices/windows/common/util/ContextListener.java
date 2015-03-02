@@ -51,7 +51,8 @@ public class ContextListener implements ServletContextListener {
 	 *
 	 * @param servletContextEvent - Uses when servlet communicating with servlet container.
 	 */
-	@Override public void contextInitialized(ServletContextEvent servletContextEvent) {
+	@Override
+	public void contextInitialized(ServletContextEvent servletContextEvent) {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
@@ -108,6 +109,7 @@ public class ContextListener implements ServletContextListener {
 		servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
 	}
 
-	@Override public void contextDestroyed(ServletContextEvent servletContextEvent) {
+	@Override
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 	}
 }

@@ -31,6 +31,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.BindingType;
+import javax.xml.ws.Holder;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.SOAPBinding;
@@ -58,12 +59,12 @@ public interface CertificateEnrollmentPolicyService {
 			RequestFilter requestFilter,
 			@WebParam(mode = WebParam.Mode.OUT, name = "response", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
-			javax.xml.ws.Holder<Response> response,
+			Holder<Response> response,
 			@WebParam(mode = WebParam.Mode.OUT, name = "cAs", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
-			javax.xml.ws.Holder<CACollection> CACollection,
+			Holder<CACollection> CACollection,
 			@WebParam(mode = WebParam.Mode.OUT, name = "oIDs", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
-			javax.xml.ws.Holder<OIDCollection> OIDCollection
+			Holder<OIDCollection> OIDCollection
 	);
 }
