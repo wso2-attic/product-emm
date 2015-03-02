@@ -143,7 +143,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 				    (Constants.SyncML.SYNCML_RESULTS.equals(nodeName))) {
 
 					NodeList childNodes = node.getChildNodes();
-
 					OSVersion = childNodes.item(DevicePropertyIndex.OS_VERSION.getValue()).
 							getChildNodes().item(SECOND_ITEM).getTextContent();
 					IMSI = childNodes.item(DevicePropertyIndex.IMSI.getValue()).

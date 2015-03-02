@@ -44,6 +44,8 @@ public class ContextListener implements ServletContextListener {
 	private static final String SIGNED_CERT_CN = "signedcertCN";
 	private static final String SIGNED_CERT_NOT_BEFORE = "signedcertnotbefore";
 	private static final String SIGNED_CERT_NOT_AFTER = "signedcertnotafter";
+	private static final String MDM_PASSWORD = "mdmpassword";
+	private static final String MDM_PRIVATE_KEY_PASSWORD = "mdmprivatekeypassword";
 
 	/**
 	 * This method loads wap-provisioning file / property file, sets wap-provisioning file and
@@ -82,10 +84,10 @@ public class ContextListener implements ServletContextListener {
 		int signedCertNotAfterDate = INITIAL_VALUE;
 
 		if (document != null) {
-		   MDMPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PASSWORD).
-				         item(FIRST_ITEM).getTextContent();
-		   MDMPrivateKeyPassword = document.getElementsByTagName(Constants.CertificateEnrolment.
-				                   MDM_PRIVATE_KEY_PASSWORD).item(FIRST_ITEM).getTextContent();
+		   MDMPassword = document.getElementsByTagName(MDM_PASSWORD).item(FIRST_ITEM).
+				         getTextContent();
+		   MDMPrivateKeyPassword = document.getElementsByTagName(MDM_PRIVATE_KEY_PASSWORD).
+				                   item(FIRST_ITEM).getTextContent();
 		   signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).
 				                  getTextContent();
 		   signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(

@@ -17,8 +17,8 @@
   -->
 
 <WindowsPlugin>
-    <emmpassword>wso2carbon</emmpassword>
-    <emmprivatekeypassword>cacert</emmprivatekeypassword>
+    <mdmpassword>wso2carbon</mdmpassword>
+    <mdmprivatekeypassword>cacert</mdmprivatekeypassword>
     <signedcertCN>CN=mdmcn</signedcertCN>
     <signedcertnotbefore>3</signedcertnotbefore>
     <signedcertnotafter>300</signedcertnotafter>

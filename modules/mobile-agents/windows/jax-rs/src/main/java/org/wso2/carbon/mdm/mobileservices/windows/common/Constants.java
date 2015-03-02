@@ -114,8 +114,6 @@ public final class Constants {
 		public static final String CA_CERT = "cacert";
 		public static final String X_509 = "X.509";
 		public static final String PROPERTIES_XML = "properties.xml";
-		public static final String MDM_PASSWORD = "emmpassword";
-		public static final String MDM_PRIVATE_KEY_PASSWORD = "emmprivatekeypassword";
 		public static final String WAP_PROVISIONING_XML = "wap-provisioning.xml";
 		public static final String PROVIDER = "BC";
 		public static final String ALGORITHM = "SHA1withRSA";
