@@ -27,14 +27,11 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.mdm</groupId>
-    <artifactId>tests-common</artifactId>
+    <artifactId>tests-artifacts</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 MDM Integration Test Common</name>
 
     <modules>
-        <module>admin-clients</module>
-        <module>integration-test-utils</module>
-        <module>ui-pages</module>
     </modules>
 
 </project>

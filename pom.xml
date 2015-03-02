@@ -45,7 +45,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Test automation dependencies -->
+            <!-- Test Automation Dependencies -->
             <dependency>
                 <groupId>org.wso2.carbon.automation</groupId>
                 <artifactId>org.wso2.carbon.automation.engine</artifactId>
@@ -159,6 +159,12 @@
                         <artifactId>org.wso2.carbon.utils</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.mdm</groupId>
+                <artifactId>org.wso2.carbon.mdm.integration.ui.pages</artifactId>
+                <version>${mdm.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <!--Carbon Kernel Dependencies-->
@@ -672,6 +678,7 @@
 
         <!-- Mobile Device Management -->
         <carbon.mobile.device.mgt.version>1.9.1</carbon.mobile.device.mgt.version>
+        <mdm.version>2.0.0-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
         <carbon.api.mgt.version>1.3.3</carbon.api.mgt.version>
@@ -690,7 +697,6 @@
         <connection>scm:git:https://github.com/wso2/product-mdm.git</connection>
         <tag>HEAD</tag>
     </scm>
-
 
     <build>
         <extensions>
