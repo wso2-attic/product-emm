@@ -60,11 +60,9 @@ public final class Constants {
 
 	//Servlet Context attributes names
 	public static final String CONTEXT_WAP_PROVISIONING_FILE = "WAP_PROVISIONING_FILE";
-	public static final String CONTEXT_MDM_PASSWORD = "MDM_PASSWORD";
-	public static final String CONTEXT_MDM_PRIVATE_KEY_PASSWORD = "MDM_PRIVATE_KEY_PASSWORD";
-	public static final String CONTEXT_COMMON_NAME = "COMMON_NAME";
-	public static final String CONTEXT_NOT_BEFORE_DATE = "NOT_BEFORE_DATE";
-	public static final String CONTEXT_NOT_AFTER_DATE = "NOT_AFTER_DATE";
+	public static final String WINDOWS_PLUGIN_PROPERTIES = "WINDOWS_PLUGIN_PROPERTIES";
+
+	//Message handler constants
 	public static final String CONTENT_LENGTH = "Content-Length";
 
 	/**

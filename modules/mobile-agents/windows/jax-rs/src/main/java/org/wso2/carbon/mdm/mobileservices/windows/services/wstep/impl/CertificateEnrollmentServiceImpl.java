@@ -75,6 +75,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 
 /**
  * Implementation class of CertificateEnrollmentService interface. This class implements MS-WSTEP
@@ -116,18 +117,21 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		ServletContext ctx =
 				(ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
 		File wapProvisioningFile = (File) ctx.getAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE);
-		String storePassword = (String) ctx.getAttribute(Constants.CONTEXT_MDM_PASSWORD);
-		String keyPassword = (String) ctx.getAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD);
+
+		WindowsPluginProperties windowsPluginProperties = (WindowsPluginProperties)ctx.getAttribute(
+				                                               Constants.WINDOWS_PLUGIN_PROPERTIES);
+		String keyStorePassword = windowsPluginProperties.getMDMKeyStorePassword();
+		String privateKeyPassword = windowsPluginProperties.getMDMPrivateKeyPassword();
+		String commonName = windowsPluginProperties.getCommonName();
+		int notBeforeDate = windowsPluginProperties.getNotBeforeDays();
+		int notAfterDate = windowsPluginProperties.getNotAfterDays();
 
 		List<java.io.Serializable> certPropertyList = new ArrayList<java.io.Serializable>();
-		String commonName = (String) ctx.getAttribute(Constants.CONTEXT_COMMON_NAME);
 		certPropertyList.add(commonName);
-		int notBeforeDate = (Integer) ctx.getAttribute(Constants.CONTEXT_NOT_BEFORE_DATE);
 		certPropertyList.add(notBeforeDate);
-		int notAfterDate = (Integer) ctx.getAttribute(Constants.CONTEXT_NOT_AFTER_DATE);
 		certPropertyList.add(notAfterDate);
 		try {
-			setRootCertAndKey(storePassword, keyPassword);
+			setRootCertAndKey(keyStorePassword, privateKeyPassword);
 		}
 		//Generic exception is caught here as there is no need of taking different actions for
 		//different exceptions.

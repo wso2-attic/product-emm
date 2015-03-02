@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.xml.sax.SAXException;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -32,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 
 /**
  * This class performs one time operations.
@@ -55,7 +55,6 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
-
 		File propertyFile = new File(getClass().getClassLoader().getResource(
 				Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -77,32 +76,31 @@ public class ContextListener implements ServletContextListener {
 		}
 
 		String MDMPassword = null;
-		if (document != null) {
-		   MDMPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PASSWORD).
-				         item(FIRST_ITEM).getTextContent();
-		}
-
 		String MDMPrivateKeyPassword = null;
 		String signedCertCommonName = null;
 		int signedCertNotBeforeDate = INITIAL_VALUE;
 		int signedCertNotAfterDate = INITIAL_VALUE;
+
 		if (document != null) {
-			MDMPrivateKeyPassword = document.getElementsByTagName(Constants.CertificateEnrolment.
-					                MDM_PRIVATE_KEY_PASSWORD).item(FIRST_ITEM).getTextContent();
-			signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(
-					                      FIRST_ITEM).getTextContent();
-			signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
-					                     SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).getTextContent());
-			signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
-					                      SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).getTextContent());
+		   MDMPassword = document.getElementsByTagName(Constants.CertificateEnrolment.MDM_PASSWORD).
+				         item(FIRST_ITEM).getTextContent();
+		   MDMPrivateKeyPassword = document.getElementsByTagName(Constants.CertificateEnrolment.
+				                   MDM_PRIVATE_KEY_PASSWORD).item(FIRST_ITEM).getTextContent();
+		   signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(FIRST_ITEM).
+				                  getTextContent();
+		   signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
+				                     SIGNED_CERT_NOT_BEFORE).item(FIRST_ITEM).getTextContent());
+		   signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
+					                SIGNED_CERT_NOT_AFTER).item(FIRST_ITEM).getTextContent());
 		}
 
-		servletContext.setAttribute(Constants.CONTEXT_MDM_PASSWORD, MDMPassword);
-		servletContext.setAttribute(Constants.CONTEXT_MDM_PRIVATE_KEY_PASSWORD,
-		                            MDMPrivateKeyPassword);
-		servletContext.setAttribute(Constants.CONTEXT_COMMON_NAME, signedCertCommonName);
-		servletContext.setAttribute(Constants.CONTEXT_NOT_BEFORE_DATE, signedCertNotBeforeDate);
-		servletContext.setAttribute(Constants.CONTEXT_NOT_AFTER_DATE, signedCertNotAfterDate);
+		WindowsPluginProperties properties = new WindowsPluginProperties();
+		properties.setMDMKeyStorePassword(MDMPassword);
+		properties.setMDMPrivateKeyPassword(MDMPrivateKeyPassword);
+		properties.setCommonName(signedCertCommonName);
+		properties.setNotBeforeDays(signedCertNotBeforeDate);
+		properties.setNotAfterDays(signedCertNotAfterDate);
+		servletContext.setAttribute(Constants.WINDOWS_PLUGIN_PROPERTIES, properties);
 
 		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(
 				Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
