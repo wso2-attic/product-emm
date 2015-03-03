@@ -55,12 +55,12 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	public void discover(DiscoveryRequest discoveryRequest, Holder<DiscoveryResponse> response) {
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
-		discoveryResponse.setAuthPolicy(Constants.Discovery.AUTH_POLICY);
+		discoveryResponse.setAuthPolicy("Federated");
 		discoveryResponse.setEnrollmentPolicyServiceUrl(
 				Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
 		discoveryResponse.setEnrollmentServiceUrl(
 				Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
-
+		discoveryResponse.setAuthenticationServiceUrl("http://en.wikipedia.org/wiki/Wiki");
 		response.value = discoveryResponse;
 
 		if (log.isDebugEnabled()) {
