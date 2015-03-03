@@ -22,7 +22,5 @@ var dataConfig = require('/modules/mdm-props.js').config();
 
 if(loggedUser == null){
      response.sendRedirect(dataConfig.appContext + "login");
-     //TODO:- call exit
-     //TODO:- Move login url to a constant
 }
 %>

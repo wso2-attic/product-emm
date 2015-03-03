@@ -19,7 +19,7 @@
 
 var sso = {};
 var ssoMod = require("sso");
-// TODO: Log object define on top
+var log = new Log();
  (function () {
  	var carbon = require("carbon");
  	var process = require("process");
