@@ -15,11 +15,10 @@
   ~  specific language governing permissions and limitations
   ~  under the License.
   -->
-
 <WindowsPlugin>
-    <mdmpassword>wso2carbon</mdmpassword>
-    <mdmprivatekeypassword>cacert</mdmprivatekeypassword>
-    <signedcertCN>CN=mdmcn</signedcertCN>
-    <signedcertnotbefore>3</signedcertnotbefore>
-    <signedcertnotafter>300</signedcertnotafter>
+    <Password>wso2carbon</Password>
+    <PrivateKeyPassword>cacert</PrivateKeyPassword>
+    <SignedCertCN>CN=mdmcn</SignedCertCN>
+    <SignedCertNotBefore>3</SignedCertNotBefore>
+    <SignedCertNotAfter>300</SignedCertNotAfter>
 </WindowsPlugin>

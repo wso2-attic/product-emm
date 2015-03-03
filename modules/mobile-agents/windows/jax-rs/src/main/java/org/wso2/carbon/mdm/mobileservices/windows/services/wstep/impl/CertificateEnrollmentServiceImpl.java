@@ -109,8 +109,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	public void requestSecurityToken(String tokenType, String requestType,
 	                                 String binarySecurityToken,
 	                                 AdditionalContext additionalContext,
-	                                 Holder<RequestSecurityTokenResponse> response)
-									 throws WindowsDeviceEnrolmentException {
+	                                 Holder<RequestSecurityTokenResponse> response) throws
+	                                 WindowsDeviceEnrolmentException {
 
 		ServletContext ctx =
 				(ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
@@ -194,9 +194,9 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException
 	 * @throws CertificateGenerationException
 	 */
-	public void setRootCertAndKey(String storePassword, String keyPassword)
-			throws KeyStoreGenerationException, WAPProvisioningException,
-			       CertificateGenerationException {
+	public void setRootCertAndKey(
+			String storePassword, String keyPassword) throws KeyStoreGenerationException,
+	                              WAPProvisioningException, CertificateGenerationException {
 
 		File JKSFile = new File(getClass().getClassLoader().getResource(
 				Constants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
@@ -244,7 +244,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 					CertificateFactory.getInstance(Constants.CertificateEnrolment.X_509);
 			byteArrayInputStream = new ByteArrayInputStream(CACertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
-			String msg = "CA certificate cannot be encoded.";
+			String msg = "Error occurred while encoding CA certificate.";
 			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		} catch (KeyStoreException e) {
@@ -277,9 +277,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @throws CertificateGenerationException
 	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException
 	 */
-	public String prepareWapProvisioningXML(String binarySecurityToken, List<java.io.Serializable> certPropertyList,
-	                                        String wapProvisioningFilePath)
-			throws CertificateGenerationException, WAPProvisioningException {
+	public String prepareWapProvisioningXML(
+			String binarySecurityToken, List<java.io.Serializable> certPropertyList,
+			String wapProvisioningFilePath) throws CertificateGenerationException,
+	                                               WAPProvisioningException {
 
 		byte[] DERByteArray =
 				DatatypeConverter.parseBase64Binary(binarySecurityToken);

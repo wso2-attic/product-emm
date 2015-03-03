@@ -54,9 +54,21 @@ import java.util.List;
 public class CertificateSigningService {
 
 	private static final long MILLI_SECONDS = 1000L * 60 * 60 * 24;
-	public static final int FIRST_ITEM = 0;
-	public static final int SECOND_ITEM = 1;
-	public static final int THIRD_ITEM = 2;
+
+	private enum PropertyIndex {
+		COMMON_NAME_INDEX(0),
+		NOT_BEFORE_DAYS_INDEX(1),
+		NOT_AFTER_DAYS_INDEX(2);
+
+		private final int itemPosition;
+		private PropertyIndex(final int itemPosition) {
+			this.itemPosition = itemPosition;
+		}
+		public int getValue() {
+			return this.itemPosition;
+		}
+	}
+
 	private static Log log = LogFactory.getLog(CertificateSigningService.class);
 
 	/**
@@ -75,9 +87,12 @@ public class CertificateSigningService {
 	                                      List certParameterList) throws
 	                                      CertificateGenerationException, WAPProvisioningException {
 
-		String commonName = (String) certParameterList.get(FIRST_ITEM);
-		int notBeforeDays = (Integer) certParameterList.get(SECOND_ITEM);
-		int notAfterDays = (Integer) certParameterList.get(THIRD_ITEM);
+		String commonName =
+				(String) certParameterList.get(PropertyIndex.COMMON_NAME_INDEX.getValue());
+		int notBeforeDays =
+				(Integer) certParameterList.get(PropertyIndex.NOT_BEFORE_DAYS_INDEX.getValue());
+		int notAfterDays =
+				(Integer) certParameterList.get(PropertyIndex.NOT_AFTER_DAYS_INDEX.getValue());
 		X509v3CertificateBuilder certificateBuilder;
 		X509Certificate signedCertificate;
 
@@ -121,7 +136,7 @@ public class CertificateSigningService {
 			throw new CertificateGenerationException("Content signer cannot be created", e);
 		}
 		catch (CertificateException e) {
-			throw new CertificateGenerationException("Signed certificate cannot generated", e);
+			throw new CertificateGenerationException("Signed certificate cannot be generated", e);
 		}
 		return signedCertificate;
 	}

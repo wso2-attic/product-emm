@@ -31,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 
 /**
@@ -38,77 +39,90 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProp
  */
 public class ConfigInitializerContextListener implements ServletContextListener {
 
-	public static final int INITIAL_VALUE = 0;
-	private static Log log = LogFactory.getLog(ConfigInitializerContextListener.class);
-	private static final String SIGNED_CERT_CN = "signedcertCN";
-	private static final String SIGNED_CERT_NOT_BEFORE = "signedcertnotbefore";
-	private static final String SIGNED_CERT_NOT_AFTER = "signedcertnotafter";
-	private static final String PASSWORD = "mdmpassword";
-	private static final String PRIVATE_KEY_PASSWORD = "mdmprivatekeypassword";
+    public static final int INITIAL_VALUE = 0;
+    private static Log log = LogFactory.getLog(ConfigInitializerContextListener.class);
+    private enum PropertyName {
+        PROPERTY_SIGNED_CERT_CN("SignedCertCN"),
+        PROPERTY_SIGNED_CERT_NOT_BEFORE("SignedCertNotBefore"),
+        PROPERTY_SIGNED_CERT_NOT_AFTER("SignedCertNotAfter"),
+        PROPERTY_PASSWORD("Password"),
+        PROPERTY_PRIVATE_KEY_PASSWORD("PrivateKeyPassword");
 
-	/**
-	 * This method loads wap-provisioning file / property file, sets wap-provisioning file and
-	 * extracted properties as attributes in servlet context.
-	 * @param servletContextEvent - Uses when servlet communicating with servlet container.
-	 */
-	@Override
-	public void contextInitialized(ServletContextEvent servletContextEvent) {
+        private final String propertyName;
+        private PropertyName(final String propertyName) {
+            this.propertyName = propertyName;
+        }
+        public String getValue() {
+            return this.propertyName;
+        }
+    }
 
-		ServletContext servletContext = servletContextEvent.getServletContext();
-		File propertyFile = new File(getClass().getClassLoader().getResource(
-				Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
-		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder;
-		Document document = null;
-		try {
-			docBuilder = docBuilderFactory.newDocumentBuilder();
-			if (docBuilder != null) {
-				document = docBuilder.parse(propertyFile);
-			}
-		} catch (ParserConfigurationException e) {
-			log.error("Parser configuration failure while reading properties.xml.");
-		} catch (SAXException e) {
-			log.error("Parsing error occurred while reading properties.xml.");
-		} catch (IOException e) {
-			log.error("File reading error occurred while accessing properties.xml.");
-		}
+    /**
+     * This method loads wap-provisioning file / property file, sets wap-provisioning file and
+     * extracted properties as attributes in servlet context.
+     *
+     * @param servletContextEvent - Uses when servlet communicating with servlet container.
+     */
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
 
-		String password = null;
-		String privateKeyPassword = null;
-		String signedCertCommonName = null;
-		int signedCertNotBeforeDate = INITIAL_VALUE;
-		int signedCertNotAfterDate = INITIAL_VALUE;
+        ServletContext servletContext = servletContextEvent.getServletContext();
+        File propertyFile = new File(getClass().getClassLoader().getResource(
+                Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder;
+        Document document = null;
+        try {
+            docBuilder = docBuilderFactory.newDocumentBuilder();
+            if (docBuilder != null) {
+                document = docBuilder.parse(propertyFile);
+            }
+        } catch (ParserConfigurationException e) {
+            log.error("Parser configuration failure while reading properties.xml.");
+        } catch (SAXException e) {
+            log.error("Parsing error occurred while reading properties.xml.");
+        } catch (IOException e) {
+            log.error("File reading error occurred while accessing properties.xml.");
+        }
 
-		//TODO : Passwords which have been read here are for accessing keystore. Currently this
-		//keystore is kept within the windows plugin, but ideally this should be implemented
-		//in the MDM core layer
-		if (document != null) {
-		   password = document.getElementsByTagName(PASSWORD).item(0).
-				         getTextContent();
-		   privateKeyPassword = document.getElementsByTagName(PRIVATE_KEY_PASSWORD).
-				                   item(0).getTextContent();
-		   signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(0).
-				                  getTextContent();
-		   signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
-				                     SIGNED_CERT_NOT_BEFORE).item(0).getTextContent());
-		   signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
-					                SIGNED_CERT_NOT_AFTER).item(0).getTextContent());
-		}
+        String password = null;
+        String privateKeyPassword = null;
+        String signedCertCommonName = null;
+        int signedCertNotBeforeDate = INITIAL_VALUE;
+        int signedCertNotAfterDate = INITIAL_VALUE;
 
-		WindowsPluginProperties properties = new WindowsPluginProperties();
-		properties.setKeyStorePassword(password);
-		properties.setPrivateKeyPassword(privateKeyPassword);
-		properties.setCommonName(signedCertCommonName);
-		properties.setNotBeforeDays(signedCertNotBeforeDate);
-		properties.setNotAfterDays(signedCertNotAfterDate);
-		servletContext.setAttribute(Constants.WINDOWS_PLUGIN_PROPERTIES, properties);
+        //TODO : Passwords which have been read here are for accessing keystore. Currently this
+        //keystore is kept within the windows plugin, but ideally this should be implemented
+        //in the MDM core layer
+        if (document != null) {
+            password = document.getElementsByTagName(PropertyName.PROPERTY_PASSWORD.getValue()).item(0).
+                    getTextContent();
+            privateKeyPassword = document.getElementsByTagName(PropertyName.PROPERTY_PRIVATE_KEY_PASSWORD.getValue()).
+                    item(0).getTextContent();
+            signedCertCommonName =
+                    document.getElementsByTagName(PropertyName.PROPERTY_SIGNED_CERT_CN.getValue()).item(0).
+                    getTextContent();
+            signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
+                    PropertyName.PROPERTY_SIGNED_CERT_NOT_BEFORE.getValue()).item(0).getTextContent());
+            signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
+                    PropertyName.PROPERTY_SIGNED_CERT_NOT_AFTER.getValue()).item(0).getTextContent());
+        }
 
-		File wapProvisioningFile = new File(getClass().getClassLoader().getResource(
-				Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
-		servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
-	}
+        WindowsPluginProperties properties = new WindowsPluginProperties();
+        properties.setKeyStorePassword(password);
+        properties.setPrivateKeyPassword(privateKeyPassword);
+        properties.setCommonName(signedCertCommonName);
+        properties.setNotBeforeDays(signedCertNotBeforeDate);
+        properties.setNotAfterDays(signedCertNotAfterDate);
+        servletContext.setAttribute(Constants.WINDOWS_PLUGIN_PROPERTIES, properties);
 
-	@Override
-	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-	}
+        File wapProvisioningFile = new File(getClass().getClassLoader().getResource(
+                Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
+        servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+    }
+
 }

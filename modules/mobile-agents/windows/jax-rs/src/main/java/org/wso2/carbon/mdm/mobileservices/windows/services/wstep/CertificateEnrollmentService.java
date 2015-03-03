@@ -55,6 +55,6 @@ public interface CertificateEnrollmentService {
 			AdditionalContext additionalContext,
 			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse",
 					targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
-			javax.xml.ws.Holder<RequestSecurityTokenResponse> response)
-			throws WindowsDeviceEnrolmentException;
+			javax.xml.ws.Holder<RequestSecurityTokenResponse> response) throws
+	                                                          WindowsDeviceEnrolmentException;
 }

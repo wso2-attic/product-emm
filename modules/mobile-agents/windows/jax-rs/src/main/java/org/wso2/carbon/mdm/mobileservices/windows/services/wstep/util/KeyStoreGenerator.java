@@ -44,8 +44,9 @@ public class KeyStoreGenerator {
 	 * @param keyStorePath - Keystore path
 	 * @throws KeyStoreGenerationException
 	 */
-	public static void loadToStore(KeyStore keyStore, char[] keyStorePassword, String keyStorePath)
-			throws KeyStoreGenerationException {
+	public static void loadToStore(KeyStore keyStore,
+	                               char[] keyStorePassword,
+	                               String keyStorePath) throws KeyStoreGenerationException {
 
 		FileInputStream fileInputStream = null;
 

@@ -37,8 +37,8 @@ public class SyncmlUtils {
 	 * @return DeviceManagementServiceObject
 	 * @throws org.wso2.carbon.device.mgt.common.DeviceManagementServiceException
 	 */
-	public static DeviceManagementService getDeviceManagementService()
-			throws DeviceManagementServiceException {
+	public static DeviceManagementService getDeviceManagementService() throws
+	                                      DeviceManagementServiceException {
 
 		DeviceManagementService deviceManagementService;
 		PrivilegedCarbonContext.startTenantFlow();

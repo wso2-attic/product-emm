@@ -44,58 +44,58 @@ public class UsernameTokenValidator implements Validator {
 
 	/**
 	 * This method validates the username token in SOAP message coming from the device.
-	 * @param credential - Username token credentials coming from device
+	 * @param credential  - Username token credentials coming from device
 	 * @param requestData - Request data associated with the request
 	 * @return - Credential object if authentication is success, or null if not success
 	 * @throws WSSecurityException
 	 */
 	@Override
-	public Credential validate(Credential credential, RequestData requestData)
-			throws WSSecurityException {
+	public Credential validate(Credential credential,
+	                           RequestData requestData) throws WSSecurityException {
 
 		String domainUser = credential.getUsernametoken().getName();
 		String[] domainUserArray = domainUser.split(DELIMITER);
 		Credential returnCredentials;
 		String user = domainUserArray[USER_SEGMENT];
 		String domain = domainUserArray[DOMAIN_SEGMENT];
-		domain = "";  //for testing purposes..
 		String password = credential.getUsernametoken().getPassword();
 
 		try {
 			if (authenticate(user, password, domain)) {
 				returnCredentials = credential;
 			} else {
-				String msg="Authentication failure due to incorrect credentials.";
+				String msg = "Authentication failure due to incorrect credentials.";
 				log.error(msg);
 				throw new WindowsDeviceEnrolmentException(msg);
 			}
-		//Generic exception is caught here as there is no need of taking different actions for
-		//different exceptions.
+			//Generic exception is caught here as there is no need of taking different actions for
+			//different exceptions.
 		} catch (Exception e) {
 			String msg = "Failure occurred in the credential validator.";
-			log.error(msg,e);
-			throw new WSSecurityException(msg,e);
+			log.error(msg, e);
+			throw new WSSecurityException(msg, e);
 		}
 		return returnCredentials;
 	}
 
 	/**
 	 * This method authenticate the user checking the carbon default user store.
-	 * @param username - Username in username token
-	 * @param password - Password in username token
+	 * @param username     - Username in username token
+	 * @param password     - Password in username token
 	 * @param tenantDomain - Tenant domain is extracted from the username
 	 * @return - Returns boolean representing authentication result
 	 * @throws AuthenticationException
 	 */
-	public boolean authenticate(String username, String password, String tenantDomain)
-			throws AuthenticationException {
+	public boolean authenticate(String username, String password, String tenantDomain) throws
+	                           AuthenticationException {
 
 		try {
-		    PrivilegedCarbonContext.startTenantFlow();
+			PrivilegedCarbonContext.startTenantFlow();
 			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+			RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class,
+			                                                              null);
 
 			if (realmService == null) {
 				String msg = "RealmService not initialized.";
