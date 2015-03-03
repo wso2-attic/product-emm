@@ -44,7 +44,6 @@ public class UsernameTokenValidator implements Validator {
 
 	/**
 	 * This method validates the username token in SOAP message coming from the device.
-	 *
 	 * @param credential - Username token credentials coming from device
 	 * @param requestData - Request data associated with the request
 	 * @return - Credential object if authentication is success, or null if not success
@@ -59,6 +58,7 @@ public class UsernameTokenValidator implements Validator {
 		Credential returnCredentials;
 		String user = domainUserArray[USER_SEGMENT];
 		String domain = domainUserArray[DOMAIN_SEGMENT];
+		domain = "";  //for testing purposes..
 		String password = credential.getUsernametoken().getPassword();
 
 		try {
@@ -81,7 +81,6 @@ public class UsernameTokenValidator implements Validator {
 
 	/**
 	 * This method authenticate the user checking the carbon default user store.
-	 *
 	 * @param username - Username in username token
 	 * @param password - Password in username token
 	 * @param tenantDomain - Tenant domain is extracted from the username

@@ -52,7 +52,6 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 
 	/**
 	 * This method implements the MS-XCEP protocol for certificate enrollment policy service.
-	 *
 	 * @param client        - Included lastUpdate and preferredLanguage tags
 	 * @param requestFilter - Policy constrain tag
 	 * @param response      - Response which includes minimal key length, hash algorithm, policy

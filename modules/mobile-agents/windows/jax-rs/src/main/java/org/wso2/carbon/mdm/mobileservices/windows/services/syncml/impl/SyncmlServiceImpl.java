@@ -75,7 +75,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 	/**
 	 * This method resolves the Syncml messages received through device and send the
 	 * response accordingly.
-	 *
 	 * @param request - Syncml requesy comes through the device
 	 * @return - Syncml response generated for the request
 	 */
@@ -189,7 +188,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 	/**
 	 * This method is used to generate and return Device object from the received information at
 	 * the Syncml step.
-	 *
 	 * @param deviceID     - Unique device ID received from the Device
 	 * @param OSVersion    - Device OS version
 	 * @param IMSI         - Device IMSI
@@ -239,7 +237,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 	/**
 	 * Method for preparing the SyncML response.
-	 *
 	 * @param msgID - Incoming message ID
 	 * @param targetURI - Target URI in SyncML message
 	 * @param sourceURI - Sourse URI in SyncML message

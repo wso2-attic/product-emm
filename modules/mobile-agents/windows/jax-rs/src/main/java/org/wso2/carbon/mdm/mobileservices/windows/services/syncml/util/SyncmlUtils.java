@@ -34,7 +34,6 @@ public class SyncmlUtils {
 
 	/**
 	 * This method returns Device Management Object for certain tasks such as Device enrollment etc.
-	 *
 	 * @return DeviceManagementServiceObject
 	 * @throws org.wso2.carbon.device.mgt.common.DeviceManagementServiceException
 	 */

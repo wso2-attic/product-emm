@@ -99,7 +99,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	/**
 	 * This method implements MS-WSTEP for Certificate Enrollment Service.
-	 *
 	 * @param tokenType           - Device Enrolment Token type is received via device
 	 * @param requestType         - WS-Trust request type
 	 * @param binarySecurityToken - CSR from device
@@ -172,7 +171,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	/**
 	 * Method used to Convert the Document object into a String.
-	 *
 	 * @param document - Wap provisioning XML document
 	 * @return - String representation of wap provisioning XML document
 	 * @throws TransformerException
@@ -190,7 +188,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	/**
 	 * Method for reading MDM Keystore and setting privateKey and rootCACertificate variables.
-	 *
 	 * @param storePassword - MDM Keystore password
 	 * @param keyPassword   - MDM Private key password
 	 * @throws KeyStoreGenerationException
@@ -282,7 +279,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 	/**
 	 * This method prepares the wap-provisioning file by including relevant certificates etc
-	 *
 	 * @param binarySecurityToken     - CSR from device
 	 * @param certPropertyList        - property list for signed certificate
 	 * @param wapProvisioningFilePath - File path of wap-provisioning file

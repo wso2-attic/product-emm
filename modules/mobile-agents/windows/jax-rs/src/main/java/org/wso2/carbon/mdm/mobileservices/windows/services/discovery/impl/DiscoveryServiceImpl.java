@@ -48,7 +48,6 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	 * This method returns the OnPremise AuthPolicy and next two endpoint the mobile device should
 	 * call if this response to received successfully at the device end. This method is called by
 	 * device immediately after the first GET method calling for the same endpoint.
-	 *
 	 * @param discoveryRequest - Request bean comes via mobile phone
 	 * @param response - DiscoveryResponse bean for response
 	 */
@@ -72,7 +71,6 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	/**
 	 * This is the first method called through device. The device checks the availability of the
 	 * Service end point by calling this method.
-	 *
 	 * @return - HTTP 200OK message
 	 */
 	@Override

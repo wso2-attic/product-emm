@@ -62,7 +62,6 @@ public class CertificateSigningService {
 	/**
 	 * Implement certificate signing task using CSR received from the device and the MDM server key
 	 * store.
-	 *
 	 * @param jcaRequest        - CSR from the device
 	 * @param privateKey        - Private key of CA certificate in MDM server
 	 * @param CACert            - CA certificate in MDM server

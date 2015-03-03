@@ -66,7 +66,6 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	/**
 	 * This method adds Timestamp for SOAP header, and adds Content-length for HTTP header for
 	 * avoiding HTTP chunking.
-	 *
 	 * @param context - Context of the SOAP Message
 	 */
 	@Override

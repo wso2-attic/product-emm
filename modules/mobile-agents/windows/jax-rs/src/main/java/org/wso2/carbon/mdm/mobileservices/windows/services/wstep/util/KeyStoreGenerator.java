@@ -39,7 +39,6 @@ public class KeyStoreGenerator {
 
 	/**
 	 * This method loads the MDM keystore.
-	 *
 	 * @param keyStore   - MDM Keystore
 	 * @param keyStorePassword  - Keystore Password
 	 * @param keyStorePath - Keystore path
@@ -78,7 +77,6 @@ public class KeyStoreGenerator {
 
 	/**
 	 * This method is for retrieving instance of Key Store.
-	 *
 	 * @return Keystore object
 	 * @throws KeyStoreGenerationException
 	 */

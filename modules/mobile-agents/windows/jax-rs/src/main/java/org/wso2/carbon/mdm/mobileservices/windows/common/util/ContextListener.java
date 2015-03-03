@@ -49,7 +49,6 @@ public class ContextListener implements ServletContextListener {
 	/**
 	 * This method loads wap-provisioning file / property file, sets wap-provisioning file and
 	 * extracted properties as attributes in servlet context.
-	 *
 	 * @param servletContextEvent - Uses when servlet communicating with servlet container.
 	 */
 	@Override
