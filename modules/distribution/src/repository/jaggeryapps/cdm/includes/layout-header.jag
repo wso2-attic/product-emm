@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var constants = require("/modules/constants.js");
 %>
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,12 +30,12 @@
     <title><%=title%></title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/cdm/client/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/cdm/client/css/bootstrap-table.min.css" rel="stylesheet"/>
+    <link href=<%=constants.WEB_APP_CONTEXT%>"client/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href=<%=constants.WEB_APP_CONTEXT%>"client/css/bootstrap-table.min.css" rel="stylesheet"/>
 
     <!-- Custom styles for this template -->
-    <link href="/cdm/client/css/dashboard.css" rel="stylesheet">
-    <link href="/cdm/client/css/main.css" rel="stylesheet">
+    <link href=<%=constants.WEB_APP_CONTEXT%>"client/css/dashboard.css" rel="stylesheet">
+    <link href=<%=constants.WEB_APP_CONTEXT%>"client/css/main.css" rel="stylesheet">
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     

@@ -16,6 +16,7 @@
  * under the License.
  */
 var WEB_APP_TITLE = "WSO2 MDM";
+var WEB_APP_CONTEXT = "/cdm/";
 var UNSPECIFIED = "Unspecified";
 var USER_SESSION_KEY = "USER";
 

@@ -19,6 +19,7 @@
 
 var sso = {};
 var ssoMod = require("sso");
+// TODO: Log object define on top
  (function () {
  	var carbon = require("carbon");
  	var process = require("process");
@@ -31,6 +32,7 @@ var ssoMod = require("sso");
 	    }
 	    return sso_sessions;
  	};
+
  	sso.configure = function(issuer, appName, keyStoreParams, address, transport, ssoService, responseSign){
  		sso.issuer = issuer;
  		sso.appName = appName;
@@ -46,6 +48,7 @@ var ssoMod = require("sso");
                 IDP_ALIAS: keyStoreParams.identityAlias
         };
  	};
+
  	sso.login = function(){
  		sso.sessionId = session.getId();
  		var referer = request.getHeader("referer");
@@ -59,9 +62,12 @@ var ssoMod = require("sso");
 		}
  		sso.encodedSAMLAuthRequest = ssoMod.client.getEncodedSAMLAuthRequest(sso.issuer);
  		var postUrl = sso.address + sso.ssoService;
-		log.debug(sso.relayState);
+		if(log.isDebugEnabled()){
+			log.debug(sso.relayState);
+		}
  		print("<div><p>You are now being redirected to SSO Provider. If the redirection fails, please click on the button below.</p> <form method='post' action='"+postUrl+"'><p><input type='hidden' name='SAMLRequest' value='"+sso.encodedSAMLAuthRequest+"'/><input type='hidden' name='RelayState' value='"+sso.relayState+"'/><input type='hidden' name='SSOAuthSessionID' value='"+sso.sessionId+"'/><button type='submit'>Redirect manually</button></p></form></div><script type = 'text/javascript' >document.forms[0].submit();</script>");
  	};
+
  	sso.logout = function(user){
  		var sso_sessions = getSSOSessions();
  		sso.sessionId = session.getId();
@@ -71,12 +77,15 @@ var ssoMod = require("sso");
  		sso.relayState = (referer ? referer : sso.relayState);
  		sso.relayState = sso.relayState + request.getQueryString(); // append query string
  		sso.encodedSAMLLogoutRequest = ssoMod.client.getEncodedSAMLLogoutRequest(user, sso.sessionIndex , sso.issuer);
- 		sso.log.debug("Logout request recieved from session id ###: " + sso.sessionId );
- 		
  		var postUrl = sso.address + sso.ssoService;
- 		sso.log.debug(sso.sessionId);
+
+		if(log.isDebugEnabled()){
+			sso.log.debug("Logout request recieved from session id ###: " + sso.sessionId );
+			sso.log.debug(sso.sessionId);
+		}
  		print("<div><p>You are now redirected to Stratos Identity. If theredirection fails, please click the post button.</p> <form id='logoutForm' method='post' action='"+postUrl+"'> <p> <input type='hidden' name='SAMLRequest' value='"+sso.encodedSAMLLogoutRequest+"'/> <input type='hidden' name='RelayState' value='"+sso.relayState+"'/> <input type='hidden' name='SSOAuthSessionID' value='"+sso.sessionId+"'/> <button type='submit'>POST</button> </p> </form> </div> <script type = 'text/javascript' > document.forms[0].submit(); </script>");
  	};
+
  	sso.acs = function(loginCallback, logoutCallback){
 	    var sso_sessions = getSSOSessions();
 	    sso.sessionId = session.getId();
@@ -89,20 +98,28 @@ var ssoMod = require("sso");
 	        samlRespObj = ssoMod.client.getSamlObject(samlResponse);
 	        if(ssoMod.client.isLogoutResponse(samlRespObj)){
 	        	logoutCallback();
-		        sso.log.debug('Session Id Invalidated :::' + sso.sessionId);
+				if(log.isDebugEnabled()){
+					sso.log.debug('Session Id Invalidated :::' + sso.sessionId);
+				}
 		        // Invalidating the session after the callback
 		        session.invalidate();
 	        }else{
-	        	sso.log.debug("Login request");
+				if(log.isDebugEnabled()){
+					sso.log.debug("Login request");
+				}
 	            // validating the signature
 	            if (sso.responseSign) {
 	                if (ssoMod.client.validateSignature(samlRespObj, sso.keyStoreProps)) {
 	                    var sessionObj = ssoMod.client.decodeSAMLLoginResponse(samlRespObj, samlResponse, sso.sessionId);
-	                    sso.log.debug("Saml object session ID :"+sessionObj.sessionId);
+						if(log.isDebugEnabled()){
+							sso.log.debug("Saml object session ID :"+sessionObj.sessionId);
+						}
 	                    if (sessionObj.sessionIndex != null || sessionObj.sessionIndex != 'undefined') {
 	                    	sso_sessions[sso_sessions[sessionObj.sessionIndex] = sessionObj.sessionId] = sessionObj.sessionIndex;
-	                        sso.log.debug("Login successful");
-	                        sso.log.debug('user is set :::' + sessionObj.loggedInUser);
+							if(log.isDebugEnabled()){
+								sso.log.debug("Login successful");
+								sso.log.debug('user is set :::' + sessionObj.loggedInUser);
+							}
 	                        loginCallback(sessionObj.loggedInUser);
 	                    }else{
 	                    	sso.log.error("Session index invalid");
@@ -111,7 +128,9 @@ var ssoMod = require("sso");
 	                	sso.log.error("Response Signing failed");
 	                }
 	            }else{
-	            	sso.log.debug("Response Signing is disabled");
+					if(log.isDebugEnabled()){
+						sso.log.debug("Response Signing is disabled");
+					}
 	            }
 	        }
 	    }
@@ -120,11 +139,12 @@ var ssoMod = require("sso");
 	    */
 	    if(samlRequest!= null){
 	    	var index = ssoMod.client.decodeSAMLLogoutRequest(ssoMod.client.getSamlObject(samlRequest));
-	        sso.log.debug('BACKEND LOGOUT RECIEVED FROM STORE THE INDEX IS ######' + index);
 	        var jSessionId = getSSOSessions()[index];
 	        delete getSSOSessions()[index];
-	        sso.log.debug('Session Id Invalidated :::' + jSessionId);
-	        // Invalidating the session after the callback
+			if(log.isDebugEnabled()){
+				sso.log.debug('BACKEND LOGOUT RECIEVED FROM STORE THE INDEX IS ######' + index);
+				sso.log.debug('Session Id Invalidated :::' + jSessionId);
+			}
 	        session.invalidate();
 	    }
  	}

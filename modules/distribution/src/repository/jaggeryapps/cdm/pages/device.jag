@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <%
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
@@ -19,8 +18,22 @@
  */
   var constants = require("/modules/constants.js");
   var title = constants.WEB_APP_TITLE;
+  var deviceModule = require("/modules/device.js");
+  var uri = request.getRequestURI();
+  var uriMatcher = new URIMatcher(callPath);
+  uriMatcher.match("devices/{type}/{id}/");
+  var elements = uriMatcher.elements();
+  var deviceId = elements.id;
+  var type = elements.type;
+  var device = deviceModule.viewDevice(type, deviceId);
+  if (!device) {
+    response.sendError(400);
+  }
+  var operations = deviceModule.getOperations(constants.PLATFORM_ANDROID);
+
   include("/includes/auth-header.jag");
 %>
+<!DOCTYPE html>
 <html lang="en">
     <%
         include("/includes/layout-header.jag");
@@ -28,15 +41,7 @@
     <body>
         <%
             include("/includes/header.jag");
-            var deviceModule = require("/modules/device.js");
-            var uri = request.getRequestURI();
-            var callPath=uri.replace("/cdm/","");
-            var uriMatcher = new URIMatcher(callPath);
-            uriMatcher.match("devices/{type}/{id}/");
-            var deviceId = uriMatcher.elements().id;
-            var type = uriMatcher.elements().type;
-            var device = deviceModule.viewDevice(type, deviceId);
-            var operations = deviceModule.getOperations(constants.PLATFORM_ANDROID);
+
         %>
         <div id="device-main" data-device-id="<%=deviceId%>" data-device-type="<%=type%>" class="container-fluid">
             <div class="row">
@@ -50,7 +55,7 @@
                           var operation = operations[i];
                           %>
                             <button data-operation="<%=operation.featureName%>" class="device-operation btn btn-default">
-                            <img src="/cdm/client/img/operations/<%=operation.featureName%>.png" />
+                            <img src=<%=constants.WEB_APP_CONTEXT%>"client/img/operations/<%=operation.featureName%>.png" />
                             <p><%=operation.featureDescription%></p>
                             </button>
                           <%
@@ -59,7 +64,7 @@
                     </div>
                     <div class="row">
                       <div class="col-md-3 device-model-holder well well-lg">
-                        <img src="/cdm/client/img/models/iphone.png" width="200"/>
+                        <img class="device-image" src=<%= constants.WEB_APP_CONTEXT%>"client/img/models/iphone.png"/>
                       </div>
                       <div class="col-md-8">
                         <div class="row">
@@ -78,7 +83,7 @@
                         </div>             
                         <div class="row">
                           <div class="col-md-12 well well-lg device-static-data">
-                            <table id="table-pagination" data-toggle="table"  data-url="/cdm/data3.json" data-query-params="queryParams" data-height="300" data-pagination="true" data-search="true">
+                            <table id="table-pagination" data-toggle="table"  data-url=<%=constants.WEB_APP_CONTEXT%>"data3.json" data-query-params="queryParams" data-height="300" data-pagination="true" data-search="true">
                                   <thead>
                                       <tr>
                                           <th data-field="appName" data-align="right" data-sortable="true">App name</th>

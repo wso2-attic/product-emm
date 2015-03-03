@@ -16,15 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var constants = require("/modules/constants.js");
 %>
 <!-- Bootstrap core JavaScript
 === === === === === === === === === === === === === === === === == -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src = "/cdm/client/javascript/jquery.min.js" > </script>
-<script src="/cdm/client/javascript/bootstrap.min.js"></script>
-<script src="/cdm/client/javascript/docs.min.js"></script>
+<script src=<%=constants.WEB_APP_CONTEXT%>"client/javascript/jquery.min.js"> </script>
+<script src=<%=constants.WEB_APP_CONTEXT%>"client/javascript/bootstrap.min.js"></script>
+<script src=<%=constants.WEB_APP_CONTEXT%>"client/javascript/docs.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="/cdm/client/javascript/ie10-viewport-bug-workaround.js"></script>
-<script src="/cdm/client/javascript/ie10-viewport-bug-workaround.js"></script>
-<script src="/cdm/client/javascript/bootstrap-table.min.js"> </script>
-<script src="/cdm/client/javascript/main.js"></script>
+<script src=<%=constants.WEB_APP_CONTEXT%>"client/javascript/ie10-viewport-bug-workaround.js"></script>
+<script src=<%=constants.WEB_APP_CONTEXT%>"client/javascript/ie10-viewport-bug-workaround.js"></script>
+<script src=<%=constants.WEB_APP_CONTEXT%>"client/javascript/bootstrap-table.min.js"> </script>
+<script src=<%=constants.WEB_APP_CONTEXT%>"client/javascript/main.js"></script>

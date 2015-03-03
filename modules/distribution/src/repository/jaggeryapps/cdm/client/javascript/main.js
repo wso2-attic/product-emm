@@ -15,9 +15,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var appContext = "/cdm/";
 function identifierFormatter(value, row, index) {
     return [
-        '<a class="like" href="/cdm/devices/' + row["deviceType"] + '/' + encodeURIComponent(value) + '" title="Like">',
+        '<a class="like" href='+appContext+'"devices/' + row["deviceType"] + '/' + encodeURIComponent(value) + '" title="Like">',
         value,
         '</a>'
     ].join('');
@@ -29,7 +30,7 @@ var currentDeviceType;
 function performOperation(){
     currentDevice = encodeURIComponent($("#device-main").data("deviceId"));
     currentDeviceType = $("#device-main").data("deviceType");
-    $.post("/cdm/api/operation/"+currentDeviceType+"/"+currentDevice+"/"+currentDeviceOperation,function(){
+    $.post(appContext+"api/operation/"+currentDeviceType+"/"+currentDevice+"/"+currentDeviceOperation,function(){
         $('#confirm-model').modal('hide');
     });
 }
