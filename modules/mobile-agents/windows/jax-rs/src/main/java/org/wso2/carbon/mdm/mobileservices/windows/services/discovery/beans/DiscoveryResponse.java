@@ -35,18 +35,6 @@ public class DiscoveryResponse implements Serializable {
 	@XmlElement(name = "EnrollmentServiceUrl")
 	private String enrollmentServiceUrl;
 
-	@XmlElement(name = "AuthenticationServiceUrl")
-	private String authenticationServiceUrl;
-
-
-	public String getAuthenticationServiceUrl() {
-		return authenticationServiceUrl;
-	}
-
-	public void setAuthenticationServiceUrl(String authenticationServiceUrl) {
-		this.authenticationServiceUrl = authenticationServiceUrl;
-	}
-
 	public String getAuthPolicy() {
 		return authPolicy;
 	}

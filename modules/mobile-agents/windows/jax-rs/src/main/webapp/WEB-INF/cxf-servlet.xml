@@ -87,16 +87,5 @@
           class="org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl.SyncmlServiceImpl"/>
     <bean id="customvalidator"
           class="org.wso2.carbon.mdm.mobileservices.windows.common.util.UsernameTokenValidator"/>
-
-    <!--experimential-->
-    <!--<jaxrs:server id="wab" address="/syncml">-->
-        <!--<jaxrs:serviceBeans>-->
-            <!--<ref bean="wab_test"/>-->
-        <!--</jaxrs:serviceBeans>-->
-    <!--</jaxrs:server>-->
-    <!--<bean id="wab_test"-->
-          <!--class="org.wso2.carbon.mdm.mobileservices.windows.services.wab.wabimpl"/>-->
-    <!--experimantel-->
-
 </beans>
 
