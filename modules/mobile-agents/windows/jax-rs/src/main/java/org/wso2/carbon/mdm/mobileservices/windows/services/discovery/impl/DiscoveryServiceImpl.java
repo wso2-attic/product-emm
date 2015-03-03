@@ -55,7 +55,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	public void discover(DiscoveryRequest discoveryRequest, Holder<DiscoveryResponse> response) {
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
-		discoveryResponse.setAuthPolicy("OnPremise");
+		discoveryResponse.setAuthPolicy(Constants.Discovery.AUTH_POLICY);
 		discoveryResponse.setEnrollmentPolicyServiceUrl(
 				Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
 		discoveryResponse.setEnrollmentServiceUrl(
