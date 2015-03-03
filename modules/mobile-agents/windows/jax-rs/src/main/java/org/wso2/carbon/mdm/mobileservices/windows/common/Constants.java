@@ -135,8 +135,8 @@ public final class Constants {
 	 * SynclML service related constants
 	 */
 	public final class SyncML {
-		public static final String SYNCML_RESPONSE = "reply.xml";
-		public static final String SYNCML_SECOND_RESPONSE = "reply2.xml";
+		public static final String SYNCML_RESPONSE = "device-info-response.xml";
+		public static final String SYNCML_SECOND_RESPONSE = "syncml-session-ending-response.xml";
 		public static final String SYNC_ML = "SyncML";
 		public static final String SYNCML_MSG_ID = "MsgID";
 		public static final String SYNCML_TARGET = "Target";

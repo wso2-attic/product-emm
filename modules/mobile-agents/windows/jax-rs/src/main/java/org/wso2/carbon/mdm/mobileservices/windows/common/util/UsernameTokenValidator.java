@@ -73,8 +73,8 @@ public class UsernameTokenValidator implements Validator {
 		//different exceptions.
 		} catch (Exception e) {
 			String msg = "Failure occurred in the credential validator.";
-			log.error(msg);
-			throw new WSSecurityException(msg);
+			log.error(msg,e);
+			throw new WSSecurityException(msg,e);
 		}
 		return returnCredentials;
 	}
@@ -120,7 +120,7 @@ public class UsernameTokenValidator implements Validator {
 
 			return userRealm.getUserStoreManager().authenticate(username, password);
 		} catch (UserStoreException e) {
-			String msg = "User store not initialized.";
+			String msg = "User store is not initialized.";
 			log.error(msg, e);
 			throw new AuthenticationException(msg, e);
 		} finally {

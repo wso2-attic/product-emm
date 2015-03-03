@@ -196,7 +196,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 	 * @param model        - Device Model
 	 * @return - Device Object
 	 */
-	private static Device generateDevice(String type, String deviceID, String OSVersion, String IMSI,
+	private Device generateDevice(String type, String deviceID, String OSVersion, String IMSI,
 	                                    String IMEI, String manufacturer, String model) {
 
 		Device generatedDevice = new Device();

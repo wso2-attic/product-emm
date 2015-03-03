@@ -36,10 +36,10 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProp
 /**
  * This class performs one time operations.
  */
-public class ContextListener implements ServletContextListener {
+public class ConfigInitializerContextListener implements ServletContextListener {
 
 	public static final int INITIAL_VALUE = 0;
-	private static Log log = LogFactory.getLog(ContextListener.class);
+	private static Log log = LogFactory.getLog(ConfigInitializerContextListener.class);
 	private static final String SIGNED_CERT_CN = "signedcertCN";
 	private static final String SIGNED_CERT_NOT_BEFORE = "signedcertnotbefore";
 	private static final String SIGNED_CERT_NOT_AFTER = "signedcertnotafter";
@@ -58,33 +58,34 @@ public class ContextListener implements ServletContextListener {
 		File propertyFile = new File(getClass().getClassLoader().getResource(
 				Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = null;
-		try {
-			docBuilder = docBuilderFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			log.error("XML parsing configuration exception.");
-		}
+		DocumentBuilder docBuilder;
 		Document document = null;
 		try {
-		    if (docBuilder != null) {
+			docBuilder = docBuilderFactory.newDocumentBuilder();
+			if (docBuilder != null) {
 				document = docBuilder.parse(propertyFile);
 			}
+		} catch (ParserConfigurationException e) {
+			log.error("Parser configuration failure while reading properties.xml.");
 		} catch (SAXException e) {
-			log.error("XML Parsing Exception.");
+			log.error("Parsing error occurred while reading properties.xml.");
 		} catch (IOException e) {
-			log.error("XML property file reading exception.");
+			log.error("File reading error occurred while accessing properties.xml.");
 		}
 
-		String MDMPassword = null;
-		String MDMPrivateKeyPassword = null;
+		String password = null;
+		String privateKeyPassword = null;
 		String signedCertCommonName = null;
 		int signedCertNotBeforeDate = INITIAL_VALUE;
 		int signedCertNotAfterDate = INITIAL_VALUE;
 
+		//TODO : Passwords which have been read here are for accessing keystore. Currently this
+		//keystore is kept within the windows plugin, but ideally this should be implemented
+		//in the MDM core layer
 		if (document != null) {
-		   MDMPassword = document.getElementsByTagName(PASSWORD).item(0).
+		   password = document.getElementsByTagName(PASSWORD).item(0).
 				         getTextContent();
-		   MDMPrivateKeyPassword = document.getElementsByTagName(PRIVATE_KEY_PASSWORD).
+		   privateKeyPassword = document.getElementsByTagName(PRIVATE_KEY_PASSWORD).
 				                   item(0).getTextContent();
 		   signedCertCommonName = document.getElementsByTagName(SIGNED_CERT_CN).item(0).
 				                  getTextContent();
@@ -95,8 +96,8 @@ public class ContextListener implements ServletContextListener {
 		}
 
 		WindowsPluginProperties properties = new WindowsPluginProperties();
-		properties.setKeyStorePassword(MDMPassword);
-		properties.setPrivateKeyPassword(MDMPrivateKeyPassword);
+		properties.setKeyStorePassword(password);
+		properties.setPrivateKeyPassword(privateKeyPassword);
 		properties.setCommonName(signedCertCommonName);
 		properties.setNotBeforeDays(signedCertNotBeforeDate);
 		properties.setNotAfterDays(signedCertNotAfterDate);

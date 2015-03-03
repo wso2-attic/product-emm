@@ -218,9 +218,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throw new KeyStoreGenerationException(msg, e);
 		}
 
-		PrivateKey CAPrivateKey;
 		try {
-			CAPrivateKey = (PrivateKey) securityJKS
+			privateKey = (PrivateKey) securityJKS
 					.getKey(Constants.CertificateEnrolment.CA_CERT, keyPassword.toCharArray());
 		} catch (java.security.KeyStoreException e) {
 			String msg = "Cannot generate private key due to Key store error.";
@@ -236,45 +235,37 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throw new CertificateGenerationException(msg, e);
 		}
 
-		privateKey = CAPrivateKey;
 		Certificate CACertificate;
+		ByteArrayInputStream byteArrayInputStream;
+		CertificateFactory certificateFactory;
 		try {
 			CACertificate = securityJKS.getCertificate(Constants.CertificateEnrolment.CA_CERT);
-		} catch (KeyStoreException e) {
-			String msg = "Keystore cannot be accessed.";
-			log.error(msg, e);
-			throw new KeyStoreGenerationException(msg, e);
-		}
-		CertificateFactory certificateFactory;
-
-		try {
 			certificateFactory =
 					CertificateFactory.getInstance(Constants.CertificateEnrolment.X_509);
-		} catch (CertificateException e) {
-			String msg = "Cannot initiate certificate factory.";
-			log.error(msg, e);
-			throw new CertificateGenerationException(msg, e);
-		}
-
-		ByteArrayInputStream byteArrayInputStream;
-		try {
 			byteArrayInputStream = new ByteArrayInputStream(CACertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
 			String msg = "CA certificate cannot be encoded.";
 			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
+		} catch (KeyStoreException e) {
+			String msg = "Error occurred while accessing keystore for CA certificate retrieval.";
+			log.error(msg, e);
+			throw new KeyStoreGenerationException(msg, e);
+		} catch (CertificateException e) {
+			String msg = "Error occurred while initiating certificate factory for CA certificate " +
+			             "retrieval.";
+			log.error(msg, e);
+			throw new CertificateGenerationException(msg, e);
 		}
 
-		X509Certificate X509CACertificate;
 		try {
-			X509CACertificate =
+			rootCACertificate =
 					(X509Certificate) certificateFactory.generateCertificate(byteArrayInputStream);
 		} catch (CertificateException e) {
 			String msg = "X509 CA certificate cannot be generated.";
 			log.error(msg, e);
 			throw new CertificateGenerationException(msg, e);
 		}
-		rootCACertificate = X509CACertificate;
 	}
 
 	/**
