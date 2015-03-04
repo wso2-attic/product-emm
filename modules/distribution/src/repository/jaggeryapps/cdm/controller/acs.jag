@@ -24,16 +24,20 @@ var keyStoreParams = {
     keyStoreName: dataConfig.ssoConfiguration.keyStoreName,
     keyStorePassword: dataConfig.ssoConfiguration.keyStorePassword,
     identityAlias: dataConfig.ssoConfiguration.identityAlias
-}
+};
 sso.configure(dataConfig.ssoConfiguration.issuer, dataConfig.ssoConfiguration.appName, keyStoreParams,
 dataConfig.ssoConfiguration.identityProviderURL);
 sso.acs(function(loggedInUser) {
     session.put(constants.USER_SESSION_KEY, loggedInUser);
     var username = loggedInUser;
-    log.debug("User logged in: "+username);
+    if(log.isDebugEnabled()){
+        log.debug("User logged in: "+username);
+    }
     response.sendRedirect(dataConfig.appContext+'dashboard');
 }, function() {
-    log.debug("User logged out");
+    if(log.isDebugEnabled()){
+        log.debug("User logged out");
+    }
     response.sendRedirect(dataConfig.appContext);
 });
 %>

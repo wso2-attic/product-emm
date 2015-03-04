@@ -19,7 +19,8 @@
 var constants = require('/modules/constants.js');
 var loggedUser = session.get(constants.USER_SESSION_KEY);
 var dataConfig = require('/modules/mdm-props.js').config();
+
 if(loggedUser == null){
-     response.sendRedirect(dataConfig.appContext+"login");
+     response.sendRedirect(dataConfig.appContext + "login");
 }
 %>
