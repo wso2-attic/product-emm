@@ -51,7 +51,7 @@
                       <div class="tab-content">
                         <div role="devicepanel" class="tab-pane active" id="mobile">
                             <div class="table-responsive">
-                                <table id="table-pagination" data-toggle="table" data-url=<%=constants.WEB_APP_CONTEXT%>"api/devices/mobile"  data-query-params="queryParams" data-height="400" data-pagination="true" data-search="true">
+                                <table id="table-pagination" data-toggle="table" data-url="<%=constants.WEB_APP_CONTEXT%>api/devices/mobile"  data-query-params="queryParams" data-height="400" data-pagination="true" data-search="true">
                                     <thead>
                                         <tr>
                                             <!--Use the constants-->

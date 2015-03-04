@@ -33,10 +33,10 @@ var constants = require("/modules/constants.js");
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href=<%=constants.WEB_APP_CONTEXT%>"dashboard">Dashboard</a></li>
+        <li><a href="<%=constants.WEB_APP_CONTEXT%>dashboard">Dashboard</a></li>
         <li><a href="#">Configuration</a></li>
         <li><a href="#">Management</a></li>
-        <li><a href=<%=constants.WEB_APP_CONTEXT%>"logout">Logout</a></li>
+        <li><a href="<%=constants.WEB_APP_CONTEXT%>logout">Logout</a></li>
       </ul>
     </div>
   </div>
