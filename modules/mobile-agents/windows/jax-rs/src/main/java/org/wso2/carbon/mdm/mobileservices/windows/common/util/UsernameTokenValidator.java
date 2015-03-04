@@ -94,8 +94,7 @@ public class UsernameTokenValidator implements Validator {
 			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class,
-			                                                              null);
+			RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
 
 			if (realmService == null) {
 				String msg = "RealmService not initialized.";
