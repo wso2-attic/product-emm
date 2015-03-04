@@ -141,7 +141,6 @@ public final class Constants {
 		public static final String SYNCML_MSG_ID = "MsgID";
 		public static final String SYNCML_TARGET = "Target";
 		public static final String SYNCML_SOURCE = "Source";
-		public static final String SYNCML_CRED = "Cred";
 		public static final String SYNCML_RESULTS = "Results";
 		public static final String SYNCML_SOURCE_URI = "SOURCE_URI";
 		public static final String SYNCML_TARGET_URI = "TARGET_URI";

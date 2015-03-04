@@ -49,9 +49,7 @@ public class SyncmlUtils {
 				.getOSGiService(DeviceManagementService.class, null);
 
 		if (deviceManagementService == null) {
-			String msg = "Device management service not initialized.";
-			log.error(msg);
-			throw new DeviceManagementServiceException(msg);
+			throw new DeviceManagementServiceException("Device management service is not initialized.");
 		}
 		PrivilegedCarbonContext.endTenantFlow();
 		return deviceManagementService;

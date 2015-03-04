@@ -56,21 +56,21 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 	 * @param requestFilter - Policy constrain tag
 	 * @param response      - Response which includes minimal key length, hash algorithm, policy
 	 *                        schema, policy OID reference
-	 * @param CACollection  - Contains the issuers for the certificate enrollment policies
-	 * @param OIDCollection - Contains the collection of OIDs for the response
+	 * @param caCollection  - Contains the issuers for the certificate enrollment policies
+	 * @param oidCollection - Contains the collection of OIDs for the response
 	 */
 	@Override
 	public void getPolicies(Client client, RequestFilter requestFilter,
-	                        Holder<Response> response, Holder<CACollection> CACollection,
-	                        Holder<OIDCollection> OIDCollection) {
+	                        Holder<Response> response, Holder<CACollection> caCollection,
+	                        Holder<OIDCollection> oidCollection) {
 
 		if (log.isDebugEnabled()) {
 			log.debug("Enrolment certificate policy end point was triggered by device.");
 		}
 
 		Response responseElement = new Response();
-		OIDCollection OIDCollectionElement = new OIDCollection();
-		CACollection CACollectionElement = new CACollection();
+		OIDCollection oidCollectionElement = new OIDCollection();
+		CACollection caCollectionElement = new CACollection();
 
 		PolicyCollection policyCollectionElement = new PolicyCollection();
 
@@ -92,14 +92,14 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		responseElement.setPolicies(policyCollectionElement);
 		response.value = responseElement;
 
-		OID OIDElement = new OID();
-		OIDElement.setValue(Constants.CertificateEnrolmentPolicy.OID);
-		OIDElement.setGroup(Constants.CertificateEnrolmentPolicy.OID_GROUP);
-		OIDElement.setOIDReferenceID(Constants.CertificateEnrolmentPolicy.OID_REFERENCE_ID);
-		OIDElement.setDefaultName(Constants.CertificateEnrolmentPolicy.OID_DEFAULT_NAME);
+		OID oidElement = new OID();
+		oidElement.setValue(Constants.CertificateEnrolmentPolicy.OID);
+		oidElement.setGroup(Constants.CertificateEnrolmentPolicy.OID_GROUP);
+		oidElement.setOIDReferenceID(Constants.CertificateEnrolmentPolicy.OID_REFERENCE_ID);
+		oidElement.setDefaultName(Constants.CertificateEnrolmentPolicy.OID_DEFAULT_NAME);
 
-		OIDCollectionElement.getOID().add(OIDElement);
-		CACollection.value = CACollectionElement;
-		OIDCollection.value = OIDCollectionElement;
+		oidCollectionElement.getOID().add(oidElement);
+		caCollection.value = caCollectionElement;
+		oidCollection.value = oidCollectionElement;
 	}
 }

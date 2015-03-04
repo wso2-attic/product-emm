@@ -45,10 +45,10 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
  */
 public class SyncmlServiceImpl implements SyncmlService {
 
-	private static final String MESSAGE_ID_ONE_TEMP = "1";
-	private static final String MESSAGE_ID_TWO_TEMP = "2";
-	private static final int FIRST_ITEM = 0;
-	private static final int SECOND_ITEM = 1;
+	private static final String SYNCML_FIRST_MESSAGE = "1";
+	private static final String SYNCML_SECOND_MESSAGE = "2";
+	private static final int SYNCML_MESSAGE_POSITION = 0;
+	private static final int SYNCML_ITEM_DATA_POSITION = 1;
 	private static final String OS_VERSION = "osVersion";
 	private static final String IMSI = "imsi";
 	private static final String IMEI = "imei";
@@ -82,19 +82,19 @@ public class SyncmlServiceImpl implements SyncmlService {
 	public Response getInitialResponse(Document request) throws DeviceManagementException,
 	                                   DeviceManagementServiceException, FileOperationException {
 
-		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(FIRST_ITEM).
+		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
 				          getFirstChild();
-		Node bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(FIRST_ITEM).
-				        getChildNodes().item(SECOND_ITEM);
+		Node bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
+				        getChildNodes().item(SYNCML_ITEM_DATA_POSITION);
 		NodeList nodeListHeader = headerNode.getChildNodes();
 		NodeList nodeListBody = bodyNode.getChildNodes();
 
 		String targetURI = null;
 		String sourceURI = null;
 		String msgID = null;
-		String OSVersion;
-		String IMSI;
-		String IMEI;
+		String osVersion;
+		String imsi;
+		String imei;
 		String devID;
 		String devMan;
 		String devMod;
@@ -119,12 +119,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 						targetURI = node.getFirstChild().getTextContent().trim();
 					} else if (Constants.SyncML.SYNCML_SOURCE.equals(nodeName)) {
 						sourceURI = node.getFirstChild().getTextContent().trim();
-					} else if (Constants.SyncML.SYNCML_CRED.equals(nodeName)) {
-						if (log.isDebugEnabled()) {
-							log.debug("Credentials: " + node.getChildNodes().item(SECOND_ITEM).
-									getTextContent().trim());
-						}
-						//Credentials can be used to verify device to server SyncML messages.
 					}
 				}
 			}
@@ -141,31 +135,31 @@ public class SyncmlServiceImpl implements SyncmlService {
 				    (Constants.SyncML.SYNCML_RESULTS.equals(nodeName))) {
 
 					NodeList childNodes = node.getChildNodes();
-					OSVersion = childNodes.item(DevicePropertyIndex.OS_VERSION.getValue()).
-							getChildNodes().item(SECOND_ITEM).getTextContent();
-					IMSI = childNodes.item(DevicePropertyIndex.IMSI.getValue()).
-							getChildNodes().item(SECOND_ITEM).getTextContent();
-					IMEI = childNodes.item(DevicePropertyIndex.IMEI.getValue()).
-							getChildNodes().item(SECOND_ITEM).getTextContent();
+					osVersion = childNodes.item(DevicePropertyIndex.OS_VERSION.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					imsi = childNodes.item(DevicePropertyIndex.IMSI.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					imei = childNodes.item(DevicePropertyIndex.IMEI.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
 					devID = childNodes.item(DevicePropertyIndex.DEVICE_ID.getValue()).
-							getChildNodes().item(SECOND_ITEM).getTextContent();
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
 					devMan = childNodes.item(DevicePropertyIndex.DEVICE_MANUFACTURER.getValue()).
-							getChildNodes().item(SECOND_ITEM).getTextContent();
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
 					devMod = childNodes.item(DevicePropertyIndex.DEVICE_MODEL.getValue()).
-							getChildNodes().item(SECOND_ITEM).getTextContent();
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
 					devLang = childNodes.item(DevicePropertyIndex.DEVICE_LANGUAGE.getValue()).
-							getChildNodes().item(SECOND_ITEM).getTextContent();
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
 
 					if (log.isDebugEnabled()) {
 						log.debug(
-								"OS Version:" + OSVersion + ", IMSI: " + IMSI + ", IMEI: " +
-								IMEI + ", DevID: " + devID + ", DevMan: " + devMan +
+								"OS Version:" + osVersion + ", IMSI: " + imsi + ", IMEI: " +
+								imei + ", DevID: " + devID + ", DevMan: " + devMan +
 								", DevMod: " + devMod + ", DevLang: " + devLang);
 					}
 
 					Device generatedDevice =
 						generateDevice(DeviceManagementConstants.MobileDeviceTypes.
-						MOBILE_DEVICE_TYPE_WINDOWS, devID, OSVersion, IMSI, IMEI, devMan, devMod);
+						MOBILE_DEVICE_TYPE_WINDOWS, devID, osVersion, imsi, imei, devMan, devMod);
 					try {
 						SyncmlUtils.getDeviceManagementService()
 						                     .enrollDevice(generatedDevice);
@@ -189,29 +183,29 @@ public class SyncmlServiceImpl implements SyncmlService {
 	 * This method is used to generate and return Device object from the received information at
 	 * the Syncml step.
 	 * @param deviceID     - Unique device ID received from the Device
-	 * @param OSVersion    - Device OS version
-	 * @param IMSI         - Device IMSI
-	 * @param IMEI         - Device IMEI
+	 * @param osVersion    - Device OS version
+	 * @param imsi         - Device IMSI
+	 * @param imei         - Device IMEI
 	 * @param manufacturer - Device Manufacturer name
 	 * @param model        - Device Model
 	 * @return - Device Object
 	 */
-	private Device generateDevice(String type, String deviceID, String OSVersion, String IMSI,
-	                                    String IMEI, String manufacturer, String model) {
+	private Device generateDevice(String type, String deviceID, String osVersion, String imsi,
+	                                    String imei, String manufacturer, String model) {
 
 		Device generatedDevice = new Device();
 
 		Device.Property OSVersionProperty = new Device.Property();
 		OSVersionProperty.setName(OS_VERSION);
-		OSVersionProperty.setValue(OSVersion);
+		OSVersionProperty.setValue(osVersion);
 
 		Device.Property IMSEIProperty = new Device.Property();
 		IMSEIProperty.setName(SyncmlServiceImpl.IMSI);
-		IMSEIProperty.setValue(IMSI);
+		IMSEIProperty.setValue(imsi);
 
 		Device.Property IMEIProperty = new Device.Property();
 		IMEIProperty.setName(SyncmlServiceImpl.IMEI);
-		IMEIProperty.setValue(IMEI);
+		IMEIProperty.setValue(imei);
 
 		Device.Property DevManProperty = new Device.Property();
 		DevManProperty.setName(VENDOR);
@@ -250,8 +244,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         String responseFilePath;
 		File responseFile;
 		try {
-			//Change this when proceeding with operations..
-			if (MESSAGE_ID_ONE_TEMP.equals(msgID)) {
+			if (SYNCML_FIRST_MESSAGE.equals(msgID)) {
 				responseFile = new File(getClass().getClassLoader().getResource(Constants.SyncML.
 						                          SYNCML_RESPONSE).getFile());
 				responseFilePath = responseFile.getPath();
@@ -261,7 +254,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 					response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
 				}
 			}
-			else if(MESSAGE_ID_TWO_TEMP.equals(msgID)){
+			else if(SYNCML_SECOND_MESSAGE.equals(msgID)){
 				responseFile = new File(getClass().getClassLoader().getResource(Constants.SyncML.
 						                          SYNCML_SECOND_RESPONSE).getFile());
 				responseFilePath = responseFile.getPath();

@@ -76,14 +76,14 @@ public class CertificateSigningService {
 	 * store.
 	 * @param jcaRequest        - CSR from the device
 	 * @param privateKey        - Private key of CA certificate in MDM server
-	 * @param CACert            - CA certificate in MDM server
+	 * @param caCert            - CA certificate in MDM server
 	 * @param certParameterList - Parameter list for Signed certificate generation
 	 * @return - Signed certificate for CSR from device
 	 * @throws CertificateGenerationException
 	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException
 	 */
 	public static X509Certificate signCSR(JcaPKCS10CertificationRequest jcaRequest,
-	                                      PrivateKey privateKey, X509Certificate CACert,
+	                                      PrivateKey privateKey, X509Certificate caCert,
 	                                      List certParameterList) throws
 	                                      CertificateGenerationException, WAPProvisioningException {
 
@@ -105,7 +105,7 @@ public class CertificateSigningService {
 			Date notAfterDate = new Date(System.currentTimeMillis() +
 			                             (MILLI_SECONDS * notAfterDays));
 			certificateBuilder =
-				  new JcaX509v3CertificateBuilder(CACert, serialNumber, notBeforeDate, notAfterDate,
+				  new JcaX509v3CertificateBuilder(caCert, serialNumber, notBeforeDate, notAfterDate,
 				                                  new X500Principal(commonName),
 				                                  jcaRequest.getPublicKey());
 
