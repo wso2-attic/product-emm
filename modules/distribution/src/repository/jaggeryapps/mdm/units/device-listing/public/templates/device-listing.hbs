@@ -1,0 +1,17 @@
+{{#each devices}}
+    <div class="ctrl-wr-asset">
+        <div class="itm-select"><input type="checkbox"/></div>
+        <div class="itm-ast">
+            <div class="ast-img"><img src="{{../imageLocation}}{{os}}.png"/></div>
+            <div class="ast-desc">
+                <h3 class="ast-name">{{name}}</h3>
+                <span class="ast-auth">{{owner}}</span>
+                <span class="ast-ver">{{version}}</span>
+                <span class="ast-published">{{vendor}} {{model}}</span>
+            </div>
+            <br class="c-both"/>
+        </div>
+        <br class="c-both"/>
+    </div>
+{{/each}}
+<br class="c-both"/>

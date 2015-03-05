@@ -17,6 +17,11 @@ var getScope = function (unit,configs) {
         //Check if the unit author has specified an onRequest
         //callback
         if(script.hasOwnProperty('onRequest')){
+            script.app = {
+                url: '/' + fuseState.appName,
+                publicURL: '/' + fuseState.appName + '/public/' + unit,
+                "class": unit + '-unit'
+            };
             onRequestCb = script.onRequest;
             cbResult = onRequestCb(templateConfigs);
             log.info("passing configs to unit "+unit+" configs: "+stringify(templateConfigs));
@@ -165,3 +170,12 @@ Handlebars.compileFile = function (file) {
     Handlebars.cache[f.getPath()] = compiled;
     return compiled;
 };
+Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
+    if (arguments.length < 3)
+        throw new Error("Handlebars Helper equal needs 2 parameters");
+    if( lvalue!=rvalue ) {
+        return options.inverse(this);
+    } else {
+        return options.fn(this);
+    }
+});
