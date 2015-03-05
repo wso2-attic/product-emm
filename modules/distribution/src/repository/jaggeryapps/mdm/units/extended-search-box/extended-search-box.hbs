@@ -1,37 +1,72 @@
 {{#zone "main"}}
-    <div class="row">
+    <div class="row wr-operations-board">
         <div class="col-lg-12 wr-secondary-bar">
             <div class="col-lg-8 col-md-9 col-sm-6 wr-filters">
+
+
+                <!-- asset filter -->
                 <div class="wr-asset-type-switcher">
-                    <a href="#" class="ctrl-asset-type-switcher" data-placement="bottom" data-trigger="focus">
-                    <span class="btn-asset"></span></a>
+
+                    <a href="javascript:void(0);" class="ctrl-asset-type-switcher"><span class="btn-asset"></span></a>
+
+                    <div class="popover menu fade bottom in">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <div class="title">Select type of your device</div>
+                            <div id="asset-selected"></div>
+                            <div id="asset-select">
+                                <ul>
+                                    <li>Mobile</li>
+                                    <ul>
+                                        <li>Android</li>
+                                        <ul>
+                                            <li>ICS</li>
+                                            <ul>
+                                                <li>3.0</li>
+                                                <li>3.0.1</li>
+                                            </ul>
+                                            <li>JB</li>
+                                            <li>KK</li>
+                                            <ul>
+                                                <li>4.0</li>
+                                                <li>4.4</li>
+                                            </ul>
+                                        </ul>
+                                        <li>iOS</li>
+                                        <li>Windows</li>
+                                    </ul>
+                                    <li>Computer</li>
+                                    <ul>
+                                        <li>Desktop</li>
+                                        <li>Laptop</li>
+                                    </ul>
+                                    <li>IoT</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="wr-search">
                     <div>
-                        <div></div>
+                        <div class="wr-search-tags"></div>
+                        <input type="text" class="" placeholder="Search devices ..." />
+                        <a href="#" class="btn-search"><span class="glyphicon glyphicon-search"></span></a>
                     </div>
-                    <div>
-                        <input type="text" class="" placeholder="Search devices ..." /><a href="#" class="btn-search"><span class="glyphicon glyphicon-search"></span></a>
-                    </div>
+                </div>
+                <!-- /asset filter -->
+
+
+            </div>
+            <div class="col-lg-4 col-md-3 col-sm-6 wr-filters wr-filters-right">
+
+                <div class="wr-filter-sort pull-right">
+                    <a href="#" class="btn-select-devices">Select All Devices</a>
+                    <a href="#" class="ico-filter ctrl-filter-grid"><img src="{{self.publicURL}}/img/icons/ico-grid.png" /></a>
+                    <a href="#" class="ico-filter ctrl-filter-list"><img src="{{self.publicURL}}/img/icons/ico-list.png" /></a>
+                    <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><img src="{{self.publicURL}}/img/icons/ico-sort.png" /></a></span>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-3 col-sm-6 wr-filters">
-                <div class="wr-filter-sort pull-right">
-                        <a href="#" class="ico-filter ctrl-filter-grid"><img src="{{self.publicURL}}/img/icons/ico-grid.png" /></a>
-                        <a href="#" class="ico-filter ctrl-filter-list"><img src="{{self.publicURL}}/img/icons/ico-list.png" /></a>
-                        <a href="#" class="ico-filter ctrl-filter-sort dropdown-toggle" data-toggle="dropdown"><img src="{{self.publicURL}}/img/icons/ico-sort.png" /></a>
-                        <div class="dropdown-menu">
-                            <div class="cu-arrow"></div>
-                            <div class="dropdown-menu-content">
-                                <a class="filter-item">Name</a>
-                                <a class="filter-item">Version</a>
-                                <a class="filter-item">Publisher</a>
-                                <a class="filter-item">Date/Time Created</a>
-                            </div>
-                        </div>
-                </div>
-            </div>  
         </div>
     </div>
 {{/zone}}

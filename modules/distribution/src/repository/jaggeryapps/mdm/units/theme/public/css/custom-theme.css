@@ -451,7 +451,7 @@ a.ctrl-filter-category:hover {
 	left: 0;
 	z-index: 1060;
 	display: none;
-	max-width: 200px;
+	width: 200px;
 	padding: 1px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
@@ -468,9 +468,7 @@ a.ctrl-filter-category:hover {
 	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,.2);
 	box-shadow: 0 0px 0px rgba(0,0,0,.2);
 	padding-bottom:8px;
-
-	border:1px solid #ff0000;
-	margin-right: -200px !important;
+	margin-right: -400px !important;
 }
 
 .wr-filter-type-switcher .popover.bottom>.arrow {
@@ -512,5 +510,5 @@ a.ctrl-filter-category:hover {
 }
 
 .wr-filter-type-switcher .popover {
-	left:10px !important;
+	left: -148px !important;
 }
