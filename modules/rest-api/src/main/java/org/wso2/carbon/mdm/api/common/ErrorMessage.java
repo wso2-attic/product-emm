@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.cdm.api.common;
+package org.wso2.carbon.mdm.api.common;
 
 
 public class ErrorMessage {

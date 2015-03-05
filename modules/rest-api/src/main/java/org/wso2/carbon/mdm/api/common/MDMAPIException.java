@@ -16,12 +16,12 @@
  * under the License.
  */
 
-package org.wso2.carbon.cdm.api.common;
+package org.wso2.carbon.mdm.api.common;
 
 /**
  * Custom exception class for handling CDM API related exceptions.
  */
-public class CDMAPIException extends Exception {
+public class MDMAPIException extends Exception {
 
 	private static final long serialVersionUID = 7950151650447893900L;
 	private String errorMessage;
@@ -34,26 +34,26 @@ public class CDMAPIException extends Exception {
 		this.errorMessage = errorMessage;
 	}
 
-	public CDMAPIException(String msg, Exception nestedEx) {
+	public MDMAPIException(String msg, Exception nestedEx) {
 		super(msg, nestedEx);
 		setErrorMessage(msg);
 	}
 
-	public CDMAPIException(String message, Throwable cause) {
+	public MDMAPIException(String message, Throwable cause) {
 		super(message, cause);
 		setErrorMessage(message);
 	}
 
-	public CDMAPIException(String msg) {
+	public MDMAPIException(String msg) {
 		super(msg);
 		setErrorMessage(msg);
 	}
 
-	public CDMAPIException() {
+	public MDMAPIException() {
 		super();
 	}
 
-	public CDMAPIException(Throwable cause) {
+	public MDMAPIException(Throwable cause) {
 		super(cause);
 	}
 }

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.cdm.api.context;
+package org.wso2.carbon.mdm.api.context;
 
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.Operation;

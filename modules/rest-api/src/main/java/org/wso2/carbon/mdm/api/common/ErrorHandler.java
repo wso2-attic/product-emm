@@ -15,34 +15,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.cdm.api.util;
+package org.wso2.carbon.mdm.api.common;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 
-@XmlRootElement
-public class Message {
+@Produces({ "application/json", "application/xml" })
+public class ErrorHandler implements ExceptionMapper<MDMAPIException> {
 
-    private String responseCode;
-    private String responseMessage;
-
-    @XmlElement
-    public String getResponseMessage() {
-        return responseMessage;
+    public Response toResponse(MDMAPIException exception) {
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setErrorMessage(exception.getErrorMessage());
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
     }
-
-    public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
-    }
-
-
-    @XmlElement
-    public String getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(String responseCode) {
-        this.responseCode = responseCode;
-    }
-
 }

@@ -16,15 +16,15 @@
  * under the License.
  */
 
-package org.wso2.carbon.cdm.api;
+package org.wso2.carbon.mdm.api;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.cdm.api.common.CDMAPIException;
-import org.wso2.carbon.cdm.api.context.DeviceOperationContext;
-import org.wso2.carbon.cdm.api.util.CDMAPIUtils;
-import org.wso2.carbon.cdm.api.util.Message;
+import org.wso2.carbon.mdm.api.common.MDMAPIException;
+import org.wso2.carbon.mdm.api.context.DeviceOperationContext;
+import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.mdm.api.util.Message;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 
@@ -46,38 +46,38 @@ public class Operation {
 
 	@GET
 	public List<org.wso2.carbon.device.mgt.common.Operation> getAllOperations()
-			throws CDMAPIException {
+			throws MDMAPIException {
 		List<org.wso2.carbon.device.mgt.common.Operation> operations;
 		DeviceManagementService dmService;
 		OperationManager operationManager;
 		try {
-			dmService = CDMAPIUtils.getDeviceManagementService();
+			dmService = MDMAPIUtils.getDeviceManagementService();
 			operationManager = dmService.getOperationManager(
 					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 			operations = operationManager.getOperations(null);
 		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
 			String errorMsg = "Device management service error";
 			log.error(errorMsg, deviceServiceMgtEx);
-			throw new CDMAPIException(errorMsg, deviceServiceMgtEx);
+			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
 		} catch (DeviceManagementException deviceMgtEx) {
 			String errorMsg = "Error occurred while fetching the operation manager.";
 			log.error(errorMsg, deviceMgtEx);
-			throw new CDMAPIException(errorMsg, deviceMgtEx);
+			throw new MDMAPIException(errorMsg, deviceMgtEx);
 		} catch (OperationManagementException ex) {
 			String errorMsg = "Error occurred while fetching the operations for the device.";
 			log.error(errorMsg, ex);
-			throw new CDMAPIException(errorMsg, ex);
+			throw new MDMAPIException(errorMsg, ex);
 		}
 		return operations;
 	}
 
 	@POST
-	public Message addOperation(DeviceOperationContext operationContext) throws CDMAPIException {
+	public Message addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
 		DeviceManagementService dmService;
 		OperationManager operationManager;
 		Message responseMsg = new Message();
 		try {
-			dmService = CDMAPIUtils.getDeviceManagementService();
+			dmService = MDMAPIUtils.getDeviceManagementService();
 			operationManager = dmService.getOperationManager(
 					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 			boolean status = operationManager.addOperation(operationContext.getOperation(),
@@ -93,15 +93,15 @@ public class Operation {
 		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
 			String errorMsg = "Device management service error";
 			log.error(errorMsg, deviceServiceMgtEx);
-			throw new CDMAPIException(errorMsg, deviceServiceMgtEx);
+			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
 		} catch (DeviceManagementException deviceMgtEx) {
 			String errorMsg = "Error occurred while adding the operation";
 			log.error(errorMsg, deviceMgtEx);
-			throw new CDMAPIException(errorMsg, deviceMgtEx);
+			throw new MDMAPIException(errorMsg, deviceMgtEx);
 		} catch (OperationManagementException ex) {
 			String errorMsg = "Error occurred while saving the operation";
 			log.error(errorMsg, ex);
-			throw new CDMAPIException(errorMsg, ex);
+			throw new MDMAPIException(errorMsg, ex);
 		}
 	}
 }

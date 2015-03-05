@@ -16,10 +16,11 @@
  * under the License.
  */
 
-package org.wso2.carbon.cdm.api.util;
+package org.wso2.carbon.mdm.api.util;
 
 /**
  * Constants used by CDM REST API implementation.
  */
-public class CDMAPIConstants {
+public class MDMAPIConstants {
+	public static final String MOBILE_DEVICE_TYPE = "android";
 }

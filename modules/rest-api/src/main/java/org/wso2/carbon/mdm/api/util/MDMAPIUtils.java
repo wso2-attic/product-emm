@@ -15,23 +15,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.cdm.api.util;
+package org.wso2.carbon.mdm.api.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
- * CDMAPIUtils class provides utility function used by CDM REST-API classes.
+ * MDMAPIUtils class provides utility function used by CDM REST-API classes.
  */
-public class CDMAPIUtils {
+public class MDMAPIUtils {
 
-    private static Log log = LogFactory.getLog(CDMAPIUtils.class);
+    private static Log log = LogFactory.getLog(MDMAPIUtils.class);
 
 	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException{
         // until complete login this is use to load super tenant context
@@ -50,4 +49,12 @@ public class CDMAPIUtils {
         PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
 	}
+
+	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId, String deviceType) {
+		DeviceIdentifier identifier = new DeviceIdentifier();
+		identifier.setId(deviceId);
+		identifier.setType(deviceType);
+		return identifier;
+	}
+
 }
