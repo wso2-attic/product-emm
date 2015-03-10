@@ -75,7 +75,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 	/**
 	 * This method resolves the Syncml messages received through device and send the
 	 * response accordingly.
-	 * @param request - Syncml requesy comes through the device
+	 * @param request - Syncml request comes through the device
 	 * @return - Syncml response generated for the request
 	 */
 	@Override
@@ -112,7 +112,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 					if (log.isDebugEnabled()) {
 						log.debug("Request SyncML message ID: " + msgID);
 					}
-					System.out.println("MSG ID : " + msgID);
 				}
 				if (Constants.SyncML.SYNCML_MESSAGE_ONE.equals(msgID)) {
 					if (Constants.SyncML.SYNCML_TARGET.equals(nodeName)) {
@@ -188,7 +187,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 	 * @param imei         - Device IMEI
 	 * @param manufacturer - Device Manufacturer name
 	 * @param model        - Device Model
-	 * @return - Device Object
+	 * @return - Generated device object
 	 */
 	private Device generateDevice(String type, String deviceID, String osVersion, String imsi,
 	                                    String imei, String manufacturer, String model) {
@@ -230,7 +229,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 	}
 
 	/**
-	 * Method for preparing the SyncML response.
+	 * This method prepares the SyncML response.
 	 * @param msgID - Incoming message ID
 	 * @param targetURI - Target URI in SyncML message
 	 * @param sourceURI - Sourse URI in SyncML message
