@@ -46,7 +46,8 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         PROPERTY_SIGNED_CERT_NOT_BEFORE("SignedCertNotBefore"),
         PROPERTY_SIGNED_CERT_NOT_AFTER("SignedCertNotAfter"),
         PROPERTY_PASSWORD("Password"),
-        PROPERTY_PRIVATE_KEY_PASSWORD("PrivateKeyPassword");
+        PROPERTY_PRIVATE_KEY_PASSWORD("PrivateKeyPassword"),
+        AUTH_POLICY("AuthPolicy");
 
         private final String propertyName;
         private PropertyName(final String propertyName) {
@@ -88,6 +89,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         String password = null;
         String privateKeyPassword = null;
         String signedCertCommonName = null;
+        String authPolicy=null;
         int signedCertNotBeforeDate = INITIAL_VALUE;
         int signedCertNotAfterDate = INITIAL_VALUE;
 
@@ -102,6 +104,8 @@ public class ConfigInitializerContextListener implements ServletContextListener 
             signedCertCommonName =
                     document.getElementsByTagName(PropertyName.PROPERTY_SIGNED_CERT_CN.getValue()).item(0).
                     getTextContent();
+            authPolicy=document.getElementsByTagName(PropertyName.AUTH_POLICY.getValue()).item(0).
+                    getTextContent();
             signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
                     PropertyName.PROPERTY_SIGNED_CERT_NOT_BEFORE.getValue()).item(0).getTextContent());
             signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
@@ -114,6 +118,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         properties.setCommonName(signedCertCommonName);
         properties.setNotBeforeDays(signedCertNotBeforeDate);
         properties.setNotAfterDays(signedCertNotAfterDate);
+        properties.setAuthPolicy(authPolicy);
         servletContext.setAttribute(Constants.WINDOWS_PLUGIN_PROPERTIES, properties);
 
         File wapProvisioningFile = new File(getClass().getClassLoader().getResource(

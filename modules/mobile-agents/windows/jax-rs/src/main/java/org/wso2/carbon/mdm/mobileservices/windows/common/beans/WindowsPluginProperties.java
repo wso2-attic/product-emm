@@ -26,6 +26,7 @@ public class WindowsPluginProperties {
 	private String keyStorePassword;
 	private String privateKeyPassword;
 	private String commonName;
+	private String authPolicy;
 	private int notBeforeDays;
 	private int notAfterDays;
 
@@ -67,6 +68,14 @@ public class WindowsPluginProperties {
 
 	public void setNotAfterDays(int notAfterDays) {
 		this.notAfterDays = notAfterDays;
+	}
+
+	public String getAuthPolicy() {
+		return authPolicy;
+	}
+
+	public void setAuthPolicy(String authPolicy) {
+		this.authPolicy = authPolicy;
 	}
 
 }

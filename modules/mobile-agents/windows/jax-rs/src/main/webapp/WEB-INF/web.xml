@@ -45,7 +45,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>JAXServlet-windows</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/services/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>60</session-timeout>

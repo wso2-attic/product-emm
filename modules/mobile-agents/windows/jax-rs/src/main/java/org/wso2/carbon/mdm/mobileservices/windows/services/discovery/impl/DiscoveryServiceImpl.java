@@ -21,14 +21,19 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.DiscoveryService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryResponse;
 
+import javax.annotation.Resource;
 import javax.jws.WebService;
+import javax.servlet.ServletContext;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.Holder;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
 
@@ -43,6 +48,8 @@ import javax.xml.ws.soap.SOAPBinding;
 public class DiscoveryServiceImpl implements DiscoveryService {
 
 	private static Log log = LogFactory.getLog(DiscoveryServiceImpl.class);
+	@Resource
+	private WebServiceContext context;
 
 	/**
 	 * This method returns the OnPremise AuthPolicy and next two endpoint the mobile device should
@@ -54,12 +61,27 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	@Override
 	public void discover(DiscoveryRequest discoveryRequest, Holder<DiscoveryResponse> response) {
 
+		ServletContext ctx = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
+		WindowsPluginProperties windowsPluginProperties = (WindowsPluginProperties)ctx.getAttribute(
+				Constants.WINDOWS_PLUGIN_PROPERTIES);
+
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
-		discoveryResponse.setAuthPolicy(Constants.Discovery.AUTH_POLICY);
-		discoveryResponse.setEnrollmentPolicyServiceUrl(
-				Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
-		discoveryResponse.setEnrollmentServiceUrl(
-				Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
+		if("Federated".equals(windowsPluginProperties.getAuthPolicy())) {
+			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
+			discoveryResponse.setEnrollmentPolicyServiceUrl(
+					Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
+			discoveryResponse.setEnrollmentServiceUrl(
+					Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
+			discoveryResponse.setAuthenticationServiceUrl("https://enterpriseenrollment.wso2.com/wab");
+		}
+		else{
+			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
+			discoveryResponse.setEnrollmentPolicyServiceUrl("https://EnterpriseEnrollment.wso2" +
+					".com/ENROLLMENTSERVER/ONPREMISE/PolicyEnrollmentWebservice.svc");
+			discoveryResponse.setEnrollmentServiceUrl("https://EnterpriseEnrollment.wso2" +
+					".com/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc");
+			discoveryResponse.setAuthenticationServiceUrl(null);
+		}
 		response.value = discoveryResponse;
 
 		if (log.isDebugEnabled()) {

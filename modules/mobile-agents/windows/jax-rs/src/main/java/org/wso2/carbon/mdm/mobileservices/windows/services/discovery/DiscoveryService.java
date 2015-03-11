@@ -42,11 +42,9 @@ import javax.xml.ws.soap.SOAPBinding;
 public interface DiscoveryService {
 
 	@POST
-	@RequestWrapper(localName = "Discover", targetNamespace = Constants.
-			                                                     DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@RequestWrapper(localName = "Discover", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 	@WebMethod(operationName = "Discover")
-	@ResponseWrapper(localName = "DiscoverResponse", targetNamespace = Constants.
-			                                                     DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@ResponseWrapper(localName = "DiscoverResponse", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 	void discover(
 	@WebParam(name = "request", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 	DiscoveryRequest request,
