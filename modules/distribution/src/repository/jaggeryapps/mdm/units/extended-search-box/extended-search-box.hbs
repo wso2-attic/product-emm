@@ -61,7 +61,7 @@
             <div class="col-lg-4 col-md-3 col-sm-6 wr-filters wr-filters-right">
 
                 <div class="wr-filter-sort pull-right">
-                    <a href="#" class="btn-select-devices">Select All Devices</a>
+                    <a href="#" data-select="false" class="btn-select-devices">Select All Devices</a>
                     <a href="#" class="ico-filter ctrl-filter-grid"><img src="{{self.publicURL}}/img/icons/ico-grid.png" /></a>
                     <a href="#" class="ico-filter ctrl-filter-list"><img src="{{self.publicURL}}/img/icons/ico-list.png" /></a>
                     <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><img src="{{self.publicURL}}/img/icons/ico-sort.png" /></a></span>
@@ -69,4 +69,7 @@
             </div>
         </div>
     </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/extended-search-box.js"></script>
 {{/zone}}
