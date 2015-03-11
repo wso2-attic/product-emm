@@ -2,7 +2,7 @@ var log = new Log('fuse.handlebars');
 //TODO: create a different set of helpers for init parsing
 
 var Handlebars = require('handlebars-v2.0.0.js').Handlebars;
-
+var USER_SESSION_KEY = "USER";
 var getScope = function (unit,configs) {
     var jsFile = fuse.getFile(unit, '', '.js');
     var templateConfigs = configs || {};
@@ -118,6 +118,14 @@ Handlebars.registerHelper('layout', function (layoutName) {
         return 'layout_' + layoutName;
     } else {
         return '';
+    }
+});
+
+Handlebars.registerHelper('authorized', function () {
+    var loggedUser = session.get(USER_SESSION_KEY);
+    if(loggedUser == null){
+        response.sendRedirect("/"+ fuseState.appName + "/login");
+        exit();
     }
 });
 
