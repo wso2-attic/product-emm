@@ -48,7 +48,8 @@ var route;
             'htm': 'text/html',
             'woff': 'application/x-font-woff',
             "png": "image/png",
-            "css": "text/css"
+            "css": "text/css",
+            "hbs": "text/x-handlebars-template"
         };
         var mime;
         if (index >= 0) {

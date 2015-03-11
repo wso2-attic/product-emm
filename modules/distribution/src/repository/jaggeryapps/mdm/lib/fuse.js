@@ -226,20 +226,34 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
                 addPageUnitDefinitions(unitModels, pageFile.getPath())
             } else if (fileName.indexOf('.hbs', fileName.length - 4) !== -1) { // File name ends with '.hbs'
 
+                var isLeaf = true;
                 //path relative to app root
                 var relativePath = pageFile.getPath()
                     .substring(6 + pageFile.getPath().indexOf('/pages/'), pageFile.getPath().length - 4);
 
-                relativePath = relativePath.replace(/index$/, '');
-                log.info(relativePath);
+                if (relativePath.match(/\/index$/)) {
+                    relativePath = relativePath.replace(/\/index$/, '');
+                    var parentFile = new File(pageFile.getPath().substr(0, pageFile.getPath().lastIndexOf('/')));
+                    var hasSiblings = parentFile.listFiles().length != 1;
+                    if (hasSiblings) {
+                        isLeaf = false;
+                    }
+                }
 
                 //this will be used as a name for the virtual unit, useful for debugging purposes.
-                var unitName = relativePath.substr(1).replace(/\//, '-') + '-page';
+                var unitName = (relativePath == '' ? 'index' : relativePath.substr(1).replace(/\//, '-') ) + '-page';
+
+                var predicate = "urlMatch('" + relativePath + "')";
+                // leaf is page that can handle multiple URLs. in this case it should have a wildcard at end.
+                // but since our current matcher doesn't support {/wildcard*} patten, "OR" ( || ) is used
+                if (isLeaf) {
+                    predicate += " || urlMatch('" + relativePath + "/{+wildcard}')";
+                }
                 var unitModel = {
                     name: unitName,
 
                     path: pageFile.getPath(),
-                    definition: {predicate: "urlMatch('" + relativePath + "')"}
+                    definition: {predicate: predicate}
                 };
                 var hbsMetadata = getHbsMetadata(unitModel);
                 unitModel.zones = hbsMetadata.zones;

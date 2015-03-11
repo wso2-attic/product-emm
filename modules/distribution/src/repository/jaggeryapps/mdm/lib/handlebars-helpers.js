@@ -2,7 +2,7 @@ var log = new Log('fuse.handlebars');
 //TODO: create a different set of helpers for init parsing
 
 var Handlebars = require('handlebars-v2.0.0.js').Handlebars;
-
+var USER_SESSION_KEY = "USER";
 var getScope = function (unit,configs) {
     var jsFile = fuse.getFile(unit, '', '.js');
     var templateConfigs = configs || {};
@@ -17,6 +17,11 @@ var getScope = function (unit,configs) {
         //Check if the unit author has specified an onRequest
         //callback
         if(script.hasOwnProperty('onRequest')){
+            script.app = {
+                url: '/' + fuseState.appName,
+                publicURL: '/' + fuseState.appName + '/public/' + unit,
+                "class": unit + '-unit'
+            };
             onRequestCb = script.onRequest;
             cbResult = onRequestCb(templateConfigs);
             log.info("passing configs to unit "+unit+" configs: "+stringify(templateConfigs));
@@ -116,6 +121,14 @@ Handlebars.registerHelper('layout', function (layoutName) {
     }
 });
 
+Handlebars.registerHelper('authorized', function () {
+    var loggedUser = session.get(USER_SESSION_KEY);
+    if(loggedUser == null){
+        response.sendRedirect("/"+ fuseState.appName + "/login");
+        exit();
+    }
+});
+
 Handlebars.registerHelper('unit', function (unitName,options) {
     var unitDef = fuse.getUnitDefinition(unitName);
     var baseUnit = null;
@@ -165,3 +178,12 @@ Handlebars.compileFile = function (file) {
     Handlebars.cache[f.getPath()] = compiled;
     return compiled;
 };
+Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
+    if (arguments.length < 3)
+        throw new Error("Handlebars Helper equal needs 2 parameters");
+    if( lvalue!=rvalue ) {
+        return options.inverse(this);
+    } else {
+        return options.fn(this);
+    }
+});
