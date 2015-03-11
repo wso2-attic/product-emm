@@ -19,6 +19,8 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
 
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
@@ -26,12 +28,15 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SecurityHeaderHandler implements SOAPHandler<SOAPMessageContext> {
+public class SOAPSecurityHandler implements SOAPHandler<SOAPMessageContext> {
 
+    /**
+     * This method resolves the security header coming in the SOAP message.
+     * @return - Security Header
+     */
     @Override
     public Set<QName> getHeaders() {
-        QName securityHeader = new QName("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
-                "Security");
+        QName securityHeader = new QName(Constants.WS_SECURITY_TARGET_NAMESPACE, Constants.SECURITY);
         HashSet<QName> headers = new HashSet<QName>();
         headers.add(securityHeader);
         return headers;

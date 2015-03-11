@@ -52,7 +52,7 @@
         </jaxws:properties>
         <jaxws:handlers>
             <bean id="securityheader"
-                  class="org.wso2.carbon.mdm.mobileservices.windows.common.util.SecurityHeaderHandler"/>
+                  class="org.wso2.carbon.mdm.mobileservices.windows.common.util.SOAPSecurityHandler"/>
         </jaxws:handlers>
     </jaxws:endpoint>
 
@@ -118,7 +118,7 @@
     </jaxrs:server>
 
 
-    <bean id="fed_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.wabprovider.WABProviderImpl"/>
+    <bean id="fed_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.wab.WABServiceImpl"/>
     <bean id="DiscoveryService_rest_bean"
           class="org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl.DiscoveryServiceImpl"/>
     <bean id="wss4jInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">

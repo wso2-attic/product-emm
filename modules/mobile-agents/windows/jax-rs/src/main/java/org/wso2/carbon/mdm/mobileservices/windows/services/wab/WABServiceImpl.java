@@ -16,14 +16,20 @@
  *  under the License.
  */
 
-package org.wso2.carbon.mdm.mobileservices.windows.services.wabprovider;
+package org.wso2.carbon.mdm.mobileservices.windows.services.wab;
 
 
 import javax.ws.rs.core.Response;
 
-public class WABProviderImpl implements WABProvider {
+public class WABServiceImpl implements WABService {
 
-
+    /**
+     * This method returns HTML payload which includes binary security token that is used to authenticate the device
+     * at XCEP and WSTEP stages.
+     * @param appru - appid comes from the device
+     * @param hint - user name typed in the device
+     * @return - HTML payload that needs to be sent to the device
+     */
     @Override
     public Response federated(String appru, String hint) {
 

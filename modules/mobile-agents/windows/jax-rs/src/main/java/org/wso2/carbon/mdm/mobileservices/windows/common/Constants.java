@@ -64,12 +64,12 @@ public final class Constants {
 
 	//Message handler constants
 	public static final String CONTENT_LENGTH = "Content-Length";
+	public static final String SECURITY = "Security";
 
 	/**
 	 * Discovery service related other constants
 	 */
 	public final class Discovery {
-		public static final String AUTH_POLICY = "OnPremise";
 		public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL =
 				"https://EnterpriseEnrollment.wso2" +
 				".com/ENROLLMENTSERVER/PolicyEnrollmentWebservice" +
@@ -78,6 +78,15 @@ public final class Constants {
 				"https://EnterpriseEnrollment.wso2" +
 				".com/ENROLLMENTSERVER/DeviceEnrollmentWebservice" +
 				".svc";
+		public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY =
+				"https://EnterpriseEnrollment.wso2.com/" +
+				"ENROLLMENTSERVER/ONPREMISE/" +
+				"PolicyEnrollmentWebservice.svc";
+	    public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
+				"https://EnterpriseEnrollment.wso2.com/" +
+				"ENROLLMENTSERVER/ONPREMISE/" +
+				"DeviceEnrollmentWebservice.svc";
+		public static final String WAB_URL = "https://enterpriseenrollment.wso2.com/wab";
 	}
 
 	/**

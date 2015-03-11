@@ -93,9 +93,6 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         int signedCertNotBeforeDate = INITIAL_VALUE;
         int signedCertNotAfterDate = INITIAL_VALUE;
 
-        //TODO : Passwords which have been read here are for accessing keystore. Currently this
-        //keystore is kept within the windows plugin, but ideally this should be implemented
-        //in the MDM core layer
         if (document != null) {
             password = document.getElementsByTagName(PropertyName.PROPERTY_PASSWORD.getValue()).item(0).
                     getTextContent();

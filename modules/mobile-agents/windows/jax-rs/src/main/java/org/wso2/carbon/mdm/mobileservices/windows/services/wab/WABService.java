@@ -16,7 +16,7 @@
  *  under the License.
  */
 
-package org.wso2.carbon.mdm.mobileservices.windows.services.wabprovider;
+package org.wso2.carbon.mdm.mobileservices.windows.services.wab;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -26,10 +26,13 @@ import javax.ws.rs.core.Response;
 
 
 @Path("/fed")
-public interface WABProvider {
+public interface WABService {
+
+    String APPRU = "appru";
+    String LOGIN_HINT = "login_hint";
 
     @GET
     @Produces("text/html;charset=UTF-8")
     @Path("/request")
-    Response federated(@QueryParam("appru") String appru, @QueryParam("login_hint") String hint);
+    Response federated(@QueryParam(APPRU) String appru, @QueryParam(LOGIN_HINT) String hint);
 }

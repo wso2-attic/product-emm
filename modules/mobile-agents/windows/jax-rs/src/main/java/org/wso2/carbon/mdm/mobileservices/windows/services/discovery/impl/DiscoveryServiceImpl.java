@@ -47,6 +47,7 @@ import javax.xml.ws.soap.SOAPBinding;
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class DiscoveryServiceImpl implements DiscoveryService {
 
+	public static final String FEDERATED = "Federated";
 	private static Log log = LogFactory.getLog(DiscoveryServiceImpl.class);
 	@Resource
 	private WebServiceContext context;
@@ -66,20 +67,20 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 				Constants.WINDOWS_PLUGIN_PROPERTIES);
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
-		if("Federated".equals(windowsPluginProperties.getAuthPolicy())) {
+		if(FEDERATED.equals(windowsPluginProperties.getAuthPolicy())) {
 			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
 			discoveryResponse.setEnrollmentPolicyServiceUrl(
 					Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
 			discoveryResponse.setEnrollmentServiceUrl(
 					Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
-			discoveryResponse.setAuthenticationServiceUrl("https://enterpriseenrollment.wso2.com/wab");
+			discoveryResponse.setAuthenticationServiceUrl(Constants.Discovery.WAB_URL);
 		}
 		else{
 			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
-			discoveryResponse.setEnrollmentPolicyServiceUrl("https://EnterpriseEnrollment.wso2" +
-					".com/ENROLLMENTSERVER/ONPREMISE/PolicyEnrollmentWebservice.svc");
-			discoveryResponse.setEnrollmentServiceUrl("https://EnterpriseEnrollment.wso2" +
-					".com/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc");
+			discoveryResponse.setEnrollmentPolicyServiceUrl(
+					Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY);
+			discoveryResponse.setEnrollmentServiceUrl(
+					Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL);
 			discoveryResponse.setAuthenticationServiceUrl(null);
 		}
 		response.value = discoveryResponse;

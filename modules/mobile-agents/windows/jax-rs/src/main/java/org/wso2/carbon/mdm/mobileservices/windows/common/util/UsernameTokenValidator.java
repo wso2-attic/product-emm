@@ -50,8 +50,8 @@ public class UsernameTokenValidator implements Validator {
 	 * @throws WSSecurityException
 	 */
 	@Override
-	public Credential validate(Credential credential,
-	                           RequestData requestData) throws WSSecurityException {
+	public Credential validate(Credential credential, RequestData requestData) throws
+			                   WSSecurityException {
 
 		String domainUser = credential.getUsernametoken().getName();
 		String[] domainUserArray = domainUser.split(DELIMITER);
@@ -88,7 +88,7 @@ public class UsernameTokenValidator implements Validator {
 	 * @throws AuthenticationException
 	 */
 	public boolean authenticate(String username, String password, String tenantDomain) throws
-	                           AuthenticationException {
+			                    AuthenticationException {
 
 		try {
 			PrivilegedCarbonContext.startTenantFlow();

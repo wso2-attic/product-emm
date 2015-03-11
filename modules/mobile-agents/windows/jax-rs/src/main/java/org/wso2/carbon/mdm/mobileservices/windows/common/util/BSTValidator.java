@@ -36,15 +36,14 @@ public class BSTValidator implements Validator {
     private static Log log = LogFactory.getLog(BSTValidator.class);
 
     /**
-     * This method validates the username token in SOAP message coming from the device.
-     * @param credential  - Username token credentials coming from device
+     * This method validates the binary security token in SOAP message coming from the device.
+     * @param credential  - binary security token credential object
      * @param requestData - Request data associated with the request
      * @return - Credential object if authentication is success, or null if not success
      * @throws WSSecurityException
      */
     @Override
-    public Credential validate(Credential credential,
-                               RequestData requestData) throws WSSecurityException {
+    public Credential validate(Credential credential, RequestData requestData) throws WSSecurityException {
 
         BinarySecurity binarySecurityTokenObject = credential.getBinarySecurityToken();
         String binarySecurityToken = new String(binarySecurityTokenObject.getToken());
@@ -53,14 +52,14 @@ public class BSTValidator implements Validator {
             if (authenticate(binarySecurityToken)) {
                 returnCredentials = credential;
             } else {
-                String msg = "Authentication failure due to incorrect credentials.";
+                String msg = "Authentication failure due to invalid binary security token.";
                 log.error(msg);
                 throw new WindowsDeviceEnrolmentException(msg);
             }
             //Generic exception is caught here as there is no need of taking different actions for
             //different exceptions.
         } catch (Exception e) {
-            String msg = "Failure occurred in the credential validator.";
+            String msg = "Failure occurred in the BST validator.";
             log.error(msg, e);
             throw new WSSecurityException(msg, e);
         }
@@ -68,7 +67,7 @@ public class BSTValidator implements Validator {
     }
 
     /**
-     * This method authenticates the device checking the binary security token sent by the device.
+     * This method authenticates the user checking the binary security token in the user store.
      * @param binarySecurityToken - Binary security token received in the SOAP message header
      * @return - Authentication status
      * @throws AuthenticationException

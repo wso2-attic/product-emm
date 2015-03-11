@@ -54,10 +54,13 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	public static final int TIMESTAMP_BEGIN_INDEX = 0;
 	private static Log log = LogFactory.getLog(MessageHandler.class);
 
+	/**
+	 * This method resolves the security header coming in the SOAP message.
+	 * @return - Security Header
+	 */
 	@Override
 	public Set<QName> getHeaders() {
-		QName securityHeader = new QName("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
-				"Security");
+		QName securityHeader = new QName(Constants.WS_SECURITY_TARGET_NAMESPACE, Constants.SECURITY);
 		HashSet<QName> headers = new HashSet<QName>();
 		headers.add(securityHeader);
 		return headers;
