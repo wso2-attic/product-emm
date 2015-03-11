@@ -21,12 +21,12 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.context.DeviceOperationContext;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.Message;
-import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

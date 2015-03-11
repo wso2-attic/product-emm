@@ -33,6 +33,16 @@
         </jaxrs:providers>
     </jaxrs:server>
 
+    <jaxrs:server id="featureService" address="/features">
+        <jaxrs:serviceBeans>
+            <ref bean="featureServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
     <jaxrs:server id="deviceService" address="/devices">
         <jaxrs:serviceBeans>
             <ref bean="deviceServiceBean"/>
@@ -46,6 +56,7 @@
 
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.api.Operation"/>
     <bean id="deviceServiceBean" class="org.wso2.carbon.mdm.api.MobileDevice"/>
+    <bean id="featureServiceBean" class="org.wso2.carbon.mdm.api.Feature"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.api.common.ErrorHandler"/>
 </beans>
