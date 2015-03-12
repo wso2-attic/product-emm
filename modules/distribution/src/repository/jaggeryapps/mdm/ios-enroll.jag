@@ -1,0 +1,44 @@
+<%
+var username = session.get("username");
+var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
+var PostMethod = Packages.org.apache.commons.httpclient.methods.PostMethod;
+var Header = Packages.org.apache.commons.httpclient.Header;
+var StringRequestEntity = Packages.org.apache.commons.httpclient.methods.StringRequestEntity;
+if (username) {
+    var password = session.get("password");
+    var ownership = session.get("ownership");
+    var mdmProps = require('/config/mdm-props.js').config();
+    var iOSEnrollUrl = mdmProps.httpsURL + mdmProps.iOSConfigRoot + 'enroll';
+    var log = new Log();
+
+    var client = new HttpClient();
+    var method = new PostMethod(iOSEnrollUrl);
+    var header =  new Header();
+    header.setName("Content-Type");
+    header.setValue("application/json");
+    method.addRequestHeader(header);
+    var inputs = {"username": username, "password": password};
+
+    var re = new StringRequestEntity(String(stringify(inputs)));
+    method.setRequestEntity(re);
+    try {
+        client.executeMethod(method);
+        var status = method.getStatusCode();
+        log.info(String(inputs.toString()));
+        log.info(">>>>>>" + status);
+        if (status == 200) {
+            session.put("enrollUser", username);
+            var stream = method.getResponseBody();
+            response.contentType = "application/x-apple-aspen-config";
+            var byteArrayInputStream = new Packages.java.io.ByteArrayInputStream(stream);
+            print(new Stream(byteArrayInputStream));
+        } else if (status == 403) {
+            response.sendRedirect("/mdm/login-agent#auth-failed");
+        }
+    } catch (e) {
+        e.printStackTrace();
+    }
+} else {
+    response.sendError(400);
+}
+%>

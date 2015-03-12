@@ -51,10 +51,10 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="deviceMgtServiceBean" class="org.wso2.carbon.mdm.mobileservices.android.Device"/>
-    <bean id="enrollmentServiceBean" class="org.wso2.carbon.mdm.mobileservices.android.Enrollment"/>
-    <bean id="operationServiceBean" class="org.wso2.carbon.mdm.mobileservices.android.Operation"/>
+    <bean id="deviceMgtServiceBean" class="org.wso2.carbon.mdm.services.android.Device"/>
+    <bean id="enrollmentServiceBean" class="org.wso2.carbon.mdm.services.android.Enrollment"/>
+    <bean id="operationServiceBean" class="org.wso2.carbon.mdm.services.android.Operation"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-    <bean id="errorHandler" class="org.wso2.carbon.mdm.mobileservices.android.common.ErrorHandler"/>
+    <bean id="errorHandler" class="org.wso2.carbon.mdm.services.android.common.ErrorHandler"/>
 </beans>
 

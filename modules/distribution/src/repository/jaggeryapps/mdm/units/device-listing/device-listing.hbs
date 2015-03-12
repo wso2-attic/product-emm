@@ -1,0 +1,10 @@
+{{#zone "main"}}
+    <div id="device-list-box" class="ast-container">
+        <br class="c-both" />
+    </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/handlebars-v2.0.0.js"></script>
+    <script id="device-listing" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/device-listing.hbs" type="text/x-handlebars-template" ></script>
+    <script src="{{self.publicURL}}/js/device-listing.js"></script>
+{{/zone}}

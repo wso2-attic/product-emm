@@ -20,6 +20,7 @@ var uri = request.getRequestURI();
 var log = new Log("operation-api");
 var deviceModule = require("/modules/device.js");
 var uriMatcher = new URIMatcher(uri);
+// RestFul spec /api/device/{deviceId}/{action} |POST
 if (uriMatcher.match("{context}/api/operation/{type}/{deviceId}/{operation}")) {
     var elements = uriMatcher.elements();
     var deviceId = elements.deviceId;

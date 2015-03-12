@@ -489,6 +489,15 @@
             <fileMode>644</fileMode>
         </file>
 
+	<file>
+            <source>
+                src/repository/conf/license-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!--cdm plugin config file-->
         <file>
             <source>

@@ -16,8 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-// header includes
-  var ui_config = require("/config/ui.json");
+
+var uiConfig = require("/config/ui.json");
+var constants = require("/modules/constants.js");
 %>
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
@@ -28,14 +29,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><%= ui_config.console_name %></a>
+      <a class="navbar-brand" href="#"><%=uiConfig.console_name%></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/cdm/dashboard">Dashboard</a></li>
+        <li><a href="<%=constants.WEB_APP_CONTEXT%>dashboard">Dashboard</a></li>
         <li><a href="#">Configuration</a></li>
         <li><a href="#">Management</a></li>
-        <li><a href="/cdm/logout">Logout</a></li>
+        <li><a href="<%=constants.WEB_APP_CONTEXT%>logout">Logout</a></li>
       </ul>
     </div>
   </div>
