@@ -122,10 +122,15 @@ Handlebars.registerHelper('layout', function (layoutName) {
 });
 
 Handlebars.registerHelper('authorized', function () {
-    var loggedUser = session.get(USER_SESSION_KEY);
-    if(loggedUser == null){
-        response.sendRedirect("/"+ fuseState.appName + "/login");
-        exit();
+    var currentZone = fuseState.currentZone[fuseState.currentZone.length - 1];
+    if (currentZone == null) {
+        return '';
+    } else {
+        var loggedUser = session.get(USER_SESSION_KEY);
+        if(loggedUser == null){
+            response.sendRedirect("/"+ fuseState.appName + "/login");
+            exit();
+        }
     }
 });
 

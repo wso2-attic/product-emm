@@ -4,18 +4,38 @@ var log = new Log();
 var username = request.getParameter("username");
 var password = request.getParameter("password");
 var ownership = request.getParameter("ownership");
-var mdmProps = require('/config/mdm-props.js').config();
-var iOSAuthUrl = mdmProps.httpsURL + mdmProps.iOSConfigRoot + 'authenticate';
 
+var userAgent = request.getHeader("User-Agent");
+var UAParser = require("/modules/ua-parser.min.js").UAParser;
+var parser = new UAParser();
+parser.setUA(userAgent);
+parser.getResult();
+var os = parser.getOS();
+var platform = os.name;
+
+var mdmProps = require('/config/mdm-props.js').config();
+var authUrl;
+if(platform == "iOS"){
+    var authUrl = mdmProps.iOSConfigRoot + 'authenticate';
+} else if(platform == "Windows Phone"){
+    var authUrl = mdmProps.windowsConfigRoot;
+}
 var xhr = new XMLHttpRequest();
-xhr.open("POST", iOSAuthUrl);
+xhr.open("POST", authUrl);
 xhr.setRequestHeader("Content-Type", "application/json");
-xhr.send({"username": username, "password": password});
+if(platform == "iOS"){
+    xhr.send({"username": username, "password": password});
+}else if(platform == "Windows Phone"){
+    xhr.send({"credentials": {"username": username, "password": password}});
+}
 log.info(xhr.status);
 if (xhr.status == 200) {
     session.put("username", username);
     session.put("password", password);
     session.put("ownership", ownership);
+    if (platform == "Windows Phone"){
+        session.put("windows_binary_token", xhr.responseText);
+    }
     response.sendRedirect("/mdm/license-agent");
 } else if (xhr.status == 403) {
     response.sendRedirect("/mdm/login-agent#auth-failed");

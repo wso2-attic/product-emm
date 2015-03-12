@@ -13,7 +13,6 @@ function onRequest(context){
     var url  = "http://localhost:9763/wso2mdm-api/devices/"+type+"/"+deviceId;
     var response = get(url, "json");
     var status = response.xhr.status;
-    log.info("statusss>>>>>>>>>>>>>"+status);
     if (status == "200"){
         var device = JSON.parse(response.data);
         var arr = device.properties;
