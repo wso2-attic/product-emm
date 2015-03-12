@@ -20,7 +20,6 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
-
 import javax.xml.namespace.QName;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;

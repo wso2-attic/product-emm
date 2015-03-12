@@ -86,7 +86,7 @@ public final class Constants {
 				"https://EnterpriseEnrollment.wso2.com/" +
 				"ENROLLMENTSERVER/ONPREMISE/" +
 				"DeviceEnrollmentWebservice.svc";
-		public static final String WAB_URL = "https://enterpriseenrollment.wso2.com/wab";
+        public static final String WAB_URL = "https://EnterpriseEnrollment.wso2.com/mdm/login-agent";
 	}
 
 	/**

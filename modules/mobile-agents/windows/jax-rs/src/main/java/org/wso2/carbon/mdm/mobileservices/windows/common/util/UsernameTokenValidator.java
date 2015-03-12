@@ -104,7 +104,6 @@ public class UsernameTokenValidator implements Validator {
 			}
 
 			int tenantId;
-
 			if (tenantDomain == null || tenantDomain.trim().isEmpty()) {
 				tenantId = MultitenantConstants.SUPER_TENANT_ID;
 			} else {
