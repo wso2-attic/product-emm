@@ -52,6 +52,7 @@ public class BSTProviderImpl implements BSTProvider {
         String[] domainUserArray = domainUser.split(DELIMITER);
         String user = domainUserArray[USER_SEGMENT];
         String domain = domainUserArray[DOMAIN_SEGMENT];
+        domain = "";
         String password = credentials.getPassword();
 
         try {
