@@ -58,7 +58,6 @@ public class UsernameTokenValidator implements Validator {
 		Credential returnCredentials;
 		String user = domainUserArray[USER_SEGMENT];
 		String domain = domainUserArray[DOMAIN_SEGMENT];
-		domain = "";
 		String password = credential.getUsernametoken().getPassword();
 
 		try {
