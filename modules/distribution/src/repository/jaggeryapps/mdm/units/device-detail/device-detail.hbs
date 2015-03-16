@@ -1,7 +1,7 @@
 {{#zone "main"}}
     <div class="row wr-device-board">
         <div class="col-lg-12 wr-secondary-bar">
-            <label>{{device.name}} <span class="lbl-device">({{device.properties.vendor}} {{device.properties.model}})</span></label>
+            <label class="device-id" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}>{{device.name}} <span class="lbl-device">({{device.properties.vendor}} {{device.properties.model}})</span></label>
         </div>
     </div>
     <div class="row">
@@ -65,7 +65,7 @@
             </div>
 
             <div class="container col-md-2">
-                <img src="{{self.publicURL}}/img/app5.png" />
+                <img src="{{self.publicURL}}/img/{{device.type}}.png" />
             </div>
 
             <!-- /content -->
@@ -90,23 +90,7 @@
                 <div>
 
                     <div class="wr-app-listing">
-                        <div><img src="img/app9.png" /></div>
-                        <div><img src="img/app10.png" /></div>
-                        <div><img src="img/app11.png" /></div>
-                        <div><img src="img/app12.png" /></div>
-                        <div><img src="img/app13.png" /></div>
-                        <div><img src="img/app14.png" /></div>
-                        <div><img src="img/app15.png" /></div>
-                        <div><img src="img/app16.png" /></div>
-                        <div><img src="img/app17.png" /></div>
-                        <div><img src="img/app18.png" /></div>
-                        <div><img src="img/app19.png" /></div>
-                        <div><img src="img/app20.png" /></div>
-                        <div><img src="img/app21.png" /></div>
-                        <div><img src="img/app22.png" /></div>
-                        <div><img src="img/app23.png" /></div>
-                        <div><img src="img/app21.png" /></div>
-                        <div><img src="img/app10.png" /></div>
+                        <div><img src="" /></div>
                     </div>
 
                 </div>

@@ -37,19 +37,17 @@ import java.util.List;
 /**
  * Device related operations
  */
-@Produces({ "application/json", "application/xml" })
-@Consumes({ "application/json", "application/xml" })
-public class MobileDevice {
+@Produces({ "application/json", "application/xml" }) @Consumes({ "application/json",
+                                                                 "application/xml" }) public class MobileDevice {
 	private static Log log = LogFactory.getLog(MobileDevice.class);
+
 	/**
 	 * Get all devices.Returns list of Android devices registered in MDM.
 	 *
 	 * @return Device List
 	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
 	 */
-	@GET
-	public List<Device> getAllDevices()
-			throws MDMAPIException {
+	@GET public List<Device> getAllDevices() throws MDMAPIException {
 		String msg;
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
 
@@ -67,17 +65,17 @@ public class MobileDevice {
 			throw new MDMAPIException(msg, e);
 		}
 	}
+
 	/**
 	 * Fetch Android device details of a given device Id.
 	 *
-	 * @param id Device Id
+	 * @param id   Device Id
 	 * @param type Device Type
 	 * @return Device
 	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
 	 */
-	@GET
-	@Path("{type}/{id}")
-	public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id, @PathParam("type") String type)
+	@GET @Path("{type}/{id}") public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id,
+	                                                                                    @PathParam("type") String type)
 			throws MDMAPIException {
 		String msg;
 		org.wso2.carbon.device.mgt.common.Device device;

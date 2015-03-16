@@ -249,10 +249,10 @@ a.ctrl-filter-category:hover {
 }
 
 .panel-heading {
-	padding: 0px 0px 0px 15px;
-	border-bottom: 0px solid transparent;
-	border-top-left-radius: 0px;
-	border-top-right-radius: 0px;
+	padding: 0 0 0 15px;
+	border-bottom: 0 solid transparent;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
 .panel-title table, .panel-body table {
@@ -274,7 +274,7 @@ a.ctrl-filter-category:hover {
 }
 
 .panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
-	border-top: 0px solid #e4e4e4;
+	border-top: 0 solid #e4e4e4;
 }
 
 .panel-body {
@@ -302,9 +302,9 @@ a.ctrl-filter-category:hover {
 	background-color: #fff;
 	background-image: none;
 	border: 1px solid #999;
-	border-radius: 0px;
-	-webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
-	box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
+	border-radius: 0;
+	-webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, .075);
+	box-shadow: inset 0 0 0 rgba(0, 0, 0, .075);
 	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
 	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
@@ -313,8 +313,8 @@ a.ctrl-filter-category:hover {
 .form-control:focus {
 	border-color: #555;
 	outline: 0;
-	-webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,.075), 0 0 0px rgba(102, 175, 233, .6);
-	box-shadow: inset 0 0px 0px rgba(0,0,0,.075), 0 0 0px rgba(102, 175, 233, .6);
+	-webkit-box-shadow: inset 0 0 0 rgba(0,0,0,.075), 0 0 0 rgba(102, 175, 233, .6);
+	box-shadow: inset 0 0 0 rgba(0,0,0,.075), 0 0 0 rgba(102, 175, 233, .6);
 }
 
 
@@ -324,7 +324,7 @@ a.ctrl-filter-category:hover {
 	margin-bottom: 20px;
 	overflow: hidden;
 	background-color: #e4e4e4;
-	border-radius: 0px;
+	border-radius: 0;
 	-webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, .1);
 	box-shadow: inset 0 0px 0px rgba(0, 0, 0, .1);
 }
@@ -346,7 +346,7 @@ a.ctrl-filter-category:hover {
 	margin-right: 2px;
 	line-height: 1.42857143;
 	border: 1px solid transparent;
-	border-radius: 0px 0px 0 0;
+	border-radius: 0;
 	color:#6c5c76;
 }
 
@@ -386,8 +386,8 @@ a.ctrl-filter-category:hover {
 /* buttons */
 .btn-primary {
 	color: #fff;
-	background-color: #533565;
-	border-color: #533565;
+	background-color: #6b94f1;
+	border-color: #6b94f1;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
@@ -415,28 +415,8 @@ a.ctrl-filter-category:hover {
 	user-select: none;
 	background-image: none;
 	border: 1px solid transparent;
-	border-radius: 0px;
+	border-radius: 0;
 }
-
-
-/* testing */
-
-/*GROW*/
-/*
-.ast-img img {
-  -webkit-transition: all 0.5s ease;
-     -moz-transition: all 0.5s ease;
-       -o-transition: all 0.5s ease;
-      -ms-transition: all 0.5s ease;
-          transition: all 0.5s ease;
-}
- 
-.ast-img img:hover {
-  width: 150px;
-  height: 150px;
-}
-*/
-
 
 /* filter type switcher */
 #content-filter-types {
@@ -501,6 +481,10 @@ a.ctrl-filter-category:hover {
 	border-style: solid;
 }
 
+.wr-filter-type-switcher {
+	position: relative;
+}
+
 .wr-filter-type-switcher .popover-content {
 	padding: 6px 6px;
 }
@@ -511,4 +495,9 @@ a.ctrl-filter-category:hover {
 
 .wr-filter-type-switcher .popover {
 	left: -148px !important;
+}
+
+.col-centered {
+	float: none;
+	margin: 0 auto;
 }

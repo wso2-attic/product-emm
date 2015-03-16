@@ -20,30 +20,30 @@
  * Setting-up global variables.
  */
 var operations = '.wr-operations',
-    modelPopup = '.wr-modalpopup',
-    modelPopupContent = modelPopup + ' .modalpopup-content';
+    modalPopup = '.wr-modalpopup',
+    modalPopupContent = modalPopup + ' .modalpopup-content';
 
 /*
  * On operation click function.
  * @param selection: Selected operation
  */
 function operationSelect(selection){
-    $(modelPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
+    $(modalPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
     showPopup();
 }
 
 function showPopup() {
-    $(modelPopup).show();
+    $(modalPopup).show();
 }
 
 function hidePopup() {
-    $(modelPopupContent).html('');
-    $(modelPopup).hide();
+    $(modalPopupContent).html('');
+    $(modalPopup).hide();
 }
 
 function getSelectedDeviceIds(){
     var deviceIdentifierList = [];
-    $(".device-checkbox").each(function(index){
+    $(".device-id").each(function(index){
         var device = $(this);
         var deviceId = device.data("deviceid");
         var deviceType = device.data("type");

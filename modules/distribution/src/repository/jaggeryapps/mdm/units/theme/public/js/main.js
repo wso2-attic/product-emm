@@ -11,13 +11,6 @@ $( document ).ready(function() {
         }
     });
 
-    $(".ctrl-filter-type-switcher").popover({
-        html : true,
-        content: function() {
-            return $('#content-filter-types').html();
-        }
-    });
-
     $('#nav').affix({
         offset: {
             top: $('header').height()

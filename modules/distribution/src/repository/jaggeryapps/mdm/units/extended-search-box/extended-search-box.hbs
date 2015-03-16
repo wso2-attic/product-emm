@@ -1,72 +1,74 @@
 {{#zone "main"}}
     <div class="row wr-operations-board">
         <div class="col-lg-12 wr-secondary-bar">
-            <div class="col-lg-8 col-md-9 col-sm-6 wr-filters">
 
-
+            <div class="wr-filters col-xs-12 col-sm-7 col-md-8">
                 <!-- asset filter -->
-                <div class="wr-asset-type-switcher">
-
-                    <a href="javascript:void(0);" class="ctrl-asset-type-switcher"><span class="btn-asset"></span></a>
-
-                    <div class="popover menu fade bottom in">
-                        <div class="arrow"></div>
-                        <div class="popover-content">
-                            <div class="title">Select type of your device</div>
-                            <div id="asset-selected"></div>
-                            <div id="asset-select">
-                                <ul>
-                                    <li>Mobile</li>
-                                    <ul>
-                                        <li>Android</li>
+                <div class="wr-search">
+                    <div class="wr-asset-type-switcher">
+                        <a href="javascript:void(0)" class="ctrl-asset-type-switcher"><span class="btn-asset"></span></a>
+                        <div class="popover menu fade bottom in">
+                            <div class="arrow"></div>
+                            <div class="popover-content">
+                                <div id="advance-filter-options">
+                                    <div class="title">Search method</div>
+                                    <input type="radio" name="search-method" value="devices" checked />Device
+                                    <input type="radio" name="search-method" value="users" />User
+                                    <input type="radio" name="search-method" value="user roles" />User Role
+                                </div>
+                                <div id="device-filter-options">
+                                    <div class="title">Select type of your device</div>
+                                    <div id="asset-selected"></div>
+                                    <div id="asset-select">
                                         <ul>
-                                            <li>ICS</li>
+                                            <li>Mobile</li>
                                             <ul>
-                                                <li>3.0</li>
-                                                <li>3.0.1</li>
+                                                <li>Android</li>
+                                                <ul>
+                                                    <li>ICS</li>
+                                                    <ul>
+                                                        <li>3.0</li>
+                                                        <li>3.0.1</li>
+                                                    </ul>
+                                                    <li>JB</li>
+                                                    <li>KK</li>
+                                                    <ul>
+                                                        <li>4.0</li>
+                                                        <li>4.4</li>
+                                                    </ul>
+                                                </ul>
+                                                <li>iOS</li>
+                                                <li>Windows</li>
                                             </ul>
-                                            <li>JB</li>
-                                            <li>KK</li>
+                                            <li>Computer</li>
                                             <ul>
-                                                <li>4.0</li>
-                                                <li>4.4</li>
+                                                <li>Desktop</li>
+                                                <li>Laptop</li>
                                             </ul>
+                                            <li>IoT</li>
                                         </ul>
-                                        <li>iOS</li>
-                                        <li>Windows</li>
-                                    </ul>
-                                    <li>Computer</li>
-                                    <ul>
-                                        <li>Desktop</li>
-                                        <li>Laptop</li>
-                                    </ul>
-                                    <li>IoT</li>
-                                </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="wr-search">
-                    <div>
-                        <div class="wr-search-tags"></div>
-                        <input type="text" class="" placeholder="Search devices ..." />
-                        <a href="#" class="btn-search"><span class="glyphicon glyphicon-search"></span></a>
-                    </div>
+                    <div class="wr-search-tags"></div>
+                    <a href="#" class="btn-search"><span class="glyphicon glyphicon-search"></span></a>
+                    <div class="input" id="search" data-value="" data-placeholder="Search devices ..." contenteditable="true"></div>
+                    <div class="clearfix"></div>
                 </div>
                 <!-- /asset filter -->
-
-
             </div>
-            <div class="col-lg-4 col-md-3 col-sm-6 wr-filters wr-filters-right">
 
+            <div class="wr-filters col-xs-12 col-sm-5 col-md-4 wr-filters-right">
                 <div class="wr-filter-sort pull-right">
-                    <a href="#" data-select="false" class="btn-select-devices">Select All Devices</a>
-                    <a href="#" class="ico-filter ctrl-filter-grid"><img src="{{self.publicURL}}/img/icons/ico-grid.png" /></a>
-                    <a href="#" class="ico-filter ctrl-filter-list"><img src="{{self.publicURL}}/img/icons/ico-list.png" /></a>
+                    <a href="#"  class="wr-btn btn-select-devices">Select All Devices</a>
+                    <a href="javascript:changeDeviceView('grid', this)" class="ico-filter ctrl-filter-grid view-toggle"><img src="{{self.publicURL}}/img/icons/ico-grid.png" /></a>
+                    <a href="javascript:changeDeviceView('list', this)" class="ico-filter ctrl-filter-list view-toggle"><img src="{{self.publicURL}}/img/icons/ico-list.png" /></a>
                     <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><img src="{{self.publicURL}}/img/icons/ico-sort.png" /></a></span>
                 </div>
             </div>
+
         </div>
     </div>
 {{/zone}}

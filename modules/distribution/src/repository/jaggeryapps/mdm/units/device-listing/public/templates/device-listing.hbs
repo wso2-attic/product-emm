@@ -1,18 +1,19 @@
 {{#each devices}}
     {{deviceMap this}}
     <div class="ctrl-wr-asset">
-        <div class="itm-select"><input class="device-checkbox" data-deviceid="{{deviceIdentifier}}" data-type="{{type}}" type="checkbox"/></div>
+        <div class="itm-select"><input class="device-checkbox device-id" type="checkbox" data-deviceid="{{deviceIdentifier}}" data-type="{{type}}"/></div>
         <div class="itm-ast">
-            <div class="ast-img"><img src="{{../imageLocation}}{{type}}.png"/></div>
+            <a href="device/{{type}}/{{deviceIdentifier}}"><div class="ast-img"><img src="{{../imageLocation}}{{type}}.png"/></div></a>
             <div class="ast-desc">
-                <h3 class="ast-name">{{name}}</h3>
-                <span class="ast-auth">{{owner}}</span>
+                <div class="ast-title">
+                    <h3 class="ast-name" title="mymobile">{{name}}</h3>
+                    <span class="ast-auth" title="navinda">{{owner}}</span>
+                </div>
                 <span class="ast-ver">{{properties.osVersion}}</span>
                 <span class="ast-published">{{properties.vendor}} {{model}}</span>
             </div>
-            <br class="c-both"/>
+            <br class="c-both" />
         </div>
-        <br class="c-both"/>
     </div>
 {{/each}}
 <br class="c-both"/>

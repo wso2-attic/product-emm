@@ -4,7 +4,7 @@
   "httpsURL": "%https.ip%",
   "httpURL": "%http.ip%",
   "iOSConfigRoot": "%https.ip%/ios/enrollment/",
-  "windowsConfigRoot": "%http.ip%/mdm-windows-api/services/federated/bst/authentication",
+  "windowsConfigRoot": "http://10.10.10.198:9763/mdm-windows-api/services/federated/bst/authentication",
   "ssoConfiguration": {
     "enabled": true,
     "issuer": "mdm",

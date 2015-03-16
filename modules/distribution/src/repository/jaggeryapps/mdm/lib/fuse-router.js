@@ -49,7 +49,8 @@ var route;
             'woff': 'application/x-font-woff',
             "png": "image/png",
             "css": "text/css",
-            "hbs": "text/x-handlebars-template"
+            "hbs": "text/x-handlebars-template",
+            "apk": "application/vnd.android.package-archive"
         };
         var mime;
         if (index >= 0) {
