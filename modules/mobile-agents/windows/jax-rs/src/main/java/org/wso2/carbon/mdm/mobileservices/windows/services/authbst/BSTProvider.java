@@ -26,6 +26,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Interface for handling authentication request comes via MDM login page.
+ */
 @Path("/bst")
 public interface BSTProvider {
 

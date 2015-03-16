@@ -18,11 +18,44 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations;
 
-import javax.ws.rs.Path;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
 
-@Path("/operation")
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+/**
+ * Interface for Admin operations persisting. This interface accepts operations added via UI.
+ */
+@Path("/windows")
 public interface operations {
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/ring")
+    OperationResponse ring(OperationRequest credentials);
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/wipe")
+    OperationResponse wipe(OperationRequest credentials);
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/lock")
+    OperationResponse lock(OperationRequest credentials);
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/wifi")
+    OperationResponse wifi(OperationRequest credentials);
 
 }

@@ -32,6 +32,9 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.Response;
 
+/**
+ * Implementation class of BSTProvider interface which authenticates the credentials comes via MDM login page.
+ */
 public class BSTProviderImpl implements BSTProvider {
 
     private static Log log = LogFactory.getLog(BSTProviderImpl.class);
