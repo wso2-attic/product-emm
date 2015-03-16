@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -78,7 +76,7 @@ public class CertificateEnrollmentServiceTest {
     } catch (CertificateGenerationException e) {
         Assert.fail("Test failure when retrieving private key from key store.", e);
     }
-    Assert.assertTrue(true);
+    Assert.assertTrue(true, "Test of JKS file reading is successful.");
 }
 
 }
