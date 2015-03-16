@@ -66,6 +66,9 @@ public final class Constants {
 	public static final String CONTENT_LENGTH = "Content-Length";
 	public static final String SECURITY = "Security";
 
+	//Web services media types
+	public static final String SYNCML_MEDIA_TYPE = "application/vnd.syncml.dm+xml;charset=utf-8";
+
 	/**
 	 * Discovery service related other constants
 	 */
