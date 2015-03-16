@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
 
+import org.apache.commons.io.FileUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
 import org.apache.commons.logging.Log;
@@ -33,8 +34,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUti
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -240,14 +239,12 @@ public class SyncmlServiceImpl implements SyncmlService {
 	                               FileOperationException {
 
 		String response = null;
-        String responseFilePath;
 		File responseFile;
 		try {
 			if (SYNCML_FIRST_MESSAGE.equals(msgID)) {
 				responseFile = new File(getClass().getClassLoader().getResource(Constants.SyncML.
 						                          SYNCML_RESPONSE).getFile());
-				responseFilePath = responseFile.getPath();
-				response = new String(Files.readAllBytes(Paths.get(responseFilePath)));
+				response = FileUtils.readFileToString(responseFile);
 				if ((targetURI != null)&&(sourceURI != null)) {
 					response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
 					response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
@@ -256,8 +253,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 			else if(SYNCML_SECOND_MESSAGE.equals(msgID)){
 				responseFile = new File(getClass().getClassLoader().getResource(Constants.SyncML.
 						                          SYNCML_SECOND_RESPONSE).getFile());
-				responseFilePath = responseFile.getPath();
-				response = new String(Files.readAllBytes(Paths.get(responseFilePath)));
+				response = FileUtils.readFileToString(responseFile);
 				if ((targetURI != null)&&(sourceURI != null)) {
 					response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
 					response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);

@@ -23,11 +23,14 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
+import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIConstants;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -96,5 +99,36 @@ public class MobileDevice {
 			throw new MDMAPIException(msg, deviceMgtEx);
 		}
 	}
+
+	/**
+	* Get a list of devices based on the username.
+	* @param username Username of the device owner.
+			* @return A list of devices.
+			* @throws MDMAPIException
+	*/
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Path("listall/user/{username}")
+	public List<org.wso2.carbon.device.mgt.common.Device> getAllDeviceOfUser( @PathParam("username") String username)
+			throws MDMAPIException {
+		DeviceManagementService dmService;
+		try {
+			dmService = MDMAPIUtils.getDeviceManagementService();
+			return dmService.getDeviceListOfUser(username);
+		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
+			String errorMsg = "Device management service error";
+			log.error(errorMsg, deviceServiceMgtEx);
+			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
+		}catch (DeviceManagementDAOException e) {
+			String errorMsg = "Device management DAO error";
+			log.error(errorMsg, e);
+			throw new MDMAPIException(errorMsg, e);
+		} catch (DeviceManagementException e) {
+			String errorMsg = "Device management error";
+			log.error(errorMsg, e);
+			throw new MDMAPIException(errorMsg, e);
+		}
+	}
+
 
 }
