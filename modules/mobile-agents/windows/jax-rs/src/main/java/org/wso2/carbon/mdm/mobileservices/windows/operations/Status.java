@@ -43,6 +43,7 @@ public class Status {
 		this.targetReference = targetReference;
 		this.data = data;
 	}
+	public Status(){}
 
 	public String getTargetReference() {
 		return targetReference;

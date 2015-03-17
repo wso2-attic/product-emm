@@ -31,6 +31,15 @@ public class SyncmlHeader {
 	private int msgId = 0;
 	private Target target;
 	private Source source;
+	private Credential credential;
+
+	public Credential getCredential() {
+		return credential;
+	}
+
+	public void setCredential(Credential credential) {
+		this.credential = credential;
+	}
 
 	public int getSessionId() {
 		return sessionId;
@@ -88,7 +97,15 @@ public class SyncmlHeader {
 		}
 
 		if (getTarget() != null) {
-			target.buildTargetElement(doc, syncHdr);
+			getTarget().buildTargetElement(doc, syncHdr);
+		}
+
+		if (getSource() != null) {
+			getSource().buildSourceElement(doc, syncHdr);
+		}
+
+		if (getCredential() != null) {
+			getCredential().buildCredentialElement(doc, syncHdr);
 		}
 
 	}

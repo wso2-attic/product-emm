@@ -53,6 +53,13 @@ public class Constants {
 	public static final String ALERT = "Alert";
 	public static final String FINAL = "Final";
 	public static final String REPLACE = "Replace";
+	public static final String META = "Meta";
+	public static final String CREDENTIAL = "Cred";
+	public static final String FORMAT = "Format";
+	public static final String TYPE = "Type";
+	public static final String META_NAMESPACE = "syncml:metinf";
+	public static final String XMLNS = "xmlns";
+
 
 	/**
 	 * SynclML service related constants

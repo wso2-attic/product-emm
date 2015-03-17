@@ -19,6 +19,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
+import org.wso2.carbon.device.mgt.common.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
@@ -34,9 +35,11 @@ public class OperationReply {
 	private static final int HEADER_COMMAND_REFERENCE_ID = 0;
 	private static final String HEADER_COMMAND_TEXT = "SyncHdr";
 	private static final String ALERT_COMMAND_TEXT = "Alert";
-	private static final int ALERT_MESSAGE_ID = 1;
+	private static final String REPLACE_COMMAND_TEXT = "Replace";
+	private static final String GET_COMMAND_TEXT = "Get";
+	private static final String EXEC_COMMAND_TEXT = "Exec";
 
-	public OperationReply(SyncmlDocument syncmlDocument) {
+	public OperationReply(SyncmlDocument syncmlDocument, Operation [] operations) {
 		this.syncmlDocument = syncmlDocument;
 		replySyncmlDocument = new SyncmlDocument();
 	}
@@ -67,21 +70,56 @@ public class OperationReply {
 		SyncmlHeader sourceHeader = syncmlDocument.getHeader();
 		SyncmlBody syncmlBodyReply = new SyncmlBody();
 		List<Status> status = new ArrayList<Status>();
-		Status headerStatus=new Status(HEADER_STATUS_ID, sourceHeader.getMsgId(), HEADER_COMMAND_REFERENCE_ID,
-		           HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
-		           String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
-
-		if(sourceSyncmlBody.getAlert() !=null){
-//			Status alertStatus=new Status();
+		Status headerStatus =
+				new Status(HEADER_STATUS_ID, sourceHeader.getMsgId(), HEADER_COMMAND_REFERENCE_ID,
+				           HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
+				           String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
+		status.add(headerStatus);
+		if (sourceSyncmlBody.getAlert() != null) {
+			Status alertStatus = new Status(sourceSyncmlBody.getAlert().getCommandId(),
+			                                HEADER_COMMAND_REFERENCE_ID,
+			                                sourceSyncmlBody.getAlert().getCommandId(),
+			                                ALERT_COMMAND_TEXT, null,
+			                                String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
+			status.add(alertStatus);
 		}
-		if(sourceSyncmlBody.getGet()!=null){
-
+		if (sourceSyncmlBody.getReplace() != null) {
+			Status replaceStatus = new Status(sourceSyncmlBody.getReplace().getCommandId(),
+			                                  HEADER_COMMAND_REFERENCE_ID,
+			                                  sourceSyncmlBody.getReplace().getCommandId(),
+			                                  REPLACE_COMMAND_TEXT, null,
+			                                  String.valueOf(
+					                                  Constants.SyncMLResponseCodes.ACCEPTED));
+			status.add(replaceStatus);
 		}
-		if(sourceSyncmlBody.getExec()!=null){
-
+		if (sourceSyncmlBody.getExec() != null) {
+			Status replaceStatus = new Status(sourceSyncmlBody.getExec().getCommandId(),
+			                                  HEADER_COMMAND_REFERENCE_ID,
+			                                  sourceSyncmlBody.getExec().getCommandId(),
+			                                  GET_COMMAND_TEXT, null,
+			                                  String.valueOf(
+					                                  Constants.SyncMLResponseCodes.ACCEPTED));
+			status.add(replaceStatus);
 		}
+		if (sourceSyncmlBody.getGet() != null) {
+			Status execStatus = new Status(sourceSyncmlBody.getGet().getCommandId(),
+			                               HEADER_COMMAND_REFERENCE_ID,
+			                               sourceSyncmlBody.getGet().getCommandId(),
+			                               GET_COMMAND_TEXT, null,
+			                               String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
+			status.add(execStatus);
+		}
+
 		syncmlBodyReply.setStatus(status);
 		return syncmlBodyReply;
+	}
+
+	private void appendExecuteCommand() {
+
+	}
+
+	private void appendGetCommand() {
+
 	}
 
 }

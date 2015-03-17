@@ -23,12 +23,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.List;
+
 /**
  * Commands sent from the device.
  */
 public class Replace {
 	int commandId = 0;
-	Item[] items;
+	List<Item> items;
 
 	public int getCommandId() {
 		return commandId;
@@ -38,11 +40,11 @@ public class Replace {
 		this.commandId = commandId;
 	}
 
-	public Item[] getItems() {
+	public List<Item> getItems() {
 		return items;
 	}
 
-	public void setItems(Item[] items) {
+	public void setItems(List<Item> items) {
 		this.items = items;
 	}
 
@@ -56,9 +58,9 @@ public class Replace {
 				get.appendChild(commandId);
 			}
 			if (getItems() != null) {
-				for (int x = 0; x < getItems().length; x++) {
-					if (getItems()[x] != null) {
-						getItems()[x].buildItemElement(doc, get);
+				for (int x = 0; x < getItems().size(); x++) {
+					if (getItems().get(x) != null) {
+						getItems().get(x).buildItemElement(doc, get);
 					}
 				}
 			}
