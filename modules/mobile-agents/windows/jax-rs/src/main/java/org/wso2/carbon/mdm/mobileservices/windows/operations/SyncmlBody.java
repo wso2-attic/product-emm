@@ -23,20 +23,30 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.List;
+
 /**
  * Represents the body details of a syncml.
  */
 public class SyncmlBody {
 	Get getCommands;
 	Exec exec;
-	Status[] status;
-	Alert[] alert;
+	List<Status> status;
+	Alert alert;
 
-	public Alert[] getAlert() {
+	public List<Status> getStatus() {
+		return status;
+	}
+
+	public void setStatus(List<Status> status) {
+		this.status = status;
+	}
+
+	public Alert getAlert() {
 		return alert;
 	}
 
-	public void setAlert(Alert[] alert) {
+	public void setAlert(Alert alert) {
 		this.alert = alert;
 	}
 
@@ -56,33 +66,21 @@ public class SyncmlBody {
 		this.exec = exec;
 	}
 
-	public Status[] getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status[] status) {
-		this.status = status;
-	}
-
 	public void buildBodyElement(Document doc, Element rootElement) {
 
 		Element syncBody = doc.createElement(Constants.SYNC_BODY);
 		rootElement.appendChild(syncBody);
 
 		if (getStatus() != null) {
-			for (int x = 0; x < getStatus().length; x++) {
-				if (getStatus()[x] != null) {
-					getStatus()[x].buildStatusElement(doc, syncBody);
+			for (int x = 0; x < getStatus().size(); x++) {
+				if (getStatus().get(x) != null) {
+					getStatus().get(x).buildStatusElement(doc, syncBody);
 				}
 			}
 		}
 
 		if (getAlert() != null) {
-			for (int x = 0; x < getAlert().length; x++) {
-				if (getAlert()[x] != null) {
-					getAlert()[x].buildAlertElement(doc, syncBody);
-				}
-			}
+			getAlert().buildAlertElement(doc, syncBody);
 		}
 
 		if (getGet() != null) {

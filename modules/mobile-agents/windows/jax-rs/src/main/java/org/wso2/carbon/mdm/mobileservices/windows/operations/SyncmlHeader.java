@@ -27,24 +27,24 @@ import org.w3c.dom.Element;
  * Represents the header details of a syncml.
  */
 public class SyncmlHeader {
-	private String sessionID;
-	private String msgId;
+	private int sessionId = 0;
+	private int msgId = 0;
 	private Target target;
 	private Source source;
 
-	public String getSessionID() {
-		return sessionID;
+	public int getSessionId() {
+		return sessionId;
 	}
 
-	public void setSessionID(String sessionID) {
-		this.sessionID = sessionID;
+	public void setSessionId(int sessionId) {
+		this.sessionId = sessionId;
 	}
 
-	public String getMsgId() {
+	public int getMsgId() {
 		return msgId;
 	}
 
-	public void setMsgId(String msgId) {
+	public void setMsgId(int msgId) {
 		this.msgId = msgId;
 	}
 
@@ -75,15 +75,15 @@ public class SyncmlHeader {
 		verProtocol.appendChild(doc.createTextNode(Constants.VER_PROTOCOL_VALUE));
 		syncHdr.appendChild(verProtocol);
 
-		if (getSessionID() != null) {
+		if (getSessionId() != 0) {
 			Element sessionId = doc.createElement(Constants.SESSION_ID);
-			sessionId.appendChild(doc.createTextNode(getSessionID()));
+			sessionId.appendChild(doc.createTextNode(String.valueOf(getSessionId())));
 			syncHdr.appendChild(sessionId);
 		}
 
-		if (getMsgId() != null) {
+		if (getMsgId() != 0) {
 			Element msgId = doc.createElement(Constants.MESSAGE_ID);
-			msgId.appendChild(doc.createTextNode(getMsgId()));
+			msgId.appendChild(doc.createTextNode(String.valueOf(getMsgId())));
 			syncHdr.appendChild(msgId);
 		}
 

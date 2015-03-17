@@ -34,6 +34,16 @@ public class Status {
 	String targetReference;
 	String data;
 
+	public Status(int commandId, int messageReference, int commandReference, String command,
+	              String targetReference, String data) {
+		this.commandId = commandId;
+		this.messageReference = messageReference;
+		this.commandReference = commandReference;
+		this.command = command;
+		this.targetReference = targetReference;
+		this.data = data;
+	}
+
 	public String getTargetReference() {
 		return targetReference;
 	}

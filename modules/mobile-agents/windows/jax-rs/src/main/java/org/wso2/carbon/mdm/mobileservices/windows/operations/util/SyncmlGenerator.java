@@ -41,13 +41,15 @@ public class SyncmlGenerator {
 
 	private static Log log = LogFactory.getLog(SyncmlGenerator.class);
 
+
+
 	public void generatePayload(SyncmlDocument syncmlDocument) throws WindowsOperationException {
 		Document doc = generateDocument();
 		Element rootElement = createRootElement(doc);
-		SyncmlHeader header = syncmlDocument.getHeader();
+		SyncmlHeader header= syncmlDocument.getHeader();
 		header.buildSyncmlHeaderElement(doc, rootElement);
-		SyncmlBody body = syncmlDocument.getBody();
-		body.buildBodyElement(doc, rootElement);
+		SyncmlBody body= syncmlDocument.getBody();
+		body.buildBodyElement(doc,rootElement);
 		transformDocument(doc);
 	}
 

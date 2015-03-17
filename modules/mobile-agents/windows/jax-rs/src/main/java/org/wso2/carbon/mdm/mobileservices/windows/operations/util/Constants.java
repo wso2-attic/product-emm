@@ -52,5 +52,14 @@ public class Constants {
 	public static final String VER_PROTOCOL_VALUE = "DM/1.2";
 	public static final String ALERT = "Alert";
 	public static final String FINAL = "Final";
+	public static final String REPLACE = "Replace";
+
+	/**
+	 * SynclML service related constants
+	 */
+	public final class SyncMLResponseCodes {
+		public static final int AUTHENTICATION_ACCEPTED = 212;
+		public static final int ACCEPTED = 200;
+	}
 
 }
