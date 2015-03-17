@@ -256,8 +256,10 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
                 <include>authenticationendpoint.war</include>
+                <include>oauth2.war</include>
             </includes>
         </fileSet>
+        <!--copy jaxrs web app for OAuth feature-->
 
         <!-- Copying API Manager Publisher and Store Jaggery apps -->
         <fileSet>
