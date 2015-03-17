@@ -79,7 +79,7 @@ function runOperation(operation) {
         "operation" : operationObject
     };
     $.ajax({
-        url:"https://localhost:9443/wso2mdm-api/operations",
+        url:"https://localhost:9443/mdm/api/operations",
         type:"POST",
         data: JSON.stringify(payload),
         contentType:"application/json",
