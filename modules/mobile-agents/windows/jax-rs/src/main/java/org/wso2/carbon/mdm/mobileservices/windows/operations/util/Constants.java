@@ -46,7 +46,7 @@ public class Constants {
 	public static final String VER_DTD = "VerDTD";
 	public static final String VER_PROTOCOL = "VerProto";
 	public static final String SESSION_ID = "SessionID";
-	public static final String MESSAGE_ID = "msgId";
+	public static final String MESSAGE_ID = "MsgID";
 	public static final String TARGET = "Target";
 	public static final String VER_DTD_VALUE = "1.2";
 	public static final String VER_PROTOCOL_VALUE = "DM/1.2";
