@@ -33,6 +33,15 @@ public class SyncmlBody {
 	Exec exec;
 	List<Status> status;
 	Alert alert;
+	Replace replace;
+
+	public Replace getReplace() {
+		return replace;
+	}
+
+	public void setReplace(Replace replace) {
+		this.replace = replace;
+	}
 
 	public List<Status> getStatus() {
 		return status;
@@ -89,6 +98,10 @@ public class SyncmlBody {
 
 		if (getExec() != null) {
 			getExec().buildExecElement(doc, syncBody);
+		}
+
+		if (getReplace() != null) {
+			getReplace().buildReplaceElement(doc, syncBody);
 		}
 
 		syncBody.appendChild(doc.createElement(Constants.FINAL));

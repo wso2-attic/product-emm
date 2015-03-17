@@ -67,9 +67,19 @@ public class OperationReply {
 		SyncmlHeader sourceHeader = syncmlDocument.getHeader();
 		SyncmlBody syncmlBodyReply = new SyncmlBody();
 		List<Status> status = new ArrayList<Status>();
-		new Status(HEADER_STATUS_ID, sourceHeader.getMsgId(), HEADER_COMMAND_REFERENCE_ID,
+		Status headerStatus=new Status(HEADER_STATUS_ID, sourceHeader.getMsgId(), HEADER_COMMAND_REFERENCE_ID,
 		           HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
 		           String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
+
+		if(sourceSyncmlBody.getAlert() !=null){
+//			Status alertStatus=new Status();
+		}
+		if(sourceSyncmlBody.getGet()!=null){
+
+		}
+		if(sourceSyncmlBody.getExec()!=null){
+
+		}
 		syncmlBodyReply.setStatus(status);
 		return syncmlBodyReply;
 	}
