@@ -15,22 +15,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var WEB_APP_TITLE = "WSO2 MDM";
-var WEB_APP_CONTEXT = "/cdm/";
-var UNSPECIFIED = "Unspecified";
-var USER_SESSION_KEY = "USER";
 
-var DEVICE_IDENTIFIER = "deviceIdentifier";
-var DEVICE_NAME = "name";
-var DEVICE_OWNERSHIP = "ownership";
-var DEVICE_OWNER = "owner";
-var DEVICE_TYPE ="type";
-var DEVICE_VENDOR = "vendor";
-var DEVICE_MODEL = "model";
-var DEVICE_OS_VERSION = "osVersion";
-var DEVICE_PROPERTIES = "properties";
+var utility = (function () {
+    var module = {};
+    var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext;
+    var Class = java.lang.Class;
 
-var FEATURE_NAME = "featureName";
-var FEATURE_DESCRIPTION = "featureDescription";
+    var osgiService = function (clazz) {
+        return PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(Class.forName(clazz));
+    };
+    module.getDeviceManagementService= function(){
+        return osgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementService');
+    }
+    return module;
+}());
 
-var PLATFORM_ANDROID = "android"
+

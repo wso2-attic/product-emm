@@ -55,7 +55,7 @@ $(document).ready(function () {
     $.template("device-listing", deviceListingSrc, function(template){
         var serviceURL;
         if ($.hasPermission("LIST_DEVICES")) {
-            serviceURL = "https://localhost:9443/wso2mdm-api/devices";
+            serviceURL = "https://localhost:9443/mdm/api/devices";
         }else if($.hasPermission("LIST_OWN_DEVICES")){
             //Get authenticated users devices
             serviceURL = "https://localhost:9443/wso2mdm-api/user/devices";
@@ -65,7 +65,7 @@ $(document).ready(function () {
         }
         $.get(serviceURL, function(data){
             var viewModel = {
-                "devices": data
+                "devices": JSON.parse(data)
             }
             viewModel.imageLocation = imageResource;
             var content = template(viewModel);
