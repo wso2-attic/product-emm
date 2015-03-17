@@ -17,10 +17,67 @@
  */
 
 describe('Device Module', function () {
+    var log = new Log();
+    var mobileDB;
+    var cdmDB;
+    var deviceModule = require("/modules/device.js").deviceModule;
+    function tearUp() {
+        mobileDB = new Database("MobileDM_DS");
+        cdmDB = new Database("DM_DS");
+        cdmDB.query("insert into dm_device(description, name, date_of_enrollment, date_of_last_update, " +
+                            "ownership,status, device_type_id, device_identification, owner, tenant_id ) " +
+                                "values ('Galaxy Tab','Admin Samsung', 1425467382, 1425467382, 'BYOD', 'ACTIVE'," +
+                                    " 1,'4892813d-0b18-4a02-b7b1-61775257488e', 'admin@wso2.com', '-1234');");
+        cdmDB.query("insert into dm_device(description, name, date_of_enrollment, date_of_last_update, " +
+                            "ownership,status, device_type_id, device_identification, owner, tenant_id ) " +
+                                "values ('Galaxy Tab','Admin Samsung', 1425467382, 1425467382, 'BYOD', 'ACTIVE'," +
+                                    " 1,'4892813d-0b18-4a02-b7b1-61775257488F', 'mdm@wso2.com', '-1234');");
 
-    describe('List all Devices - Device Module', function () {
-        var log = new Log();
-        var deviceModule = require("/modules/device.js").deviceModule;
+        mobileDB.query("insert into mbl_device (mobile_device_id, push_token, imei ,imsi, os_version, " +
+                        "device_model , vendor ,latitude ,longitude , challenge ,token, unlock_token ,serial ) " +
+                            "values ('4892813d-0b18-4a02-b7b1-61775257488e', 'sdfsdf', 'cxv', 'vbcb', '4.1', " +
+                                "'Galaxy Tab', 'Samsung',  '234234234', '4345345234234', 'dfjsdlfk', 'wuweir234', " +
+                                    "'ksdfjlskfjwer', '234234');");
+        mobileDB.query("insert into mbl_device (mobile_device_id, push_token, imei ,imsi, os_version, " +
+                        "device_model , vendor ,latitude ,longitude , challenge ,token, unlock_token ,serial ) " +
+                            "values ('4892813d-0b18-4a02-b7b1-61775257488F', 'sdfsdf', 'cxv', 'vbcb', '4.1', " +
+                                "'Galaxy Tab', 'Samsung',  '234234234', '4345345234234', 'dfjsdlfk', 'wuweir234', " +
+                                    "'ksdfjlskfjwer', '234234');");
+    }
 
+    function tearDown() {
+        deleteData();
+        mobileDB.close();
+        cdmDB.close();
+    }
+
+    function deleteData(){
+        cdmDB.query("delete from dm_device where device_identification='4892813d-0b18-4a02-b7b1-61775257488e'");
+        cdmDB.query("delete from dm_device where device_identification='4892813d-0b18-4a02-b7b1-61775257488F'");
+        mobileDB.query("delete from mbl_device where mobile_device_id='4892813d-0b18-4a02-b7b1-61775257488e'");
+        mobileDB.query("delete from mbl_device where mobile_device_id='4892813d-0b18-4a02-b7b1-61775257488F'");
+    }
+
+    it('List all Devices - Device Module', function () {
+        try {
+            tearUp();
+            var results = deviceModule.listDevices();
+            expect(results.length).not.toBe(0);
+        } catch (e) {
+            throw e;
+        } finally {
+            tearDown();
+        }
+    });
+    it('List Devices for User - Device Module', function () {
+        try {
+            tearUp();
+            var results = deviceModule.listDevicesForUser("mdm@wso2.com");
+            expect(results.length).toBe(1);
+        } catch (e) {
+            throw e;
+        } finally {
+            tearDown();
+        }
     });
 });

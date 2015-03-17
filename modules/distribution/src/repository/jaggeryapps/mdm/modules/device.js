@@ -99,15 +99,19 @@ var deviceModule = (function () {
     };
 
     module.performOperation = function(devices, operation){
-        var operation = new Operation();
-        operation.setCode(featureName);
-        operation.setType(Type.COMMAND);
+        var operationInstance = new Operation();
+        operationInstance.setCode(operation.featureName);
+        if (operation.type=="COMMAND") {
+            operationInstance.setType(Type.COMMAND);
+        }else if (operation.type=="CONFIG") {
+            operationInstance.setType(Type.CONFIG);
+        }
         var props = new Properties();
-        for (var i = 0; i < properties.length; i++) {
+        for (var i = 0; i < operation.properties.length; i++) {
             var object = properties[i];
             props.setProperty(object.key,object.value);
         }
-        operation.setProperties(props);
+        operationInstance.setProperties(props);
         var deviceList = new ArrayList();
         for(var i in devices){
             var device = devices[i];
@@ -116,7 +120,7 @@ var deviceModule = (function () {
             deviceIdentifier.setType(device.type);
             deviceList.add(deviceIdentifier);
         }
-        deviceManagementService.getOperationManager().addOperation(operation, deviceList);
+        deviceManagementService.getOperationManager().addOperation(operationInstance, deviceList);
     };
     module.viewDevice = function(type, deviceId){
         var device = getDevice(type, deviceId);

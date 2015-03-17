@@ -1,3 +1,7 @@
+body {
+	overflow-x: hidden;
+	-ms-overflow-x: hidden;
+}
 
 /* asset type switcher */
 .wr-asset-type-switcher .popover {
@@ -282,14 +286,6 @@ a.ctrl-filter-category:hover {
 	background:#f9f9f9;
 }
 
-.ctrl-exp-col {
-	background-size: 26px 26px !important;
-	background:url('../images/icons/ico-collapsed.png') 0.1em 1.4em no-repeat;
-	padding:26px;
-	padding-left:35px;
-}
-
-
 /* input */
 .form-control {
 	display: block;
@@ -418,86 +414,92 @@ a.ctrl-filter-category:hover {
 	border-radius: 0;
 }
 
-/* filter type switcher */
-#content-filter-types {
-	position:absolute;
-	right: -300px !important;
-	float: right;
-}
-
-.wr-filter-type-switcher .popover {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 1060;
-	display: none;
-	width: 200px;
-	padding: 1px;
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-size: 14px;
-	font-weight: 400;
-	line-height: 1.42857143;
-	text-align: left;
-	white-space: normal;
-	background-color: #232323;
-	-webkit-background-clip: padding-box;
-	background-clip: padding-box;
-	border: 0px solid #232323;
-	border: 0px solid rgba(0,0,0,.2);
-	border-radius: 0px;
-	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,.2);
-	box-shadow: 0 0px 0px rgba(0,0,0,.2);
-	padding-bottom:8px;
-	margin-right: -400px !important;
-}
-
-.wr-filter-type-switcher .popover.bottom>.arrow {
-	top: -11px;
-	left: 50%;
-	margin-left: 130px;
-	border-top-width: 0;
-	border-bottom-color: #232323;
-	border-bottom-color: #232323;
-}
-
-.wr-filter-type-switcher .popover>.arrow {
-	border-width: 11px;
-}
-
-.wr-filter-type-switcher .popover.bottom>.arrow:after {
-	top: 1px;
-	margin-left: -10px;
-	content: " ";
-	border-top-width: 0;
-	border-bottom-color: #232323;
-}
-
-.wr-filter-type-switcher .popover>.arrow, .popover>.arrow:after {
-	position: absolute;
-	display: block;
-	width: 0;
-	height: 0;
-	border-color: transparent;
-	border-style: solid;
-}
-
-.wr-filter-type-switcher {
-	position: relative;
-}
-
-.wr-filter-type-switcher .popover-content {
-	padding: 6px 6px;
-}
-
-.wr-filter-type-switcher .arrow {
-	left:25px !important;
-}
-
-.wr-filter-type-switcher .popover {
-	left: -148px !important;
-}
-
 .col-centered {
 	float: none;
 	margin: 0 auto;
+}
+
+b, strong {
+	font-weight: 500;
+}
+
+.panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
+	border-top: none;
+}
+
+.panel-default > .panel-heading {
+	background: transparent;
+	padding: 0;
+}
+
+.panel-title a {
+	color: #333333;
+	padding:15px 35px;
+	background-size: 26px 26px !important;
+	display: inline-block;
+	background: url('../img/icons/ico-down-dark.png') 0.1em 0.65em no-repeat;
+}
+
+.panel-title a.collapsed {
+	background: url('../img/icons/ico-next-dark.png') 0.1em 0.65em no-repeat;
+}
+
+.panel-body {
+	background: transparent;
+	padding: 0;
+}
+
+
+select.select2 {
+	height:0 !important;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	border: none;
+	outline: none;
+}
+
+.select2-container {
+	width: 100% !important;
+}
+
+.select2-container--default .select2-selection--multiple, .select2-container--default .select2-selection--single {
+	border-radius: 0;
+	height: 34px;
+	border: 1px solid #999;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+	margin-top: 0;
+	padding: 0;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+	padding: 5px 8px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	line-height: 34px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+	margin-bottom: 0;
+	margin-top: 0;
+	color: #ffffff;
+	background: #6b94f1;
+	font-size: 11px;
+	display: inline-block;
+	cursor: pointer;
+	padding: 3px 6px;
+	border-radius: 2px;
+	border: none;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+	color: #ffffff;
+	font-weight: 500;
+	font-size: 11px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+	color: #ffffff;
 }

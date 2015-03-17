@@ -1,12 +1,9 @@
 {{#zone "main"}}
-    <!-- secondary header - app bar -->
     <div id="nav" class="row wr-app-bar">
-        <div id="nav" class="row wr-app-bar">
-            <div class="col-md-9 wr-action-container">
-                <div class="wr-action-btn-bar">
-                    <a href="#" class="cu-btn btn-add-new">Enroll Device</a>
-                    <a href="#" class="cu-btn btn-prev">Go Back</a>
-                </div>
+        <div class="wr-action-container">
+            <div class="wr-action-btn-bar">
+                <a href="javascript:history.go(-1)" class="cu-btn btn-prev">Go Back</a>
+                <a href="javascript:openNotificationbar()" class="cu-btn btn-notification wr-notification-toggle-btn"><span class="wr-notification-bubble">35</span></a>
             </div>
         </div>
     </div>

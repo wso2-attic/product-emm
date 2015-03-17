@@ -13,16 +13,19 @@
                 </div>
             </div>
         {{/if}}
-        <a href="javascript:operationSelect('ring')"><img
-                src="{{self.publicURL}}/images/icons/ico-ring.png"/><span>Ring</span></a>
+        {{#if features.RING}}
+            <a href="javascript:operationSelect('RING')"><img
+                    src="{{self.publicURL}}/images/icons/ico-ring.png"/><span>Ring</span></a>
 
-        <div class="operation" data-operation="ring">
-            <div class="content">Please click ok to start ringing</div>
-            <div class="buttons">
-                <a href="javascript:runOperation('ring')" class="btn-operations">Ring</a>
-                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            <div class="operation" data-operation="ring">
+                <div class="content">Please click ok to start ringing</div>
+                <div class="buttons">
+                    <a href="javascript:runOperation('ring')" class="btn-operations">Ring</a>
+                    <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+                </div>
             </div>
-        </div>
+        {{/if}}
+
 
         <a href="javascript:operationSelect('message')"><img
                 src="{{self.publicURL}}/images/icons/ico-message.png"/><span>Message</span></a>

@@ -20,33 +20,51 @@
  * Setting-up global variables.
  */
 var operations = '.wr-operations',
-    modalPopup = '.wr-modalpopup',
-    modalPopupContent = modalPopup + ' .modalpopup-content';
+    modelPopup = '.wr-modalpopup',
+    modelPopupContent = modelPopup + ' .modalpopup-content',
+    deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]';
 
 /*
  * On operation click function.
  * @param selection: Selected operation
  */
 function operationSelect(selection){
-    $(modalPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
+    $(modelPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
     showPopup();
 }
 
+/*
+ * On operation click function.
+ * @param operation: Selected operation
+ */
+function runOperation(operation){
+    console.log(operation);
+}
+
+/*
+ * show popup function.
+ */
 function showPopup() {
-    $(modalPopup).show();
+    $(modelPopup).show();
 }
 
+/*
+ * hide popup function.
+ */
 function hidePopup() {
-    $(modalPopupContent).html('');
-    $(modalPopup).hide();
+    $(modelPopupContent).html('');
+    $(modelPopup).hide();
 }
 
+/*
+ * Function to get selected devices ID's
+ */
 function getSelectedDeviceIds(){
     var deviceIdentifierList = [];
-    $(".device-id").each(function(index){
+    $(deviceCheckbox).each(function(index){
         var device = $(this);
-        var deviceId = device.data("deviceid");
-        var deviceType = device.data("type");
+        var deviceId = device.data('deviceid');
+        var deviceType = device.data('type');
         deviceIdentifierList.push({
             "id" : deviceId,
             "type" : deviceType
@@ -54,32 +72,16 @@ function getSelectedDeviceIds(){
     });
     return deviceIdentifierList;
 }
-/*{
-    "devices": [
-    {
-        "type": "android",
-        "id": "sdkfjlsdkfjslkf"
-    }
-],
-    "operation": {
-    "code": "DEVICE_LOCK",
-        "properties": {
-        "key": "value"
-    },
-    "type": "COMMAND"
-}
-}
-*/
 
 function runOperation(operation) {
-    var operationObject = {"code": operation, "type": "COMMAND"};
+    var operationObject = {"code": operation, "type": "COMMAND", properties: []};
     var deviceIdList = getSelectedDeviceIds();
     var payload = {
         "devices" : deviceIdList,
         "operation" : operationObject
     };
     $.ajax({
-        url:"https://localhost:9443/mdm/api/operations",
+        url:"https://localhost:9443/mdm/api/operation",
         type:"POST",
         data: JSON.stringify(payload),
         contentType:"application/json",
