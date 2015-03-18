@@ -119,10 +119,6 @@ public class MobileDevice {
 			String errorMsg = "Device management service error";
 			log.error(errorMsg, deviceServiceMgtEx);
 			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
-		}catch (DeviceManagementDAOException e) {
-			String errorMsg = "Device management DAO error";
-			log.error(errorMsg, e);
-			throw new MDMAPIException(errorMsg, e);
 		} catch (DeviceManagementException e) {
 			String errorMsg = "Device management error";
 			log.error(errorMsg, e);

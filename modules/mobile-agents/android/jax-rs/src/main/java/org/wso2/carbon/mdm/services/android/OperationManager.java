@@ -23,6 +23,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.core.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
@@ -37,36 +38,29 @@ import java.util.List;
  */
 @Produces({ "application/json", "application/xml" })
 @Consumes({ "application/json", "application/xml" })
-public class Operation {
+public class OperationManager {
 
-	private static Log log = LogFactory.getLog(Operation.class);
+	private static Log log = LogFactory.getLog(OperationManager.class);
 
 	@GET
 	@Path("{id}")
-	public List<org.wso2.carbon.device.mgt.common.Operation> getPendingOperations(
+	public List<org.wso2.carbon.device.mgt.core.operation.mgt.Operation> getPendingOperations(
 			@PathParam("id") String id)
 			throws AndroidAgentException {
 
-		List<org.wso2.carbon.device.mgt.common.Operation> operations;
+		List<org.wso2.carbon.device.mgt.core.operation.mgt.Operation> operations;
 		String msg;
 		DeviceManagementService dmService;
 
 		try {
 			dmService = AndroidAPIUtils.getDeviceManagementService();
 			DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-			operations = dmService.getOperationManager(
-					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID)
-			                      .getPendingOperations(deviceIdentifier);
+			operations = dmService.getPendingOperations(deviceIdentifier);
 			Response.status(HttpStatus.SC_OK);
 			return operations;
 		} catch (DeviceManagementServiceException e) {
 			msg = "Device management service error";
 			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
-		} catch (DeviceManagementException e) {
-			msg = "Error occurred while fetching the operation manager for the device type.";
-			log.error(msg, e);
-			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			throw new AndroidAgentException(msg, e);
 		} catch (OperationManagementException e) {
 			msg = "Error occurred while fetching the operation list for the device.";
@@ -85,7 +79,7 @@ public class Operation {
 			dmService = AndroidAPIUtils.getDeviceManagementService();
 
             //TODO: need to complete updateOperation logic
-			boolean result = dmService.getOperationManager("").addOperation(null, null);
+			boolean result = dmService.addOperation(null, null);
 			if (result) {
 				Response.status(HttpStatus.SC_OK);
 				responseMsg.setResponseMessage("Device has already enrolled");
@@ -97,11 +91,6 @@ public class Operation {
 		} catch (DeviceManagementServiceException e) {
 			msg = "Device management service error";
 			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
-		} catch (DeviceManagementException e) {
-			msg = "Error occurred while fetching the operation manager for the device type.";
-			log.error(msg, e);
-			Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			throw new AndroidAgentException(msg, e);
 		} catch (OperationManagementException e) {
 			msg = "Error occurred while updating the operation status for the device.";
