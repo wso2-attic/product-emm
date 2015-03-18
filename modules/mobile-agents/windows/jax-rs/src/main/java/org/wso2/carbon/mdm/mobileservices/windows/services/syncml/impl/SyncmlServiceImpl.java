@@ -29,7 +29,6 @@ import org.w3c.dom.NodeList;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -78,8 +77,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 	 * @return - Syncml response generated for the request
 	 */
 	@Override
-	public Response getInitialResponse(Document request) throws DeviceManagementException,
-	                                   DeviceManagementServiceException, FileOperationException {
+	public Response getInitialResponse(Document request) throws DeviceManagementException, FileOperationException {
 
 		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
 				          getFirstChild();
@@ -165,10 +163,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 						String msg = "Exception while getting Device Management Service.";
 						log.error(msg, e);
 						throw new DeviceManagementException(msg, e);
-					} catch (DeviceManagementServiceException e) {
-						String msg = "Exception while enrolling device after receiving data.";
-						log.error(msg, e);
-						throw new DeviceManagementServiceException(msg, e);
 					}
 				}
 			}

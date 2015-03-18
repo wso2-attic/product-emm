@@ -23,7 +23,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.carbon.device.mgt.core.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
@@ -44,11 +45,11 @@ public class OperationManager {
 
 	@GET
 	@Path("{id}")
-	public List<org.wso2.carbon.device.mgt.core.operation.mgt.Operation> getPendingOperations(
+	public List<Operation> getPendingOperations(
 			@PathParam("id") String id)
 			throws AndroidAgentException {
 
-		List<org.wso2.carbon.device.mgt.core.operation.mgt.Operation> operations;
+		List<Operation> operations;
 		String msg;
 		DeviceManagementService dmService;
 
@@ -58,10 +59,6 @@ public class OperationManager {
 			operations = dmService.getPendingOperations(deviceIdentifier);
 			Response.status(HttpStatus.SC_OK);
 			return operations;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (OperationManagementException e) {
 			msg = "Error occurred while fetching the operation list for the device.";
 			log.error(msg, e);
@@ -88,10 +85,6 @@ public class OperationManager {
 				responseMsg.setResponseMessage("Operation not found");
 			}
 			return responseMsg;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (OperationManagementException e) {
 			msg = "Error occurred while updating the operation status for the device.";
 			log.error(msg, e);
@@ -99,4 +92,5 @@ public class OperationManager {
 			throw new AndroidAgentException(msg, e);
 		}
 	}
+
 }

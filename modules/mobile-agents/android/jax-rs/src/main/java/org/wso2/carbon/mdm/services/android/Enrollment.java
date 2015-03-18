@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
@@ -55,10 +54,6 @@ public class Enrollment {
 			Response.status(Response.Status.CREATED);
 			responseMsg.setResponseMessage("Device enrollment succeeded");
 			return responseMsg;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);
@@ -83,10 +78,6 @@ public class Enrollment {
 				responseMsg.setResponseMessage("Device not found");
 			}
 			return responseMsg;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrollment of the device.";
 			log.error(msg, e);
@@ -113,10 +104,6 @@ public class Enrollment {
 				Response.status(Response.Status.NOT_MODIFIED);
 			}
 			return responseMsg;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying enrollment of the device";
 			log.error(msg, e);
@@ -141,10 +128,6 @@ public class Enrollment {
 				Response.status(Response.Status.NOT_FOUND);
 			}
 			return responseMsg;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while dis enrolling the device";
 			log.error(msg, e);

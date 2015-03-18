@@ -21,7 +21,6 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -30,28 +29,25 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  */
 public class SyncmlUtils {
 
-	private static Log log = LogFactory.getLog(SyncmlUtils.class);
+    private static Log log = LogFactory.getLog(SyncmlUtils.class);
 
-	/**
-	 * This method returns Device Management Object for certain tasks such as Device enrollment etc.
-	 * @return DeviceManagementServiceObject
-	 * @throws org.wso2.carbon.device.mgt.common.DeviceManagementServiceException
-	 */
-	public static DeviceManagementService getDeviceManagementService() throws
-	                                      DeviceManagementServiceException {
-
-		DeviceManagementService deviceManagementService;
-		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext context = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		context.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		deviceManagementService = (DeviceManagementService) context
-				.getOSGiService(DeviceManagementService.class, null);
-
-		if (deviceManagementService == null) {
-			throw new DeviceManagementServiceException("Device management service is not initialized.");
-		}
-		PrivilegedCarbonContext.endTenantFlow();
-		return deviceManagementService;
-	}
+    /**
+     * This method returns Device Management Object for certain tasks such as Device enrollment etc.
+     *
+     * @return DeviceManagementServiceObject
+     */
+    public static DeviceManagementService getDeviceManagementService() {
+        try {
+            DeviceManagementService deviceManagementService;
+            PrivilegedCarbonContext.startTenantFlow();
+            PrivilegedCarbonContext context = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            context.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            deviceManagementService = (DeviceManagementService) context.getOSGiService(
+                    DeviceManagementService.class, null);
+            return deviceManagementService;
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
+        }
+    }
 }
