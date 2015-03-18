@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
@@ -59,8 +60,10 @@ public class SyncmlParserTest {
         } catch (IOException e) {
             Assert.fail("Test failure while accessing syncml-test-message.xml.");
         }
-
         SyncmlGenerator generator = new SyncmlGenerator();
-        log.info(generator.generatePayload(syncmlParser.parseSyncmlPayload(document)));
+        String inputSyncmlMsg = FileUtils.readFileToString(propertyFile);
+        String generatedSyncmlMsg = generator.generatePayload(syncmlParser.parseSyncmlPayload(document));
+        generatedSyncmlMsg = generatedSyncmlMsg.replaceAll("\n", "");
+        Assert.assertEquals(inputSyncmlMsg , generatedSyncmlMsg);
     }
 }
