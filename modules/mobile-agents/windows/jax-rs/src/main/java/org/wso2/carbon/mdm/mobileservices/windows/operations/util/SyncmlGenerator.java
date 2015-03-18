@@ -41,8 +41,6 @@ public class SyncmlGenerator {
 
 	private static Log log = LogFactory.getLog(SyncmlGenerator.class);
 
-
-
 	public void generatePayload(SyncmlDocument syncmlDocument) throws WindowsOperationException {
 		Document doc = generateDocument();
 		Element rootElement = createRootElement(doc);
