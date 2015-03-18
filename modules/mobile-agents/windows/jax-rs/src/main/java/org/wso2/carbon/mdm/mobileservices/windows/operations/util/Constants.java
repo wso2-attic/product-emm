@@ -59,7 +59,7 @@ public class Constants {
 	public static final String TYPE = "Type";
 	public static final String META_NAMESPACE = "syncml:metinf";
 	public static final String XMLNS = "xmlns";
-
+	public static final String RESULTS = "Results";
 
 	/**
 	 * SynclML service related constants

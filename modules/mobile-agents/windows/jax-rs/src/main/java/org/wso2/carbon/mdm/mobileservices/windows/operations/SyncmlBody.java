@@ -36,7 +36,6 @@ public class SyncmlBody {
 	Replace replace;
 	Results results;
 
-
 	public Results getResults() {
 		return results;
 	}
@@ -102,6 +101,10 @@ public class SyncmlBody {
 			getAlert().buildAlertElement(doc, syncBody);
 		}
 
+		if (getResults() != null) {
+			getResults().buildResultElement(doc, syncBody);
+		}
+
 		if (getGet() != null) {
 			getGet().buildGetElement(doc, syncBody);
 		}
@@ -112,10 +115,6 @@ public class SyncmlBody {
 
 		if (getReplace() != null) {
 			getReplace().buildReplaceElement(doc, syncBody);
-		}
-
-		if (getResults() != null) {
-			getResults().buildResultElement(doc, syncBody);
 		}
 
 		syncBody.appendChild(doc.createElement(Constants.FINAL));

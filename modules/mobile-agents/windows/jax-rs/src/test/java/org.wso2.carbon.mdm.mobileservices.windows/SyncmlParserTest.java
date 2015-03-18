@@ -34,28 +34,31 @@ import java.io.*;
 
 public class SyncmlParserTest {
 
-    @Test
-    public void parseSyncML() throws IOException, WindowsOperationException {
+	@Test
+	public void parseSyncML() throws IOException, WindowsOperationException {
 
-        SyncmlParser syncmlParser = new SyncmlParser();
-        File propertyFile = new File(getClass().getClassLoader().getResource("syncml-test-message.xml").getFile());
+		SyncmlParser syncmlParser = new SyncmlParser();
+		File propertyFile = new File(
+				getClass().getClassLoader().getResource("syncml-test-message.xml").getFile());
 
-        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder;
-        Document document = null;
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		Document document = null;
 
-        try {
-            docBuilder = docBuilderFactory.newDocumentBuilder();
-            if (docBuilder != null) {
-                document = docBuilder.parse(propertyFile);
-            }
-        } catch (ParserConfigurationException e) {
-            Assert.fail("Test failure in parser configuration while reading syncml-test-message.xml.");
-        } catch (SAXException e) {
-            Assert.fail("Test failure occurred while reading syncml-test-message.xml.");
-        } catch (IOException e) {
-            Assert.fail("Test failure while accessing syncml-test-message.xml.");
-        }
-        syncmlParser.parseSyncmlPayload(document);
-    }
+		try {
+			docBuilder = docBuilderFactory.newDocumentBuilder();
+			if (docBuilder != null) {
+				document = docBuilder.parse(propertyFile);
+			}
+		} catch (ParserConfigurationException e) {
+			Assert.fail(
+					"Test failure in parser configuration while reading syncml-test-message.xml.");
+		} catch (SAXException e) {
+			Assert.fail("Test failure occurred while reading syncml-test-message.xml.");
+		} catch (IOException e) {
+			Assert.fail("Test failure while accessing syncml-test-message.xml.");
+		}
+		syncmlParser.parseSyncmlPayload(document);
+	}
+
 }
