@@ -6,7 +6,7 @@
   "iOSConfigRoot": "%https.ip%/ios/enrollment/",
   "windowsConfigRoot": "http://10.10.10.198:9763/mdm-windows-api/services/federated/bst/authentication",
   "ssoConfiguration": {
-    "enabled": true,
+    "enabled": false,
     "issuer": "mdm",
     "appName": "mdm",
     "identityProviderURL": "%https.ip%/sso/samlsso.jag",

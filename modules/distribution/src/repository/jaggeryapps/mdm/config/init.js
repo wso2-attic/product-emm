@@ -15,22 +15,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var WEB_APP_TITLE = "WSO2 MDM";
-var WEB_APP_CONTEXT = "/mdm/";
-var UNSPECIFIED = "Unspecified";
-var USER_SESSION_KEY = "USER";
-
-var DEVICE_IDENTIFIER = "deviceIdentifier";
-var DEVICE_NAME = "name";
-var DEVICE_OWNERSHIP = "ownership";
-var DEVICE_OWNER = "owner";
-var DEVICE_TYPE ="type";
-var DEVICE_VENDOR = "vendor";
-var DEVICE_MODEL = "model";
-var DEVICE_OS_VERSION = "osVersion";
-var DEVICE_PROPERTIES = "properties";
-
-var FEATURE_NAME = "featureName";
-var FEATURE_DESCRIPTION = "featureDescription";
-
-var PLATFORM_ANDROID = "android"
+var carbonModule = require("carbon");
+var mdmProps = require('/config/mdm-props.js').config();
+var carbonServer = new carbonModule.server.Server({
+    tenanted: true,
+    url: mdmProps.httpsURL + '/admin'
+});
+application.put("carbonServer", carbonServer);

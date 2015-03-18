@@ -47,7 +47,7 @@
         </ServiceProvider>
         <ServiceProvider>
             <Issuer>mdm</Issuer>
-            <AssertionConsumerService>https://localhost:9443/mdm/acs</AssertionConsumerService>
+            <AssertionConsumerService>https://localhost:9443/mdm/sso/acs</AssertionConsumerService>
             <SignAssertion>true</SignAssertion>
             <SignResponse>true</SignResponse>
             <EnableAttributeProfile>false</EnableAttributeProfile>

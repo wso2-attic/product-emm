@@ -1,0 +1,30 @@
+{{#zone "main"}}
+    <div class="container col-md-12 col-lg-3 col-centered wr-content wr-login col-centered">
+
+        <h1 class="wr-title">Login</h1>
+        Mobile Device Manager credentials to login.
+
+        <hr />
+
+        <!-- validation -->
+        <span class="wr-validation-summary hidden">
+                <p>Login failed. Check your credentials and try again.</p>
+        </span>
+        <form method="POST" class="form-login-box" action="{{loginPath}}">
+            <label class="wr-input-label">Username</label>
+            <div class="wr-input-control">
+                <input name="username" type="text" value="" placeholder="input text"/>
+            </div>
+
+            <label class="wr-input-label">Password</label>
+            <div class="wr-input-control">
+                <input name="password" type="password" value="" placeholder="input text"/>
+            </div>
+
+            <div class="wr-input-control">
+                <button class="wr-btn" onclick="document.location.href='home.html';">Login</button>
+            </div>
+        </form>
+
+    </div>
+{{/zone}}
