@@ -63,10 +63,4 @@ public class SyncmlParserTest {
         SyncmlGenerator generator = new SyncmlGenerator();
         log.info(generator.generatePayload(syncmlParser.parseSyncmlPayload(document)));
     }
-
-    //TODO remove later, this is only for quick testings...
-    public static void main(String[] args) throws IOException, WindowsOperationException {
-        SyncmlParserTest test = new SyncmlParserTest();
-        test.parseSyncML();
-    }
 }
