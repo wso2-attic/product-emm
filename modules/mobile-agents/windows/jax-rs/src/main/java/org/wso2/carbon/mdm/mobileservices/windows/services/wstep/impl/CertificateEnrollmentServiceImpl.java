@@ -191,12 +191,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @param storePassword - MDM Keystore password
 	 * @param keyPassword   - MDM Private key password
 	 * @throws KeyStoreGenerationException
-	 * @throws org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException
 	 * @throws CertificateGenerationException
 	 */
 	public void setRootCertAndKey(
 			String storePassword, String keyPassword) throws KeyStoreGenerationException,
-	                              WAPProvisioningException, CertificateGenerationException {
+	                              CertificateGenerationException {
 
 		File jksFile = new File(getClass().getClassLoader().getResource(
 				Constants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
@@ -294,8 +293,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(certificationRequest);
 		X509Certificate signedCertificate =
-				CertificateSigningService.signCSR(csr, privateKey, rootCACertificate,
-				                                  certPropertyList);
+				CertificateSigningService.signCSR(csr, privateKey, rootCACertificate, certPropertyList);
 		Base64 base64Encoder = new Base64();
 		String rootCertEncodedString;
 		try {
