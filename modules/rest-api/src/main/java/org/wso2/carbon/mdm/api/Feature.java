@@ -48,19 +48,13 @@ public class Feature {
 			throws MDMAPIException {
 		List<org.wso2.carbon.device.mgt.common.Feature> features;
 		DeviceManagementService dmService;
-		OperationManager operationManager;
 		try {
 			dmService = MDMAPIUtils.getDeviceManagementService();
-			operationManager = dmService.getOperationManager(MDMAPIConstants.MOBILE_DEVICE_TYPE);
-			features = operationManager.getFeaturesForDeviceType(MDMAPIConstants.MOBILE_DEVICE_TYPE);
+			features = dmService.getFeatures(MDMAPIConstants.MOBILE_DEVICE_TYPE);
 		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
 			String errorMsg = "Device management service error.";
 			log.error(errorMsg, deviceServiceMgtEx);
 			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
-		} catch (DeviceManagementException deviceMgtEx) {
-			String errorMsg = "Error occurred while fetching the operation manager.";
-			log.error(errorMsg, deviceMgtEx);
-			throw new MDMAPIException(errorMsg, deviceMgtEx);
 		} catch (FeatureManagementException ex) {
 			String errorMsg = "Error occurred while fetching the features for the device type.";
 			log.error(errorMsg, ex);
