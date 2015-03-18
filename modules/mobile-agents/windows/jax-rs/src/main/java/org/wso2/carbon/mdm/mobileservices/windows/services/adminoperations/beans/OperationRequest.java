@@ -18,5 +18,39 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans;
 
+import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
+import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
+import java.util.List;
+
 public class OperationRequest {
+
+    private List<Devices> deviceList;
+    private List<CommandOperation> commandOperations;
+    private List<ConfigOperation> configOperations;
+
+    public List<ConfigOperation> getConfigOperations() {
+        return configOperations;
+    }
+
+    public void setConfigOperations(List<ConfigOperation> configOperations) {
+        this.configOperations = configOperations;
+    }
+
+    public List<Devices> getDeviceList() {
+        return deviceList;
+
+    }
+
+    public void setDeviceList(List<Devices> deviceList) {
+        this.deviceList = deviceList;
+    }
+
+    public List<CommandOperation> getCommandOperations() {
+        return commandOperations;
+    }
+
+    public void setCommandOperations(List<CommandOperation> commandOperations) {
+        this.commandOperations = commandOperations;
+    }
+
 }

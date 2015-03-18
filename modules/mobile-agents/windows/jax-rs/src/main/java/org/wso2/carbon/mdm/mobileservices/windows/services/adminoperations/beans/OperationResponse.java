@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * This bean class is for credentials coming from wab page at federated authentication step.
  */
-@XmlRootElement(name = "credentials")
+@XmlRootElement(name = "response")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OperationResponse {
 
