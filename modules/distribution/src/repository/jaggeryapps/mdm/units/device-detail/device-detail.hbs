@@ -1,0 +1,122 @@
+{{#zone "main"}}
+    <div class="row wr-device-board">
+        <div class="col-lg-12 wr-secondary-bar">
+            <label>{{device.name}} <span class="lbl-device">({{device.properties.vendor}} {{device.properties.model}})</span></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- content -->
+            <div class="container col-md-12 col-centered wr-content">
+                {{unit "operation-bar"}}
+            </div>
+            <!-- /content -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- content -->
+            <div class="container col-md-10 wr-stats-board">
+
+                <!-- device summary -->
+                <div class="ctrl-tile-status tile-bg">
+                    <div class="tile-name">BATTERY</div>
+                    <div >
+                        <div class="tile-icon"><img src="{{self.publicURL}}/img/icons/ico-batt.png" /></div>
+                        <div class="tile-stats">10%</div>
+                    </div>
+                </div>
+
+                <div class="ctrl-tile-status tile-bg">
+                    <div class="tile-name">LOCAL STORAGE</div>
+                    <div>
+                        <div class="tile-icon"><img src="{{self.publicURL}}/img/icons/ico-storage-local.png" /></div>
+                        <div class="tile-stats">80%<span class="tile-stats-free">6 GB Free</span></div>
+                    </div>
+                </div>
+
+                <div class="ctrl-tile-status tile-bg">
+                    <div class="tile-name">EXTERNAL STORAGE</div>
+                    <div>
+                        <div class="tile-icon"><img src="{{self.publicURL}}/img/icons/ico-ext-data.png" /></div>
+                        <div class="tile-stats">20%<span class="tile-stats-free">14 GB Free</span></div>
+                    </div>
+                </div>
+
+                <div class="ctrl-tile-status-2x tile-bg">
+                    <div class="tile-name">USAGE /DATA<span class="tile-sup-lbl">Last 30 days</span></div>
+
+                    <div class="tile-stats-v">
+                        <div><span class="tile-stats-sm">721 Mb </span><span class="tile-stats-type">Cellular</span></div>
+                        <div><span class="tile-stats-sm">3.2 Gb </span><span class="tile-stats-type">Wi-Fi</span></div>
+                    </div>
+                    <div class="tile-graph"><img src="{{self.publicURL}}/img/graph.png" /></div>
+                </div>
+
+                <div class="ctrl-tile-status tile-bg">
+                    <div class="tile-name">USAGE /VOICE</div>
+                    <div>
+                        <div class="tile-icon"><img src="{{self.publicURL}}/img/icons/ico-voice.png" /></div>
+                        <div class="tile-stats">80%<span class="tile-stats-free">6 GB Free</span></div>
+                    </div>
+                </div>
+                <!-- /device summary -->
+
+            </div>
+
+            <div class="container col-md-2">
+                <img src="{{self.publicURL}}/img/app5.png" />
+            </div>
+
+            <!-- /content -->
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="container col-md-12">
+
+            <div class="container col-md-10 wr-stats-board">
+
+                <!-- content -->
+                <h2 class="sub-title">Device Location</h2>
+
+                <h2 class="sub-title">Policies</h2>
+
+
+                <!-- installed applications -->
+                <h2 class="sub-title">Installed Applications</h2>
+                <div>
+
+                    <div class="wr-app-listing">
+                        <div><img src="img/app9.png" /></div>
+                        <div><img src="img/app10.png" /></div>
+                        <div><img src="img/app11.png" /></div>
+                        <div><img src="img/app12.png" /></div>
+                        <div><img src="img/app13.png" /></div>
+                        <div><img src="img/app14.png" /></div>
+                        <div><img src="img/app15.png" /></div>
+                        <div><img src="img/app16.png" /></div>
+                        <div><img src="img/app17.png" /></div>
+                        <div><img src="img/app18.png" /></div>
+                        <div><img src="img/app19.png" /></div>
+                        <div><img src="img/app20.png" /></div>
+                        <div><img src="img/app21.png" /></div>
+                        <div><img src="img/app22.png" /></div>
+                        <div><img src="img/app23.png" /></div>
+                        <div><img src="img/app21.png" /></div>
+                        <div><img src="img/app10.png" /></div>
+                    </div>
+
+                </div>
+                <!-- /installed applications -->
+
+
+                <!-- /content -->
+
+            </div>
+
+        </div>
+    </div>
+{{/zone}}

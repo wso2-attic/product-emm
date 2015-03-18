@@ -22,6 +22,7 @@
                 <exclude>**/version.txt</exclude>
                 <exclude>**/master-datasources.xml</exclude>
                 <exclude>**/carbon.xml</exclude>
+                <exclude>**/registry.xml</exclude>
                 <exclude>**/client-truststore.jks</exclude>
                 <exclude>**/wso2carbon.jks</exclude>
                 <exclude>**/WSO2AM_DB.h2.db</exclude>
@@ -314,6 +315,12 @@
             <fileMode>755</fileMode>
         </file>
         <file>
+            <source>../mobile-agents/windows/jax-rs/target/mdm-windows-api.war</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
             <source>../rest-api/target/wso2mdm-api.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
@@ -483,11 +490,21 @@
             <fileMode>644</fileMode>
         </file>
 
-	<file>
+        <!--License Config file-->
+	    <file>
             <source>
                 src/repository/conf/license-config.xml
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- Copying the modified registry.xml file-->
+        <file>
+            <source>
+                src/repository/conf/registry.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>

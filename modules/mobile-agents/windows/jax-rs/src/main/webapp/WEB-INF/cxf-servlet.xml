@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~  WSO2 Inc. licenses this file to you under the Apache License,
   ~  Version 2.0 (the "License"); you may not use this file except
@@ -17,85 +16,133 @@
   ~  specific language governing permissions and limitations
   ~  under the License.
   -->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-         http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+         http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+         http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-    <jaxws:endpoint
-            id="DiscoveryService"
-            implementor="cdm.api.windows.DiscoveryService.impl.DiscoveryServiceGetImpl"
-            address="/test/send"/>
-
-    <jaxrs:server id="DiscoveryService_rest" address="/test/send2">
+    <!--Discovery Service GET Endpoint-->
+    <jaxrs:server id="DiscoveryService_rest" address="/discovery/get">
         <jaxrs:serviceBeans>
             <ref bean="DiscoveryService_rest_bean"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
-    <bean id="DiscoveryService_rest_bean" class="cdm.api.windows.DiscoveryService.impl.DiscoveryServiceGetImpl"/>
 
+    <!--Discovery Service POST Endpoint-->
+    <jaxws:endpoint
+            id="DiscoveryService"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl.DiscoveryServiceImpl"
+            address="/discovery/post"/>
 
-
-
-
-
-
+    <!--XCEP endpoint for Federated Auth-Policy-->
     <jaxws:endpoint
             id="EnrollmentPolicyService"
-            implementor="cdm.api.windows.xcep.impl.xcepimpl"
-            address="/test/xcep">
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.xcep.impl.CertificateEnrollmentPolicyServiceImpl"
+            address="/certificatepolicy/xcep">
+        <jaxws:properties>
+            <entry key="ws-security.bst.validator" value-ref="customvalidator"/>
+        </jaxws:properties>
+        <jaxws:handlers>
+            <bean id="securityheader"
+                  class="org.wso2.carbon.mdm.mobileservices.windows.common.util.SOAPSecurityHandler"/>
+        </jaxws:handlers>
+    </jaxws:endpoint>
+
+    <!--XCEP endpoint for OnPremise Auth-Policy-->
+    <jaxws:endpoint
+            id="EnrollmentPolicyServiceOnPremise"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.xcep.impl.CertificateEnrollmentPolicyServiceImpl"
+            address="/certificatepolicy/xcep/onpremise">
+        <jaxws:properties>
+            <entry key="ws-security.ut.validator" value-ref="customvalidatoronpremise"/>
+        </jaxws:properties>
         <jaxws:inInterceptors>
-            <ref bean="wss4jInInterceptor1"/>
+            <ref bean="wss4jInInterceptor"/>
         </jaxws:inInterceptors>
     </jaxws:endpoint>
-    <bean id="wss4jInInterceptor1" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
-        <property name="properties">
-            <map>
-                <entry key="action" value="UsernameToken"/>
-                <entry key="passwordType" value="PasswordText"/>
-                <entry key="isBSPCompliant" value="false"/>
-                <entry key="allowNamespaceQualifiedPasswordTypes"
-                       value="true"/>
-                <entry key="passwordCallbackRef" value-ref="passwordCallback1"/>
-            </map>
-        </property>
-    </bean>
-    <bean id="passwordCallback1" class="cdm.api.windows.xcep.util.ServerPasswordCallback"/>
 
 
 
-
-
-
-
-
+    <!--WSTEP Endpoint for Federated Auth-Policy-->
     <jaxws:endpoint
             id="CertificateEnrollmentService"
-            implementor="cdm.api.windows.wstep.impl.CertificateEnrollmentServiceImpl"
-            address="/cert">
-        <jaxws:inInterceptors>
-            <ref bean="wss4jInInterceptor2"/>
-        </jaxws:inInterceptors>
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.impl.CertificateEnrollmentServiceImpl"
+            address="/deviceenrolment/wstep">
+        <jaxws:properties>
+            <entry key="ws-security.bst.validator" value-ref="customvalidator"/>
+        </jaxws:properties>
+        <jaxws:handlers>
+            <ref bean="serviceOptionsHandler"/>
+        </jaxws:handlers>
     </jaxws:endpoint>
-    <bean id="wss4jInInterceptor2" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+
+    <!--WSTEP Endpoint for OnPremise Auth-Policy-->
+    <jaxws:endpoint
+            id="CertificateEnrollmentServiceOnPremise"
+            implementor="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.impl.CertificateEnrollmentServiceImpl"
+            address="/deviceenrolment/wstep/onpremise">
+        <jaxws:properties>
+            <entry key="ws-security.ut.validator" value-ref="customvalidatoronpremise"/>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wss4jInInterceptor"/>
+        </jaxws:inInterceptors>
+        <jaxws:handlers>
+            <ref bean="serviceOptionsHandler"/>
+        </jaxws:handlers>
+    </jaxws:endpoint>
+
+    <!--Syncml Endpoint-->
+    <jaxrs:server id="Syncmlinitial" address="/syncml">
+        <jaxrs:serviceBeans>
+            <ref bean="Syncml_initial_bean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+    <!--BST provider Endpoint for returning binary security token after authentication-->
+    <jaxrs:server id="bstprovider" address="/federated">
+        <jaxrs:serviceBeans>
+            <ref bean="bstprovider_bean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+    <!--Endpoint for UI admin operations-->
+    <jaxrs:server id="adminoperations" address="/operations">
+        <jaxrs:serviceBeans>
+            <ref bean="adminoperations_bean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+
+    <bean id="bstprovider_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl.BSTProviderImpl"/>
+    <bean id="adminoperations_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl.operationsImpl"/>
+    <bean id="DiscoveryService_rest_bean"
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl.DiscoveryServiceImpl"/>
+    <bean id="wss4jInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
         <property name="properties">
             <map>
                 <entry key="action" value="UsernameToken"/>
                 <entry key="passwordType" value="PasswordText"/>
                 <entry key="isBSPCompliant" value="false"/>
-                <entry key="allowNamespaceQualifiedPasswordTypes"
-                       value="true"/>
-                <entry key="passwordCallbackRef" value-ref="passwordCallback2"/>
+                <entry key="allowNamespaceQualifiedPasswordTypes" value="true"/>
             </map>
         </property>
     </bean>
-    <bean id="passwordCallback2" class="cdm.api.windows.wstep.util.PasswordCallbackHandler"/>
-
-
+    <bean id="Syncml_initial_bean"
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl.SyncmlServiceImpl"/>
+    <bean id="customvalidator"
+          class="org.wso2.carbon.mdm.mobileservices.windows.common.util.BSTValidator"/>
+    <bean id="customvalidatoronpremise"
+          class="org.wso2.carbon.mdm.mobileservices.windows.common.util.UsernameTokenValidator"/>
+    <bean id="serviceOptionsHandler"
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.MessageHandler"/>
 </beans>
 
