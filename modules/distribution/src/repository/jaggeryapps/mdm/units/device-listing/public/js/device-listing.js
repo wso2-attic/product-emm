@@ -46,11 +46,6 @@
     $.hasPermission = function (permission){
         return permissionSet[permission];
     }
-    //TODO: Call the backend and get the permission list
-    var tempPermlist = ["LIST_DEVICES", "LIST_OWN_DEVICES"];
-    for(temp in tempPermlist){
-        $.setPermission(tempPermlist[temp]);
-    }
 })();
 
 /*
@@ -67,6 +62,10 @@ $(document).ready(function(){
     $(deviceCheckbox).each(function(){
         addDeviceSelectedClass(this);
     });
+    var permissionList = $("#permission").data("permission");
+    for(var index in permissionList){
+        $.setPermission(permissionList[index]);
+    }
 });
 
 /*
@@ -132,7 +131,7 @@ $(document).ready(function () {
             serviceURL = "https://localhost:9443/mdm/api/devices";
         }else if($.hasPermission("LIST_OWN_DEVICES")){
             //Get authenticated users devices
-            serviceURL = "https://localhost:9443/wso2mdm-api/user/devices";
+            serviceURL = "https://localhost:9443/mdm/api/user/devices";
         }else {
             $("#ast-container").html("Permission denied");
             return;

@@ -20,6 +20,7 @@ var uri = request.getRequestURI();
 var log = new Log();
 var uriMatcher = new URIMatcher(uri);
 var constants = require("/modules/constants.js");
+var mdmProps = require('/config/mdm-props.js').config();
 if (uriMatcher.match("/{context}/api/user/login/")) {
     var username = request.getParameter("username");
     var password = request.getParameter("password");
@@ -30,17 +31,23 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         var authState = carbonServer.authenticate(username, password);
         delete password;
         if (authState){
-            session.put(constants.USER_SESSION_KEY, username);
+            var carbonUser = carbonModule.server.tenantUser(username);
+            session.put(constants.USER_SESSION_KEY, carbonUser);
             response.sendRedirect(constants.WEB_APP_CONTEXT);
         }else{
-            response.sendRedirect("login?");
+            response.sendRedirect(mdmProps.appContext + "login?#auth-failed");
             exit();
         }
     }catch (e) {
         log.debug(e);
-        throw e;
+        response.sendRedirect(mdmProps.appContext + "login?#error");
     }
 } else if (uriMatcher.match("/{context}/api/user/logout/")){
     session.invalidate();
+    response.sendRedirect(mdmProps.appContext + "login");
+} else if (uriMatcher.match("/{context}/api/user/devices/")) {
+    var deviceModule = require("/modules/device.js").deviceModule;
+    var carbonUser = session.get(constants.USER_SESSION_KEY);
+    result = deviceModule.listDevicesForUser(carbonUser.username);
 }
 %>

@@ -23,9 +23,6 @@ var uriMatcher = new URIMatcher(uri);
 var result;
 if (uriMatcher.match("/{context}/api/devices/")) {
     result = deviceModule.listDevices();
-}else if (uriMatcher.match("/{context}/api/user/devices/")) {
-    var currentUser = session.get("USER");
-    result = deviceModule.listDevicesForUser(currentUser);
 }else if (uriMatcher.match("/{context}/api/devices/{type}/{deviceId}")) {
     var elements = uriMatcher.elements();
     var deviceId = elements.deviceId;
