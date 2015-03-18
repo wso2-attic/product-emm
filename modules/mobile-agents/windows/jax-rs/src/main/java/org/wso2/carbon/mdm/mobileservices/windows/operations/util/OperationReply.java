@@ -105,7 +105,7 @@ public class OperationReply {
 			Status execStatus = new Status(sourceSyncmlBody.getGet().getCommandId(),
 			                               HEADER_COMMAND_REFERENCE_ID,
 			                               sourceSyncmlBody.getGet().getCommandId(),
-			                               GET_COMMAND_TEXT, null,
+			                               EXEC_COMMAND_TEXT, null,
 			                               String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
 			status.add(execStatus);
 		}

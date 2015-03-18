@@ -65,7 +65,7 @@ public class Results {
 	}
 
 	public void buildResultElement(Document doc, Element rootElement) {
-		Element get = doc.createElement(Constants.GET);
+		Element get = doc.createElement(Constants.RESULTS);
 		rootElement.appendChild(get);
 		if (getCommandId() != 0) {
 			Element commandId = doc.createElement(Constants.COMMAND_ID);
