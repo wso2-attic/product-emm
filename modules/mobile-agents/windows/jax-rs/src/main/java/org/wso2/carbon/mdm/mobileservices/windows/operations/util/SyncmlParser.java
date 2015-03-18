@@ -32,34 +32,63 @@ import java.util.List;
  */
 public class SyncmlParser {
 
+    private static final String SYNC_HDR = "SyncHdr";
+    private static final String SYNC_BODY = "SyncBody";
+    private enum SyncMLHeaderParameter {
+        MSG_ID("MsgID"),
+        SESSION_ID("SessionID"),
+        TARGET("Target"),
+        SOURCE("Source"),
+        CRED("Cred");
+        private final String parameterName;
+        private SyncMLHeaderParameter(final String parameterName) {
+            this.parameterName = parameterName;
+        }
+        public String getValue() {
+            return this.parameterName;
+        }
+    }
+    private enum SycMLCommandType{
+        ALERT("Alert"),
+        REPLACE("Replace"),
+        STATUS("Status"),
+        RESULTS("Results");
+        private final String commandName;
+        private SycMLCommandType(final String commandName){
+            this.commandName = commandName;
+        }
+        public String getValue() {
+            return this.commandName;
+        }
+    }
     private static Log log = LogFactory.getLog(SyncmlParser.class);
 
     /**
      * Parses the raw SyncML payload and generates a SyncmlDocument object using the parsed XML contents.
-     *
      * @param syncmlPayload - Received SyncML XML payload
      * @return - SyncmlDocument object generated from the received payload
      */
     public SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws WindowsOperationException {
 
-        NodeList syncHeaderList = syncmlPayload.getElementsByTagName("SyncHdr");
+        NodeList syncHeaderList = syncmlPayload.getElementsByTagName(SYNC_HDR);
         Node syncHeader = syncHeaderList.item(0);
         SyncmlHeader header = generateSyncmlHeader(syncHeader);
 
-        NodeList syncBodyList = syncmlPayload.getElementsByTagName("SyncBody");
+        NodeList syncBodyList = syncmlPayload.getElementsByTagName(SYNC_BODY);
         Node syncBody = syncBodyList.item(0);
         SyncmlBody body = generateSyncmlBody(syncBody);
 
         SyncmlDocument syncmlDocument = new SyncmlDocument();
         syncmlDocument.setHeader(header);
         syncmlDocument.setBody(body);
-
-        SyncmlGenerator generator = new SyncmlGenerator();
-        System.out.println(generator.generatePayload(syncmlDocument));
-
         return syncmlDocument;
     }
 
+    /**
+     * Generates SyncmlHeader object by extracting properties of passed XML node.
+     * @param syncHeader - XML node which represents SyncML header
+     * @return - SyncmlHeader object
+     */
     private SyncmlHeader generateSyncmlHeader(Node syncHeader) {
 
         NodeList headerElements = syncHeader.getChildNodes();
@@ -73,22 +102,21 @@ public class SyncmlParser {
             Node node = headerElements.item(i);
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-
                 String nodeName = node.getNodeName();
 
-                if ("MsgID".equals(nodeName)) {
+                if (SyncMLHeaderParameter.MSG_ID.getValue().equals(nodeName)) {
                     messageID = node.getTextContent().trim();
                 }
-                else if("SessionID".equals(nodeName)){
+                else if(SyncMLHeaderParameter.SESSION_ID.getValue().equals(nodeName)){
                     sessionID = node.getTextContent().trim();
                 }
-                else if ("Target".equals(nodeName)) {
+                else if (SyncMLHeaderParameter.TARGET.getValue().equals(nodeName)) {
                     target = generateTarget(node);
                 }
-                else if ("Source".equals(nodeName)) {
+                else if (SyncMLHeaderParameter.SOURCE.getValue().equals(nodeName)) {
                     source = generateSource(node);
                 }
-                else if ("Cred".equals(nodeName)) {
+                else if (SyncMLHeaderParameter.CRED.getValue().equals(nodeName)) {
                     credential = generateCredential(node);
                 }
             }
@@ -99,11 +127,14 @@ public class SyncmlParser {
         header.setTarget(target);
         header.setSource(source);
         header.setCredential(credential);
-
-        System.out.println("Header Parts : " + "sessionID: " + sessionID + " MessageID: " + messageID + " TargetURI: " + target.getLocURI() + " SourceURI: " + source.getLocURI() + " SourceName: " + source.getLocName());
         return header;
     }
 
+    /**
+     * Generates SyncmlBody object by extracting properties of passed XML node.
+     * @param syncBody - XML node which represents SyncML body
+     * @return - SyncmlBody object
+     */
     private SyncmlBody generateSyncmlBody(Node syncBody) {
 
         NodeList bodyElements = syncBody.getChildNodes();
@@ -116,19 +147,18 @@ public class SyncmlParser {
             Node node = bodyElements.item(i);
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-
                 String nodeName = node.getNodeName();
 
-                if("Alert".equals(nodeName)){
+                if(SycMLCommandType.ALERT.getValue().equals(nodeName)){
                     alert = generateAlert(node);
                 }
-                else if("Replace".equals(nodeName)){
+                else if(SycMLCommandType.REPLACE.getValue().equals(nodeName)){
                     replace = generateReplace(node);
                 }
-                else if("Status".equals(nodeName)){
+                else if(SycMLCommandType.STATUS.getValue().equals(nodeName)){
                     status.add(generateStatus(node));
                 }
-                else if("Results".equals(nodeName)){
+                else if(SycMLCommandType.RESULTS.getValue().equals(nodeName)){
                     results = generateResults(node);
                 }
             }
@@ -141,10 +171,14 @@ public class SyncmlParser {
         return body;
     }
 
+    /**
+     * Generates Source object by extracting properties of passed XML node.
+     * @param node - XML node which represents Source
+     * @return - Source object
+     */
     private Source generateSource(Node node) {
 
         Source source = new Source();
-
         Node sourceURIItem = node.getChildNodes().item(0);
         Node sourceNameItem = node.getChildNodes().item(1);
         String sourceURI = null;
@@ -161,6 +195,11 @@ public class SyncmlParser {
         return source;
     }
 
+    /**
+     * Generates Target object by extracting properties of passed XML node.
+     * @param node - XML node which represents Target
+     * @return - Target object
+     */
     private Target generateTarget(Node node) {
 
         Target target = new Target();
@@ -180,11 +219,16 @@ public class SyncmlParser {
         return target;
     }
 
+    /**
+     * Generates Results object by extracting properties of passed XML node.
+     * @param node - XML node which represents Results
+     * @return - Results object
+     */
     private Results generateResults(Node node) {
 
         Results results = new Results();
-        if(node.getNodeType() == Node.ELEMENT_NODE) {
 
+        if(node.getNodeType() == Node.ELEMENT_NODE) {
             String commandID = node.getChildNodes().item(0).getTextContent().trim();
             String messageReference = node.getChildNodes().item(1).getTextContent().trim();
             String commandReference = node.getChildNodes().item(2).getTextContent().trim();
@@ -195,10 +239,14 @@ public class SyncmlParser {
             results.setCommandReference(Integer.valueOf(commandReference));
             results.setItem(item);
         }
-        System.out.println(" Results Object --- "+ " commandID:" + results.getCommandId() + " messID :" + results.getMessageReference() + " comref :" + results.getCommandReference());
         return results;
     }
 
+    /**
+     * Generates Status object by extracting properties of passed XML node.
+     * @param node - XML node which represents Status
+     * @return - Status object
+     */
     private Status generateStatus(Node node) {
 
         Status status = new Status();
@@ -218,6 +266,11 @@ public class SyncmlParser {
         return status;
     }
 
+    /**
+     * Generates Replace object by extracting properties of passed XML node.
+     * @param node - XML node which represents Replace
+     * @return - Replace object
+     */
     private Replace generateReplace(Node node) {
 
         Replace replace = new Replace();
@@ -231,8 +284,12 @@ public class SyncmlParser {
         return replace;
     }
 
+    /**
+     * Generates Alert object by extracting properties of passed XML node.
+     * @param node - XML node which represents Alert
+     * @return - Alert object
+     */
     private Alert generateAlert(Node node) {
-
         Alert alert = new Alert();
         String commandID = node.getChildNodes().item(0).getTextContent().trim();
         String data = node.getChildNodes().item(1).getTextContent().trim();
@@ -241,28 +298,35 @@ public class SyncmlParser {
         return alert;
     }
 
+    /**
+     * Generates Item object by extracting properties of passed XML node.
+     * @param node - XML node which represents Item
+     * @return - Item object
+     */
     private Item generateItem(Node node){
-
         Item item = new Item();
         String data;
-        if("Source".equals(node.getChildNodes().item(0).getNodeName())){
+
+        if(SyncMLHeaderParameter.SOURCE.getValue().equals(node.getChildNodes().item(0).getNodeName())){
             Source source = generateSource(node.getChildNodes().item(0));
             item.setSource(source);
         }
-        else if("Target".equals(node.getChildNodes().item(0).getNodeName())){
+        else if(SyncMLHeaderParameter.TARGET.getValue().equals(node.getChildNodes().item(0).getNodeName())){
             Target target = generateTarget(node.getChildNodes().item(0));
             item.setTarget(target);
         }
-
         Node dataItem = node.getChildNodes().item(1);
         data = dataItem.getTextContent().trim();
         item.setData(data);
-        System.out.println("Item Object: " + "data : " + data);
         return item;
     }
 
+    /**
+     * Generates Credential object by extracting properties of passed XML node.
+     * @param node - XML node which represents Credential
+     * @return - Credential object
+     */
     private Credential generateCredential(Node node) {
-
         Credential credential = new Credential();
         Meta meta = generateMeta(node.getChildNodes().item(0));
         String data = node.getChildNodes().item(1).getTextContent().trim();
@@ -271,6 +335,11 @@ public class SyncmlParser {
         return credential;
     }
 
+    /**
+     * Generates Meta object by extracting properties of passed XML node.
+     * @param node - XML node which represents Meta
+     * @return - Meta object
+     */
     private Meta generateMeta(Node node){
         Meta meta = new Meta();
         String format = node.getChildNodes().item(0).getTextContent().trim();

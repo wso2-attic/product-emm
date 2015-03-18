@@ -78,7 +78,7 @@
                     <parm name="IntervalForSecondSetOfRetries" value="3" datatype="integer" />
                     <parm name="NumberOfRemainingScheduledRetries" value="0" datatype="integer" />
                     <!-- In Windows Phone 8.1, MDM push is supported for real-time communication. The DM client long term polling schedule’s retry waiting interval should be more than 24 hours (1440) to reduce the impact to data consumption and battery life. Refer to the DMClient Configuration Service Provider section for information about polling schedule parameters.-->
-                    <parm name="IntervalForRemainingScheduledRetries" value="1560" datatype="integer" />
+                    <parm name="IntervalForRemainingScheduledRetries" value="1" datatype="integer" />
                 </characteristic>
                 <parm name="EntDeviceName" value="AdministratorWindowsPhone" datatype="string" />
             </characteristic>

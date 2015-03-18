@@ -18,13 +18,14 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlGenerator;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlParser;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -33,6 +34,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 
 public class SyncmlParserTest {
+
+    private static Log log = LogFactory.getLog(SyncmlParser.class);
 
     @Test
     public void parseSyncML() throws IOException, WindowsOperationException {
@@ -56,6 +59,14 @@ public class SyncmlParserTest {
         } catch (IOException e) {
             Assert.fail("Test failure while accessing syncml-test-message.xml.");
         }
-        syncmlParser.parseSyncmlPayload(document);
+
+        SyncmlGenerator generator = new SyncmlGenerator();
+        log.info(generator.generatePayload(syncmlParser.parseSyncmlPayload(document)));
+    }
+
+    //TODO remove later, this is only for quick testings...
+    public static void main(String[] args) throws IOException, WindowsOperationException {
+        SyncmlParserTest test = new SyncmlParserTest();
+        test.parseSyncML();
     }
 }
