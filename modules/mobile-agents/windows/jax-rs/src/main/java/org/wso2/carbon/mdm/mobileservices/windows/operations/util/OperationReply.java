@@ -19,7 +19,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
-import org.wso2.carbon.device.mgt.common.Operation;
+import org.wso2.carbon.device.mgt.core.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
