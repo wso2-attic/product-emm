@@ -34,6 +34,16 @@ public class SyncmlBody {
 	List<Status> status;
 	Alert alert;
 	Replace replace;
+	Results results;
+
+
+	public Results getResults() {
+		return results;
+	}
+
+	public void setResults(Results results) {
+		this.results = results;
+	}
 
 	public Replace getReplace() {
 		return replace;
@@ -102,6 +112,10 @@ public class SyncmlBody {
 
 		if (getReplace() != null) {
 			getReplace().buildReplaceElement(doc, syncBody);
+		}
+
+		if (getResults() != null) {
+			getResults().buildResultElement(doc, syncBody);
 		}
 
 		syncBody.appendChild(doc.createElement(Constants.FINAL));

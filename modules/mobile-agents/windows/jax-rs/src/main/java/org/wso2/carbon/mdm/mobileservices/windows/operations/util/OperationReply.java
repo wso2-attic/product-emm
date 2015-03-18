@@ -47,7 +47,7 @@ public class OperationReply {
 	private void generateHeader() {
 		SyncmlHeader sourceHeader = syncmlDocument.getHeader();
 		SyncmlHeader header = new SyncmlHeader();
-		header.setMsgId(sourceHeader.getMsgId());
+		header.setMsgID(sourceHeader.getMsgID());
 		header.setSessionId(sourceHeader.getSessionId());
 		Target target = new Target();
 		target.setLocURI(sourceHeader.getSource().getLocURI());
@@ -71,7 +71,7 @@ public class OperationReply {
 		SyncmlBody syncmlBodyReply = new SyncmlBody();
 		List<Status> status = new ArrayList<Status>();
 		Status headerStatus =
-				new Status(HEADER_STATUS_ID, sourceHeader.getMsgId(), HEADER_COMMAND_REFERENCE_ID,
+				new Status(HEADER_STATUS_ID, sourceHeader.getMsgID(), HEADER_COMMAND_REFERENCE_ID,
 				           HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
 				           String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
 		status.add(headerStatus);

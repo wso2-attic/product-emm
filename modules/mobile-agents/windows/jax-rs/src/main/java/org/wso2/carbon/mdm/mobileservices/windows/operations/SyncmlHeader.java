@@ -28,7 +28,7 @@ import org.w3c.dom.Element;
  */
 public class SyncmlHeader {
 	private int sessionId = 0;
-	private int msgId = 0;
+	private int MsgID = 0;
 	private Target target;
 	private Source source;
 	private Credential credential;
@@ -49,12 +49,12 @@ public class SyncmlHeader {
 		this.sessionId = sessionId;
 	}
 
-	public int getMsgId() {
-		return msgId;
+	public int getMsgID() {
+		return MsgID;
 	}
 
-	public void setMsgId(int msgId) {
-		this.msgId = msgId;
+	public void setMsgID(int msgID) {
+		this.MsgID = msgID;
 	}
 
 	public Target getTarget() {
@@ -90,9 +90,9 @@ public class SyncmlHeader {
 			syncHdr.appendChild(sessionId);
 		}
 
-		if (getMsgId() != 0) {
+		if (getMsgID() != 0) {
 			Element msgId = doc.createElement(Constants.MESSAGE_ID);
-			msgId.appendChild(doc.createTextNode(String.valueOf(getMsgId())));
+			msgId.appendChild(doc.createTextNode(String.valueOf(getMsgID())));
 			syncHdr.appendChild(msgId);
 		}
 
