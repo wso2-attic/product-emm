@@ -60,12 +60,6 @@ public class Item {
 		Element item = doc.createElement(Constants.ITEM);
 		rootElement.appendChild(item);
 
-		if (getData() != null) {
-			Element data = doc.createElement(Constants.DATA);
-			data.appendChild(doc.createTextNode(getData()));
-			item.appendChild(data);
-		}
-
 		if (getTarget() != null || getSource() != null) {
 
 			if (getTarget() != null) {
@@ -74,6 +68,12 @@ public class Item {
 			if (getSource() != null) {
 				getSource().buildSourceElement(doc, item);
 			}
+		}
+
+		if (getData() != null) {
+			Element data = doc.createElement(Constants.DATA);
+			data.appendChild(doc.createTextNode(getData()));
+			item.appendChild(data);
 		}
 	}
 }
