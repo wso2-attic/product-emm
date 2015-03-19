@@ -21,7 +21,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
@@ -34,7 +33,7 @@ public class MDMAPIUtils {
 
     private static Log log = LogFactory.getLog(MDMAPIUtils.class);
 
-	public static DeviceManagementService getDeviceManagementService() throws DeviceManagementServiceException{
+	public static DeviceManagementService getDeviceManagementService() {
         // until complete login this is use to load super tenant context
 		DeviceManagementService dmService;
 		PrivilegedCarbonContext.startTenantFlow();
@@ -42,12 +41,6 @@ public class MDMAPIUtils {
 		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
 		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
-
-        if (dmService == null){
-	        String msg = "device management service not initialized";
-            log.error(msg);
-            throw new DeviceManagementServiceException(msg);
-        }
         PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
 	}

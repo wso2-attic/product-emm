@@ -43,14 +43,14 @@ public class Alert {
 		this.data = data;
 	}
 
-	int commandId = 0;
+	int commandId = -1;
 	String data;
 
 	public void buildAlertElement(Document doc, Element rootElement) {
 		Element alert = doc.createElement(Constants.ALERT);
 		rootElement.appendChild(alert);
 
-		if (getCommandId() != 0) {
+		if (getCommandId() != -1) {
 			Element commandId = doc.createElement(Constants.COMMAND_ID);
 			commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
 			alert.appendChild(commandId);

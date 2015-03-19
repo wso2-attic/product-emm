@@ -50,17 +50,11 @@ public class Feature {
 		DeviceManagementService dmService;
 		try {
 			dmService = MDMAPIUtils.getDeviceManagementService();
-			features = dmService.getFeatures(MDMAPIConstants.MOBILE_DEVICE_TYPE);
-		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
-			String errorMsg = "Device management service error.";
-			log.error(errorMsg, deviceServiceMgtEx);
-			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
-		} catch (FeatureManagementException ex) {
-			String errorMsg = "Error occurred while fetching the features for the device type.";
-			log.error(errorMsg, ex);
-			throw new MDMAPIException(errorMsg, ex);
-		}
-		return features;
+			features = dmService.getFeatureManager().getFeatures();
+		} catch (DeviceManagementException e) {
+            throw new MDMAPIException("Error occurred while retrieving the list of features", e);
+        }
+        return features;
 	}
 
 }
