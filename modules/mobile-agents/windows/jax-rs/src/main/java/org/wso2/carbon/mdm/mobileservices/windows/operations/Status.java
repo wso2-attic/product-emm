@@ -27,9 +27,9 @@ import org.w3c.dom.Element;
  * Status of a previously sent message to device;
  */
 public class Status {
-	int commandId = 0;
-	int messageReference = 0;
-	int commandReference = 0;
+	int commandId = -1;
+	int messageReference = -1;
+	int commandReference = -1;
 	String command;
 	String targetReference;
 	String data;
@@ -96,17 +96,17 @@ public class Status {
 	public void buildStatusElement(Document doc, Element rootElement) {
 		Element status = doc.createElement(Constants.STATUS);
 		rootElement.appendChild(status);
-		if (getCommandId() != 0) {
+		if (getCommandId() != -1) {
 			Element commandId = doc.createElement(Constants.COMMAND_ID);
 			commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
 			status.appendChild(commandId);
 		}
-		if (getMessageReference() != 0) {
+		if (getMessageReference() != -1) {
 			Element msgReference = doc.createElement(Constants.MESSAGE_REFERENCE);
 			msgReference.appendChild(doc.createTextNode(String.valueOf(getMessageReference())));
 			status.appendChild(msgReference);
 		}
-		if (getCommandReference() != 0) {
+		if (getCommandReference() != -1) {
 			Element commandReference = doc.createElement(Constants.COMMAND_REFERENCE);
 			commandReference.appendChild(doc.createTextNode(String.valueOf(getCommandReference())));
 			status.appendChild(commandReference);

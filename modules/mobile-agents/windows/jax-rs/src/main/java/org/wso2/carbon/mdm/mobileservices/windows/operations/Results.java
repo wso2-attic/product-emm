@@ -27,9 +27,9 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
  * Results sent for the requests made to the device.
  */
 public class Results {
-	int commandId = 0;
-	int messageReference = 0;
-	int commandReference = 0;
+	int commandId = -1;
+	int messageReference = -1;
+	int commandReference = -1;
 	Item item;
 
 	public int getCommandId() {
@@ -67,17 +67,17 @@ public class Results {
 	public void buildResultElement(Document doc, Element rootElement) {
 		Element get = doc.createElement(Constants.RESULTS);
 		rootElement.appendChild(get);
-		if (getCommandId() != 0) {
+		if (getCommandId() != -1) {
 			Element commandId = doc.createElement(Constants.COMMAND_ID);
 			commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
 			get.appendChild(commandId);
 		}
-		if (getMessageReference() != 0) {
+		if (getMessageReference() != -1) {
 			Element messageReference = doc.createElement(Constants.MESSAGE_REFERENCE);
 			messageReference.appendChild(doc.createTextNode(String.valueOf(getMessageReference())));
 			get.appendChild(messageReference);
 		}
-		if (getCommandReference() != 0) {
+		if (getCommandReference() != -1) {
 			Element messageReference = doc.createElement(Constants.COMMAND_REFERENCE);
 			messageReference.appendChild(doc.createTextNode(String.valueOf(getCommandReference())));
 			get.appendChild(messageReference);

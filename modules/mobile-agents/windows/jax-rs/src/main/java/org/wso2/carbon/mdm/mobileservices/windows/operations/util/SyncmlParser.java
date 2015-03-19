@@ -81,6 +81,10 @@ public class SyncmlParser {
         SyncmlDocument syncmlDocument = new SyncmlDocument();
         syncmlDocument.setHeader(header);
         syncmlDocument.setBody(body);
+
+        SyncmlGenerator generator = new SyncmlGenerator();
+      //  System.out.println(generator.generatePayload(syncmlDocument));
+
         return syncmlDocument;
     }
 
