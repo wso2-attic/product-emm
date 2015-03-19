@@ -21,10 +21,11 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.bean
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
 import java.util.List;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 
 public class OperationRequest {
 
-    private List<Devices> deviceList;
+    private List<DeviceIdentifier> deviceList;
     private List<CommandOperation> commandOperations;
     private List<ConfigOperation> configOperations;
 
@@ -36,12 +37,12 @@ public class OperationRequest {
         this.configOperations = configOperations;
     }
 
-    public List<Devices> getDeviceList() {
+    public List<DeviceIdentifier> getDeviceList() {
         return deviceList;
 
     }
 
-    public void setDeviceList(List<Devices> deviceList) {
+    public void setDeviceList(List<DeviceIdentifier> deviceList) {
         this.deviceList = deviceList;
     }
 
