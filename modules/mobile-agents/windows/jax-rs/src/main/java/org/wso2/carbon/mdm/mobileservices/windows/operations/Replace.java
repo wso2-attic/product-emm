@@ -29,7 +29,7 @@ import java.util.List;
  * Commands sent from the device.
  */
 public class Replace {
-	int commandId = 0;
+	int commandId = -1;
 	List<Item> items;
 
 	public int getCommandId() {
@@ -52,7 +52,7 @@ public class Replace {
 		if (getItems() != null) {
 			Element get = doc.createElement(Constants.REPLACE);
 			rootElement.appendChild(get);
-			if (getCommandId() != 0) {
+			if (getCommandId() != -1) {
 				Element commandId = doc.createElement(Constants.COMMAND_ID);
 				commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
 				get.appendChild(commandId);

@@ -55,7 +55,7 @@ public class SyncmlParser {
         syncmlDocument.setBody(body);
 
         SyncmlGenerator generator = new SyncmlGenerator();
-        System.out.println(generator.generatePayload(syncmlDocument));
+      //  System.out.println(generator.generatePayload(syncmlDocument));
 
         return syncmlDocument;
     }

@@ -27,8 +27,8 @@ import org.w3c.dom.Element;
  * Represents the header details of a syncml.
  */
 public class SyncmlHeader {
-	private int sessionId = 0;
-	private int MsgID = 0;
+	private int sessionId = -1;
+	private int MsgID = -1;
 	private Target target;
 	private Source source;
 	private Credential credential;
@@ -84,13 +84,13 @@ public class SyncmlHeader {
 		verProtocol.appendChild(doc.createTextNode(Constants.VER_PROTOCOL_VALUE));
 		syncHdr.appendChild(verProtocol);
 
-		if (getSessionId() != 0) {
+		if (getSessionId() != -1) {
 			Element sessionId = doc.createElement(Constants.SESSION_ID);
 			sessionId.appendChild(doc.createTextNode(String.valueOf(getSessionId())));
 			syncHdr.appendChild(sessionId);
 		}
 
-		if (getMsgID() != 0) {
+		if (getMsgID() != -1) {
 			Element msgId = doc.createElement(Constants.MESSAGE_ID);
 			msgId.appendChild(doc.createTextNode(String.valueOf(getMsgID())));
 			syncHdr.appendChild(msgId);
