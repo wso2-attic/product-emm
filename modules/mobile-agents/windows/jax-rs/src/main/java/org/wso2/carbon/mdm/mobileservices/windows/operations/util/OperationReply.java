@@ -19,7 +19,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
-import org.wso2.carbon.device.mgt.core.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class OperationReply {
 	private static final String GET_COMMAND_TEXT = "Get";
 	private static final String EXEC_COMMAND_TEXT = "Exec";
 
-	public OperationReply(SyncmlDocument syncmlDocument, Operation [] operations) {
+	public OperationReply(SyncmlDocument syncmlDocument, Operation[] operations) {
 		this.syncmlDocument = syncmlDocument;
 		replySyncmlDocument = new SyncmlDocument();
 	}

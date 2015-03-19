@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -51,11 +50,7 @@ public class User {
 		try {
 			dmService = MDMAPIUtils.getDeviceManagementService();
 			return dmService.getDeviceListOfUser(username);
-		} catch (DeviceManagementServiceException deviceServiceMgtEx) {
-			String errorMsg = "Device management service error";
-			log.error(errorMsg, deviceServiceMgtEx);
-			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
-		}catch (DeviceManagementException e) {
+		} catch (DeviceManagementException e) {
 			String errorMsg = "Device management error";
 			log.error(errorMsg, e);
 			throw new MDMAPIException(errorMsg, e);

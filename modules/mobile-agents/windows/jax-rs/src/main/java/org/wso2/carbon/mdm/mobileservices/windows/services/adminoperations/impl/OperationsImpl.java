@@ -18,35 +18,33 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl;
 
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.operations;
-
-import javax.ws.rs.core.Response;
 
 /**
  * Implementation class of operations interface. Each method in this class receives the operations comes via UI
  * and persists those in the correct format.
  */
-public class operationsImpl implements operations {
+public class OperationsImpl implements Operations {
 
     @Override
-    public OperationResponse ring(OperationRequest credentials) {
+    public OperationResponse ring(OperationRequest ring) {
         return null;
     }
 
     @Override
-    public OperationResponse wipe(OperationRequest credentials) {
+    public OperationResponse wipe(OperationRequest wipe) {
         return null;
     }
 
     @Override
-    public OperationResponse lock(OperationRequest credentials) {
+    public OperationResponse lock(OperationRequest lock) {
         return null;
     }
 
     @Override
-    public OperationResponse wifi(OperationRequest credentials) {
+    public OperationResponse wifi(OperationRequest wifi) {
         return null;
     }
 }

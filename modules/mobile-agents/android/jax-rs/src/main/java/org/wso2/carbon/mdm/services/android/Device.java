@@ -18,8 +18,8 @@
 package org.wso2.carbon.mdm.services.android;
 
 import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.carbon.device.mgt.core.config.license.License;
-import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementException;
+import org.wso2.carbon.device.mgt.common.license.mgt.License;
+import org.wso2.carbon.device.mgt.common.license.mgt.LicenseManagementException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
@@ -59,10 +59,6 @@ public class Device {
 					getAllDevices(DeviceManagementConstants.MobileDeviceTypes.
 							              MOBILE_DEVICE_TYPE_ANDROID);
 			return devices;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while fetching the device list.";
 			log.error(msg, e);
@@ -92,10 +88,6 @@ public class Device {
 				Response.status(Response.Status.NOT_FOUND);
 			}
 			return device;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException deviceMgtEx) {
 			msg = "Error occurred while fetching the device information.";
 			log.error(msg, deviceMgtEx);
@@ -130,10 +122,6 @@ public class Device {
 				responseMessage.setResponseMessage("Device not found for the update.");
 			}
 			return responseMessage;
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying the device information.";
 			log.error(msg, e);
@@ -149,15 +137,10 @@ public class Device {
 		License license;
 		try {
 			license =
-					AndroidAPIUtils.getLicenseManagerService().
-							getLicense(
+					AndroidAPIUtils.getLicenseManagerService().getLicense(
 									DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
 									DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
 
-		} catch (DeviceManagementServiceException e) {
-			msg = "Device management service error";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
 		} catch (LicenseManagementException e) {
 			msg = "Error occurred while retrieving the license configured for Android device enrolment";
 			log.error(msg, e);

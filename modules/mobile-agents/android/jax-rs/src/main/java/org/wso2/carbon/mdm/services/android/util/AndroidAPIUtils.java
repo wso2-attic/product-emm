@@ -40,8 +40,7 @@ public class AndroidAPIUtils {
 		return identifier;
 	}
 
-	public static DeviceManagementService getDeviceManagementService()
-			throws DeviceManagementServiceException {
+	public static DeviceManagementService getDeviceManagementService() {
 
 		//TODO: complete login change super tenent context
 		DeviceManagementService dmService;
@@ -51,18 +50,11 @@ public class AndroidAPIUtils {
 		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
 		dmService =
 				(DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
-
-		if (dmService == null) {
-			String msg = "Device management service not initialized";
-			log.error(msg);
-			throw new DeviceManagementServiceException(msg);
-		}
 		PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
 	}
 
-	public static LicenseManagementService getLicenseManagerService()
-			throws DeviceManagementServiceException {
+	public static LicenseManagementService getLicenseManagerService() {
 
 		//TODO: complete login change super tenent context
 		LicenseManagementService licenseManagementService;
@@ -72,12 +64,6 @@ public class AndroidAPIUtils {
 		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
 		licenseManagementService =
 				(LicenseManagementService) ctx.getOSGiService(LicenseManagementService.class, null);
-
-		if (licenseManagementService == null) {
-			String msg = "License management service not initialized";
-			log.error(msg);
-			throw new DeviceManagementServiceException(msg);
-		}
 		PrivilegedCarbonContext.endTenantFlow();
 		return licenseManagementService;
 	}

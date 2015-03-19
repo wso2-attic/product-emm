@@ -19,10 +19,8 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml;
 
 import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -41,6 +39,6 @@ public interface SyncmlService {
 	@POST
 	@Consumes({Constants.SYNCML_MEDIA_TYPE, MediaType.APPLICATION_XML})
 	@Produces(Constants.SYNCML_MEDIA_TYPE)
-	Response getInitialResponse(Document request) throws DeviceManagementException,
-	                            DeviceManagementServiceException, FileOperationException;
+	Response getInitialResponse(Document request) throws WindowsDeviceEnrolmentException;
+
 }
