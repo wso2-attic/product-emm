@@ -123,7 +123,7 @@
 
 
     <bean id="bstprovider_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl.BSTProviderImpl"/>
-    <bean id="adminoperations_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl.operationsImpl"/>
+    <bean id="adminoperations_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl.OperationsImpl"/>
     <bean id="DiscoveryService_rest_bean"
           class="org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl.DiscoveryServiceImpl"/>
     <bean id="wss4jInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">

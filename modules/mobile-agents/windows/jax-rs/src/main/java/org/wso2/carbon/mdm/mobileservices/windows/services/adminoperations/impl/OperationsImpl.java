@@ -34,7 +34,7 @@ public class OperationsImpl implements Operations {
 
         OperationResponse operationResponse = new OperationResponse();
 
-        if(OperationStore.storeOperations(ring)){
+        if(OperationStore.storeOperation(ring)){
             operationResponse.setStatusCode("Ring operation added successfully.");
             return operationResponse;
         }
@@ -49,7 +49,7 @@ public class OperationsImpl implements Operations {
 
         OperationResponse operationResponse = new OperationResponse();
 
-        if(OperationStore.storeOperations(wipe)){
+        if(OperationStore.storeOperation(wipe)){
             operationResponse.setStatusCode("Wipe operation added successfully.");
             return operationResponse;
         }
@@ -64,7 +64,7 @@ public class OperationsImpl implements Operations {
 
         OperationResponse operationResponse = new OperationResponse();
 
-        if(OperationStore.storeOperations(lock)){
+        if(OperationStore.storeOperation(lock)){
             operationResponse.setStatusCode("Lock operation added successfully.");
             return operationResponse;
         }
@@ -79,7 +79,7 @@ public class OperationsImpl implements Operations {
 
         OperationResponse operationResponse = new OperationResponse();
 
-        if(OperationStore.storeOperations(wifi)){
+        if(OperationStore.storeOperation(wifi)){
             operationResponse.setStatusCode("WIFI operation added successfully.");
             return operationResponse;
         }

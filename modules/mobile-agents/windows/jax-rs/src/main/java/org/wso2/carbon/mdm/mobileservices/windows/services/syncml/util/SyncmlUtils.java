@@ -21,6 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.core.operation.mgt.OperationManagerImpl;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -49,5 +50,23 @@ public class SyncmlUtils {
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
+    }
+
+    //TODO comment...
+    public static OperationManagerImpl getOperationManagementService() {
+
+        OperationManagerImpl operationManager;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        operationManager = (OperationManagerImpl) ctx.getOSGiService(OperationManagerImpl.class, null);
+
+        if (operationManager == null) {
+            String msg = "Operation management service is not initialized";
+            log.error(msg);
+        }
+        PrivilegedCarbonContext.endTenantFlow();
+        return operationManager;
     }
 }

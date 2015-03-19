@@ -18,21 +18,13 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * This bean class is for credentials coming from wab page at federated authentication step.
  */
-@XmlRootElement(name = "response")
-@XmlAccessorType(XmlAccessType.FIELD)
+
 public class OperationResponse {
 
-    @XmlElement(required = true, name = "error_message")
     private String errorCode;
-    @XmlElement(required = true, name = "status_code")
     private String statusCode;
 
     public OperationResponse(){

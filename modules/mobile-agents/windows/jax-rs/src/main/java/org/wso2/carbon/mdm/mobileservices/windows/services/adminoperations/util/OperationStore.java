@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
@@ -35,42 +36,21 @@ public class OperationStore {
 
     private static Log log = LogFactory.getLog(OperationStore.class);
 
-    public static boolean storeOperations(OperationRequest operationRequest){
+    public static boolean storeOperation(OperationRequest operationRequest) {
 
         List<DeviceIdentifier> devices = operationRequest.getDeviceList();
-
-        OperationManagerImpl operationManager = getDeviceManagementService();
-
-        if (operationRequest.getCommandOperations() != null) {
-            List<CommandOperation> commandOperations = operationRequest.getCommandOperations();
-
-            for(int i=0 ; i<commandOperations.size() ; i++){
-                try {
-                    operationManager.addOperation(commandOperations.get(i), devices);
-                } catch (OperationManagementException e) {
-                    String msg = "Failure occurred while storing command operation.";
-                    log.error(msg);
-                    return false;
-                }
-            }
-        }
-        if (operationRequest.getConfigOperations() != null) {
-            List<ConfigOperation> configOperations = operationRequest.getConfigOperations();
-
-            for(int i=0 ; i<configOperations.size() ; i++){
-                try {
-                    operationManager.addOperation(configOperations.get(i), devices);
-                } catch (OperationManagementException e) {
-                    String msg = "Failure occurred while storing configuration operation.";
-                    log.error(msg);
-                    return false;
-                }
-            }
+        Operation operation = operationRequest.getOperation();
+        try {
+            getOperationManagementService().addOperation(operation, devices);
+        } catch (OperationManagementException e) {
+            String msg = "Failure occurred while storing command operation.";
+            log.error(msg);
+            return false;
         }
         return true;
     }
 
-    private static OperationManagerImpl getDeviceManagementService() {
+    private static OperationManagerImpl getOperationManagementService() {
 
         OperationManagerImpl operationManager;
         PrivilegedCarbonContext.startTenantFlow();
