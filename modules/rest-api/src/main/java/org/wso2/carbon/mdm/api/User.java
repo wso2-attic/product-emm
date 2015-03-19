@@ -5,7 +5,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
-import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -56,11 +55,7 @@ public class User {
 			String errorMsg = "Device management service error";
 			log.error(errorMsg, deviceServiceMgtEx);
 			throw new MDMAPIException(errorMsg, deviceServiceMgtEx);
-		}catch (DeviceManagementDAOException e) {
-			String errorMsg = "Device management DAO error";
-			log.error(errorMsg, e);
-			throw new MDMAPIException(errorMsg, e);
-		} catch (DeviceManagementException e) {
+		}catch (DeviceManagementException e) {
 			String errorMsg = "Device management error";
 			log.error(errorMsg, e);
 			throw new MDMAPIException(errorMsg, e);

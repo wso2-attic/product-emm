@@ -23,7 +23,7 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
-import org.wso2.carbon.device.mgt.core.DeviceManagementService;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIConstants;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
