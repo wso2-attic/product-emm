@@ -19,16 +19,18 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.core.operation.mgt.Operation;
+
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationCode.*;
-import static org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationCode.Command.*;
 
 /**
  * Used to generate a reply to a receiving syncml from a device.
@@ -45,6 +47,7 @@ public class OperationReply {
 	private static final String EXEC_COMMAND_TEXT = "Exec";
 	private List<Operation> operations;
 	private static Log log = LogFactory.getLog(OperationReply.class);
+
 
 	public OperationReply(SyncmlDocument syncmlDocument, List<Operation> operations) {
 		this.syncmlDocument = syncmlDocument;
@@ -171,17 +174,6 @@ public class OperationReply {
 		getElement.setItems(itemsGet);
 		syncmlBody.setGet(getElement);
 	}
-
-//	private Item appendExecuteCommand(Operation operation) {
-//		String operationCode = operation.getCode();
-//
-//		switch (operationCode) {
-//			case DEV_ID:
-//				;
-//				break;
-//		}
-//		return null;
-//	}
 
 	private Item appendGetInfo(Operation operation) {
 		Item item=new Item();

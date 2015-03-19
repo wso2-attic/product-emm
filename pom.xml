@@ -677,7 +677,7 @@
         <carbon.device.mgt.version.range>[0.8.0, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>1.9.1</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>1.9.2-SNAPSHOT</carbon.mobile.device.mgt.version>
         <mdm.version>2.0.0-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
