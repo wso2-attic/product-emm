@@ -502,6 +502,18 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
+
+
+        <!--notifications config file-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/notification-messages.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!-- Copying the modified registry.xml file-->
         <file>
             <source>

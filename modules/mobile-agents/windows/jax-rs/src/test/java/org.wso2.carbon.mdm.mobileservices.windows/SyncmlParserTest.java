@@ -74,5 +74,4 @@ public class SyncmlParserTest {
 		Assert.assertEquals(inputSyncmlMsg , generatedSyncmlMsg);
 	}
 
-
 }

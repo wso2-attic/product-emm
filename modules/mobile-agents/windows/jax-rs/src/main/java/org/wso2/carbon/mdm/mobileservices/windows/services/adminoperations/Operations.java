@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations;
 
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
 import javax.ws.rs.Consumes;
@@ -35,25 +36,6 @@ public interface Operations {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/ring")
-    OperationResponse ring(OperationRequest ring);
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/wipe")
-    OperationResponse wipe(OperationRequest wipe);
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/lock")
-    OperationResponse lock(OperationRequest lock);
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/wifi")
-    OperationResponse wifi(OperationRequest wifi);
-
+    OperationResponse lock(OperationRequest lock) throws WindowsDeviceEnrolmentException;
 }
