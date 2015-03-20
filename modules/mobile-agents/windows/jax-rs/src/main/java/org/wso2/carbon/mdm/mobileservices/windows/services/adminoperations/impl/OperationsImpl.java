@@ -18,6 +18,9 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl;
 
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
@@ -30,61 +33,16 @@ import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.util.
 public class OperationsImpl implements Operations {
 
     @Override
-    public OperationResponse ring(OperationRequest ring) {
+    public OperationResponse lock(OperationRequest lock) throws WindowsDeviceEnrolmentException {
 
         OperationResponse operationResponse = new OperationResponse();
 
-        if(OperationStore.storeOperations(ring)){
-            operationResponse.setStatusCode("Ring operation added successfully.");
-            return operationResponse;
-        }
-        else{
-            operationResponse.setErrorCode("Error while storing Ring operation.");
-            return operationResponse;
-        }
-    }
-
-    @Override
-    public OperationResponse wipe(OperationRequest wipe) {
-
-        OperationResponse operationResponse = new OperationResponse();
-
-        if(OperationStore.storeOperations(wipe)){
-            operationResponse.setStatusCode("Wipe operation added successfully.");
-            return operationResponse;
-        }
-        else{
-            operationResponse.setErrorCode("Error while storing Wipe operation.");
-            return operationResponse;
-        }
-    }
-
-    @Override
-    public OperationResponse lock(OperationRequest lock) {
-
-        OperationResponse operationResponse = new OperationResponse();
-
-        if(OperationStore.storeOperations(lock)){
+        if(OperationStore.storeOperation(lock, Operation.Type.COMMAND, SyncmlCommandType.BASIC)){
             operationResponse.setStatusCode("Lock operation added successfully.");
             return operationResponse;
         }
         else{
             operationResponse.setErrorCode("Error while storing Lock operation.");
-            return operationResponse;
-        }
-    }
-
-    @Override
-    public OperationResponse wifi(OperationRequest wifi) {
-
-        OperationResponse operationResponse = new OperationResponse();
-
-        if(OperationStore.storeOperations(wifi)){
-            operationResponse.setStatusCode("WIFI operation added successfully.");
-            return operationResponse;
-        }
-        else{
-            operationResponse.setErrorCode("Error while storing WIFI operation.");
             return operationResponse;
         }
     }

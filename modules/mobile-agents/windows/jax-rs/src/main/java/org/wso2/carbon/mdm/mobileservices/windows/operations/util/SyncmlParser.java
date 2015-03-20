@@ -68,7 +68,7 @@ public class SyncmlParser {
      * @param syncmlPayload - Received SyncML XML payload
      * @return - SyncmlDocument object generated from the received payload
      */
-    public SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws WindowsOperationException {
+    public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws WindowsOperationException {
 
         NodeList syncHeaderList = syncmlPayload.getElementsByTagName(SYNC_HDR);
         Node syncHeader = syncHeaderList.item(0);
@@ -93,7 +93,7 @@ public class SyncmlParser {
      * @param syncHeader - XML node which represents SyncML header
      * @return - SyncmlHeader object
      */
-    private SyncmlHeader generateSyncmlHeader(Node syncHeader) {
+    private static SyncmlHeader generateSyncmlHeader(Node syncHeader) {
 
         NodeList headerElements = syncHeader.getChildNodes();
         String sessionID = null;
@@ -139,7 +139,7 @@ public class SyncmlParser {
      * @param syncBody - XML node which represents SyncML body
      * @return - SyncmlBody object
      */
-    private SyncmlBody generateSyncmlBody(Node syncBody) {
+    private static SyncmlBody generateSyncmlBody(Node syncBody) {
 
         NodeList bodyElements = syncBody.getChildNodes();
         Alert alert = null;
@@ -180,7 +180,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Source
      * @return - Source object
      */
-    private Source generateSource(Node node) {
+    private static Source generateSource(Node node) {
 
         Source source = new Source();
         Node sourceURIItem = node.getChildNodes().item(0);
@@ -204,7 +204,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Target
      * @return - Target object
      */
-    private Target generateTarget(Node node) {
+    private static Target generateTarget(Node node) {
 
         Target target = new Target();
         Node targetURIItem = node.getChildNodes().item(0);
@@ -228,7 +228,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Results
      * @return - Results object
      */
-    private Results generateResults(Node node) {
+    private static Results generateResults(Node node) {
 
         Results results = new Results();
 
@@ -251,7 +251,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Status
      * @return - Status object
      */
-    private Status generateStatus(Node node) {
+    private static Status generateStatus(Node node) {
 
         Status status = new Status();
         String commandId = node.getChildNodes().item(0).getTextContent().trim();
@@ -275,7 +275,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Replace
      * @return - Replace object
      */
-    private Replace generateReplace(Node node) {
+    private static Replace generateReplace(Node node) {
 
         Replace replace = new Replace();
         String commandId = node.getChildNodes().item(0).getTextContent().trim();
@@ -293,7 +293,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Alert
      * @return - Alert object
      */
-    private Alert generateAlert(Node node) {
+    private static Alert generateAlert(Node node) {
         Alert alert = new Alert();
         String commandID = node.getChildNodes().item(0).getTextContent().trim();
         String data = node.getChildNodes().item(1).getTextContent().trim();
@@ -307,7 +307,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Item
      * @return - Item object
      */
-    private Item generateItem(Node node){
+    private static Item generateItem(Node node){
         Item item = new Item();
         String data;
 
@@ -330,7 +330,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Credential
      * @return - Credential object
      */
-    private Credential generateCredential(Node node) {
+    private static Credential generateCredential(Node node) {
         Credential credential = new Credential();
         Meta meta = generateMeta(node.getChildNodes().item(0));
         String data = node.getChildNodes().item(1).getTextContent().trim();
@@ -344,7 +344,7 @@ public class SyncmlParser {
      * @param node - XML node which represents Meta
      * @return - Meta object
      */
-    private Meta generateMeta(Node node){
+    private static Meta generateMeta(Node node){
         Meta meta = new Meta();
         String format = node.getChildNodes().item(0).getTextContent().trim();
         String type = node.getChildNodes().item(1).getTextContent().trim();
