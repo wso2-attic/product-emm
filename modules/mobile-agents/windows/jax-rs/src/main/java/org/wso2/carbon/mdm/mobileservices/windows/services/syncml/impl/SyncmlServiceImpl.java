@@ -276,6 +276,14 @@ public class SyncmlServiceImpl implements SyncmlService {
 	}
 
 	//Primary method for Syncml engine usage...
+	/**
+	 * Method for calling SyncML engine for producing the Syncml response. For the first SyncML message comes from
+	 * the device, this method produces a response to retrieve device information for enrolling the device.
+	 * @param request - SyncML request
+	 * @return - SyncML response
+	 * @throws WindowsOperationException
+	 * @throws WindowsDeviceEnrolmentException
+	 */
 	public Response getResponse(Document request) throws WindowsOperationException, WindowsDeviceEnrolmentException {
 
 		SyncmlDocument syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
