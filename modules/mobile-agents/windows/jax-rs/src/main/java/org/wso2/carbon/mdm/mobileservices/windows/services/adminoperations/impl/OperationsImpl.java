@@ -21,6 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.util.OperationStore;
 
 /**
  * Implementation class of operations interface. Each method in this class receives the operations comes via UI
@@ -30,21 +31,61 @@ public class OperationsImpl implements Operations {
 
     @Override
     public OperationResponse ring(OperationRequest ring) {
-        return null;
+
+        OperationResponse operationResponse = new OperationResponse();
+
+        if(OperationStore.storeOperations(ring)){
+            operationResponse.setStatusCode("Ring operation added successfully.");
+            return operationResponse;
+        }
+        else{
+            operationResponse.setErrorCode("Error while storing Ring operation.");
+            return operationResponse;
+        }
     }
 
     @Override
     public OperationResponse wipe(OperationRequest wipe) {
-        return null;
+
+        OperationResponse operationResponse = new OperationResponse();
+
+        if(OperationStore.storeOperations(wipe)){
+            operationResponse.setStatusCode("Wipe operation added successfully.");
+            return operationResponse;
+        }
+        else{
+            operationResponse.setErrorCode("Error while storing Wipe operation.");
+            return operationResponse;
+        }
     }
 
     @Override
     public OperationResponse lock(OperationRequest lock) {
-        return null;
+
+        OperationResponse operationResponse = new OperationResponse();
+
+        if(OperationStore.storeOperations(lock)){
+            operationResponse.setStatusCode("Lock operation added successfully.");
+            return operationResponse;
+        }
+        else{
+            operationResponse.setErrorCode("Error while storing Lock operation.");
+            return operationResponse;
+        }
     }
 
     @Override
     public OperationResponse wifi(OperationRequest wifi) {
-        return null;
+
+        OperationResponse operationResponse = new OperationResponse();
+
+        if(OperationStore.storeOperations(wifi)){
+            operationResponse.setStatusCode("WIFI operation added successfully.");
+            return operationResponse;
+        }
+        else{
+            operationResponse.setErrorCode("Error while storing WIFI operation.");
+            return operationResponse;
+        }
     }
 }

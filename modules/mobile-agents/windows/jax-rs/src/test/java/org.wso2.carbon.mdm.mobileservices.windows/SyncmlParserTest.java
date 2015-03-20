@@ -24,7 +24,12 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
+
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationReply;
+
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlGenerator;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlParser;
 import org.xml.sax.SAXException;
@@ -33,37 +38,41 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SyncmlParserTest {
 
     private static Log log = LogFactory.getLog(SyncmlParser.class);
 
-    @Test
-    public void parseSyncML() throws IOException, WindowsOperationException {
+	@Test
+	public void parseSyncML() throws IOException, WindowsOperationException {
 
-        SyncmlParser syncmlParser = new SyncmlParser();
-        File propertyFile = new File(getClass().getClassLoader().getResource("syncml-test-message.xml").getFile());
+		SyncmlParser syncmlParser = new SyncmlParser();
+		File propertyFile = new File(getClass().getClassLoader().getResource("syncml-test-message.xml").getFile());
 
-        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder;
-        Document document = null;
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		Document document = null;
 
-        try {
-            docBuilder = docBuilderFactory.newDocumentBuilder();
-            if (docBuilder != null) {
-                document = docBuilder.parse(propertyFile);
-            }
-        } catch (ParserConfigurationException e) {
-            Assert.fail("Test failure in parser configuration while reading syncml-test-message.xml.");
-        } catch (SAXException e) {
-            Assert.fail("Test failure occurred while reading syncml-test-message.xml.");
-        } catch (IOException e) {
-            Assert.fail("Test failure while accessing syncml-test-message.xml.");
-        }
-        SyncmlGenerator generator = new SyncmlGenerator();
-        String inputSyncmlMsg = FileUtils.readFileToString(propertyFile);
-        String generatedSyncmlMsg = generator.generatePayload(syncmlParser.parseSyncmlPayload(document));
-        generatedSyncmlMsg = generatedSyncmlMsg.replaceAll("\n", "");
-        Assert.assertEquals(inputSyncmlMsg , generatedSyncmlMsg);
-    }
+		try {
+			docBuilder = docBuilderFactory.newDocumentBuilder();
+			if (docBuilder != null) {
+				document = docBuilder.parse(propertyFile);
+			}
+		} catch (ParserConfigurationException e) {
+			Assert.fail("Test failure in parser configuration while reading syncml-test-message.xml.");
+		} catch (SAXException e) {
+			Assert.fail("Test failure occurred while reading syncml-test-message.xml.");
+		} catch (IOException e) {
+			Assert.fail("Test failure while accessing syncml-test-message.xml.");
+		}
+		SyncmlGenerator generator = new SyncmlGenerator();
+		String inputSyncmlMsg = FileUtils.readFileToString(propertyFile);
+		String generatedSyncmlMsg = generator.generatePayload(syncmlParser.parseSyncmlPayload(document));
+		generatedSyncmlMsg = generatedSyncmlMsg.replaceAll("\n", "");
+		Assert.assertEquals(inputSyncmlMsg , generatedSyncmlMsg);
+	}
+
+
 }
