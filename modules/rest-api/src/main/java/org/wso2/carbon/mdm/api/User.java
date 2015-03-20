@@ -4,7 +4,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.device.mgt.user.common.Role;
+import org.wso2.carbon.device.mgt.user.common.UserManagementException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
@@ -54,6 +57,54 @@ public class User {
 			String errorMsg = "Device management error";
 			log.error(errorMsg, e);
 			throw new MDMAPIException(errorMsg, e);
+		}
+	}
+
+	@GET
+	public List<org.wso2.carbon.device.mgt.user.common.User> getAllUsers() throws MDMAPIException {
+		String msg;
+		List<org.wso2.carbon.device.mgt.user.common.User> users;
+
+		try {
+			users = MDMAPIUtils.getUserManagementService().getUsersForTenant(-1234);
+			return users;
+		} catch (UserManagementException e) {
+			msg = "User management service error.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+	}
+
+	@GET
+	@Path("{type}/{id}")
+	public List<Role> getUserRoles() throws MDMAPIException {
+		String msg;
+		List<Role> roles;
+		try {
+			roles = MDMAPIUtils.getUserManagementService().getRolesForTenant(-1234);
+			return roles;
+		} catch (UserManagementException e) {
+			msg = "User management service error.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+	}
+
+	@GET
+	@Path("send")
+	public void sendEmail() throws MDMAPIException {
+
+		try {
+			EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
+			emailMessageProperties.setMailTo(new String[]{"manojgunawardena@gmail.com"});
+			emailMessageProperties.setMessageBody("Test Mail");
+			emailMessageProperties.setSubject("test subject");
+
+			MDMAPIUtils.getEmailService().sendEmail(emailMessageProperties);
+		} catch (DeviceManagementException e) {
+			String msg = "Email service error.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
 		}
 	}
 
