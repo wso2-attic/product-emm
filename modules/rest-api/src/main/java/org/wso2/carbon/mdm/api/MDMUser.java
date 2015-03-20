@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManagementServiceException;
+import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 import org.wso2.carbon.device.mgt.user.common.Role;
 import org.wso2.carbon.device.mgt.user.common.UserManagementException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
@@ -69,6 +69,24 @@ public class MDMUser {
             return roles;
         } catch (UserManagementException e) {
             msg = "User management service error.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+    }
+
+    @GET
+    @Path("send")
+    public void sendEmail() throws MDMAPIException {
+
+        try {
+            EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
+            emailMessageProperties.setMailTo(new String[]{"manojgunawardena@gmail.com"});
+            emailMessageProperties.setMessageBody("Test Mail");
+            emailMessageProperties.setSubject("test subject");
+
+            MDMAPIUtils.getEmailService().sendEmail(emailMessageProperties);
+        } catch (DeviceManagementException e) {
+            String msg = "Email service error.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }

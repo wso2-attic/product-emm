@@ -27,6 +27,7 @@
                 <exclude>**/wso2carbon.jks</exclude>
                 <exclude>**/WSO2AM_DB.h2.db</exclude>
                 <exclude>**/WSO2DM_DB.h2.db</exclude>
+                <exclude>**/conf/axis2/axis2_client.xml</exclude>
             </excludes>
         </fileSet>
 
@@ -564,6 +565,15 @@
             <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/carbon.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
+        </file>
+
+        <!--email broker config-->
+        <file>
+            <source>src/repository/conf/axis2/axis2_client.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/
+            </outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
         </file>
 
     </files>
