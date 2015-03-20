@@ -64,6 +64,7 @@ describe('Device Module', function () {
             var results = deviceModule.listDevices();
             expect(results.length).not.toBe(0);
         } catch (e) {
+            log.error(e);
             throw e;
         } finally {
             tearDown();
@@ -75,6 +76,21 @@ describe('Device Module', function () {
             var results = deviceModule.listDevicesForUser("mdm@wso2.com");
             expect(results.length).toBe(1);
         } catch (e) {
+            log.error(e);
+            throw e;
+        } finally {
+            tearDown();
+        }
+    });
+    it('Perform operation on the device', function(){
+        try {
+            tearUp();
+            var devices = [{"id": "4892813d-0b18-4a02-b7b1-61775257488e", "type": "android"}];
+            var operation = {"featureName": "DEVICE_LOCK", "type": "COMMAND", "properties": {"enabled": true}}
+            var results = deviceModule.performOperation(devices, operation);
+            expect(results.length).toBe(1);
+        } catch (e) {
+            log.error(e);
             throw e;
         } finally {
             tearDown();
