@@ -1,0 +1,34 @@
+{{#zone "main"}}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- content -->
+            <div class="container-fluid col-centered wr-content">
+
+                <div class="wr-list-group">
+                    {{#each users}}
+                        <span class="list-group-item">
+                        <h3 class="wr-list-name">{{name}}</h3>
+                        <span class="wr-list-username">{{username}}</span> | <a href="#"
+                                                                                class="wr-list-email">{{email}}</a>
+                        <span class="list-group-item-actions">
+                            <a href="#" class="inviteAction" data-username="{{username}}"
+                               class="cu-btn btn-view dark"><span>Invite</span></a>
+                            <a href="#" class="cu-btn btn-delete dark"><span>Delete</span></a>
+                        </span>
+
+                        </span>
+                    {{/each}}
+                </div>
+
+            </div>
+            <!-- /content -->
+
+        </div>
+    </div>
+
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/user-listing.js"></script>
+{{/zone}}

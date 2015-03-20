@@ -23,8 +23,8 @@ var deviceModule = (function () {
 
     var DeviceIdentifier = Packages.org.wso2.carbon.device.mgt.common.DeviceIdentifier;
     var DeviceManagerUtil = Packages.org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
-    var Operation = Packages.org.wso2.carbon.device.mgt.common.Operation;
-    var Type =  Packages.org.wso2.carbon.device.mgt.common.Operation.Type;
+    var Operation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+    var Type =  Packages.org.wso2.carbon.device.mgt.common.operation.mgt.Operation.Type;
     var Properties = Packages.java.util.Properties;
     var ArrayList = Packages.java.util.ArrayList;
     var deviceManagementService = utility.getDeviceManagementService();
@@ -34,11 +34,11 @@ var deviceModule = (function () {
     };
 
     module.listDevices = function () {
-        var devices = deviceManagementService.getAllDevices(constants.PLATFORM_ANDROID);
+        var devices = deviceManagementService.getAllDevices();
         var deviceList = [];
         for (var i = 0; i < devices.size(); i++) {
             var device = devices.get(i);
-            var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
+            var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
             var deviceObject = {};
             deviceObject[constants.DEVICE_IDENTIFIER] = defaultVal(device.getDeviceIdentifier());
             deviceObject[constants.DEVICE_NAME] = defaultVal(device.getName());
@@ -58,8 +58,9 @@ var deviceModule = (function () {
         var deviceList = [];
         for (var i = 0; i < devices.size(); i++) {
             var device = devices.get(i);
-            var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
+            var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
             var deviceObject = {};
+            log.info(device.getName());
             deviceObject[constants.DEVICE_IDENTIFIER] = defaultVal(device.getDeviceIdentifier());
             deviceObject[constants.DEVICE_NAME] = defaultVal(device.getName());
             deviceObject[constants.DEVICE_OWNERSHIP] =  defaultVal(device.getOwnership());
@@ -84,16 +85,15 @@ var deviceModule = (function () {
     /*
      Get the supported features by the device type
      */
-    module.getFeatures = function(deviceType){
-        var features = deviceManagementService.getOperationManager(constants.PLATFORM_ANDROID).
-            getFeaturesForDeviceType(deviceType);
-        var featuresConverted = [];
+    module.getFeatures = function(){
+        var features = deviceManagementService.getFeatures(constants.PLATFORM_ANDROID);
+        var featuresConverted = {};
         for (var i = 0; i < features.size(); i++) {
             var feature = features.get(i);
             var featureObject = {};
             featureObject[constants.FEATURE_NAME] = feature.getName();
             featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription();
-            featuresConverted.push(featureObject);
+            featuresConverted[feature.getName()] = featureObject;
         }
         return featuresConverted;
     };
@@ -120,12 +120,12 @@ var deviceModule = (function () {
             deviceIdentifier.setType(device.type);
             deviceList.add(deviceIdentifier);
         }
-        deviceManagementService.getOperationManager().addOperation(operationInstance, deviceList);
+        deviceManagementService.addOperation(operationInstance, deviceList);
     };
     module.viewDevice = function(type, deviceId){
         var device = getDevice(type, deviceId);
         if (device){
-            var propertiesList = DeviceManagerUtil.convertPropertiesToMap(device.getProperties());
+            var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
             var entries = propertiesList.entrySet();
             var iterator = entries.iterator();
             var properties = {};

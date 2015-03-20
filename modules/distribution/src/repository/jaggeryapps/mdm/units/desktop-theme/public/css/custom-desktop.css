@@ -1273,4 +1273,22 @@ a.wr-notification-toggle-btn.selected {
     top: 2px;
 }
 
+.wr-list-group h3.wr-list-name {
+    margin: 0;
+    font-weight: 400;
+    font-size: 20px;
+    color: #555;
+}
+
+.wr-list-group .wr-list-username {
+    font-weight: 100;
+    font-size: 13px;
+}
+
+.wr-list-email, .wr-list-email:hover {
+    font-weight: 300;
+    font-size: 13px;
+    color: #237bd5;
+}
+
 

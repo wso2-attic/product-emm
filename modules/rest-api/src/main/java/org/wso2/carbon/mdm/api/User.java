@@ -43,12 +43,12 @@ public class User {
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/users/{username}/devices")
-	public List<Device> getAllDeviceOfUser( @PathParam("username") String username)
+	@Path("/{tenantDomain}/{username}/devices")
+	public List<Device> getAllDeviceOfUser( @PathParam("username") String username,  @PathParam("tenantDomain") String tenantDomain)
 			throws MDMAPIException {
 		DeviceManagementService dmService;
 		try {
-			dmService = MDMAPIUtils.getDeviceManagementService();
+			dmService = MDMAPIUtils.getDeviceManagementService(tenantDomain);
 			return dmService.getDeviceListOfUser(username);
 		} catch (DeviceManagementException e) {
 			String errorMsg = "Device management error";

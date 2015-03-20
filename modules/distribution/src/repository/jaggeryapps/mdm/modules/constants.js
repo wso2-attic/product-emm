@@ -34,3 +34,7 @@ var FEATURE_NAME = "featureName";
 var FEATURE_DESCRIPTION = "featureDescription";
 
 var PLATFORM_ANDROID = "android"
+
+var ERRORS = {
+    "USER_NOT_FOUND" : "USER_NOT_FOUND"
+};

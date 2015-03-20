@@ -1,7 +1,7 @@
 function onRequest(context){
     var log = new Log();
-    var deviceModule = require("/modules/device.js").deviceModule;
+    var userModule = require("/modules/user.js").userModule;
     //var features = deviceModule.getFeatures();
-    context.features = [];
+    context.users = userModule.getUsers();
     return context;
 }

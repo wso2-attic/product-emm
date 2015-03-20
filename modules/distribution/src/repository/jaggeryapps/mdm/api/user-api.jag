@@ -21,33 +21,48 @@ var log = new Log();
 var uriMatcher = new URIMatcher(uri);
 var constants = require("/modules/constants.js");
 var mdmProps = require('/config/mdm-props.js').config();
+var userModule = require("/modules/user.js").userModule;
+var utility = require("/modules/utility.js").utility;
+var result;
 if (uriMatcher.match("/{context}/api/user/login/")) {
     var username = request.getParameter("username");
     var password = request.getParameter("password");
-    var carbonServer = application.get("carbonServer");
-    var carbonModule = require("carbon");
-    username = username + "@" + carbonModule.server.tenantDomain();
     try {
-        var authState = carbonServer.authenticate(username, password);
-        delete password;
-        if (authState){
-            var carbonUser = carbonModule.server.tenantUser(username);
-            session.put(constants.USER_SESSION_KEY, carbonUser);
+        userModule.login(username, password, function(user){
+            if(log.isDebugEnabled()){
+                log.debug("User Logged In: " + user);
+            }
+            utility.insertAppPermissions(userModule, "login");
             response.sendRedirect(constants.WEB_APP_CONTEXT);
-        }else{
+        }, function(){
             response.sendRedirect(mdmProps.appContext + "login?#auth-failed");
-            exit();
-        }
-    }catch (e) {
-        log.debug(e);
+        });
+    }catch (e){
         response.sendRedirect(mdmProps.appContext + "login?#error");
     }
 } else if (uriMatcher.match("/{context}/api/user/logout/")){
-    session.invalidate();
-    response.sendRedirect(mdmProps.appContext + "login");
+    userModule.logout(function(){
+        response.sendRedirect(mdmProps.appContext + "login");
+    });
 } else if (uriMatcher.match("/{context}/api/user/devices/")) {
-    var deviceModule = require("/modules/device.js").deviceModule;
-    var carbonUser = session.get(constants.USER_SESSION_KEY);
-    result = deviceModule.listDevicesForUser(carbonUser.username);
+    if (userModule.isAuthorized("/permission/device-mgt/user/devices/list")) {
+        var deviceModule = require("/modules/device.js").deviceModule;
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        result = deviceModule.listDevicesForUser(carbonUser.username);
+    }else {
+        response.sendError(403);
+    }
+} else if (uriMatcher.match("/{context}/api/users/{username}/invite")) {
+    if (userModule.isAuthorized("/permission/device-mgt/admin/users/invite")) {
+        var deviceModule = require("/modules/device.js").deviceModule;
+        var elements = uriMatcher.elements();
+        var username = elements.username;
+        userModule.inviteUser(username);
+    }else {
+        response.sendError(403);
+    }
+}
+if (result){
+    print(result);
 }
 %>

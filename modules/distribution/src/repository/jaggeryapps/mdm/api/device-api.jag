@@ -19,21 +19,34 @@
 var uri = request.getRequestURI();
 var log = new Log();
 var deviceModule = require("/modules/device.js").deviceModule;
+var userModule = require("/modules/user.js").userModule;
 var uriMatcher = new URIMatcher(uri);
 var result;
 if (uriMatcher.match("/{context}/api/devices/")) {
-    result = deviceModule.listDevices();
+    if (userModule.isAuthorized("/permission/device-mgt/admin/devices/list")) {
+        result = deviceModule.listDevices();
+    }else {
+        response.sendError(403);
+    }
 }else if (uriMatcher.match("/{context}/api/devices/{type}/{deviceId}")) {
     var elements = uriMatcher.elements();
     var deviceId = elements.deviceId;
     var type = elements.type;
-    result = deviceModule.viewDevice(type, deviceId);
+    if (userModule.isAuthorized("/permission/device-mgt/admin/devices/list")) {
+        result = deviceModule.viewDevice(type, deviceId);
+    }else {
+        response.sendError(403);
+    }
 }else if (uriMatcher.match("{context}/api/devices/{type}/{deviceId}/{operation}")) {
     var elements = uriMatcher.elements();
     var deviceId = elements.deviceId;
     var type = elements.type;
     var operation = elements.operation;
-    result = deviceModule.performOperation(deviceId, operation,[],type);
+    if (userModule.isAuthorized("/permission/device-mgt/admin/devices/operation")) {
+        result = deviceModule.performOperation(deviceId, operation,[],type);
+    }else {
+        response.sendError(403);
+    }
 }
 if (result){
     print(result);

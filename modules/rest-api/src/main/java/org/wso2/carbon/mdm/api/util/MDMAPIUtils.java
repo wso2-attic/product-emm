@@ -22,6 +22,9 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.mdm.api.common.MDMAPIException;
+import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
@@ -31,16 +34,35 @@ public class MDMAPIUtils {
 
     private static Log log = LogFactory.getLog(MDMAPIUtils.class);
 
-	public static DeviceManagementService getDeviceManagementService() {
-        // until complete login this is use to load super tenant context
-		DeviceManagementService dmService;
+
+	public static DeviceManagementService getDeviceManagementService(String tenantDomain) throws MDMAPIException {
+		// until complete login this is use to load super tenant context
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+		int tenantId;
+		DeviceManagementService dmService;
+		if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)){
+			tenantId = MultitenantConstants.SUPER_TENANT_ID;
+		}else{
+			tenantId = getTenantId(tenantDomain);
+		}
+		ctx.setTenantDomain(tenantDomain);
+		ctx.setTenantId(tenantId);
 		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
+	}
+	public static int getTenantId(String tenantDomain) throws MDMAPIException {
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+		try {
+			return realmService.getTenantManager().getTenantId(tenantDomain);
+		} catch (UserStoreException e) {
+			throw new MDMAPIException("Error obtaining tenant id from tenant domain "+tenantDomain);
+		}
+	}
+
+	public static DeviceManagementService getDeviceManagementService() throws MDMAPIException {
+		return getDeviceManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 	}
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId, String deviceType) {
