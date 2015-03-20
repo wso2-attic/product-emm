@@ -354,6 +354,17 @@
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.user.common</artifactId>
+                <version>${carbon.device.mgt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
+                <version>${carbon.device.mgt.version}</version>
+            </dependency>
+
             <!--MDM dependencies-->
             <dependency>
                 <groupId>org.wso2.carbon.mdm</groupId>
@@ -688,7 +699,7 @@
         <bouncycastle.version>1.49</bouncycastle.version>
         <apache.wss4j.version>2.0.0</apache.wss4j.version>
         <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
-
+        <axis2-transports.wso2.version>1.1.0-wso2v11</axis2-transports.wso2.version>
     </properties>
 
     <scm>
