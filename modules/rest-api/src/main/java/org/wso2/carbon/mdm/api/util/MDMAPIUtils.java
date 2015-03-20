@@ -25,6 +25,9 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
+import org.wso2.carbon.device.mgt.core.service.EmailService;
+import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
+import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
@@ -51,6 +54,11 @@ public class MDMAPIUtils {
 		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
 		return dmService;
 	}
+
+	public static DeviceManagementService getDeviceManagementService() throws MDMAPIException {
+		return getDeviceManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+	}
+
 	public static int getTenantId(String tenantDomain) throws MDMAPIException {
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
@@ -61,9 +69,40 @@ public class MDMAPIUtils {
 		}
 	}
 
-	public static DeviceManagementService getDeviceManagementService() throws MDMAPIException {
-		return getDeviceManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-	}
+    public static UserManagementService getUserManagementService() throws MDMAPIException{
+
+        UserManagementService umService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        umService = (UserManagementService) ctx.getOSGiService(UserManagementService.class, null);
+
+        if (umService == null){
+            String msg = "user management service not initialized";
+            log.error(msg);
+            throw new MDMAPIException(msg);
+        }
+        PrivilegedCarbonContext.endTenantFlow();
+        return umService;
+    }
+
+    public static EmailService getEmailService() throws MDMAPIException{
+        EmailService emailService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        emailService = (EmailService) ctx.getOSGiService(EmailService.class, null);
+
+        if (emailService == null){
+            String msg = "email service not initialized";
+            log.error(msg);
+            throw new MDMAPIException(msg);
+        }
+        PrivilegedCarbonContext.endTenantFlow();
+        return emailService;
+    }
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId, String deviceType) {
 		DeviceIdentifier identifier = new DeviceIdentifier();

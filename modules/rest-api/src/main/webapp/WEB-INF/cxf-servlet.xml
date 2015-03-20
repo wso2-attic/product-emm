@@ -62,12 +62,24 @@
         </jaxrs:providers>
     </jaxrs:server>
 
+    <jaxrs:server id="userService" address="/users">
+        <jaxrs:serviceBeans>
+            <ref bean="userServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
 
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.api.Operation"/>
     <bean id="deviceServiceBean" class="org.wso2.carbon.mdm.api.MobileDevice"/>
     <bean id="userServiceBean" class="org.wso2.carbon.mdm.api.User"/>
     <bean id="featureServiceBean" class="org.wso2.carbon.mdm.api.Feature"/>
+    <bean id="userServiceBean" class="org.wso2.carbon.mdm.api.MDMUser"/>
+
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+
     <bean id="errorHandler" class="org.wso2.carbon.mdm.api.common.ErrorHandler"/>
 </beans>
 
