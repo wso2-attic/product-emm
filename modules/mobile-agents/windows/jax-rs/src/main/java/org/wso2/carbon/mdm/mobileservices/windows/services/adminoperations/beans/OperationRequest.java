@@ -19,13 +19,21 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans;
 
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.BasicOperation;
 import java.util.List;
 
 public class OperationRequest {
 
     private List<DeviceIdentifier> deviceList;
-    private Operation Operation;
+    private BasicOperation basicOperation;
+
+    public BasicOperation getBasicOperation() {
+        return basicOperation;
+    }
+
+    public void setBasicOperation(BasicOperation basicOperation) {
+        this.basicOperation = basicOperation;
+    }
 
     public List<DeviceIdentifier> getDeviceList() {
         return deviceList;
@@ -35,11 +43,4 @@ public class OperationRequest {
         this.deviceList = deviceList;
     }
 
-    public Operation getOperation() {
-        return Operation;
-    }
-
-    public void setOperation(Operation operation) {
-        Operation = operation;
-    }
 }

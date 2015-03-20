@@ -20,14 +20,20 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.util
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
-import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
+import org.wso2.carbon.device.mgt.core.DeviceManagementServiceProviderImpl;
 import org.wso2.carbon.device.mgt.core.operation.mgt.OperationManagerImpl;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.BasicOperation;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.util.List;
@@ -36,10 +42,22 @@ public class OperationStore {
 
     private static Log log = LogFactory.getLog(OperationStore.class);
 
-    public static boolean storeOperation(OperationRequest operationRequest) {
+    public static boolean storeOperation(OperationRequest operationRequest, Operation.Type type,
+                                         SyncmlCommandType syncmlCommandType) throws
+                                         WindowsDeviceEnrolmentException {
 
         List<DeviceIdentifier> devices = operationRequest.getDeviceList();
-        Operation operation = operationRequest.getOperation();
+        Operation operation = transformBasicOperation(operationRequest.getBasicOperation(), type, syncmlCommandType);
+
+        for (int i = 0; i < devices.size(); i++) {
+            try {
+                getDeviceManagementServiceProvider().getDevice(devices.get(i));
+            } catch (DeviceManagementException e) {
+                log.error("Cannot validate device ID: " + devices.get(i).getId());
+                devices.remove(i);
+            }
+        }
+
         try {
             getOperationManagementService().addOperation(operation, devices);
         } catch (OperationManagementException e) {
@@ -60,10 +78,46 @@ public class OperationStore {
         operationManager = (OperationManagerImpl) ctx.getOSGiService(OperationManagerImpl.class, null);
 
         if (operationManager == null) {
-            String msg = "Operation management service is not initialized";
+            String msg = "Operation management service is not initialized.";
             log.error(msg);
         }
         PrivilegedCarbonContext.endTenantFlow();
         return operationManager;
+    }
+
+    private static DeviceManagementServiceProviderImpl getDeviceManagementServiceProvider() {
+
+        DeviceManagementServiceProviderImpl deviceManager;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        deviceManager = (DeviceManagementServiceProviderImpl) ctx.getOSGiService(DeviceManagementServiceProviderImpl.class, null);
+
+        if (deviceManager == null) {
+            String msg = "Device management service is not initialized.";
+            log.error(msg);
+        }
+        PrivilegedCarbonContext.endTenantFlow();
+        return deviceManager;
+    }
+
+    private static Operation transformBasicOperation(BasicOperation basicOperation, Operation.Type type,
+                                                     SyncmlCommandType syncmlCommandType) throws
+            WindowsDeviceEnrolmentException {
+
+        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        Operation operation = new Operation();
+        operation.setCode(syncmlCommandType.getValue());
+        operation.setType(type);
+
+        if (syncmlCommandType == SyncmlCommandType.BASIC) {
+//            try {
+//                operation.setPayload(objectWriter.writeValueAsString(basicOperation));
+//            } catch (IOException e) {
+//                throw new WindowsDeviceEnrolmentException("", e);
+//            }
+        }
+        return operation;
     }
 }

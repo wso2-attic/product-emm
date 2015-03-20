@@ -52,7 +52,6 @@ public class SyncmlUtils {
         }
     }
 
-    //TODO comment...
     public static OperationManagerImpl getOperationManagementService() {
 
         OperationManagerImpl operationManager;

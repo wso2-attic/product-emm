@@ -19,32 +19,38 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
 
 import org.apache.commons.io.FileUtils;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.operation.mgt.SimpleOperation;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlParser;
-import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.operation.mgt.SimpleOperation;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.SyncmlCommandType;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationReply;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlGenerator;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlParser;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.BasicOperation;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
+
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-import sun.awt.SunToolkit;
 
 /**
  * Implementing class of SyncmlImpl interface.
@@ -269,8 +275,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 		return response;
 	}
 
-	//////////////TODO this should be the needed method
-	public Response getResponse(Document request) throws WindowsOperationException {
+	//Primary method for Syncml engine usage...
+	public Response getResponse(Document request) throws WindowsOperationException, WindowsDeviceEnrolmentException {
 
 		SyncmlDocument syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
 		int msgID = syncmlDocument.getHeader().getMsgID();
@@ -281,41 +287,65 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 		if(msgID == 1){
 			pendingOperations = new ArrayList<Operation>();
+            BasicOperation basicOperation = new BasicOperation();
+			ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
-			Operation osVersion = new SimpleOperation();
-			osVersion.setCode("OS_VERSION");
-			osVersion.setType(Operation.Type.INFO);
-			pendingOperations.add(osVersion);
+//			try {
+				Operation osVersion = new SimpleOperation();
+				basicOperation.setName("OS_VERSION");
+				osVersion.setCode(SyncmlCommandType.BASIC.getValue());
+				osVersion.setType(Operation.Type.INFO);
+//				osVersion.setPayload(objectWriter.writeValueAsString(basicOperation));
+				pendingOperations.add(osVersion);
 
-			Operation imsi = new SimpleOperation();
-			imsi.setCode("IMSI");
-			imsi.setType(Operation.Type.INFO);
-			pendingOperations.add(imsi);
 
-			Operation imei = new SimpleOperation();
-			imei.setCode("IMEI");
-			imei.setType(Operation.Type.INFO);
-			pendingOperations.add(imei);
+				Operation imsi = new SimpleOperation();
+				basicOperation.setName("IMSI");
+				imsi.setCode(SyncmlCommandType.BASIC.getValue());
+				imsi.setType(Operation.Type.INFO);
+//				imsi.setPayload(objectWriter.writeValueAsString(basicOperation));
+				pendingOperations.add(imsi);
 
-			Operation deviceID = new SimpleOperation();
-			deviceID.setCode("DEVICE_ID");
-			deviceID.setType(Operation.Type.INFO);
-			pendingOperations.add(deviceID);
+				Operation imei = new SimpleOperation();
+				basicOperation.setName("IMEI");
+				imei.setCode(SyncmlCommandType.BASIC.getValue());
+				imei.setType(Operation.Type.INFO);
+//				imei.setPayload(objectWriter.writeValueAsString(basicOperation));
+				pendingOperations.add(imei);
 
-			Operation manufacturer = new SimpleOperation();
-			manufacturer.setCode("MANUFACTURER");
-			manufacturer.setType(Operation.Type.INFO);
-			pendingOperations.add(manufacturer);
+				Operation deviceID = new SimpleOperation();
+				basicOperation.setName("DEVICE_ID");
+				deviceID.setCode(SyncmlCommandType.BASIC.getValue());
+				deviceID.setType(Operation.Type.INFO);
+//				deviceID.setPayload(objectWriter.writeValueAsString(basicOperation));
+				pendingOperations.add(deviceID);
 
-			Operation model = new SimpleOperation();
-			model.setCode("MODEL");
-			model.setType(Operation.Type.INFO);
-			pendingOperations.add(model);
+				Operation manufacturer = new SimpleOperation();
+				basicOperation.setName("MANUFACTURER");
+				manufacturer.setCode(SyncmlCommandType.BASIC.getValue());
+				manufacturer.setType(Operation.Type.INFO);
+//				manufacturer.setPayload(objectWriter.writeValueAsString(basicOperation));
+				pendingOperations.add(manufacturer);
 
-			Operation language = new SimpleOperation();
-			language.setCode("LANGUAGE");
-			language.setType(Operation.Type.INFO);
-			pendingOperations.add(language);
+				Operation model = new SimpleOperation();
+				basicOperation.setName("MODEL");
+				model.setCode(SyncmlCommandType.BASIC.getValue());
+				model.setType(Operation.Type.INFO);
+//				model.setPayload(objectWriter.writeValueAsString(basicOperation));
+				pendingOperations.add(model);
+
+				Operation language = new SimpleOperation();
+				basicOperation.setName("LANGUAGE");
+				language.setCode(SyncmlCommandType.BASIC.getValue());
+				language.setType(Operation.Type.INFO);
+//				language.setPayload(objectWriter.writeValueAsString(basicOperation));
+				pendingOperations.add(language);
+//			}
+//			catch (IOException e){
+//				String msg = "Initial get operations cannot be performed.";
+//				log.error(msg);
+//				throw new WindowsDeviceEnrolmentException(msg, e);
+//			}
 		}
 		else{
 			try {
@@ -325,8 +355,11 @@ public class SyncmlServiceImpl implements SyncmlService {
 			}
 		}
 
-		/////TODO send pendingOperations and device list to the syncml response generating method
+		OperationReply operationReply = new OperationReply(syncmlDocument, pendingOperations);
+		SyncmlDocument syncmlResponse = operationReply.generateReply();
+		SyncmlGenerator generator = new SyncmlGenerator();
+		String response = generator.generatePayload(syncmlResponse);
 
-		return null;
+		return Response.ok().entity(response).build();
 	}
 }
