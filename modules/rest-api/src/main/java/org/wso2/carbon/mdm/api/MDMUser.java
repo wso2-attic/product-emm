@@ -28,10 +28,7 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.device.mgt.user.common.User;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import java.util.List;
 
 /**
@@ -75,16 +72,11 @@ public class MDMUser {
     }
 
     @GET
-    @Path("send")
-    public void sendEmail() throws MDMAPIException {
+    @Path("send/{emailAddress}")
+    public void sendEmail(@PathParam("emailAddress") String emailAddress) throws MDMAPIException {
 
         try {
-            EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-            emailMessageProperties.setMailTo(new String[]{"manojgunawardena@gmail.com"});
-            emailMessageProperties.setMessageBody("Test Mail");
-            emailMessageProperties.setSubject("test subject");
-
-            MDMAPIUtils.getEmailService().sendEmail(emailMessageProperties);
+            MDMAPIUtils.getDeviceManagementService().sendEnrollInvitation(emailAddress);
         } catch (DeviceManagementException e) {
             String msg = "Email service error.";
             log.error(msg, e);
