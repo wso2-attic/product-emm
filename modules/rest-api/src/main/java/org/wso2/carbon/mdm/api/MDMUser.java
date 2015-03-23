@@ -29,6 +29,8 @@ import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.device.mgt.user.common.User;
 
 import javax.ws.rs.*;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -71,16 +73,4 @@ public class MDMUser {
         }
     }
 
-    @GET
-    @Path("send/{emailAddress}")
-    public void sendEmail(@PathParam("emailAddress") String emailAddress) throws MDMAPIException {
-
-        try {
-            MDMAPIUtils.getDeviceManagementService().sendEnrollInvitation(emailAddress);
-        } catch (DeviceManagementException e) {
-            String msg = "Email service error.";
-            log.error(msg, e);
-            throw new MDMAPIException(msg, e);
-        }
-    }
 }
