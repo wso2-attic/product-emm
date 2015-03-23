@@ -2,8 +2,14 @@
     <div id="nav" class="row wr-app-bar">
         <div class="wr-action-container">
             <div class="wr-action-btn-bar">
-                <a href="javascript:history.go(-1)" class="cu-btn btn-prev">Go Back</a>
-                <a href="javascript:openNotificationbar()" class="cu-btn btn-notification wr-notification-toggle-btn"><span class="wr-notification-bubble">35</span></a>
+                <!--<a href="javascript:history.go(-1)" class="cu-btn btn-prev">Go Back</a>-->
+                {{#if permissions.LIST_DEVICES}}
+                    <a href="/mdm" class="cu-btn">Device Management</a>
+                {{/if}}
+                {{#if permissions.LIST_USERS}}
+                    <a href="/mdm/users" class="cu-btn">User Management</a>
+                {{/if}}
+                <a href="javascript:openNotificationbar()" class="cu-btn btn-notification wr-notification-toggle-btn"><span class="wr-notification-bubble hidden"></span></a>
             </div>
         </div>
     </div>

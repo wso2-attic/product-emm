@@ -20,6 +20,10 @@ var userModule = (function () {
     var module = {};
     var log = new Log();
     var constants = require("/modules/constants.js");
+    var utility = require('/modules/utility.js').utility;
+    var dataConfig = require('/config/mdm-props.js').config();
+    var userManagementService = utility.getUserManagementService();
+    var deviceManagement = utility.getDeviceManagementService();
     module.login = function(username, password, successCallback, failureCallback){
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
@@ -68,14 +72,34 @@ var userModule = (function () {
         }
     };
     module.inviteUser = function(username) {
-        log.info("User invited");
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        var user = userManagementService.getUser(username, carbonUser.tenantId);
+        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "/download-agentt";
+
+        deviceManagement.sendEnrollInvitation(user.getTitle(), user.getFirstName(), user.getEmail(), new java.lang.String(enrollmentURL));
     };
     module.getUsers = function(){
-        var users = [{
-            "username": "dulitha",
-            "email": "dulitha@wso2.com",
-            "name": "Dulitha Wijewantha"
-        }, {"username": "dulitha", "email": "dulitha@wso2.com", "name": "Dulitha Wijewantha"}];
+        var users = [];
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        var userList = userManagementService.getUsersForTenant(carbonUser.tenantId);
+        for (var i = 0; i < userList.size(); i++) {
+            var userObject = userList.get(i);
+            log.info( userObject.class);
+            users.push({
+                "username" : userObject.getUserName(),
+                "email" : userObject.getEmail(),
+                "name" : userObject.getFirstName() +" "+ userObject.getLastName()
+
+            });
+        }
         return users;
     };
     module.isAuthorized = function(permission){

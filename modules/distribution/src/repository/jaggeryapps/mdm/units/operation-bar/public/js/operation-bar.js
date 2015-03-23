@@ -88,6 +88,11 @@ function runOperation(operation) {
         dataType:"json",
         success: function(message){
             console.log(message);
+            $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div class="wr-notification-operation">' +
+            'Device '+operation.toLowerCase()+' Operation Successful!</div><hr /> </div>');
+            var notificationCount = parseInt($(".wr-notification-bubble").html());
+            notificationCount++;
+            $(".wr-notification-bubble").html(notificationCount);
         }
     }).error(function(message, sdf,sdf){
         console.log(message);

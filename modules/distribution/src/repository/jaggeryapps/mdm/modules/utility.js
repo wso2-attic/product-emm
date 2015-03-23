@@ -27,6 +27,9 @@ var utility = (function () {
     module.getDeviceManagementService = function () {
         return osgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementService');
     };
+    module.getUserManagementService = function(){
+        return osgiService('org.wso2.carbon.device.mgt.user.core.service.UserManagementService');
+    };
     module.insertAppPermissions = function (userModule, type) {
         userModule.addPermissions([{key: "device-mgt/", name: "Device Management"}], "", type);
         userModule.addPermissions([{key: "device-mgt/admin", name: "Device Management Admin"}], "", type);
@@ -35,9 +38,12 @@ var utility = (function () {
         userModule.addPermissions([{key: "devices", name: "Device"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "users", name: "User"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "devices", name: "Device"}], "device-mgt/user", type);
+
         userModule.addPermissions([{key: "devices/list", name: "List all Devices"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "devices/operation", name: "Perform operations"}], "device-mgt/admin", type);
+        userModule.addPermissions([{key: "users/list", name: "List Users"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "users/invite", name: "Invite Users"}], "device-mgt/admin", type);
+
         userModule.addPermissions([{key: "devices/list", name: "List own Devices"}], "device-mgt/user", type);
         userModule.addPermissions([{
             key: "devices/operation",
