@@ -130,7 +130,7 @@ public class Device {
 	}
 
 	@GET
-	@Path("/license")
+	@Path("license")
 	@Produces("text/plain")
 	public String getLicense() throws AndroidAgentException {
 		String msg;
