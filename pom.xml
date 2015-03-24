@@ -17,7 +17,8 @@
  ~ under the License.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.mdm</groupId>
@@ -321,16 +322,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
-                <version>${carbon.kernel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tomcat</artifactId>
-                <version>${carbon.kernel.version}</version>
-            </dependency>
 
             <!--CDM core dependencies-->
             <dependency>
@@ -413,16 +404,6 @@
                 <groupId>com.h2database.wso2</groupId>
                 <artifactId>h2-database-engine</artifactId>
                 <version>${orbit.h2.engine.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat.wso2</groupId>
-                <artifactId>tomcat</artifactId>
-                <version>${orbit.tomcat.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat.wso2</groupId>
-                <artifactId>jdbc-pool</artifactId>
-                <version>${orbit.tomcat.jdbc.pooling.version}</version>
             </dependency>
 
             <!--APIM dependencies-->
@@ -619,6 +600,40 @@
                 <artifactId>cxf-rt-ws-security</artifactId>
                 <version>${cxf.version}</version>
             </dependency>
+
+            <!-- Tomcat dependencies -->
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
+                <version>${carbon.kernel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tomcat</artifactId>
+                <version>${carbon.kernel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.wso2</groupId>
+                <artifactId>tomcat-servlet-api</artifactId>
+                <version>${orbit.version.tomcat-servlet-api}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.wso2</groupId>
+                <artifactId>tomcat</artifactId>
+                <version>${orbit.tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.wso2</groupId>
+                <artifactId>jdbc-pool</artifactId>
+                <version>${orbit.tomcat.jdbc.pooling.version}</version>
+            </dependency>
+            <!-- End of Tomcat dependencies -->
+
+            <dependency>
+                <groupId>commons-httpclient.wso2</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${orbit.version.commons-httpclient}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -660,7 +675,7 @@
 
         <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
 
-         <!--CXF properties-->
+        <!--CXF properties-->
         <cxf.version>2.6.1</cxf.version>
         <jackson.version>1.9.0</jackson.version>
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
@@ -694,12 +709,17 @@
         <!-- API Management -->
         <carbon.api.mgt.version>1.3.3</carbon.api.mgt.version>
 
+        <!-- Tomcat -->
+        <orbit.version.tomcat>7.0.52.wso2v5</orbit.version.tomcat>
+        <orbit.version.tomcat-servlet-api>7.0.52.wso2v1</orbit.version.tomcat-servlet-api>
+
         <!-- Third Party Dependencies-->
         <spongycastle.version>1.51.0.0</spongycastle.version>
         <bouncycastle.version>1.49</bouncycastle.version>
         <apache.wss4j.version>2.0.0</apache.wss4j.version>
         <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
         <axis2-transports.wso2.version>1.1.0-wso2v11</axis2-transports.wso2.version>
+        <orbit.version.commons-httpclient>3.1.0.wso2v2</orbit.version.commons-httpclient>
     </properties>
 
     <scm>

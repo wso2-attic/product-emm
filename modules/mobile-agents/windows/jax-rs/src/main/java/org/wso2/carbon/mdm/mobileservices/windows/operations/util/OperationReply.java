@@ -22,14 +22,9 @@ package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.apache.tiles.jsp.taglib.AddListAttributeTag;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
-import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
 
 import java.util.ArrayList;
 import java.util.List;
