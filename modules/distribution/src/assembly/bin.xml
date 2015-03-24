@@ -228,7 +228,7 @@
 
         <!-- Copying Device Management related dbscripts -->
         <fileSet>
-            <directory>../distribution/src/repository/dbscripts/cdm</directory>
+            <directory> ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/cdm</outputDirectory>
             <includes>
                 <include>*/**</include>
