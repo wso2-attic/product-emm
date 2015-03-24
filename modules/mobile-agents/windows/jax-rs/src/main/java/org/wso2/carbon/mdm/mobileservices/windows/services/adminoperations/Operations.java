@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Interface for Admin operations persisting. This interface accepts operations added via UI.
  */
-@Path("/windows")
+@Path("/operations")
 public interface Operations {
 
     @POST
@@ -38,4 +38,22 @@ public interface Operations {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/lock")
     OperationResponse lock(OperationRequest lock) throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/ring")
+    OperationResponse ring(OperationRequest ring) throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/wipe")
+    OperationResponse wipe(OperationRequest wipe) throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/wifi")
+    OperationResponse wifi(OperationRequest wifi) throws WindowsDeviceEnrolmentException;
 }

@@ -53,19 +53,22 @@ public class SyncmlUtils {
     }
 
     public static OperationManagerImpl getOperationManagementService() {
+        try {
+            OperationManagerImpl operationManager;
+            PrivilegedCarbonContext.startTenantFlow();
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            operationManager = (OperationManagerImpl) ctx.getOSGiService(OperationManagerImpl.class, null);
 
-        OperationManagerImpl operationManager;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        operationManager = (OperationManagerImpl) ctx.getOSGiService(OperationManagerImpl.class, null);
-
-        if (operationManager == null) {
-            String msg = "Operation management service is not initialized";
-            log.error(msg);
+            if (operationManager == null) {
+                String msg = "Operation management service is not initialized";
+                log.error(msg);
+            }
+            return operationManager;
         }
-        PrivilegedCarbonContext.endTenantFlow();
-        return operationManager;
+        finally{
+            PrivilegedCarbonContext.endTenantFlow();
+        }
     }
 }

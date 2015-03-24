@@ -23,19 +23,21 @@ import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.DeviceManagementServiceProviderImpl;
 import org.wso2.carbon.device.mgt.core.operation.mgt.OperationManagerImpl;
+import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.util.SyncmlCommandType;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Device;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
-import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.BasicOperation;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OperationStore {
@@ -43,23 +45,29 @@ public class OperationStore {
     private static Log log = LogFactory.getLog(OperationStore.class);
 
     public static boolean storeOperation(OperationRequest operationRequest, Operation.Type type,
-                                         SyncmlCommandType syncmlCommandType) throws
+                                         String commandType) throws
                                          WindowsDeviceEnrolmentException {
 
-        List<DeviceIdentifier> devices = operationRequest.getDeviceList();
-        Operation operation = transformBasicOperation(operationRequest.getBasicOperation(), type, syncmlCommandType);
+        List<Device> devices = operationRequest.getDeviceList();
+        List<DeviceIdentifier> deviceIdentifiers = new ArrayList<DeviceIdentifier>();
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+
+        Operation operation = transformBasicOperation(operationRequest, type, commandType);
 
         for (int i = 0; i < devices.size(); i++) {
             try {
-                getDeviceManagementServiceProvider().getDevice(devices.get(i));
+                deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
+                deviceIdentifier.setId(devices.get(i).getID());
+                deviceIdentifiers.add(deviceIdentifier);
+                getDeviceManagementServiceProvider().getDevice(deviceIdentifier);
+
             } catch (DeviceManagementException e) {
-                log.error("Cannot validate device ID: " + devices.get(i).getId());
-                devices.remove(i);
+                log.error("Cannot validate device ID: " + devices.get(i).getID());
+                deviceIdentifiers.remove(i);
             }
         }
-
         try {
-            getOperationManagementService().addOperation(operation, devices);
+            getOperationManagementService().addOperation(operation, deviceIdentifiers);
         } catch (OperationManagementException e) {
             String msg = "Failure occurred while storing command operation.";
             log.error(msg);
@@ -69,55 +77,70 @@ public class OperationStore {
     }
 
     private static OperationManagerImpl getOperationManagementService() {
+        try {
+            OperationManagerImpl operationManager;
+            PrivilegedCarbonContext.startTenantFlow();
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            operationManager = (OperationManagerImpl) ctx.getOSGiService(OperationManagerImpl.class, null);
 
-        OperationManagerImpl operationManager;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        operationManager = (OperationManagerImpl) ctx.getOSGiService(OperationManagerImpl.class, null);
-
-        if (operationManager == null) {
-            String msg = "Operation management service is not initialized.";
-            log.error(msg);
+            if (operationManager == null) {
+                String msg = "Operation management service is not initialized.";
+                log.error(msg);
+            }
+            return operationManager;
         }
-        PrivilegedCarbonContext.endTenantFlow();
-        return operationManager;
+        finally {
+            PrivilegedCarbonContext.endTenantFlow();
+        }
     }
 
     private static DeviceManagementServiceProviderImpl getDeviceManagementServiceProvider() {
+        try {
+            DeviceManagementServiceProviderImpl deviceManager;
+            PrivilegedCarbonContext.startTenantFlow();
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            deviceManager = (DeviceManagementServiceProviderImpl) ctx.getOSGiService(DeviceManagementServiceProviderImpl.class, null);
 
-        DeviceManagementServiceProviderImpl deviceManager;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        deviceManager = (DeviceManagementServiceProviderImpl) ctx.getOSGiService(DeviceManagementServiceProviderImpl.class, null);
-
-        if (deviceManager == null) {
-            String msg = "Device management service is not initialized.";
-            log.error(msg);
+            if (deviceManager == null) {
+                String msg = "Device management service is not initialized.";
+                log.error(msg);
+            }
+            return deviceManager;
         }
-        PrivilegedCarbonContext.endTenantFlow();
-        return deviceManager;
+        finally {
+            PrivilegedCarbonContext.endTenantFlow();
+        }
     }
 
-    private static Operation transformBasicOperation(BasicOperation basicOperation, Operation.Type type,
-                                                     SyncmlCommandType syncmlCommandType) throws
-            WindowsDeviceEnrolmentException {
+    private static Operation transformBasicOperation(OperationRequest operationRequest, Operation.Type type,
+                                                     String commandType) throws
+                                                     WindowsDeviceEnrolmentException {
 
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         Operation operation = new Operation();
-        operation.setCode(syncmlCommandType.getValue());
+        operation.setCode(commandType);
         operation.setType(type);
 
-        if (syncmlCommandType == SyncmlCommandType.BASIC) {
+        if (commandType == SyncmlCommandType.WIFI.getValue()) {
+
+//--------------Commented as getPayLoad() method is still not available----------------------
+
 //            try {
-//                operation.setPayload(objectWriter.writeValueAsString(basicOperation));
+//                Wifi wifiObject = (Wifi)operationRequest.getBasicOperation();
+//                        operation.setPayload(objectWriter.writeValueAsString(configOperation));
 //            } catch (IOException e) {
-//                throw new WindowsDeviceEnrolmentException("", e);
+//                throw new WindowsDeviceEnrolmentException(
+//                        "Failure in resolving JSON payload of WIFI operation.", e);
 //            }
         }
+        else {
+//            no operation.....
+        }
+
         return operation;
     }
 }

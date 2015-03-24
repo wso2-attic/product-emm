@@ -24,23 +24,20 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
-
-import org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationReply;
 
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlGenerator;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlParser;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SyncmlParserTest {
 
@@ -49,11 +46,8 @@ public class SyncmlParserTest {
 	@Test
 	public void parseSyncML() throws IOException, WindowsOperationException {
 
-        URL resourceUrl = this.getClass().getClassLoader().getResource("syncml-test-message.xml");
-        if (resourceUrl == null) {
-            Assert.fail("Failed to locate the resource file 'syncml-test-message.xml'");
-        }
-		File propertyFile = new File(resourceUrl.getFile());
+		SyncmlParser syncmlParser = new SyncmlParser();
+		File syncmlTestMessage = new File(getClass().getClassLoader().getResource("syncml-test-message.xml").getFile());
 
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
@@ -62,20 +56,48 @@ public class SyncmlParserTest {
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			if (docBuilder != null) {
-				document = docBuilder.parse(propertyFile);
+				document = docBuilder.parse(syncmlTestMessage);
 			}
 		} catch (ParserConfigurationException e) {
-			Assert.fail("Test failure in parser configuration while reading syncml-test-message.xml", e);
+			Assert.fail("Test failure in parser configuration while reading syncml-test-message.xml.");
 		} catch (SAXException e) {
-			Assert.fail("Test failure occurred while reading syncml-test-message.xml", e);
+			Assert.fail("Test failure occurred while reading syncml-test-message.xml.");
 		} catch (IOException e) {
-			Assert.fail("Test failure while accessing syncml-test-message.xml", e);
+			Assert.fail("Test failure while accessing syncml-test-message.xml.");
 		}
+
 		SyncmlGenerator generator = new SyncmlGenerator();
-		String inputSyncmlMsg = FileUtils.readFileToString(propertyFile);
-		String generatedSyncmlMsg = generator.generatePayload(SyncmlParser.parseSyncmlPayload(document));
-		generatedSyncmlMsg = generatedSyncmlMsg.replaceAll("\n", "");
-		//Assert.assertEquals(inputSyncmlMsg , generatedSyncmlMsg);
+		String fileInputSyncmlMsg = FileUtils.readFileToString(syncmlTestMessage);
+		String inputSyncmlMessage = null;
+
+		String generatedSyncmlMsg = generator.generatePayload(syncmlParser.parseSyncmlPayload(document));
+
+		Document documentInputSyncML;
+		try {
+			DocumentBuilder documentBuilderInputSyncML = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			InputSource inputSourceInputSyncML = new InputSource();
+			inputSourceInputSyncML.setCharacterStream(new StringReader(fileInputSyncmlMsg));
+			documentInputSyncML = documentBuilderInputSyncML.parse(inputSourceInputSyncML);
+
+			inputSyncmlMessage = convertToString(documentInputSyncML);
+		}
+		catch (Exception e){
+            log.info("Failure occurred in input test XML file parsing.");
+		}
+		Assert.assertEquals(inputSyncmlMessage, generatedSyncmlMsg);
 	}
 
+	public String convertToString(Document doc) throws TransformerException {
+
+		DOMSource domSource = new DOMSource(doc);
+		StringWriter stringWriter = new StringWriter();
+		StreamResult streamResult = new StreamResult(stringWriter);
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.transform(domSource, streamResult);
+		stringWriter.flush();
+		return stringWriter.toString();
+	}
 }

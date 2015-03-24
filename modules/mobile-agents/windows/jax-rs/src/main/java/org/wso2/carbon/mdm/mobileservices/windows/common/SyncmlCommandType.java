@@ -16,11 +16,11 @@
  *  under the License.
  */
 
-package org.wso2.carbon.mdm.mobileservices.windows.common.util;
+package org.wso2.carbon.mdm.mobileservices.windows.common;
 
 public enum SyncmlCommandType {
 
-    BASIC("BASIC");
+    WIFI("WIFI");
 
     private final String commandType;
     private SyncmlCommandType(final String commandType) {
