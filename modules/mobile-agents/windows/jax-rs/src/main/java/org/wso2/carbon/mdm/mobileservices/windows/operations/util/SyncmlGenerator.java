@@ -94,8 +94,6 @@ public class SyncmlGenerator {
 			log.error(message);
 			throw new WindowsOperationException(message);
 		}
-		String generatedDocument = stringWriter.toString();
-
-		return generatedDocument;
+        return stringWriter.toString();
 	}
 }
