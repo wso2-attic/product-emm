@@ -8,8 +8,7 @@ import java.io.OutputStream;
 import android.util.Log;
 
 public class StreamHandler {
-	
-	
+
 	/**
 	 * Close a ByteArrayOutputStream passed in.
 	 * @param stream - ByteArrayOutputStream to be closed.
@@ -36,7 +35,7 @@ public class StreamHandler {
 	            stream.close();
             } catch (IOException e) {
             	if (Constants.DEBUG_MODE_ENABLED) { 
-    				Log.e(tag, "Exception occured when closing InputStream."+e);
+    				Log.e(tag, "Exception occured when closing InputStream." + e);
     			}
             }
 		}
@@ -52,7 +51,7 @@ public class StreamHandler {
 	            stream.close();
             } catch (IOException e) {
             	if (Constants.DEBUG_MODE_ENABLED) {
-    				Log.e(tag, "Exception occured when closing BufferedReader."+e);
+    				Log.e(tag, "Exception occured when closing BufferedReader." + e);
     			}
             }
 		}

@@ -20,7 +20,7 @@ package org.wso2.mdm.agent;
 import java.util.Map;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.beans.ServerConfig;
-import org.wso2.mdm.agent.proxy.APIResultCallBack;
+import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.services.BuildDeviceInfoPayload;
 import org.wso2.mdm.agent.utils.CommonDialogUtils;
 import org.wso2.mdm.agent.utils.Constants;

@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.api.DeviceInfo;
 import org.wso2.mdm.agent.beans.ServerConfig;
-import org.wso2.mdm.agent.proxy.APIResultCallBack;
+import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.utils.Constants;
 import org.wso2.mdm.agent.utils.Preference;
 import org.wso2.mdm.agent.utils.CommonUtils;

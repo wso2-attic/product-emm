@@ -28,7 +28,7 @@ public class Constants {
 	public static final String API_VERSION = "1.0.0";
 	public static final String API_SERVER_PORT = "8280";
 
-	public static final String SERVER_APP_ENDPOINT = "/cdm-android-api/";
+	public static final String SERVER_APP_ENDPOINT = "/mdm-android-api/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = "/license/" + API_VERSION;
 	public static final String REGISTER_ENDPOINT = "/enroll/" + API_VERSION;
@@ -124,12 +124,8 @@ public class Constants {
 	public static final String OPERATION_INSTALL_APPLICATION_BUNDLE = "509B";
 	public static final String OPERATION_UNINSTALL_APPLICATION = "510A";
 	public static final String OPERATION_ENCRYPT_STORAGE = "511A";
-	public static final String OPERATION_APN = "512A";
+	public static final String OPERATION_RING = "512A";
 	public static final String OPERATION_MUTE = "513A";
-	public static final String OPERATION_TRACK_CALLS = "514A";
-	public static final String OPERATION_TRACK_SMS = "515A";
-	public static final String OPERATION_DATA_USAGE = "516A";
-	public static final String OPERATION_STATUS = "517A";
 	public static final String OPERATION_WEBCLIP = "518A";
 	public static final String OPERATION_PASSWORD_POLICY = "519A";
 	public static final String OPERATION_EMAIL_CONFIGURATION = "520A";

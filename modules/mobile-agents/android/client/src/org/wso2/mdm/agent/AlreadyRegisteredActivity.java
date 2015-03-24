@@ -22,7 +22,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.mdm.agent.R;
-import org.wso2.mdm.agent.proxy.APIResultCallBack;
+import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.services.LocalNotification;
 import org.wso2.mdm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.mdm.agent.utils.CommonDialogUtils;

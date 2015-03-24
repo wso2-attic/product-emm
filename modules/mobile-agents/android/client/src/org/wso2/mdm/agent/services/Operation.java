@@ -134,6 +134,9 @@ public class Operation {
 			case Constants.OPERATION_ENCRYPT_STORAGE:
 				encryptStorage(operationCode, operationData);
 				break;
+			case Constants.OPERATION_RING:
+				ringDevice(operationCode);
+				break;
 			case Constants.OPERATION_MUTE:
 				muteDevice(operationCode);
 				break;
@@ -270,9 +273,17 @@ public class Operation {
 	/**
 	 * Lock the device.
 	 * @param code        - Operation code.
-	 * @param requestMode - Request mode(Normal mode or policy bundle mode).
 	 */
 	public void lockDevice(String code) {
+		resultBuilder.build(code);
+		devicePolicyManager.lockNow();
+	}
+	
+	/**
+	 * Ring the device.
+	 * @param code        - Operation code.
+	 */
+	public void ringDevice(String code) {
 		resultBuilder.build(code);
 		devicePolicyManager.lockNow();
 	}

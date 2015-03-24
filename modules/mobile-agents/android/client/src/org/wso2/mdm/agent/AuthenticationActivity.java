@@ -21,8 +21,9 @@ import java.util.Map;
 
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.beans.ServerConfig;
-import org.wso2.mdm.agent.proxy.APIAccessCallBack;
-import org.wso2.mdm.agent.proxy.APIResultCallBack;
+import org.wso2.mdm.agent.proxy.beans.CredentialInfo;
+import org.wso2.mdm.agent.proxy.interfaces.APIAccessCallBack;
+import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.proxy.IdentityProxy;
 import org.wso2.mdm.agent.utils.CommonDialogUtils;
 import org.wso2.mdm.agent.utils.Constants;
@@ -89,6 +90,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		etDomain.setFocusable(true);
 		etDomain.requestFocus();
 		btnRegister = (Button) findViewById(R.id.btnRegister);
+		btnRegister.setOnClickListener(onClickAuthenticate);
 		btnRegister.setEnabled(false);
 		btnRegister.setOnClickListener(onClickAuthenticate);
 		// change button color background till user enters a valid input
@@ -150,6 +152,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					deviceType = getResources().getString(R.string.device_enroll_type_cope);
 				}
 				
+				showAuthenticationDialog();			
 			} else {
 				if (etUsername.getText() != null &&
 				    !etUsername.getText().toString().trim().isEmpty()) {
@@ -192,6 +195,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		if (CommonUtils.isNetworkAvailable(context)) {
 			initializeIDPLib(getResources().getString(R.string.client_id),
 			                 getResources().getString(R.string.client_secret));
+			progressDialog =
+					ProgressDialog.show(context,
+					                    getResources().getString(R.string.dialog_authenticate),
+					                    getResources().getString(R.string.dialog_message_please_wait),
+					                    true);
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(context);
@@ -225,9 +233,20 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		} else {
 			username = etUsername.getText().toString().trim();
 		}
+
+		Preference.putString(context, context.getResources()
+				                            .getString(R.string.shared_pref_client_id), clientKey);
+		Preference.putString(context, context.getResources()
+	                            .getString(R.string.shared_pref_client_secret), clientSecret);
 		
-		IdentityProxy.getInstance().init(clientKey, clientSecret, username, passwordVal, serverURL,
-		                                 AuthenticationActivity.this, this.getApplicationContext());
+		CredentialInfo info = new CredentialInfo();
+		info.setClientID(clientKey);
+		info.setClientSecret(clientSecret);
+		info.setUsername(username);
+		info.setPassword(passwordVal);
+		info.setTokenEndPoint(serverURL);
+		
+		IdentityProxy.getInstance().init(info, AuthenticationActivity.this, this.getApplicationContext());
 	}
 
 	@Override
@@ -239,6 +258,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				                     username);
 
 				// Check network connection availability before calling the API.
+				CommonDialogUtils.stopProgressDialog(progressDialog);
 				if (CommonUtils.isNetworkAvailable(context)) {
 					getLicense();
 				} else {
@@ -372,6 +392,23 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		} else {
 			showEnrollementFailedErrorMessage();
 		}
+	}
+	
+	private void showAuthenticationDialog(){
+		StringBuilder messageBuilder = new StringBuilder();
+		messageBuilder.append(getResources().getString(R.string.dialog_init_middle));
+		messageBuilder.append(getResources().getString(R.string.intent_extra_space));
+		messageBuilder.append(deviceType);
+		messageBuilder.append(getResources().getString(R.string.intent_extra_space));
+		messageBuilder.append(getResources().getString(R.string.dialog_init_end));
+		AlertDialog.Builder alertDialog =
+				CommonDialogUtils.getAlertDialogWithTwoButtonAndTitle(context,
+                                      getResources().getString(R.string.dialog_init_device_type),
+                                      messageBuilder.toString(),
+                                      getResources().getString(R.string.yes),
+                                      getResources().getString(R.string.no),
+                                      dialogClickListener, dialogClickListener);
+		alertDialog.show();
 	}
 
 	private void showErrorMessage(String message, String title) {
@@ -588,7 +625,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
               getResources().getString(R.string.title_head_authentication_error),
               getResources().getString(R.string.error_authentication_failed),
               getResources().getString(R.string.button_ok),
-              dialogClickListener);
+              null);
 	}
 
 	/**

@@ -20,8 +20,8 @@ package org.wso2.mdm.agent.utils;
 import org.json.JSONObject;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.proxy.APIController;
-import org.wso2.mdm.agent.proxy.APIResultCallBack;
-import org.wso2.mdm.agent.proxy.APIUtilities;
+import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.mdm.agent.proxy.beans.APIUtilities;
 import org.wso2.mdm.agent.services.AgentDeviceAdminReceiver;
 
 import android.app.admin.DevicePolicyManager;
@@ -68,7 +68,7 @@ public class CommonUtils {
 				                     context.getResources()
 				                            .getString(R.string.shared_pref_client_secret)
 				);
-		if (!clientKey.isEmpty() && !clientSecret.isEmpty()) {
+		if (clientKey!=null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
 			apiController.setClientDetails(clientKey, clientSecret);
 		}
 		apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,

@@ -1,5 +1,5 @@
-WSO2 EMM Agent
-=================
+WSO2 CDM Android Agent
+======================
 
 Configure and build the Android client application
 ----------------------

@@ -72,7 +72,7 @@ public class ServerDetails extends Activity {
 					                     getResources().getString(R.string.shared_pref_ip));
 
 			// check if we have the IP saved previously.
-			if (ipSaved != null) {
+			if (ipSaved != null && !ipSaved.isEmpty()) {
 				evServerIP.setText(ipSaved);
 				startAuthenticationActivity();
 			} else {
