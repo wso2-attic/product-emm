@@ -15,10 +15,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.mdm.agent.proxy;
+package org.wso2.mdm.agent.proxy.interfaces;
 
-import java.util.Map;
-
-public interface APIResultCallBack {
-	public void onReceiveAPIResult(Map<String, String> result, int requestCode);
+public interface APIAccessCallBack {
+	void onAPIAccessRecive(String status);
 }

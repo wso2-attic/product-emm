@@ -26,28 +26,32 @@ import android.util.Log;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.mdm.agent.proxy.beans.APIUtilities;
+import org.wso2.mdm.agent.proxy.beans.Token;
+import org.wso2.mdm.agent.proxy.utils.Constants;
+import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Getting new access token and refresh token after access token expiration
  */
 public class RefreshTokenHandler {
 	private static final String TAG = "RefreshTokenHandler";
+	private static final String SCOPE_LABEL = "scope";
+	private static final String PRODUCTION_LABEL = "PRODUCTION";
 	private static Token token;
+	private static final String COLON = ":";
 
 	public RefreshTokenHandler(Token token) {
 		RefreshTokenHandler.token = token;
 	}
 
-	public void obtainNewAccessToken() throws InterruptedException, ExecutionException,
-	                                          TimeoutException {
+	public void obtainNewAccessToken(){
 		new NetworkCallTask().execute();
 	}
 
@@ -55,40 +59,34 @@ public class RefreshTokenHandler {
 
 		private String responseCode = null;
 
-		public NetworkCallTask() {
-
-		}
-
 		@Override
 		protected String doInBackground(String... params) {
-			String response = "";
+			String response = null;
 
-			Map<String, String> request_params = new HashMap<String, String>();
-			request_params.put("grant_type", "refresh_token");
-			request_params.put("refresh_token", token.getRefreshToken());
-			request_params.put("scope", "PRODUCTION");
+			Map<String, String> requestParams = new HashMap<String, String>();
+			requestParams.put(Constants.GRANT_TYPE, Constants.REFRESH_TOKEN);
+			requestParams.put(Constants.REFRESH_TOKEN, token.getRefreshToken());
+			requestParams.put(SCOPE_LABEL, PRODUCTION_LABEL);
 			APIUtilities apiUtilities = new APIUtilities();
 			apiUtilities.setEndPoint(IdentityProxy.getInstance().getAccessTokenURL());
-			apiUtilities.setHttpMethod("POST");
-			apiUtilities.setRequestParamsMap(request_params);
+			apiUtilities.setHttpMethod(Constants.POST_METHOD);
+			apiUtilities.setRequestParamsMap(requestParams);
+			
+			byte [] credentials = Base64.encodeBase64((IdentityProxy.clientID + COLON + 
+					IdentityProxy.clientSecret).getBytes());
+			String encodedCredentials = new String(credentials);
 
 			Map<String, String> headers = new HashMap<String, String>();
-			Log.e("proxy", IdentityProxy.clientID + ":" + IdentityProxy.clientSecret);
-			String authorizationString =
-					"Basic " +
-					new String(
-							Base64.encodeBase64((IdentityProxy.clientID +
-							                     ":" + IdentityProxy.clientSecret).getBytes())
-					);
-			headers.put("Authorization", authorizationString);
-			headers.put("Content-Type", "application/x-www-form-urlencoded");
+			
+			String authorizationString = Constants.AUTHORIZATION_MODE + encodedCredentials;
+			headers.put(Constants.AUTHORIZATION_HEADER, authorizationString);
+			headers.put(Constants.CONTENT_TYPE_HEADER, Constants.DEFAULT_CONTENT_TYPE);
 
-			Map<String, String> response_params =
-					ServerApiAccess.postDataAPI(apiUtilities, headers);
+			Map<String, String> responseParams =
+					ServerUtilities.postDataAPI(apiUtilities, headers);
 
-			response = response_params.get("response");
-			responseCode = response_params.get("status");
-			Log.d(TAG, response);
+			response = responseParams.get(Constants.SERVER_RESPONSE_BODY);
+			responseCode = responseParams.get(Constants.SERVER_RESPONSE_STATUS);
 			return response;
 		}
 
@@ -102,12 +100,11 @@ public class RefreshTokenHandler {
 			IdentityProxy identityProxy = IdentityProxy.getInstance();
 			try {
 				JSONObject response = new JSONObject(result);
-				Log.e("refresh Token Post", result.toString());
 
-				if (responseCode != null && responseCode.equals("200")) {
-					refreshToken = response.getString("refresh_token");
-					accessToken = response.getString("access_token");
-					timeToExpireSecond = Integer.parseInt(response.getString("expires_in"));
+				if (responseCode != null && responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
+					refreshToken = response.getString(Constants.REFRESH_TOKEN);
+					accessToken = response.getString(Constants.ACCESS_TOKEN);
+					timeToExpireSecond = Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
 
 					token.setRefreshToken(refreshToken);
 					token.setAccessToken(accessToken);
@@ -115,11 +112,11 @@ public class RefreshTokenHandler {
 					SharedPreferences mainPref =
 							IdentityProxy.getInstance()
 							             .getContext()
-							             .getSharedPreferences("com.mdm",
+							             .getSharedPreferences(Constants.APPLICATION_PACKAGE,
 							                                   Context.MODE_PRIVATE);
 					Editor editor = mainPref.edit();
-					editor.putString("refresh_token", refreshToken);
-					editor.putString("access_token", accessToken);
+					editor.putString(Constants.REFRESH_TOKEN, refreshToken);
+					editor.putString(Constants.ACCESS_TOKEN, accessToken);
 
 					DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 					Date date = new Date();
@@ -127,22 +124,22 @@ public class RefreshTokenHandler {
 					Date expireDate = new Date(expiresIN);
 					String strDate = dateFormat.format(expireDate);
 					token.setDate(strDate);
-					editor.putString("date", strDate);
+					editor.putString(Constants.DATE_LABEL, strDate);
 					editor.commit();
 
-					identityProxy.receiveNewAccessToken(responseCode, "success", token);
+					identityProxy.receiveNewAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
 
 				} else if (responseCode != null) {
-					JSONObject mainObject = new JSONObject(result);
-					String error = mainObject.getString("error");
-					String errorDescription = mainObject.getString("error_description");
+					JSONObject responseBody = new JSONObject(result);
+					String error = responseBody.getString(Constants.ERROR_LABEL);
+					String errorDescription = responseBody.getString(Constants.ERROR_DESCRIPTION_LABEL);
 					Log.d(TAG, error);
 					Log.d(TAG, errorDescription);
 					identityProxy.receiveNewAccessToken(responseCode, errorDescription, token);
 				}
 			} catch (JSONException e) {
 				identityProxy.receiveNewAccessToken(responseCode, "", token);
-				e.printStackTrace();
+				Log.e(TAG, "Invalid JSON." + e);
 			}
 		}
 	}

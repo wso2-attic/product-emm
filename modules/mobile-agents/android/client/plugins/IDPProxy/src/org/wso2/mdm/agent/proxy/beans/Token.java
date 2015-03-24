@@ -1,7 +1,23 @@
-package org.wso2.mdm.agent.proxy;
+/*
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.wso2.mdm.agent.proxy.beans;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -71,22 +87,4 @@ public final class Token {
 		this.expired = expired;
 	}
 
-	public static boolean isValid(Date expirationDate) {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
-		Date currentDate = new Date();
-		String strDate = dateFormat.format(currentDate);
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
-		try {
-			currentDate = format.parse(strDate);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-		boolean expired = currentDate.after(expirationDate);
-		boolean equalDates = currentDate.equals(expirationDate);
-		if (expired == true || equalDates == true) {
-			return true;
-		}
-
-		return false;
-	}
 }

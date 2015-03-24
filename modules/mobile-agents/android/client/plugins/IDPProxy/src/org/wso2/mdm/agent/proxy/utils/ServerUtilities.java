@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.mdm.agent.proxy;
+package org.wso2.mdm.agent.proxy.utils;
 
 import android.util.Log;
 
@@ -38,31 +38,56 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
+import org.wso2.mdm.agent.proxy.IdentityProxy;
+import org.wso2.mdm.agent.proxy.R;
+import org.wso2.mdm.agent.proxy.beans.APIUtilities;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
 /**
  * Handle network communication between SDK and authorization server
  */
-public class ServerApiAccess {
+public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";
 
-	/**
-	 * Enable SSL communication between client application and authorization
-	 * server (if you have selfish sign certificate)
-	 * @param in
-	 * @param myTrustStorePassword
-	 */
+	public static boolean isValid(Date expirationDate) {
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
+		Date currentDate = new Date();
+		String formattedDate = dateFormat.format(currentDate);
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
+		try {
+			currentDate = format.parse(formattedDate);
+		} catch (ParseException e) {
+			Log.d(TAG, "Date parsing failed." + e);
+		}
+		boolean isExpired = currentDate.after(expirationDate);
+		boolean isEqual = currentDate.equals(expirationDate);
+		if (isExpired == true || isEqual == true) {
+			return true;
+		}
 
+		return false;
+	}
+	
 	public static String buildPayload(Map<String, String> params) {
 		if (params == null) {
 			return null;
@@ -95,9 +120,9 @@ public class ServerApiAccess {
 		String url = apiUtilities.getEndPoint();
 		JSONObject params = apiUtilities.getRequestParams();
 		Map<String, String> responseParams = new HashMap<String, String>();
-		HttpClient httpclient = getCertifiedHttpClient();
+		HttpClient httpClient = getCertifiedHttpClient();
 
-		if (httpMethod.equals("POST")) {
+		if (httpMethod.equals(Constants.POST_METHOD)) {
 			HttpPost httpPost = new HttpPost(url);
 			if (params != null) {
 				try {
@@ -108,48 +133,42 @@ public class ServerApiAccess {
 			} else {
 				httpPost.setEntity(null);
 			}
-			Log.e("url", "" + url);
+
 			HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers, httpMethod);
 			try {
-				HttpResponse response = httpclient.execute(httpPostWithHeaders);
+				HttpResponse response = httpClient.execute(httpPostWithHeaders);
 				String status = String.valueOf(response.getStatusLine().getStatusCode());
-				Log.d(TAG, status);
-				responseParams.put("response", getResponseBody(response));
-				responseParams.put("status", status);
-				return responseParams;
+
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
+				
 			} catch (ClientProtocolException e) {
-				Log.d(TAG, "ClientProtocolException :" + e.toString());
-				return null;
+				Log.d(TAG, "Invalid client protocol." + e);
 			} catch (IOException e) {
 				Log.d(TAG, e.toString());
-				responseParams.put("response", "Internal Server Error");
-				responseParams.put("status", "500");
-				return responseParams;
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			}
-		} else if (httpMethod.equals("GET")) {
-			// if(payload!=null){
-			// url = url+"?"+payload;
-			// }
+		} else if (httpMethod.equals(Constants.GET_METHOD)) {
 			HttpGet httpGet = new HttpGet(url);
 			HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet, headers, httpMethod);
-			Log.d(TAG, httpGetWithHeaders.toString() + " GET");
+
 			try {
-				HttpResponse response = httpclient.execute(httpGetWithHeaders);
-				responseParams.put("response", getResponseBody(response));
-				responseParams.put("status",
+				HttpResponse response = httpClient.execute(httpGetWithHeaders);
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
 				                   String.valueOf(response.getStatusLine().getStatusCode()));
-				return responseParams;
 			} catch (ClientProtocolException e) {
-				Log.d(TAG, "ClientProtocolException :" + e.toString());
-				return null;
+				Log.d(TAG, "Invalid client protocol." + e);
 			} catch (IOException e) {
-				Log.d(TAG, e.toString());
-				responseParams.put("response", "Internal Server Error");
-				responseParams.put("status", "500");
-				return responseParams;
+				Log.d(TAG, "Server connectivity failure." + e);
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return null;
+		
+		return responseParams;
+		
 	}
 
 	public static Map<String, String> postDataAPI(APIUtilities apiUtilities,
@@ -158,45 +177,44 @@ public class ServerApiAccess {
 		String url = apiUtilities.getEndPoint();
 		Map<String, String> params = apiUtilities.getRequestParamsMap();
 
-		Map<String, String> response_params = new HashMap<String, String>();
+		Map<String, String> responseParams = new HashMap<String, String>();
 		HttpClient httpclient = getCertifiedHttpClient();
 		String payload = buildPayload(params);
 
-		if (httpMethod.equals("POST")) {
+		if (httpMethod.equals(Constants.POST_METHOD)) {
 			HttpPost httpPost = new HttpPost(url);
-			Log.e("url", "" + url);
 			HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers, httpMethod);
 			byte[] postData = payload.getBytes();
 			try {
 				httpPostWithHeaders.setEntity(new ByteArrayEntity(postData));
 				HttpResponse response = httpclient.execute(httpPostWithHeaders);
 				String status = String.valueOf(response.getStatusLine().getStatusCode());
-				Log.d(TAG, status);
-				response_params.put("response", getResponseBody(response));
-				response_params.put("status", status);
-				return response_params;
+
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
+				return responseParams;
 			} catch (ClientProtocolException e) {
-				Log.d(TAG, "ClientProtocolException :" + e.toString());
-				return null;
+				Log.d(TAG, "Invalid client protocol." + e);
 			} catch (IOException e) {
-				Log.d(TAG, e.toString());
-				response_params.put("response", "Internal Server Error");
-				response_params.put("status", "500");
-				return response_params;
+				Log.d(TAG, "Server connectivity failure." + e);
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return null;
+		
+		return responseParams;
 	}
 
 	public static HttpClient getCertifiedHttpClient() {
-		try {
-			HttpClient client = null;
+		HttpClient client = null;
+		InputStream inStream = null;
+		try {			
 			if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
 				KeyStore localTrustStore = KeyStore.getInstance("BKS");
-				InputStream in =
-						IdentityProxy.getInstance().getContext().getResources()
-						             .openRawResource(R.raw.emm_truststore);
-				localTrustStore.load(in, Constants.TRUSTSTORE_PASSWORD.toCharArray());
+				inStream =
+				                 IdentityProxy.getInstance().getContext().getResources()
+				                              .openRawResource(R.raw.emm_truststore);
+				localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
 
 				SchemeRegistry schemeRegistry = new SchemeRegistry();
 				schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(),
@@ -205,47 +223,61 @@ public class ServerApiAccess {
 				sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 				schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
 				HttpParams params = new BasicHttpParams();
-				ClientConnectionManager cm =
-						new ThreadSafeClientConnManager(params, schemeRegistry);
+				ClientConnectionManager connectionManager =
+				                             new ThreadSafeClientConnManager(params, schemeRegistry);
 
-				client = new DefaultHttpClient(cm, params);
+				client = new DefaultHttpClient(connectionManager, params);
 
 			} else {
 				client = new DefaultHttpClient();
 			}
-			return client;
-		} catch (Exception e) {
-			Log.d(TAG, e.toString());
-			return null;
+			
+		} catch (KeyStoreException e) {
+			Log.d(TAG, "Invalid keystore." + e);
+		} catch (CertificateException e) {
+			Log.d(TAG, "Invalid certificate." + e);
+		} catch (NoSuchAlgorithmException e) {
+			Log.d(TAG, "Keystore algorithm does not match." + e);
+		} catch (UnrecoverableKeyException e) {
+			Log.d(TAG, "Invalid keystore." + e);
+		} catch (KeyManagementException e) {
+			Log.d(TAG, "Invalid keystore." + e);
+		} catch (IOException e) {
+			Log.d(TAG, "Trust store failed to load." + e);
+		} finally{
+			StreamHandler.closeInputStream(inStream, TAG);
 		}
+		
+		return client;
 	}
 
 	public static String getResponseBody(HttpResponse response) {
 
-		String response_text = null;
+		String responseBody = null;
 		HttpEntity entity = null;
 		try {
 			entity = response.getEntity();
-			response_text = getResponseBodyContent(entity);
+			responseBody = getResponseBodyContent(entity);
 		} catch (ParseException e) {
-			Log.d(TAG, e.toString());
+			Log.d(TAG, "Invalid keystore." + e);
 		} catch (IOException e) {
 			if (entity != null) {
 				try {
 					entity.consumeContent();
-				} catch (IOException e1) {
-					Log.d(TAG, e1.toString());
+				} catch (IOException ex) {
+					Log.d(TAG, "HTTP Response failure." + ex);
 				}
 			}
 		}
-		return response_text;
+		
+		return responseBody;
 	}
 
 	public static String getResponseBodyContent(final HttpEntity entity) throws IOException,
-	                                                                            ParseException {
+	                                                                    ParseException {
 
 		if (entity == null) {
-			throw new IllegalArgumentException("HTTP entity may not be null");
+			throw new IllegalArgumentException("HTTP entity may not be null.");
 		}
 
 		InputStream instream = entity.getContent();
@@ -255,39 +287,27 @@ public class ServerApiAccess {
 		}
 
 		if (entity.getContentLength() > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException(
-
-					"HTTP entity too large to be buffered in memory");
+			throw new IllegalArgumentException("HTTP entity too large to be buffered in memory.");
 		}
 
 		String charset = getContentCharSet(entity);
 
 		if (charset == null) {
-
 			charset = HTTP.DEFAULT_CONTENT_CHARSET;
-
 		}
 
 		Reader reader = new InputStreamReader(instream, charset);
-
 		StringBuilder buffer = new StringBuilder();
 
 		try {
-
-			char[] tmp = new char[1024];
-
-			int l;
-
-			while ((l = reader.read(tmp)) != -1) {
-
-				buffer.append(tmp, 0, l);
-
+			char[] bufferSize = new char[1024];
+			int length;
+			
+			while ((length = reader.read(bufferSize)) != -1) {
+				buffer.append(bufferSize, 0, length);
 			}
-
 		} finally {
-
 			reader.close();
-
 		}
 
 		return buffer.toString();
@@ -300,27 +320,21 @@ public class ServerApiAccess {
 			throw new IllegalArgumentException("HTTP entity may not be null");
 		}
 
-		String charset = null;
+		String charSet = null;
 
 		if (entity.getContentType() != null) {
-
 			HeaderElement values[] = entity.getContentType().getElements();
-
+			
 			if (values.length > 0) {
-
 				NameValuePair param = values[0].getParameterByName("charset");
 
 				if (param != null) {
-
-					charset = param.getValue();
-
+					charSet = param.getValue();
 				}
-
 			}
-
 		}
 
-		return charset;
+		return charSet;
 
 	}
 

@@ -15,8 +15,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.mdm.agent.proxy;
+package org.wso2.mdm.agent.proxy.interfaces;
 
-public interface APIAccessCallBack {
-	public void onAPIAccessRecive(String status);
+import org.wso2.mdm.agent.proxy.beans.Token;
+
+public interface CallBack {
+
+	/**
+	 * Get access token stored in the app preferences.
+	 * @param status - Status code.
+	 * @param message - Success/Error message.
+	 * @param token - Token retrieved.
+	 */
+	void receiveAccessToken(String status, String message, Token token);
+
+	/**
+	 * Get a new access token from the server.
+	 * @param status - Status code.
+	 * @param message - Success/Error message.
+	 * @param token - Token retrieved.
+	 */
+	void receiveNewAccessToken(String status, String message, Token token);
+
 }

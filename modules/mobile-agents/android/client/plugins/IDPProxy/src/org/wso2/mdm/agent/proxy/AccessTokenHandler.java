@@ -27,6 +27,12 @@ import android.util.Log;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.mdm.agent.proxy.beans.APIUtilities;
+import org.wso2.mdm.agent.proxy.beans.CredentialInfo;
+import org.wso2.mdm.agent.proxy.beans.Token;
+import org.wso2.mdm.agent.proxy.interfaces.CallBack;
+import org.wso2.mdm.agent.proxy.utils.Constants;
+import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,19 +46,13 @@ import java.util.Map;
  */
 public class AccessTokenHandler extends Activity {
 	private static final String TAG = "AccessTokenHandler";
-	private String username = null;
-	private String password = null;
-	private String clientID = null;
-	private String clientSecret = null;
-	private String tokenEndPoint = null;
+	private static final String USERNAME_LABEL = "username";
+	private static final String PASSWORD_LABEL = "password";
+	private static final String COLON = ":";
+	private CredentialInfo info;
 
-	public AccessTokenHandler(String clientID, String clientSecret, String username,
-	                          String password, String tokenEndPoint, CallBack callBack) {
-		this.username = username;
-		this.password = password;
-		this.clientID = clientID;
-		this.clientSecret = clientSecret;
-		this.tokenEndPoint = tokenEndPoint;
+	public AccessTokenHandler(CredentialInfo info, CallBack callBack) {
+		this.info = info;
 	}
 
 	public void obtainAccessToken() {
@@ -67,33 +67,29 @@ public class AccessTokenHandler extends Activity {
 		private String response = null;
 		private String responseCode = null;
 
-		public NetworkCallTask() {
-
-		}
-
 		@Override
 		protected String doInBackground(Void... arg0) {
 			Map<String, String> request_params = new HashMap<String, String>();
-			request_params.put("grant_type", "password");
-			request_params.put("username", username);
-			request_params.put("password", password);
+			request_params.put(Constants.GRANT_TYPE, Constants.GRANT_TYPE_PASSWORD);
+			request_params.put(USERNAME_LABEL, info.getUsername());
+			request_params.put(PASSWORD_LABEL, info.getPassword());
 			APIUtilities apiUtilities = new APIUtilities();
-			apiUtilities.setEndPoint(tokenEndPoint);
-			apiUtilities.setHttpMethod("POST");
+			apiUtilities.setEndPoint(info.getTokenEndPoint());
+			apiUtilities.setHttpMethod(Constants.POST_METHOD);
 			apiUtilities.setRequestParamsMap(request_params);
+			byte [] credentials = Base64.encodeBase64((info.getClientID() + COLON + 
+															info.getClientSecret()).getBytes());
+			String encodedCredentials = new String(credentials);
 
 			Map<String, String> headers = new HashMap<String, String>();
-			String authorizationString =
-					"Basic " +
-					new String(
-							Base64.encodeBase64((clientID + ":" + clientSecret).getBytes()));
-			headers.put("Authorization", authorizationString);
-			headers.put("Content-Type", "application/x-www-form-urlencoded");
+			String authorizationString = Constants.AUTHORIZATION_MODE + encodedCredentials;
+			headers.put(Constants.AUTHORIZATION_HEADER, authorizationString);
+			headers.put(Constants.CONTENT_TYPE_HEADER, Constants.DEFAULT_CONTENT_TYPE);
 
-			Map<String, String> response_params =
-					ServerApiAccess.postDataAPI(apiUtilities, headers);
-			response = response_params.get("response");
-			responseCode = response_params.get("status");
+			Map<String, String> responseParams =
+					ServerUtilities.postDataAPI(apiUtilities, headers);
+			response = responseParams.get(Constants.SERVER_RESPONSE_BODY);
+			responseCode = responseParams.get(Constants.SERVER_RESPONSE_STATUS);
 			return response;
 		}
 
@@ -106,13 +102,12 @@ public class AccessTokenHandler extends Activity {
 			try {
 				IdentityProxy identityProxy = IdentityProxy.getInstance();
 
-				if (responseCode != null && responseCode.equals("200")) {
+				if (responseCode != null && responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
 					JSONObject response = new JSONObject(result);
-					Log.d("sdf", response.toString());
 					try {
-						accessToken = response.getString("access_token");
-						refreshToken = response.getString("refresh_token");
-						timeToExpireSecond = Integer.parseInt(response.getString("expires_in"));
+						accessToken = response.getString(Constants.ACCESS_TOKEN);
+						refreshToken = response.getString(Constants.REFRESH_TOKEN);
+						timeToExpireSecond = Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
 						Token token = new Token();
 						token.setDate();
 						token.setRefreshToken(refreshToken);
@@ -122,33 +117,33 @@ public class AccessTokenHandler extends Activity {
 						SharedPreferences mainPref =
 								IdentityProxy.getInstance()
 								             .getContext()
-								             .getSharedPreferences("com.mdm",
+								             .getSharedPreferences(Constants.APPLICATION_PACKAGE,
 								                                   Context.MODE_PRIVATE);
 						Editor editor = mainPref.edit();
-						editor.putString("access_token", accessToken);
-						editor.putString("refresh_token", refreshToken);
-						editor.putString("username", username);
+						editor.putString(Constants.ACCESS_TOKEN, accessToken);
+						editor.putString(Constants.REFRESH_TOKEN, refreshToken);
+						editor.putString(USERNAME_LABEL, info.getUsername());
 						DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 						Date date = new Date();
 						long expiresIN = date.getTime() + (timeToExpireSecond * 1000);
 						Date expireDate = new Date(expiresIN);
 						String strDate = dateFormat.format(expireDate);
 						token.setDate(strDate);
-						editor.putString("date", strDate);
+						editor.putString(Constants.DATE_LABEL, strDate);
 						editor.commit();
 
-						identityProxy.receiveAccessToken(responseCode, "success", token);
-					} catch (JSONException e) {// admin user
-
+						identityProxy.receiveAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
+					} catch (JSONException e) {
+						Log.e(TAG, "Invalid JSON format.");
 					}
 
 				} else if (responseCode != null) {
-					if ("500".equals(responseCode)) {
+					if (Constants.INTERNAL_SERVER_ERROR.equals(responseCode)) {
 						identityProxy.receiveAccessToken(responseCode, result, null);
 					} else {
 						JSONObject mainObject = new JSONObject(result);
-						String error = mainObject.getString("error");
-						String errorDescription = mainObject.getString("error_description");
+						String error = mainObject.getString(Constants.ERROR_LABEL);
+						String errorDescription = mainObject.getString(Constants.ERROR_DESCRIPTION_LABEL);
 						Log.d(TAG, error);
 						Log.d(TAG, errorDescription);
 						identityProxy.receiveAccessToken(responseCode, errorDescription, null);

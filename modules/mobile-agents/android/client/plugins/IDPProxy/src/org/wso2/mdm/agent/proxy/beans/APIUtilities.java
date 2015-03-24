@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.mdm.agent.proxy;
+package org.wso2.mdm.agent.proxy.beans;
 
 import java.util.Map;
 
@@ -58,4 +58,5 @@ public class APIUtilities {
 	public void setEndPoint(String endPoint) {
 		this.endPoint = endPoint;
 	}
+	
 }

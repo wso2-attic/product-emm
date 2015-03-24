@@ -15,11 +15,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.wso2.mdm.agent.proxy.interfaces;
 
-package org.wso2.mdm.agent.proxy;
+import org.wso2.mdm.agent.proxy.beans.Token;
 
-public class Constants {
-	public static final String SERVER_PROTOCOL = "http://";
-	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
-
+public interface TokenCallBack {
+	void onReceiveTokenResult(Token token, String status);
 }
