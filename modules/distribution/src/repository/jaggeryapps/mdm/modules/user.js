@@ -16,6 +16,8 @@
  * under the License.
  */
 
+var EmailMessageProperties =  Packages.org.wso2.carbon.device.mgt.common.EmailMessageProperties;
+var deviceManagement;
 var userModule = (function () {
     var module = {};
     var log = new Log();
@@ -23,8 +25,7 @@ var userModule = (function () {
     var utility = require('/modules/utility.js').utility;
     var dataConfig = require('/config/mdm-props.js').config();
     var userManagementService = utility.getUserManagementService();
-    var deviceManagement = utility.getDeviceManagementService();
-    var emailProperties = Packages.org.wso2.carbon.device.mgt.common.EmailMessageProperties;
+    deviceManagement = utility.getDeviceManagementService();
 
     module.login = function(username, password, successCallback, failureCallback){
         var carbonModule = require("carbon");
@@ -79,17 +80,18 @@ var userModule = (function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-
-
         var user = userManagementService.getUser(username, carbonUser.tenantId);
-        emailProperties = new emailProperties();
-        emailProperties.setMailTo(user.getEmail());
-        emailProperties.setFirstName(username);
-        emailProperties.setTitle(user.getTitle());
-        emailProperties.enrolmentUrl(enrollmentURL);
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "/download-agentt";
+        deviceManagement = utility.getDeviceManagementService();
 
-        deviceManagement.sendEnrollInvitation(emailProperties);
+        var emailProperties = new EmailMessageProperties();
+        var emailTo =  new Array();
+        emailTo[0] = user.getEmail();
+        emailProperties.setMailTo(emailTo);
+        emailProperties.setFirstName(user.getFirstName());
+        emailProperties.setTitle(user.getTitle());
+        emailProperties.setEnrolmentUrl(enrollmentURL);
+        deviceManagement.sendEnrolmentInvitation(emailProperties);
     };
     module.getUsers = function(){
         var users = [];
