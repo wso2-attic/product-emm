@@ -36,7 +36,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
@@ -44,7 +43,6 @@
                     <warName>${project.artifactId}</warName>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -58,9 +56,6 @@
                     </suiteXmlFiles>
                 </configuration>
             </plugin>
-
-
-
         </plugins>
     </build>
 
@@ -201,6 +196,10 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.logging</artifactId>
         </dependency>
 
         <!--CDM dependancies-->
