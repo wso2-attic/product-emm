@@ -31,6 +31,15 @@ public class Item {
 	Target target;
 	Source source;
 	String data;
+	Meta meta;
+
+	public Meta getMeta() {
+		return meta;
+	}
+
+	public void setMeta(Meta meta) {
+		this.meta = meta;
+	}
 
 	public String getData() {
 		return data;
@@ -75,5 +84,10 @@ public class Item {
 			data.appendChild(doc.createTextNode(getData()));
 			item.appendChild(data);
 		}
+
+		if(getMeta() != null){
+			getMeta().buildMetaElement(doc, item);
+		}
+
 	}
 }

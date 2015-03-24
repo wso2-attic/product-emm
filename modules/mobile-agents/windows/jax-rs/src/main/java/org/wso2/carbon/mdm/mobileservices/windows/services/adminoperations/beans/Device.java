@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  WSO2 Inc. licenses this file to you under the Apache License,
  *  Version 2.0 (the "License"); you may not use this file except
@@ -18,28 +18,16 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans;
 
-import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.BasicOperation;
-import java.util.List;
+public class Device {
 
-public class OperationRequest {
+    private String id;
 
-    private List<Device> deviceList;
-    private BasicOperation basicOperation;
-
-    public BasicOperation getBasicOperation() {
-        return basicOperation;
+    public String getID() {
+        return id;
     }
 
-    public void setBasicOperation(BasicOperation basicOperation) {
-        this.basicOperation = basicOperation;
-    }
-
-    public List<Device> getDeviceList() {
-        return deviceList;
-    }
-
-    public void setDeviceList(List<Device> deviceList) {
-        this.deviceList = deviceList;
+    public void setID(String id) {
+        this.id = id;
     }
 
 }

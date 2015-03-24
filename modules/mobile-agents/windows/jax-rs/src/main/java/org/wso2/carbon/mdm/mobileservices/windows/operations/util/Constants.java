@@ -29,6 +29,8 @@ public class Constants {
 	public static final String YES = "yes";
 
 	public static final String EXECUTE = "Exec";
+	public static final String ATOMIC = "Atomic";
+	public static final String ADD = "Add";
 	public static final String COMMAND_ID = "CmdID";
 	public static final String GET = "Get";
 	public static final String ITEM = "Item";

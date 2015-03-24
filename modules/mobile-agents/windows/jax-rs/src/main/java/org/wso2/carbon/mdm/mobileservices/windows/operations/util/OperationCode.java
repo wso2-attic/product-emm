@@ -41,4 +41,19 @@ public class OperationCode {
 		}
 
 	}
+
+	public static enum Configure {
+		WIFI("./Vendor/MSFT/WiFi/Profile/MyNetwork/WlanXml");
+
+		private final String code;
+
+		Configure(String code) {
+			this.code = code;
+		}
+
+		public String getCode() {
+			return this.code;
+		}
+
+	}
 }

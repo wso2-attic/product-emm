@@ -115,12 +115,11 @@
     </jaxrs:server>
 
     <!--Endpoint for UI admin operations-->
-    <jaxrs:server id="adminoperations" address="/operations">
+    <jaxrs:server id="adminoperations" address="/windows">
         <jaxrs:serviceBeans>
             <ref bean="adminoperations_bean"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
-
 
     <bean id="bstprovider_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl.BSTProviderImpl"/>
     <bean id="adminoperations_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl.OperationsImpl"/>

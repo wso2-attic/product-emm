@@ -20,7 +20,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl
 
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.util.SyncmlCommandType;
+import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
@@ -37,8 +37,51 @@ public class OperationsImpl implements Operations {
 
         OperationResponse operationResponse = new OperationResponse();
 
-        if(OperationStore.storeOperation(lock, Operation.Type.COMMAND, SyncmlCommandType.BASIC)){
+        if(OperationStore.storeOperation(lock, Operation.Type.COMMAND, "LOCK")){
             operationResponse.setStatusCode("Lock operation added successfully.");
+            return operationResponse;
+        }
+        else{
+            operationResponse.setErrorCode("Error while storing Lock operation.");
+            return operationResponse;
+        }
+    }
+
+    @Override
+    public OperationResponse ring(OperationRequest ring) throws WindowsDeviceEnrolmentException {
+        OperationResponse operationResponse = new OperationResponse();
+
+        if(OperationStore.storeOperation(ring, Operation.Type.COMMAND, "RING")){
+            operationResponse.setStatusCode("Ring operation added successfully.");
+            return operationResponse;
+        }
+        else{
+            operationResponse.setErrorCode("Error while storing Ring operation.");
+            return operationResponse;
+        }
+    }
+
+    @Override
+    public OperationResponse wipe(OperationRequest wipe) throws WindowsDeviceEnrolmentException {
+        OperationResponse operationResponse = new OperationResponse();
+
+        if(OperationStore.storeOperation(wipe, Operation.Type.COMMAND, "WIPE")){
+            operationResponse.setStatusCode("Wipe operation added successfully.");
+            return operationResponse;
+        }
+        else{
+            operationResponse.setErrorCode("Error while storing Wipe operation.");
+            return operationResponse;
+        }
+    }
+
+    @Override
+    public OperationResponse wifi(OperationRequest wifi) throws WindowsDeviceEnrolmentException {
+
+        OperationResponse operationResponse = new OperationResponse();
+
+        if(OperationStore.storeOperation(wifi, Operation.Type.CONFIG, SyncmlCommandType.WIFI.getValue())){
+            operationResponse.setStatusCode("Wifi operation added successfully.");
             return operationResponse;
         }
         else{
