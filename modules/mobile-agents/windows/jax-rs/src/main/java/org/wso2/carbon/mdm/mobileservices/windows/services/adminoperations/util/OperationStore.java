@@ -34,6 +34,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Device;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public class OperationStore {
 
     private static Operation transformBasicOperation(OperationRequest operationRequest, Operation.Type type,
                                                      String commandType) throws
-            WindowsDeviceEnrolmentException {
+                                                     WindowsDeviceEnrolmentException {
 
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         Operation operation = new Operation();
@@ -129,7 +130,7 @@ public class OperationStore {
 //--------------Commented as getPayLoad() method is still not available----------------------
 
 //            try {
-//                WIFI wifiObject = (WIFI)operationRequest.getBasicOperation();
+//                Wifi wifiObject = (Wifi)operationRequest.getBasicOperation();
 //                        operation.setPayload(objectWriter.writeValueAsString(configOperation));
 //            } catch (IOException e) {
 //                throw new WindowsDeviceEnrolmentException(

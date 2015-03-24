@@ -16,6 +16,8 @@
  * under the License.
  */
 
+var EmailMessageProperties =  Packages.org.wso2.carbon.device.mgt.common.EmailMessageProperties;
+var deviceManagement;
 var userModule = (function () {
     var module = {};
     var log = new Log();
@@ -23,7 +25,8 @@ var userModule = (function () {
     var utility = require('/modules/utility.js').utility;
     var dataConfig = require('/config/mdm-props.js').config();
     var userManagementService = utility.getUserManagementService();
-    var deviceManagement = utility.getDeviceManagementService();
+    deviceManagement = utility.getDeviceManagementService();
+
     module.login = function(username, password, successCallback, failureCallback){
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
@@ -79,8 +82,16 @@ var userModule = (function () {
         }
         var user = userManagementService.getUser(username, carbonUser.tenantId);
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "/download-agentt";
+        deviceManagement = utility.getDeviceManagementService();
 
-        deviceManagement.sendEnrollInvitation(user.getTitle(), user.getFirstName(), user.getEmail(), new java.lang.String(enrollmentURL));
+        var emailProperties = new EmailMessageProperties();
+        var emailTo =  new Array();
+        emailTo[0] = user.getEmail();
+        emailProperties.setMailTo(emailTo);
+        emailProperties.setFirstName(user.getFirstName());
+        emailProperties.setTitle(user.getTitle());
+        emailProperties.setEnrolmentUrl(enrollmentURL);
+        deviceManagement.sendEnrolmentInvitation(emailProperties);
     };
     module.getUsers = function(){
         var users = [];
