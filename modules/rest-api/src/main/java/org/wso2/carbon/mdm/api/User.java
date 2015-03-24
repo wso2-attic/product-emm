@@ -10,6 +10,8 @@ import org.wso2.carbon.device.mgt.user.common.Role;
 import org.wso2.carbon.device.mgt.user.common.UserManagementException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.utils.CarbonUtils;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -66,7 +68,7 @@ public class User {
 		List<org.wso2.carbon.device.mgt.user.common.User> users;
 
 		try {
-			users = MDMAPIUtils.getUserManagementService().getUsersForTenant(-1234);
+			users = MDMAPIUtils.getUserManagementService().getUsersForTenant(MultitenantConstants.SUPER_TENANT_ID);
 			return users;
 		} catch (UserManagementException e) {
 			msg = "User management service error.";
@@ -81,7 +83,7 @@ public class User {
 		String msg;
 		List<Role> roles;
 		try {
-			roles = MDMAPIUtils.getUserManagementService().getRolesForTenant(-1234);
+			roles = MDMAPIUtils.getUserManagementService().getRolesForTenant(MultitenantConstants.SUPER_TENANT_ID);
 			return roles;
 		} catch (UserManagementException e) {
 			msg = "User management service error.";
