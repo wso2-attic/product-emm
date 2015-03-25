@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.core.service.AppManager;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -109,6 +110,27 @@ public class MDMAPIUtils {
 		identifier.setId(deviceId);
 		identifier.setType(deviceType);
 		return identifier;
+	}
+
+	public static AppManager getAppManagementService(String tenantDomain) throws MDMAPIException {
+		// until complete login this is use to load super tenant context
+		PrivilegedCarbonContext.startTenantFlow();
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		int tenantId;
+		AppManager appService;
+		if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)){
+			tenantId = MultitenantConstants.SUPER_TENANT_ID;
+		}else{
+			tenantId = getTenantId(tenantDomain);
+		}
+		ctx.setTenantDomain(tenantDomain);
+		ctx.setTenantId(tenantId);
+		appService = (AppManager) ctx.getOSGiService(AppManager.class, null);
+		return appService;
+	}
+
+	public static AppManager getAppManagementService() throws MDMAPIException {
+		return getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 	}
 
 }
