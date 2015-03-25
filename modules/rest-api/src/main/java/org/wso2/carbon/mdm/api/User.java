@@ -10,8 +10,6 @@ import org.wso2.carbon.device.mgt.user.common.Role;
 import org.wso2.carbon.device.mgt.user.common.UserManagementException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
-import org.wso2.carbon.utils.CarbonUtils;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -42,6 +40,7 @@ public class User {
 
 	/**
 	 * Get a list of devices based on the username.
+	 *
 	 * @param username Username of the device owner.
 	 * @return A list of devices.
 	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
@@ -49,7 +48,8 @@ public class User {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/{tenantDomain}/{username}/devices")
-	public List<Device> getAllDeviceOfUser( @PathParam("username") String username,  @PathParam("tenantDomain") String tenantDomain)
+	public List<Device> getAllDeviceOfUser(@PathParam("username") String username,
+	                                       @PathParam("tenantDomain") String tenantDomain)
 			throws MDMAPIException {
 		DeviceManagementService dmService;
 		try {
@@ -68,7 +68,7 @@ public class User {
 		List<org.wso2.carbon.device.mgt.user.common.User> users;
 
 		try {
-			users = MDMAPIUtils.getUserManagementService().getUsersForTenant(MultitenantConstants.SUPER_TENANT_ID);
+			users = MDMAPIUtils.getUserManagementService().getUsersForTenant(-1234);
 			return users;
 		} catch (UserManagementException e) {
 			msg = "User management service error.";
@@ -83,7 +83,7 @@ public class User {
 		String msg;
 		List<Role> roles;
 		try {
-			roles = MDMAPIUtils.getUserManagementService().getRolesForTenant(MultitenantConstants.SUPER_TENANT_ID);
+			roles = MDMAPIUtils.getUserManagementService().getRolesForTenant(-1234);
 			return roles;
 		} catch (UserManagementException e) {
 			msg = "User management service error.";
@@ -98,7 +98,7 @@ public class User {
 
 		try {
 			EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-			emailMessageProperties.setMailTo(new String[]{"manojgunawardena@gmail.com"});
+			emailMessageProperties.setMailTo(new String[] { "manojgunawardena@gmail.com" });
 			emailMessageProperties.setMessageBody("Test Mail");
 			emailMessageProperties.setSubject("test subject");
 

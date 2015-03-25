@@ -23,4 +23,8 @@ package org.wso2.carbon.mdm.api.util;
  */
 public class MDMAPIConstants {
 	public static final String MOBILE_DEVICE_TYPE = "android";
+	public static final String OAUTH_APPLICATION_NAME = "app_management_application";
+	public static final String OAUTH2_GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
+	public final static String OAUTH_VERSION_2 = "oauth-2.0";
+	public final static String OAUTH_ADMIN_SERVICE = "/services/OAuthAdminService";
 }
