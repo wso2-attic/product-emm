@@ -242,9 +242,9 @@
             </outputDirectory>
         </fileSet>
 
-        <!-- Copying CDM Jaggery app -->
+        <!-- Copying MDM Jaggery app -->
         <fileSet>
-            <directory>src/repository/jaggeryapps</directory>
+            <directory>src/repository/jaggeryapps/</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -312,19 +312,19 @@
 
     <files>
         <file>
-            <source>../mobile-agents/android/jax-rs/target/mdm-android-api.war</source>
+            <source>../mobile-agents/android/jax-rs/target/mdm-android-agent.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
         <file>
-            <source>../mobile-agents/windows/jax-rs/target/mdm-windows-api.war</source>
+            <source>../mobile-agents/windows/jax-rs/target/mdm-windows-agent.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
         <file>
-            <source>../rest-api/target/wso2mdm-api.war</source>
+            <source>../rest-api/target/mdm-admin.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -489,6 +489,16 @@
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/cdm-config.xml
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+	<!--API publisher config file-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/user-api-publisher-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>

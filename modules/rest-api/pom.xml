@@ -28,7 +28,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.mdm</groupId>
-    <artifactId>wso2mdm-api</artifactId>
+    <artifactId>mdm-admin</artifactId>
     <packaging>war</packaging>
     <version>2.0.0-SNAPSHOT</version>
     <name>WSO2 MDM REST API</name>

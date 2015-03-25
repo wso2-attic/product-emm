@@ -69,8 +69,6 @@
         </jaxws:inInterceptors>
     </jaxws:endpoint>
 
-
-
     <!--WSTEP Endpoint for Federated Auth-Policy-->
     <jaxws:endpoint
             id="CertificateEnrollmentService"

@@ -27,7 +27,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.mdm</groupId>
-    <artifactId>mdm-android-api</artifactId>
+    <artifactId>mdm-android-agent</artifactId>
     <name>JAX-RS Android API</name>
     <description>JAX-RS Android API</description>
     <packaging>war</packaging>

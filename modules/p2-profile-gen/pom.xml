@@ -112,6 +112,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.devicemgt.user.server.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
+				<featureArtifactDef>
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.webapp.authenticator.framework.server.feature:${carbon.device.mgt.version}
+                                </featureArtifactDef>
                                 <!-- End of Device Management Features -->
 
                                 <!-- Mobile Device Management Features -->
@@ -333,7 +336,10 @@
                                     <id>org.wso2.carbon.devicemgt.user.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
-
+				<feature>
+                                    <id>org.wso2.carbon.webapp.authenticator.framework.server.feature.group</id>
+                                    <version>${carbon.device.mgt.version}</version>
+                                </feature>
                                 <!-- End of Device Management Features -->
 
                                 <!-- Carbon Deployment Features -->
