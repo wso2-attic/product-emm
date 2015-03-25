@@ -15,27 +15,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.mdm.agent.services;
+package org.wso2.mdm.agent.proxy.interfaces;
 
-import org.wso2.mdm.agent.utils.Constants;
+import org.wso2.mdm.agent.proxy.beans.Token;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-
-public class AlarmReceiver extends BroadcastReceiver {
-
-	private static final String DEBUG_TAG = AlarmReceiver.class.getName();
-
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(DEBUG_TAG, "Recurring alarm; requesting alarm service.");
-		}
-		
-		MessageProcessor messageProcessor = new MessageProcessor(context);
-		messageProcessor.getMessages();
-	}
-
+/**
+ *This interface handles token callback when the application
+ *is able to receive the access token. Applications
+ *can implement this when they retrieve tokens.
+ */
+public interface TokenCallBack {
+	void onReceiveTokenResult(Token token, String status);
 }
