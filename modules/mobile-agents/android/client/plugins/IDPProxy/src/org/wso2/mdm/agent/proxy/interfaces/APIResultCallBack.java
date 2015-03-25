@@ -20,9 +20,9 @@ package org.wso2.mdm.agent.proxy.interfaces;
 import java.util.Map;
 
 /**
- *This interface handles API result callback when the application
- *is able to receive the API results by passing access token. Applications
- *can implement this when API access is required.
+ * This interface handles API result callback when the application
+ * is able to receive the API results by passing access token. Applications
+ * can implement this when API access is required.
  */
 public interface APIResultCallBack {
 	void onReceiveAPIResult(Map<String, String> result, int requestCode);

@@ -17,11 +17,10 @@
  */
 package org.wso2.mdm.agent.proxy.interfaces;
 
-
 /**
- *This interface handles API access callback when the application
- *is able to receive the access token by passing necessary credentials. Applications
- *can implement this when retrieving tokens on authentication.
+ * This interface handles API access callback when the application
+ * is able to receive the access token by passing necessary credentials. Applications
+ * can implement this when retrieving tokens on authentication.
  */
 public interface APIAccessCallBack {
 	void onAPIAccessRecive(String status);

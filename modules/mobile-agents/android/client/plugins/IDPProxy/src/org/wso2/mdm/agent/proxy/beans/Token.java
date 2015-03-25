@@ -17,13 +17,9 @@
  */
 package org.wso2.mdm.agent.proxy.beans;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 
-import android.util.Log;
+import java.util.Date;
 
 /**
  * Persists refresh token to obtain new access token and id token to retrieve
@@ -34,9 +30,7 @@ public final class Token {
 	private String idToken = null;
 	private String accessToken = null;
 	private Date receivedDate = null;
-	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
-	private static final String TAG = "Token";
-	
+
 	@SuppressWarnings("unused")
 	private boolean expired = false;
 
@@ -44,22 +38,8 @@ public final class Token {
 		return receivedDate;
 	}
 
-	public void setDate() {
-		Date date = new Date();
-		String strDate = dateFormat.format(date);
-		try {
-			receivedDate = dateFormat.parse(strDate);
-		} catch (ParseException e) {
-			Log.e(TAG, "Invalid date format." + e);
-		}
-	}
-
 	public void setDate(String date) {
-		try {
-			receivedDate = dateFormat.parse(date);
-		} catch (ParseException e) {
-			Log.e(TAG, "Invalid date format." + e);
-		}
+		receivedDate = ServerUtilities.convertDate(date);
 	}
 
 	public String getAccessToken() {

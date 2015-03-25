@@ -20,25 +20,27 @@ package org.wso2.mdm.agent.proxy.interfaces;
 import org.wso2.mdm.agent.proxy.beans.Token;
 
 /**
- *This interface handles token callback when the application
- *is able to receive the access token from the app local storage or from the server. 
- *Applications can implement this when it requires access token.
+ * This interface handles token callback when the application
+ * is able to receive the access token from the app local storage or from the server.
+ * Applications can implement this when it requires access token.
  */
 public interface CallBack {
 
 	/**
 	 * Get access token stored in the app preferences.
-	 * @param status - Status code.
+	 *
+	 * @param status  - Status code.
 	 * @param message - Success/Error message.
-	 * @param token - Token retrieved.
+	 * @param token   - Token retrieved.
 	 */
 	void receiveAccessToken(String status, String message, Token token);
 
 	/**
 	 * Get a new access token from the server.
-	 * @param status - Status code.
+	 *
+	 * @param status  - Status code.
 	 * @param message - Success/Error message.
-	 * @param token - Token retrieved.
+	 * @param token   - Token retrieved.
 	 */
 	void receiveNewAccessToken(String status, String message, Token token);
 

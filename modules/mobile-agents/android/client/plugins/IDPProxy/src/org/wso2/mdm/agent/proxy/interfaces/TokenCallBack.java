@@ -20,9 +20,9 @@ package org.wso2.mdm.agent.proxy.interfaces;
 import org.wso2.mdm.agent.proxy.beans.Token;
 
 /**
- *This interface handles token callback when the application
- *is able to receive the access token. Applications
- *can implement this when they retrieve tokens.
+ * This interface handles token callback when the application
+ * is able to receive the access token. Applications
+ * can implement this when they retrieve tokens.
  */
 public interface TokenCallBack {
 	void onReceiveTokenResult(Token token, String status);

@@ -17,9 +17,9 @@
  */
 package org.wso2.mdm.agent.proxy.beans;
 
-import java.util.Map;
-
 import org.json.JSONObject;
+
+import java.util.Map;
 
 public class APIUtilities {
 	private String httpMethod;
@@ -58,5 +58,5 @@ public class APIUtilities {
 	public void setEndPoint(String endPoint) {
 		this.endPoint = endPoint;
 	}
-	
+
 }

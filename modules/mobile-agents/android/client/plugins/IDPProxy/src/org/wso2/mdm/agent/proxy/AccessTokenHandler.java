@@ -50,7 +50,8 @@ public class AccessTokenHandler extends Activity {
 	private static final String USERNAME_LABEL = "username";
 	private static final String PASSWORD_LABEL = "password";
 	private static final String COLON = ":";
-	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
+	private static final DateFormat dateFormat =
+			new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 	private CredentialInfo info;
 
 	public AccessTokenHandler(CredentialInfo info, CallBack callBack) {
@@ -79,8 +80,8 @@ public class AccessTokenHandler extends Activity {
 			apiUtilities.setEndPoint(info.getTokenEndPoint());
 			apiUtilities.setHttpMethod(Constants.POST_METHOD);
 			apiUtilities.setRequestParamsMap(request_params);
-			byte [] credentials = Base64.encodeBase64((info.getClientID() + COLON + 
-															info.getClientSecret()).getBytes());
+			byte[] credentials = Base64.encodeBase64((info.getClientID() + COLON +
+			                                          info.getClientSecret()).getBytes());
 			String encodedCredentials = new String(credentials);
 
 			Map<String, String> headers = new HashMap<String, String>();
@@ -88,8 +89,14 @@ public class AccessTokenHandler extends Activity {
 			headers.put(Constants.AUTHORIZATION_HEADER, authorizationString);
 			headers.put(Constants.CONTENT_TYPE_HEADER, Constants.DEFAULT_CONTENT_TYPE);
 
-			Map<String, String> responseParams =
-					ServerUtilities.postDataAPI(apiUtilities, headers);
+			Map<String, String> responseParams = null;
+
+			try {
+				responseParams = ServerUtilities.postDataAPI(apiUtilities, headers);
+			} catch (IDPTokenManagerException e) {
+				Log.e(TAG, "Failed to contact server." + e);
+			}
+
 			response = responseParams.get(Constants.SERVER_RESPONSE_BODY);
 			responseCode = responseParams.get(Constants.SERVER_RESPONSE_STATUS);
 			return response;
@@ -109,9 +116,12 @@ public class AccessTokenHandler extends Activity {
 					try {
 						accessToken = response.getString(Constants.ACCESS_TOKEN);
 						refreshToken = response.getString(Constants.REFRESH_TOKEN);
-						timeToExpireSecond = Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
+						timeToExpireSecond =
+								Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
 						Token token = new Token();
-						token.setDate();
+						Date date = new Date();
+						String currentDate = dateFormat.format(date);
+						token.setDate(currentDate);
 						token.setRefreshToken(refreshToken);
 						token.setAccessToken(accessToken);
 						token.setExpired(false);
@@ -125,7 +135,6 @@ public class AccessTokenHandler extends Activity {
 						editor.putString(Constants.ACCESS_TOKEN, accessToken);
 						editor.putString(Constants.REFRESH_TOKEN, refreshToken);
 						editor.putString(USERNAME_LABEL, info.getUsername());
-						Date date = new Date();
 						long expiresIN = date.getTime() + (timeToExpireSecond * 1000);
 						Date expireDate = new Date(expiresIN);
 						String strDate = dateFormat.format(expireDate);
@@ -133,9 +142,10 @@ public class AccessTokenHandler extends Activity {
 						editor.putString(Constants.DATE_LABEL, strDate);
 						editor.commit();
 
-						identityProxy.receiveAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
+						identityProxy.receiveAccessToken(responseCode, Constants.SUCCESS_RESPONSE,
+						                                 token);
 					} catch (JSONException e) {
-						Log.e(TAG, "Invalid JSON format.");
+						Log.e(TAG, "Invalid JSON format." + e);
 					}
 
 				} else if (responseCode != null) {
@@ -143,7 +153,8 @@ public class AccessTokenHandler extends Activity {
 						identityProxy.receiveAccessToken(responseCode, result, null);
 					} else {
 						JSONObject mainObject = new JSONObject(result);
-						String errorDescription = mainObject.getString(Constants.ERROR_DESCRIPTION_LABEL);
+						String errorDescription =
+								mainObject.getString(Constants.ERROR_DESCRIPTION_LABEL);
 						identityProxy.receiveAccessToken(responseCode, errorDescription, null);
 					}
 				}

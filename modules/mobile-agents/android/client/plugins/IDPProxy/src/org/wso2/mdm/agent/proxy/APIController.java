@@ -17,23 +17,24 @@
  */
 package org.wso2.mdm.agent.proxy;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 import org.wso2.mdm.agent.proxy.beans.APIUtilities;
 import org.wso2.mdm.agent.proxy.beans.Token;
 import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.proxy.interfaces.TokenCallBack;
 import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 
-import android.content.Context;
-import android.os.AsyncTask;
+import java.util.HashMap;
+import java.util.Map;
 
 public class APIController implements TokenCallBack {
+	private static final String TAG = "APIController";
 	private static Token token;
+	private static String clientKey, clientSecret;
 	private APIResultCallBack apiResultCall;
 	private APIUtilities apiUtilitiesCurrent;
-	private static String clientKey, clientSecret;
 
 	public void setClientDetails(String clientKey, String clientSecret) {
 		APIController.clientKey = clientKey;
@@ -42,26 +43,33 @@ public class APIController implements TokenCallBack {
 
 	/**
 	 * Invoking an API using retrieved token.
-	 * @param apiUtilities - Server and API end point information.
+	 *
+	 * @param apiUtilities      - Server and API end point information.
 	 * @param apiResultCallBack - API result callback data.
-	 * @param requestCode - Request code to avoid response complications.
-	 * @param context - Application context.
+	 * @param requestCode       - Request code to avoid response complications.
+	 * @param context           - Application context.
 	 */
 	public void invokeAPI(APIUtilities apiUtilities, APIResultCallBack apiResultCallBack,
 	                      int requestCode, Context context) {
-		
+
 		apiResultCall = apiResultCallBack;
 		apiUtilitiesCurrent = apiUtilities;
-		
+
 		if (IdentityProxy.getInstance().getContext() == null) {
 			IdentityProxy.getInstance().setContext(context);
 		}
-		
+
 		IdentityProxy.getInstance().setRequestCode(requestCode);
 
-		IdentityProxy.getInstance().getToken(IdentityProxy.getInstance().getContext(), this,
-			                                     APIController.clientKey,
-			                                     APIController.clientSecret);
+		IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
+		                                         APIController.clientKey,
+		                                         APIController.clientSecret);
+	}
+
+	@Override
+	public void onReceiveTokenResult(Token token, String status) {
+		APIController.token = token;
+		new NetworkCallTask(apiResultCall).execute(apiUtilitiesCurrent);
 	}
 
 	/**
@@ -85,7 +93,13 @@ public class APIController implements TokenCallBack {
 			headers.put("Accept", "*/*");
 			headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
 			headers.put("Authorization", "Bearer " + accessToken);
-			responseParams = ServerUtilities.postData(apiUtilities, headers);
+
+			try {
+				responseParams = ServerUtilities.postData(apiUtilities, headers);
+			} catch (IDPTokenManagerException e) {
+				Log.e(TAG, "Failed to contact server." + e);
+			}
+
 			return responseParams;
 		}
 
@@ -96,10 +110,4 @@ public class APIController implements TokenCallBack {
 		}
 	}
 
-	@Override
-	public void onReceiveTokenResult(Token token, String status) {
-		APIController.token = token;
-		new NetworkCallTask(apiResultCall).execute(apiUtilitiesCurrent);
-	}
-	
 }

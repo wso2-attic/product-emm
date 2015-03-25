@@ -1,19 +1,18 @@
 package org.wso2.mdm.agent.proxy.utils;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import android.util.Log;
-
 public class StreamHandler {
 
 	/**
 	 * Close a ByteArrayOutputStream passed in.
-	 * 
-	 * @param stream
-	 *            - ByteArrayOutputStream to be closed.
+	 *
+	 * @param stream - ByteArrayOutputStream to be closed.
 	 */
 	public static void closeOutputStream(OutputStream stream, String tag) {
 		if (stream != null) {
@@ -27,9 +26,8 @@ public class StreamHandler {
 
 	/**
 	 * Close a InputStream passed in.
-	 * 
-	 * @param stream
-	 *            - InputStream to be closed.
+	 *
+	 * @param stream - InputStream to be closed.
 	 */
 	public static void closeInputStream(InputStream stream, String tag) {
 		if (stream != null) {
@@ -43,9 +41,8 @@ public class StreamHandler {
 
 	/**
 	 * Close a InputStream passed in.
-	 * 
-	 * @param stream
-	 *            - InputStream to be closed.
+	 *
+	 * @param stream - InputStream to be closed.
 	 */
 	public static void closeBufferedReader(BufferedReader stream, String tag) {
 		if (stream != null) {

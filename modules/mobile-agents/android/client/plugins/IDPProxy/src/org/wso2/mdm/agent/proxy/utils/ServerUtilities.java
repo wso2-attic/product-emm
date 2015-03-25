@@ -18,8 +18,10 @@
 package org.wso2.mdm.agent.proxy.utils;
 
 import android.util.Log;
-
-import org.apache.http.*;
+import org.apache.http.HeaderElement;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -38,29 +40,18 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
+import org.wso2.mdm.agent.proxy.IDPTokenManagerException;
 import org.wso2.mdm.agent.proxy.IdentityProxy;
 import org.wso2.mdm.agent.proxy.R;
 import org.wso2.mdm.agent.proxy.beans.APIUtilities;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
+import java.io.*;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -68,16 +59,20 @@ import java.util.Map.Entry;
  */
 public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";
-	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
+	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
+	                                                                  Locale.getDefault());
 
+	/**
+	 * Validate the token expiration date.
+	 *
+	 * @param expirationDate - Token expiration date.
+	 * @return - Token status.
+	 */
 	public static boolean isValid(Date expirationDate) {
 		Date currentDate = new Date();
 		String formattedDate = dateFormat.format(currentDate);
-		try {
-			currentDate = dateFormat.parse(formattedDate);
-		} catch (ParseException e) {
-			Log.e(TAG, "Date parsing failed." + e);
-		}
+		currentDate = convertDate(formattedDate);
+
 		boolean isExpired = currentDate.after(expirationDate);
 		boolean isEqual = currentDate.equals(expirationDate);
 		if (isExpired == true || isEqual == true) {
@@ -86,7 +81,24 @@ public class ServerUtilities {
 
 		return false;
 	}
-	
+
+	/**
+	 * Convert the date to the standard format.
+	 *
+	 * @param date - Date as a string.
+	 * @return - Formatted date.
+	 */
+	public static Date convertDate(String date) {
+		Date receivedDate = null;
+		try {
+			receivedDate = dateFormat.parse(date);
+		} catch (ParseException e) {
+			Log.e(TAG, "Invalid date format." + e);
+		}
+
+		return receivedDate;
+	}
+
 	public static String buildPayload(Map<String, String> params) {
 		if (params == null) {
 			return null;
@@ -114,8 +126,11 @@ public class ServerUtilities {
 	}
 
 	public static Map<String, String> postData(APIUtilities apiUtilities,
-	                                           Map<String, String> headers) {
+	                                           Map<String, String> headers)
+			throws IDPTokenManagerException {
+
 		String httpMethod = apiUtilities.getHttpMethod();
+		String message;
 		String url = apiUtilities.getEndPoint();
 		JSONObject params = apiUtilities.getRequestParams();
 		Map<String, String> responseParams = new HashMap<String, String>();
@@ -127,7 +142,8 @@ public class ServerUtilities {
 				try {
 					httpPost.setEntity(new StringEntity(params.toString()));
 				} catch (UnsupportedEncodingException e) {
-					Log.e(TAG, "Invalid encoding type." + e);
+					message = "Invalid encoding type.";
+					throw new IDPTokenManagerException(message, e);
 				}
 			} else {
 				httpPost.setEntity(null);
@@ -140,13 +156,16 @@ public class ServerUtilities {
 
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
-				
+
 			} catch (ClientProtocolException e) {
-				Log.e(TAG, "Invalid client protocol." + e);
+				message = "Invalid client protocol.";
+				throw new IDPTokenManagerException(message, e);
 			} catch (IOException e) {
-				Log.e(TAG, "Server connectivity failure." + e);
+				message = "Server connectivity failure.";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+				                   Constants.INTERNAL_SERVER_ERROR);
+				throw new IDPTokenManagerException(message, e);
 			}
 		} else if (httpMethod.equals(Constants.GET_METHOD)) {
 			HttpGet httpGet = new HttpGet(url);
@@ -158,21 +177,26 @@ public class ServerUtilities {
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
 				                   String.valueOf(response.getStatusLine().getStatusCode()));
 			} catch (ClientProtocolException e) {
-				Log.e(TAG, "Invalid client protocol." + e);
+				message = "Invalid client protocol.";
+				throw new IDPTokenManagerException(message, e);
 			} catch (IOException e) {
-				Log.e(TAG, "Server connectivity failure." + e);
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+				                   Constants.INTERNAL_SERVER_ERROR);
+				message = "Server connectivity failure.";
+				throw new IDPTokenManagerException(message, e);
 			}
 		}
-		
+
 		return responseParams;
-		
+
 	}
 
 	public static Map<String, String> postDataAPI(APIUtilities apiUtilities,
-	                                              Map<String, String> headers) {
+	                                              Map<String, String> headers)
+			throws IDPTokenManagerException {
 		String httpMethod = apiUtilities.getHttpMethod();
+		String message;
 		String url = apiUtilities.getEndPoint();
 		Map<String, String> params = apiUtilities.getRequestParamsMap();
 
@@ -193,26 +217,30 @@ public class ServerUtilities {
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
 				return responseParams;
 			} catch (ClientProtocolException e) {
-				Log.e(TAG, "Invalid client protocol." + e);
+				message = "Invalid client protocol.";
+				throw new IDPTokenManagerException(message, e);
 			} catch (IOException e) {
-				Log.e(TAG, "Server connectivity failure." + e);
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+				                   Constants.INTERNAL_SERVER_ERROR);
+				message = "Server connectivity failure.";
+				throw new IDPTokenManagerException(message, e);
 			}
 		}
-		
+
 		return responseParams;
 	}
 
-	public static HttpClient getCertifiedHttpClient() {
+	public static HttpClient getCertifiedHttpClient() throws IDPTokenManagerException {
 		HttpClient client = null;
 		InputStream inStream = null;
-		try {			
+		String message;
+		try {
 			if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
 				KeyStore localTrustStore = KeyStore.getInstance("BKS");
 				inStream =
-				                 IdentityProxy.getInstance().getContext().getResources()
-				                              .openRawResource(R.raw.emm_truststore);
+						IdentityProxy.getInstance().getContext().getResources()
+						             .openRawResource(R.raw.emm_truststore);
 				localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
 
 				SchemeRegistry schemeRegistry = new SchemeRegistry();
@@ -223,57 +251,68 @@ public class ServerUtilities {
 				schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
 				HttpParams params = new BasicHttpParams();
 				ClientConnectionManager connectionManager =
-				                             new ThreadSafeClientConnManager(params, schemeRegistry);
+						new ThreadSafeClientConnManager(params,
+						                                schemeRegistry);
 
 				client = new DefaultHttpClient(connectionManager, params);
 
 			} else {
 				client = new DefaultHttpClient();
 			}
-			
+
 		} catch (KeyStoreException e) {
-			Log.e(TAG, "Invalid keystore." + e);
+			message = "Invalid keystore.";
+			throw new IDPTokenManagerException(message, e);
 		} catch (CertificateException e) {
-			Log.e(TAG, "Invalid certificate." + e);
+			message = "Invalid certificate.";
+			throw new IDPTokenManagerException(message, e);
 		} catch (NoSuchAlgorithmException e) {
-			Log.e(TAG, "Keystore algorithm does not match." + e);
+			message = "Keystore algorithm does not match.";
+			throw new IDPTokenManagerException(message, e);
 		} catch (UnrecoverableKeyException e) {
-			Log.e(TAG, "Invalid keystore." + e);
+			message = "Invalid keystore.";
+			throw new IDPTokenManagerException(message, e);
 		} catch (KeyManagementException e) {
-			Log.e(TAG, "Invalid keystore." + e);
+			message = "Invalid keystore.";
+			throw new IDPTokenManagerException(message, e);
 		} catch (IOException e) {
-			Log.e(TAG, "Trust store failed to load." + e);
-		} finally{
+			message = "Trust store failed to load.";
+			throw new IDPTokenManagerException(message, e);
+		} finally {
 			StreamHandler.closeInputStream(inStream, TAG);
 		}
-		
+
 		return client;
 	}
 
-	public static String getResponseBody(HttpResponse response) {
+	public static String getResponseBody(HttpResponse response) throws IDPTokenManagerException {
 
 		String responseBody = null;
 		HttpEntity entity = null;
+		String message;
+
 		try {
 			entity = response.getEntity();
 			responseBody = getResponseBodyContent(entity);
 		} catch (ParseException e) {
-			Log.e(TAG, "Invalid keystore." + e);
+			message = "Invalid response.";
+			throw new IDPTokenManagerException(message, e);
 		} catch (IOException e) {
 			if (entity != null) {
 				try {
 					entity.consumeContent();
 				} catch (IOException ex) {
-					Log.e(TAG, "HTTP Response failure." + ex);
+					message = "HTTP Response failure.";
+					throw new IDPTokenManagerException(message, e);
 				}
 			}
 		}
-		
+
 		return responseBody;
 	}
 
 	public static String getResponseBodyContent(final HttpEntity entity) throws IOException,
-	                                                                    ParseException {
+	                                                                            ParseException {
 
 		if (entity == null) {
 			throw new IllegalArgumentException("HTTP entity may not be null.");
@@ -297,7 +336,7 @@ public class ServerUtilities {
 		try {
 			char[] bufferSize = new char[1024];
 			int length;
-			
+
 			while ((length = reader.read(bufferSize)) != -1) {
 				buffer.append(bufferSize, 0, length);
 			}
@@ -319,7 +358,7 @@ public class ServerUtilities {
 
 		if (entity.getContentType() != null) {
 			HeaderElement values[] = entity.getContentType().getElements();
-			
+
 			if (values.length > 0) {
 				NameValuePair param = values[0].getParameterByName("charset");
 

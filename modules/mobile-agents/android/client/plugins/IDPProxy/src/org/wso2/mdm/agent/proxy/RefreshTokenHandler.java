@@ -45,15 +45,16 @@ public class RefreshTokenHandler {
 	private static final String TAG = "RefreshTokenHandler";
 	private static final String SCOPE_LABEL = "scope";
 	private static final String PRODUCTION_LABEL = "PRODUCTION";
-	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
-	private static Token token;
+	private static final DateFormat dateFormat =
+			new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 	private static final String COLON = ":";
+	private Token token;
 
 	public RefreshTokenHandler(Token token) {
-		RefreshTokenHandler.token = token;
+		this.token = token;
 	}
 
-	public void obtainNewAccessToken(){
+	public void obtainNewAccessToken() {
 		new NetworkCallTask().execute();
 	}
 
@@ -73,19 +74,23 @@ public class RefreshTokenHandler {
 			apiUtilities.setEndPoint(IdentityProxy.getInstance().getAccessTokenURL());
 			apiUtilities.setHttpMethod(Constants.POST_METHOD);
 			apiUtilities.setRequestParamsMap(requestParams);
-			
-			byte [] credentials = Base64.encodeBase64((IdentityProxy.clientID + COLON + 
-					IdentityProxy.clientSecret).getBytes());
+
+			byte[] credentials = Base64.encodeBase64((IdentityProxy.clientID + COLON +
+			                                          IdentityProxy.clientSecret).getBytes());
 			String encodedCredentials = new String(credentials);
 
 			Map<String, String> headers = new HashMap<String, String>();
-			
+
 			String authorizationString = Constants.AUTHORIZATION_MODE + encodedCredentials;
 			headers.put(Constants.AUTHORIZATION_HEADER, authorizationString);
 			headers.put(Constants.CONTENT_TYPE_HEADER, Constants.DEFAULT_CONTENT_TYPE);
 
-			Map<String, String> responseParams =
-					ServerUtilities.postDataAPI(apiUtilities, headers);
+			Map<String, String> responseParams = null;
+			try {
+				responseParams = ServerUtilities.postDataAPI(apiUtilities, headers);
+			} catch (IDPTokenManagerException e) {
+				Log.e(TAG, "Failed to contact server." + e);
+			}
 
 			response = responseParams.get(Constants.SERVER_RESPONSE_BODY);
 			responseCode = responseParams.get(Constants.SERVER_RESPONSE_STATUS);
@@ -106,7 +111,8 @@ public class RefreshTokenHandler {
 				if (responseCode != null && responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
 					refreshToken = response.getString(Constants.REFRESH_TOKEN);
 					accessToken = response.getString(Constants.ACCESS_TOKEN);
-					timeToExpireSecond = Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
+					timeToExpireSecond =
+							Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
 
 					token.setRefreshToken(refreshToken);
 					token.setAccessToken(accessToken);
@@ -128,11 +134,13 @@ public class RefreshTokenHandler {
 					editor.putString(Constants.DATE_LABEL, strDate);
 					editor.commit();
 
-					identityProxy.receiveNewAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
+					identityProxy
+							.receiveNewAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
 
 				} else if (responseCode != null) {
 					JSONObject responseBody = new JSONObject(result);
-					String errorDescription = responseBody.getString(Constants.ERROR_DESCRIPTION_LABEL);
+					String errorDescription =
+							responseBody.getString(Constants.ERROR_DESCRIPTION_LABEL);
 					identityProxy.receiveNewAccessToken(responseCode, errorDescription, token);
 				}
 			} catch (JSONException e) {
