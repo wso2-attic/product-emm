@@ -38,6 +38,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -49,6 +50,7 @@ public class AccessTokenHandler extends Activity {
 	private static final String USERNAME_LABEL = "username";
 	private static final String PASSWORD_LABEL = "password";
 	private static final String COLON = ":";
+	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 	private CredentialInfo info;
 
 	public AccessTokenHandler(CredentialInfo info, CallBack callBack) {
@@ -123,7 +125,6 @@ public class AccessTokenHandler extends Activity {
 						editor.putString(Constants.ACCESS_TOKEN, accessToken);
 						editor.putString(Constants.REFRESH_TOKEN, refreshToken);
 						editor.putString(USERNAME_LABEL, info.getUsername());
-						DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 						Date date = new Date();
 						long expiresIN = date.getTime() + (timeToExpireSecond * 1000);
 						Date expireDate = new Date(expiresIN);
@@ -142,15 +143,12 @@ public class AccessTokenHandler extends Activity {
 						identityProxy.receiveAccessToken(responseCode, result, null);
 					} else {
 						JSONObject mainObject = new JSONObject(result);
-						String error = mainObject.getString(Constants.ERROR_LABEL);
 						String errorDescription = mainObject.getString(Constants.ERROR_DESCRIPTION_LABEL);
-						Log.d(TAG, error);
-						Log.d(TAG, errorDescription);
 						identityProxy.receiveAccessToken(responseCode, errorDescription, null);
 					}
 				}
 			} catch (JSONException e) {
-				Log.d(TAG, e.toString());
+				Log.e(TAG, "Invalid JSON." + e);
 			}
 		}
 	}

@@ -35,6 +35,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -44,6 +45,7 @@ public class RefreshTokenHandler {
 	private static final String TAG = "RefreshTokenHandler";
 	private static final String SCOPE_LABEL = "scope";
 	private static final String PRODUCTION_LABEL = "PRODUCTION";
+	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 	private static Token token;
 	private static final String COLON = ":";
 
@@ -118,7 +120,6 @@ public class RefreshTokenHandler {
 					editor.putString(Constants.REFRESH_TOKEN, refreshToken);
 					editor.putString(Constants.ACCESS_TOKEN, accessToken);
 
-					DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 					Date date = new Date();
 					long expiresIN = date.getTime() + (timeToExpireSecond * 1000);
 					Date expireDate = new Date(expiresIN);
@@ -131,14 +132,11 @@ public class RefreshTokenHandler {
 
 				} else if (responseCode != null) {
 					JSONObject responseBody = new JSONObject(result);
-					String error = responseBody.getString(Constants.ERROR_LABEL);
 					String errorDescription = responseBody.getString(Constants.ERROR_DESCRIPTION_LABEL);
-					Log.d(TAG, error);
-					Log.d(TAG, errorDescription);
 					identityProxy.receiveNewAccessToken(responseCode, errorDescription, token);
 				}
 			} catch (JSONException e) {
-				identityProxy.receiveNewAccessToken(responseCode, "", token);
+				identityProxy.receiveNewAccessToken(responseCode, null, token);
 				Log.e(TAG, "Invalid JSON." + e);
 			}
 		}

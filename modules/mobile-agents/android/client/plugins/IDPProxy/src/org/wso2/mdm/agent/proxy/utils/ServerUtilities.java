@@ -68,16 +68,15 @@ import java.util.Map.Entry;
  */
 public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";
+	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 
 	public static boolean isValid(Date expirationDate) {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		Date currentDate = new Date();
 		String formattedDate = dateFormat.format(currentDate);
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		try {
-			currentDate = format.parse(formattedDate);
+			currentDate = dateFormat.parse(formattedDate);
 		} catch (ParseException e) {
-			Log.d(TAG, "Date parsing failed." + e);
+			Log.e(TAG, "Date parsing failed." + e);
 		}
 		boolean isExpired = currentDate.after(expirationDate);
 		boolean isEqual = currentDate.equals(expirationDate);
@@ -128,7 +127,7 @@ public class ServerUtilities {
 				try {
 					httpPost.setEntity(new StringEntity(params.toString()));
 				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+					Log.e(TAG, "Invalid encoding type." + e);
 				}
 			} else {
 				httpPost.setEntity(null);
@@ -143,9 +142,9 @@ public class ServerUtilities {
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
 				
 			} catch (ClientProtocolException e) {
-				Log.d(TAG, "Invalid client protocol." + e);
+				Log.e(TAG, "Invalid client protocol." + e);
 			} catch (IOException e) {
-				Log.d(TAG, e.toString());
+				Log.e(TAG, "Server connectivity failure." + e);
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			}
@@ -159,9 +158,9 @@ public class ServerUtilities {
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
 				                   String.valueOf(response.getStatusLine().getStatusCode()));
 			} catch (ClientProtocolException e) {
-				Log.d(TAG, "Invalid client protocol." + e);
+				Log.e(TAG, "Invalid client protocol." + e);
 			} catch (IOException e) {
-				Log.d(TAG, "Server connectivity failure." + e);
+				Log.e(TAG, "Server connectivity failure." + e);
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			}
@@ -194,9 +193,9 @@ public class ServerUtilities {
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
 				return responseParams;
 			} catch (ClientProtocolException e) {
-				Log.d(TAG, "Invalid client protocol." + e);
+				Log.e(TAG, "Invalid client protocol." + e);
 			} catch (IOException e) {
-				Log.d(TAG, "Server connectivity failure." + e);
+				Log.e(TAG, "Server connectivity failure." + e);
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			}
@@ -233,17 +232,17 @@ public class ServerUtilities {
 			}
 			
 		} catch (KeyStoreException e) {
-			Log.d(TAG, "Invalid keystore." + e);
+			Log.e(TAG, "Invalid keystore." + e);
 		} catch (CertificateException e) {
-			Log.d(TAG, "Invalid certificate." + e);
+			Log.e(TAG, "Invalid certificate." + e);
 		} catch (NoSuchAlgorithmException e) {
-			Log.d(TAG, "Keystore algorithm does not match." + e);
+			Log.e(TAG, "Keystore algorithm does not match." + e);
 		} catch (UnrecoverableKeyException e) {
-			Log.d(TAG, "Invalid keystore." + e);
+			Log.e(TAG, "Invalid keystore." + e);
 		} catch (KeyManagementException e) {
-			Log.d(TAG, "Invalid keystore." + e);
+			Log.e(TAG, "Invalid keystore." + e);
 		} catch (IOException e) {
-			Log.d(TAG, "Trust store failed to load." + e);
+			Log.e(TAG, "Trust store failed to load." + e);
 		} finally{
 			StreamHandler.closeInputStream(inStream, TAG);
 		}
@@ -259,13 +258,13 @@ public class ServerUtilities {
 			entity = response.getEntity();
 			responseBody = getResponseBodyContent(entity);
 		} catch (ParseException e) {
-			Log.d(TAG, "Invalid keystore." + e);
+			Log.e(TAG, "Invalid keystore." + e);
 		} catch (IOException e) {
 			if (entity != null) {
 				try {
 					entity.consumeContent();
 				} catch (IOException ex) {
-					Log.d(TAG, "HTTP Response failure." + ex);
+					Log.e(TAG, "HTTP Response failure." + ex);
 				}
 			}
 		}
@@ -281,10 +280,6 @@ public class ServerUtilities {
 		}
 
 		InputStream instream = entity.getContent();
-
-		if (instream == null) {
-			return "";
-		}
 
 		if (entity.getContentLength() > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException("HTTP entity too large to be buffered in memory.");

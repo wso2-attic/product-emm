@@ -18,9 +18,12 @@
 package org.wso2.mdm.agent.proxy.beans;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import android.util.Log;
 
 /**
  * Persists refresh token to obtain new access token and id token to retrieve
@@ -31,6 +34,9 @@ public final class Token {
 	private String idToken = null;
 	private String accessToken = null;
 	private Date receivedDate = null;
+	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
+	private static final String TAG = "Token";
+	
 	@SuppressWarnings("unused")
 	private boolean expired = false;
 
@@ -39,23 +45,20 @@ public final class Token {
 	}
 
 	public void setDate() {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		Date date = new Date();
 		String strDate = dateFormat.format(date);
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		try {
-			receivedDate = format.parse(strDate);
-		} catch (Exception e) {
-			e.printStackTrace();
+			receivedDate = dateFormat.parse(strDate);
+		} catch (ParseException e) {
+			Log.e(TAG, "Invalid date format." + e);
 		}
 	}
 
 	public void setDate(String date) {
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		try {
-			receivedDate = format.parse(date);
-		} catch (Exception e) {
-			e.printStackTrace();
+			receivedDate = dateFormat.parse(date);
+		} catch (ParseException e) {
+			Log.e(TAG, "Invalid date format." + e);
 		}
 	}
 

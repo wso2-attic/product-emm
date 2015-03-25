@@ -1,4 +1,4 @@
-package org.wso2.mdm.agent.proxy.utils;
+package org.wso2.mdm.agent.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +20,9 @@ public class StreamHandler {
 			try {
 				stream.close();
 			} catch (IOException e) {
-				Log.e(tag, "Exception occured when closing ByteArrayOutputStream." + e);
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.e(tag, "Exception occured when closing ByteArrayOutputStream." + e);
+				}
 			}
 		}
 	}
@@ -36,7 +38,9 @@ public class StreamHandler {
 			try {
 				stream.close();
 			} catch (IOException e) {
-				Log.e(tag, "Exception occured when closing InputStream." + e);
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.e(tag, "Exception occured when closing InputStream." + e);
+				}
 			}
 		}
 	}
@@ -52,7 +56,9 @@ public class StreamHandler {
 			try {
 				stream.close();
 			} catch (IOException e) {
-				Log.e(tag, "Exception occured when closing BufferedReader." + e);
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.e(tag, "Exception occured when closing BufferedReader." + e);
+				}
 			}
 		}
 	}

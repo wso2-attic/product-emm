@@ -131,10 +131,10 @@ public class IdentityProxy implements CallBack {
 	private void getStoredToken(){
 		SharedPreferences mainPref = context.getSharedPreferences(Constants.APPLICATION_PACKAGE, 
 		                                                          				Context.MODE_PRIVATE);
-		String refreshToken = mainPref.getString(Constants.REFRESH_TOKEN, "").toString();
-		String accessToken = mainPref.getString(Constants.ACCESS_TOKEN, "").toString();
-		String date = mainPref.getString(Constants.DATE_LABEL, "").toString();
-		String endPoint = mainPref.getString(Constants.TOKEN_ENDPOINT, "").toString();
+		String refreshToken = mainPref.getString(Constants.REFRESH_TOKEN, null).toString();
+		String accessToken = mainPref.getString(Constants.ACCESS_TOKEN, null).toString();
+		String date = mainPref.getString(Constants.DATE_LABEL, null).toString();
+		String endPoint = mainPref.getString(Constants.TOKEN_ENDPOINT, null).toString();
 		setAccessTokenURL(endPoint);
 
 		if (!refreshToken.isEmpty()) {

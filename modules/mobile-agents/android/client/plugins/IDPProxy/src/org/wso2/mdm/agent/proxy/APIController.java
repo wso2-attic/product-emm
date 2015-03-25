@@ -79,19 +79,14 @@ public class APIController implements TokenCallBack {
 			APIUtilities apiUtilities = params[0];
 
 			Map<String, String> responseParams = null;
-			try {
-				String accessToken = token.getAccessToken();
-				Map<String, String> headers = new HashMap<String, String>();
-				headers.put("Content-Type", "application/json");
-				headers.put("Accept", "*/*");
-				headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
-				headers.put("Authorization", "Bearer " + accessToken);
-				responseParams = ServerUtilities.postData(apiUtilities, headers);
-				return responseParams;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
+			String accessToken = token.getAccessToken();
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("Content-Type", "application/json");
+			headers.put("Accept", "*/*");
+			headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
+			headers.put("Authorization", "Bearer " + accessToken);
+			responseParams = ServerUtilities.postData(apiUtilities, headers);
+			return responseParams;
 		}
 
 		@Override
@@ -105,6 +100,6 @@ public class APIController implements TokenCallBack {
 	public void onReceiveTokenResult(Token token, String status) {
 		APIController.token = token;
 		new NetworkCallTask(apiResultCall).execute(apiUtilitiesCurrent);
-
 	}
+	
 }

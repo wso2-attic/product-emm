@@ -15,14 +15,44 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.mdm.agent.proxy.interfaces;
+package org.wso2.mdm.agent.beans;
 
+public class Battery {
+	private int scale;
+	private int level;
+	private int voltage;
+	private int temp;
 
-/**
- *This interface handles API access callback when the application
- *is able to receive the access token by passing necessary credentials. Applications
- *can implement this when retrieving tokens on authentication.
- */
-public interface APIAccessCallBack {
-	void onAPIAccessRecive(String status);
+	public int getScale() {
+		return scale;
+	}
+
+	public void setScale(int scale) {
+		this.scale = scale;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public int getVoltage() {
+		return voltage;
+	}
+
+	public void setVoltage(int voltage) {
+		this.voltage = voltage;
+	}
+
+	public int getTemp() {
+		return temp;
+	}
+
+	public void setTemp(int temp) {
+		this.temp = temp;
+	}
+
 }
