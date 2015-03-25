@@ -244,7 +244,7 @@
 
         <!-- Copying MDM Jaggery app -->
         <fileSet>
-            <directory>src/repository/jaggeryapps/mdm</directory>
+            <directory>src/repository/jaggeryapps/</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps
             </outputDirectory>
             <fileMode>755</fileMode>
