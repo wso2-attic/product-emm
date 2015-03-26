@@ -1,0 +1,3 @@
+{
+  "predicate": "permission('/permission/device-mgt/admin/devices/list')"
+}
