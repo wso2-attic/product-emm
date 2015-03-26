@@ -28,6 +28,7 @@
                 <exclude>**/WSO2AM_DB.h2.db</exclude>
                 <exclude>**/WSO2DM_DB.h2.db</exclude>
                 <exclude>**/conf/axis2/axis2_client.xml</exclude>
+                <exclude>**/conf/etc/launch.ini</exclude>
             </excludes>
         </fileSet>
 
@@ -605,6 +606,13 @@
         <file>
             <source>src/repository/conf/axis2/axis2_client.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/
+            </outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>src/repository/conf/etc/launch.ini</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/
             </outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
