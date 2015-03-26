@@ -8,7 +8,7 @@
             <name>DM_DS</name>
             <description>The datasource used for CDM</description>
             <jndiConfig>
-                <name>jdbc/DMCORE_DS</name>
+                <name>jdbc/DM_DS</name>
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
