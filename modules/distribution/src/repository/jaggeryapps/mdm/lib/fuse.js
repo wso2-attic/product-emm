@@ -24,11 +24,23 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
             var uriMatcher = new URIMatcher(request.getRequestURI());
             return Boolean(uriMatcher.match('/{appName}' + pattern));
         };
+        var permission = function (permissionStr) {
+            var carbonModule = require("carbon");
+            var carbonServer = application.get("carbonServer");
+            var carbonUser = session.get("USER");
+            if (!carbonUser) {
+                log.error("User object was not found in the session");
+                throw constants.ERRORS.USER_NOT_FOUND;
+            }
+            var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
+            var user = new carbonModule.user.User(userManager, carbonUser.username);
+            return user.isAuthorized(permissionStr, "ui.execute");
+        };
         var config = {'theme': 'default'};
         var predicateStr = definition.definition.predicate;
         if (predicateStr) {
-            var js = 'function(config,urlMatch,layout){ return ' + predicateStr + ';}';
-            return Boolean(eval(js)(config, urlMatch, layout ? layout : NaN));
+            var js = 'function(config,urlMatch,permission,layout){ return ' + predicateStr + ';}';
+            return Boolean(eval(js)(config, urlMatch,permission, layout ? layout : NaN));
         }
         return false;
     };
