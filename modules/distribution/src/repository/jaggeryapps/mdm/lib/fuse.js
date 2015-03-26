@@ -28,13 +28,12 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
             var carbonModule = require("carbon");
             var carbonServer = application.get("carbonServer");
             var carbonUser = session.get("USER");
-            if (!carbonUser) {
-                log.error("User object was not found in the session");
-                throw constants.ERRORS.USER_NOT_FOUND;
+            if (carbonUser) {
+                var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
+                var user = new carbonModule.user.User(userManager, carbonUser.username);
+                return user.isAuthorized(permissionStr, "ui.execute");
             }
-            var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
-            var user = new carbonModule.user.User(userManager, carbonUser.username);
-            return user.isAuthorized(permissionStr, "ui.execute");
+            return false;
         };
         var config = {'theme': 'default'};
         var predicateStr = definition.definition.predicate;
