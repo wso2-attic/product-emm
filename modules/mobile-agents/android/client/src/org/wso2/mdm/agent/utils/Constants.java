@@ -24,10 +24,10 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 
-	public static final String SERVER_PORT = "9770";
+	public static final String SERVER_PORT = "9764";
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String API_VERSION = "1.0.0";
-	public static final String API_SERVER_PORT = "9770";
+	public static final String API_SERVER_PORT = "8281";
 
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-api/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
@@ -66,12 +66,6 @@ public class Constants {
 	public static final int LICENSE_REQUEST_CODE = 304;
 	public static final int UNREGISTER_REQUEST_CODE = 305;
 	public static final int NOTIFICATION_REQUEST_CODE = 306;
-
-	/**
-	 * Method types.
-	 */
-	public static final String GET_METHOD = "GET";
-	public static final String POST_METHOD = "POST";
 
 	/**
 	 * Google API project id registered to use GCM.

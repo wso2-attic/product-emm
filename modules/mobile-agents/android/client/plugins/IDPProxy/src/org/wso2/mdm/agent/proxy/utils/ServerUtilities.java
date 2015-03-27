@@ -213,8 +213,7 @@ public class ServerUtilities {
 		HttpClient httpclient = getCertifiedHttpClient();
 		String payload = buildPayload(params);
 		
-		if (httpMethod.equals(Constants.POST_METHOD)) {
-			
+		if (httpMethod.equals(HTTP_METHODS.POST)) {		
 			HttpPost httpPost = new HttpPost(url);
 			HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers, httpMethod);
 			byte[] postData = payload.getBytes();

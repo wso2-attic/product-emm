@@ -49,8 +49,6 @@ public class Constants {
 	public final static String CLIENT_ID = "client_id";
 	public final static String CLIENT_SECRET = "client_secret";
 	public final static String TOKEN_ENDPOINT = "token_endpoint";
-	public static final String GET_METHOD = "GET";
-	public static final String POST_METHOD = "POST";
 	public static enum HTTP_METHODS{GET, POST};
 	public static final String INTERNAL_SERVER_ERROR = "500";
 	public static final String ACCESS_FAILURE = "400";
