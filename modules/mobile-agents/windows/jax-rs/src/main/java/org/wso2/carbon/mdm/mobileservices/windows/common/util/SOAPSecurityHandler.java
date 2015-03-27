@@ -43,12 +43,12 @@ public class SOAPSecurityHandler implements SOAPHandler<SOAPMessageContext> {
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean handleFault(SOAPMessageContext context) {
-        return false;
+        return true;
     }
 
     @Override
