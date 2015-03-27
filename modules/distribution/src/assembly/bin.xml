@@ -243,6 +243,18 @@
             </outputDirectory>
         </fileSet>
 
+
+        <!-- Copying Mobile plugin management related dbscripts -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.mobile.device.mgt.version}/dbscripts/cdm/plugins
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/cdm/plugins</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+
         <!-- Copying MDM Jaggery app -->
         <fileSet>
             <directory>src/repository/jaggeryapps/</directory>
