@@ -50,6 +50,9 @@
         <jaxws:properties>
             <entry key="ws-security.bst.validator" value-ref="customvalidator"/>
         </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wss4jInInterceptor_federated"/>
+        </jaxws:inInterceptors>
         <jaxws:handlers>
             <bean id="securityheader"
                   class="org.wso2.carbon.mdm.mobileservices.windows.common.util.SOAPSecurityHandler"/>
@@ -77,6 +80,9 @@
         <jaxws:properties>
             <entry key="ws-security.bst.validator" value-ref="customvalidator"/>
         </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wss4jInInterceptor_federated"/>
+        </jaxws:inInterceptors>
         <jaxws:handlers>
             <ref bean="serviceOptionsHandler"/>
         </jaxws:handlers>
@@ -133,6 +139,16 @@
             </map>
         </property>
     </bean>
+
+    <bean id="wss4jInInterceptor_federated" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+        <property name="properties">
+            <map>
+                <entry key="action" value="NoSecurity"/>
+                <entry key="isBSPCompliant" value="false"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="Syncml_initial_bean"
           class="org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl.SyncmlServiceImpl"/>
     <bean id="customvalidator"

@@ -60,7 +60,7 @@ public class BSTProviderImpl implements BSTProvider {
 
         try {
             if(authenticate(user, password, domain)){
-                return Response.ok().entity("3284623988768768767646298").build();
+                return Response.ok().entity("123456789123456789").build();
             }
             else{
                 String msg = "Authentication failure due to incorrect credentials.";
