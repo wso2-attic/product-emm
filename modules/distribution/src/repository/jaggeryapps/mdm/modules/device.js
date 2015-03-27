@@ -23,7 +23,10 @@ var deviceModule = (function () {
 
     var DeviceIdentifier = Packages.org.wso2.carbon.device.mgt.common.DeviceIdentifier;
     var DeviceManagerUtil = Packages.org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
-    var Operation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+
+    var CommandOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.CommandOperation;
+    var ConfigOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.ConfigOperation;
+    var SimpleOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.SimpleOperation;
     var Type =  Packages.org.wso2.carbon.device.mgt.common.operation.mgt.Operation.Type;
     var Properties = Packages.java.util.Properties;
     var ArrayList = Packages.java.util.ArrayList;
@@ -86,7 +89,7 @@ var deviceModule = (function () {
      Get the supported features by the device type
      */
     module.getFeatures = function(){
-        var features = deviceManagementService.getFeatures(constants.PLATFORM_ANDROID);
+        var features = deviceManagementService.getFeatureManager(constants.PLATFORM_ANDROID).getFeatures();
         var featuresConverted = {};
         for (var i = 0; i < features.size(); i++) {
             var feature = features.get(i);
@@ -99,13 +102,15 @@ var deviceModule = (function () {
     };
 
     module.performOperation = function(devices, operation){
-        var operationInstance = new Operation();
-        operationInstance.setCode(operation.featureName);
+        var operationInstance;
         if (operation.type=="COMMAND") {
-            operationInstance.setType(Type.COMMAND);
+            operationInstance = new CommandOperation();
         }else if (operation.type=="CONFIG") {
-            operationInstance.setType(Type.CONFIG);
+            operationInstance = new ConfigOperation();
+        }else {
+            operationInstance = new SimpleOperation();
         }
+        operationInstance.setCode(operation.featureName);
         var props = new Properties();
         for (var i = 0; i < operation.properties.length; i++) {
             var object = properties[i];
