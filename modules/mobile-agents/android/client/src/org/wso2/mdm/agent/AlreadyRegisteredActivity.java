@@ -76,7 +76,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 		ComponentName cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
-		context = this.getApplicationContext();
+		context = this;
 		resources = context.getResources();
 		Bundle extras = getIntent().getExtras();
 		

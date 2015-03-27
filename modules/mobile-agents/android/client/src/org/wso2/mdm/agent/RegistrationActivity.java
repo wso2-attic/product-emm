@@ -49,7 +49,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		context = this.getApplicationContext();
+		context = this;
 		deviceInfoBuilder = new BuildDeviceInfoPayload(context);
 		registerDevice();
 	}
@@ -180,13 +180,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 
 			if (responseStatus.equals(Constants.REQUEST_SUCCESSFUL)) {
 				loadAlreadyRegisteredActivity();
-			} else if (responseStatus.equals(Constants.INTERNAL_SERVER_ERROR)) {
+			} else {
 				displayInternalServerError();
-			} 
-
+			}
 		} else {
 			displayConnectionError();
-
 		}
 	}
 

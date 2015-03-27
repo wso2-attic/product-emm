@@ -82,7 +82,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		getSupportActionBar().setCustomView(R.layout.custom_sherlock_bar);
 		getSupportActionBar().setTitle(R.string.empty_app_title);
 
-		context = AuthenticationActivity.this;
+		context = this;
 		deviceType = getResources().getString(R.string.device_enroll_type_byod);
 		etDomain = (EditText) findViewById(R.id.etDomain);
 		etUsername = (EditText) findViewById(R.id.etUsername);
@@ -298,7 +298,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		if (type.trim().equals(getResources().getString(R.string.device_enroll_type_byod))) {
 			if (licenseAgreedResponse == null) {
 
-				// Get License
 				OnCancelListener cancelListener = new OnCancelListener() {
 
 					@Override
