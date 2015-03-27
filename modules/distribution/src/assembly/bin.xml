@@ -589,6 +589,7 @@
         </file>
 
         <!-- Copying H2 database related files corresponding to default Device management repository schema -->
+
         <file>
             <source>
                 target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2DM_DB.h2.db
@@ -598,22 +599,13 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!-- Copying H2 database related files corresponding to default Mobile Device management repository schema -->
-        <file>
-            <source>
-                ../distribution/src/repository/database/WSO2MobileDM_DB.h2.db
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database</outputDirectory>
-            <destName>WSO2MobileDM_DB.h2.db</destName>
-            <fileMode>644</fileMode>
-        </file>
-
+        <!--
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/carbon.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
         </file>
-
+        -->
         <!--email broker config-->
         <file>
             <source>src/repository/conf/axis2/axis2_client.xml</source>
