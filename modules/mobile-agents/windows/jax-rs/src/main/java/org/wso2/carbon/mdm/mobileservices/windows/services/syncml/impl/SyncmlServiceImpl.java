@@ -30,7 +30,6 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.operation.mgt.SimpleOperation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
@@ -291,37 +290,37 @@ public class SyncmlServiceImpl implements SyncmlService {
 		if(msgID == 1){
 			pendingOperations = new ArrayList<Operation>();
 
-				Operation osVersion = new SimpleOperation();
+				Operation osVersion = new Operation();
 				osVersion.setCode("SOFTWARE_VERSION");
 				osVersion.setType(Operation.Type.INFO);
 				pendingOperations.add(osVersion);
 
-				Operation imsi = new SimpleOperation();
+				Operation imsi = new Operation();
 				imsi.setCode("IMSI");
 				imsi.setType(Operation.Type.INFO);
 				pendingOperations.add(imsi);
 
-				Operation imei = new SimpleOperation();
+				Operation imei = new Operation();
 				imei.setCode("IMEI");
 				imei.setType(Operation.Type.INFO);
 				pendingOperations.add(imei);
 
-				Operation deviceID = new SimpleOperation();
+				Operation deviceID = new Operation();
 				deviceID.setCode("DEV_ID");
 				deviceID.setType(Operation.Type.INFO);
 				pendingOperations.add(deviceID);
 
-				Operation manufacturer = new SimpleOperation();
+				Operation manufacturer = new Operation();
 				manufacturer.setCode("MANUFACTURER");
 				manufacturer.setType(Operation.Type.INFO);
 				pendingOperations.add(manufacturer);
 
-				Operation model = new SimpleOperation();
+				Operation model = new Operation();
 				model.setCode("MODEL");
 				model.setType(Operation.Type.INFO);
 				pendingOperations.add(model);
 
-				Operation language = new SimpleOperation();
+				Operation language = new Operation();
 				language.setCode("LANGUAGE");
 				language.setType(Operation.Type.INFO);
 				pendingOperations.add(language);

@@ -20,9 +20,9 @@ package org.wso2.carbon.mdm.api;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.core.app.mgt.AppManagementException;
+import org.wso2.carbon.device.mgt.core.app.mgt.AppManagerConnector;
+import org.wso2.carbon.device.mgt.core.app.mgt.AppManagerConnectorException;
 import org.wso2.carbon.device.mgt.core.app.mgt.oauth.dto.Credential;
-import org.wso2.carbon.device.mgt.core.service.AppManager;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
@@ -41,11 +41,11 @@ public class Authentication {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("credentials")
 	public Credential auth() throws MDMAPIException {
-		AppManager appManager;
+		AppManagerConnector appManager;
 		try {
 			appManager = MDMAPIUtils.getAppManagementService();
 			return appManager.getClientCredentials();
-		} catch (AppManagementException e) {
+		} catch (AppManagerConnectorException e) {
 			String errorMsg = "Device management error";
 			log.error(errorMsg, e);
 			throw new MDMAPIException(errorMsg, e);
