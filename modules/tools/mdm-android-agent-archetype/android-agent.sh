@@ -26,11 +26,9 @@ echo "Please provide the ClientKey: "
 read clientKey
 echo "Please provide the ClientSecret: "
 read clientSecret
-echo "Please provide the Target Android SDK Version: "
-read targetSDK
 
 # Default Target Android SDK version
-DEFAULT_TARGET_SDK="17"
+DEFAULT_TARGET_SDK="21"
 
 echo "************** Prerequisites verification started **************"
 
@@ -38,7 +36,7 @@ echo "Verifying the Apache Maven installation"
 if [ -d "$M2_HOME" ];then
 echo $M2_HOME
 else
-echo "Apache Maven is not installed in the system. Please install Apache Maven 3.0.5 or higher and set M2_HOME environment variable."
+echo "Apache Maven is not installed in the system. Please install Apache Maven 3.1.1 or higher and set M2_HOME environment variable."
 exit -1
 fi
 
@@ -68,21 +66,22 @@ echo "Client-Secret is not defined."
 exit 1;
 fi
 
-if [ -n "$targetSDK" ];then
-echo "Setting the target Android SDK to $targetSDK"
-else
-echo "Target Android SDK Version is not defined. Using the default target (17)."
-targetSDK=$DEFAULT_TARGET_SDK
-fi
-
 echo "************** Argument verification completed **************"
 
 echo "************** Installing WSO2 MDM Android Agent Archetype to the maven repo **************"
 
-mvn install:install-file -Dfile=mdm-android-agent-archetype-1.0.0-SNAPSHOT.jar -DgroupId=org.wso2.mdmserver -DartifactId=mdm-android-agent-archetype -Dversion=1.0.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
+mvn install:install-file -Dfile=mdm-android-agent-archetype-1.0.0-SNAPSHOT.jar -DgroupId=org.wso2.mdmr -DartifactId=mdm-android-agent-archetype -Dversion=1.0.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
 
 
 echo "************** Generating WSO2 MDM Android agent project ***************"
-mvn archetype:generate -B -DarchetypeGroupId=org.wso2.mdmserver -DarchetypeArtifactId=mdm-android-agent-archetype -DarchetypeVersion=1.0.0-SNAPSHOT -DgroupId=org.wso2.carbon -DartifactId=mdm-android-agent -DclientKey=$clientKey -DclientSecret=$clientSecret -Dplatform=$targetSDK
+mvn archetype:generate -B -DarchetypeGroupId=org.wso2.mdm -DarchetypeArtifactId=mdm-android-agent-archetype -DarchetypeVersion=1.0.0-SNAPSHOT -DgroupId=org.wso2.mdm -DartifactId=mdm-android-client -DclientKey=$clientKey -DclientSecret=$clientSecret
+
+
+echo "************** Adding IDPProxy to maven repo ***************"
+mvn -f mdm-android-client/src/main/plugins/IDPProxy/pom.xml clean install
+
+
+echo "************** Building MDM Android Agent ***************"
+mvn -f mdm-android-client/pom.xml clean install
 
 exit 0

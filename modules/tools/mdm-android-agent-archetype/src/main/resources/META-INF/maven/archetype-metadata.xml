@@ -19,69 +19,63 @@
 <archetype-descriptor name="mdm-android-agent">
     <requiredProperties>
         <requiredProperty key="platform">
-            <defaultValue>16</defaultValue>
+            <defaultValue>21</defaultValue>
         </requiredProperty>
         <requiredProperty key="clientKey">
-            <defaultValue>iwriqwyriqrqro</defaultValue>
+            <defaultValue>client-key</defaultValue>
         </requiredProperty>
         <requiredProperty key="clientSecret">
-            <defaultValue>wrhqwriqwyroiwq</defaultValue>
+            <defaultValue>client-secret</defaultValue>
         </requiredProperty>
     </requiredProperties>
 
     <fileSets>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory>src</directory>
+        <fileSet filtered="false" encoding="UTF-8">
+            <directory>src/main/java</directory>
             <includes>
                 <include>**/*.java</include>
             </includes>
         </fileSet>
         <fileSet filtered="false" encoding="UTF-8">
-            <directory>assets</directory>
+            <directory>src/main/assets</directory>
             <includes>
-                <include>**/*.*</include>
+                <include>*.properties</include>
             </includes>
         </fileSet>
         <fileSet filtered="false" encoding="UTF-8">
-            <directory>libs</directory>
-            <includes>
-                <include>**/*.*</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="false" encoding="UTF-8">
-            <directory>plugins</directory>
+            <directory>src/main/plugins</directory>
             <includes>
                 <include>**/*.*</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
-            <directory>res</directory>
+            <directory>src/main/res</directory>
             <includes>
                 <include>**/*.xml</include>
             </includes>
         </fileSet>
         <fileSet filtered="false" encoding="UTF-8">
-            <directory>res</directory>
+            <directory>src/main/res</directory>
             <includes>
                 <include>**/*.png</include>
             </includes>
         </fileSet>
         <fileSet filtered="false" encoding="UTF-8">
-            <directory>res</directory>
-            <includes>
-                <include>**/*.bks</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory></directory>
-            <includes>
-                <include>*.xml</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory></directory>
+            <directory>src/main</directory>
             <includes>
                 <include>*.properties</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="false" encoding="UTF-8">
+            <directory>src/main</directory>
+            <includes>
+                <include>*.txt</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="false" encoding="UTF-8">
+            <directory>src/main</directory>
+            <includes>
+                <include>*.xml</include>
             </includes>
         </fileSet>
     </fileSets>
