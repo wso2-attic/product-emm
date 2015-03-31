@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+ ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+-->
 <resources>
-    
+
     <string name="client_id">${clientKey}</string>
     <string name="client_secret">${clientSecret}</string>
-
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
     <string name="already_registered">Device is already registered on server.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>
@@ -48,14 +64,14 @@
     <string name="menu_item_operations">Operations</string>
     <string name="menu_item_pin">Change PIN</string>
     <string name="menu_item_ip">Change Server Address</string>
-     <string name="menu_item_log">Debug Log</string>
+    <string name="menu_item_log">Debug Log</string>
     <string name="title_activity_alert">Message from EMM</string>
     <string name="device_admin_enable_alert">This will enable device administration</string>
     <string name="device_enroll_type_byod">BYOD</string>
     <string name="device_enroll_type_cope">COPE</string>
     <string name="title_init_msg_error">Initialization Failed. Please try again.</string>
-   	<string name="title_head_init_error">Initialization Failed</string>
-   	<string name="title_head_confirm_pin">Re-type the PIN to Confirm</string>
+    <string name="title_head_init_error">Initialization Failed</string>
+    <string name="title_head_confirm_pin">Re-type the PIN to Confirm</string>
 
     <!-- TEXT FIELD HINTS -->
     <string name="hint_new_pin">New PIN Code</string>
@@ -66,19 +82,78 @@
     <string name="toast_message_enter_server_address">Please enter Server Address, i.e : www.abc.com</string>
     <string name="toast_error_username">Please enter username</string>
     <string name="toast_error_password">Please enter password</string>
+    <string name="toast_message_wipe">Device is being wiped</string>
+    <string name="toast_message_wipe_failed">Device wipe failed due to wrong PIN</string>
 
     <!-- INTENT EXTRAS -->
     <string name="intent_extra_from_activity">from_activity_name</string>
     <string name="intent_extra_regid">regid</string>
     <string name="intent_extra_main_activity">main_activity_name</string>
     <string name="intent_extra_message">message</string>
+    <string name="intent_extra_token">token</string>
+    <string name="intent_extra_data">data</string>
+    <string name="intent_extra_code">code</string>
+    <string name="intent_extra_message_id">msgID</string>
+    <string name="intent_extra_status">status</string>
+    <string name="intent_extra_status_ok">200</string>
+    <string name="intent_extra_status_fail">400</string>
     <string name="intent_extra_fresh_reg_flag">freshRegFlag</string>
     <string name="intent_extra_username">username</string>
+    <string name="intent_extra_ssid">ssid</string>
+    <string name="intent_extra_password">password</string>
+    <string name="intent_extra_function">function</string>
+    <string name="intent_extra_enable">enable</string>
+    <string name="intent_extra_disable">disable</string>
+    <string name="intent_extra_encrypt">encrypt</string>
+    <string name="intent_extra_decrypt">decrypt</string>
     <string name="intent_extra_notification">notification</string>
+    <string name="intent_extra_identity">identity</string>
+    <string name="intent_extra_title">title</string>
+    <string name="intent_extra_type">type</string>
+    <string name="intent_extra_package">package</string>
+    <string name="intent_extra_policies">policies</string>
+    <string name="intent_extra_name">name</string>
+    <string name="intent_extra_not_violated">notviolated</string>
+    <string name="intent_extra_not_rooted">notrooted</string>
+    <string name="intent_extra_platform_id">platform_id</string>
+    <string name="intent_extra_os">os</string>
+    <string name="intent_extra_enterprise">Enterprise</string>
+    <string name="intent_extra_android">android</string>
+    <string name="intent_extra_market">Market</string>
+    <string name="intent_extra_at">/@</string>
+    <string name="intent_extra_space">/ </string>
+    <string name="intent_extra_comma">, / </string>
+
+    <!-- POLICY CONFIGURATION FIELDS -->
+    <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>
+    <string name="policy_password_min_length">minLength</string>
+    <string name="policy_password_pin_history">pinHistory</string>
+    <string name="policy_password_min_complex_chars">minComplexChars</string>
+    <string name="policy_password_require_alphanumeric">requireAlphanumeric</string>
+    <string name="policy_password_allow_simple">allowSimple</string>
+    <string name="policy_password_pin_age_in_days">maxPINAgeInDays</string>
+    <string name="policy_email_display_name">displayname</string>
+    <string name="policy_email_username">username</string>
+    <string name="policy_email_password">password</string>
+    <string name="policy_email_host">hostname</string>
+
+    <!-- POLICY VIOLATION MESSAGES -->
+    <string name="policy_violation_wifi">\nYou are not using company WIFI account, please change your WIFI configuration \n</string>
+    <string name="policy_violation_wifi_tail">You are not using company WIFI account, please change your WIFI configuration \n</string>
+    <string name="policy_violation_encryption">\nYour device should be encrypted according to the policy, please enable device encryption through device settings\n</string>
+    <string name="policy_violation_encryption_tail">Your device should be encrypted according to the policy, please enable device encryption through device settings \n</string>
+    <string name="policy_violation_mute">\nYour phone should be muted according to the policy, please mute your phone \n</string>
+    <string name="policy_violation_mute_tail">Your phone should be muted according to the policy, please mute your phone \n</string>
+    <string name="policy_violation_password">\nYour screen lock password doesn\'t meet current policy requirement. Please reset your passcode \n</string>
+    <string name="policy_violation_password_tail">Your screen lock password doesn\'t meet current policy requirement. Please reset your passcode \n</string>
+    <string name="policy_violation_apps">\n</string>
+    <string name="policy_violation_apps_tail">\nFollowing apps are blacklisted by your MDM Admin, please remove them \n\n</string>
+    <string name="policy_violation_apps_number">. </string>
 
     <!-- SHARED PREF KEYS -->
     <string name="shared_pref_package">com.mdm</string>
     <string name="shared_pref_policy">policy</string>
+    <string name="shared_pref_policy_applied">policy_applied</string>
     <string name="shared_pref_isagreed">isAgreed</string>
     <string name="shared_pref_registered">registered</string>
     <string name="shared_pref_ip">ip</string>
@@ -92,14 +167,15 @@
     <string name="shared_pref_sender_id">senderID</string>
     <string name="shared_pref_message_mode">mode</string>
     <string name="shared_pref_interval">interval</string>
-    
     <string name="username">username</string>
-    
     <string name="shared_pref_device_active">0</string>
     <string name="shared_pref_client_id">ClientID</string>
     <string name="shared_pref_client_secret">ClientSecret</string>
-    
-    <!-- PARA KEYS -->
+    <string name="shared_pref_operators">operators</string>
+    <string name="shared_pref_default_array">[]</string>
+    <string name="shared_pref_default_string"></string>
+    <string name="shared_pref_default_status">true</string>
+    <string name="shared_pref_false_status">false</string>
 
     <!-- ERROR MESSAGES -->
     <string name="error_connect_to_server">Could not connect to server please check your internet connection and try again</string>
@@ -121,6 +197,8 @@
 
     <!-- DIALOG TITLES AND MESSAGES -->
     <string name="dialog_authenticate">Authenticating</string>
+    <string name="dialog_gps_settings">GPS Settings</string>
+    <string name="dialog_gps_message">GPS is not enabled. Do you want to go to settings menu to enable GPS?</string>
     <string name="dialog_please_wait">Please wait</string>
     <string name="dialog_checking_reg">Checking Registration Info</string>
     <string name="dialog_sender_id">Retrieving server settings</string>
@@ -159,10 +237,38 @@
     <string name="info_label_rooted">Rooted:</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="info_label_settings">Settings</string>
+    <string name="info_label_cancel">Cancel</string>
 
-    <!-- BUTTON TITLES -->
+    <!-- UI TITLES -->
     <string name="button_ok">OK</string>
+    <string name="button_agree">Agree</string>
+    <string name="button_settings">Settings</string>
+    <string name="txt_message">Message from MDM Server</string>
+    <string name="txt_notification">Message from MDM Server</string>
     <string name="button_cancel">Cancel</string>
+    <string name="authentication_failed">Authentication Failed</string>
+    <string name="try_again">Try again</string>
+    <string name="button_unregister">Unregister</string>
+    <string name="txt_domain">Domain</string>
+    <string name="txt_username">Username</string>
+    <string name="txt_password">Password</string>
+    <string name="txt_register">Register</string>
+    <string name="txt_refresh">Refresh</string>
+    <string name="txt_reset">Reset</string>
+    <string name="txt_byod">  BYOD (This device is my own device)</string>
+    <string name="txt_cope">  COPE (This device is corporate owned)</string>
+    <string name="txt_incompatible">Registration failed, check your internet connection and click to retry</string>
+    <string name="txt_retry">Retry Registration</string>
+    <string name="txt_old_pin">Old PIN Code</string>
+    <string name="txt_enter_pin">Enter PIN Code</string>
+    <string name="txt_new_pin">Set PIN Code</string>
+    <string name="txt_start_reg">Start Registration</string>
+    <string name="txt_register_success">Device successfully registered, click to un-register from the MDM</string>
+    <string name="txt_unregister">Unregister</string>
+    <string name="txt_enroll">Please click to enroll the device</string>
+    <string name="txt_lblpin">Please enter a PIN code to make your device safe from critical operations</string>
+    <string name="button_unregister_text">Device successfully registered, click to unregister from the MDM</string>
 
     <!-- APPLICATION MANAGER -->
     <string name="application_mgr_download_location">/Download/</string>
@@ -175,11 +281,11 @@
     <string name="server_util_req_type_post">POST</string>
     <string name="server_util_req_type_get">GET</string>
     <string name="title_activity_log">LogActivity</string>
-    
-    <!--  Headings -->
-     <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com</string>
-     
-     <!--  Validation Errors -->
-     <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>
+
+    <!-- Headings -->
+    <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com</string>
+
+    <!-- Validation Errors -->
+    <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>
 
 </resources>
