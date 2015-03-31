@@ -45,9 +45,9 @@ public class Operation {
 	private static Log log = LogFactory.getLog(Operation.class);
 
 	@GET
-	public List<org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
+	public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
 			throws MDMAPIException {
-		List<org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
 		DeviceManagementService dmService;
 		try {
 			dmService = MDMAPIUtils.getDeviceManagementService();

@@ -44,11 +44,11 @@ public class OperationManager {
 
 	@GET
 	@Path("{id}")
-	public List<Operation> getPendingOperations(
+	public List<? extends Operation> getPendingOperations(
 			@PathParam("id") String id)
 			throws AndroidAgentException {
 
-		List<Operation> operations;
+		List<? extends Operation> operations;
 		String msg;
 		DeviceManagementService dmService;
 
