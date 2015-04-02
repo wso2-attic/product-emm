@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 var dataConfig = require('/config/mdm-props.js').config();
 var sso = require('/modules/sso.js').sso;
 var constants = require('/modules/constants.js');
@@ -26,20 +27,23 @@ var keyStoreParams = {
     keyStorePassword: dataConfig.ssoConfiguration.keyStorePassword,
     identityAlias: dataConfig.ssoConfiguration.identityAlias
 };
-sso.configure(dataConfig.ssoConfiguration.issuer, dataConfig.ssoConfiguration.appName, keyStoreParams,
-dataConfig.ssoConfiguration.identityProviderURL);
-sso.acs(function(loggedInUser) {
-    var carbonUser = carbonModule.server.tenantUser(loggedInUser);
-    session.put(constants.USER_SESSION_KEY, carbonUser);
-    var username = carbonUser.username;
-    if(log.isDebugEnabled()){
-        log.debug("User logged in: "+username);
+sso.configure(dataConfig.ssoConfiguration.issuer,
+                    dataConfig.ssoConfiguration.appName,
+                            keyStoreParams, dataConfig.ssoConfiguration.identityProviderURL);
+sso.acs(
+    function(loggedInUser) {
+        var carbonUser = carbonModule.server.tenantUser(loggedInUser);
+        session.put(constants.USER_SESSION_KEY, carbonUser);
+        var username = carbonUser.username;
+        if(log.isDebugEnabled()){
+            log.debug("User logged in: "+username);
+        }
+        response.sendRedirect(dataConfig.appContext);
+    }, function() {
+        if(log.isDebugEnabled()){
+            log.debug("User logged out");
+        }
+        response.sendRedirect(dataConfig.appContext);
     }
-    response.sendRedirect(dataConfig.appContext);
-}, function() {
-    if(log.isDebugEnabled()){
-        log.debug("User logged out");
-    }
-    response.sendRedirect(dataConfig.appContext);
-});
+);
 %>

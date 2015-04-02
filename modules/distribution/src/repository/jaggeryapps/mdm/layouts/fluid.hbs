@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ defineZone "title"}}</title>
-    {{ defineZone "topLibCss"}}
-    {{ defineZone "topCss"}}
-</head>
-<body>
-<div class="wr-modalpopup">
-    <div class="modalpopup-content"><!-- dynamic content --></div>
-    <div class="modalpopup-bg"></div>
-</div>
-{{ defineZone "notification"}}
-<div class="container col-lg-12 col-md-12 col-sm-12">
-    <!-- header -->
-    {{ defineZone "header"}}
-    <!-- /header -->
-    {{ defineZone "body"}}
-</div>
-{{ defineZone "bottomLibJs" }}
-{{ defineZone "bottomJs" }}
-</body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {{ defineZone "title"}}
+        </title>
+        {{ defineZone "topLibCss"}}
+        {{ defineZone "topCss"}}
+    </head>
+    <body>
+    <div class="wr-modalpopup">
+        <div class="modalpopup-content">
+            <!-- dynamic content -->
+        </div>
+        <div class="modalpopup-bg"></div>
+    </div>
+    {{ defineZone "notification"}}
+    <div class="container col-lg-12 col-md-12 col-sm-12">
+        <!-- header -->
+        {{ defineZone "header"}}
+        <!-- /header -->
+        {{ defineZone "body"}}
+    </div>
+    {{ defineZone "bottomjquery" }}
+    {{ defineZone "bottomLibJs" }}
+    {{ defineZone "bottomJs" }}
+    </body>
 </html>

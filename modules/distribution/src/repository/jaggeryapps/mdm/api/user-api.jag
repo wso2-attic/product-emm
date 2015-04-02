@@ -7,26 +7,32 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
+
 var uri = request.getRequestURI();
-var log = new Log();
-var uriMatcher = new URIMatcher(uri);
+var uriMatcher = new URIMatcher(String(uri));
+
+var log = new Log("api/user-api.jag");
+
 var constants = require("/modules/constants.js");
 var mdmProps = require('/config/mdm-props.js').config();
 var userModule = require("/modules/user.js").userModule;
+var deviceModule = require("/modules/device.js").deviceModule;
 var utility = require("/modules/utility.js").utility;
+
 var result;
+
 if (uriMatcher.match("/{context}/api/user/login/")) {
-    var username = request.getParameter("username");
-    var password = request.getParameter("password");
+    username = request.getParameter("username");
+    password = request.getParameter("password");
     try {
         userModule.login(username, password, function(user){
             if(log.isDebugEnabled()){
@@ -37,7 +43,7 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         }, function(){
             response.sendRedirect(mdmProps.appContext + "login?#auth-failed");
         });
-    }catch (e){
+    } catch (e) {
         response.sendRedirect(mdmProps.appContext + "login?#error");
     }
 } else if (uriMatcher.match("/{context}/api/user/logout/")){
@@ -46,23 +52,49 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
     });
 } else if (uriMatcher.match("/{context}/api/user/devices/")) {
     if (userModule.isAuthorized("/permission/device-mgt/user/devices/list")) {
-        var deviceModule = require("/modules/device.js").deviceModule;
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        carbonUser = session.get(constants.USER_SESSION_KEY);
         result = deviceModule.listDevicesForUser(carbonUser.username);
-    }else {
+    } else {
         response.sendError(403);
     }
 } else if (uriMatcher.match("/{context}/api/users/{username}/invite")) {
     if (userModule.isAuthorized("/permission/device-mgt/admin/users/invite")) {
-        var deviceModule = require("/modules/device.js").deviceModule;
-        var elements = uriMatcher.elements();
-        var username = elements.username;
+        elements = uriMatcher.elements();
+        username = elements.username;
         userModule.inviteUser(username);
-    }else {
+    } else {
         response.sendError(403);
     }
+} else if (uriMatcher.match("/{context}/api/user/add")) {
+    if (userModule.isAuthorized("/permission/device-mgt/admin/users/add-user")) {
+        addUserFormData = request.getContent();
+
+        username = addUserFormData.username;
+        firstname = addUserFormData.firstname;
+        lastname = addUserFormData.lastname;
+        emailAddress = addUserFormData.emailAddress;
+
+        if (!addUserFormData.userRoles) {
+            userRoles = null;
+        } else {
+            userRoles = String(addUserFormData.userRoles).split(",");
+        }
+
+        try {
+            result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);
+        } catch (e) {
+            log.error("Exception in modules/user.js/addUser() : " + e.message);
+            // http status code 400 refers to - Bad request.
+            result = 400;
+        }
+    } else {
+        // http status code 403 refers to - forbidden.
+        result = 403;
+    }
 }
-if (result){
+
+// returning the result.
+if (result) {
     print(result);
 }
 %>

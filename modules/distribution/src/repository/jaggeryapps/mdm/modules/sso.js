@@ -152,7 +152,7 @@ var log = new Log();
             var jSessionId = getSSOSessions()[index];
             delete getSSOSessions()[index];
             if (log.isDebugEnabled()) {
-                sso.log.debug('Backend logout recieved from store. The index is :::' + index);
+                sso.log.debug('Backend logout received from store. The index is :::' + index);
                 sso.log.debug('Session Id Invalidated :::' + jSessionId);
             }
             session.invalidate();
