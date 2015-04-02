@@ -35,8 +35,10 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDevic
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Device;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
+import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,15 +109,17 @@ public class OperationStore {
 
         if (commandType == SyncmlCommandType.WIFI.getValue()) {
 
-//--------------Commented as getPayLoad() method is still not available----------------------
+            operation = new ConfigOperation();
+            operation.setCode(commandType);
+            operation.setType(type);
 
-//            try {
-//                Wifi wifiObject = (Wifi)operationRequest.getBasicOperation();
-//                        operation.setPayload(objectWriter.writeValueAsString(configOperation));
-//            } catch (IOException e) {
-//                throw new WindowsDeviceEnrolmentException(
-//                        "Failure in resolving JSON payload of WIFI operation.", e);
-//            }
+            try {
+                Wifi wifiObject = (Wifi)operationRequest.getBasicOperation();
+                operation.setPayLoad(objectWriter.writeValueAsString(wifiObject));
+            } catch (IOException e) {
+                throw new WindowsDeviceEnrolmentException(
+                        "Failure in resolving JSON payload of WIFI operation.", e);
+            }
         }
         else {
 //            no operation.....

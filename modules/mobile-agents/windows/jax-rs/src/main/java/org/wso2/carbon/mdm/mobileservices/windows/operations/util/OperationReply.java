@@ -22,10 +22,13 @@ package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -222,7 +225,7 @@ public class OperationReply {
         return item;
     }
 
-    private List<Add> appendAddConfiguration(Operation operation) {
+    private List<Add> appendAddConfiguration(Operation operation) throws WindowsOperationException {
 
         List<Add> addList = new ArrayList<Add>();
 
@@ -232,22 +235,25 @@ public class OperationReply {
 
             String operationCode = operation.getCode();
 
-//--------------Commented as getPayLoad() method is still not available----------------------
+            Wifi wifiObject;
+            try {
+                wifiObject = new ObjectMapper().readValue(operation.getPayLoad(), Wifi.class);
+            } catch (IOException e) {
+                throw new WindowsOperationException("Failure while creating Wifi operation object.", e);
+            }
 
-//            Wifi wifiObject = new ObjectMapper().readValue(operation.getPayLoad(), Wifi.class);
-//
-//            String data = "&lt;?xml version=&quot;1.0&quot;?&gt;&lt;WLANProfile" +
-//                    "xmlns=&quot;http://www.microsoft.com/networking/WLAN/profile/v1&quot;&gt;&lt;name&gt;" +
-//                    wifiObject.getNetworkName() + "&lt;/name&gt;&lt;SSIDConfig&gt;&lt;SSID&gt;&lt;name&gt;" +
-//                    wifiObject.getSsid() + "&lt;/name&gt;&lt;/SSID&gt;&lt;/SSIDConfig&gt;&lt;connectionType&gt;" +
-//                    wifiObject.getConnectionType() + "&lt;/connectionType&gt;&lt;connectionMode&gt;" +
-//                    wifiObject.getConnectionMode() + "&lt;/connectionMode&gt;&lt;MSM&gt;&lt;security&gt;&lt;" +
-//                    "authEncryption&gt;&lt;authentication&gt;" + wifiObject.getAuthentication() +
-//                    "&lt;/authentication&gt;&lt;encryption&gt;" + wifiObject.getEncryption() +
-//                    "&lt;/encryption&gt;&lt;/authEncryption&gt;&lt;sharedKey&gt;&lt;keyType&gt;" +
-//                    wifiObject.getKeyType() + "&lt;/keyType&gt;&lt;protected&gt;" + wifiObject.getProtection() +
-//                    "&lt;/protected&gt;&lt;keyMaterial&gt;" + wifiObject.getKeyMaterial() +
-//                    "&lt;/keyMaterial&gt;&lt;/sharedKey&gt;&lt;/security&gt;&lt;/MSM&gt;&lt;/WLANProfile&gt;";
+            String data = "&lt;?xml version=&quot;1.0&quot;?&gt;&lt;WLANProfile" +
+                    "xmlns=&quot;http://www.microsoft.com/networking/WLAN/profile/v1&quot;&gt;&lt;name&gt;" +
+                    wifiObject.getNetworkName() + "&lt;/name&gt;&lt;SSIDConfig&gt;&lt;SSID&gt;&lt;name&gt;" +
+                    wifiObject.getSsid() + "&lt;/name&gt;&lt;/SSID&gt;&lt;/SSIDConfig&gt;&lt;connectionType&gt;" +
+                    wifiObject.getConnectionType() + "&lt;/connectionType&gt;&lt;connectionMode&gt;" +
+                    wifiObject.getConnectionMode() + "&lt;/connectionMode&gt;&lt;MSM&gt;&lt;security&gt;&lt;" +
+                    "authEncryption&gt;&lt;authentication&gt;" + wifiObject.getAuthentication() +
+                    "&lt;/authentication&gt;&lt;encryption&gt;" + wifiObject.getEncryption() +
+                    "&lt;/encryption&gt;&lt;/authEncryption&gt;&lt;sharedKey&gt;&lt;keyType&gt;" +
+                    wifiObject.getKeyType() + "&lt;/keyType&gt;&lt;protected&gt;" + wifiObject.getProtection() +
+                    "&lt;/protected&gt;&lt;keyMaterial&gt;" + wifiObject.getKeyMaterial() +
+                    "&lt;/keyMaterial&gt;&lt;/sharedKey&gt;&lt;/security&gt;&lt;/MSM&gt;&lt;/WLANProfile&gt;";
 
             Meta meta = new Meta();
             meta.setFormat("chr");
@@ -261,8 +267,7 @@ public class OperationReply {
                 }
             }
             items.get(0).setMeta(meta);
-//--------------Commented as getPayLoad() method is still not available----------------------
-//          items.get(0).setData(data);
+            items.get(0).setData(data);
 
             add.setCommandId(301);
             add.setItems(items);
