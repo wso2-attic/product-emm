@@ -67,33 +67,13 @@ public class OperationStore {
             }
         }
         try {
-            getOperationManagementService().addOperation(operation, deviceIdentifiers);
+            getDeviceManagementServiceProvider().addOperation(operation, deviceIdentifiers);
         } catch (OperationManagementException e) {
             String msg = "Failure occurred while storing command operation.";
             log.error(msg);
             return false;
         }
         return true;
-    }
-
-    private static OperationManagerImpl getOperationManagementService() {
-        try {
-            OperationManagerImpl operationManager;
-            PrivilegedCarbonContext.startTenantFlow();
-            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-            operationManager = (OperationManagerImpl) ctx.getOSGiService(OperationManagerImpl.class, null);
-
-            if (operationManager == null) {
-                String msg = "Operation management service is not initialized.";
-                log.error(msg);
-            }
-            return operationManager;
-        }
-        finally {
-            PrivilegedCarbonContext.endTenantFlow();
-        }
     }
 
     private static DeviceManagementServiceProviderImpl getDeviceManagementServiceProvider() {

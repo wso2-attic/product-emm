@@ -285,60 +285,64 @@ public class SyncmlServiceImpl implements SyncmlService {
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
 		deviceIdentifier.setId(syncmlDocument.getHeader().getSource().getLocURI());
 		deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
- 		List<? extends Operation> pendingOperations;
+		List<Operation> deviceInfoList;
+		List<? extends Operation> pendingOperations;
+		String response;
 
-//		if(msgID == 1){
-//			pendingOperations = new ArrayList<Operation>();
-//
-//				Operation osVersion = new Operation();
-//				osVersion.setCode("SOFTWARE_VERSION");
-//				osVersion.setType(Operation.Type.INFO);
-//				pendingOperations.add(osVersion);
-//
-//				Operation imsi = new Operation();
-//				imsi.setCode("IMSI");
-//				imsi.setType(Operation.Type.INFO);
-//				pendingOperations.add(imsi);
-//
-//				Operation imei = new Operation();
-//				imei.setCode("IMEI");
-//				imei.setType(Operation.Type.INFO);
-//				pendingOperations.add(imei);
-//
-//				Operation deviceID = new Operation();
-//				deviceID.setCode("DEV_ID");
-//				deviceID.setType(Operation.Type.INFO);
-//				pendingOperations.add(deviceID);
-//
-//				Operation manufacturer = new Operation();
-//				manufacturer.setCode("MANUFACTURER");
-//				manufacturer.setType(Operation.Type.INFO);
-//				pendingOperations.add(manufacturer);
-//
-//				Operation model = new Operation();
-//				model.setCode("MODEL");
-//				model.setType(Operation.Type.INFO);
-//				pendingOperations.add(model);
-//
-//				Operation language = new Operation();
-//				language.setCode("LANGUAGE");
-//				language.setType(Operation.Type.INFO);
-//				pendingOperations.add(language);
-//		}
-//		else{
-//			try {
-//				pendingOperations = SyncmlUtils.getOperationManagementService().getPendingOperations(deviceIdentifier);
-//			} catch (OperationManagementException e) {
-//				throw new WindowsOperationException("Cannot access operation management service." , e);
-//			}
-//		}
-//
-//		OperationReply operationReply = new OperationReply(syncmlDocument, pendingOperations);
-//		SyncmlDocument syncmlResponse = operationReply.generateReply();
-//		SyncmlGenerator generator = new SyncmlGenerator();
-//		String response = generator.generatePayload(syncmlResponse);
+		if(msgID == 1){
+			    deviceInfoList = new ArrayList<Operation>();
 
-        String response = null;
+				Operation osVersion = new Operation();
+				osVersion.setCode("SOFTWARE_VERSION");
+				osVersion.setType(Operation.Type.INFO);
+			    deviceInfoList.add(osVersion);
+
+				Operation imsi = new Operation();
+				imsi.setCode("IMSI");
+				imsi.setType(Operation.Type.INFO);
+			    deviceInfoList.add(imsi);
+
+				Operation imei = new Operation();
+				imei.setCode("IMEI");
+				imei.setType(Operation.Type.INFO);
+			    deviceInfoList.add(imei);
+
+				Operation deviceID = new Operation();
+				deviceID.setCode("DEV_ID");
+				deviceID.setType(Operation.Type.INFO);
+		    	deviceInfoList.add(deviceID);
+
+				Operation manufacturer = new Operation();
+				manufacturer.setCode("MANUFACTURER");
+				manufacturer.setType(Operation.Type.INFO);
+			    deviceInfoList.add(manufacturer);
+
+				Operation model = new Operation();
+				model.setCode("MODEL");
+				model.setType(Operation.Type.INFO);
+			    deviceInfoList.add(model);
+
+				Operation language = new Operation();
+				language.setCode("LANGUAGE");
+				language.setType(Operation.Type.INFO);
+			    deviceInfoList.add(language);
+
+			    OperationReply operationReply = new OperationReply(syncmlDocument, deviceInfoList);
+			    SyncmlDocument syncmlResponse = operationReply.generateReply();
+			    SyncmlGenerator generator = new SyncmlGenerator();
+			    response = generator.generatePayload(syncmlResponse);
+		}
+		else{
+			try {
+				pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
+				OperationReply operationReply = new OperationReply(syncmlDocument, (List<Operation>)pendingOperations);
+				SyncmlDocument syncmlResponse = operationReply.generateReply();
+				SyncmlGenerator generator = new SyncmlGenerator();
+				response = generator.generatePayload(syncmlResponse);
+			} catch (OperationManagementException e) {
+				throw new WindowsOperationException("Cannot access operation management service." , e);
+			}
+		}
 
 		return Response.ok().entity(response).build();
 	}
