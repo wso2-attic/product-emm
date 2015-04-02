@@ -29,13 +29,12 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.DeviceManagementServiceProviderImpl;
-import org.wso2.carbon.device.mgt.core.operation.mgt.OperationManagerImpl;
+import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Device;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
-import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.io.IOException;
