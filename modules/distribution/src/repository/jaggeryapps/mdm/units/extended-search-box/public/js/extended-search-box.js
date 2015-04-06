@@ -90,13 +90,13 @@ function containerUpdate(asset){
     var options = $(asset).next('ul').length ? $(asset).next('ul').html() : "";
 
     $(menuSubContainer).html('<ul class="selected"><li level="'+ $(asset).attr('level') +'" '
-    +'onclick="selectAsset(this)"'
-    +'asset="' + $(asset).attr('asset') + '">'+ $(asset).html() +'</li>'
-    +'<a id="goBack" href="javascript:void(0);" onclick="goBack(this); return false;" '
-    +'class="cu-btn btn-prev" title="Go Back"></a>'
-    +'<a id="resetNav" href="javascript:void(0);" onclick="resetNav(); return false;" '
-    +'class="cu-btn btn-reset" title="Reset"></a>'
-    +'</ul>' + '<ul class="options">'+ options +'</ul>');
+        +'onclick="selectAsset(this)"'
+        +'asset="' + $(asset).attr('asset') + '">'+ $(asset).html() +'</li>'
+        +'<a id="goBack" href="javascript:void(0);" onclick="goBack(this); return false;" '
+        +'class="cu-btn" title="Go Back"><i class="wso2icon wso2-c-left-arrow"></i></a>'
+        +'<a id="resetNav" href="javascript:void(0);" onclick="resetNav(); return false;" '
+        +'class="cu-btn" title="Reset"><i class="wso2icon wso2-refresh"></i></a>'
+        +'</ul>' + '<ul class="options">'+ options +'</ul>');
 
     prevSelected = ($(menuSubContainer + ' ul.selected li').attr('asset'));
 

@@ -6,15 +6,24 @@
                 <!-- asset filter -->
                 <div class="wr-search">
                     <div class="wr-asset-type-switcher">
-                        <a href="javascript:void(0)" class="ctrl-asset-type-switcher"><span class="btn-asset"></span></a>
+                        <a href="javascript:void(0)" class="ctrl-asset-type-switcher"><span class="btn-asset"><i class="wso2icon wso2-tile-menu"></i></span></a>
                         <div class="popover menu fade bottom in">
                             <div class="arrow"></div>
                             <div class="popover-content">
                                 <div id="advance-filter-options">
                                     <div class="title">Search method</div>
-                                    <input type="radio" name="search-method" value="devices" checked />Device
-                                    <input type="radio" name="search-method" value="users" />User
-                                    <input type="radio" name="search-method" value="user roles" />User Role
+                                    <label class="wr-input-control radio light">
+                                        <input type="radio" name="search-method" value="devices" checked />
+                                        <span class="helper">Device</span>
+                                    </label>
+                                    <label class="wr-input-control radio light">
+                                        <input type="radio" name="search-method" value="users" />
+                                        <span class="helper">User</span>
+                                    </label>
+                                    <label class="wr-input-control radio light">
+                                        <input type="radio" name="search-method" value="user roles" />
+                                        <span class="helper">User Role</span>
+                                    </label>
                                 </div>
                                 <div id="device-filter-options">
                                     <div class="title">Select type of your device</div>
@@ -63,9 +72,9 @@
             <div class="wr-filters col-xs-12 col-sm-5 col-md-4 wr-filters-right">
                 <div class="wr-filter-sort pull-right">
                     <a href="javascript:void(0)" onclick="selectAllDevices(this)" class="wr-btn">Select All Devices</a>
-                    <a href="javascript:changeDeviceView('grid', this)" class="ico-filter ctrl-filter-grid view-toggle"><img src="{{self.publicURL}}/img/icons/ico-grid.png" /></a>
-                    <a href="javascript:changeDeviceView('list', this)" class="ico-filter ctrl-filter-list view-toggle"><img src="{{self.publicURL}}/img/icons/ico-list.png" /></a>
-                    <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><img src="{{self.publicURL}}/img/icons/ico-sort.png" /></a></span>
+                    <a href="javascript:void(0)" onclick="changeDeviceView('grid', this)" class="ico-filter ctrl-filter-grid view-toggle selected"><i class="wso2icon wso2-tile-menu"></i></a>
+                    <a href="javascript:void(0)" onclick="changeDeviceView('list', this)" class="ico-filter ctrl-filter-list view-toggle"><i class="wso2icon wso2-list"></i></a>
+                    <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><i class="wso2icon wso2-sort"></i></a></span>
                 </div>
             </div>
 

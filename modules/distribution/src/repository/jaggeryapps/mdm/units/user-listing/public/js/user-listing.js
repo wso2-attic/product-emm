@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     $(".inviteAction").click(function(){
         var username = $(this).data("username");
@@ -8,4 +7,16 @@ $(document).ready(function(){
             console.log(message);
         });
     });
+});
+
+/* sorting function */
+$(function() {
+    var sortableElem = '.wr-sortable';
+    $(sortableElem).sortable({
+        beforeStop: function(event, ui){
+            var sortedIDs = $(this).sortable('toArray');
+            console.log(sortedIDs);
+        }
+    });
+    $(sortableElem).disableSelection();
 });

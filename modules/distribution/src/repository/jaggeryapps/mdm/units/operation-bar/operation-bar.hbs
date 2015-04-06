@@ -1,35 +1,31 @@
 {{#zone "main"}}
-    <!-- opearations container -->
+
+    <!-- operations container -->
     <div class="wr-operations">
+
         {{#if features.DEVICE_LOCK}}
-            <a href="javascript:operationSelect('DEVICE_LOCK')"><img
-                    src="{{self.publicURL}}/images/icons/ico-lock.png"/><span>{{features.DEVICE_LOCK.description}}</span></a>
-
-            <div class="operation" data-operation="DEVICE_LOCK">
-                <div class="content">Are you sure you want to lock the selected devices ?</div>
-                <div class="buttons">
-                    <a href="javascript:runOperation('lock')" class="btn-operations">Lock</a>
-                    <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
-                </div>
+        <a href="javascript:operationSelect('devicelock')"><i class="wso2icon wso2-lock"></i><span>{{features.DEVICE_LOCK.description}}</span></a>
+        <div class="operation" data-operation="devicelock">
+            <div class="content">Are you sure you want to lock the selected devices ?</div>
+            <div class="buttons">
+                <a href="javascript:runOperation('lock')" class="btn-operations">Lock</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
+        </div>
         {{/if}}
+
         {{#if features.RING}}
-            <a href="javascript:operationSelect('RING')"><img
-                    src="{{self.publicURL}}/images/icons/ico-ring.png"/><span>Ring</span></a>
-
-            <div class="operation" data-operation="ring">
-                <div class="content">Please click ok to start ringing</div>
-                <div class="buttons">
-                    <a href="javascript:runOperation('ring')" class="btn-operations">Ring</a>
-                    <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
-                </div>
+        <a href="javascript:operationSelect('ring')"><i class="wso2icon wso2-incoming-call"></i><span>Ring</span></a>
+        <div class="operation" data-operation="ring">
+            <div class="content">Please click ok to start ringing</div>
+            <div class="buttons">
+                <a href="javascript:runOperation('ring')" class="btn-operations">Ring</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
+        </div>
         {{/if}}
 
-
-        <a href="javascript:operationSelect('message')"><img
-                src="{{self.publicURL}}/images/icons/ico-message.png"/><span>Message</span></a>
-
+        <a href="javascript:operationSelect('message')"><i class="wso2icon wso2-message"></i><span>Message</span></a>
         <div class="operation" data-operation="message">
             <div class="content">
                 <div>Type message</div>
@@ -41,8 +37,7 @@
             </div>
         </div>
 
-        <a href="javascript:operationSelect('locate')"><img src="{{self.publicURL}}/images/icons/ico-map.png"/><span>Locate</span></a>
-
+        <a href="javascript:operationSelect('locate')"><i class="wso2icon wso2-map-location"></i><span>Locate</span></a>
         <div class="operation" data-operation="locate">
             <div class="content">Locate</div>
             <div class="buttons">
@@ -50,9 +45,7 @@
             </div>
         </div>
 
-        <a href="javascript:operationSelect('wipe')"><img
-                src="{{self.publicURL}}/images/icons/ico-wipe.png"/><span>Wipe</span></a>
-
+        <a href="javascript:operationSelect('wipe')"><i class="wso2icon wso2-clean"></i><span>Wipe</span></a>
         <div class="operation" data-operation="wipe">
             <div class="content">Wipe</div>
             <div class="buttons">
@@ -60,8 +53,7 @@
             </div>
         </div>
 
-        <a href="javascript:operationSelect('camera')"><img src="{{self.publicURL}}/images/icons/ico-camera.png"/><span>Camera</span></a>
-
+        <a href="javascript:operationSelect('camera')"><i class="wso2icon wso2-camera"></i><span>Camera</span></a>
         <div class="operation" data-operation="camera">
             <div class="content">Camera</div>
             <div class="buttons">
@@ -69,18 +61,20 @@
             </div>
         </div>
 
-        <a href="javascript:operationSelect('wifi')"><img src="{{self.publicURL}}/images/icons/ico-wifi.png"/><span>Wi-Fi</span></a>
-
+        <a href="javascript:operationSelect('wifi')"><i class="wso2icon wso2-wifi"></i><span>Wi-Fi</span></a>
         <div class="operation" data-operation="wifi">
             <div class="content">Wi-Fi</div>
             <div class="buttons">
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-        <br class="c-both"/>
+
+        <br class="c-both" />
     </div>
-    <!-- /opearations container -->
+    <!-- /operations container -->
+
 {{/zone}}
+
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/operation-bar.js"></script>
 {{/zone}}

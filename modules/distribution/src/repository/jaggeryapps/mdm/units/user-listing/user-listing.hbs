@@ -2,29 +2,29 @@
 
     <div class="row">
         <div class="col-md-12">
-
             <!-- content -->
             <div class="container-fluid col-centered wr-content">
-
-                <div class="wr-list-group">
+                <div class="wr-list-group wr-sortable">
                     {{#each users}}
-                        <span class="list-group-item">
-                        <h3 class="wr-list-name">{{name}}</h3>
-                        <span class="wr-list-username">{{username}}</span> | <a href="#"
-                                                                                class="wr-list-email">{{email}}</a>
-                        <span class="list-group-item-actions">
-                            <a href="#" class="inviteAction" data-username="{{username}}"
-                               class="cu-btn btn-view dark"><span>Invite</span></a>
-                            <a href="#" class="cu-btn btn-delete dark"><span>Delete</span></a>
-                        </span>
-
+                        <span class="list-group-item" id="user1">
+                            <i class="wso2icon wso2-sort-move"></i>
+                            <div style="float:left;">
+                                <h3 class="wr-list-name">{{name}}</h3>
+                                <span class="wr-list-username">{{username}}</span> |
+                                <a href="mailto:{{email}}" class="wr-list-email">{{email}}</a>
+                            </div>
+                            <span class="list-group-item-actions">
+                                <a href="#" class="cu-btn-inner" data-username="{{username}}">
+                                    <i class="wso2icon wso2-text"></i>Invite
+                                </a>
+                                <a href="#" class="cu-btn-inner"><i class="wso2icon wso2-c-delete"></i>Delete</a>
+                            </span>
+                            <div class="clearfix"></div>
                         </span>
                     {{/each}}
                 </div>
-
             </div>
             <!-- /content -->
-
         </div>
     </div>
 

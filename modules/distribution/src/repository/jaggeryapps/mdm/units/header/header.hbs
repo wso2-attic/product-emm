@@ -1,27 +1,35 @@
 {{#zone "header"}}
+
+    <!-- header -->
     <header>
         <div class="row wr-global-header">
             <div class="col-xs-8 col-sm-6 col-lg-8 app-logo">
                 <a href="/mdm">{{ defineZone "brand"}}</a>
             </div>
             <div class="col-xs-4 col-sm-6 col-lg-4 wr-auth-container">
+
                 {{#if user}}
-                    <div class="wr-auth pull-right">
-                        <a href="#" data-toggle="dropdown" class="">
-                            <div class="auth-img">
-                                <span>{{user.username}}</span><img src="{{self.publicURL}}/img/ico-user.png" />
-                            </div>
-                        </a>
-                        <div class="dropdown-menu">
-                            <div class="cu-arrow"></div>
-                            <div class="dropdown-menu-content">
-                                <a href="{{logoutURL}}" class="filter-item">Logout</a>
-                            </div>
+                <div class="wr-auth pull-right">
+                    <a href="#" data-toggle="dropdown">
+                        <div class="auth-img">
+                            {{user.username}}
+                            <span class="wso2icon-stack-md wso2icon-lg">
+                                <i class="wso2icon wso2-user wso2icon-stack-1-5x"></i>
+                            </span>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="cu-arrow"></div>
+                        <div class="dropdown-menu-content">
+                            <a href="{{logoutURL}}" class="filter-item">Logout</a>
                         </div>
                     </div>
+                </div>
                 {{/if}}
 
             </div>
         </div>
     </header>
+    <!-- /header -->
+
 {{/zone}}
