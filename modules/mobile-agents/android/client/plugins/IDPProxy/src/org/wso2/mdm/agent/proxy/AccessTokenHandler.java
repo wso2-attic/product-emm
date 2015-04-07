@@ -112,7 +112,7 @@ public class AccessTokenHandler extends Activity {
 			try {
 				IdentityProxy identityProxy = IdentityProxy.getInstance();
 
-				if (responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
+				if (Constants.REQUEST_SUCCESSFUL.equals(responseCode)) {
 					JSONObject response = new JSONObject(result);
 					try {
 						accessToken = response.getString(Constants.ACCESS_TOKEN);

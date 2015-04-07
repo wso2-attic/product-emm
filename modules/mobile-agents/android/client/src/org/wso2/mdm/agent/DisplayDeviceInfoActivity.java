@@ -121,7 +121,7 @@ public class DisplayDeviceInfoActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK &&
-		    fromActivity.equals(AlreadyRegisteredActivity.class.getSimpleName())) {
+				AlreadyRegisteredActivity.class.getSimpleName().equals(fromActivity)) {
 			Intent intent =
 					new Intent(DisplayDeviceInfoActivity.this,
 					           AlreadyRegisteredActivity.class);

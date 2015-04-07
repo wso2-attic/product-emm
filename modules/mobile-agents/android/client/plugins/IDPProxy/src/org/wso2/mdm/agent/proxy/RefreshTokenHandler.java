@@ -109,7 +109,7 @@ public class RefreshTokenHandler {
 			try {
 				JSONObject response = new JSONObject(result);
 
-				if (responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
+				if (Constants.REQUEST_SUCCESSFUL.equals(responseCode)) {
 					refreshToken = response.getString(Constants.REFRESH_TOKEN);
 					accessToken = response.getString(Constants.ACCESS_TOKEN);
 					timeToExpireSecond =

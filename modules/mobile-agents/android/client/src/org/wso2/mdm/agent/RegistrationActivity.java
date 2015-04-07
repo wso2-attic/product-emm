@@ -178,7 +178,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		if (result != null) {
 			responseStatus = result.get(Constants.STATUS_KEY);
 
-			if (responseStatus.equals(Constants.REQUEST_SUCCESSFUL)) {
+			if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 				loadAlreadyRegisteredActivity();
 			} else {
 				displayInternalServerError();

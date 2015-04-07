@@ -109,14 +109,15 @@ public class MessageProcessor implements APIResultCallBack {
 		);
 	}
 
-	@Override
+	@SuppressWarnings("unused")
+    @Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		String responseStatus;
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-				if (responseStatus.equals(Constants.REQUEST_SUCCESSFUL)) {
+				if (Constants.REQUEST_SUCCESSFUL.equals(requestCode)) {
 					response = result.get(Constants.RESPONSE);
 					if (response != null && !response.isEmpty()) {
 						if (Constants.DEBUG_MODE_ENABLED) { 
