@@ -303,9 +303,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-				if (responseStatus != null && responseStatus.equals(Constants.REQUEST_SUCCESSFUL)) {
+				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					clearAppData();
-				} else if (responseStatus != null && responseStatus.equals(Constants.INTERNAL_SERVER_ERROR)) {
+				} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else {
 					loadAuthenticationErrorActivity();
@@ -320,9 +320,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-				if (responseStatus.equals(Constants.INTERNAL_SERVER_ERROR)) {
+				if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
-				} else if (!responseStatus.equals(Constants.REQUEST_SUCCESSFUL)) {
+				} else if (!Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					initiateUnregistration();
 				} 
 			} else {

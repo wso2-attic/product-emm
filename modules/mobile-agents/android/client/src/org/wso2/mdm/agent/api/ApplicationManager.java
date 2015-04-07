@@ -97,7 +97,7 @@ public class ApplicationManager {
 		List<PackageInfo> packages = packageManager.
 										getInstalledPackages(SYSTEM_APPS_DISABLED_FLAG);
 		for (PackageInfo packageInfo : packages) {
-			if (packageName != null && packageName.equals(packageInfo.packageName)) {
+			if (packageName.equals(packageInfo.packageName)) {
 				appName = packageInfo.applicationInfo.
 							loadLabel(packageManager).toString();
 				break;

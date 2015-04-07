@@ -58,7 +58,7 @@ public class CommonUtils {
 		if (requestParams != null) {
 			apiUtilities.setRequestParams(requestParams);
 		}
-		APIController apiController = new APIController();
+		APIController apiController;
 		String clientKey =
 				Preference.getString(context,
 				                     context.getResources()
@@ -70,10 +70,11 @@ public class CommonUtils {
 				                            .getString(R.string.shared_pref_client_secret)
 				);
 		if (clientKey!=null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
-			apiController.setClientDetails(clientKey, clientSecret);
+			apiController = new APIController(clientKey, clientSecret);
+			apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
+			                        context.getApplicationContext());
 		}
-		apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
-		                        context.getApplicationContext());
+		
 	}
 
 	/**

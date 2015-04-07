@@ -23,6 +23,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.AlertActivity;
 import org.wso2.mdm.agent.ServerDetails;
@@ -53,6 +54,9 @@ public class Operation {
 	private ApplicationManager appList;
 	private Resources resources;
 	private BuildResultPayload resultBuilder;
+	private DeviceInfo deviceInfo;
+	private DeviceState phoneState;
+	private GPSTracker gps;
 	private static final String TAG = "Operation Handler";
 	private static final String MEMORY_INFO_TAG_TOTAL = "total";
 	private static final String MEMORY_INFO_TAG_AVAILABLE = "available";
@@ -83,6 +87,10 @@ public class Operation {
 				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		this.appList = new ApplicationManager(context.getApplicationContext());
 		this.resultBuilder = new BuildResultPayload(context.getApplicationContext());
+		deviceInfo = new DeviceInfo(context.getApplicationContext());
+		phoneState = DeviceStateFactory.getDeviceState(context.getApplicationContext(),
+	                                                           				deviceInfo.getSdkVersion());
+		gps = new GPSTracker(context.getApplicationContext());
 	}
 
 	/**
@@ -92,7 +100,7 @@ public class Operation {
 	 * @param requestMode   - Request mode (GCM/Local).
 	 * @return Operation/Policy status list.
 	 */
-	public JSONArray doTask(String operationCode, String operationData) {
+	public JSONArray doTask(String operationCode, String operationData) throws AndroidAgentException {
 
 		switch (operationCode) {
 			case Constants.OPERATION_DEVICE_INFO:
@@ -173,11 +181,7 @@ public class Operation {
 	 * Retrieve device information.
 	 * @param code - Operation code.
 	 */
-	public void getDeviceInfo(String code) {
-		DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
-		DeviceState phoneState = DeviceStateFactory.getDeviceState(context.getApplicationContext(),
-	                                                           				deviceInfo.getSdkVersion());
-		GPSTracker gps = new GPSTracker(context.getApplicationContext());
+	public void getDeviceInfo(String code) throws AndroidAgentException {
 		JSONObject result = new JSONObject();
 		JSONObject batteryInfo = new JSONObject();
 		JSONObject internalMemoryInfo = new JSONObject();
@@ -212,7 +216,7 @@ public class Operation {
 			resultBuilder.build(code, result);
 
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -220,11 +224,10 @@ public class Operation {
 	 * Retrieve device information.
 	 * @param code - Operation code.
 	 */
-	public void getLocationInfo(String code) {
+	public void getLocationInfo(String code) throws AndroidAgentException {
 		double latitude;
 		double longitude;
 		JSONObject result = new JSONObject();
-		GPSTracker gps = new GPSTracker(context);
 		
 		try {
 			latitude = gps.getLatitude();
@@ -233,7 +236,7 @@ public class Operation {
 			result.put(LOCATION_INFO_TAG_LONGITUDE, longitude);
 			resultBuilder.build(code, result);
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -241,7 +244,7 @@ public class Operation {
 	 * Retrieve device application information.
 	 * @param code - Operation code.
 	 */
-	public void getApplicationList(String code) {
+	public void getApplicationList(String code) throws AndroidAgentException {
 		ArrayList<DeviceAppInfo> apps = appList.getInstalledApps();
 
 		JSONArray result = new JSONArray();
@@ -255,7 +258,7 @@ public class Operation {
 				app.put(APP_INFO_TAG_ICON, apps.get(i).getIcon());
 				result.put(app);
 			} catch (JSONException e) {
-				Log.e(TAG, "Invalid JSON format." + e);
+				throw new AndroidAgentException("Invalid JSON format.", e);
 			}
 		}
 		
@@ -285,7 +288,7 @@ public class Operation {
 	 * @param code - Operation code.
 	 * @param data - Data required by the operation(PIN).
 	 */
-	public void wipeDevice(String code, String data) {
+	public void wipeDevice(String code, String data) throws AndroidAgentException {
 		String inputPin;
 		String savedPin =
 				Preference.getString(context,
@@ -309,7 +312,7 @@ public class Operation {
 				try {
 					Thread.sleep(PRE_WIPE_WAIT_TIME);
 				} catch (InterruptedException e) {
-					Log.e(TAG, "Wipe pause interrupted :" + e.toString());
+					throw new AndroidAgentException("Wipe pause interrupted.", e);
 				}
 				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
 			} else {
@@ -317,7 +320,7 @@ public class Operation {
 				               Toast.LENGTH_LONG).show();
 			}
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -344,7 +347,7 @@ public class Operation {
 	 * Display notification.
 	 * @param code - Operation code.
 	 */
-	public void displayNotification(String code) {
+	public void displayNotification(String code) throws AndroidAgentException {
 		String notification = null;
 
 		try {
@@ -368,7 +371,7 @@ public class Operation {
 				context.startActivity(intent);
 			}
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -378,7 +381,7 @@ public class Operation {
 	 * @param data        - Data required(SSID, Password).
 	 * @param requestMode - Request mode(Normal mode or policy bundle mode).
 	 */
-	public void configureWifi(String code, String data) {
+	public void configureWifi(String code, String data) throws AndroidAgentException {
 		boolean wifistatus = false;
 		String ssid = null;
 		String password = null;
@@ -393,7 +396,7 @@ public class Operation {
 						(String) wifiData.get(resources.getString(R.string.intent_extra_password));
 			}
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format " + e.toString());
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
 		WiFiConfig config = new WiFiConfig(context.getApplicationContext());
@@ -417,7 +420,7 @@ public class Operation {
 	 * @param data        - Data required(Camera enable/disable switch).
 	 * @param requestMode - Request mode(Normal mode or policy bundle mode).
 	 */
-	public void disableCamera(String code, String data) {
+	public void disableCamera(String code, String data) throws AndroidAgentException {
 		boolean camFunc = false;
 		try {
 			JSONObject inputData = new JSONObject(data);
@@ -443,7 +446,7 @@ public class Operation {
 
 			devicePolicyManager.setCameraDisabled(cameraAdmin, camFunc);
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -452,7 +455,7 @@ public class Operation {
 	 * @param code - Operation code.
 	 * @param data - Data required(App data).
 	 */
-	public void installAppBundle(String code, String data) {
+	public void installAppBundle(String code, String data) throws AndroidAgentException {
 		try {
 			resultBuilder.build(code);
 
@@ -469,7 +472,7 @@ public class Operation {
 			}
 
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -478,7 +481,7 @@ public class Operation {
 	 * @param code - Operation code.
 	 * @param data - Data required(App package).
 	 */
-	public void uninstallApplication(String code, String data) {
+	public void uninstallApplication(String code, String data) throws AndroidAgentException {
 		String packageName;
 		try {
 			JSONObject appData = new JSONObject(data);
@@ -488,7 +491,7 @@ public class Operation {
 
 			appList.uninstallApplication(packageName);
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -498,7 +501,7 @@ public class Operation {
 	 * @param data        - Data required(Encryption enable/disable switch).
 	 * @param requestMode - Request mode(Normal mode or policy bundle mode).
 	 */
-	public void encryptStorage(String code, String data) {
+	public void encryptStorage(String code, String data) throws AndroidAgentException {
 		boolean doEncrypt = true;
 		try {
 			JSONObject encryptData = new JSONObject(data);
@@ -519,7 +522,7 @@ public class Operation {
 								           .toString());
 			}
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
 		ComponentName admin = new ComponentName(context, AgentDeviceAdminReceiver.class);
@@ -570,7 +573,7 @@ public class Operation {
 	 * @param code - Operation code.
 	 * @param data - Data required(Web app data).
 	 */
-	public void createWebClip(String code, String data) {
+	public void createWebClip(String code, String data) throws AndroidAgentException {
 		String appUrl = null;
 		String title = null;
 
@@ -579,12 +582,12 @@ public class Operation {
 			appUrl = (String) webClipData.get(resources.getString(R.string.intent_extra_identity));
 			title = (String) webClipData.get(resources.getString(R.string.intent_extra_title));
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format. " + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
 		resultBuilder.build(data);
 
-		if(appUrl!=null && title!=null){
+		if(appUrl != null && title != null){
 			appList.createWebAppBookmark(appUrl, title);
 		}
 	}
@@ -595,7 +598,7 @@ public class Operation {
 	 * @param data        - Data required (Password policy parameters).
 	 * @param requestMode - Request mode(Normal mode or policy bundle mode).
 	 */
-	public void setPasswordPolicy(String code, String data) {
+	public void setPasswordPolicy(String code, String data) throws AndroidAgentException {
 		ComponentName demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 
 		int attempts, length, history, specialChars;
@@ -705,7 +708,7 @@ public class Operation {
 			}
 
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
 	}
@@ -715,14 +718,14 @@ public class Operation {
 	 * @param code - Operation code.
 	 * @param data - Data required(App data).
 	 */
-	public void installGooglePlayApp(String code, String data) {
+	public void installGooglePlayApp(String code, String data) throws AndroidAgentException {
 		String packageName = null;
 		try {
 			JSONObject appData = new JSONObject(data);
 			packageName = (String) appData.get(resources.getString(R.string.intent_extra_package));
 
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
 		resultBuilder.build(code);
@@ -745,7 +748,7 @@ public class Operation {
 	 * @param code - Operation code.
 	 * @param data - Data required(Lock code).
 	 */
-	public void changeLockCode(String code, String data) {
+	public void changeLockCode(String code, String data) throws AndroidAgentException {
 		ComponentName demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		devicePolicyManager.setPasswordMinimumLength(demoDeviceAdmin, DEFAULT_PASSWORD_MIN_LENGTH);
 		String password = null;
@@ -765,7 +768,7 @@ public class Operation {
 				devicePolicyManager.lockNow();
 			}
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -773,11 +776,11 @@ public class Operation {
 	 * Set policy bundle.
 	 * @param code - Operation code.
 	 */
-	public void setPolicyBundle(String code) {
+	public void setPolicyBundle(String code) throws AndroidAgentException {
 		try {
 			resultBuilder.build(code, new JSONObject(bundleParams.toString()));
 		} catch (JSONException e) { 
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 	}
 
@@ -800,7 +803,7 @@ public class Operation {
 	 * @param code - Operation code.
 	 * @param data - Data required(Application data).
 	 */
-	public void blacklistApps(String code, String data) {
+	public void blacklistApps(String code, String data) throws AndroidAgentException {
 		ArrayList<DeviceAppInfo> apps = appList.getInstalledApps();
 		JSONArray appList = new JSONArray();
 		String identity = null;
@@ -813,7 +816,7 @@ public class Operation {
 
 			identity = (String) resultApp.get(resources.getString(R.string.intent_extra_identity));
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
 		for (DeviceAppInfo app : apps) {
@@ -831,7 +834,7 @@ public class Operation {
 				}
 
 			} catch (JSONException e) {
-				Log.e(TAG, "Invalid JSON format." + e);
+				throw new AndroidAgentException("Invalid JSON format.", e);
 			}
 			appList.put(result);
 		}
@@ -842,7 +845,7 @@ public class Operation {
 	/**
 	 * Install an Application
 	 */
-	private void installApplication(JSONObject data, String code) {
+	private void installApplication(JSONObject data, String code) throws AndroidAgentException {
 		String appUrl = null;
 		String type = null;
 		String os = null;
@@ -891,7 +894,7 @@ public class Operation {
 			}
 
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e);
+			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
 	}

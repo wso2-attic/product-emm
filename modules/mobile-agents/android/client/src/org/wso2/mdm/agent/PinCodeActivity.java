@@ -88,8 +88,7 @@ public class PinCodeActivity extends Activity {
 		btnPin.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnPin.setTextColor(getResources().getColor(R.color.black));
 
-		if (fromActivity != null &&
-		    fromActivity.equals(AlreadyRegisteredActivity.class.getSimpleName())) {
+		if (AlreadyRegisteredActivity.class.getSimpleName().equals(fromActivity)) {
 			txtPin.setVisibility(View.GONE);
 			evOldPin.setVisibility(View.VISIBLE);
 			evPin.setHint(getResources().getString(R.string.hint_new_pin));
@@ -222,8 +221,7 @@ public class PinCodeActivity extends Activity {
 		Preference.putString(context, getResources().getString(R.string.shared_pref_pin),
 		                     evPin.getText().toString().trim());
 
-		if (fromActivity != null &&
-		    (fromActivity.equals(AlreadyRegisteredActivity.class.getSimpleName()))) {
+		if (AlreadyRegisteredActivity.class.getSimpleName().equals(fromActivity)) {
 			Toast.makeText(getApplicationContext(),
 			               getResources().getString(R.string.toast_message_pin_change_success),
 			               Toast.LENGTH_SHORT).show();
@@ -299,8 +297,8 @@ public class PinCodeActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && fromActivity != null &&
-		    fromActivity.equals(AlreadyRegisteredActivity.class.getSimpleName())) {
+		if (keyCode == KeyEvent.KEYCODE_BACK &&
+				AlreadyRegisteredActivity.class.getSimpleName().equals(fromActivity)) {
 			Intent intent = new Intent(PinCodeActivity.this, AlreadyRegisteredActivity.class);
 			intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
 			                PinCodeActivity.class.getSimpleName());

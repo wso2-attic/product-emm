@@ -31,29 +31,29 @@ import java.util.Map;
 
 public class APIController implements TokenCallBack {
 	private static final String TAG = "APIController";
-	private static Token token;
-	private static String clientKey, clientSecret;
+	private Token token;
+	private String clientKey, clientSecret;
 	private APIResultCallBack apiResultCall;
-	private EndPointInfo apiUtilitiesCurrent;
-
-	public void setClientDetails(String clientKey, String clientSecret) {
-		APIController.clientKey = clientKey;
-		APIController.clientSecret = clientSecret;
+	private EndPointInfo currentEndPointInfo;
+	
+	public APIController(String clientKey, String clientSecret){
+		this.clientKey = clientKey;
+		this.clientSecret = clientSecret;
 	}
 
 	/**
 	 * Invoking an API using retrieved token.
 	 *
-	 * @param apiUtilities      - Server and API end point information.
+	 * @param endPointInfo      - Server and API end point information.
 	 * @param apiResultCallBack - API result callback data.
 	 * @param requestCode       - Request code to avoid response complications.
 	 * @param context           - Application context.
 	 */
-	public void invokeAPI(EndPointInfo apiUtilities, APIResultCallBack apiResultCallBack,
+	public void invokeAPI(EndPointInfo endPointInfo, APIResultCallBack apiResultCallBack,
 	                      int requestCode, Context context) {
 
 		apiResultCall = apiResultCallBack;
-		apiUtilitiesCurrent = apiUtilities;
+		currentEndPointInfo = endPointInfo;
 
 		if (IdentityProxy.getInstance().getContext() == null) {
 			IdentityProxy.getInstance().setContext(context);
@@ -62,14 +62,14 @@ public class APIController implements TokenCallBack {
 		IdentityProxy.getInstance().setRequestCode(requestCode);
 
 		IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
-		                                         APIController.clientKey,
-		                                         APIController.clientSecret);
+		                                         this.clientKey,
+		                                         this.clientSecret);
 	}
 
 	@Override
 	public void onReceiveTokenResult(Token token, String status) {
-		APIController.token = token;
-		new NetworkCallTask(apiResultCall).execute(apiUtilitiesCurrent);
+		this.token = token;
+		new NetworkCallTask(apiResultCall).execute(currentEndPointInfo);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class APIController implements TokenCallBack {
 
 		@Override
 		protected Map<String, String> doInBackground(EndPointInfo... params) {
-			EndPointInfo apiUtilities = params[0];
+			EndPointInfo endPointInfo = params[0];
 
 			Map<String, String> responseParams = null;
 			String accessToken = token.getAccessToken();
@@ -95,7 +95,7 @@ public class APIController implements TokenCallBack {
 			headers.put("Authorization", "Bearer " + accessToken);
 
 			try {
-				responseParams = ServerUtilities.postData(apiUtilities, headers);
+				responseParams = ServerUtilities.postData(endPointInfo, headers);
 			} catch (IDPTokenManagerException e) {
 				Log.e(TAG, "Failed to contact server." + e);
 			}

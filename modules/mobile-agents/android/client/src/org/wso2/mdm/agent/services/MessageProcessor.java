@@ -25,6 +25,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.api.DeviceInfo;
 import org.wso2.mdm.agent.beans.ServerConfig;
@@ -67,7 +68,7 @@ public class MessageProcessor implements APIResultCallBack {
 	 * @param response Response received from the server that needs to be processed
 	 *                 and applied to the device.
 	 */
-	public void performOperation(String response) {
+	public void performOperation(String response) throws AndroidAgentException {
 		try {
 			JSONArray operations = new JSONArray(response);
 			for (int i = 0; i < operations.length(); i++) {
@@ -77,7 +78,7 @@ public class MessageProcessor implements APIResultCallBack {
 				operation.doTask(featureCode, properties);
 			}
 		} catch (JSONException e) {
-			Log.e(TAG, "JSON Exception in response String." + e.toString());
+			throw new AndroidAgentException("JSON Exception in response String.", e);
 		}
 
 	}
@@ -108,21 +109,26 @@ public class MessageProcessor implements APIResultCallBack {
 		);
 	}
 
-	@Override
+	@SuppressWarnings("unused")
+    @Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		String responseStatus;
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-				if (responseStatus != null &&
-				    responseStatus.equals(Constants.REQUEST_SUCCESSFUL)) {
+				if (Constants.REQUEST_SUCCESSFUL.equals(requestCode)) {
 					response = result.get(Constants.RESPONSE);
 					if (response != null && !response.isEmpty()) {
 						if (Constants.DEBUG_MODE_ENABLED) { 
 							Log.d(TAG, "onReceiveAPIResult." + response);
 						}
-						performOperation(response);
+						
+						try{
+							performOperation(response);
+						} catch (AndroidAgentException e) {
+							Log.e(TAG, "Failed to perform operation." + e);
+						}
 					}
 				}
 

@@ -370,7 +370,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 		if (result != null) {
 			responseStatus = result.get(Constants.STATUS_KEY);
-			if (responseStatus.equals(Constants.REQUEST_SUCCESSFUL)) {
+			if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 				String licenseAgreement = result.get(Constants.RESPONSE);
 
 				if (licenseAgreement != null) {
@@ -384,7 +384,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 							getResources().getString(R.string.error_enrollment_failed));
 				}
 
-			} else if (responseStatus.equals(Constants.INTERNAL_SERVER_ERROR)) {
+			} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 				showInternalServerErrorMessage();
 			} else {
 				showEnrollementFailedErrorMessage();
