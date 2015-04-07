@@ -36,6 +36,9 @@ if (xhr.status == 200) {
     session.put("ownership", ownership);
     if (platform == "Windows Phone"){
         session.put("windows_binary_token", xhr.responseText);
+    } else if(platform == "iOS") {
+        var responseText = parse(xhr.responseText);
+        session.put("iOS_challenge_token", responseText.challengeToken);
     }
     response.sendRedirect("/mdm/license-agent");
 } else if (xhr.status == 403) {

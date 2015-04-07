@@ -17,17 +17,18 @@ if (username) {
 
     var password = session.get("password");
     var ownership = session.get("ownership");
+    var challengeToken = session.get("iOS_challenge_token");
     var mdmProps = require('/config/mdm-props.js').config();
     log.info(platform);
     if(platform == "iOS"){
-        var enrollUrl = mdmProps.httpsURL + mdmProps.iOSConfigRoot + 'enroll';
+        var enrollUrl = mdmProps.iOSConfigRoot + 'enroll';
         var client = new HttpClient();
-        var method = new PostMethod(iOSEnrollUrl);
+        var method = new PostMethod(enrollUrl);
         var header =  new Header();
         header.setName("Content-Type");
         header.setValue("application/json");
         method.addRequestHeader(header);
-        var inputs = {"username": username, "password": password};
+        var inputs = {"username": username, "password": password, "challengeToken": challengeToken};
 
         var re = new StringRequestEntity(String(stringify(inputs)));
         method.setRequestEntity(re);
