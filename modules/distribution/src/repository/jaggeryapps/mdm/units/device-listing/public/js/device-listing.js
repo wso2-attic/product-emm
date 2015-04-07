@@ -66,6 +66,14 @@ $(document).ready(function(){
     for(var index in permissionList){
         $.setPermission(permissionList[index]);
     }
+
+    /* for device list sorting drop down */
+    $(".ctrl-filter-type-switcher").popover({
+        html : true,
+        content: function() {
+            return $('#content-filter-types').html();
+        }
+    });
 });
 
 /*
@@ -75,16 +83,18 @@ $(document).ready(function(){
 function selectAllDevices(button){
     if(!$(button).data('select')){
         $(deviceCheckbox).each(function(index){
+            addDeviceSelectedClass(this);
             $(this).prop('checked', true);
         });
         $(button).data('select', true);
-        $(button).html('Select All Devices');
+        $(button).html('Deselect All Devices');
     }else{
         $(deviceCheckbox).each(function(index){
+            addDeviceSelectedClass(this);
             $(this).prop('checked', false);
         });
         $(button).data('select', false);
-        $(button).html('Deselect All Devices');
+        $(button).html('Select All Devices');
     }
 }
 
