@@ -58,7 +58,7 @@ public class IdentityProxy implements CallBack {
 		return requestCode;
 	}
 
-	public void setRequestCode(int requestCode) {
+	public synchronized void setRequestCode(int requestCode) {
 		this.requestCode = requestCode;
 	}
 
@@ -110,7 +110,7 @@ public class IdentityProxy implements CallBack {
 		accessTokenHandler.obtainAccessToken();
 	}
 
-	public void requestToken(Context contextt, TokenCallBack call, String clientID,
+	public synchronized void requestToken(Context contextt, TokenCallBack call, String clientID,
 	                         String clientSecret) {
 		context = contextt;
 		callback = call;

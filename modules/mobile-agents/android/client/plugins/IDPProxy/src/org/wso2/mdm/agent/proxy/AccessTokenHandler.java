@@ -77,10 +77,10 @@ public class AccessTokenHandler extends Activity {
 			request_params.put(Constants.GRANT_TYPE, Constants.GRANT_TYPE_PASSWORD);
 			request_params.put(USERNAME_LABEL, info.getUsername());
 			request_params.put(PASSWORD_LABEL, info.getPassword());
-			EndPointInfo apiUtilities = new EndPointInfo();
-			apiUtilities.setEndPoint(info.getTokenEndPoint());
-			apiUtilities.setHttpMethod(HTTP_METHODS.POST);
-			apiUtilities.setRequestParamsMap(request_params);
+			EndPointInfo endPointInfo = new EndPointInfo();
+			endPointInfo.setEndPoint(info.getTokenEndPoint());
+			endPointInfo.setHttpMethod(HTTP_METHODS.POST);
+			endPointInfo.setRequestParamsMap(request_params);
 			byte[] credentials = Base64.encodeBase64((info.getClientID() + COLON +
 			                                          info.getClientSecret()).getBytes());
 			String encodedCredentials = new String(credentials);
@@ -93,7 +93,7 @@ public class AccessTokenHandler extends Activity {
 			Map<String, String> responseParams = null;
 
 			try {
-				responseParams = ServerUtilities.postDataAPI(apiUtilities, headers);
+				responseParams = ServerUtilities.postDataAPI(endPointInfo, headers);
 				response = responseParams.get(Constants.SERVER_RESPONSE_BODY);
 				responseCode = responseParams.get(Constants.SERVER_RESPONSE_STATUS);
 			} catch (IDPTokenManagerException e) {
@@ -112,7 +112,7 @@ public class AccessTokenHandler extends Activity {
 			try {
 				IdentityProxy identityProxy = IdentityProxy.getInstance();
 
-				if (responseCode != null && responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
+				if (responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
 					JSONObject response = new JSONObject(result);
 					try {
 						accessToken = response.getString(Constants.ACCESS_TOKEN);

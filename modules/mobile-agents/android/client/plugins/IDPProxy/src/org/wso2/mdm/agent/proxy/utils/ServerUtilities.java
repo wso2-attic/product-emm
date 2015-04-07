@@ -124,13 +124,13 @@ public class ServerUtilities {
 		return httpRequestBase;
 	}
 
-	public static Map<String, String> postData(EndPointInfo apiUtilities,
+	public static Map<String, String> postData(EndPointInfo endPointInfo,
 	                                           Map<String, String> headers)
 			throws IDPTokenManagerException {
 
-		HTTP_METHODS httpMethod = apiUtilities.getHttpMethod();
-		String url = apiUtilities.getEndPoint();
-		JSONObject params = apiUtilities.getRequestParams();
+		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
+		String url = endPointInfo.getEndPoint();
+		JSONObject params = endPointInfo.getRequestParams();
 		Map<String, String> responseParams = new HashMap<String, String>();
 		
 		switch (httpMethod) {
@@ -202,12 +202,12 @@ public class ServerUtilities {
 		return responseParams;
 	}
 
-	public static Map<String, String> postDataAPI(EndPointInfo apiUtilities,
+	public static Map<String, String> postDataAPI(EndPointInfo endPointInfo,
 	                                              Map<String, String> headers)
 			throws IDPTokenManagerException {
-		HTTP_METHODS httpMethod = apiUtilities.getHttpMethod();
-		String url = apiUtilities.getEndPoint();
-		Map<String, String> params = apiUtilities.getRequestParamsMap();
+		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
+		String url = endPointInfo.getEndPoint();
+		Map<String, String> params = endPointInfo.getRequestParamsMap();
 
 		Map<String, String> responseParams = new HashMap<String, String>();
 		HttpClient httpclient = getCertifiedHttpClient();
@@ -271,7 +271,7 @@ public class ServerUtilities {
 		} catch (CertificateException e) {
 			throw new IDPTokenManagerException("Invalid certificate.", e);
 		} catch (NoSuchAlgorithmException e) {
-			throw new IDPTokenManagerException("Keystore algorithm does not match.");
+			throw new IDPTokenManagerException("Keystore algorithm does not match.", e);
 		} catch (UnrecoverableKeyException e) {
 			throw new IDPTokenManagerException("Invalid keystore.", e);
 		} catch (KeyManagementException e) {

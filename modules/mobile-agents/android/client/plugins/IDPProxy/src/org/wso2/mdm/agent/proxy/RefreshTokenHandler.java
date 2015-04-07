@@ -71,10 +71,10 @@ public class RefreshTokenHandler {
 			requestParams.put(Constants.GRANT_TYPE, Constants.REFRESH_TOKEN);
 			requestParams.put(Constants.REFRESH_TOKEN, token.getRefreshToken());
 			requestParams.put(SCOPE_LABEL, PRODUCTION_LABEL);
-			EndPointInfo apiUtilities = new EndPointInfo();
-			apiUtilities.setEndPoint(IdentityProxy.getInstance().getAccessTokenURL());
-			apiUtilities.setHttpMethod(HTTP_METHODS.POST);
-			apiUtilities.setRequestParamsMap(requestParams);
+			EndPointInfo endPointInfo = new EndPointInfo();
+			endPointInfo.setEndPoint(IdentityProxy.getInstance().getAccessTokenURL());
+			endPointInfo.setHttpMethod(HTTP_METHODS.POST);
+			endPointInfo.setRequestParamsMap(requestParams);
 
 			byte[] credentials = Base64.encodeBase64((IdentityProxy.clientID + COLON +
 			                                          IdentityProxy.clientSecret).getBytes());
@@ -88,7 +88,7 @@ public class RefreshTokenHandler {
 
 			Map<String, String> responseParams = null;
 			try {
-				responseParams = ServerUtilities.postDataAPI(apiUtilities, headers);
+				responseParams = ServerUtilities.postDataAPI(endPointInfo, headers);
 			} catch (IDPTokenManagerException e) {
 				Log.e(TAG, "Failed to contact server." + e);
 			}
@@ -109,7 +109,7 @@ public class RefreshTokenHandler {
 			try {
 				JSONObject response = new JSONObject(result);
 
-				if (responseCode != null && responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
+				if (responseCode.equals(Constants.REQUEST_SUCCESSFUL)) {
 					refreshToken = response.getString(Constants.REFRESH_TOKEN);
 					accessToken = response.getString(Constants.ACCESS_TOKEN);
 					timeToExpireSecond =
