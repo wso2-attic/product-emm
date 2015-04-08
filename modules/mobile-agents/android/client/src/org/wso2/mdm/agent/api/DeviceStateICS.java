@@ -33,6 +33,10 @@ import android.os.BatteryManager;
 import android.os.Environment;
 import android.os.StatFs;
 
+/**
+ * This class represents all the device state related APIs for devices up to 
+ * Android SDK 15 - ICS.
+ */
 public class DeviceStateICS implements DeviceState{
 	private Context context;
 	private DeviceInfo info;

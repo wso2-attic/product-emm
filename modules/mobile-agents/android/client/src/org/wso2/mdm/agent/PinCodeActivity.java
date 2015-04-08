@@ -40,6 +40,9 @@ import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.utils.CommonDialogUtils;
 import org.wso2.mdm.agent.utils.Preference;
 
+/**
+ * Activity which handles PIN code setting/editing.
+ */
 public class PinCodeActivity extends Activity {
 	private TextView txtPin;
 	private EditText evPin;

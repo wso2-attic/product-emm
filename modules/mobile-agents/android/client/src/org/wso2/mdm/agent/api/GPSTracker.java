@@ -27,6 +27,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+/**
+ * This class handles all the functionalities related to retrieving device 
+ * current location.
+ */
 public class GPSTracker extends Service implements LocationListener {
 
 	private Location location;

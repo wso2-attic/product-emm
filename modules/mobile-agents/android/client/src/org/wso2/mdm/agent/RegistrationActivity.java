@@ -39,6 +39,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Activity which handles user enrollment.
+ */
 public class RegistrationActivity extends Activity implements APIResultCallBack {
 	private Context context;
 	private ProgressDialog progressDialog;

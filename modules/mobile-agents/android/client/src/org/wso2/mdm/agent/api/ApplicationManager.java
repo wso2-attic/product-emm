@@ -46,6 +46,10 @@ import android.provider.Browser;
 import android.util.Base64;
 import android.util.Log;
 
+/**
+ * This class handles all the functionalities required for managing application 
+ * installation and un-installation.
+ */
 public class ApplicationManager {
 	private Context context;
 	private static final int SYSTEM_APPS_DISABLED_FLAG = 0;

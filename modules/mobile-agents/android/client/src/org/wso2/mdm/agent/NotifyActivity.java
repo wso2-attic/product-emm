@@ -25,6 +25,9 @@ import android.view.Menu;
 import android.widget.TextView;
 import org.wso2.mdm.agent.R;
 
+/**
+ * Activity to generate notifications.
+ */
 public class NotifyActivity extends Activity {
 	private TextView txtNotify;
 

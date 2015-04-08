@@ -19,6 +19,10 @@ package org.wso2.mdm.agent.interfaces;
 
 import org.wso2.mdm.agent.utils.Response;
 
+/**
+ * This interface represents all the functionalities related to the retrieval of 
+ * the device state (battery, memory status etc).
+ */
 public interface DeviceState {
 	/**
 	 * Returns whether the external memory is available or not.

@@ -56,7 +56,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * Handle network communication between SDK and authorization server
+ * This class represents all the utilities used for network communication between SDK 
+ * and authorization server.
  */
 public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";

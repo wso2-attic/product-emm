@@ -28,6 +28,9 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
+/**
+ * This class handles all the functionalities related to device WIFI configuration.
+ */
 public class WiFiConfig {
 	private static ConnectivityManager connectivityManager;
 	private WifiManager wifiManager;

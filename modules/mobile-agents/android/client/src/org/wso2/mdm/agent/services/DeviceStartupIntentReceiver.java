@@ -30,6 +30,10 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.SystemClock;
 
+/**
+ * Broadcast receiver for device boot action used to start agent local
+ * notification service at device startup.
+ */
 public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	private static final String NOTIFIER_MODE = "LOCAL";
 	private static final int DEFAULT_TIME_MILLISECONDS = 1000;

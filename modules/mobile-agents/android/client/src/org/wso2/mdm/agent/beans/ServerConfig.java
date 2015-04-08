@@ -19,6 +19,9 @@ package org.wso2.mdm.agent.beans;
 
 import org.wso2.mdm.agent.utils.Constants;
 
+/**
+ * This class represents the server configuration parameters.
+ */
 public class ServerConfig {
 	private String serverIP;
 	private String serverURL;

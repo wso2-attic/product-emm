@@ -26,6 +26,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+/**
+ * This class handles building of the operation list result payload to be sent to the server.
+ */
 public class BuildResultPayload {
 	private JSONArray operationListResult;
 	private JSONObject result;

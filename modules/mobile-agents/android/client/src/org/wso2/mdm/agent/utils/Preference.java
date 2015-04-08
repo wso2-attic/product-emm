@@ -6,7 +6,8 @@ import android.content.SharedPreferences.Editor;
 import org.wso2.mdm.agent.R;
 
 /**
- * Data retrieval and saving to shared preferences is done here.
+ * This class handles all the functionality related to data retrieval and saving to 
+ * shared preferences.
  */
 public class Preference {
 	private static final int DEFAULT_INDEX = 0;

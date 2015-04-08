@@ -47,6 +47,9 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * This class handles all the functionalities related to device management operations.
+ */
 public class Operation {
 
 	private Context context;

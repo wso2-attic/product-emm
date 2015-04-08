@@ -23,21 +23,17 @@ package org.wso2.mdm.agent.proxy;
 public class IDPTokenManagerException extends Exception {
 
 	private static final long serialVersionUID = 1L;
-	private String errorMessage;
 
 	public IDPTokenManagerException(String msg, Exception nestedEx) {
 		super(msg, nestedEx);
-		setErrorMessage(msg);
 	}
 
 	public IDPTokenManagerException(String message, Throwable cause) {
 		super(message, cause);
-		setErrorMessage(message);
 	}
 
 	public IDPTokenManagerException(String msg) {
 		super(msg);
-		setErrorMessage(msg);
 	}
 
 	public IDPTokenManagerException() {
@@ -46,14 +42,6 @@ public class IDPTokenManagerException extends Exception {
 
 	public IDPTokenManagerException(Throwable cause) {
 		super(cause);
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
 	}
 
 }

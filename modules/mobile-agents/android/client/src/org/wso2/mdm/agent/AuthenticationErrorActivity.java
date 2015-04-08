@@ -29,6 +29,9 @@ import android.widget.TextView;
 import com.google.android.gcm.GCMRegistrar;
 import org.wso2.mdm.agent.R;
 
+/**
+ * Activity which handles authentication errors.
+ */
 public class AuthenticationErrorActivity extends Activity {
 	private String registrationId;
 	private Button btnTryAgain;

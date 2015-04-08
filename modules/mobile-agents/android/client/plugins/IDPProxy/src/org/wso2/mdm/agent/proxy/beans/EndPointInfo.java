@@ -22,6 +22,9 @@ import org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS;
 
 import java.util.Map;
 
+/**
+ * This class represents end-point information required when invoking APIs.
+ */
 public class EndPointInfo {
 	private HTTP_METHODS httpMethod;
 	private String endPoint;

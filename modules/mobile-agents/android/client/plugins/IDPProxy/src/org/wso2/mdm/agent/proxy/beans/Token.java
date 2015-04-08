@@ -22,8 +22,8 @@ import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 import java.util.Date;
 
 /**
- * Persists refresh token to obtain new access token and id token to retrieve
- * login user claims
+ * This class handles persisting of the refresh token to obtain new access token and 
+ * id token to retrieve login user claims.
  */
 public final class Token {
 	private String refreshToken = null;

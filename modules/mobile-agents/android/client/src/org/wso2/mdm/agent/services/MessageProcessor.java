@@ -39,7 +39,8 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Used to coordinate the retrieval and processing of messages from the server.
+ * This class handles all the functionalities related to coordinating the retrieval 
+ * and processing of messages from the server.
  */
 public class MessageProcessor implements APIResultCallBack {
 

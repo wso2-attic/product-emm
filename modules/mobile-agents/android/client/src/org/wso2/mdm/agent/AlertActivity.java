@@ -25,6 +25,9 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import org.wso2.mdm.agent.R;
 
+/**
+ * Activity which is used to show alerts throughout the application.
+ */
 public class AlertActivity extends SherlockActivity {
 	private String message;
 	private Button btnOK;

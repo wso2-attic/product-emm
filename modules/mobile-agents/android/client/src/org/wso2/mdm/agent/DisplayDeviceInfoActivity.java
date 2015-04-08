@@ -28,6 +28,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+/**
+ * Activity which displays device information.
+ */
 public class DisplayDeviceInfoActivity extends Activity {
 	private String fromActivity;
 	private String registrationId;

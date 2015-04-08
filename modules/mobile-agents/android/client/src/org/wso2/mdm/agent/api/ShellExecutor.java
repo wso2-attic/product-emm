@@ -26,6 +26,10 @@ import org.wso2.mdm.agent.utils.StreamHandler;
 
 import android.util.Log;
 
+/**
+ * This class handles all the functionalities related to executing shell commands 
+ * on the device.
+ */
 public class ShellExecutor {
 
 	private static final String LOG_TAG = ShellExecutor.class.getName();
