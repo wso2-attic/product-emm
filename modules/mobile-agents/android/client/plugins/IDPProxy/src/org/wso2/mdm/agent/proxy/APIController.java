@@ -29,12 +29,15 @@ import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Invoking APIs and return API results to the client.
+ */
 public class APIController implements TokenCallBack {
 	private static final String TAG = "APIController";
 	private Token token;
 	private String clientKey, clientSecret;
-	private APIResultCallBack apiResultCall;
-	private EndPointInfo currentEndPointInfo;
+	private APIResultCallBack apiResultCallback;
+	private EndPointInfo apiEndPointInfo;
 	
 	public APIController(String clientKey, String clientSecret){
 		this.clientKey = clientKey;
@@ -49,11 +52,11 @@ public class APIController implements TokenCallBack {
 	 * @param requestCode       - Request code to avoid response complications.
 	 * @param context           - Application context.
 	 */
-	public void invokeAPI(EndPointInfo endPointInfo, APIResultCallBack apiResultCallBack,
+	public void invokeAPI(EndPointInfo apiEndPointInfo, APIResultCallBack apiResultCallBack,
 	                      int requestCode, Context context) {
 
-		apiResultCall = apiResultCallBack;
-		currentEndPointInfo = endPointInfo;
+		this.apiResultCallback = apiResultCallBack;
+		this.apiEndPointInfo = apiEndPointInfo;
 
 		if (IdentityProxy.getInstance().getContext() == null) {
 			IdentityProxy.getInstance().setContext(context);
@@ -69,7 +72,7 @@ public class APIController implements TokenCallBack {
 	@Override
 	public void onReceiveTokenResult(Token token, String status) {
 		this.token = token;
-		new NetworkCallTask(apiResultCall).execute(currentEndPointInfo);
+		new NetworkCallTask(apiResultCallback).execute(apiEndPointInfo);
 	}
 
 	/**

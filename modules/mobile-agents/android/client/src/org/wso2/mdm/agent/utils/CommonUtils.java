@@ -34,6 +34,9 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ * Holds all the common functions used throughout the application.
+ */
 public class CommonUtils {
 
 	public static String TAG = CommonUtils.class.getSimpleName();

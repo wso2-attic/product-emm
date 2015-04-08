@@ -23,7 +23,7 @@ import java.util.Date;
 
 /**
  * Persists refresh token to obtain new access token and id token to retrieve
- * login user claims
+ * login user claims.
  */
 public final class Token {
 	private String refreshToken = null;

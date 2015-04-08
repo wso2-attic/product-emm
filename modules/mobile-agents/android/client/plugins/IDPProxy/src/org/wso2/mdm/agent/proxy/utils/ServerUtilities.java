@@ -56,7 +56,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * Handle network communication between SDK and authorization server
+ * Handle network communication between SDK and authorization server.
  */
 public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";

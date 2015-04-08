@@ -18,6 +18,9 @@
 
 package org.wso2.mdm.agent.utils;
 
+/**
+ * Holds all the constants used throughout the application.
+ */
 public class Constants {
 
 	public static final boolean DEBUG_MODE_ENABLED = true;

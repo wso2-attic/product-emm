@@ -35,6 +35,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
+/**
+ * Device state related APIs for devices up to Jelly Bean.
+ */
 public class DeviceStateJB implements DeviceState{
 	private Context context;
 	private DeviceInfo info;

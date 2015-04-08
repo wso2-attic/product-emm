@@ -23,6 +23,9 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+/**
+ * Parses the operations payload.
+ */
 public class PayloadParser {
 	private static final String LABEL_CODE = "code";
 	private static final String LABEL_REG_ID = "regId";

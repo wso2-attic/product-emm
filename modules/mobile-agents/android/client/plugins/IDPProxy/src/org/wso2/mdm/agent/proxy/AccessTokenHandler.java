@@ -44,7 +44,7 @@ import java.util.Map;
 
 /**
  * After receiving authorization code client application can use this class to
- * obtain access token
+ * obtain access token.
  */
 public class AccessTokenHandler extends Activity {
 	private static final String TAG = "AccessTokenHandler";

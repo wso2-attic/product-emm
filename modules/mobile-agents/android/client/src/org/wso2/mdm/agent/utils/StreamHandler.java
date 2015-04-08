@@ -7,6 +7,9 @@ import java.io.OutputStream;
 
 import android.util.Log;
 
+/**
+ * Handling the closure of streams.
+ */
 public class StreamHandler {
 
 	/**

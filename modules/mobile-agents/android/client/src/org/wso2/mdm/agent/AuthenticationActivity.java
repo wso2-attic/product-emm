@@ -55,7 +55,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 /**
- * Activity that captures username, password and device ownership details.
+ * Activity that captures username, password and device ownership details 
+ * and handles authentication.
  */
 public class AuthenticationActivity extends SherlockActivity implements APIAccessCallBack,
                                                                         APIResultCallBack {

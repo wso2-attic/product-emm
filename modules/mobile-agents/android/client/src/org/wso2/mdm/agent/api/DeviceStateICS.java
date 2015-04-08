@@ -33,6 +33,9 @@ import android.os.BatteryManager;
 import android.os.Environment;
 import android.os.StatFs;
 
+/**
+ * Device state related APIs for devices up to ICS.
+ */
 public class DeviceStateICS implements DeviceState{
 	private Context context;
 	private DeviceInfo info;

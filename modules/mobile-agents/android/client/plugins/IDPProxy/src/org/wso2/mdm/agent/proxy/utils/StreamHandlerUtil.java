@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Handles the closure of all the stream types.
+ */
 public class StreamHandlerUtil {
 
 	/**

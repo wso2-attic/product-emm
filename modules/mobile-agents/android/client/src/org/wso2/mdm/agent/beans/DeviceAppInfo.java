@@ -17,6 +17,9 @@
  */
 package org.wso2.mdm.agent.beans;
 
+/**
+ * Holds the application information.
+ */
 public class DeviceAppInfo {
 	private String appName;
 	private String packageName;

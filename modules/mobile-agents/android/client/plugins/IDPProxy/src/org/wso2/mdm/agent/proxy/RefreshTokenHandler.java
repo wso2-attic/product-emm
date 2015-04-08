@@ -40,7 +40,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Getting new access token and refresh token after access token expiration
+ * Getting new access token and refresh token after access token expiration.
  */
 public class RefreshTokenHandler {
 	private static final String TAG = "RefreshTokenHandler";

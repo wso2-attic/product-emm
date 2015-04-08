@@ -24,6 +24,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+/**
+ * Alarm receiver which triggers on local notification timeouts.
+ */
 public class AlarmReceiver extends BroadcastReceiver {
 
 	private static final String DEBUG_TAG = AlarmReceiver.class.getName();

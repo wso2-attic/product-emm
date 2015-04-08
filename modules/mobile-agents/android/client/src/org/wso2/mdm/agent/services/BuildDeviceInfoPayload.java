@@ -25,6 +25,9 @@ import org.wso2.mdm.agent.api.DeviceInfo;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * Builds the device information payload to be sent to the server.
+ */
 public class BuildDeviceInfoPayload {
 	private JSONObject result;
 	private DeviceInfo deviceInfo;

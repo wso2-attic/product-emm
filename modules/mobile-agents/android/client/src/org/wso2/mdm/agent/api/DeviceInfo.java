@@ -31,6 +31,9 @@ import android.os.Build;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 
+/**
+ * Device information related APIs.
+ */
 public class DeviceInfo {
 	private Root rootChecker;
 	private Context context;

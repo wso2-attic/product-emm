@@ -30,7 +30,7 @@ import org.wso2.mdm.agent.proxy.utils.Constants;
 import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 
 /**
- * client application specific data
+ * Identity proxy initialization and token validation handling.
  */
 public class IdentityProxy implements CallBack {
 
@@ -43,7 +43,7 @@ public class IdentityProxy implements CallBack {
 	private Context context;
 	private static String accessTokenURL;
 	private APIAccessCallBack apiAccessCallBack;
-	private TokenCallBack callback;
+	private TokenCallBack tokenCallBack;
 	private int requestCode = 0;
 
 	private IdentityProxy() {
@@ -76,6 +76,7 @@ public class IdentityProxy implements CallBack {
 			Log.d(TAG, token.getAccessToken());
 			Log.d(TAG, token.getRefreshToken());
 		}
+		
 		IdentityProxy.token = token;
 		apiAccessCallBack.onAPIAccessRecive(status);
 	}
@@ -83,7 +84,7 @@ public class IdentityProxy implements CallBack {
 	@Override
 	public void receiveNewAccessToken(String status, String message, Token token) {
 		IdentityProxy.token = token;
-		callback.onReceiveTokenResult(token, status);
+		tokenCallBack.onReceiveTokenResult(token, status);
 	}
 
 	/**
@@ -91,13 +92,13 @@ public class IdentityProxy implements CallBack {
 	 *
 	 * @param info              - Includes token end point and Oauth app credentials.
 	 * @param apiAccessCallBack - Callback when API access happens.
-	 * @param appContext        - Application context.
+	 * @param context        - Application context.
 	 */
-	public void init(CredentialInfo info, APIAccessCallBack apiAccessCallBack, Context appContext) {
+	public void init(CredentialInfo info, APIAccessCallBack apiAccessCallBack, Context context) {
 		IdentityProxy.clientID = info.getClientID();
 		IdentityProxy.clientSecret = info.getClientSecret();
 		this.apiAccessCallBack = apiAccessCallBack;
-		context = appContext;
+		this.context = context;
 		SharedPreferences mainPref = context.getSharedPreferences(Constants.APPLICATION_PACKAGE
 				, Context.MODE_PRIVATE);
 		Editor editor = mainPref.edit();
@@ -110,10 +111,10 @@ public class IdentityProxy implements CallBack {
 		accessTokenHandler.obtainAccessToken();
 	}
 
-	public void requestToken(Context context, TokenCallBack call, String clientID,
+	public void requestToken(Context context, TokenCallBack tokenCallBack, String clientID,
 	                         String clientSecret) {
 		this.context = context;
-		callback = call;
+		this.tokenCallBack = tokenCallBack;
 		IdentityProxy.clientID = clientID;
 		IdentityProxy.clientSecret = clientSecret;
 		if (token == null) {
