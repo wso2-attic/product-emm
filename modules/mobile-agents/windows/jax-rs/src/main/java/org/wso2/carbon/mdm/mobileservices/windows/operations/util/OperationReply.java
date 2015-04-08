@@ -237,7 +237,7 @@ public class OperationReply {
 
             Wifi wifiObject;
             try {
-                wifiObject = new ObjectMapper().readValue(operation.getPayLoad(), Wifi.class);
+                wifiObject = new ObjectMapper().readValue((String)operation.getPayLoad(), Wifi.class);
             } catch (IOException e) {
                 throw new WindowsOperationException("Failure while creating Wifi operation object.", e);
             }
