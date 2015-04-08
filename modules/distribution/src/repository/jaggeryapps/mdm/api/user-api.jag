@@ -83,7 +83,7 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         try {
             result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);
         } catch (e) {
-            log.error("Exception in modules/user.js/addUser()", e);
+            log.error("Exception occurred while trying to add a user to MDM User Store", e);
             // http status code 400 refers to - Bad request.
             result = 400;
         }
