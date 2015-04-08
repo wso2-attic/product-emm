@@ -23,21 +23,17 @@ package org.wso2.mdm.agent;
 public class AndroidAgentException extends Exception {
 
 	private static final long serialVersionUID = 1L;
-	private String errorMessage;
 
 	public AndroidAgentException(String msg, Exception nestedEx) {
 		super(msg, nestedEx);
-		setErrorMessage(msg);
 	}
 
 	public AndroidAgentException(String message, Throwable cause) {
 		super(message, cause);
-		setErrorMessage(message);
 	}
 
 	public AndroidAgentException(String msg) {
 		super(msg);
-		setErrorMessage(msg);
 	}
 
 	public AndroidAgentException() {
@@ -46,14 +42,6 @@ public class AndroidAgentException extends Exception {
 
 	public AndroidAgentException(Throwable cause) {
 		super(cause);
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
 	}
 
 }
