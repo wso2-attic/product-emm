@@ -49,7 +49,7 @@ public class Constants {
 	public final static String CLIENT_ID = "client_id";
 	public final static String CLIENT_SECRET = "client_secret";
 	public final static String TOKEN_ENDPOINT = "token_endpoint";
-	public static enum HTTP_METHODS{GET, POST};
+	public static enum HTTP_METHODS{GET, POST, DELETE, PUT};
 	public static final String INTERNAL_SERVER_ERROR = "500";
 	public static final String ACCESS_FAILURE = "400";
 	public static final String REQUEST_SUCCESSFUL = "200";

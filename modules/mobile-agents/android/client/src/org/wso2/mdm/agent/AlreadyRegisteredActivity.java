@@ -22,6 +22,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.mdm.agent.R;
+import org.wso2.mdm.agent.beans.ServerConfig;
 import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.mdm.agent.services.LocalNotification;
@@ -79,7 +80,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		context = this;
 		resources = context.getResources();
 		Bundle extras = getIntent().getExtras();
-		
+
 		if (extras != null) {
 			if (extras.
 					containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
@@ -190,8 +191,16 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 
 		if (CommonUtils.isNetworkAvailable(context)) {
+			String serverIP =
+					Preference.getString(AlreadyRegisteredActivity.this,
+					                     context.getResources()
+					                            .getString(R.string.shared_pref_ip)
+					);
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(serverIP);
+
 			CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-			                           Constants.UNREGISTER_ENDPOINT, HTTP_METHODS.POST,
+			                           utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT, HTTP_METHODS.DELETE,
 			                           requestParams, AlreadyRegisteredActivity.this,
 			                           Constants.UNREGISTER_REQUEST_CODE);
 		} else {
@@ -257,8 +266,16 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 						Log.e(TAG, "Invalid JSON." + e);
 				}
 
+				String serverIP =
+						Preference.getString(AlreadyRegisteredActivity.this,
+						                     context.getResources()
+						                            .getString(R.string.shared_pref_ip)
+						);
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(serverIP);
+
 				CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-				                           Constants.IS_REGISTERED_ENDPOINT, HTTP_METHODS.POST,
+				                           utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT, HTTP_METHODS.POST,
 				                           requestParams, AlreadyRegisteredActivity.this,
 				                           Constants.IS_REGISTERED_REQUEST_CODE);
 			} else {

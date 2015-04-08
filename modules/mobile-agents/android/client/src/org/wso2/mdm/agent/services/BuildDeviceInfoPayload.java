@@ -88,7 +88,7 @@ public class BuildDeviceInfoPayload {
     		
     		property = new JSONObject();
     		property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_VENDOR);
-    		property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getOsVersion());
+    		property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getDeviceManufacturer());
     		properties.put(property);
     		
     		property = new JSONObject();
