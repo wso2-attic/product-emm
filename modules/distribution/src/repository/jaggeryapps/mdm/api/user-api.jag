@@ -83,7 +83,8 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         try {
             result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);
         } catch (e) {
-            log.error("Exception in modules/user.js/addUser() : " + e.message);
+            log.error("Exception in modules/user.js/addUser()");
+            log.error(e);
             // http status code 400 refers to - Bad request.
             result = 400;
         }
