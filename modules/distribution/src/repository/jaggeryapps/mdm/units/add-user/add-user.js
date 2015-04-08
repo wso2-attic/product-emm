@@ -1,5 +1,6 @@
 /**
- * Returns the state to be viewed by add-user page
+ * Returns the state to be viewed by add-user page.
+ * 
  * @param context
  * @returns {*} A context object that returns the next state of this page to be presented
  */

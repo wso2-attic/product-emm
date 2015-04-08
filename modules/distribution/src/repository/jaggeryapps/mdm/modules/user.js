@@ -132,7 +132,6 @@ var userModule = (function () {
      *
      * @returns {Object} Default user claims to be provided
      */
-
     privateMethods.buildDefaultUserClaims = function(firstname, lastname, emailAddress) {
         var defaultUserClaims = {
             "http://wso2.org/claims/givenname": firstname,
