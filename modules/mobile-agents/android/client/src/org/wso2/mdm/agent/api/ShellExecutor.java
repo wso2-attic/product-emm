@@ -27,7 +27,8 @@ import org.wso2.mdm.agent.utils.StreamHandler;
 import android.util.Log;
 
 /**
- * Executes shell commands on the device.
+ * This class handles all the functionalities related to executing shell commands 
+ * on the device.
  */
 public class ShellExecutor {
 

@@ -30,7 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Invoking APIs and return API results to the client.
+ * This class includes the functionality related to invoking APIs and 
+ * return API results to the client.
  */
 public class APIController implements TokenCallBack {
 	private static final String TAG = "APIController";

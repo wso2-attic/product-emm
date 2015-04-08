@@ -19,7 +19,7 @@
 package org.wso2.mdm.agent.utils;
 
 /**
- * Holds all the constants used throughout the application.
+ * This class holds all the constants used throughout the application.
  */
 public class Constants {
 

@@ -20,7 +20,7 @@ package org.wso2.mdm.agent.api;
 import java.io.File;
 
 /**
- * APIs to check if the device is Rooted or not.
+ * This class represents all the APIs to check if the device is Rooted or not.
  */
 public class Root {
 	private static final String[] SU_CHECK_COMMAND = new String[] { "/system/xbin/which", "su" };

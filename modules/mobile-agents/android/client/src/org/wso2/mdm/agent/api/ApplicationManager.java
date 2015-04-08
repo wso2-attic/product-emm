@@ -47,7 +47,8 @@ import android.util.Base64;
 import android.util.Log;
 
 /**
- * Manage application installation/un-installation.
+ * This class handles all the functionalities required for managing application 
+ * installation and un-installation.
  */
 public class ApplicationManager {
 	private Context context;

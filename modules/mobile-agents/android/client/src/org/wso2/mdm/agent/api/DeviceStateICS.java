@@ -34,7 +34,8 @@ import android.os.Environment;
 import android.os.StatFs;
 
 /**
- * Device state related APIs for devices up to ICS.
+ * This class represents all the device state related APIs for devices up to 
+ * Android SDK 15 - ICS.
  */
 public class DeviceStateICS implements DeviceState{
 	private Context context;

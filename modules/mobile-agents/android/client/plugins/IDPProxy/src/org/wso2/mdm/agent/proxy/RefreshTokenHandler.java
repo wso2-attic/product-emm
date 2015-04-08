@@ -40,8 +40,10 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Getting new access token and refresh token after access token expiration.
+ * This class handles the entire functionality of OAuth token expiration and 
+ * refresh process.
  */
+
 public class RefreshTokenHandler {
 	private static final String TAG = "RefreshTokenHandler";
 	private static final String SCOPE_LABEL = "scope";

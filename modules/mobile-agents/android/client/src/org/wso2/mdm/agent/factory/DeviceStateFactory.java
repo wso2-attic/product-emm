@@ -24,7 +24,7 @@ import org.wso2.mdm.agent.interfaces.DeviceState;
 import android.content.Context;
 
 /**
- * Factory class which handles device state for various OS versions.
+ * This is the factory class which handles device state for various OS versions.
  */
 public class DeviceStateFactory {
 	

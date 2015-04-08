@@ -18,7 +18,7 @@
 package org.wso2.mdm.agent.beans;
 
 /**
- * Holds the battery information.
+ * This class represents the device battery information.
  */
 public class Battery {
 	private int scale;

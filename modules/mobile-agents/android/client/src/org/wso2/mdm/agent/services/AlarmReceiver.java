@@ -25,7 +25,7 @@ import android.content.Intent;
 import android.util.Log;
 
 /**
- * Alarm receiver which triggers on local notification timeouts.
+ * This class is a broadcast receiver which triggers on local notification timeouts.
  */
 public class AlarmReceiver extends BroadcastReceiver {
 

@@ -26,7 +26,7 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Builds the device information payload to be sent to the server.
+ * This class handles building of the device information payload to be sent to the server.
  */
 public class BuildDeviceInfoPayload {
 	private JSONObject result;

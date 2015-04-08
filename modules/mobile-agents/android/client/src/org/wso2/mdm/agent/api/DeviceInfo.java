@@ -32,7 +32,7 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 
 /**
- * Device information related APIs.
+ * This class represents all the device information related APIs.
  */
 public class DeviceInfo {
 	private Root rootChecker;

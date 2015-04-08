@@ -30,7 +30,7 @@ import org.wso2.mdm.agent.proxy.utils.Constants;
 import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 
 /**
- * Identity proxy initialization and token validation handling.
+ * This class handles identity proxy library initialization and token validation.
  */
 public class IdentityProxy implements CallBack {
 

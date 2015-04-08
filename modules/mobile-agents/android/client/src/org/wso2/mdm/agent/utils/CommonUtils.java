@@ -35,7 +35,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Holds all the common functions used throughout the application.
+ * This class represents all the common functions used throughout the application.
  */
 public class CommonUtils {
 

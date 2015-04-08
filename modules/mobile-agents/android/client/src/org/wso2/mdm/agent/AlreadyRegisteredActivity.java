@@ -51,7 +51,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 /**
- * Activity which handles un-registration.
+ * Activity which handles user un-registration from the MDM server.
  */
 public class AlreadyRegisteredActivity extends SherlockActivity implements APIResultCallBack {
 

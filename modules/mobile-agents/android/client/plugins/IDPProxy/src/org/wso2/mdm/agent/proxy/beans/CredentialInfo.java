@@ -18,7 +18,8 @@
 package org.wso2.mdm.agent.proxy.beans;
 
 /**
- * Credential information required when invoking token end-point.
+ * This class represents credential information required when invoking 
+ * OAuth token end-point.
  */
 public class CredentialInfo {
 	private String username = null;

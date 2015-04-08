@@ -48,7 +48,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * Handles device management operations.
+ * This class handles all the functionalities related to device management operations.
  */
 public class Operation {
 

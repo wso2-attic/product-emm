@@ -20,8 +20,8 @@ package org.wso2.mdm.agent.utils;
 import org.wso2.mdm.agent.R;
 
 /**
- * Describes the errors and their relevant error messages.
- * In order to internationalize the message in the res.
+ * This class describes the errors and their relevant error messages 
+ * in order to internationalize the message in the resources.
  */
 public enum Response {
 	INCOMPATIBLE(false, R.string.device_not_compatible_error),

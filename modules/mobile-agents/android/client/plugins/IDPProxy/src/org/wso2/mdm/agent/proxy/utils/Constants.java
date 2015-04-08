@@ -19,7 +19,7 @@
 package org.wso2.mdm.agent.proxy.utils;
 
 /**
- * Holds all the constants used throughout the application.
+ * This class holds all the constants used throughout the application.
  */
 public class Constants {
 	public static final String SERVER_PROTOCOL = "http://";

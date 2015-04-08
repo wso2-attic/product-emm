@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 /**
- * Parses the operations payload.
+ * This class handles parsing of the operations payload retrieved from the MDM server.
  */
 public class PayloadParser {
 	private static final String LABEL_CODE = "code";
