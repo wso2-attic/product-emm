@@ -21,7 +21,7 @@ if (username) {
     var mdmProps = require('/config/mdm-props.js').config();
     log.info(platform);
     if(platform == "iOS"){
-        var enrollUrl = mdmProps.iOSConfigRoot + 'enroll';
+        var enrollUrl = mdmProps.iOSConfigRoot + 'enrollment/enroll';
         var client = new HttpClient();
         var method = new PostMethod(enrollUrl);
         var header =  new Header();
@@ -46,8 +46,16 @@ if (username) {
                 response.sendRedirect("/mdm/login-agent#auth-failed");
             }
         } catch (e) {
-            e.printStackTrace();
+            log.error("Error occurred when enrolling " + e);
         }
+
+        setInterval(function(){ 
+            var deviceCheckURL = mdmProps.iOSConfigRoot + 'device/deviceid';
+            var result = post(deviceCheckURL, { "challengeToken": challengeToken }, {
+                "Accept" : "application/json"
+            }, 'json');
+            log.error(result.data);
+        }, 5000);
     } else if(platform == "Windows Phone"){
         var action = session.get("windows_action");
         var binaryToken = session.get("windows_binary_token");

@@ -2,7 +2,7 @@
 var username = session.get("enrollUser");
 if (username) {
     var mdmProps = require('/config/mdm-props.js').config();
-    var iOSCheckUrl = mdmProps.iOSConfigRoot + 'enrolled';
+    var iOSCheckUrl = mdmProps.iOSConfigRoot + 'enrollment/enrolled';
     var xhr = new XMLHttpRequest();
     var log = new Log();
     xhr.open("POST", iOSCheckUrl);
