@@ -94,7 +94,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				Preference.getString(context, resources.
 				                     			getString(R.string.shared_pref_regId));
 		
-		if (!registrationId.isEmpty()) {
+		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
 		}
 
