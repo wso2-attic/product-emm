@@ -6,6 +6,9 @@ var PostMethod = Packages.org.apache.commons.httpclient.methods.PostMethod;
 var Header = Packages.org.apache.commons.httpclient.Header;
 var StringRequestEntity = Packages.org.apache.commons.httpclient.methods.StringRequestEntity;
 var log = new Log();
+
+var iOSResponse;
+
 if (username) {
     var userAgent = request.getHeader("User-Agent");
     var UAParser = require("/modules/ua-parser.min.js").UAParser;
