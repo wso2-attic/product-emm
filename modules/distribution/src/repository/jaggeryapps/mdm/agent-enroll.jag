@@ -48,8 +48,13 @@ if (username) {
         } catch (e) {
             log.error("Error occurred when enrolling " + e);
         }
-        /**
-        setInterval(function(){ 
+
+        iOSResponse = {
+            "deviceCheckURL" : mdmProps.iOSConfigRoot + 'device/deviceid',
+            "inputs" : { "challengeToken" : challengeToken }
+        };
+
+        /*setInterval(function(){
             var deviceCheckURL = mdmProps.iOSConfigRoot + 'device/deviceid';
             var inputs = { "challengeToken": challengeToken };
 
@@ -71,6 +76,7 @@ if (username) {
             log.error("<br>ResponseStatus : "+xhr.status);
             log.error("<br>ResponseText : "+xhr.responseText);
         }, 5000);*/
+
     } else if(platform == "Windows Phone"){
         var action = session.get("windows_action");
         var binaryToken = session.get("windows_binary_token");
@@ -102,5 +108,10 @@ if (username) {
     }
 } else {
     response.sendError(400);
+}
+
+// returning the result.
+if (iOSResponse) {
+    print(stringify(iOSResponse));
 }
 %>
