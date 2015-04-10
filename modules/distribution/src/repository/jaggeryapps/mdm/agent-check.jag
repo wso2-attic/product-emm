@@ -14,10 +14,10 @@ if (username) {
     log.info(xhr.status);
     if (xhr.status == 200) {
         var responseText = parse(xhr.responseText);
-        var deviceID = responseText.deviceID;
-        log.info(deviceID);
+        var deviceId = responseText.deviceId;
+        log.info(deviceId);
         response.status = 200;
-        print({"deviceId" : deviceID});
+        print({"deviceId" : deviceId});
     } else if (xhr.status == 400) {
         response.sendError(400);
     }

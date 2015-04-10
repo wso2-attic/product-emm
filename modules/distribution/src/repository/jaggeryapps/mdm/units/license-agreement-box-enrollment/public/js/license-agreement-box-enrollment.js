@@ -5,7 +5,7 @@ $( document ).ready(function() {
             $.get(iOSCheckUrl).done(function(data, textStatus){
                 if(textStatus=="success"){
                     var deviceId = data.deviceId;
-                    window.location = "/mdm/thank-you-agent?deviceId="+deviceId;
+
                     if(deviceId != null) {
                         window.location = "/mdm/thank-you-agent?deviceId="+deviceId;
                     }
