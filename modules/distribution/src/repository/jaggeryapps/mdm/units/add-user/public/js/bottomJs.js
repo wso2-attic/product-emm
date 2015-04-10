@@ -58,7 +58,7 @@ $("button#add-user-btn").click(function(){
         addUserFormData.emailAddress = emailAddress;
         addUserFormData.userRoles = userRoles;
 
-        var addUserAPI = "/mdm/api/user/add";
+        var addUserAPI = "/mdm/api/users/add";
 
         $.ajax({
             type:'POST',
@@ -67,18 +67,18 @@ $("button#add-user-btn").click(function(){
             data:JSON.stringify(addUserFormData),
             success:function(data){
                 if (data == 201) {
-                    $('.wr-validation-summary p').text("User created");
+                    $('.wr-validation-summary p').text("User created.");
                 } else if (data == 400) {
-                    $('.wr-validation-summary p').text("Exception at backend");
+                    $('.wr-validation-summary p').text("Exception at backend.");
                 } else if (data == 403) {
-                    $('.wr-validation-summary p').text("Action not permitted");
+                    $('.wr-validation-summary p').text("Action not permitted.");
                 } else if (data == 409) {
-                    $('.wr-validation-summary p').text("User exists");
+                    $('.wr-validation-summary p').text("User exists.");
                 }
                 $('.wr-validation-summary').removeClass("hidden");
             },
             error:function(){
-                $('.wr-validation-summary p').text("An unexpected error occurred");
+                $('.wr-validation-summary p').text("An unexpected error occurred.");
                 $('.wr-validation-summary').removeClass("hidden");
             }
         });

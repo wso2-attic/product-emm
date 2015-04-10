@@ -8,7 +8,7 @@ function onRequest(context){
     if(userModule.isAuthorized("/permission/device-mgt/admin/users/list")){
         permissions.LIST_USERS = true;
     }
-    if(userModule.isAuthorized("/permission/device-mgt/admin/users/add-user")){
+    if(userModule.isAuthorized("/permission/device-mgt/admin/users/add")){
         permissions.ADD_USER = true;
     }
 
