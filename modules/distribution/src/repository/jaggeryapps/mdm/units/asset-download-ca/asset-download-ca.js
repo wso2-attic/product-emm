@@ -1,6 +1,6 @@
 function onRequest(context) {
-    var mdmProps = require('/config/mdm-props.js').config();
     var viewModel = {};
-    viewModel.rootCertificateURL = mdmProps.httpsURL + mdmProps.appContext + "controller/ios/ca";
+    viewModel.rootCertificateURL = "/ios/enrollment/CA";
+    viewModel.licenseURL = "/mdm/login-agent";
     return viewModel;
 }
