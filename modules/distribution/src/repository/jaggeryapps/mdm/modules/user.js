@@ -55,7 +55,7 @@ var userModule = (function () {
     };
 
     /**
-     * Add user to carbon-user-store.
+     * Add user to mdm-user-store.
      *
      * @param username Username of the user
      * @param firstname First name of the user
@@ -89,6 +89,39 @@ var userModule = (function () {
                 }
                 // http status code 201 refers to - created.
                 return 201;
+            }
+        } catch(e) {
+            throw e;
+        }
+    };
+
+    /**
+     * Remove an existing user from mdm-user-store.
+     *
+     * @param username Username of the user
+     * @returns {number} HTTP Status code 200 if succeeded, 409 if the user does not exist
+     */
+    publicMethods.removeUser = function (username) {
+        var carbon = require('carbon');
+        var tenantId = carbon.server.tenantId();
+        var url = carbon.server.address('https') + "/admin/services";
+        var server = new carbon.server.Server(url);
+        var userManager = new carbon.user.UserManager(server, tenantId);
+
+        try {
+            if (userManager.userExists(username)) {
+                userManager.removeUser(username);
+                if (log.isDebugEnabled()) {
+                    log.debug("An existing user with name '" + username + "' was removed.");
+                }
+                // http status code 200 refers to - success.
+                return 200;
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("A user with name '" + username + "' does not exist to remove.");
+                }
+                // http status code 409 refers to - conflict.
+                return 409;
             }
         } catch(e) {
             throw e;
@@ -175,7 +208,7 @@ var userModule = (function () {
             throw constants.ERRORS.USER_NOT_FOUND;
         }
         var user = userManagementService.getUser(username, carbonUser.tenantId);
-        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "/download-agent";
+        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
         deviceManagement = utility.getDeviceManagementService();
 
         var emailProperties = new EmailMessageProperties();

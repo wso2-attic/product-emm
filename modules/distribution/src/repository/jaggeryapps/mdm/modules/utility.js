@@ -43,8 +43,11 @@ var utility = (function () {
         userModule.addPermissions([{key: "devices/operation", name: "Perform operations"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "users/list", name: "List Users"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "users/invite", name: "Invite Users"}], "device-mgt/admin", type);
+        userModule.addPermissions([{key: "users/add", name: "Add New Users"}], "device-mgt/admin", type);
+        userModule.addPermissions([{key: "users/remove", name: "Remove Users"}], "device-mgt/admin", type);
 
         userModule.addPermissions([{key: "devices/list", name: "List own Devices"}], "device-mgt/user", type);
+
         userModule.addPermissions([{
             key: "devices/operation",
             name: "Perform operations on own devices"

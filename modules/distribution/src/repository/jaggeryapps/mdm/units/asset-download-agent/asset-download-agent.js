@@ -13,11 +13,11 @@ function onRequest(context){
     if(os.name == "Android"){
         log.info("Android detected");
         viewModel.header = "Download and install Agent";
-        viewModel.link = mdmProps.httpURL + app.publicURL+"/asset/android-agent.apk";
+        viewModel.link = mdmProps.httpURL + app.publicURL + "/asset/" + mdmProps.androidAgentApp;
     }else if(os.name == "iOS"){
         viewModel.header = "Step 1. Download and install Agent";
-        viewModel.link = "itms-services://?action=download-manifest&url=itms-services://?action=download-manifest&url="
-            + mdmProps.httpURL + app.publicURL + "/asset/" + mdmProps.iOSAgentApp;
+        viewModel.link = "itms-services://?action=download-manifest&url=itms-services://?" +
+            "action=download-manifest&url=" + mdmProps.httpURL + app.publicURL + "/asset/" + mdmProps.iOSAgentApp;
     }
     return viewModel;
 }
