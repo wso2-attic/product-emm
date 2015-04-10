@@ -1,17 +1,32 @@
 $( document ).ready(function() {
+//    var iOSCheckUrl = "/mdm/controller/check";
+//    setInterval(
+//        (function x() {
+//            $.get(iOSCheckUrl).done(function(data, textStatus){
+//                if(textStatus==200){
+//                    window.location = "/mdm/thank-you-agent"
+//                }
+//            }).fail(function(jqXHR, textStatus){
+//                if(jqXHR.status==403){
+//                    window.location = "/mdm/login-agent#error"
+//                }
+//            });
+//        })(), 5000);
+
     var iOSCheckUrl = "/mdm/controller/check";
-    setInterval(
-        (function x() {
-            $.get(iOSCheckUrl).done(function(data, textStatus){
-                if(textStatus==200){
-                    window.location = "/mdm/thank-you-agent"
-                }
-            }).fail(function(jqXHR, textStatus){
-                if(jqXHR.status==403){
-                    window.location = "/mdm/login-agent#error"
-                }
-            });
-        })(), 5000);
+    setInterval(function() {
+        $.ajax({
+            type: 'GET',
+            url: iOSCheckUrl,
+            success: function(data) {
+
+            },
+            error: function() {
+
+            }
+        });
+    }, 5000);
+
 });
 
 /**
