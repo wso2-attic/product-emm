@@ -1,11 +1,12 @@
 <%
-var username = session.get("username");
+//var username = session.get("username");
+var username = "admin";
 var platform = request.getParameter("platform");
 var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
 var PostMethod = Packages.org.apache.commons.httpclient.methods.PostMethod;
 var Header = Packages.org.apache.commons.httpclient.Header;
 var StringRequestEntity = Packages.org.apache.commons.httpclient.methods.StringRequestEntity;
-var log = new Log();
+var log = new Log("inside agent-enroll.jag");
 
 var iOSResponse;
 
@@ -117,4 +118,6 @@ if (username) {
 if (iOSResponse) {
     print(stringify(iOSResponse));
 }
+
+print("{}");
 %>

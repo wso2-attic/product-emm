@@ -4,6 +4,7 @@
   "httpsURL": "%https.ip%",
   "httpURL": "%http.ip%",
   "iOSConfigRoot": "%https.ip%/ios/",
+  "iOSAgentApp" : "ios-agent.ipa",
   "windowsConfigRoot": "http://10.10.10.198:9763/mdm-windows-api/services/federated/bst/authentication",
   "ssoConfiguration": {
         "enabled": false,

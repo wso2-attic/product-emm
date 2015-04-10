@@ -28,9 +28,11 @@ $("a.btn-download-agent").click(function(e){
         url: enrollmentURL,
         success: function(data) {
             if (data) {
+                //alert("Response data is not empty : " + data);
                 // then device is an iOS device
                 var iOSResponse = JSON.parse(data);
                 setInterval(function(){
+                    //alert("Response data is not empty : " + data);
                     var deviceCheckURL = iOSResponse.deviceCheckURL;
                     var inputs = iOSResponse.inputs;
 
@@ -51,10 +53,12 @@ $("a.btn-download-agent").click(function(e){
                         }
                     });
                 }, 5000);
+            } else {
+                alert("Response data is empty");
             }
         },
         error: function() {
-            alert("error in request to /mdm/controller/enroll");
+            alert("Error in request to /mdm/controller/enroll");
         }
     });
 });
