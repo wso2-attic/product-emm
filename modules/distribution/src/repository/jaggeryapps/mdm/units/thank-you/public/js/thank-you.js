@@ -2,7 +2,7 @@ $( document ).ready(function() {
     setTimeout(function(){
         var deviceId = getParameterByName("deviceId");
         window.location.href = "wso2agent://" + deviceId;
-    }, 5000);
+    }, 2000);
     function getParameterByName(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
