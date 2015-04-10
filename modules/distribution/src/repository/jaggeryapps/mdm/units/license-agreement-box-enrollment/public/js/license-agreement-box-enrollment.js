@@ -15,5 +15,5 @@ $( document ).ready(function() {
                     window.location = "/mdm/login-agent#error"
                 }
             });
-        }, 3000);
+        }, 2000);
 });
