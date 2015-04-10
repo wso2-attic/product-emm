@@ -22,5 +22,4 @@ try {
 } catch (e) {
     log.error("Error occurred when downloading CA " + e);
 }
-
 %>
