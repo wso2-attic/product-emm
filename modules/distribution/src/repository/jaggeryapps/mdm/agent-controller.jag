@@ -14,7 +14,7 @@ var os = parser.getOS();
 var platform = os.name;
 
 var mdmProps = require('/config/mdm-props.js').config();
-log.info(mdmProps.windowsConfigRoot);
+log.info(platform);
 var authUrl;
 if(platform == "iOS"){
     var authUrl = mdmProps.iOSConfigRoot + 'enrollment/authenticate';
@@ -29,6 +29,7 @@ if(platform == "iOS"){
 }else if(platform == "Windows Phone"){
     xhr.send({"credentials": {"username": username, "password": password}});
 }
+log.info(authUrl)    ;
 log.info(xhr.status);
 if (xhr.status == 200) {
     session.put("username", username);

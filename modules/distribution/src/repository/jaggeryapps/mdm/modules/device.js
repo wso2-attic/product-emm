@@ -91,13 +91,16 @@ var deviceModule = (function () {
     module.getFeatures = function(){
         var features = deviceManagementService.getFeatureManager(constants.PLATFORM_ANDROID).getFeatures();
         var featuresConverted = {};
-        for (var i = 0; i < features.size(); i++) {
-            var feature = features.get(i);
-            var featureObject = {};
-            featureObject[constants.FEATURE_NAME] = feature.getName();
-            featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription();
-            featuresConverted[feature.getName()] = featureObject;
+        if(features){
+            for (var i = 0; i < features.size(); i++) {
+                var feature = features.get(i);
+                var featureObject = {};
+                featureObject[constants.FEATURE_NAME] = feature.getName();
+                featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription();
+                featuresConverted[feature.getName()] = featureObject;
+            }
         }
+
         return featuresConverted;
     };
 
