@@ -73,7 +73,7 @@ System Requirements
 2. Portal app requires full Javascript enablement of the Web browser
 
 For known issues see
-https://wso2.org/jira/issues/?filter=11791
+https://wso2.org/jira/issues/?filter=12190
 
 WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
 -----------------------------------------------------
