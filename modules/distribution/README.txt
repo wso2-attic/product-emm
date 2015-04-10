@@ -37,6 +37,31 @@ Installation & Running
   	     Valid To -: date in {dd-mm-yyyy} format.
              License -: License Text
 
+8. Configure email account.
+   Go to Following path and open CARBON_HOME/repository/conf/axis2 and open axis2_client.xml.
+   Un comment following entry and give correct credentials for email account.
+
+ <transportSender name="mailto"
+                     class="org.apache.axis2.transport.mail.MailTransportSender">
+        <parameter name="mail.smtp.from">wso2demomail@gmail.com</parameter>
+        <parameter name="mail.smtp.user">wso2demomail</parameter>
+        <parameter name="mail.smtp.password">mailpassword</parameter>
+        <parameter name="mail.smtp.host">smtp.gmail.com</parameter>
+
+        <parameter name="mail.smtp.port">587</parameter>
+        <parameter name="mail.smtp.starttls.enable">true</parameter>
+        <parameter name="mail.smtp.auth">true</parameter>
+    </transportSender>
+
+9. Install following features using carbon admin features.
+   MDM - iOS APNS Server 1.9.2.SNAPSHOT More Info.
+   MDM - iOS Device Management JAX-RS Web Application 1.9.2.SNAPSHOT More Info.
+   MDM - iOS Device Management Server.
+
+10. Change Urls and settings in ios-config.xml found in CARBON_HOME/repository/conf.
+
+11. Follow the instructions in following document to generate keys.
+    https://docs.wso2.com/display/EMM110/iOS+Server+Configurations
 
 
 For more details, see the Installation Guide
