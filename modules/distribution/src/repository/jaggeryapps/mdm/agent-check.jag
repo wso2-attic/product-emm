@@ -14,7 +14,7 @@ if (username) {
     log.info(xhr.status);
     if (xhr.status == 200) {
         var responseText = parse(xhr.responseText);
-        var deviceId = responseText.deviceId;
+        var deviceId = responseText.deviceID;
         log.info(deviceId);
         response.status = 200;
         print({"deviceId" : deviceId});
