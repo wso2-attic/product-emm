@@ -38,7 +38,7 @@ if (username) {
         try {
             client.executeMethod(method);
             var status = method.getStatusCode();
-            log.info(String(inputs.toString()));
+            log.info(status);
             if (status == 200) {
                 session.put("enrollUser", username);
                 var stream = method.getResponseBody();
