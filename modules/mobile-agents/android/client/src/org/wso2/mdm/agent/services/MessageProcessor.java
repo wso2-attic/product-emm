@@ -70,16 +70,21 @@ public class MessageProcessor implements APIResultCallBack {
 	 *                 and applied to the device.
 	 */
 	public void performOperation(String response) throws AndroidAgentException {
+		JSONArray replyPayload = null;
 		try {
 			JSONArray operations = new JSONArray(response);
 			for (int i = 0; i < operations.length(); i++) {
 				String featureCode = operations.getJSONObject(i).getString(Constants.CODE);
 				String properties = operations.getJSONObject(i).getString(Constants.PROPERTIES);
 				Operation operation = new Operation(context.getApplicationContext());
-				operation.doTask(featureCode, properties);
+				replyPayload = operation.doTask(featureCode, properties);
 			}
 		} catch (JSONException e) {
 			throw new AndroidAgentException("JSON Exception in response String.", e);
+		} finally {
+			if (replyPayload != null){
+				getMessages(replyPayload);
+			}
 		}
 
 	}
@@ -88,7 +93,7 @@ public class MessageProcessor implements APIResultCallBack {
 	 * Call the message retrieval end point of the server to get messages
 	 * pending.
 	 */
-	public void getMessages() {
+	public void getMessages(JSONArray replyPayload) throws AndroidAgentException {
 		String ipSaved =
 				Preference.getString(context.getApplicationContext(),
 				                     context.getResources().getString(R.string.shared_pref_ip));
@@ -102,10 +107,19 @@ public class MessageProcessor implements APIResultCallBack {
 			Log.e(TAG, "Unsupport encoding." + e.toString());
 		}
 		
+		JSONObject requestParams = null;
+		if (replyPayload != null) {
+			try {
+				requestParams = new JSONObject(replyPayload.toString());
+            } catch (JSONException e) {
+    			throw new AndroidAgentException("JSON Exception in response String.", e);
+    		}
+		}
+		
 		CommonUtils.callSecuredAPI(context, utils.getAPIServerURL() +
 		                                    Constants.NOTIFICATION_ENDPOINT + File.separator +
 		                                    deviceIdentifier,
-		                           HTTP_METHODS.GET, new JSONObject(), MessageProcessor.this,
+		                           HTTP_METHODS.GET, requestParams, MessageProcessor.this,
 		                           Constants.NOTIFICATION_REQUEST_CODE
 		);
 	}
