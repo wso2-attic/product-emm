@@ -49,6 +49,7 @@ public class MessageProcessor implements APIResultCallBack {
 	private String deviceId;
 	private static final String DEVICE_ID_PREFERENCE_KEY = "deviceId";
 	private static final String ENCODE_METHOD_UTF_8 = "utf-8";
+	private static final String LABEL_DATA = "data";
 
 	/**
 	 * Local notification message handler.
@@ -90,8 +91,8 @@ public class MessageProcessor implements APIResultCallBack {
 	}
 
 	/**
-	 * Call the message retrieval end point of the server to get messages
-	 * pending.
+	 * Call the message retrieval end point of the server to get messages pending. This method 
+	 * will be called when there is a reply payload to be sent to the server.
 	 */
 	public void getMessages(JSONArray replyPayload) throws AndroidAgentException {
 		String ipSaved =
@@ -107,19 +108,44 @@ public class MessageProcessor implements APIResultCallBack {
 			Log.e(TAG, "Unsupport encoding." + e.toString());
 		}
 		
-		JSONObject requestParams = null;
+		JSONObject requestParams = new JSONObject();
 		if (replyPayload != null) {
 			try {
-				requestParams = new JSONObject(replyPayload.toString());
-        		} catch (JSONException e) {
-    				throw new AndroidAgentException("JSON Exception in reply payload.", e);
-    			}
+				requestParams.put(LABEL_DATA, replyPayload.toString());
+            } catch (JSONException e) {
+    			throw new AndroidAgentException("JSON Exception in reply payload.", e);
+    		}
 		}
 		
 		CommonUtils.callSecuredAPI(context, utils.getAPIServerURL() +
 		                                    Constants.NOTIFICATION_ENDPOINT + File.separator +
 		                                    deviceIdentifier,
 		                           HTTP_METHODS.GET, requestParams, MessageProcessor.this,
+		                           Constants.NOTIFICATION_REQUEST_CODE
+		);
+	}
+	
+	/**
+	 * Call the message retrieval end point of the server to get messages pending.
+	 */
+	public void getMessages() {
+		String ipSaved =
+				Preference.getString(context.getApplicationContext(),
+				                     context.getResources().getString(R.string.shared_pref_ip));
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(ipSaved);
+		String deviceIdentifier = null;
+		
+		try {
+			deviceIdentifier = URLEncoder.encode(deviceId, ENCODE_METHOD_UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			Log.e(TAG, "Unsupport encoding." + e.toString());
+		}
+		
+		CommonUtils.callSecuredAPI(context, utils.getAPIServerURL() +
+		                                    Constants.NOTIFICATION_ENDPOINT + File.separator +
+		                                    deviceIdentifier,
+		                           HTTP_METHODS.GET, new JSONObject(), MessageProcessor.this,
 		                           Constants.NOTIFICATION_REQUEST_CODE
 		);
 	}
