@@ -111,9 +111,9 @@ public class MessageProcessor implements APIResultCallBack {
 		if (replyPayload != null) {
 			try {
 				requestParams = new JSONObject(replyPayload.toString());
-            } catch (JSONException e) {
-    			throw new AndroidAgentException("JSON Exception in response String.", e);
-    		}
+        		} catch (JSONException e) {
+    				throw new AndroidAgentException("JSON Exception in reply payload.", e);
+    			}
 		}
 		
 		CommonUtils.callSecuredAPI(context, utils.getAPIServerURL() +
