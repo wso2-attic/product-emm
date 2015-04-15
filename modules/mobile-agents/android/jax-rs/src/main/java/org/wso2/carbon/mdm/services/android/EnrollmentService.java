@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
+import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 
@@ -38,9 +38,9 @@ import javax.ws.rs.core.Response;
 @WebService
 @Produces({ "application/json", "application/xml" })
 @Consumes({ "application/json", "application/xml" })
-public class Enrollment {
+public class EnrollmentService {
 
-	private static Log log = LogFactory.getLog(Enrollment.class);
+	private static Log log = LogFactory.getLog(EnrollmentService.class);
 
 	@POST
 	public Message enrollDevice(org.wso2.carbon.device.mgt.common.Device device)

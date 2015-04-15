@@ -24,12 +24,12 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 
-	public static final String SERVER_PORT = "9764";
+	public static final String SERVER_PORT = "9763";
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String API_VERSION = "1.0.0";
-	public static final String API_SERVER_PORT = "8281";
+	public static final String API_SERVER_PORT = "9763";
 
-	public static final String SERVER_APP_ENDPOINT = "/mdm-android-api/";
+	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = "/license/" + API_VERSION;
 	public static final String REGISTER_ENDPOINT = "/enroll/" + API_VERSION;

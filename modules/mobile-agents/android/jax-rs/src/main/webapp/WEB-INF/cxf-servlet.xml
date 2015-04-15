@@ -51,9 +51,9 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="deviceMgtServiceBean" class="org.wso2.carbon.mdm.services.android.Device"/>
-    <bean id="enrollmentServiceBean" class="org.wso2.carbon.mdm.services.android.Enrollment"/>
-    <bean id="operationServiceBean" class="org.wso2.carbon.mdm.services.android.OperationManager"/>
+    <bean id="deviceMgtServiceBean" class="org.wso2.carbon.mdm.services.android.DeviceMgtService"/>
+    <bean id="enrollmentServiceBean" class="org.wso2.carbon.mdm.services.android.EnrollmentService"/>
+    <bean id="operationServiceBean" class="org.wso2.carbon.mdm.services.android.OperationMgtService"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.services.android.common.ErrorHandler"/>
 </beans>

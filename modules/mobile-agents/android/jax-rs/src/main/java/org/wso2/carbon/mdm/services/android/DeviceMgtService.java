@@ -19,10 +19,9 @@ package org.wso2.carbon.mdm.services.android;
 
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
-import org.wso2.carbon.device.mgt.common.license.mgt.LicenseManagementException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
-import org.wso2.carbon.mdm.services.android.common.AndroidAgentException;
+import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -38,15 +37,15 @@ import java.util.List;
 @WebService
 @Produces({ "application/json", "application/xml" })
 @Consumes({ "application/json", "application/xml" })
-public class Device {
+public class DeviceMgtService {
 
-	private static Log log = LogFactory.getLog(Device.class);
+	private static Log log = LogFactory.getLog(DeviceMgtService.class);
 
 	/**
 	 * Get all devices.Returns list of Android devices registered in MDM.
 	 *
 	 * @return Device List
-	 * @throws org.wso2.carbon.mdm.services.android.common.AndroidAgentException
+	 * @throws org.wso2.carbon.mdm.services.android.exception.AndroidAgentException
 	 */
 	@GET
 	public List<org.wso2.carbon.device.mgt.common.Device> getAllDevices()
@@ -71,7 +70,7 @@ public class Device {
 	 *
 	 * @param id Device Id
 	 * @return Device
-	 * @throws org.wso2.carbon.mdm.services.android.common.AndroidAgentException
+	 * @throws org.wso2.carbon.mdm.services.android.exception.AndroidAgentException
 	 */
 	@GET
 	@Path("{id}")
@@ -135,7 +134,7 @@ public class Device {
 	public String getLicense() throws AndroidAgentException {
 		String msg;
 		License license;
-		try {
+		/*try {
 			license =
 					AndroidAPIUtils.getLicenseManagerService().getLicense(
 									DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
@@ -145,8 +144,8 @@ public class Device {
 			msg = "Error occurred while retrieving the license configured for Android device enrolment";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		}
-		return license.getText();
+		}*/
+		return "License";
 	}
 
 }

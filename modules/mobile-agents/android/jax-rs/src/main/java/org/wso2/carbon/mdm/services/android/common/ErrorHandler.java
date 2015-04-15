@@ -17,6 +17,8 @@
  */
 package org.wso2.carbon.mdm.services.android.common;
 
+import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
+
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
