@@ -112,9 +112,9 @@ public class MessageProcessor implements APIResultCallBack {
 		if (replyPayload != null) {
 			try {
 				requestParams.put(LABEL_DATA, replyPayload.toString());
-            } catch (JSONException e) {
-    			throw new AndroidAgentException("JSON Exception in reply payload.", e);
-    		}
+            		} catch (JSONException e) {
+    				throw new AndroidAgentException("JSON Exception in reply payload.", e);
+    			}
 		}
 		
 		CommonUtils.callSecuredAPI(context, utils.getAPIServerURL() +
@@ -151,7 +151,7 @@ public class MessageProcessor implements APIResultCallBack {
 	}
 
 	@SuppressWarnings("unused")
-    @Override
+    	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		String responseStatus;
 		String response;
