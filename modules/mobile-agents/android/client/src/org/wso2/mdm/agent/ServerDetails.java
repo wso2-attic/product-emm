@@ -85,7 +85,7 @@ public class ServerDetails extends Activity {
 					                            .getString(R.string.shared_pref_device_active)
 					);
 			
-			if (deviceActive.equals(context.getResources()
+			if (deviceActive != null && deviceActive.equals(context.getResources()
 			                               .getString(R.string.shared_pref_reg_success))) {
 				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
