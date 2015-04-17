@@ -22,7 +22,7 @@ $("a#invite-user-link").click(function() {
     var username = $(this).data("username");
     var inviteUserAPI = "/mdm/api/users/" + username + "/invite";
     $.ajax({
-        type : 'GET',
+        type : "GET",
         url : inviteUserAPI,
         success : function(data) {
             alert("User invitation for enrollment sent.");
@@ -42,9 +42,9 @@ $("a#remove-user-link").click(function() {
     var username = $(this).data("username");
     var removeUserAPI = "/mdm/api/users/" + username + "/remove";
     $.ajax({
-        type:'GET',
-        url:removeUserAPI,
-        success:function(data){
+        type : "GET",
+        url : removeUserAPI,
+        success : function(data) {
             if (data == 200) {
                 alert("user successfully removed.");
                 location.reload();
@@ -56,7 +56,7 @@ $("a#remove-user-link").click(function() {
                 alert("User does not exist.");
             }
         },
-        error:function(){
+        error : function() {
             alert("An unexpected error occurred.");
         }
     });
