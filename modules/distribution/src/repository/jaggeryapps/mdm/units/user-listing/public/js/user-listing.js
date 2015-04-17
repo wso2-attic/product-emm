@@ -1,4 +1,7 @@
-/* sorting function */
+/**
+ * Sorting function of users
+ * listed on User Management page in WSO2 MDM Console.
+ */
 $(function() {
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
@@ -10,15 +13,31 @@ $(function() {
     $(sortableElem).disableSelection();
 });
 
+/**
+ * Following click function would execute
+ * when a user clicks on "Invite" link
+ * on User Management page in WSO2 MDM Console.
+ */
 $("a#invite-user-link").click(function() {
     var username = $(this).data("username");
-    $.get("/mdm/api/users/" + username + "/invite", function( data ) {
-        alert("User invitation for enrollment sent.");
-    }).fail(function(message){
-
+    var inviteUserAPI = "/mdm/api/users/" + username + "/invite";
+    $.ajax({
+        type : 'GET',
+        url : inviteUserAPI,
+        success : function(data) {
+            alert("User invitation for enrollment sent.");
+        },
+        error: function() {
+            alert("An unexpected error occurred.");
+        }
     });
 });
 
+/**
+ * Following click function would execute
+ * when a user clicks on "Remove" link
+ * on User Management page in WSO2 MDM Console.
+ */
 $("a#remove-user-link").click(function() {
     var username = $(this).data("username");
     var removeUserAPI = "/mdm/api/users/" + username + "/remove";
