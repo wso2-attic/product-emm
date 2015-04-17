@@ -55,8 +55,7 @@ public class Root {
 	 * @return - Device root status by build tags.
 	 */
 	public boolean checkRootByBuildTags() {
-
-        String buildTags = android.os.Build.TAGS;
+        	String buildTags = android.os.Build.TAGS;
 		if (buildTags != null && buildTags.contains(SU_TAG)) {
             		if (Constants.DEBUG_MODE_ENABLED){
                 		Log.d(TAG, "Build tags found");
