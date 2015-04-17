@@ -63,8 +63,8 @@ public class ServerDetails extends Activity {
 		if (!compatibility.getCode()) {
 			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
 			txtSeverAddress.setVisibility(View.VISIBLE);
-            btnStartRegistration.setVisibility(View.GONE);
-            evServerIP.setVisibility(View.GONE);
+            		btnStartRegistration.setVisibility(View.GONE);
+            		evServerIP.setVisibility(View.GONE);
 		} else {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
