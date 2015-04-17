@@ -131,15 +131,13 @@ public class DeviceStateICS implements DeviceState{
 	@Override
 	public Response evaluateCompatibility() {
 		if (!(info.getSdkVersion() >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) &&
-				info.isRooted()) {
-			return Response.INCOMPATIBLE;
-
-		} else if (info.getSdkVersion() < android.os.Build.VERSION_CODES.FROYO) {
-			return Response.INCOMPATIBLE;
-		} else if (info.isRooted()) {
-			return Response.INCOMPATIBLE;
-		}
-		
+                info.isRooted()) {
+            return Response.INCOMPATIBLE;
+        } else if (info.getSdkVersion() < android.os.Build.VERSION_CODES.FROYO) {
+            return Response.INCOMPATIBLE_OS;
+        } else if (info.isRooted()) {
+            return Response.INCOMPATIBLE_ROOT;
+        }		
 		return Response.COMPATIBLE;
 	}
 

@@ -61,9 +61,10 @@ public class ServerDetails extends Activity {
 
 		Response compatibility = state.evaluateCompatibility();
 		if (!compatibility.getCode()) {
-			btnStartRegistration.setVisibility(View.GONE);
-			txtSeverAddress.setVisibility(View.GONE);
-			evServerIP.setVisibility(View.GONE);
+			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+			txtSeverAddress.setVisibility(View.VISIBLE);
+            btnStartRegistration.setVisibility(View.GONE);
+            evServerIP.setVisibility(View.GONE);
 		} else {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
