@@ -581,14 +581,14 @@ public class Operation {
 		String title = null;
 
 		try {
-			JSONObject webClipData = new JSONObject(code);
+			JSONObject webClipData = new JSONObject(data);
 			appUrl = (String) webClipData.get(resources.getString(R.string.intent_extra_identity));
 			title = (String) webClipData.get(resources.getString(R.string.intent_extra_title));
 		} catch (JSONException e) {
 			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
-		resultBuilder.build(data);
+		resultBuilder.build(code);
 
 		if(appUrl != null && title != null){
 			appList.createWebAppBookmark(appUrl, title);
