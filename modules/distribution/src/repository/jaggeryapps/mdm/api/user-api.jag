@@ -34,20 +34,21 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
     username = request.getParameter("username");
     password = request.getParameter("password");
     try {
-        userModule.login(username, password, function(user){
-            if(log.isDebugEnabled()){
-                log.debug("User Logged In: " + user);
+        userModule.login(username, password, function(user) {
+            if (log.isDebugEnabled()) {
+                log.debug("User Logged In : " + user);
             }
             utility.insertAppPermissions(userModule, "login");
             response.sendRedirect(constants.WEB_APP_CONTEXT);
-        }, function(){
+        }, function() {
             response.sendRedirect(mdmProps.appContext + "login?#auth-failed");
         });
     } catch (e) {
+        log.error("Exception occurred while a user tried to login to MDM", e);
         response.sendRedirect(mdmProps.appContext + "login?#error");
     }
 } else if (uriMatcher.match("/{context}/api/user/logout/")){
-    userModule.logout(function(){
+    userModule.logout(function() {
         response.sendRedirect(mdmProps.appContext + "login");
     });
 } else if (uriMatcher.match("/{context}/api/user/devices/")) {
