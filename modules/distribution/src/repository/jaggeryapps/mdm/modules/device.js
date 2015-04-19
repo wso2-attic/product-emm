@@ -33,12 +33,12 @@ deviceModule = function () {
 
     var deviceManagementService = utility.getDeviceManagementService();
 
-    var defaultVal = function (prop) {
-        return (prop == undefined || prop == null) ? constants.UNSPECIFIED : prop;
-    };
-
     var publicMethods = {};
     var privateMethods = {};
+
+    privateMethods.validateAndReturn = function (value) {
+        return (value == undefined || value == null) ? constants.UNSPECIFIED : value;
+    };
 
     publicMethods.listDevices = function () {
         var devices = deviceManagementService.getAllDevices();
@@ -49,18 +49,23 @@ deviceModule = function () {
             propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
 
             deviceObject = {};
-            deviceObject[constants.DEVICE_IDENTIFIER] = defaultVal(device.getDeviceIdentifier());
-            deviceObject[constants.DEVICE_NAME] = defaultVal(device.getName());
-            deviceObject[constants.DEVICE_OWNERSHIP] = defaultVal(device.getOwnership());
-            deviceObject[constants.DEVICE_OWNER] = defaultVal(device.getOwner());
-            deviceObject[constants.DEVICE_TYPE] = defaultVal(device.getType());
+            deviceObject[constants.DEVICE_IDENTIFIER] =
+                privateMethods.validateAndReturn(device.getDeviceIdentifier());
+            deviceObject[constants.DEVICE_NAME] =
+                privateMethods.validateAndReturn(device.getName());
+            deviceObject[constants.DEVICE_OWNERSHIP] =
+                privateMethods.validateAndReturn(device.getOwnership());
+            deviceObject[constants.DEVICE_OWNER] =
+                privateMethods.validateAndReturn(device.getOwner());
+            deviceObject[constants.DEVICE_TYPE] =
+                privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
-                                        defaultVal(propertiesList.get(constants.DEVICE_VENDOR));
+                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_VENDOR));
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
-                                        defaultVal(propertiesList.get(constants.DEVICE_MODEL));
+                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
-                                        defaultVal(propertiesList.get(constants.DEVICE_OS_VERSION));
+                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
             deviceList.push(deviceObject);
         }
@@ -76,18 +81,23 @@ deviceModule = function () {
             propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
 
             deviceObject = {};
-            deviceObject[constants.DEVICE_IDENTIFIER] = defaultVal(device.getDeviceIdentifier());
-            deviceObject[constants.DEVICE_NAME] = defaultVal(device.getName());
-            deviceObject[constants.DEVICE_OWNERSHIP] = defaultVal(device.getOwnership());
-            deviceObject[constants.DEVICE_OWNER] = defaultVal(device.getOwner());
-            deviceObject[constants.DEVICE_TYPE] = defaultVal(device.getType());
+            deviceObject[constants.DEVICE_IDENTIFIER] =
+                privateMethods.validateAndReturn(device.getDeviceIdentifier());
+            deviceObject[constants.DEVICE_NAME] =
+                privateMethods.validateAndReturn(device.getName());
+            deviceObject[constants.DEVICE_OWNERSHIP] =
+                privateMethods.validateAndReturn(device.getOwnership());
+            deviceObject[constants.DEVICE_OWNER] =
+                privateMethods.validateAndReturn(device.getOwner());
+            deviceObject[constants.DEVICE_TYPE] =
+                privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
-                                        defaultVal(propertiesList.get(constants.DEVICE_VENDOR));
+                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_VENDOR));
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
-                                        defaultVal(propertiesList.get(constants.DEVICE_MODEL));
+                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
-                                        defaultVal(propertiesList.get(constants.DEVICE_OS_VERSION));
+                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
             deviceList.push(deviceObject);
         }
@@ -158,19 +168,22 @@ deviceModule = function () {
             var iterator = entries.iterator();
             var properties = {};
             var entry, key, value;
+
             while (iterator.hasNext()) {
                 entry = iterator.next();
                 key = entry.getKey();
                 value = entry.getValue();
-                properties[key] = defaultVal(value);
+                properties[key] = privateMethods.validateAndReturn(value);
             }
+
             var deviceObject = {};
             deviceObject[constants.DEVICE_IDENTIFIER] = device.getDeviceIdentifier();
-            deviceObject[constants.DEVICE_NAME] = defaultVal(device.getName());
-            deviceObject[constants.DEVICE_OWNERSHIP] = defaultVal(device.getOwnership());
+            deviceObject[constants.DEVICE_NAME] = privateMethods.validateAndReturn(device.getName());
+            deviceObject[constants.DEVICE_OWNERSHIP] = privateMethods.validateAndReturn(device.getOwnership());
             deviceObject[constants.DEVICE_OWNER] = device.getOwner();
             deviceObject[constants.DEVICE_TYPE] = device.getType();
             deviceObject[constants.DEVICE_PROPERTIES] = properties;
+
             return deviceObject;
         }
     };
