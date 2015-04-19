@@ -20,7 +20,7 @@ var userModule = (function() {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
-    var utility = require('/modules/utility.js');
+    var utility = require('/modules/utility.js').utility;
     var dataConfig = require('/config/mdm-props.js').config();
 
     var userManagementService = utility.getUserManagementService();
