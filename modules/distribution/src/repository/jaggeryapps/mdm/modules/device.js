@@ -23,13 +23,13 @@ deviceModule = function () {
     var utility = require('/modules/utility.js').utility;
     var constants = require('/modules/constants.js');
 
+    var ArrayList = Packages.java.util.ArrayList;
+    var Properties = Packages.java.util.Properties;
     var DeviceIdentifier = Packages.org.wso2.carbon.device.mgt.common.DeviceIdentifier;
     var DeviceManagerUtil = Packages.org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
-    var CommandOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.CommandOperation;
-    var ConfigOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.ConfigOperation;
     var SimpleOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.SimpleOperation;
-    var Properties = Packages.java.util.Properties;
-    var ArrayList = Packages.java.util.ArrayList;
+    var ConfigOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.ConfigOperation;
+    var CommandOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.CommandOperation;
 
     var deviceManagementService = utility.getDeviceManagementService();
 
