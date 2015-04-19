@@ -20,8 +20,8 @@ var userModule = (function() {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
-    var utility = require('/modules/utility.js').utility;
-    var dataConfig = require('/config/mdm-props.js').config();
+    var dataConfig = require("/config/mdm-props.js").config();
+    var utility = require("/modules/utility.js").utility;
 
     var userManagementService = utility.getUserManagementService();
     var deviceManagementService = utility.getDeviceManagementService();
@@ -212,7 +212,6 @@ var userModule = (function() {
         }
         var user = userManagementService.getUser(username, carbonUser.tenantId);
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
-        deviceManagement = utility.getDeviceManagementService();
 
         var emailProperties = new EmailMessageProperties();
         var emailTo = [];
@@ -221,7 +220,7 @@ var userModule = (function() {
         emailProperties.setFirstName(user.getFirstName());
         emailProperties.setTitle(user.getTitle());
         emailProperties.setEnrolmentUrl(enrollmentURL);
-        deviceManagement.sendEnrolmentInvitation(emailProperties);
+        deviceManagementService.sendEnrolmentInvitation(emailProperties);
     };
 
     publicMethods.getUsers = function() {
