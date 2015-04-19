@@ -233,9 +233,9 @@ userModule = function () {
             throw constants.ERRORS.USER_NOT_FOUND;
         }
         var userList = userManagementService.getUsersForTenant(carbonUser.tenantId);
-        for (var i = 0; i < userList.size(); i++) {
-            var userObject = userList.get(i);
-            log.info(userObject.class);
+        var i, userObject;
+        for (i = 0; i < userList.size(); i++) {
+            userObject = userList.get(i);
             users.push({
                 "username" : userObject.getUserName(),
                 "email" : userObject.getEmail(),
