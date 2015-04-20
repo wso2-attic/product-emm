@@ -253,7 +253,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	}
 
 	@Override
-	public void onAPIAccessRecive(String status) {
+	public void onAPIAccessReceive(String status) {
 		if (status != null) {
 			if (status.trim().equals(Constants.REQUEST_SUCCESSFUL)) {
 				Preference.putString(context,
