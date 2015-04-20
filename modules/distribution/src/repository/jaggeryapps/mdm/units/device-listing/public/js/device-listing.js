@@ -138,10 +138,10 @@ $(document).ready(function () {
     $.template("device-listing", deviceListingSrc, function(template){
         var serviceURL;
         if ($.hasPermission("LIST_DEVICES")) {
-            serviceURL = "https://localhost:9443/mdm/api/devices";
+            serviceURL = "/mdm/api/devices";
         }else if($.hasPermission("LIST_OWN_DEVICES")){
             //Get authenticated users devices
-            serviceURL = "https://localhost:9443/mdm/api/user/devices";
+            serviceURL = "/mdm/api/user/devices";
         }else {
             $("#ast-container").html("Permission denied");
             return;
