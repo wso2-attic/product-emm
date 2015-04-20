@@ -150,9 +150,8 @@ $(document).ready(function () {
             return;
         }
         $.get(serviceURL, function (data) {
-            var viewModel = {
-                "devices": JSON.parse(data)
-            };
+            var viewModel = {};
+            viewModel.devices = JSON.parse(data);
             viewModel.imageLocation = imageResource;
             var content = template(viewModel);
             $("#ast-container").html(content);

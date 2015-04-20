@@ -23,5 +23,5 @@ package org.wso2.mdm.agent.proxy.interfaces;
  * can implement this when retrieving tokens on authentication.
  */
 public interface APIAccessCallBack {
-	void onAPIAccessRecive(String status);
+	void onAPIAccessReceive(String status);
 }
