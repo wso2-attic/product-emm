@@ -53,9 +53,9 @@
     <string name="device_admin_enabled">Device Admin Enabled</string>
     <string name="device_admin_disabled">Device Admin Disabled</string>
     <string name="device_not_compatible_error">You are not allowed to enroll because your device is rooted and device OS version is older than 4.0.3</string>
-    <string name="device_not_compatible_error_os">You are not allowed to enroll because your device is rooted</string>
+    <string name="device_not_compatible_error_os">You are not allowed to enroll because your device OS version is older than 4.0.3</string>
+    <string name="device_not_compatible_error_root">You are not allowed to enroll because your device is rooted</string>
     <string name="device_compatible">Compatible device</string>
-    <string name="device_not_compatible_error_root">You are not allowed to enroll because your device OS version is older than 4.0.3</string>
     <string name="title_activity_authentication_error">AuthenticationError</string>
     <string name="title_activity_notification">NotificationActivity</string>
     <string name="title_activity_notify">NotifyActivity</string>
