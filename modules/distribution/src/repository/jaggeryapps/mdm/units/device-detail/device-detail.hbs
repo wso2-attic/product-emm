@@ -32,12 +32,12 @@
 
                 <div class="col-md-2">
                     <div class="row">
-                        <img src="images/device_icons/android-mobile.png" style="width:200px" />
+                        <img src="{{self.publicURL}}/img/device_icons/{{device.type}}.png" style="width:200px" />
                     </div>
                     <div class="row ast-desc">
-                        <div class="ast-device-desc"><b>Device:</b> Samsung Galaxy S4</div>
-                        <div class="ast-device-desc"><b>Model:</b>  GT-i9505</div>
-                        <div class="ast-device-desc"><b>IMEI:</b>  351776060691383</div>
+                        <div class="ast-device-desc"><b>Device:</b> {{device.properties.vendor}} {{device.properties.model}}</div>
+                        <div class="ast-device-desc"><b>Model:</b>  {{device.properties.model}}</div>
+                        <div class="ast-device-desc"><b>IMEI:</b>  {{device.deviceIdentifier}}</div>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                                 <div><span class="tile-stats-sm">721 Mb </span><span class="tile-stats-type">Cellular</span></div>
                                 <div><span class="tile-stats-sm">3.2 Gb </span><span class="tile-stats-type">Wi-Fi</span></div>
                             </div>
-                            <div class="tile-graph"><img src="images/graph.png" /></div>
+                            <div class="tile-graph"><img src="{{self.publicURL}}/img/graph.png" /></div>
                         </div>
 
                         <div class="ctrl-tile-status tile-bg">

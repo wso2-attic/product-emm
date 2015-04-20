@@ -8,7 +8,6 @@ function onRequest(context) {
     if (os.name == "Windows Phone"){
         var action = request.getParameter("appru");
         if(action){
-            log.info("&&&&&&&&&&&&&&&^^^^");
             session.put("windows_action", action);
         }
     }
