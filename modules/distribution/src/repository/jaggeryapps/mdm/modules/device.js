@@ -41,6 +41,7 @@ var deviceModule = (function () {
         var deviceList = [];
         for (var i = 0; i < devices.size(); i++) {
             var device = devices.get(i);
+            log.info(device.getDeviceIdentifier());
             var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
             var deviceObject = {};
             deviceObject[constants.DEVICE_IDENTIFIER] = defaultVal(device.getDeviceIdentifier());
