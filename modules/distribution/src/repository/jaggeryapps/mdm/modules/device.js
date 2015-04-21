@@ -60,11 +60,11 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_TYPE] =
                 privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
-            if(device.getType() == constants.PLATFORM_ANDROID){
+            if (device.getType() == constants.PLATFORM_IOS) {
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
                     privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
-            }else{
+            } else {
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
                     privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
@@ -98,11 +98,11 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_TYPE] =
                 privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
-            if(device.getType() == constants.PLATFORM_ANDROID){
+            if (device.getType() == constants.PLATFORM_IOS) {
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
                     privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
-            }else{
+            } else {
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
                     privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
@@ -119,8 +119,8 @@ deviceModule = function () {
     /*
      Get the supported features by the device type
      */
-    publicMethods.getFeatures = function () {
-        var features = deviceManagementService.getFeatureManager(constants.PLATFORM_ANDROID).getFeatures();
+    publicMethods.getFeatures = function (deviceType) {
+        var features = deviceManagementService.getFeatureManager(deviceType).getFeatures();
         var featuresConverted = {};
 
         if (features) {
@@ -194,14 +194,13 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_OWNERSHIP] = privateMethods.validateAndReturn(device.getOwnership());
             deviceObject[constants.DEVICE_OWNER] = device.getOwner();
             deviceObject[constants.DEVICE_TYPE] = device.getType();
-            log.info(properties);
-            if(device.getType() == constants.PLATFORM_ANDROID){
+            if (device.getType() == constants.PLATFORM_IOS) {
                 properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
                 delete properties[constants.DEVICE_PRODUCT];
                 properties[constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
             }
             deviceObject[constants.DEVICE_PROPERTIES] = properties;
-
+            
             return deviceObject;
         }
     };
