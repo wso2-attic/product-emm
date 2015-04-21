@@ -256,9 +256,14 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	public void onAPIAccessReceive(String status) {
 		if (status != null) {
 			if (status.trim().equals(Constants.REQUEST_SUCCESSFUL)) {
+				String androidId = Secure.getString(context.getContentResolver(), 
+				Secure.ANDROID_ID);
 				Preference.putString(context,
 				                     getResources().getString(R.string.shared_pref_username),
 				                     username);
+				Preference.putString(context,
+				                     getResources().getString(R.string.shared_pref_regId),
+				                     androidId);
 
 				// Check network connection availability before calling the API.
 				CommonDialogUtils.stopProgressDialog(progressDialog);
