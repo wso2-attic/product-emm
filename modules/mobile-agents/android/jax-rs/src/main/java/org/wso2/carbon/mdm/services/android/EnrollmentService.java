@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
@@ -60,6 +61,29 @@ public class EnrollmentService {
 			throw new AndroidAgentException(msg, e);
 		}
 	}
+
+    @POST
+    @Path("{sendMail}")
+    public void sendMail()
+            throws AndroidAgentException {
+
+        Message responseMsg = new Message();
+        String msg;
+        try {
+            EmailMessageProperties messageProperties = new EmailMessageProperties();
+            messageProperties.setMailTo(new String[]{"manojg@wso2.com"});
+            messageProperties.setFirstName("Manoj");
+            messageProperties.setTitle("Mr");
+            messageProperties.setUserName("ManojG");
+            messageProperties.setPassword("welcome");
+
+            AndroidAPIUtils.getDeviceManagementService().sendRegistrationEmail(messageProperties);
+        } catch (DeviceManagementException e) {
+            msg = "Error occurred while enrolling the device";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
+        }
+    }
 
 	@GET
 	@Path("{id}")

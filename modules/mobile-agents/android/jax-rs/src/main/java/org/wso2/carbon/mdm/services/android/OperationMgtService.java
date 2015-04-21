@@ -34,6 +34,7 @@ import org.wso2.carbon.mdm.services.android.util.Message;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +43,29 @@ import java.util.List;
 public class OperationMgtService {
 
 	private static Log log = LogFactory.getLog(OperationMgtService.class);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
+            (@HeaderParam("Accept") String acceptHeader, @PathParam("id") String id) {
+
+        Message message = new Message();
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        java.util.List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations = new
+                ArrayList<Operation>();
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android pending operations:"+id);
+        }
+        DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+        try {
+             operations = AndroidAPIUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
+        }catch(OperationManagementException ex){
+            message.setResponseMessage("Issue in retrieving operation management service instance");
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+        return operations;
+    }
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
