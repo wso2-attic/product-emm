@@ -4,8 +4,8 @@
     <div class="wr-operations">
 
         {{#if features.DEVICE_LOCK}}
-        <a href="javascript:operationSelect('devicelock')"><i class="wso2icon wso2-lock"></i><span>{{features.DEVICE_LOCK.description}}</span></a>
-        <div class="operation" data-operation="devicelock">
+        <a href="javascript:operationSelect('{{features.DEVICE_LOCK.featureName}}')"><i class="wso2icon wso2-lock"></i><span>{{features.DEVICE_LOCK.featureDescription}}</span></a>
+        <div class="operation" data-operation="{{features.DEVICE_LOCK.featureName}}">
             <div class="content">Are you sure you want to lock the selected devices ?</div>
             <div class="buttons">
                 <a href="javascript:runOperation('lock')" class="btn-operations">Lock</a>

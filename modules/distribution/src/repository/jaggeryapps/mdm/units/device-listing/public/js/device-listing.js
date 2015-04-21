@@ -128,9 +128,9 @@ function changeDeviceView(view, selection) {
  */
 function addDeviceSelectedClass(checkbox) {
     if ($(checkbox).is(":checked")) {
-        $(checkbox).closest(".ctrl-wr-asset").addClass("selected");
+        $(checkbox).closest(".ctrl-wr-asset").addClass("selected device-select");
     } else {
-        $(checkbox).closest(".ctrl-wr-asset").removeClass("selected");
+        $(checkbox).closest(".ctrl-wr-asset").removeClass("selected device-select");
     }
 }
 

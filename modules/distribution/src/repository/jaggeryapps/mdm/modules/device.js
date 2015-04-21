@@ -27,9 +27,9 @@ deviceModule = function () {
     var Properties = Packages.java.util.Properties;
     var DeviceIdentifier = Packages.org.wso2.carbon.device.mgt.common.DeviceIdentifier;
     var DeviceManagerUtil = Packages.org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
-    var SimpleOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.SimpleOperation;
-    var ConfigOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.ConfigOperation;
-    var CommandOperation = Packages.org.wso2.carbon.device.mgt.common.operation.mgt.CommandOperation;
+    var SimpleOperation = Packages.org.wso2.carbon.device.mgt.core.operation.mgt.SimpleOperation;
+    var ConfigOperation = Packages.org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
+    var CommandOperation = Packages.org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 
     var deviceManagementService = utility.getDeviceManagementService();
 
@@ -120,8 +120,9 @@ deviceModule = function () {
      Get the supported features by the device type
      */
     publicMethods.getFeatures = function () {
-        var features = deviceManagementService.getFeatureManager(constants.PLATFORM_ANDROID).getFeatures();
+        var features = deviceManagementService.getFeatureManager(constants.PLATFORM_IOS).getFeatures();
         var featuresConverted = {};
+
         if (features) {
             var i, feature, featureObject;
             for (i = 0; i < features.size(); i++) {
@@ -132,7 +133,6 @@ deviceModule = function () {
                 featuresConverted[feature.getName()] = featureObject;
             }
         }
-
         return featuresConverted;
     };
 
