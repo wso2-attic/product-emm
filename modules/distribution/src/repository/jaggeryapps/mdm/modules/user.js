@@ -6,50 +6,55 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
 
-var EmailMessageProperties =  Packages.org.wso2.carbon.device.mgt.common.EmailMessageProperties;
-var deviceManagement;
-var userModule = (function () {
+var userModule;
+userModule = function () {
     var log = new Log("modules/user.js");
+
     var constants = require("/modules/constants.js");
-    var utility = require('/modules/utility.js').utility;
-    var dataConfig = require('/config/mdm-props.js').config();
+    var dataConfig = require("/config/mdm-props.js").config();
+    var utility = require("/modules/utility.js").utility;
+
     var userManagementService = utility.getUserManagementService();
-    deviceManagement = utility.getDeviceManagementService();
+    var deviceManagementService = utility.getDeviceManagementService();
+    var EmailMessageProperties = Packages.org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 
     var publicMethods = {};
     var privateMethods = {};
 
-    publicMethods.login = function(username, password, successCallback, failureCallback){
+    /**
+     * Authenticate a user when he or she attempts to login to MDM.
+     *
+     * @param username Username of the user
+     * @param password Password of the user
+     * @param successCallback Function to be called at the event of successful authentication
+     * @param failureCallback Function to be called at the event of failed authentication
+     */
+    publicMethods.login = function (username, password, successCallback, failureCallback) {
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
-        username = username + "@" + carbonModule.server.tenantDomain();
         try {
-            var authState = carbonServer.authenticate(username, password);
-            log.info(username);
-
-            delete password;
-            if (authState){
-                var carbonUser = carbonModule.server.tenantUser(username);
-                session.put(constants.USER_SESSION_KEY, carbonUser);
-                successCallback(carbonUser);
-            }else{
+            // get tenant specific full user name.
+            username = username + "@" + carbonModule.server.tenantDomain();
+            // check if the user is an authenticated user.
+            var isAuthenticated = carbonServer.authenticate(username, password);
+            if (isAuthenticated) {
+                var tenantUser = carbonModule.server.tenantUser(username);
+                session.put(constants.USER_SESSION_KEY, tenantUser);
+                successCallback(tenantUser);
+            } else {
                 failureCallback();
-                exit();
             }
-        }catch (e) {
-            if(log.isDebugEnabled()){
-                log.debug(e);
-            }
+        } catch (e) {
             throw e;
         }
     };
@@ -90,7 +95,7 @@ var userModule = (function () {
                 // http status code 201 refers to - created.
                 return 201;
             }
-        } catch(e) {
+        } catch (e) {
             throw e;
         }
     };
@@ -123,7 +128,7 @@ var userModule = (function () {
                 // http status code 409 refers to - conflict.
                 return 409;
             }
-        } catch(e) {
+        } catch (e) {
             throw e;
         }
     };
@@ -135,13 +140,12 @@ var userModule = (function () {
      *
      * @returns {string} Initial User Password
      */
-    privateMethods.generateInitialUserPassword = function() {
+    privateMethods.generateInitialUserPassword = function () {
         var passwordLength = 6;
-
         //defining the pool of characters to be used for initial password generation
         var lowerCaseCharset = "abcdefghijklmnopqrstuvwxyz";
         var upperCaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var numericCharset   = "0123456789";
+        var numericCharset = "0123456789";
 
         var totalCharset = lowerCaseCharset + upperCaseCharset + numericCharset;
         var totalCharsetLength = totalCharset.length;
@@ -165,7 +169,7 @@ var userModule = (function () {
      *
      * @returns {Object} Default user claims to be provided
      */
-    privateMethods.buildDefaultUserClaims = function(firstname, lastname, emailAddress) {
+    privateMethods.buildDefaultUserClaims = function (firstname, lastname, emailAddress) {
         var defaultUserClaims = {
             "http://wso2.org/claims/givenname": firstname,
             "http://wso2.org/claims/lastname": lastname,
@@ -177,7 +181,7 @@ var userModule = (function () {
         return defaultUserClaims;
     };
 
-    publicMethods.addPermissions = function(permissionList, path, init){
+    publicMethods.addPermissions = function (permissionList, path, init) {
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
         var options = {system: true};
@@ -188,12 +192,13 @@ var userModule = (function () {
             }
         }
         var registry = new carbonModule.registry.Registry(carbonServer, options);
-        for(var index in permissionList){
-            var permission = permissionList[index];
-            var resource = {
+        var i, permission, resource;
+        for (i = 0; i < permissionList.length; i++) {
+            permission = permissionList[i];
+            resource = {
                 collection : true,
                 name : permission.name,
-                properties: {
+                properties : {
                     name : permission.name
                 }
             };
@@ -201,7 +206,7 @@ var userModule = (function () {
         }
     };
 
-    publicMethods.inviteUser = function(username) {
+    publicMethods.inviteUser = function (username) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
             log.error("User object was not found in the session");
@@ -209,19 +214,18 @@ var userModule = (function () {
         }
         var user = userManagementService.getUser(username, carbonUser.tenantId);
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
-        deviceManagement = utility.getDeviceManagementService();
 
         var emailProperties = new EmailMessageProperties();
-        var emailTo =  [];
+        var emailTo = [];
         emailTo[0] = user.getEmail();
         emailProperties.setMailTo(emailTo);
         emailProperties.setFirstName(user.getFirstName());
         emailProperties.setTitle(user.getTitle());
         emailProperties.setEnrolmentUrl(enrollmentURL);
-        deviceManagement.sendEnrolmentInvitation(emailProperties);
+        deviceManagementService.sendEnrolmentInvitation(emailProperties);
     };
 
-    publicMethods.getUsers = function(){
+    publicMethods.getUsers = function () {
         var users = [];
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
@@ -229,20 +233,19 @@ var userModule = (function () {
             throw constants.ERRORS.USER_NOT_FOUND;
         }
         var userList = userManagementService.getUsersForTenant(carbonUser.tenantId);
-        for (var i = 0; i < userList.size(); i++) {
-            var userObject = userList.get(i);
-            log.info( userObject.class);
+        var i, userObject;
+        for (i = 0; i < userList.size(); i++) {
+            userObject = userList.get(i);
             users.push({
                 "username" : userObject.getUserName(),
                 "email" : userObject.getEmail(),
-                "name" : userObject.getFirstName() +" "+ userObject.getLastName()
-
+                "name" : userObject.getFirstName() + " " + userObject.getLastName()
             });
         }
         return users;
     };
 
-    publicMethods.isAuthorized = function(permission){
+    publicMethods.isAuthorized = function (permission) {
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
         var carbonUser = session.get(constants.USER_SESSION_KEY);
@@ -255,13 +258,12 @@ var userModule = (function () {
         return user.isAuthorized(permission, "ui.execute");
     };
 
-    publicMethods.logout = function(successCallback){
+    publicMethods.logout = function (successCallback) {
         session.invalidate();
         successCallback();
     };
 
     return publicMethods;
-
-}());
+}();
 
 

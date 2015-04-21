@@ -78,7 +78,7 @@ public class IdentityProxy implements CallBack {
 		}
 		
 		IdentityProxy.token = token;
-		apiAccessCallBack.onAPIAccessRecive(status);
+		apiAccessCallBack.onAPIAccessReceive(status);
 	}
 
 	@Override

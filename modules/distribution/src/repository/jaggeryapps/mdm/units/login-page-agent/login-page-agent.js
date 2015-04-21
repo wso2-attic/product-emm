@@ -9,10 +9,9 @@ function onRequest(context){
     var viewModel = context;
     viewModel.link = os.name;
     if(os.name == "Android"){
-        log.info("Android detected");
         viewModel.header = "Complete MDM Registration";
     }else if(os.name == "iOS"){
-        viewModel.header = "Step 4. Complete MDM Registration";
+        viewModel.header = "Step 3. Login to MDM";
     }else if(os.name == "Windows Phone"){
         viewModel.header = "Step 2. Complete MDM Registration";
     }

@@ -7,11 +7,7 @@ function onRequest(context){
     parser.getResult();
     var os = parser.getOS();
     var viewModel = context;
-    viewModel.link = os.name;
-    if(os.name == "Android"){
-        log.info("Android detected");
-        viewModel.header = "Login to Mobile Device Manager";
-    }else if(os.name == "iOS"){
+    viewModel.link = os.name; if(os.name == "iOS"){
         viewModel.header = "Step 3. Login to Mobile Device Manager";
     }else if(os.name == "Windows Phone"){
         viewModel.header = "Step 1. Login to Mobile Device Manager";

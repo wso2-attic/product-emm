@@ -50,7 +50,8 @@ var route;
             "png": "image/png",
             "css": "text/css",
             "hbs": "text/x-handlebars-template",
-            "apk": "application/vnd.android.package-archive"
+            "apk": "application/vnd.android.package-archive",
+            "ipa": "application/octet-stream"
         };
         var mime;
         if (index >= 0) {

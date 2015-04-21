@@ -22,7 +22,7 @@
 var operations = '.wr-operations',
     modelPopup = '.wr-modalpopup',
     modelPopupContent = modelPopup + ' .modalpopup-content',
-    deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]';
+    deviceSelection = '.device-select';
 
 /*
  * On operation click function.
@@ -61,7 +61,7 @@ function hidePopup() {
  */
 function getSelectedDeviceIds(){
     var deviceIdentifierList = [];
-    $(deviceCheckbox).each(function(index){
+    $(deviceSelection).each(function(index){
         var device = $(this);
         var deviceId = device.data('deviceid');
         var deviceType = device.data('type');
@@ -72,30 +72,64 @@ function getSelectedDeviceIds(){
     });
     return deviceIdentifierList;
 }
+function getDevicesByTypes(deviceList){
+    var deviceTypes = {};
+    jQuery.each(deviceList, function(index, item) {
+        if(!deviceTypes[item.type]){
+            deviceTypes[item.type] = [];
+        }
+        if(item.type == "ios"){
+            //for iOS we are sending only the IDS cause we are sending it to the JAX-RS
+            deviceTypes[item.type].push(item.id);
+        }else{
+            deviceTypes[item.type].push(item);
+        }
+
+    });
+    return deviceTypes;
+}
 
 function runOperation(operation) {
     var operationObject = {"code": operation, "type": "COMMAND", properties: []};
     var deviceIdList = getSelectedDeviceIds();
-    var payload = {
-        "devices" : deviceIdList,
-        "operation" : operationObject
-    };
-    $.ajax({
-        url:"https://localhost:9443/mdm/api/operation",
-        type:"POST",
-        data: JSON.stringify(payload),
-        contentType:"application/json",
-        dataType:"json",
-        success: function(message){
-            console.log(message);
-            $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div class="wr-notification-operation">' +
-            'Device '+operation.toLowerCase()+' Operation Successful!</div><hr /> </div>');
-            var notificationCount = parseInt($(".wr-notification-bubble").html());
-            notificationCount++;
-            $(".wr-notification-bubble").html(notificationCount);
-        }
-    }).error(function(message, sdf,sdf){
+    var list = getDevicesByTypes(deviceIdList);
+    var successCallback = function(message){
         console.log(message);
-    });
+        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div class="wr-notification-operation">' +
+        'Device '+operation.toLowerCase()+' Operation Successful!</div><hr /> </div>');
+        var notificationCount = parseInt($(".wr-notification-bubble").html());
+        notificationCount++;
+        $(".wr-notification-bubble").html(notificationCount);
+    };
+    if(list["ios"]){
+        var payload = list["ios"];
+        $.ajax({
+            url: "https://localhost:9443/ios/operation/lock",
+            type: "POST",
+            data: JSON.stringify(payload),
+            contentType: "application/json",
+            accept: "application/json",
+            dataType: "json",
+            success: successCallback
+        }).error(function(message, sdf,sdf){
+            console.log(message);
+        });
+    }
+    if(list["android"]){
+        var payload = {
+            "devices" : list["android"],
+            "operation" : operationObject
+        };
+        $.ajax({
+            url: "https://localhost:9443/mdm/api/operation",
+            type: "POST",
+            data: JSON.stringify(payload),
+            contentType: "application/json",
+            dataType: "json",
+            success: successCallback
+        }).error(function(message, sdf,sdf){
+            console.log(message);
+        });
+    }
     hidePopup();
 }

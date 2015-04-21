@@ -48,7 +48,7 @@ if (uriMatcher.match("/{context}/api/devices/")) {
     type = elements.type;
     operation = elements.operation;
     if (userModule.isAuthorized("/permission/device-mgt/admin/devices/operation")) {
-        result = deviceModule.performOperation(deviceId, operation,[],type);
+        result = deviceModule.performOperation(deviceId, operation, [], type);
     } else {
         response.sendError(403);
     }

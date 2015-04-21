@@ -26,6 +26,7 @@ import org.wso2.mdm.agent.R;
 public enum Response {
 	INCOMPATIBLE(false, R.string.device_not_compatible_error),
 	INCOMPATIBLE_OS(false, R.string.device_not_compatible_error_os),
+    	INCOMPATIBLE_ROOT(false, R.string.device_not_compatible_error_root),
 	COMPATIBLE(true, R.string.device_not_compatible_error_os);
 
 	private final boolean code;

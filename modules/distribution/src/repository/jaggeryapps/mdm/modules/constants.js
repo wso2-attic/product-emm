@@ -6,35 +6,39 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
+
 var WEB_APP_TITLE = "WSO2 MDM";
-var WEB_APP_CONTEXT = "/mdm/";
-var UNSPECIFIED = "Unspecified";
+var WEB_APP_CONTEXT = "/mdm";
 var USER_SESSION_KEY = "USER";
+var UNSPECIFIED = "Unspecified";
 
 var DEVICE_IDENTIFIER = "deviceIdentifier";
 var DEVICE_NAME = "name";
 var DEVICE_OWNERSHIP = "ownership";
 var DEVICE_OWNER = "owner";
-var DEVICE_TYPE ="type";
+var DEVICE_TYPE = "type";
 var DEVICE_VENDOR = "vendor";
 var DEVICE_MODEL = "model";
+var DEVICE_PRODUCT = "PRODUCT";
 var DEVICE_OS_VERSION = "osVersion";
 var DEVICE_PROPERTIES = "properties";
 
 var FEATURE_NAME = "featureName";
 var FEATURE_DESCRIPTION = "featureDescription";
 
-var PLATFORM_ANDROID = "android"
+var PLATFORM_ANDROID = "android";
+var PLATFORM_IOS = "ios";
 
+var VENDOR_APPLE = "Apple";
 var ERRORS = {
-    "USER_NOT_FOUND" : "USER_NOT_FOUND"
-};
+        "USER_NOT_FOUND": "USER_NOT_FOUND"
+    };
