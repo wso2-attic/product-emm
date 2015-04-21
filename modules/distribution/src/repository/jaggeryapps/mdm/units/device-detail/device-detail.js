@@ -1,17 +1,15 @@
-function onRequest(context){
-    var log = new Log();
+function onRequest(context) {
     var uri = request.getRequestURI();
-    var uriMatcher = new URIMatcher(uri);
-    var elements = uriMatcher.match("/{context}/device/{type}/{deviceId}");
-    var deviceModule = require("/modules/device.js").deviceModule;
-    //TODO:- null scenarios
-    var type = elements['type'];
-    var deviceId = elements['deviceId'];
-    if(!type && !deviceId){
-        response.sendError("404");
-        exit();
+    var uriMatcher = new URIMatcher(String(uri));
+    var isMatched = uriMatcher.match("/{context}/device/{deviceType}/{+deviceId}");
+    if (isMatched) {
+        var matchedElements = uriMatcher.elements();
+        var deviceType = matchedElements.deviceType;
+        var deviceId = matchedElements.deviceId;
+        var deviceModule = require("/modules/device.js").deviceModule;
+        context.device = deviceModule.viewDevice(deviceType, deviceId);
+    } else {
+        response.sendError(404);
     }
-    context.device = deviceModule.viewDevice(type, deviceId);
-    log.info(context);
     return context;
 }

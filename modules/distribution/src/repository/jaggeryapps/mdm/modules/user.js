@@ -89,6 +89,7 @@ userModule = function () {
                 var defaultUserClaims = privateMethods.buildDefaultUserClaims(firstname, lastname, emailAddress);
 
                 userManager.addUser(username, initialUserPassword, userRoles, defaultUserClaims, "default");
+                privateMethods.inviteUserToEnroll(username, initialUserPassword);
                 if (log.isDebugEnabled()) {
                     log.debug("A new user with name '" + username + "' was created.");
                 }
@@ -181,6 +182,33 @@ userModule = function () {
         return defaultUserClaims;
     };
 
+    /**
+     * Send an initial invitation email to a user with username/password attached
+     * for the very-first enrollment with WSO2 MDM.
+     *
+     * @param username Username of the user
+     * @param password Password of the user
+     */
+    privateMethods.inviteUserToEnroll = function (username, password) {
+        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        var user = userManagementService.getUser(username, carbonUser.tenantId);
+
+        var emailTo = [];
+        emailTo[0] = user.getEmail();
+        var emailMessageProperties = new EmailMessageProperties();
+        emailMessageProperties.setMailTo(emailTo);
+        emailMessageProperties.setFirstName(user.getFirstName());
+        emailMessageProperties.setUserName(username);
+        emailMessageProperties.setPassword(password);
+        emailMessageProperties.setEnrolmentUrl(enrollmentURL);
+        deviceManagementService.sendRegistrationEmail(emailMessageProperties);
+    };
+
     publicMethods.addPermissions = function (permissionList, path, init) {
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
@@ -220,7 +248,6 @@ userModule = function () {
         emailTo[0] = user.getEmail();
         emailProperties.setMailTo(emailTo);
         emailProperties.setFirstName(user.getFirstName());
-        emailProperties.setTitle(user.getTitle());
         emailProperties.setEnrolmentUrl(enrollmentURL);
         deviceManagementService.sendEnrolmentInvitation(emailProperties);
     };

@@ -60,7 +60,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_TYPE] =
                 privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
-            if(device.getType() == constants.PLATFORM_IOS){
+            if(device.getType() == constants.PLATFORM_ANDROID){
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
                     privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
@@ -98,7 +98,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_TYPE] =
                 privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
-            if(device.getType() == constants.PLATFORM_IOS){
+            if(device.getType() == constants.PLATFORM_ANDROID){
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
                     privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
                 deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
@@ -120,7 +120,7 @@ deviceModule = function () {
      Get the supported features by the device type
      */
     publicMethods.getFeatures = function () {
-        var features = deviceManagementService.getFeatureManager(constants.PLATFORM_IOS).getFeatures();
+        var features = deviceManagementService.getFeatureManager(constants.PLATFORM_ANDROID).getFeatures();
         var featuresConverted = {};
 
         if (features) {
@@ -195,7 +195,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_OWNER] = device.getOwner();
             deviceObject[constants.DEVICE_TYPE] = device.getType();
             log.info(properties);
-            if(device.getType() == constants.PLATFORM_IOS){
+            if(device.getType() == constants.PLATFORM_ANDROID){
                 properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
                 delete properties[constants.DEVICE_PRODUCT];
                 properties[constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
