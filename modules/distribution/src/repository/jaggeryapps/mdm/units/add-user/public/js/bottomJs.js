@@ -65,7 +65,8 @@ $("button#add-user-btn").click(function() {
             data : JSON.stringify(addUserFormData),
             success : function(data) {
                 if (data == 201) {
-                    $(".wr-validation-summary p").text("User (" + username + ") was added.");
+                    $(".wr-validation-summary p").text("User (" + username + ") was added." +
+                        "An invitation mail will also be sent to this user to initiate Enrollment Process.");
                     // Clearing user input fields.
                     $("input#username").val("");
                     $("input#firstname").val("");
