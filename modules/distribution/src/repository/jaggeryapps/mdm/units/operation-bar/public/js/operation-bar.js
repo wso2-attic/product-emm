@@ -89,47 +89,38 @@ function getDevicesByTypes(deviceList){
     return deviceTypes;
 }
 
-function runOperation(operation) {
-    var operationObject = {"code": operation, "type": "COMMAND", properties: []};
+function runOperation(operationName) {
+    var operationObject = {"code": operationName, "type": "COMMAND", properties: []};
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
+    var iOSFeatureMap = {
+        DEVICE_LOCK: "lock",
+        ALARM: "alarm",
+        LOCATION: "location"
+    };
     var successCallback = function(message){
         console.log(message);
-        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div class="wr-notification-operation">' +
-        'Device '+operation.toLowerCase()+' Operation Successful!</div><hr /> </div>');
+        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
+        'class="wr-notification-operation">Device ' + operationName.toLowerCase() +
+        'Operation Successful!</div><hr /> </div>');
         var notificationCount = parseInt($(".wr-notification-bubble").html());
         notificationCount++;
         $(".wr-notification-bubble").html(notificationCount);
     };
     if(list["ios"]){
         var payload = list["ios"];
-        $.ajax({
-            url: "https://localhost:9443/ios/operation/lock",
-            type: "POST",
-            data: JSON.stringify(payload),
-            contentType: "application/json",
-            accept: "application/json",
-            dataType: "json",
-            success: successCallback
-        }).error(function(message, sdf,sdf){
-            console.log(message);
-        });
+        var operation = iOSFeatureMap[operationName];
+        invokerUtil.post("https://localhost:9443/ios/operation/" + operation, payload,
+            successCallback, function(message){
+                console.log(message);
+            });
     }
     if(list["android"]){
-        var payload = {
-            "devices" : list["android"],
-            "operation" : operationObject
-        };
-        $.ajax({
-            url: "https://localhost:9443/mdm/api/operation",
-            type: "POST",
-            data: JSON.stringify(payload),
-            contentType: "application/json",
-            dataType: "json",
-            success: successCallback
-        }).error(function(message, sdf,sdf){
-            console.log(message);
-        });
+        var payload =  list["android"];
+        invokerUtil.post("https://localhost:9443/android/operations/lock", payload,
+            successCallback, function(message){
+                console.log(message);
+            });
     }
     hidePopup();
 }

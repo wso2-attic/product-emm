@@ -5,7 +5,7 @@
 
         {{#if features.DEVICE_LOCK}}
         <a href="javascript:operationSelect('{{features.DEVICE_LOCK.featureName}}')"><i class="wso2icon wso2-lock"></i><span>{{features.DEVICE_LOCK.featureDescription}}</span></a>
-        <div class="operation" data-operation="{{features.DEVICE_LOCK.featureName}}">
+        <div class="operation" data-operation="{{features.ALARM.featureName}}">
             <div class="content">Are you sure you want to lock the selected devices ?</div>
             <div class="buttons">
                 <a href="javascript:runOperation('lock')" class="btn-operations">Lock</a>
@@ -14,9 +14,9 @@
         </div>
         {{/if}}
 
-        {{#if features.RING}}
-        <a href="javascript:operationSelect('ring')"><i class="wso2icon wso2-incoming-call"></i><span>Ring</span></a>
-        <div class="operation" data-operation="ring">
+        {{#if features.ALARM}}
+        <a href="javascript:operationSelect('{{features.ALARM.featureName}}')"><i class="wso2icon wso2-incoming-call"></i><span>Ring</span></a>
+        <div class="operation" data-operation="{{features.ALARM.featureName}}">
             <div class="content">Please click ok to start ringing</div>
             <div class="buttons">
                 <a href="javascript:runOperation('ring')" class="btn-operations">Ring</a>
@@ -37,8 +37,8 @@
             </div>
         </div>
 
-        <a href="javascript:operationSelect('locate')"><i class="wso2icon wso2-map-location"></i><span>Locate</span></a>
-        <div class="operation" data-operation="locate">
+        <a href="javascript:operationSelect('{{features.LOCATION.featureName}}')"><i class="wso2icon wso2-map-location"></i><span>Locate</span></a>
+        <div class="operation" data-operation="{{features.LOCATION.featureName}}">
             <div class="content">Locate</div>
             <div class="buttons">
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
