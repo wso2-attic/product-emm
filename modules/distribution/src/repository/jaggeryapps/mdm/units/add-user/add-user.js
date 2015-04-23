@@ -4,7 +4,7 @@
  * @param context Object that gets updated with the dynamic state of this page to be presented
  * @returns {*} A context object that returns the dynamic state of this page to be presented
  */
-function onRequest(context){
+function onRequest(context) {
     var carbon = require('carbon');
     var tenantId = carbon.server.tenantId();
     var url = carbon.server.address('https') + "/admin/services/";
