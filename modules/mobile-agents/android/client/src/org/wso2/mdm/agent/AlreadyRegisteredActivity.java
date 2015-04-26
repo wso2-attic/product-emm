@@ -85,17 +85,15 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            if (extras.
-					containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
-				freshRegFlag = extras.getBoolean(
-                                 getResources().getString(R.string.intent_extra_fresh_reg_flag));
+            if (extras.containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
+			freshRegFlag = extras.getBoolean(
+                                getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
 
 		}
 
 		String registrationId =
-                Preference.getString(context, resources.
-				                     			getString(R.string.shared_pref_regId));
+                	Preference.getString(context, resources.getString(R.string.shared_pref_regId));
 
 		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
@@ -108,7 +106,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
 			}
-
 			freshRegFlag = false;
 		}
 
@@ -180,8 +177,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				                    getResources().getString(R.string.dialog_message_please_wait),
 				                    true);
 
-		regId =
-				Preference.getString(context,
+		regId = Preference.getString(context,
 				                     context.getResources().getString(R.string.shared_pref_regId));
 
 		JSONObject requestParams = new JSONObject();
@@ -303,9 +299,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 */
 	private void clearAppData() {
 		CommonUtils.clearAppData(context);
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "App data cleared");
-        }
+        	if (Constants.DEBUG_MODE_ENABLED) {
+            		Log.d(TAG, "App data cleared");
+        	}
 	}
 
 	@Override
@@ -318,7 +314,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				responseStatus = result.get(Constants.STATUS_KEY);
 				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					clearAppData();
-                    initiateUnregistration();
+                    			initiateUnregistration();
 				} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else {
@@ -367,7 +363,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister.setText(R.string.register_button_text);
 		btnUnregister.setTag(TAG_BTN_RE_REGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-        LocalNotification.stopPolling(context);
+        	LocalNotification.stopPolling(context);
 		CommonUtils.clearAppData(context);
 	}
 
@@ -379,8 +375,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                getResources()
-				                           .getString(R.string.device_admin_enable_alert));
+                					getResources().getString(R.string.device_admin_enable_alert));
 		startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
 	}
 
@@ -392,8 +387,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				new AlertDialog.Builder(
 						AlreadyRegisteredActivity.this);
 		builder.setMessage(getResources().getString(R.string.dialog_unregister))
-                .setNegativeButton(getResources().getString(R.string.yes),
-                        dialogClickListener)
+                .setNegativeButton(getResources().getString(R.string.yes), dialogClickListener)
                 .setPositiveButton(getResources().getString(R.string.no),
 		                          dialogClickListener).show();
 	}
