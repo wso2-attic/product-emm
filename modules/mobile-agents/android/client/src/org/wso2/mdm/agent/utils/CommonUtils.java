@@ -113,6 +113,8 @@ public class CommonUtils {
 		                 resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_eula),
 		                 resources.getString(R.string.shared_pref_default_string));
+        editor.putString(resources.getString(R.string.shared_pref_device_active),
+                         resources.getString(R.string.shared_pref_reg_fail));
 		editor.commit();
 		
 		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);
