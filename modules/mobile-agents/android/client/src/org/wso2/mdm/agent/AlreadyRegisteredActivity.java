@@ -314,7 +314,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				responseStatus = result.get(Constants.STATUS_KEY);
 				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					clearAppData();
-                    initiateUnregistration();
+                    			initiateUnregistration();
 				} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else {
