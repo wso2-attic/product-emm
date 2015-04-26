@@ -84,8 +84,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		resources = context.getResources();
 		Bundle extras = getIntent().getExtras();
 
-		if (extras != null) {
-			if (extras.
+        if (extras != null) {
+            if (extras.
 					containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
 				freshRegFlag = extras.getBoolean(
                                  getResources().getString(R.string.intent_extra_fresh_reg_flag));
@@ -94,9 +94,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 
 		String registrationId =
-				Preference.getString(context, resources.
+                Preference.getString(context, resources.
 				                     			getString(R.string.shared_pref_regId));
-		
+
 		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
 		}
@@ -111,7 +111,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 			freshRegFlag = false;
 		}
-		
+
 		txtRegText = (TextView) findViewById(R.id.txtRegText);
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
@@ -119,7 +119,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		LocalNotification.startPolling(context);
 
 	}
-	
+
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
@@ -163,9 +163,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				@Override
 				public void onClick(DialogInterface arg0,
 				                    int arg1) {
-
 					loadServerDetailsActivity();
-
 				}
 			};
 
@@ -284,11 +282,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			} else {
 				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
 			}
-
 		}
 
 	}
-	
+
 	/**
 	 * Displays an internal server error message to the user.
 	 */
@@ -300,19 +297,15 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
                                             null);
 		alertDialog.show();
 	}
-	
+
 	/**
 	 * Clears application data and displays unregister success message.
 	 */
 	private void clearAppData() {
 		CommonUtils.clearAppData(context);
-
-		alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-                                            getResources().getString(R.string.title_head_registration_error),
-                                            getResources().getString(R.string.error_for_all_unknown_registration_failures),
-                                            getResources().getString(R.string.button_ok),
-                                            isRegisteredFailedOKBtnClickListerner);
-		alertDialog.show();
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "App data cleared");
+        }
 	}
 
 	@Override
@@ -325,6 +318,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				responseStatus = result.get(Constants.STATUS_KEY);
 				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					clearAppData();
+                    initiateUnregistration();
 				} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else {
@@ -344,7 +338,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 					displayInternalServerError();
 				} else if (!Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					initiateUnregistration();
-				} 
+				}
 			} else {
 				clearAppData();
 			}
@@ -352,11 +346,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 
 	}
-	
+
 	/**
 	 * Load device home screen.
 	 */
-	
+
 	private void loadHomeScreen(){
 		Intent i = new Intent();
 		i.setAction(Intent.ACTION_MAIN);
@@ -364,7 +358,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		this.startActivity(i);
 		super.onBackPressed();
 	}
-	
+
 	/**
 	 * Initiate unregistration.
 	 */
@@ -373,9 +367,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister.setText(R.string.register_button_text);
 		btnUnregister.setTag(TAG_BTN_RE_REGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+        LocalNotification.stopPolling(context);
 		CommonUtils.clearAppData(context);
 	}
-	
+
 	/**
 	 * Start device admin activation request.
 	 * @param cdmDeviceAdmin - Device admin component.
@@ -384,11 +379,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-		                           getResources()
+                getResources()
 				                           .getString(R.string.device_admin_enable_alert));
 		startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
 	}
-	
+
 	/**
 	 * Display unregistration confirmation dialog.
 	 */
@@ -397,12 +392,12 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				new AlertDialog.Builder(
 						AlreadyRegisteredActivity.this);
 		builder.setMessage(getResources().getString(R.string.dialog_unregister))
-		       .setNegativeButton(getResources().getString(R.string.yes),
-		                          dialogClickListener)
-		       .setPositiveButton(getResources().getString(R.string.no),
+                .setNegativeButton(getResources().getString(R.string.yes),
+                        dialogClickListener)
+                .setPositiveButton(getResources().getString(R.string.no),
 		                          dialogClickListener).show();
 	}
-	
+
 	/**
 	 * Load device info activity.
 	 */
@@ -414,7 +409,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		                  AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
 	}
-	
+
 	/**
 	 * Load server details activity.
 	 */
@@ -432,7 +427,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		startActivity(intent);
 		finish();
 	}
-	
+
 	/**
 	 * Load PIN code activity.
 	 */

@@ -58,7 +58,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 		MessageProcessor processor = new MessageProcessor(context);
 		processor.getMessages();
-		
+
 		Toast.makeText(context, R.string.device_admin_enabled,
 		               Toast.LENGTH_LONG).show();
 		LocalNotification.startPolling(context);
@@ -88,26 +88,26 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void startUnRegistration(Context context) {
 		String regId = Preference.getString(context, context
 				.getResources().getString(R.string.shared_pref_regId));
-
+        LocalNotification.stopPolling(context);
 		JSONObject requestParams = new JSONObject();
 		try {
 			requestParams.put(context.getResources().getString(R.string.shared_pref_regId), regId);
 		} catch (JSONException e) {
 			Log.e(TAG, "Registration ID not retrieved." + e.toString());
 		}
-		
+
 		CommonUtils.clearAppData(context);
-		CommonUtils.callSecuredAPI(context,
-		                           Constants.UNREGISTER_ENDPOINT,
-		                           HTTP_METHODS.POST, requestParams,
-		                           AgentDeviceAdminReceiver.this,
-		                           Constants.UNREGISTER_REQUEST_CODE);
+        CommonUtils.callSecuredAPI(context,
+                Constants.UNREGISTER_ENDPOINT,
+                HTTP_METHODS.POST, requestParams,
+                AgentDeviceAdminReceiver.this,
+                Constants.UNREGISTER_REQUEST_CODE);
 	}
 
 	@Override
 	public void onPasswordChanged(Context context, Intent intent) {
 		super.onPasswordChanged(context, intent);
-		if (Constants.DEBUG_MODE_ENABLED) { 
+		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "onPasswordChanged.");
 		}
 	}
