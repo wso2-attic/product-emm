@@ -88,7 +88,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void startUnRegistration(Context context) {
 		String regId = Preference.getString(context, context
 				.getResources().getString(R.string.shared_pref_regId));
-        LocalNotification.stopPolling(context);
+        	LocalNotification.stopPolling(context);
 		JSONObject requestParams = new JSONObject();
 		try {
 			requestParams.put(context.getResources().getString(R.string.shared_pref_regId), regId);
@@ -97,11 +97,11 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		}
 
 		CommonUtils.clearAppData(context);
-        CommonUtils.callSecuredAPI(context,
-                Constants.UNREGISTER_ENDPOINT,
-                HTTP_METHODS.POST, requestParams,
-                AgentDeviceAdminReceiver.this,
-                Constants.UNREGISTER_REQUEST_CODE);
+        	CommonUtils.callSecuredAPI(context,
+                	Constants.UNREGISTER_ENDPOINT,
+                	HTTP_METHODS.POST, requestParams,
+                	AgentDeviceAdminReceiver.this,
+                	Constants.UNREGISTER_REQUEST_CODE);
 	}
 
 	@Override
