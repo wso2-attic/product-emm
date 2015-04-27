@@ -168,7 +168,7 @@
     <string name="shared_pref_message_mode">mode</string>
     <string name="shared_pref_interval">interval</string>
     <string name="username">username</string>
-    <string name="shared_pref_device_active">0</string>
+    <string name="shared_pref_device_active">deviceActive</string>
     <string name="shared_pref_client_id">ClientID</string>
     <string name="shared_pref_client_secret">ClientSecret</string>
     <string name="shared_pref_operators">operators</string>
