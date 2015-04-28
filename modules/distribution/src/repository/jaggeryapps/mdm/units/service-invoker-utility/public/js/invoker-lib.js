@@ -28,7 +28,7 @@ var invokerUtil = function () {
             success: function(){
                 successCallback
             }
-        }).error(errorCallback);
+        }).fail(errorCallback);
     }
     function call(method, url, payload, successCallback, errorCallback){
         var accessToken = Cookies.get('accessToken');
@@ -61,7 +61,7 @@ var invokerUtil = function () {
                     success: function(){
                         execute();
                     }
-                }).error(errorCallback);
+                }).fail(errorCallback);
             }
         }else {
             execute();

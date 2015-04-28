@@ -22,6 +22,7 @@ var sso = require('/modules/sso.js').sso;
 var constants = require('/modules/constants.js');
 var carbonModule = require("carbon");
 var log = new Log();
+var apiWrapperUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
 var keyStoreParams = {
     keyStoreName: dataConfig.ssoConfiguration.keyStoreName,
     keyStorePassword: dataConfig.ssoConfiguration.keyStorePassword,
@@ -31,13 +32,14 @@ sso.configure(dataConfig.ssoConfiguration.issuer,
                     dataConfig.ssoConfiguration.appName,
                             keyStoreParams, dataConfig.ssoConfiguration.identityProviderURL);
 sso.acs(
-    function(loggedInUser) {
+    function(loggedInUser, samlResponse) {
         var carbonUser = carbonModule.server.tenantUser(loggedInUser);
         session.put(constants.USER_SESSION_KEY, carbonUser);
         var username = carbonUser.username;
         if(log.isDebugEnabled()){
             log.debug("User logged in: "+username);
         }
+        apiWrapperUtil.setupAccessTokenPair("saml", samlResponse);
         response.sendRedirect(dataConfig.appContext);
     }, function() {
         if(log.isDebugEnabled()){

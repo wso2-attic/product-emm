@@ -5,26 +5,25 @@
 
         {{#if features.DEVICE_LOCK}}
         <a href="javascript:operationSelect('{{features.DEVICE_LOCK.featureName}}')"><i class="wso2icon wso2-lock"></i><span>{{features.DEVICE_LOCK.featureDescription}}</span></a>
-        <div class="operation" data-operation="{{features.ALARM.featureName}}">
+        <div class="operation" data-operation="{{features.DEVICE_LOCK.featureName}}">
             <div class="content">Are you sure you want to lock the selected devices ?</div>
             <div class="buttons">
-                <a href="javascript:runOperation('lock')" class="btn-operations">Lock</a>
+                <a href="javascript:runOperation('{{features.DEVICE_LOCK.featureName}}')" class="btn-operations">Lock</a>
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
         {{/if}}
-
         {{#if features.ALARM}}
         <a href="javascript:operationSelect('{{features.ALARM.featureName}}')"><i class="wso2icon wso2-incoming-call"></i><span>Ring</span></a>
         <div class="operation" data-operation="{{features.ALARM.featureName}}">
             <div class="content">Please click ok to start ringing</div>
             <div class="buttons">
-                <a href="javascript:runOperation('ring')" class="btn-operations">Ring</a>
+                <a href="javascript:runOperation('{{features.ALARM.featureName}}')" class="btn-operations">Ring</a>
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
         {{/if}}
-
+        {{!
         <a href="javascript:operationSelect('message')"><i class="wso2icon wso2-message"></i><span>Message</span></a>
         <div class="operation" data-operation="message">
             <div class="content">
@@ -36,15 +35,16 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-
+        }}
         <a href="javascript:operationSelect('{{features.LOCATION.featureName}}')"><i class="wso2icon wso2-map-location"></i><span>Locate</span></a>
         <div class="operation" data-operation="{{features.LOCATION.featureName}}">
-            <div class="content">Locate</div>
+            <div class="content">Are you sure you want to request the location of the device?</div>
             <div class="buttons">
+                <a href="javascript:runOperation('{{features.LOCATION.featureName}}')" class="btn-operations">Locate</a>
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-
+        {{!
         <a href="javascript:operationSelect('wipe')"><i class="wso2icon wso2-clean"></i><span>Wipe</span></a>
         <div class="operation" data-operation="wipe">
             <div class="content">Wipe</div>
@@ -52,15 +52,6 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-
-        <a href="javascript:operationSelect('camera')"><i class="wso2icon wso2-camera"></i><span>Camera</span></a>
-        <div class="operation" data-operation="camera">
-            <div class="content">Camera</div>
-            <div class="buttons">
-                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
-            </div>
-        </div>
-
         <a href="javascript:operationSelect('wifi')"><i class="wso2icon wso2-wifi"></i><span>Wi-Fi</span></a>
         <div class="operation" data-operation="wifi">
             <div class="content">Wi-Fi</div>
@@ -68,7 +59,201 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
+        }}
+        <a href="javascript:operationSelect('{{features.RESTRICTION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Restriction</span></a>
+        <div class="operation" data-operation="{{features.RESTRICTION.featureName}}">
+            <div class="content operationData" data-operation="{{features.RESTRICTION.featureName}}">
+                <p>Enable Restrictions on iOS device</p>
+                <div class="form-horizontal col-centered col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Allow Camera</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="allowCamera" data-key="allowCamera" checked>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Allow Cloud Backup</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="allowCloudBackup" data-key="allowCloudBackup" checked>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Allow Screenshots</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="allowScreenShot" data-key="allowScreenShot" checked>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Allow Safari Browser</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="allowSafari" data-key="allowSafari" checked>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Allow AirDrop</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="allowAirDrop" data-key="allowAirDrop" checked>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="javascript:runOperation('{{features.RESTRICTION.featureName}}')" class="btn-operations">Configure</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            </div>
+        </div>
+        <a href="javascript:operationSelect('{{features.AIR_PLAY.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Configure AirPlay</span></a>
+        <div class="operation" data-operation="{{features.AIR_PLAY.featureName}}">
+            <div class="content operationData" data-operation="{{features.AIR_PLAY.featureName}}">
+                <p>Configure AirPlay</p>
+                <div class="form-horizontal col-centered col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="airPlayLocation">AirPlay location</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="airPlayLocation" data-key="location" placeholder="Enter location">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="airPlayDeviceName">AirPlay Device Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="airPlayDeviceName" data-key="deviceName" placeholder="Enter Device Name">
+                        </div>
 
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="airPlayPassword">AirPlay password</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control operationDataKeys col-sm-8 " id="airPlayPassword" data-key="password" placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="javascript:runOperation('{{features.AIR_PLAY.featureName}}')" class="btn-operations">Configure</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            </div>
+        </div>
+        <a href="javascript:operationSelect('{{features.INSTALL_STORE_APPLICATION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Install Appstore app</span></a>
+        <div class="operation" data-operation="{{features.INSTALL_STORE_APPLICATION.featureName}}">
+            <div class="content operationData" data-operation="{{features.INSTALL_STORE_APPLICATION.featureName}}">
+                <p>Install an App from the Apple Appstore</p>
+                <div class="form-horizontal col-centered col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="appIdentifier">App identifier</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="appIdentifier" data-key="appIdentifier" placeholder="Enter App Identifier">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="ituneID">iTunes store ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="ituneID" data-key="ituneID" placeholder="Enter iTunes store ID">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Bundle ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="bundleId" data-key="bundleId" placeholder="Enter Bundle ID">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Remove App upon dis-enrollment</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="appRemoval" data-key="appRemoval" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Prevent backup of App data</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="backupData" data-key="backupData" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="javascript:runOperation('{{features.INSTALL_STORE_APPLICATION.featureName}}')" class="btn-operations">Install</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            </div>
+        </div>
+        <a href="javascript:operationSelect('{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Install Enterprise app</span></a>
+        <div class="operation" data-operation="{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}">
+            <div class="content operationData" data-operation="{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}">
+                <p>Install an Enterprise App</p>
+                <div class="form-horizontal col-centered col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="appIdentifier">App identifier</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="appIdentifier" data-key="appIdentifier" placeholder="Enter App Identifier">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="manifestURL">Manifest URL</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="manifestURL" data-key="manifestURL" placeholder="Enter manifest URL">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Bundle ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="bundleId" data-key="bundleId" placeholder="Enter Bundle ID">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Remove App upon dis-enrollment</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="appRemoval" data-key="appRemoval" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Prevent backup of App data</label>
+                        <div class="col-sm-8">
+                            <input type="checkbox" class="pull-left operationDataKeys" id="backupData" data-key="backupData" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="javascript:runOperation('{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}')" class="btn-operations">Install</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            </div>
+        </div>
+        <a href="javascript:operationSelect('{{features.REMOVE_APPLICATION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Uninstall App</span></a>
+        <div class="operation" data-operation="{{features.REMOVE_APPLICATION.featureName}}">
+            <div class="content operationData" data-operation="{{features.REMOVE_APPLICATION.featureName}}">
+                <p>Uninstall App from Device</p>
+                <div class="form-horizontal col-centered col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Bundle ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="bundleId" data-key="bundleId" placeholder="Enter Bundle ID">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="javascript:runOperation('{{features.REMOVE_APPLICATION.featureName}}')" class="btn-operations">Uninstall</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            </div>
+        </div>
+        <a href="javascript:operationSelect('{{features.CELLULAR.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Configure Cellular</span></a>
+        <div class="operation" data-operation="{{features.CELLULAR.featureName}}">
+            <div class="content operationData" data-operation="{{features.CELLULAR.featureName}}">
+                <p>Configure Cellular</p>
+                <div class="form-horizontal col-centered col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="bundleId">Bundle ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control operationDataKeys col-sm-8" id="bundleId" data-key="bundleId" placeholder="Enter Bundle ID">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="javascript:runOperation('{{features.CELLULAR.featureName}}')" class="btn-operations">Uninstall</a>
+                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            </div>
+        </div>
         <br class="c-both" />
     </div>
     <!-- /operations container -->
