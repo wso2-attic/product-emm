@@ -41,47 +41,31 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-10 tiles">
 
                         <!-- device summary -->
-                        <div>
-                            <div class="ctrl-tile-status tile-bg">
-                                <div class="tile-name">BATTERY</div>
-                                <div>
-                                    <div class="tile-icon"><i class="wso2icon wso2-battery"></i></div>
-                                    <div class="tile-stats">{{device.properties.DEVICE_INFO.BatteryLevel}}%</div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-lg-4">
+                                    <div class="wr-stats-board-tile">
+                                        <div class="tile-name">BATTERY</div>
+                                        <div>
+                                            <div class="tile-icon"><i class="fw fw-battery"></i></div>
+                                            <div class="tile-stats">{{device.properties.DEVICE_INFO.BatteryLevel}}%</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="wr-stats-board-tile">
+                                        <div class="tile-name">STORAGE</div>
+                                        <div>
+                                            <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                            <div class="tile-stats">{{device.properties.DEVICE_INFO.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.properties.DEVICE_INFO.DeviceCapacityUsed}} GB Free</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="ctrl-tile-status tile-bg">
-                                <div class="tile-name">STORAGE</div>
-                                <div>
-                                    <div class="tile-icon"><i class="wso2icon wso2-hdd"></i></div>
-                                    <div class="tile-stats">{{device.properties.DEVICE_INFO.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.properties.DEVICE_INFO.DeviceCapacityUsed}} GB Used</span></div>
-                                </div>
-                            </div>
-
-                            <!--
-                            <div class="ctrl-tile-status-2x tile-bg">
-                                <div class="tile-name">USAGE /DATA<span class="tile-sup-lbl">Last 30 days</span></div>
-
-                                <div class="tile-stats-v">
-                                    <div><span class="tile-stats-sm">721 Mb </span><span class="tile-stats-type">Cellular</span></div>
-                                    <div><span class="tile-stats-sm">3.2 Gb </span><span class="tile-stats-type">Wi-Fi</span></div>
-                                </div>
-                                <div class="tile-graph"><img src="{{self.publicURL}}/img/graph.png" /></div>
-                            </div>
-
-                            <div class="ctrl-tile-status tile-bg">
-                                <div class="tile-name">USAGE /VOICE</div>
-                                <div>
-                                    <div class="tile-icon"><i class="wso2icon wso2-incoming-call"></i></div>
-                                    <div class="tile-stats">80%<span class="tile-stats-free">6 GB Free</span></div>
-                                </div>
-                            </div>
-                            -->
-
-
                             <div class="clearfix"></div>
                         </div>
                         <!-- /device summary -->
@@ -149,35 +133,41 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-10 tiles">
 
                         <!-- device summary -->
-                        <div>
-                            <div class="ctrl-tile-status tile-bg">
-                                <div class="tile-name">BATTERY</div>
-                                <div>
-                                    <div class="tile-icon"><i class="wso2icon wso2-battery"></i></div>
-                                    <div class="tile-stats">{{device.properties.DEVICE_INFO.battery.level}}%</div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="col-lg-4">
+                                    <div class="wr-stats-board-tile">
+                                        <div class="tile-name">BATTERY</div>
+                                        <div>
+                                            <div class="tile-icon"><i class="fw fw-battery"></i></div>
+                                            <div class="tile-stats">{{device.properties.DEVICE_INFO.battery.level}}%</div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="ctrl-tile-status tile-bg">
-                                <div class="tile-name">LOCAL STORAGE</div>
-                                <div>
-                                    <div class="tile-icon"><i class="wso2icon wso2-hdd"></i></div>
-                                    <div class="tile-stats">{{device.properties.DEVICE_INFO.internal_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.properties.DEVICE_INFO.internal_memory.FreeCapacity}} GB Free</span></div>
+                                <div class="col-lg-4">
+                                    <div class="wr-stats-board-tile">
+                                        <div class="tile-name">LOCAL STORAGE</div>
+                                        <div>
+                                            <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                            <div class="tile-stats">{{device.properties.DEVICE_INFO.internal_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.properties.DEVICE_INFO.internal_memory.FreeCapacity}} GB Free</span></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="ctrl-tile-status tile-bg">
-                                <div class="tile-name">EXTERNAL STORAGE</div>
-                                <div>
-                                    <div class="tile-icon"><i class="wso2icon wso2-usb"></i></div>
-                                    <div class="tile-stats">{{device.properties.DEVICE_INFO.external_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.properties.DEVICE_INFO.external_memory.FreeCapacity}} GB Free</span></div>
+                                <div class="col-lg-4">
+                                    <div class="wr-stats-board-tile">
+                                        <div class="tile-name">EXTERNAL STORAGE</div>
+                                        <div>
+                                            <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                            <div class="tile-stats">{{device.properties.DEVICE_INFO.external_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.properties.DEVICE_INFO.external_memory.FreeCapacity}} GB Free</span></div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="clearfix"></div>
                             </div>
-
-                            <div class="clearfix"></div>
                         </div>
                         <!-- /device summary -->
 

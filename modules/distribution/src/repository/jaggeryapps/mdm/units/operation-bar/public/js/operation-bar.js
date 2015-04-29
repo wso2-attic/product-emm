@@ -19,10 +19,35 @@
 /*
  * Setting-up global variables.
  */
+
 var operations = '.wr-operations',
     modelPopup = '.wr-modalpopup',
     modelPopupContent = modelPopup + ' .modalpopup-content',
-    deviceSelection = '.device-select';
+    deviceSelection = '.device-select',
+    deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]',
+    showOperationsBtn = '#showOperationsBtn',
+    maxOperationsLimit = 15;
+
+
+/*
+ * DOM ready functions.
+ */
+$(document).ready(function(){
+    /* collapse operations to a toggle menu, if exceeds max operations limit */
+    if($(operations + "> a").length > maxOperationsLimit){
+        $(showOperationsBtn).show();
+    }
+    else{
+        $(operations).show();
+    }
+});
+
+/*
+ * On Show Operations click operation show toggling function.
+ */
+function showOperations(){
+    $(operations).toggle('slide');
+}
 
 /*
  * On operation click function.
@@ -31,14 +56,6 @@ var operations = '.wr-operations',
 function operationSelect(selection){
     $(modelPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
     showPopup();
-}
-
-/*
- * On operation click function.
- * @param operation: Selected operation
- */
-function runOperation(operation){
-    console.log(operation);
 }
 
 /*

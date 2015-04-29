@@ -290,6 +290,21 @@ userModule = function () {
         successCallback();
     };
 
+    publicMethods.getUIPermissions = function(){
+        var permissions = {};
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/devices/list") ||
+            publicMethods.isAuthorized("/permission/device-mgt/user/devices/list")) {
+            permissions.LIST_DEVICES = true;
+        }
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/list")) {
+            permissions.LIST_USERS = true;
+        }
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/add")) {
+            permissions.ADD_USER = true;
+        }
+        return permissions;
+    };
+
     return publicMethods;
 }();
 

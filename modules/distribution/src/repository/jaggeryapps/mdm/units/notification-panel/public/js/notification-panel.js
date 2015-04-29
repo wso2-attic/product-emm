@@ -80,7 +80,7 @@ function notificationbarPositionFix(){
 /*
  * Notification panel slide toggle
  */
-function openNotificationbar(){
+function toggleNotificationbar(){
     $(notificationBar).toggleClass('toggled');
     $(toggleButton).toggleClass('selected');
 }

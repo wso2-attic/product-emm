@@ -1,27 +1,32 @@
 {{#zone "main"}}
-
+    <a href="javascript:showOperations()" class="cu-btn-inner show-operations-btn" id="showOperationsBtn">
+        Operations
+                        <span class="fw-stack">
+                            <i class="fw fw-tiles fw-stack-1-5x"></i>
+                        </span>
+    </a>
     <!-- operations container -->
     <div class="wr-operations">
 
         {{#if features.DEVICE_LOCK}}
-        <a href="javascript:operationSelect('{{features.DEVICE_LOCK.featureName}}')"><i class="wso2icon wso2-lock"></i><span>{{features.DEVICE_LOCK.featureDescription}}</span></a>
-        <div class="operation" data-operation="{{features.DEVICE_LOCK.featureName}}">
-            <div class="content">Are you sure you want to lock the selected devices ?</div>
-            <div class="buttons">
-                <a href="javascript:runOperation('{{features.DEVICE_LOCK.featureName}}')" class="btn-operations">Lock</a>
-                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            <a href="javascript:operationSelect('{{features.DEVICE_LOCK.featureName}}')"><i class="fw fw-lock"></i><span>{{features.DEVICE_LOCK.featureDescription}}</span></a>
+            <div class="operation" data-operation="{{features.DEVICE_LOCK.featureName}}">
+                <div class="content">Are you sure you want to lock the selected devices ?</div>
+                <div class="buttons">
+                    <a href="javascript:runOperation('{{features.DEVICE_LOCK.featureName}}')" class="btn-operations">Lock</a>
+                    <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+                </div>
             </div>
-        </div>
         {{/if}}
         {{#if features.ALARM}}
-        <a href="javascript:operationSelect('{{features.ALARM.featureName}}')"><i class="wso2icon wso2-incoming-call"></i><span>Ring</span></a>
-        <div class="operation" data-operation="{{features.ALARM.featureName}}">
-            <div class="content">Please click ok to start ringing</div>
-            <div class="buttons">
-                <a href="javascript:runOperation('{{features.ALARM.featureName}}')" class="btn-operations">Ring</a>
-                <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+            <a href="javascript:operationSelect('{{features.ALARM.featureName}}')"><i class="fw fw-incoming-call"></i><span>Ring</span></a>
+            <div class="operation" data-operation="{{features.ALARM.featureName}}">
+                <div class="content">Please click ok to start ringing</div>
+                <div class="buttons">
+                    <a href="javascript:runOperation('{{features.ALARM.featureName}}')" class="btn-operations">Ring</a>
+                    <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
+                </div>
             </div>
-        </div>
         {{/if}}
         {{!
         <a href="javascript:operationSelect('message')"><i class="wso2icon wso2-message"></i><span>Message</span></a>
@@ -36,7 +41,7 @@
             </div>
         </div>
         }}
-        <a href="javascript:operationSelect('{{features.LOCATION.featureName}}')"><i class="wso2icon wso2-map-location"></i><span>Locate</span></a>
+        <a href="javascript:operationSelect('{{features.LOCATION.featureName}}')"><i class="fw fw-map-location"></i><span>Locate</span></a>
         <div class="operation" data-operation="{{features.LOCATION.featureName}}">
             <div class="content">Are you sure you want to request the location of the device?</div>
             <div class="buttons">
@@ -60,7 +65,7 @@
             </div>
         </div>
         }}
-        <a href="javascript:operationSelect('{{features.RESTRICTION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Restriction</span></a>
+        <a href="javascript:operationSelect('{{features.RESTRICTION.featureName}}')"><i class="fw fw-wifi"></i><span>Restriction</span></a>
         <div class="operation" data-operation="{{features.RESTRICTION.featureName}}">
             <div class="content operationData" data-operation="{{features.RESTRICTION.featureName}}">
                 <p>Enable Restrictions on iOS device</p>
@@ -102,7 +107,7 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-        <a href="javascript:operationSelect('{{features.AIR_PLAY.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Configure AirPlay</span></a>
+        <a href="javascript:operationSelect('{{features.AIR_PLAY.featureName}}')"><i class="fw fw-wifi"></i><span>Configure AirPlay</span></a>
         <div class="operation" data-operation="{{features.AIR_PLAY.featureName}}">
             <div class="content operationData" data-operation="{{features.AIR_PLAY.featureName}}">
                 <p>Configure AirPlay</p>
@@ -133,7 +138,7 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-        <a href="javascript:operationSelect('{{features.INSTALL_STORE_APPLICATION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Install Appstore app</span></a>
+        <a href="javascript:operationSelect('{{features.INSTALL_STORE_APPLICATION.featureName}}')"><i class="fw fw-wifi"></i><span>Install Appstore app</span></a>
         <div class="operation" data-operation="{{features.INSTALL_STORE_APPLICATION.featureName}}">
             <div class="content operationData" data-operation="{{features.INSTALL_STORE_APPLICATION.featureName}}">
                 <p>Install an App from the Apple Appstore</p>
@@ -175,7 +180,7 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-        <a href="javascript:operationSelect('{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Install Enterprise app</span></a>
+        <a href="javascript:operationSelect('{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}')"><i class="fw fw-wifi"></i><span>Install Enterprise app</span></a>
         <div class="operation" data-operation="{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}">
             <div class="content operationData" data-operation="{{features.INSTALL_ENTERPRISE_APPLICATION.featureName}}">
                 <p>Install an Enterprise App</p>
@@ -217,7 +222,7 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-        <a href="javascript:operationSelect('{{features.REMOVE_APPLICATION.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Uninstall App</span></a>
+        <a href="javascript:operationSelect('{{features.REMOVE_APPLICATION.featureName}}')"><i class="fw fw-wifi"></i><span>Uninstall App</span></a>
         <div class="operation" data-operation="{{features.REMOVE_APPLICATION.featureName}}">
             <div class="content operationData" data-operation="{{features.REMOVE_APPLICATION.featureName}}">
                 <p>Uninstall App from Device</p>
@@ -236,7 +241,7 @@
                 <a href="javascript:hidePopup()" class="btn-operations">Cancel</a>
             </div>
         </div>
-        <a href="javascript:operationSelect('{{features.CELLULAR.featureName}}')"><i class="wso2icon wso2-camera"></i><span>Configure Cellular</span></a>
+        <a href="javascript:operationSelect('{{features.CELLULAR.featureName}}')"><i class="fw fw-wifi"></i><span>Configure Cellular</span></a>
         <div class="operation" data-operation="{{features.CELLULAR.featureName}}">
             <div class="content operationData" data-operation="{{features.CELLULAR.featureName}}">
                 <p>Configure Cellular</p>
@@ -257,7 +262,6 @@
         <br class="c-both" />
     </div>
     <!-- /operations container -->
-
 {{/zone}}
 
 {{#zone "bottomJs"}}
