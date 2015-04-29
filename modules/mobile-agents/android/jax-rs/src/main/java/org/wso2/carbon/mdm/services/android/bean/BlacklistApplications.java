@@ -18,15 +18,15 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Bean class of Blacklist Applications operation.
  */
-public class BlacklistApplications {
+public class BlacklistApplications extends Operation implements Serializable {
 
 	private List<String> appIdentifiers;
-	private List<String> deviceList;
 
 	public List<String> getAppIdentifier() {
 		return appIdentifiers;
@@ -34,14 +34,6 @@ public class BlacklistApplications {
 
 	public void setAppIdentifier(List<String> appIdentifiers) {
 		this.appIdentifiers = appIdentifiers;
-	}
-
-	public List<String> getDeviceList() {
-		return deviceList;
-	}
-
-	public void setDeviceList(List<String> deviceList) {
-		this.deviceList = deviceList;
 	}
 
 }

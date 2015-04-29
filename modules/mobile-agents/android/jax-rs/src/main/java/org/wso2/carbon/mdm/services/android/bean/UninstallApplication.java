@@ -18,15 +18,14 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Bean class of UninstallApplication operation.
  */
-public class UninstallApplication {
+public class UninstallApplication extends Operation implements Serializable{
 
 	private String appIdentifier;
-	private List<String> deviceList;
 
 	public String getAppIdentifier() {
 		return appIdentifier;
@@ -36,11 +35,4 @@ public class UninstallApplication {
 		this.appIdentifier = appIdentifier;
 	}
 
-	public List<String> getDeviceList() {
-		return deviceList;
-	}
-
-	public void setDeviceList(List<String> deviceList) {
-		this.deviceList = deviceList;
-	}
 }

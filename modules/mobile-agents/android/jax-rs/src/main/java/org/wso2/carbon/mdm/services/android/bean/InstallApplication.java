@@ -18,17 +18,16 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Bean class of InstallApplication operation.
  */
-public class InstallApplication {
+public class InstallApplication extends Operation implements Serializable {
 
 	private String appIdentifier;
-	private String os;
 	private String type;
-	private List<String> deviceList;
 	private String url;
 
 	public String getAppIdentifier() {
@@ -39,12 +38,12 @@ public class InstallApplication {
 		this.appIdentifier = appIdentifier;
 	}
 
-	public List<String> getDeviceList() {
-		return deviceList;
+	public String getType() {
+		return type;
 	}
 
-	public void setDeviceList(List<String> deviceList) {
-		this.deviceList = deviceList;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getUrl() {

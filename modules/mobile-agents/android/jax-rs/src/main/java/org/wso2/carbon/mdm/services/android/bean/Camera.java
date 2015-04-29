@@ -18,23 +18,15 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Bean class of Camera operation.
  */
-public class Camera {
+public class Camera extends Operation implements Serializable{
 
 	private boolean enabled;
-	private List<String> deviceList;
-
-	public List<String> getDeviceList() {
-		return deviceList;
-	}
-
-	public void setDeviceList(List deviceList) {
-		this.deviceList = deviceList;
-	}
 
 	public boolean isEnabled() {
 		return enabled;

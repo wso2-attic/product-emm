@@ -15,5 +15,25 @@
 */
 package org.wso2.carbon.mdm.services.android.bean;
 
-public class Operation {
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.wso2.carbon.mdm.services.android.exception.OperationConfigurationException;
+
+import java.io.IOException;
+
+public abstract class Operation {
+
+	public String toJSON() throws OperationConfigurationException {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(this);
+		} catch (JsonMappingException e) {
+			throw new OperationConfigurationException("Error generating JSON representation", e);
+		} catch (JsonGenerationException e) {
+			throw new OperationConfigurationException("Error generating JSON representation", e);
+		} catch (IOException e) {
+			throw new OperationConfigurationException("Error generating JSON representation", e);
+		}
+	}
 }
