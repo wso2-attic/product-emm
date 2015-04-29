@@ -282,8 +282,20 @@ public class Operation {
 	 * @param code        - Operation code.
 	 */
 	public void ringDevice(String code) {
+
+		Intent intent = new Intent(context, AlertActivity.class);
+		intent.putExtra(resources.getString(R.string.intent_extra_type),
+				resources.getString(R.string.intent_extra_ring));
+		intent.putExtra(resources.getString(R.string.intent_extra_message),
+				resources.getString(R.string.intent_extra_stop_ringing));
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+				Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(intent);
 		resultBuilder.build(code);
-		devicePolicyManager.lockNow();
+
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "Device started ringing");
+		}
 	}
 
 	/**

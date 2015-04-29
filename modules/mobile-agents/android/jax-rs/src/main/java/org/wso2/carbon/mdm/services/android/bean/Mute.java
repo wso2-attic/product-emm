@@ -18,9 +18,28 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
-//TODO : Need to complete the bean with proper properties.
+import java.util.List;
+
 /**
- * Bean class of Email configure operation.
+ * Bean class of Mute Device operation.
  */
-public class EmailBean {
+public class Mute {
+	private boolean isMute;
+	private List<String> deviceList;
+
+	public boolean isMute() {
+		return isMute;
+	}
+
+	public void setMute(boolean isMute) {
+		this.isMute = isMute;
+	}
+
+	public List<String> getDeviceList() {
+		return deviceList;
+	}
+
+	public void setDeviceList(List deviceList) {
+		this.deviceList = deviceList;
+	}
 }

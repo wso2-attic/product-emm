@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Bean class of DeviceLock operation.
  */
-public class DeviceLockBean {
+public class DeviceLock {
 
 	private boolean isLocked;
 	private List<String> deviceList;

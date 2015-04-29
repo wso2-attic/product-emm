@@ -21,35 +21,26 @@ package org.wso2.carbon.mdm.services.android.bean;
 import java.util.List;
 
 /**
- * Bean class of InstallApplication operation.
+ * Bean class of Camera operation.
  */
-public class InstallApplicationBean {
+public class Camera {
 
-	private String appIdentifier;
+	private boolean enabled;
 	private List<String> deviceList;
-	private String url;
-
-	public String getAppIdentifier() {
-		return appIdentifier;
-	}
-
-	public void setAppIdentifier(String appIdentifier) {
-		this.appIdentifier = appIdentifier;
-	}
 
 	public List<String> getDeviceList() {
 		return deviceList;
 	}
 
-	public void setDeviceList(List<String> deviceList) {
+	public void setDeviceList(List deviceList) {
 		this.deviceList = deviceList;
 	}
 
-	public String getUrl() {
-		return url;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

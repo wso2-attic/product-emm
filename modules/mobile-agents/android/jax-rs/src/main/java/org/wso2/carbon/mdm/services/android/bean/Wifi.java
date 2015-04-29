@@ -22,5 +22,5 @@ package org.wso2.carbon.mdm.services.android.bean;
 /**
  * Bean class of configure wifi operation.
  */
-public class WifiBean {
+public class Wifi {
 }

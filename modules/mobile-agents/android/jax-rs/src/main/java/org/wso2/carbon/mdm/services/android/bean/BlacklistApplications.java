@@ -21,19 +21,19 @@ package org.wso2.carbon.mdm.services.android.bean;
 import java.util.List;
 
 /**
- * Bean class of UninstallApplication operation.
+ * Bean class of Blacklist Applications operation.
  */
-public class UninstallApplicationBean {
+public class BlacklistApplications {
 
-	private String appIdentifier;
+	private List<String> appIdentifiers;
 	private List<String> deviceList;
 
-	public String getAppIdentifier() {
-		return appIdentifier;
+	public List<String> getAppIdentifier() {
+		return appIdentifiers;
 	}
 
-	public void setAppIdentifier(String appIdentifier) {
-		this.appIdentifier = appIdentifier;
+	public void setAppIdentifier(List<String> appIdentifiers) {
+		this.appIdentifiers = appIdentifiers;
 	}
 
 	public List<String> getDeviceList() {
@@ -43,4 +43,5 @@ public class UninstallApplicationBean {
 	public void setDeviceList(List<String> deviceList) {
 		this.deviceList = deviceList;
 	}
+
 }
