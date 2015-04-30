@@ -8,36 +8,37 @@ function onRequest(context) {
         var deviceId = matchedElements.deviceId;
         var deviceModule = require("/modules/device.js").deviceModule;
         var device = deviceModule.viewDevice(deviceType, deviceId);
-        if (device.properties.DEVICE_INFO != undefined && String(device.properties.DEVICE_INFO.toString()).length > 0){
-            if (device.type == "ios"){
-                device.properties.DEVICE_INFO = JSON.parse(device.properties.DEVICE_INFO);
-                device.properties.DEVICE_INFO.BatteryLevel = Math.round(device.properties.DEVICE_INFO.BatteryLevel
-                * 100);
-                device.properties.DEVICE_INFO.DeviceCapacity = Math.round(device.properties.DEVICE_INFO.DeviceCapacity
-                * 100) / 100;
-                device.properties.DEVICE_INFO.AvailableDeviceCapacity =
-                    Math.round(device.properties.DEVICE_INFO.AvailableDeviceCapacity * 100) / 100;
-                device.properties.DEVICE_INFO.DeviceCapacityUsed = Math.round((device.properties.DEVICE_INFO.DeviceCapacity
-                - device.properties.DEVICE_INFO.AvailableDeviceCapacity) * 100) / 100;
-                device.properties.DEVICE_INFO.DeviceCapacityPercentage = Math.round(
-                    device.properties.DEVICE_INFO.DeviceCapacityUsed/ device.properties.DEVICE_INFO.DeviceCapacity * 10000)
-                /100;
-            }else if(device.type == "android"){
-
-                device.properties.DEVICE_INFO = JSON.parse(device.properties.DEVICE_INFO);
-                device.properties.DEVICE_INFO.internal_memory.FreeCapacity =
-                    Math.round((device.properties.DEVICE_INFO.internal_memory.total -
-                    device.properties.DEVICE_INFO.internal_memory.available) * 100) / 100;
-                device.properties.DEVICE_INFO.internal_memory.DeviceCapacityPercentage = Math.round(
-                    device.properties.DEVICE_INFO.internal_memory.available/
-                    device.properties.DEVICE_INFO.internal_memory.total * 10000) / 100;
-                device.properties.DEVICE_INFO.external_memory.FreeCapacity =
-                    Math.round((device.properties.DEVICE_INFO.external_memory.total -
-                    device.properties.DEVICE_INFO.external_memory.available) * 100) / 100;
-                device.properties.DEVICE_INFO.external_memory.DeviceCapacityPercentage = Math.round(
-                    device.properties.DEVICE_INFO.external_memory.available/ device.properties.DEVICE_INFO.external_memory.total * 10000)
-                /100;
-                log.info(device.properties.DEVICE_INFO);
+        if (device){
+            var viewModel = {};
+            var deviceInfo = device.properties.DEVICE_INFO;
+            if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0){
+                deviceInfo = JSON.parse(deviceInfo);
+                if (device.type == "ios"){
+                    viewModel.imei = device.properties.IMEI;
+                    viewModel.phoneNumber = deviceInfo.PhoneNumber;
+                    viewModel.udid = deviceInfo.UDID;
+                    viewModel.BatteryLevel = Math.round(deviceInfo.BatteryLevel * 100);
+                    viewModel.DeviceCapacity = Math.round(deviceInfo.DeviceCapacity * 100) / 100;
+                    viewModel.AvailableDeviceCapacity = Math.round(deviceInfo.AvailableDeviceCapacity * 100) / 100;
+                    viewModel.DeviceCapacityUsed = Math.round((viewModel.DeviceCapacity
+                        - viewModel.AvailableDeviceCapacity) * 100) / 100;
+                    viewModel.DeviceCapacityPercentage = Math.round(viewModel.DeviceCapacityUsed
+                        / viewModel.DeviceCapacity * 10000) /100;
+                }else if(device.type == "android"){
+                    viewModel.imei = device.properties.imei;
+                    viewModel.internal_memory = {};
+                    viewModel.external_memory = {};
+                    viewModel.BatteryLevel = deviceInfo.battery.level;
+                    viewModel.internal_memory.FreeCapacity = Math.round((deviceInfo.internal_memory.total -
+                    deviceInfo.internal_memory.available) * 100) / 100;
+                    viewModel.internal_memory.DeviceCapacityPercentage = Math.round(deviceInfo.internal_memory.available
+                        / deviceInfo.internal_memory.total * 10000) / 100;
+                    viewModel.external_memory.FreeCapacity = Math.round((deviceInfo.external_memory.total -
+                        deviceInfo.external_memory.available) * 100) / 100;
+                    viewModel.external_memory.DeviceCapacityPercentage = Math.round(deviceInfo.external_memory.available
+                        /deviceInfo.external_memory.total * 10000) /100;
+                }
+                device.viewModel = viewModel;
             }
         }
         context.device = device;

@@ -24,7 +24,7 @@
     if (deviceType == "ios") {
         var serviceUrl = "https://localhost:9443/ios/operation/deviceinfo";
     } else if (deviceType == "android") {
-        var serviceUrl = "https://localhost:9443/android/operations/device-info";
+        var serviceUrl = "https://localhost:9443/mdm-android-agent/operation/device-info";
     }
     invokerUtil.post(serviceUrl, payload,
         function(message){

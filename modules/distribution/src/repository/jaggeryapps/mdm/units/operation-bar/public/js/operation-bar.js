@@ -105,6 +105,115 @@ function getDevicesByTypes(deviceList){
     });
     return deviceTypes;
 }
+function getiOSServiceEndpoint (operationName) {
+    var featureMap = {
+        DEVICE_LOCK: "lock",
+        ALARM: "alarm",
+        LOCATION: "location",
+        AIR_PLAY: "airplay",
+        INSTALL_STORE_APPLICATION: "storeapplication",
+        INSTALL_ENTERPRISE_APPLICATION: "enterpriseapplication",
+        REMOVE_APPLICATION: "removeapplication",
+        RESTRICTION: "restriction",
+        CELLULAR: "cellular"
+    };
+    return "https://localhost:9443/ios/operation/" + featureMap[operationName];
+}
+function createiOSPayload(operationName, devices) {
+    // Command operations doesn't need a payload
+    var payload;
+    if (operationName == "AIR_PLAY") {
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "airPlayDestinations": [
+                    operationData.location
+                ],
+                "airPlayCredentials": [{
+                    "deviceName": operationData.deviceName,
+                    "password": operationData.password
+                }]
+            }
+        };
+    }else if (operationName == "INSTALL_ENTERPRISE_APPLICATION") {
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "identifier": operationData.appIdentifier,
+                "iTunesStoreID": operationData.ituneID,
+                "removeAppUponMDMProfileRemoval": operationData.appRemoval,
+                "preventBackupOfAppData": operationData.backupData,
+                "bundleId": operationData.bundleId
+            }
+        };
+    } else if (operationName == "INSTALL_STORE_APPLICATION") {
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "identifier": operationData.appIdentifier,
+                "manifestURL": operationData.manifestURL,
+                "removeAppUponMDMProfileRemoval": operationData.appRemoval,
+                "preventBackupOfAppData": operationData.backupData,
+                "bundleId": operationData.bundleId
+            }
+        };
+    } else if (operationName == "REMOVE_APPLICATION"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "bundleId": operationData.bundleId
+            }
+        };
+    } else if (operationName == "RESTRICTION"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "allowCamera": operationData.allowCamera,
+                "allowCloudBackup": operationData.allowCloudBackup,
+                "allowSafari": operationData.allowSafari,
+                "allowScreenShot": operationData.allowScreenshot,
+                "allowAirDrop": operationData.allowAirDrop
+            }
+        };
+    }  else if (operationName == "CELLULAR"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "attachAPNName": null,
+                "authenticationType": null,
+                "username": null,
+                "password": null,
+                "apnConfigurations": [
+                    {
+                        "configurationName": null,
+                        "authenticationType": null,
+                        "username": null,
+                        "password": null,
+                        "proxyServer": null,
+                        "proxyPort": 0
+                    }
+                ]
+            }
+        };
+    }else {
+        // The payload of command operations are set as device ids
+        payload = devices;
+    }
+    return payload;
+}
+function createAndroidPayload(operationName, devices) {
+    var payload;
+    payload = devices;
+    return payload;
+}
+function getAndroidServiceEndpoint (operationName) {
+    var featureMap = {
+        DEVICE_LOCK: "lock",
+        LOCATION: "location",
+        CLEAR_PASSWORD: "clear-password"
+    };
+    return "https://localhost:9443/mdm-android-agent/operation/" + featureMap[operationName];
+}
 
 function runOperation(operationName) {
     var operationData = {};
@@ -122,7 +231,6 @@ function runOperation(operationName) {
             }
             operationData[key] = value;
         });
-    var operationObject = {"code": operationName, "type": "COMMAND", properties: []};
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
     var successCallback = function(message){
@@ -135,105 +243,17 @@ function runOperation(operationName) {
         $(".wr-notification-bubble").html(notificationCount);
     };
     if(list["ios"]){
-        // Command operations doesn't need a payload
-        var iOSFeatureMap = {
-            DEVICE_LOCK: "lock",
-            ALARM: "alarm",
-            LOCATION: "location",
-            AIR_PLAY: "airplay",
-            INSTALL_STORE_APPLICATION: "storeapplication",
-            INSTALL_ENTERPRISE_APPLICATION: "enterpriseapplication",
-            REMOVE_APPLICATION: "removeapplication",
-            RESTRICTION: "restriction",
-            CELLULAR: "cellular"
-        };
-        var payload = list["ios"];
-        var operation = iOSFeatureMap[operationName];
-        if (operationName == "AIR_PLAY") {
-            payload = {
-                "deviceIDs": list["ios"],
-                "operation": {
-                    "airPlayDestinations": [
-                        operationData.location
-                    ],
-                    "airPlayCredentials": [{
-                        "deviceName": operationData.deviceName,
-                        "password": operationData.password
-                    }]
-                }
-            };
-        }else if (operationName == "INSTALL_ENTERPRISE_APPLICATION") {
-            payload = {
-                "deviceIDs": list["ios"],
-                "operation": {
-                    "identifier": operationData.appIdentifier,
-                    "iTunesStoreID": operationData.ituneID,
-                    "removeAppUponMDMProfileRemoval": operationData.appRemoval,
-                    "preventBackupOfAppData": operationData.backupData,
-                    "bundleId": operationData.bundleId
-                }
-            };
-        } else if (operationName == "INSTALL_STORE_APPLICATION") {
-            payload = {
-                "deviceIDs": list["ios"],
-                "operation": {
-                    "identifier": operationData.appIdentifier,
-                    "manifestURL": operationData.manifestURL,
-                    "removeAppUponMDMProfileRemoval": operationData.appRemoval,
-                    "preventBackupOfAppData": operationData.backupData,
-                    "bundleId": operationData.bundleId
-                }
-            };
-        } else if (operationName == "REMOVE_APPLICATION"){
-            payload = {
-                "deviceIDs": list["ios"],
-                "operation": {
-                    "bundleId": operationData.bundleId
-                }
-            };
-        } else if (operationName == "RESTRICTION"){
-            payload = {
-                "deviceIDs": list["ios"],
-                "operation": {
-                    "allowCamera": operationData.allowCamera,
-                    "allowCloudBackup": operationData.allowCloudBackup,
-                    "allowSafari": operationData.allowSafari,
-                    "allowScreenShot": operationData.allowScreenshot,
-                    "allowAirDrop": operationData.allowAirDrop
-                }
-            };
-        }  else if (operationName == "CELLULAR"){
-            payload = {
-                "deviceIDs": list["ios"],
-                "operation": {
-                    "attachAPNName": null,
-                    "authenticationType": null,
-                    "username": null,
-                    "password": null,
-                    "apnConfigurations": [
-                        {
-                            "configurationName": null,
-                            "authenticationType": null,
-                            "username": null,
-                            "password": null,
-                            "proxyServer": null,
-                            "proxyPort": 0
-                        }
-                    ]
-                }
-            };
-        }
-        invokerUtil.post("https://localhost:9443/ios/operation/" + operation, payload,
-            successCallback, function(jqXHR, textStatus, errorThrown){
-                console.log(textStatus);
-            });
+        var payload = getiOSServiceEndpoint(operationName, list["ios"]);
+        var serviceEndPoint = getiOSServiceEndpoint(operationName);
+
     }
     if(list["android"]){
-        var payload =  list["android"];
-        invokerUtil.post("https://localhost:9443/android/operations/lock", payload,
-            successCallback, function(jqXHR, textStatus, errorThrown){
-                console.log(errorThrown);
-            });
+        var payload = getAndroidServiceEndpoint(operationName, list["android"]);
+        var serviceEndPoint = getAndroidServiceEndpoint(operationName);
     }
+    invokerUtil.post(serviceEndPoint, payload,
+        successCallback, function(jqXHR, textStatus, errorThrown){
+            console.log(textStatus);
+        });
     hidePopup();
 }
