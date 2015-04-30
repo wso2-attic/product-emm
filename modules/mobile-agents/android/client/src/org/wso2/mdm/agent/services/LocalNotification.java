@@ -28,27 +28,37 @@ import android.os.SystemClock;
  * polls to server based on a predefined to retrieve pending data.
  */
 public class LocalNotification {
-	public static boolean localNoticicationInvoked = false;
-	public static int DEFAULT_INTERVAL = 10000;
-	public static int DEFAULT_BUFFER = 1000;
-	public static int REQUEST_CODE = 0;
+    public static boolean localNoticicationInvoked = false;
+    public static int DEFAULT_INTERVAL = 30000;
+    public static int DEFAULT_BUFFER = 1000;
+    public static int REQUEST_CODE = 0;
 
-	public static void startPolling(Context context) {
-		int interval = DEFAULT_INTERVAL;
+    public static void startPolling(Context context) {
+        int interval = DEFAULT_INTERVAL;
 
-		long currentTime = SystemClock.elapsedRealtime();
-		currentTime += DEFAULT_BUFFER;
-		if (localNoticicationInvoked == false) {
-			localNoticicationInvoked = true;
-			Intent alarm = new Intent(context, AlarmReceiver.class);
-			PendingIntent recurringAlarm =
-					PendingIntent.getBroadcast(context,
-					                           REQUEST_CODE,
-					                           alarm,
-					                           PendingIntent.FLAG_CANCEL_CURRENT);
-			AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, currentTime, interval,
-			                    recurringAlarm);
-		}
-	}
+        long currentTime = SystemClock.elapsedRealtime();
+        currentTime += DEFAULT_BUFFER;
+        if (localNoticicationInvoked == false) {
+            localNoticicationInvoked = true;
+            Intent alarm = new Intent(context, AlarmReceiver.class);
+            PendingIntent recurringAlarm =
+                    PendingIntent.getBroadcast(context,
+                            REQUEST_CODE,
+                            alarm,
+                            PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, currentTime, interval,
+                    recurringAlarm);
+        }
+    }
+
+    public static void stopPolling(Context context) {
+        if (localNoticicationInvoked == true) {
+            localNoticicationInvoked = false;
+            Intent alarm = new Intent(context, AlarmReceiver.class);
+            PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, 0);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(sender);
+        }
+    }
 }

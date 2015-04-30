@@ -333,6 +333,10 @@ public class SyncmlServiceImpl implements SyncmlService {
 			    response = generator.generatePayload(syncmlResponse);
 		}
 		else{
+			if(msgID == 2){
+				//Second syncML request will provide device details requested by the first SyncML response from server.
+				enrollDevice(request);
+			}
 			try {
 				pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
 				OperationReply operationReply = new OperationReply(syncmlDocument, (List<Operation>)pendingOperations);
@@ -345,5 +349,99 @@ public class SyncmlServiceImpl implements SyncmlService {
 		}
 
 		return Response.ok().entity(response).build();
+	}
+
+	//Method which will be called by getResponse method. This method should ideally use syncmlDocument object and
+	//extract information from it. But currently SyncML engine 'Results' object includes a single 'item' and this should
+	//be an 'item' list for implementing this.
+	/**
+	 * Method that enrolls the device by extracting details from SyncML message.
+	 * @param request - Incoming Syncml request
+	 * @return enrollment status
+	 * @throws WindowsDeviceEnrolmentException
+	 */
+	private boolean enrollDevice(Document request) throws WindowsDeviceEnrolmentException {
+
+		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
+				          getFirstChild();
+		Node bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
+				        getChildNodes().item(SYNCML_ITEM_DATA_POSITION);
+		NodeList nodeListHeader = headerNode.getChildNodes();
+		NodeList nodeListBody = bodyNode.getChildNodes();
+
+		String msgID = null;
+		String osVersion;
+		String imsi;
+		String imei;
+		String devID;
+		String devMan;
+		String devMod;
+		String devLang;
+
+		for (int i = 0; i < nodeListHeader.getLength(); i++) {
+			Node node = nodeListHeader.item(i);
+
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+				String nodeName = node.getNodeName();
+
+				if (Constants.SyncML.SYNCML_MSG_ID.equals(nodeName)) {
+					msgID = node.getTextContent().trim();
+					if (log.isDebugEnabled()) {
+						log.debug("Request SyncML message ID: " + msgID);
+					}
+				}
+
+			}
+		}
+
+		for (int i = 0; i < nodeListBody.getLength(); i++) {
+			Node node = nodeListBody.item(i);
+
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+				String nodeName = node.getNodeName();
+
+				if ((Constants.SyncML.SYNCML_MESSAGE_TWO.equals(msgID))&&
+						(Constants.SyncML.SYNCML_RESULTS.equals(nodeName))) {
+
+					NodeList childNodes = node.getChildNodes();
+					osVersion = childNodes.item(DevicePropertyIndex.OS_VERSION.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					imsi = childNodes.item(DevicePropertyIndex.IMSI.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					imei = childNodes.item(DevicePropertyIndex.IMEI.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					devID = childNodes.item(DevicePropertyIndex.DEVICE_ID.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					devMan = childNodes.item(DevicePropertyIndex.DEVICE_MANUFACTURER.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					devMod = childNodes.item(DevicePropertyIndex.DEVICE_MODEL.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+					devLang = childNodes.item(DevicePropertyIndex.DEVICE_LANGUAGE.getValue()).
+							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+
+					if (log.isDebugEnabled()) {
+						log.debug(
+								"OS Version:" + osVersion + ", IMSI: " + imsi + ", IMEI: " +
+										imei + ", DevID: " + devID + ", DevMan: " + devMan +
+										", DevMod: " + devMod + ", DevLang: " + devLang);
+					}
+
+					Device generatedDevice = generateDevice(DeviceManagementConstants.MobileDeviceTypes.
+									MOBILE_DEVICE_TYPE_WINDOWS, devID, osVersion, imsi, imei, devMan, devMod);
+					try {
+						SyncmlUtils.getDeviceManagementService().enrollDevice(generatedDevice);
+						return true;
+					} catch (DeviceManagementException e) {
+						String msg = "Exception while getting Device Management Service.";
+						log.error(msg, e);
+						throw new WindowsDeviceEnrolmentException(msg, e);
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 }
