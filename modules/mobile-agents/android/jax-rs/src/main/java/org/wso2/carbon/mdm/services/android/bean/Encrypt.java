@@ -18,23 +18,14 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Bean class of Encrypt-storage operation.
  */
-public class Encrypt {
+public class Encrypt extends Operation implements Serializable {
 
 	private boolean encrypted;
-	private List<String> deviceList;
-
-	public List<String> getDeviceList() {
-		return deviceList;
-	}
-
-	public void setDeviceList(List deviceList) {
-		this.deviceList = deviceList;
-	}
 
 	public boolean isEncrypted() {
 		return encrypted;

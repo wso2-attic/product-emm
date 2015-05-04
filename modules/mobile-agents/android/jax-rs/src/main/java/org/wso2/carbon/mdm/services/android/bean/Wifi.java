@@ -19,8 +19,30 @@
 package org.wso2.carbon.mdm.services.android.bean;
 
 //TODO : Need to complete the bean with proper properties.
+
+import java.io.Serializable;
+
 /**
  * Bean class of configure wifi operation.
  */
-public class Wifi {
+public class Wifi extends Operation implements Serializable {
+
+	private String ssid;
+	private String password;
+
+	public String getSsid() {
+		return ssid;
+	}
+
+	public void setSsid(String ssid) {
+		this.ssid = ssid;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

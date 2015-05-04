@@ -64,8 +64,7 @@ public final class AndroidConstants {
 		public static final String DEVICE_LOCATION = "DEVICE_LOCATION";
 		public static final String WIFI = "WIFI";
 		public static final String CAMERA = "CAMERA";
-		public static final String EMAIL = "EMAIL";
-		public static final String MUTE_DEVICE = "MUTE_DEVICE";
+		public static final String DEVICE_MUTE = "DEVICE_MUTE";
 		public static final String PASSWORD_POLICY = "PASSWORD_POLICY";
 		public static final String DEVICE_INFO = "DEVICE_INFO";
 		public static final String ENTERPRISE_WIPE = "ENTERPRISE_WIPE";
@@ -77,8 +76,9 @@ public final class AndroidConstants {
 		public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
 		public static final String BLACKLIST_APPLICATIONS = "BLACKLIST_APPLICATIONS";
 		public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
-		public static final String RING_DEVICE = "RING_DEVICE";
-		public static final String PASSCODE_POLICY = "RING_DEVICE";
+		public static final String DEVICE_RING = "DEVICE_RING";
+		public static final String NOTIFICATION = "NOTIFICATION";
+		public static final String WEBCLIP = "WEBCLIP";
 	}
 
 	public final class StatusCodes{

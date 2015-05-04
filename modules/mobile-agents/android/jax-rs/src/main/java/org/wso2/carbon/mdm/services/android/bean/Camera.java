@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Bean class of Camera operation.
  */
-public class Camera extends Operation implements Serializable{
+public class Camera extends Operation implements Serializable {
 
 	private boolean enabled;
 

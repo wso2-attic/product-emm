@@ -23,7 +23,7 @@
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
-    <jaxrs:server id="operationService" address="/operations">
+    <jaxrs:server id="operationService" address="/operation">
         <jaxrs:serviceBeans>
             <ref bean="operationServiceBean"/>
         </jaxrs:serviceBeans>
@@ -32,7 +32,7 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
-    <jaxrs:server id="deviceManagementService" address="/devices">
+    <jaxrs:server id="deviceManagementService" address="/device">
         <jaxrs:serviceBeans>
             <ref bean="deviceMgtServiceBean"/>
         </jaxrs:serviceBeans>
