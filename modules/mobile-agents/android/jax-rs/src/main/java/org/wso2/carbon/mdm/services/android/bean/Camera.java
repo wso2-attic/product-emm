@@ -18,29 +18,21 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * Bean class of UninstallApplication operation.
+ * Bean class of Camera operation.
  */
-public class UninstallApplicationBean {
+public class Camera extends Operation implements Serializable {
 
-	private String appIdentifier;
-	private List<String> deviceList;
+	private boolean enabled;
 
-	public String getAppIdentifier() {
-		return appIdentifier;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
-	public void setAppIdentifier(String appIdentifier) {
-		this.appIdentifier = appIdentifier;
-	}
-
-	public List<String> getDeviceList() {
-		return deviceList;
-	}
-
-	public void setDeviceList(List<String> deviceList) {
-		this.deviceList = deviceList;
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

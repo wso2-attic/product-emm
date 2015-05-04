@@ -17,6 +17,12 @@
  */
 package org.wso2.mdm.agent;
 
+import android.annotation.TargetApi;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +30,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import org.wso2.mdm.agent.R;
+import org.wso2.mdm.agent.api.DeviceInfo;
+import org.wso2.mdm.agent.utils.Constants;
 
 /**
  * Activity which is used to show alerts throughout the application.
@@ -32,6 +40,13 @@ public class AlertActivity extends SherlockActivity {
 	private String message;
 	private Button btnOK;
 	private TextView txtMessage;
+	private Uri defaultRingtoneUri;
+	private Ringtone defaultRingtone;
+	private DeviceInfo deviceInfo;
+	private String type;
+
+	private static final String RING = "ring";
+	private static final String TAG = AlertActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +55,17 @@ public class AlertActivity extends SherlockActivity {
 
 		btnOK = (Button) findViewById(R.id.btnOK);
 		txtMessage = (TextView) findViewById(R.id.txtMessage);
+		deviceInfo = new DeviceInfo(this);
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			if (extras.containsKey(getResources().getString(R.string.intent_extra_message))) {
 				message = extras.getString(getResources().getString(R.string.intent_extra_message));
+			}
+			type = extras.getString(getResources().getString(R.string.intent_extra_type));
+
+			if (RING.equalsIgnoreCase(type)) {
+				startRing();
 			}
 		}
 
@@ -53,7 +74,12 @@ public class AlertActivity extends SherlockActivity {
 		btnOK.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AlertActivity.this.finish();
+				if (RING.equalsIgnoreCase(type)) {
+					stopRing();
+					AlertActivity.this.finish();
+				} else {
+					AlertActivity.this.finish();
+				}
 			}
 		});
 	}
@@ -61,6 +87,48 @@ public class AlertActivity extends SherlockActivity {
 	@Override
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		return true;
+	}
+
+	/**
+	 * This method stops the device ring.
+	 */
+	private void stopRing() {
+
+		if (defaultRingtone != null && defaultRingtone.isPlaying()) {
+			defaultRingtone.stop();
+		}
+	}
+
+	/**
+	 * This method is used to start ringing the phone.
+	 */
+	@TargetApi(21)
+	private void startRing() {
+		defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE);
+		defaultRingtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
+
+		if (deviceInfo.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP) {
+			AudioAttributes attributes = new AudioAttributes.Builder().
+					setUsage(AudioAttributes.USAGE_NOTIFICATION).
+					setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).
+					build();
+			defaultRingtone.setAudioAttributes(attributes);
+			defaultRingtone.play();
+		} else {
+			defaultRingtone.setStreamType(AudioManager.STREAM_NOTIFICATION);
+			defaultRingtone.play();
+		}
+	}
+
+	/**
+	 * This is used to disable the action of back button press.
+	 */
+	@Override
+	public void onBackPressed() {
+		//do nothing
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.i(TAG, "Back button pressed");
+		}
 	}
 
 }

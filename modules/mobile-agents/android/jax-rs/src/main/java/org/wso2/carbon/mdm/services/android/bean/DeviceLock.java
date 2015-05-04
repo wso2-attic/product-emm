@@ -18,9 +18,29 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
-//TODO : Need to complete the bean with proper properties.
+import java.util.List;
+
 /**
- * Bean class of Email configure operation.
+ * Bean class of DeviceLock operation.
  */
-public class EmailBean {
+public class DeviceLock {
+
+	private boolean isLocked;
+	private List<String> deviceList;
+
+	public List<String> getDeviceList() {
+		return deviceList;
+	}
+
+	public void setDeviceList(List deviceList) {
+		this.deviceList = deviceList;
+	}
+
+	public boolean isLocked() {
+		return isLocked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.isLocked = locked;
+	}
 }

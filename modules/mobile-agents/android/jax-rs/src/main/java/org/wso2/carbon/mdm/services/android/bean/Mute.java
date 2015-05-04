@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Bean class of Mute Device operation.
  */
-public class MuteBean {
+public class Mute {
 	private boolean isMute;
 	private List<String> deviceList;
 

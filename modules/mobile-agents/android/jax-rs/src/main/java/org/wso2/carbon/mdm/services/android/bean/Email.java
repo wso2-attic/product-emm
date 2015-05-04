@@ -18,30 +18,9 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
-import java.util.List;
-
+//TODO : Need to complete the bean with proper properties.
 /**
- * Bean class of Blacklist Applications operation.
+ * Bean class of Email configure operation.
  */
-public class BlacklistApplicationsBean {
-
-	private List<String> appIdentifiers;
-	private List<String> deviceList;
-
-	public List<String> getAppIdentifier() {
-		return appIdentifiers;
-	}
-
-	public void setAppIdentifier(List<String> appIdentifiers) {
-		this.appIdentifiers = appIdentifiers;
-	}
-
-	public List<String> getDeviceList() {
-		return deviceList;
-	}
-
-	public void setDeviceList(List<String> deviceList) {
-		this.deviceList = deviceList;
-	}
-
+public class Email {
 }
