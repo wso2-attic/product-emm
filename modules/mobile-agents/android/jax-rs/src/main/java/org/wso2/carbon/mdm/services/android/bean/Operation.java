@@ -22,8 +22,16 @@ import org.wso2.carbon.mdm.services.android.exception.OperationConfigurationExce
 
 import java.io.IOException;
 
+/*
+* This abstract class is used for extending generic functions with regard to operation.
+*/
 public abstract class Operation {
 
+	/*
+	* This method is used to convert operation object to a json format.
+	* 
+	* @return json formatted String.
+	*/
 	public String toJSON() throws OperationConfigurationException {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
