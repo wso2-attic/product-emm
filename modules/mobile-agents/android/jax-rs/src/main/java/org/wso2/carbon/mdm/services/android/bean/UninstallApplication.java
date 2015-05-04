@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * Bean class of UninstallApplication operation.
  */
-public class UninstallApplication extends Operation implements Serializable{
+public class UninstallApplication extends Operation implements Serializable {
 
 	private String appIdentifier;
 
