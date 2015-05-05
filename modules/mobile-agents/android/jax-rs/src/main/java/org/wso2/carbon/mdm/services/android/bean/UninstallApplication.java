@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.services.android.bean;
 import java.io.Serializable;
 
 /**
- * Bean class of UninstallApplication operation.
+ * This class represents the information of uninstall application operation.
  */
 public class UninstallApplication extends Operation implements Serializable {
 

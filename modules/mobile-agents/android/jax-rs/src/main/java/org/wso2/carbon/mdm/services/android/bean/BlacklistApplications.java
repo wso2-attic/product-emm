@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Bean class of Blacklist Applications operation.
+ * This class represents the blacklist applications information.
  */
 public class BlacklistApplications extends Operation implements Serializable {
 
