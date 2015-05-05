@@ -119,7 +119,7 @@ function getiOSServiceEndpoint (operationName) {
     };
     return "https://localhost:9443/ios/operation/" + featureMap[operationName];
 }
-function createiOSPayload(operationName, devices) {
+function createiOSPayload(operationName, operationData, devices) {
     // Command operations doesn't need a payload
     var payload;
     if (operationName == "AIR_PLAY") {
@@ -201,16 +201,116 @@ function createiOSPayload(operationName, devices) {
     }
     return payload;
 }
-function createAndroidPayload(operationName, devices) {
+function createAndroidPayload(operationName, operationData, devices) {
     var payload;
-    payload = devices;
+    if (operationName == "CAMERA") {
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "enabled" : operationData.enableCamera
+            }
+        };
+    } else if (operationName == "CHANGE_LOCK_CODE") {
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "lockCode" : operationData.lockCode
+            }
+        };
+    } else if (operationName == "ENCRYPT_STORAGE") {
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "encrypted" : operationData.enableEncryption
+            }
+        };
+    } else if (operationName == "NOTIFICATION"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "message" : operationData.message
+            }
+        };
+    } else if (operationName == "WEBCLIP"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "identity": operationData.url,
+                "title": operationData.title
+
+            }
+        };
+    } else if (operationName == "INSTALL_APPLICATION"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "appIdentifier": operationData.packageName,
+                "type": operationData.type,
+                "url": operationData.url
+            }
+        };
+    } else if (operationName == "UNINSTALL_APPLICATION"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "appIdentifier": operationData.packageName
+            }
+        };
+    } else if (operationName == "BLACKLIST_APPLICATIONS"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "appIdentifier": operationData.packageNames
+            }
+        };
+    } else if (operationName == "PASSCODE_POLICY"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "maxFailedAttempts": operationData.maxFailedAttempts,
+                "minLength": operationData.minLength,
+                "pinHistory": operationData.pinHistory,
+                "minComplexChars": operationData.minComplexChars,
+                "maxPINAgeInDays": operationData.maxPINAgeInDays,
+                "requireAlphanumeric": operationData.requireAlphanumeric,
+                "allowSimple": operationData.allowSimple
+
+            }
+        };
+    } else if (operationName == "WIFI"){
+        payload = {
+            "deviceIDs": devices,
+            "operation": {
+                "ssid": operationData.ssid,
+                "password": operationData.password
+
+            }
+        };
+    } else {
+        payload = devices;
+    }
     return payload;
 }
 function getAndroidServiceEndpoint (operationName) {
     var featureMap = {
         DEVICE_LOCK: "lock",
-        LOCATION: "location",
-        CLEAR_PASSWORD: "clear-password"
+        DEVICE_LOCATION: "location",
+        CLEAR_PASSWORD: "clear-password",
+        CAMERA: "camera",
+        ENTERPRISE_WIPE: "enterprise-wipe",
+        WIPE_DATA: "wipe-data",
+        APPLICATION_LIST: "get-application-list",
+        DEVICE_RING: "ring-device",
+        DEVICE_MUTE: "mute",
+        NOTIFICATION: "notification",
+        WIFI: "wifi",
+        ENCRYPT_STORAGE: "encrypt",
+        CHANGE_LOCK_CODE: "change-lock-code",
+        WEBCLIP: "webclip",
+        INSTALL_APPLICATION: "install-application",
+        UNINSTALL_APPLICATION: "uninstall-application",
+        BLACKLIST_APPLICATIONS: "blacklist-applications",
+        PASSCODE_POLICY: "password-policy"
     };
     return "https://localhost:9443/mdm-android-agent/operation/" + featureMap[operationName];
 }
@@ -228,6 +328,8 @@ function runOperation(operationName) {
                 }else if(value=="off"){
                     value = false;
                 }
+            }else if (operationDataObj.is('select')){
+                value = operationDataObj.find("option:selected").text();
             }
             operationData[key] = value;
         });
@@ -243,12 +345,12 @@ function runOperation(operationName) {
         $(".wr-notification-bubble").html(notificationCount);
     };
     if(list["ios"]){
-        var payload = getiOSServiceEndpoint(operationName, list["ios"]);
+        var payload = getiOSServiceEndpoint(operationName, operationData, list["ios"]);
         var serviceEndPoint = getiOSServiceEndpoint(operationName);
 
     }
     if(list["android"]){
-        var payload = getAndroidServiceEndpoint(operationName, list["android"]);
+        var payload = getAndroidServiceEndpoint(operationName, operationData, list["android"]);
         var serviceEndPoint = getAndroidServiceEndpoint(operationName);
     }
     invokerUtil.post(serviceEndPoint, payload,

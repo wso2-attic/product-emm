@@ -4,7 +4,10 @@ function onRequest(context){
     // temporarily providing device-type as "ios" here.
     // either we should update operations here according to all devices
     // or we should display this only for an individual device
-    context.features = deviceModule.getFeatures("ios");
-    log.info(context.features.DEVICE_LOCK);
+    var deviceType = context.deviceType;
+    deviceType = "android";
+    if (deviceType){
+        context.features = deviceModule.getFeatures(deviceType);
+    }
     return context;
 }
