@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Bean class of Camera operation.
+ * This class represents the information of camera operation.
  */
 public class Camera extends Operation implements Serializable {
 

@@ -23,7 +23,7 @@ package org.wso2.carbon.mdm.services.android.bean;
 import java.io.Serializable;
 
 /**
- * Bean class of configure wifi operation.
+ * This class represents the information of configuring wifi operation.
  */
 public class Wifi extends Operation implements Serializable {
 

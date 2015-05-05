@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.Wifi;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the wifi bean with devices.
+ */
 public class WifiBeanWrapper {
 
 	private Wifi operation;

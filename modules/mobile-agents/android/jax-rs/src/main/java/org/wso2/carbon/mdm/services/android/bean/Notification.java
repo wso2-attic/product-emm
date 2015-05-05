@@ -17,6 +17,9 @@ package org.wso2.carbon.mdm.services.android.bean;
 
 import java.io.Serializable;
 
+/**
+ * This class represents the information of sending notification operation.
+ */
 public class Notification extends Operation implements Serializable {
 
 	private String message;

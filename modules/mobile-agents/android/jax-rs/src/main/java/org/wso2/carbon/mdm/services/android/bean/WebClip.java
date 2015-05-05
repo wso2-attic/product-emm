@@ -17,6 +17,9 @@ package org.wso2.carbon.mdm.services.android.bean;
 
 import java.io.Serializable;
 
+/**
+ * This class represents the information of setting up webclip.
+ */
 public class WebClip extends Operation implements Serializable {
 
 	private String identity;

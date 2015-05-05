@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.InstallApplication;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the installapplication bean with devices.
+ */
 public class InstallApplicationBeanWrapper {
 
 	private List<String> deviceIDs;

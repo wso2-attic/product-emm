@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.UninstallApplication;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the uninstallapplication bean with devices.
+ */
 public class UninstallApplicationBeanWrapper {
 
 	private List<String> deviceIDs;

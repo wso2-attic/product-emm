@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.WebClip;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the webclip bean with devices.
+ */
 public class WebClipBeanWrapper {
 
 	private WebClip operation;

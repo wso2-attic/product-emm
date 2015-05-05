@@ -17,6 +17,9 @@ package org.wso2.carbon.mdm.services.android.bean;
 
 import java.io.Serializable;
 
+/**
+ * This class represents the information of setting up password policy.
+ */
 public class PasswordPolicy extends Operation implements Serializable {
 
 	private int maxFailedAttempts;

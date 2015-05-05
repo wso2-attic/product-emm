@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.Camera;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the camera bean with devices.
+ */
 public class CameraBeanWrapper {
 
 	private Camera operation;

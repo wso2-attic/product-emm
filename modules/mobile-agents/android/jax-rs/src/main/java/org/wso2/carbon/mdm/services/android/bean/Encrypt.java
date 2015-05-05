@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.services.android.bean;
 import java.io.Serializable;
 
 /**
- * Bean class of Encrypt-storage operation.
+ * This class represents the information of encrypt operation.
  */
 public class Encrypt extends Operation implements Serializable {
 

@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.BlacklistApplications;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the blacklistapplications bean with devices.
+ */
 public class BlacklistApplicationsBeanWrapper {
 
 	private BlacklistApplications operation;

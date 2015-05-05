@@ -15,6 +15,11 @@
 */
 package org.wso2.carbon.mdm.services.android.exception;
 
+/**
+ *
+ * Custom exception class for operation configuration related exceptions.
+ *
+ */
 public class OperationConfigurationException extends Exception {
 
 	private static final long serialVersionUID = 7435543643747623629L;

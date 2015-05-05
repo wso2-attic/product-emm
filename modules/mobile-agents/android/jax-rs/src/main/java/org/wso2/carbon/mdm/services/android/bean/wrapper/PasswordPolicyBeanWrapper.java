@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.PasswordPolicy;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the passwordpolicy bean with devices.
+ */
 public class PasswordPolicyBeanWrapper {
 
 	private PasswordPolicy operation;

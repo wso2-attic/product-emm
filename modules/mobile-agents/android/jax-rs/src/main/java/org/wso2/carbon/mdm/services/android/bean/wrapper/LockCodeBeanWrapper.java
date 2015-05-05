@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.LockCode;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the lockcode bean with devices.
+ */
 public class LockCodeBeanWrapper {
 
 	private LockCode operation;

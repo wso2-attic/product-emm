@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Bean class of InstallApplication operation.
+ * This class represents the information of install application operation.
  */
 public class InstallApplication extends Operation implements Serializable {
 

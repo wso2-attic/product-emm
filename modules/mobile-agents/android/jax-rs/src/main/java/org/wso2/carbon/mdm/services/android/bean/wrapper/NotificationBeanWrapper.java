@@ -19,6 +19,9 @@ import org.wso2.carbon.mdm.services.android.bean.Notification;
 
 import java.util.List;
 
+/**
+ * This class is used to wrap the notification bean with devices.
+ */
 public class NotificationBeanWrapper {
 
 	private List<String> deviceIDs;
