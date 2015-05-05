@@ -21,11 +21,11 @@ package org.wso2.carbon.mdm.services.android.bean;
 import java.util.List;
 
 /**
- * Bean class of Camera operation.
+ * Bean class of Encrypt-storage operation.
  */
-public class CameraBean {
+public class Encrypt {
 
-	private boolean enabled;
+	private boolean encrypted;
 	private List<String> deviceList;
 
 	public List<String> getDeviceList() {
@@ -36,11 +36,11 @@ public class CameraBean {
 		this.deviceList = deviceList;
 	}
 
-	public boolean isEnabled() {
-		return enabled;
+	public boolean isEncrypted() {
+		return encrypted;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public void setEncrypted(boolean encrypted) {
+		this.encrypted = encrypted;
 	}
 }

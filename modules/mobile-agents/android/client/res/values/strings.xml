@@ -123,6 +123,10 @@
     <string name="intent_extra_at">/@</string>
     <string name="intent_extra_space">/ </string>
     <string name="intent_extra_comma">, / </string>
+    <string name="intent_extra_stop_ringing">Your phone is ringing</string>
+    <string name="intent_extra_alert">alert</string>
+    <string name="intent_extra_ring">ring</string>
+
 
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>

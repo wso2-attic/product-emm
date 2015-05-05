@@ -18,29 +18,21 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * Bean class of DeviceLock operation.
+ * Bean class of UninstallApplication operation.
  */
-public class DeviceLockBean {
+public class UninstallApplication extends Operation implements Serializable {
 
-	private boolean isLocked;
-	private List<String> deviceList;
+	private String appIdentifier;
 
-	public List<String> getDeviceList() {
-		return deviceList;
+	public String getAppIdentifier() {
+		return appIdentifier;
 	}
 
-	public void setDeviceList(List deviceList) {
-		this.deviceList = deviceList;
+	public void setAppIdentifier(String appIdentifier) {
+		this.appIdentifier = appIdentifier;
 	}
 
-	public boolean isLocked() {
-		return isLocked;
-	}
-
-	public void setLocked(boolean locked) {
-		this.isLocked = locked;
-	}
 }

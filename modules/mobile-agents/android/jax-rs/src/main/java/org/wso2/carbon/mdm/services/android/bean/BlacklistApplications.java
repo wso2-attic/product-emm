@@ -18,38 +18,22 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * Bean class of InstallApplication operation.
+ * Bean class of Blacklist Applications operation.
  */
-public class InstallApplicationBean {
+public class BlacklistApplications extends Operation implements Serializable {
 
-	private String appIdentifier;
-	private List<String> deviceList;
-	private String url;
+	private List<String> appIdentifiers;
 
-	public String getAppIdentifier() {
-		return appIdentifier;
+	public List<String> getAppIdentifier() {
+		return appIdentifiers;
 	}
 
-	public void setAppIdentifier(String appIdentifier) {
-		this.appIdentifier = appIdentifier;
+	public void setAppIdentifier(List<String> appIdentifiers) {
+		this.appIdentifiers = appIdentifiers;
 	}
 
-	public List<String> getDeviceList() {
-		return deviceList;
-	}
-
-	public void setDeviceList(List<String> deviceList) {
-		this.deviceList = deviceList;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
 }
