@@ -247,7 +247,7 @@ public class OperationMgtService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("wipe-data")
 	public Response wipeData(@HeaderParam("Accept") String acceptHeader,
-							 List<String> deviceIDs) {
+							 WipeDataBeanWrapper wipeDataBeanWrapper) {
 
 		if (log.isDebugEnabled()) {
 			log.debug("Invoking Android wipe-data device operation");
@@ -257,17 +257,27 @@ public class OperationMgtService {
 		Message message = new Message();
 
 		try {
-			CommandOperation operation = new CommandOperation();
-			operation.setCode(AndroidConstants.OperationCodes.WIPE_DATA);
-			operation.setType(Operation.Type.COMMAND);
+			WipeData wipeData = wipeDataBeanWrapper.getOperation();
 
-			return AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message,
+			if (wipeData == null) {
+				throw new OperationManagementException("WipeData bean is empty");
+			}
+
+			ProfileOperation operation = new ProfileOperation();
+			operation.setCode(AndroidConstants.OperationCodes.WIPE_DATA);
+			operation.setType(Operation.Type.PROFILE);
+			operation.setPayLoad(wipeData.toJSON());
+
+			return AndroidAPIUtils.getOperationResponse(wipeDataBeanWrapper.getDeviceIDs(), operation, message,
 					responseMediaType);
 		} catch (OperationManagementException e) {
 			message.setResponseMessage("Issue in retrieving operation management service instance");
 			throw new AndroidOperationException(message, responseMediaType);
 		} catch (DeviceManagementException e) {
 			message.setResponseMessage("Issue in retrieving device management service instance");
+			throw new AndroidOperationException(message, responseMediaType);
+		} catch (OperationConfigurationException e) {
+			message.setResponseMessage("Issue in setting up payload in operation");
 			throw new AndroidOperationException(message, responseMediaType);
 		}
 	}
