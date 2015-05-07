@@ -8,7 +8,15 @@
                         <i class="fw fw-tiles fw-stack-1-5x"></i>
                     </span>
                 </a>
-                {{defineZone "action-bar"}}
+                {{#each currentActions}}
+                    <a href="{{url}}" class="cu-btn">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw {{icon}} fw-stack-1x"></i>
+                        </span>
+                        {{title}}
+                    </a>
+                {{/each}}
                 <a href="javascript:toggleNotificationbar()" class="cu-btn wr-notification-toggle-btn">
                     <span class="fw-stack-md">
                         <i class="fw fw-bell fw-stack-1-5x"></i>
@@ -31,8 +39,8 @@
             {{#if permissions.LIST_DEVICES}}
                 <li><a href="/mdm/device-mgt"><i class="fw fw-devices"></i>Device Management</a></li>
             {{/if}}
-            <li><a href="#"><i class="fw fw-settings"></i>Profile Management</a></li>
-            <li><a href="#"><i class="fw fw-policy"></i>Policy Management</a></li>
+            <li><a href="/mdm/profiles"><i class="fw fw-settings"></i>Profile Management</a></li>
+            <li><a href="/mdm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
         </ul>
     </div>
     <!-- /common navigation -->

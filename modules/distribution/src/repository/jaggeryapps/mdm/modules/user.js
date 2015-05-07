@@ -14,10 +14,13 @@
  * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */
+ *
+/*
 
-var userModule;
-userModule = function () {
+/*
+ * This module contains user and roles related functionality
+ */
+var userModule = function () {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
@@ -304,7 +307,32 @@ userModule = function () {
         }
         return permissions;
     };
+    /*
+     * If "Internal/Everyone" role is required - true param needs to be passed.
+     */
+    publicMethods.getRoles = function(enableInternalEveryone){
+        var carbonModule = require("carbon");
+        var carbonServer = application.get("carbonServer");
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
+        var allRoles = userManager.allRoles();
+        var i = 0;
+        var filteredRoles = [];
+        while (allRoles[i]) {
+            if (enableInternalEveryone &&  allRoles[i] == "Internal/everyone"){
+                filteredRoles.push(allRoles[i]);
+            }
+            if (allRoles[i].indexOf("Internal/") !== 0){
+                filteredRoles.push(allRoles[i]);
+            }
+            i++;
+        }
 
+    };
     return publicMethods;
 }();
 

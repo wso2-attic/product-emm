@@ -1,0 +1,60 @@
+{{#zone "main"}}
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- content -->
+            <div class="wr-content">
+
+                <div class="wr-list-group">
+                    <div class="policy-delete-message hidden">
+                        <div class="content">Policy deleted successfully</div>
+                        <div class="buttons">
+                            <a href="javascript:hidePopup()" class="btn-operations">OK</a>
+                        </div>
+                    </div>
+                    <div class="policy-delete-failed-message hidden">
+                        <div class="content">Policy deletion failed</div>
+                        <div class="buttons">
+                            <a href="javascript:hidePopup()" class="btn-operations">OK</a>
+                        </div>
+                    </div>
+                    {{#each policies}}
+                        <span class="list-group-item">
+                            <div class="wr-list-desc">{{name}}</div>
+                            <span class="list-group-item-actions">
+                                <a href="/mdm/policies/add-policy" class="cu-btn-inner">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-view fw-stack-1x"></i>
+                                    </span>
+                                    View
+                                </a>
+                                <a href="/mdm/policies/add-policy" class="cu-btn-inner">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-settings fw-stack-1x"></i>
+                                    </span>
+                                    Re-Configure
+                                </a>
+                                <a class="cu-btn-inner policy-delete" data-id="{{id}}">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                    </span>
+                                    Delete
+                                </a>
+                            </span>
+                            <div class="clearfix"></div>
+                        </span>
+                    {{/each}}
+                </div>
+
+            </div>
+            <!-- /content -->
+
+        </div>
+    </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/policy-list.js"></script>
+{{/zone}}

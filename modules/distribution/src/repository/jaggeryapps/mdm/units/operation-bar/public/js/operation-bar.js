@@ -345,12 +345,12 @@ function runOperation(operationName) {
         $(".wr-notification-bubble").html(notificationCount);
     };
     if(list["ios"]){
-        var payload = getiOSServiceEndpoint(operationName, operationData, list["ios"]);
+        var payload = createiOSPayload(operationName, operationData, list["ios"]);
         var serviceEndPoint = getiOSServiceEndpoint(operationName);
 
     }
     if(list["android"]){
-        var payload = getAndroidServiceEndpoint(operationName, operationData, list["android"]);
+        var payload = createAndroidPayload(operationName, operationData, list["android"]);
         var serviceEndPoint = getAndroidServiceEndpoint(operationName);
     }
     invokerUtil.post(serviceEndPoint, payload,

@@ -3,6 +3,7 @@ function onRequest(context) {
     var uriMatcher = new URIMatcher(String(uri));
     var isMatched = uriMatcher.match("/{context}/device/{deviceType}/{+deviceId}");
     if (isMatched) {
+        log.info("***** Call");
         var matchedElements = uriMatcher.elements();
         var deviceType = matchedElements.deviceType;
         var deviceId = matchedElements.deviceId;

@@ -1,0 +1,77 @@
+{{#zone "main"}}
+    <div class="row">
+        <div class="col-md-12">
+            <!-- content -->
+            <div class="container col-centered wr-content">
+
+                <div class="wr-form">
+
+                    <h1 class="wr-title">Create Policy</h1>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-8">
+
+                            <label class="wr-input-label">Policy Name</label>
+                            <div class="wr-input-control">
+                                <input type="text" value="" placeholder="input text"/>
+                            </div>
+
+                            <label class="wr-input-label">Profile<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
+                            <div class="wr-input-control">
+                                <select class="form-control select2">
+                                    {{#each profiles}}
+                                        <option>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                            <label class="wr-input-label">User Roles<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
+                            <div class="wr-input-control">
+                                <select class="form-control select2" multiple="multiple">
+                                    {{#each roles}}
+                                        <option>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                            <label class="wr-input-label">Users<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
+                            <div class="wr-input-control">
+                                <select class="form-control select2" multiple="multiple">
+                                    {{#each users}}
+                                        <option>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                            <!--<br />-->
+                            <!--<h2 class="sub-title">Location & Time</h2>-->
+                            <!--<hr />-->
+
+                            <label class="wr-input-label">Non compliance Actions<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
+                            <div class="wr-input-control">
+                                <select class="form-control select2" multiple="multiple">
+                                    {{#each actions}}
+                                        <option>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <button id="policy-create" class="wr-btn">Create Policy</button>
+
+                </div>
+
+            </div>
+            <!-- /content -->
+
+
+        </div>
+    </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/policy-create.js"></script>
+{{/zone}}
+
