@@ -21,7 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.core.app.mgt.AppManagerConnector;
+import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnector;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.service.EmailService;
 import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
@@ -125,6 +125,7 @@ public class MDMAPIUtils {
 		ctx.setTenantDomain(tenantDomain);
 		ctx.setTenantId(tenantId);
 		appService = (AppManagerConnector) ctx.getOSGiService(AppManagerConnector.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
 		return appService;
 	}
 
