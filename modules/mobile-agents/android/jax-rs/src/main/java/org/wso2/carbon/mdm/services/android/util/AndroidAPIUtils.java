@@ -20,16 +20,22 @@ package org.wso2.carbon.mdm.services.android.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.mdm.services.android.bean.OperationResponse;
+import org.wso2.carbon.mdm.services.android.exception.AndroidOperationException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -107,4 +113,39 @@ public class AndroidAPIUtils {
 				type(responseMediaType).build();
 	}
 
+	public static List<OperationResponse> extractOperations(String responseContent) {
+
+		List<OperationResponse> operationResponses = null;
+
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode operationsObject = mapper.readTree(responseContent);
+			JsonNode operations = operationsObject.get(AndroidConstants.DeviceConstants.DEVICE_DATA);
+
+			if (operations != null) {
+				operationResponses = mapper.readValue(
+						operations,
+						mapper.getTypeFactory().constructCollectionType(List.class, OperationResponse.class));
+			}
+
+		} catch (JsonProcessingException e) {
+			log.error("Issue in json parsing.", e);
+
+		} catch (IOException e) {
+			log.error("IOException occurred when json parsing.", e);
+		}
+
+		return operationResponses;
+	}
+
+	public static void updateOperation(Message message, MediaType responseMediaType,
+								int operationID, Operation.Status status) {
+		try {
+			getDeviceManagementService().updateOperation(operationID, status);
+		} catch (OperationManagementException e) {
+			message.setResponseMessage("Issue in retrieving operation management service instance");
+			log.error("Issue in retrieving operation management service instance.", e);
+			throw new AndroidOperationException(message, responseMediaType);
+		}
+	}
 }

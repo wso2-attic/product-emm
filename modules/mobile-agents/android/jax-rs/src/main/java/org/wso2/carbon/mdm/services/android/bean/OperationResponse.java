@@ -17,18 +17,33 @@ package org.wso2.carbon.mdm.services.android.bean;
 
 import java.io.Serializable;
 
-/**
- * This class represents the information of changing lock code operation.
- */
-public class LockCode extends Operation implements Serializable {
+public class OperationResponse implements Serializable {
 
-	private String lockCode;
+	private String id;
+	private String code;
+	private String status;
 
-	public String getLockCode() {
-		return lockCode;
+	public String getId() {
+		return id;
 	}
 
-	public void setLockCode(String lockCode) {
-		this.lockCode = lockCode;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

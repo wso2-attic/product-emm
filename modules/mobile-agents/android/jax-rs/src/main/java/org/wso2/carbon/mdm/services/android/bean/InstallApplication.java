@@ -19,7 +19,6 @@
 package org.wso2.carbon.mdm.services.android.bean;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * This class represents the information of install application operation.
