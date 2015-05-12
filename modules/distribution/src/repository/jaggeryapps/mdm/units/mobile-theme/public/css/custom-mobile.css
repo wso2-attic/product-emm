@@ -144,17 +144,16 @@ span.wr-validation-summary p {
 a.btn-download-agent {
     display:block;
     padding:15px 20px;
-    background:#6b94f1;
+    background:#11375B;
     color:#fff;
     font-size:18px;
     font-weight:100;
     text-align: center;
+    text-decoration: none;
 }
 
 a.btn-download-agent:hover {
-    background:#888;
-    color:#fff;
-    text-decoration: none;
+    background:#16436D;
 }
 
 .wr-agreement {

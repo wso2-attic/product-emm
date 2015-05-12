@@ -1,3 +1,3 @@
 {
-    "predicate":"urlMatch('/add-user')"
+    "predicate":"true"
 }

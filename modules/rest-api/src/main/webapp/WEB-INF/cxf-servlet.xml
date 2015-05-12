@@ -60,6 +60,24 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
+    <jaxrs:server id="policyService" address="/policies">
+        <jaxrs:serviceBeans>
+            <ref bean="policyServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <jaxrs:server id="profileService" address="/profiles">
+        <jaxrs:serviceBeans>
+            <ref bean="profileServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
     <jaxrs:server id="authenticationService" address="/authentication">
         <jaxrs:serviceBeans>
             <ref bean="authenticationServiceBean"/>
@@ -75,6 +93,8 @@
     <bean id="userServiceBean" class="org.wso2.carbon.mdm.api.User"/>
     <bean id="featureServiceBean" class="org.wso2.carbon.mdm.api.Feature"/>
     <bean id="authenticationServiceBean" class="org.wso2.carbon.mdm.api.Authentication"/>
+    <bean id="policyServiceBean" class="org.wso2.carbon.mdm.api.Policy"/>
+    <bean id="profileServiceBean" class="org.wso2.carbon.mdm.api.Profile"/>
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.api.common.ErrorHandler"/>
 

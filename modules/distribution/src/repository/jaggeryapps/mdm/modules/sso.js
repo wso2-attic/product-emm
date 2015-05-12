@@ -130,7 +130,7 @@ var log = new Log();
                                 sso.log.debug("Login successful");
                                 sso.log.debug('User is set :::' + sessionObj.loggedInUser);
                             }
-                            loginCallback(sessionObj.loggedInUser);
+                            loginCallback(sessionObj.loggedInUser, samlResponse);
                         } else {
                             sso.log.error("Session index invalid");
                         }

@@ -26,6 +26,7 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.service.EmailService;
 import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
+import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
@@ -133,4 +134,29 @@ public class MDMAPIUtils {
 		return getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 	}
 
+	public static PolicyManagerService getPolicyManagementService(String tenantDomain) throws MDMAPIException{
+		PolicyManagerService policyManagementService;
+		PrivilegedCarbonContext.startTenantFlow();
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		int tenantId;
+		if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)){
+			tenantId = MultitenantConstants.SUPER_TENANT_ID;
+		}else{
+			tenantId = getTenantId(tenantDomain);
+		}
+		ctx.setTenantDomain(tenantDomain);
+		ctx.setTenantId(tenantId);
+		policyManagementService = (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
+
+		if (policyManagementService == null){
+			String msg = "Policy Management service not initialized";
+			log.error(msg);
+			throw new MDMAPIException(msg);
+		}
+		PrivilegedCarbonContext.endTenantFlow();
+		return policyManagementService;
+	}
+	public static PolicyManagerService getPolicyManagementService() throws MDMAPIException {
+		return getPolicyManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+	}
 }

@@ -16,8 +16,7 @@
  * under the License.
  */
 
-var utility;
-utility = function () {
+var utility = function () {
     var JavaClass = Packages.java.lang.Class;
     var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext;
 
@@ -33,6 +32,10 @@ utility = function () {
 
     publicMethods.getUserManagementService = function () {
         return getOsgiService('org.wso2.carbon.device.mgt.user.core.service.UserManagementService');
+    };
+
+    publicMethods.getPolicyManagementService = function () {
+        return getOsgiService('org.wso2.carbon.policy.mgt.core.PolicyManagerService');
     };
 
     publicMethods.insertAppPermissions = function (userModule, type) {
