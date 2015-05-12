@@ -56,14 +56,14 @@
 
                             <label class="wr-input-label">Profile Name</label>
                             <div class="wr-input-control">
-                                <input id="profile-name" type="text" value="" placeholder="input text"/>
+                                <input id="profile-name-input" type="text" value="" placeholder="input text"/>
                             </div>
 
                             <label class="wr-input-label">Device Type<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
                             <div class="wr-input-control">
-                                <select id="device-type" class="form-control">
+                                <select id="device-type-input" class="form-control">
                                     {{#each deviceTypes}}
-                                        <option>{{this}}</option>
+                                        <option data-id="{{this.id}}">{{this.name}}</option>
                                     {{/each}}
                                 </select>
                             </div>

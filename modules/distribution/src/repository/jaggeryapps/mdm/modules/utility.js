@@ -35,7 +35,7 @@ var utility = function () {
     };
 
     publicMethods.getPolicyManagementService = function () {
-        return getOsgiService('org.wso2.carbon.device.mgt.user.core.service.PolicyManagementService');
+        return getOsgiService('org.wso2.carbon.policy.mgt.core.PolicyManagerService');
     };
 
     publicMethods.insertAppPermissions = function (userModule, type) {

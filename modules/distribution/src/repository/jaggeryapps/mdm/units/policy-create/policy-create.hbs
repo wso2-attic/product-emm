@@ -26,21 +26,21 @@
 
                             <label class="wr-input-label">Policy Name</label>
                             <div class="wr-input-control">
-                                <input type="text" value="" placeholder="input text"/>
+                                <input id="policy-name-input" type="text" value="" placeholder="input text"/>
                             </div>
 
                             <label class="wr-input-label">Profile<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
                             <div class="wr-input-control">
-                                <select class="form-control select2">
+                                <select id="profile-input" class="form-control select2">
                                     {{#each profiles}}
-                                        <option>{{this}}</option>
+                                        <option data-id="{{this.id}}">{{this.name}}</option>
                                     {{/each}}
                                 </select>
                             </div>
 
                             <label class="wr-input-label">User Roles<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
                             <div class="wr-input-control">
-                                <select class="form-control select2" multiple="multiple">
+                                <select id="users-roles-input" class="form-control select2" multiple="multiple">
                                     {{#each roles}}
                                         <option>{{this}}</option>
                                     {{/each}}
@@ -49,9 +49,9 @@
 
                             <label class="wr-input-label">Users<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
                             <div class="wr-input-control">
-                                <select class="form-control select2" multiple="multiple">
+                                <select id="users-input" class="form-control select2" multiple="multiple">
                                     {{#each users}}
-                                        <option>{{this}}</option>
+                                        <option>{{this.username}}</option>
                                     {{/each}}
                                 </select>
                             </div>
@@ -62,7 +62,7 @@
 
                             <label class="wr-input-label">Non compliance Actions<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
                             <div class="wr-input-control">
-                                <select class="form-control select2" multiple="multiple">
+                                <select id="action-input" class="form-control select2" multiple="multiple">
                                     {{#each actions}}
                                         <option>{{this}}</option>
                                     {{/each}}
