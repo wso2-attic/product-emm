@@ -34,7 +34,6 @@ import java.util.List;
  */
 public class AndroidDeviceUtils {
 
-	private static final String EMPTY_STRING = "";
 	private static final String COMMA_SEPARATION_PATTERN = ", ";
 
 	public DeviceIDHolder validateDeviceIdentifiers(List<String> deviceIDs,
@@ -53,7 +52,7 @@ public class AndroidDeviceUtils {
 
 			deviceIDCounter++;
 
-			if (deviceID == null || EMPTY_STRING.equals(deviceID)) {
+			if (deviceID == null || deviceID.isEmpty()) {
 				errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
 						deviceIDCounter));
 				continue;
@@ -68,8 +67,8 @@ public class AndroidDeviceUtils {
 				Device device = AndroidAPIUtils.getDeviceManagementService().
 						getDevice(deviceIdentifier);
 
-				if (device == null || device.getDeviceIdentifier() == null || EMPTY_STRING.
-						equals(device.getDeviceIdentifier())) {
+				if (device == null || device.getDeviceIdentifier() == null || 
+						device.getDeviceIdentifier().isEmpty()) {
 					errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
 							deviceIDCounter));
 					continue;
