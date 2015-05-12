@@ -90,4 +90,31 @@ public class MobileDevice {
         }
     }
 
+	/**
+	 * Fetch Android device details of a given user.
+	 *
+	 * @param user   User Name
+	 * @return Device
+	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
+	 *
+	 */
+	@GET
+	@Path("{user}")
+	public List<org.wso2.carbon.device.mgt.common.Device> getDevice(@PathParam("user") String user)
+			throws MDMAPIException {
+		String msg;
+		List<org.wso2.carbon.device.mgt.common.Device> devices;
+
+		try {
+			devices = MDMAPIUtils.getDeviceManagementService().getDeviceListOfUser(user);
+			if (devices == null) {
+				Response.status(Response.Status.NOT_FOUND);
+			}
+			return devices;
+		} catch (DeviceManagementException deviceMgtEx) {
+			msg = "Error occurred while fetching the device information.";
+			log.error(msg, deviceMgtEx);
+			throw new MDMAPIException(msg, deviceMgtEx);
+		}
+	}
 }

@@ -18,32 +18,25 @@
 
 package org.wso2.carbon.mdm.services.android.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.carbon.mdm.services.android.bean.OperationResponse;
-import org.wso2.carbon.mdm.services.android.exception.AndroidOperationException;
+import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.List;
 
 /**
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
  */
 public class AndroidAPIUtils {
-
-	private static Log log = LogFactory.getLog(AndroidAPIUtils.class);
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
 		DeviceIdentifier identifier = new DeviceIdentifier();
@@ -113,39 +106,32 @@ public class AndroidAPIUtils {
 				type(responseMediaType).build();
 	}
 
-	public static List<OperationResponse> extractOperations(String responseContent) {
 
-		List<OperationResponse> operationResponses = null;
+	public static void updateOperation(int operationID, Operation.Status status) throws OperationManagementException {
 
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode operationsObject = mapper.readTree(responseContent);
-			JsonNode operations = operationsObject.get(AndroidConstants.DeviceConstants.DEVICE_DATA);
-
-			if (operations != null) {
-				operationResponses = mapper.readValue(
-						operations,
-						mapper.getTypeFactory().constructCollectionType(List.class, OperationResponse.class));
-			}
-
-		} catch (JsonProcessingException e) {
-			log.error("Issue in json parsing.", e);
-
-		} catch (IOException e) {
-			log.error("IOException occurred when json parsing.", e);
-		}
-
-		return operationResponses;
+		getDeviceManagementService().updateOperation(operationID, status);
 	}
 
-	public static void updateOperation(Message message, MediaType responseMediaType,
-								int operationID, Operation.Status status) {
-		try {
-			getDeviceManagementService().updateOperation(operationID, status);
-		} catch (OperationManagementException e) {
-			message.setResponseMessage("Issue in retrieving operation management service instance");
-			log.error("Issue in retrieving operation management service instance.", e);
-			throw new AndroidOperationException(message, responseMediaType);
-		}
+	public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
+		(DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+
+		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+		operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
+
+		return operations;
+	}
+
+	public static PolicyManagerService getPolicyManagerService() {
+
+        PolicyManagerService policyManager;
+		PrivilegedCarbonContext.startTenantFlow();
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+		policyManager =
+				(PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
+		PrivilegedCarbonContext.endTenantFlow();
+
+		return policyManager;
 	}
 }

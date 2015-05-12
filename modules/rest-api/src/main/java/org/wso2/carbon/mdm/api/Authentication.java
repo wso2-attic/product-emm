@@ -20,9 +20,9 @@ package org.wso2.carbon.mdm.api;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.core.app.mgt.AppManagerConnector;
-import org.wso2.carbon.device.mgt.core.app.mgt.AppManagerConnectorException;
-import org.wso2.carbon.device.mgt.core.app.mgt.oauth.dto.Credential;
+import org.wso2.carbon.device.mgt.common.Credential;
+import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnector;
+import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnectorException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
