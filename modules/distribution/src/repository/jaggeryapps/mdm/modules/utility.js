@@ -34,6 +34,10 @@ var utility = function () {
         return getOsgiService('org.wso2.carbon.device.mgt.user.core.service.UserManagementService');
     };
 
+    publicMethods.getPolicyManagementService = function () {
+        return getOsgiService('org.wso2.carbon.device.mgt.user.core.service.PolicyManagementService');
+    };
+
     publicMethods.insertAppPermissions = function (userModule, type) {
         userModule.addPermissions([{key: "device-mgt", name: "Device Management"}], "", type);
         userModule.addPermissions([{key: "admin", name: "Device Management Admin"}], "device-mgt", type);

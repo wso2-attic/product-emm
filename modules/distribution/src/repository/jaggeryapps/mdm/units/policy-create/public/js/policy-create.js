@@ -9,6 +9,7 @@ $('select.select2[multiple=multiple]').select2({
 
 $(document).ready(function(){
     $("#policy-create").click(function(){
-
+        $(".policy-message").removeClass("hidden");
+        $(".add-policy").addClass("hidden");
     });
 });

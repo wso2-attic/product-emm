@@ -18,6 +18,7 @@
 
 var apiWrapperUtil = function () {
     var module = {};
+    var util = require("/modules/util.js").util;
     module.refreshToken = function () {
         var tokenPair = session.get("accessTokenPair");
         var accessToken, refreshToken;
@@ -27,13 +28,15 @@ var apiWrapperUtil = function () {
     };
     module.setupAccessTokenPair = function (type, properties) {
         var accessToken = "", refreshToken = "";
+        var clientId = "7iM9XgOL4lxso5QO_F0kE4aa6Yka";
+        var clientSecret = "UGj3ftqGmYJYr_eJwnzIimMBOc0a";
         if (type == "password") {
-
+            //util.getTokenWithPasswordGrantType(properties.username, properties.password, clientId, clientSecret);
         } else if (type == "saml") {
 
         }
-        session.put("accessTokenPair", {"accessToken": accessToken, "refreshToken": refreshToken});
-        response.addCookie({'name': 'accessToken', 'value': accessToken});
+        //session.put("accessTokenPair", {"accessToken": accessToken, "refreshToken": refreshToken});
+        //response.addCookie({'name': 'accessToken', 'value': accessToken});
     };
     return module;
 }();
