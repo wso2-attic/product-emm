@@ -107,8 +107,8 @@ public class AndroidAPIUtils {
 	}
 
 
-	public static void updateOperation(int operationID, Operation.Status status) throws OperationManagementException {
-
+	public static void updateOperation(int operationID, Operation.Status status) 
+		throws OperationManagementException {
 		getDeviceManagementService().updateOperation(operationID, status);
 	}
 
