@@ -30,6 +30,7 @@ public class MDMUtil {
 
         ProfileOperation operation = new ProfileOperation();
 
+
         // TODO: set operation code
         //operation.setCode(OperationMapping.INSTALL_ENTERPRISE_APPLICATION.getCode());
         operation.setType(Operation.Type.COMMAND);
