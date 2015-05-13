@@ -336,7 +336,7 @@
                                     <id>org.wso2.carbon.devicemgt.user.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
-				                <feature>
+				<feature>
                                     <id>org.wso2.carbon.webapp.authenticator.framework.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
