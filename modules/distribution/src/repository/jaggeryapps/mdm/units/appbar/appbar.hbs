@@ -17,6 +17,15 @@
                         {{title}}
                     </a>
                 {{/each}}
+                {{#if enableBack}}
+                    <a href="javascript:history.go(-1)" class="cu-btn">
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-left-arrow fw-stack-1x"></i>
+                    </span>
+                        Go Back
+                    </a>
+                {{/if}}
                 <a href="javascript:toggleNotificationbar()" class="cu-btn wr-notification-toggle-btn">
                     <span class="fw-stack-md">
                         <i class="fw fw-bell fw-stack-1-5x"></i>

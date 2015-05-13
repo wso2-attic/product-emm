@@ -5,7 +5,8 @@ function onRequest(context) {
     var links = {
         "users": [],
         "policies": [],
-        "profiles": []
+        "profiles": [],
+        "device-mgt": []
     };
     var dashboardLink = {
         title: "Go back to Dashboard",
@@ -15,6 +16,7 @@ function onRequest(context) {
     links.users.push(dashboardLink);
     links.policies.push(dashboardLink);
     links.profiles.push(dashboardLink);
+    links['device-mgt'].push(dashboardLink);
     if (permissions.ADD_USER) {
         links.users.push({
             title: "Add User",
@@ -36,7 +38,6 @@ function onRequest(context) {
             url: "/mdm/profiles/add-profile"
         });
     }
-    log.info(links[context.link]);
     context.currentActions = links[context.link];
     return context;
 }

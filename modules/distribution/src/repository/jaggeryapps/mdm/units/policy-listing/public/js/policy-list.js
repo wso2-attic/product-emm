@@ -1,4 +1,4 @@
-var serviceEndPoint = "https://localhost:9443/",
+var serviceEndPoint = "https://localhost:9443/policies",
     modelPopup = '.wr-modalpopup',
     modelPopupContent = modelPopup + ' .modalpopup-content';
 $(document).ready(function(){
@@ -6,7 +6,7 @@ $(document).ready(function(){
         var policyId = $(this).data("id");
         $(modelPopupContent).html($('.policy-delete-message').html());
         $(modelPopup).show();
-        invokerUtil.delete(serviceEndPoint,
+        invokerUtil.delete(serviceEndPoint + "id=" + policyId,
             function(){
                 $(modelPopupContent).html($('.policy-delete-message').html());
                 $(modelPopup).show();

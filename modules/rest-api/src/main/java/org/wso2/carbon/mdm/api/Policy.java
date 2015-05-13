@@ -28,6 +28,7 @@ import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -64,6 +65,25 @@ public class Policy {
 			pap.updatePolicy(policy);
 			Response.status(HttpStatus.SC_OK);
 			responseMsg.setResponseMessage("Policy has been updated successfully.");
+			return responseMsg;
+		} catch (PolicyManagementException e) {
+			String error = "Policy Management related exception";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		}
+	}
+
+	@DELETE
+	@Path("{id}")
+	public Message deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+		Message responseMsg = new Message();
+		try {
+			PolicyAdministratorPoint pap = policyManagementService.getPAP();
+			org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
+			pap.deletePolicy(policy);
+			Response.status(HttpStatus.SC_OK);
+			responseMsg.setResponseMessage("Policy has been deleted successfully.");
 			return responseMsg;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";
