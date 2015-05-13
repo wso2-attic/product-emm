@@ -29,7 +29,6 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementExcept
 import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
-import org.wso2.carbon.policy.mgt.core.PolicyManagerServiceImpl;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
@@ -111,7 +110,7 @@ public class AndroidAPIUtils {
 				type(responseMediaType).build();
 	}
 
-	public static PolicyManagerService  getPolicyManagerService() {
+	public static PolicyManagerService getPolicyManagerService() {
 
         PolicyManagerService policyManager;
 		PrivilegedCarbonContext.startTenantFlow();
