@@ -34,14 +34,10 @@ import java.util.List;
  */
 public class AndroidDeviceUtils {
 
-	private static final String DEVICE_ID_NOT_FOUND = "Device Id not found for device found at %s";
-	private static final String DEVICE_ID_SERVICE_NOT_FOUND =
-			"Issue in retrieving device management service instance for device found at %s";
-	public static final String EMPTY_STRING = "";
 	private static final String COMMA_SEPARATION_PATTERN = ", ";
 
 	public DeviceIDHolder validateDeviceIdentifiers(List<String> deviceIDs,
-	                                                Message message, MediaType responseMediaType) {
+		Message message, MediaType responseMediaType) {
 
 		if (deviceIDs == null) {
 			message.setResponseMessage("Device identifier list is empty");
@@ -56,8 +52,9 @@ public class AndroidDeviceUtils {
 
 			deviceIDCounter++;
 
-			if (deviceID == null || EMPTY_STRING.equals(deviceID)) {
-				errorDeviceIdList.add(String.format(DEVICE_ID_NOT_FOUND, deviceIDCounter));
+			if (deviceID == null || deviceID.isEmpty()) {
+				errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
+						deviceIDCounter));
 				continue;
 			}
 
@@ -65,20 +62,22 @@ public class AndroidDeviceUtils {
 				DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
 				deviceIdentifier.setId(deviceID);
 				deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.
-						                         MOBILE_DEVICE_TYPE_ANDROID);
+						MOBILE_DEVICE_TYPE_ANDROID);
 
 				Device device = AndroidAPIUtils.getDeviceManagementService().
 						getDevice(deviceIdentifier);
 
-				if (device == null || device.getDeviceIdentifier() == null || EMPTY_STRING.
-						                                     equals(device.getDeviceIdentifier())) {
-					errorDeviceIdList.add(String.format(DEVICE_ID_NOT_FOUND, deviceIDCounter));
+				if (device == null || device.getDeviceIdentifier() == null || 
+						device.getDeviceIdentifier().isEmpty()) {
+					errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
+							deviceIDCounter));
 					continue;
 				}
 
 				validDeviceIDList.add(deviceIdentifier);
 			} catch (DeviceManagementException e) {
-				errorDeviceIdList.add(String.format(DEVICE_ID_SERVICE_NOT_FOUND, deviceIDCounter));
+				errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_SERVICE_NOT_FOUND,
+						deviceIDCounter));
 			}
 		}
 

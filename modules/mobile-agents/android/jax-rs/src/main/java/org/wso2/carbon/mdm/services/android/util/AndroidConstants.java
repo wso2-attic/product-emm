@@ -46,6 +46,10 @@ public final class AndroidConstants {
 		public static final String DEVICE_OWNERSHIP_KEY = "ownership";
 		public static final String DEVICE_PROPERTIES_KEY = "properties";
 		public static final String DEVICE_FEATURES_KEY = "features";
+		public static final String DEVICE_DATA = "data";
+		public static final String DEVICE_ID_NOT_FOUND = "Device Id not found for device found at %s";
+		public static final String DEVICE_ID_SERVICE_NOT_FOUND =
+				"Issue in retrieving device management service instance for device found at %s";
 	}
 
 	public final class Messages{
