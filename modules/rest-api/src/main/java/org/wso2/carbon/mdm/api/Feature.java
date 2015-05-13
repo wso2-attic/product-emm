@@ -19,15 +19,12 @@ package org.wso2.carbon.mdm.api;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
-import org.wso2.carbon.mdm.api.util.MDMAPIConstants;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import java.util.List;
 
 /**
@@ -44,13 +41,14 @@ public class Feature {
 	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
 	 */
 	@GET
-	public List<org.wso2.carbon.device.mgt.common.Feature> getFeatures()
+	@Path("/{type}")
+	public List<org.wso2.carbon.device.mgt.common.Feature> getFeatures(@PathParam("type") String type)
 			throws MDMAPIException {
 		List<org.wso2.carbon.device.mgt.common.Feature> features;
 		DeviceManagementService dmService;
 		try {
 			dmService = MDMAPIUtils.getDeviceManagementService();
-			features = dmService.getFeatureManager().getFeatures();
+			features = dmService.getFeatureManager(type).getFeatures();
 		} catch (DeviceManagementException e) {
             throw new MDMAPIException("Error occurred while retrieving the list of features", e);
         }
