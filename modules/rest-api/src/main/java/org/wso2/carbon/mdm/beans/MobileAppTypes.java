@@ -18,14 +18,5 @@
 package org.wso2.carbon.mdm.beans;
 
 public enum MobileAppTypes {
-    ENTERPRISE("enterprise"),WEB("webapp"),PUBLIC("public");
-    String appName;
-    MobileAppTypes(String appName) {
-        this.appName = appName;
-    }
-
-    @Override
-    public String toString() {
-        return appName;
-    }
+    ENTERPRISE,WEBAPP,PUBLIC
 }
