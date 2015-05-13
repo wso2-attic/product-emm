@@ -27,6 +27,7 @@ import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -34,16 +35,15 @@ import javax.ws.rs.core.Response;
 
 public class Profile {
 	private static Log log = LogFactory.getLog(Profile.class);
+
 	@POST
-	public Message addProfile(org.wso2.carbon.policy.mgt.common.Profile profile) throws MDMAPIException {
+	public org.wso2.carbon.policy.mgt.common.Profile addProfile(org.wso2.carbon.policy.mgt.common.Profile profile) throws MDMAPIException {
 		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-		Message responseMsg = new Message();
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
-			pap.addProfile(profile);
+			profile = pap.addProfile(profile);
 			Response.status(HttpStatus.SC_CREATED);
-			responseMsg.setResponseMessage("Profile has been added successfully.");
-			return responseMsg;
+			return profile;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";
 			log.error(error, e);
@@ -61,6 +61,24 @@ public class Profile {
 			pap.updateProfile(profile);
 			Response.status(HttpStatus.SC_OK);
 			responseMsg.setResponseMessage("Profile has been updated successfully.");
+			return responseMsg;
+		} catch (PolicyManagementException e) {
+			String error = "Policy Management related exception";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		}
+	}
+	@DELETE
+	@Path("{id}")
+	public Message deleteProfile(@PathParam("id") int profileId) throws MDMAPIException {
+		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+		Message responseMsg = new Message();
+		try {
+			PolicyAdministratorPoint pap = policyManagementService.getPAP();
+			org.wso2.carbon.policy.mgt.common.Profile profile = pap.getProfile(profileId);
+			pap.deleteProfile(profile);
+			Response.status(HttpStatus.SC_OK);
+			responseMsg.setResponseMessage("Profile has been deleted successfully.");
 			return responseMsg;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";

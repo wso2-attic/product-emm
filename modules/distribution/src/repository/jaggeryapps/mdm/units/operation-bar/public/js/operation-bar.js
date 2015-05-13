@@ -40,6 +40,22 @@ $(document).ready(function(){
     else{
         $(operations).show();
     }
+    var operationBar = $("#operations-bar");
+    var operationBarSrc = operationBar.attr("src");
+    var platformType = "android";
+    $.template("operations-bar", operationBarSrc, function (template) {
+        var serviceURL = "https://localhost:9443/mdm-admin/features/" + platformType;
+        var successCallback = function (data) {
+            var viewModel = {};
+            viewModel.features = data;
+            var content = template(viewModel);
+            $(".wr-operations").html(content);
+        };
+        invokerUtil.get(serviceURL,
+            successCallback, function(message){
+                console.log(message);
+            });
+    });
 });
 
 /*

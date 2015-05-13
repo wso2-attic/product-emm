@@ -22,9 +22,9 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="wr-input-control">
-                                <select class="form-control">
+                                <select id="policy-name-input" class="form-control">
                                     {{#each policies}}
-                                        <option>{{name}}</option>
+                                        <option data-id="{{id}}">{{name}}</option>
                                     {{/each}}
                                 </select>
                             </div>
@@ -70,16 +70,17 @@
                             <br />
                             <h2 class="sub-title">Configurations</h2>
                             <hr />
-                            <div class="row">
-                                <div class="col-lg-3"><i class="wr-operation-icon fw fw-lock"></i><span>Device Lock</span></div>
-                                <div class="col-lg-9">
-                                    <label class="wr-input-control switch">
-                                        <input type="checkbox" checked>
-                                        <span class="helper"></span>
-                                        <span class="text">Enabled</span>
-                                    </label>
-                                </div>
-                            </div>
+
+                            <!--<div class="row">-->
+                                <!--<div class="col-lg-3"><i class="wr-operation-icon fw fw-lock"></i><span>Device Lock</span></div>-->
+                                <!--<div class="col-lg-9">-->
+                                    <!--<label class="wr-input-control switch">-->
+                                        <!--<input type="checkbox" checked>-->
+                                        <!--<span class="helper"></span>-->
+                                        <!--<span class="text">Enabled</span>-->
+                                    <!--</label>-->
+                                <!--</div>-->
+                            <!--</div>-->
                             <!--
                             <div class="row">
                             <div class="col-lg-3"><i class="wr-operation-icon fw fw-incoming-call"></i><span>Ring</span></div>
