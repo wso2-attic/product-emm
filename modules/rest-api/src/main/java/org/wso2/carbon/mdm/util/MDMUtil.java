@@ -17,8 +17,7 @@ public class MDMUtil {
         InstallApplication installApplication = new InstallApplication();
         installApplication.setType(application.getType().toString());
         installApplication.setAppIdentifier(application.getAppIdentifier());
-        installApplication.setUrl(application.getAppIdentifier());
-
+        installApplication.setUrl(application.getLocation());
         ProfileOperation operation = new ProfileOperation();
         operation.setCode(ANDROID_INSTALL_APPLICATION_OPCODE);
         operation.setType(Operation.Type.PROFILE);
