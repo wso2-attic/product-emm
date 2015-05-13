@@ -307,8 +307,11 @@ var userModule = function () {
         }
         return permissions;
     };
-    /*
+
+    /**
+     * Get User Roles from user store.
      * If "Internal/Everyone" role is required - true param needs to be passed.
+     * @param enableInternalEveryone boolean value true/false to enable Internal/Everyone role
      */
     publicMethods.getRoles = function(enableInternalEveryone){
         var carbonModule = require("carbon");
