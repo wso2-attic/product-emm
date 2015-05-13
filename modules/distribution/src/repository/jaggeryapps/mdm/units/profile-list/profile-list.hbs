@@ -1,0 +1,45 @@
+{{#zone "main"}}
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- content -->
+            <div class="container-fluid col-centered wr-content">
+
+                <div class="wr-list-group">
+                    {{#each profiles}}
+                        <span class="list-group-item">
+                            <div class="wr-list-desc">{{name}}</div>
+                            <span class="list-group-item-actions">
+                                <a href="policy-create.html" class="cu-btn-inner">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-view fw-stack-1x"></i>
+                                    </span>
+                                    View
+                                </a>
+                                <a href="policy-create.html" class="cu-btn-inner">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-settings fw-stack-1x"></i>
+                                    </span>
+                                    Re-Configure
+                                </a>
+                                <a href="policy-create.html" class="cu-btn-inner">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                    </span>
+                                    Delete
+                                </a>
+                            </span>
+                            <div class="clearfix"></div>
+                        </span>
+                    {{/each}}
+                </div>
+
+            </div>
+            <!-- /content -->
+
+        </div>
+    </div>
+{{/zone}}

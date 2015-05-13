@@ -1,44 +1,50 @@
 {{#zone "main"}}
-
+    <!-- secondary header - app bar -->
     <div id="nav" class="row wr-app-bar">
         <div class="wr-action-container">
             <div class="wr-action-btn-bar">
-                <!--<a href="javascript:history.go(-1)" class="cu-btn">
-                    <i class="wso2icon wso2-c-left-arrow"></i>Go Back
-                </a>-->
-                {{#if permissions.ADD_USER}}
-                    <a href="/mdm/add-user" class="cu-btn">
-                        <span class="wso2icon-stack">
-                            <i class="wso2icon wso2-ring wso2icon-stack-2x"></i>
-                            <i class="wso2icon wso2-add wso2icon-stack-1x"></i>
+                <a href="javascript:openCollapsedNav()" class="cu-btn wr-hidden-nav-toggle-btn">
+                    <span class="fw-stack">
+                        <i class="fw fw-tiles fw-stack-1-5x"></i>
+                    </span>
+                </a>
+                {{#each currentActions}}
+                    <a href="{{url}}" class="cu-btn">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw {{icon}} fw-stack-1x"></i>
                         </span>
-                        Add User
+                        {{title}}
                     </a>
-                {{/if}}
-                {{#if permissions.LIST_USERS}}
-                    <a href="/mdm/users" class="cu-btn">
-                        <span class="wso2icon-stack">
-                            <i class="wso2icon wso2icon-stack-1x"></i>
-                        </span>
-                        User Management
-                    </a>
-                {{/if}}
-                {{#if permissions.LIST_DEVICES}}
-                    <a href="/mdm" class="cu-btn">
-                        <span class="wso2icon-stack">
-                            <i class="wso2icon wso2icon-stack-1x"></i>
-                        </span>
-                        Device Management
-                    </a>
-                {{/if}}
-                <a href="javascript:openNotificationbar()" class="cu-btn wr-notification-toggle-btn">
-                    <span class="wso2icon-stack-md">
-                        <i class="wso2icon wso2-bell wso2icon-stack-1-5x"></i>
+                {{/each}}
+                <a href="javascript:toggleNotificationbar()" class="cu-btn wr-notification-toggle-btn">
+                    <span class="fw-stack-md">
+                        <i class="fw fw-bell fw-stack-1-5x"></i>
                     </span>
                     <span class="wr-notification-bubble">0</span>
                 </a>
             </div>
         </div>
     </div>
+    <!-- secondary header - app bar -->
 
+    <!-- common navigation -->
+    <div id="hiddenNav" class="wr-hidden-nav">
+        <ul>
+            <!--Below area is used to add navigations links from other units-->
+            {{defineZone "common-navigation"}}
+            {{#if permissions.LIST_USERS}}
+                <li><a href="/mdm/users"><i class="fw fw-user"></i>User Management</a></li>
+            {{/if}}
+            {{#if permissions.LIST_DEVICES}}
+                <li><a href="/mdm/device-mgt"><i class="fw fw-devices"></i>Device Management</a></li>
+            {{/if}}
+            <li><a href="/mdm/profiles"><i class="fw fw-settings"></i>Profile Management</a></li>
+            <li><a href="/mdm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
+        </ul>
+    </div>
+    <!-- /common navigation -->
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/appbar.js"></script>
 {{/zone}}

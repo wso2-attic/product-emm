@@ -1,0 +1,179 @@
+{{#zone "main"}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container col-centered wr-content profile-message hidden">
+                <div class="wr-form">
+
+                    <h1 class="wr-title">Policy was attached to the Profile</h1>
+                    Please click <b>"Finish"</b> to complete the process and go back to policy list
+                    <hr />
+
+                    <button class="wr-btn" onclick="window.location.href='/mdm/profiles/'">Finish</button>
+
+                </div>
+            </div>
+            <div class="container col-centered wr-content add-policy-profile hidden">
+                <div class="wr-form">
+
+                    <h1 class="wr-title">Profile was added to the system</h1>
+                    Please select a policy and click <b>"Add to a policy"</b>, if you wish to add the profile to a policy or click <b>"Finish"</b> to complete the process and go back to the profiles list
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="wr-input-control">
+                                <select class="form-control">
+                                    {{#each policies}}
+                                        <option>{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 btn-col">
+                            <a href="/mdm/policies/add-policy" class="cu-btn-inner">
+                                <span class="fw-stack">
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                </span>
+                                Create Policy
+                            </a>
+                        </div>
+                    </div>
+                    <button class="wr-btn btn-finish" onclick="window.location.href='/mdm/profiles/'">Finish</button>
+                    <button class="wr-btn btn-add-profile">Add to a policy</button>
+                </div>
+            </div>
+            <!-- content -->
+            <div class="container col-centered wr-content create-profile">
+
+                <div class="wr-form">
+
+                    <h1 class="wr-title">Create Profile</h1>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-8">
+
+                            <label class="wr-input-label">Profile Name</label>
+                            <div class="wr-input-control">
+                                <input id="profile-name-input" type="text" value="" placeholder="input text"/>
+                            </div>
+
+                            <label class="wr-input-label">Device Type<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
+                            <div class="wr-input-control">
+                                <select id="device-type-input" class="form-control">
+                                    {{#each deviceTypes}}
+                                        <option data-id="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <br />
+                            <h2 class="sub-title">Configurations</h2>
+                            <hr />
+                            <div class="row">
+                                <div class="col-lg-3"><i class="wr-operation-icon fw fw-lock"></i><span>Device Lock</span></div>
+                                <div class="col-lg-9">
+                                    <label class="wr-input-control switch">
+                                        <input type="checkbox" checked>
+                                        <span class="helper"></span>
+                                        <span class="text">Enabled</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="row">
+                            <div class="col-lg-3"><i class="wr-operation-icon fw fw-incoming-call"></i><span>Ring</span></div>
+                            <div class="col-lg-9">
+                                <label class="wr-input-control switch">
+                                    <input type="checkbox">
+                                    <span class="helper"></span>
+                                    <span class="text">Enabled</span>
+                                </label>
+                            </div>
+                        </div>
+                            <div class="row">
+                                <div class="col-lg-3"><i class="wr-operation-icon fw fw-message"></i><span>Message</span></div>
+                                <div class="col-lg-9">
+                                    <label class="wr-input-control switch">
+                                        <input type="checkbox">
+                                        <span class="helper"></span>
+                                        <span class="text">Enabled</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3"><i class="wr-operation-icon fw fw-map-location"></i><span>Locate</span></div>
+                                <div class="col-lg-9">
+                                    <label class="wr-input-control switch">
+                                        <input type="checkbox">
+                                        <span class="helper"></span>
+                                        <span class="text">Enabled</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3"><i class="wr-operation-icon fw fw-clean"></i><span>Wipe</span></div>
+                                <div class="col-lg-9">
+                                    <label class="wr-input-control switch">
+                                        <input type="checkbox">
+                                        <span class="helper"></span>
+                                        <span class="text">Enabled</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3"><i class="wr-operation-icon fw fw-camera"></i><span>Camera</span></div>
+                                <div class="col-lg-9">
+                                    <label class="wr-input-control switch">
+                                        <input type="checkbox">
+                                        <span class="helper"></span>
+                                        <span class="text">Enabled</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3"><i class="wr-operation-icon fw fw-wifi"></i><span>Wi-Fi</span></div>
+                                <div class="col-lg-9">
+                                    <label class="wr-input-control switch">
+                                        <input type="checkbox" checked>
+                                        <span class="helper"></span>
+                                        <span class="text">Enabled</span>
+                                    </label>
+                                    <div>
+                                        <label class="wr-input-label">Network Name</label>
+                                        <div class="wr-input-control">
+                                            <input type="text" value="" placeholder="input text"/>
+                                        </div>
+
+                                        <label class="wr-input-label">Security Type</label>
+                                        <div class="wr-input-control">
+                                            <input type="text" value="" placeholder="input text"/>
+                                        </div>
+
+                                        <label class="wr-input-label">Password</label>
+                                        <div class="wr-input-control">
+                                            <input type="password" value="" placeholder="input text"/> <a href="#">Show</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+
+                        </div>
+                    </div>
+
+                    <button class="wr-btn btn-create-profile">Create Profile</button>
+
+                </div>
+
+            </div>
+            <!-- /content -->
+
+
+        </div>
+    </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/profile-create.js"></script>
+{{/zone}}
+

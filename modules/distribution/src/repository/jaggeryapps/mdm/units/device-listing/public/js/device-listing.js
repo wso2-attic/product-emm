@@ -149,9 +149,9 @@ $(document).ready(function () {
             $("#ast-container").html("Permission denied");
             return;
         }
-        $.get(serviceURL, function (data) {
+        var successCallback = function (data) {
             var viewModel = {};
-            viewModel.devices = JSON.parse(data);
+            viewModel.devices = data;
             viewModel.imageLocation = imageResource;
             var content = template(viewModel);
             $("#ast-container").html(content);
@@ -161,6 +161,10 @@ $(document).ready(function () {
             $(deviceCheckbox).click(function () {
                 addDeviceSelectedClass(this);
             });
-        });
+        };
+        invokerUtil.get(serviceURL,
+            successCallback, function(message){
+                console.log(message);
+            });
     });
 });

@@ -121,6 +121,7 @@ public class AndroidAPIUtils {
 		return operations;
 	}
 
+
 	public static PolicyManagerService getPolicyManagerService() {
 
         PolicyManagerService policyManager;

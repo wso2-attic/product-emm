@@ -1,12 +1,12 @@
 {{#zone "main"}}
     <div class="row wr-operations-board">
-        <div class="col-lg-12 wr-secondary-bar">
+        <div class="wr-secondary-bar">
 
             <div class="wr-filters col-xs-12 col-sm-7 col-md-8">
                 <!-- asset filter -->
                 <div class="wr-search">
                     <div class="wr-asset-type-switcher">
-                        <a href="javascript:void(0)" class="ctrl-asset-type-switcher"><span class="btn-asset"><i class="wso2icon wso2-tile-menu"></i></span></a>
+                        <a href="javascript:void(0)" class="ctrl-asset-type-switcher"><span class="btn-asset"><i class="fw fw-filter"></i></span></a>
                         <div class="popover menu fade bottom in">
                             <div class="arrow"></div>
                             <div class="popover-content">
@@ -26,35 +26,43 @@
                                     </label>
                                 </div>
                                 <div id="device-filter-options">
-                                    <div class="title">Select type of your device</div>
                                     <div id="asset-selected"></div>
                                     <div id="asset-select">
                                         <ul>
-                                            <li>Mobile</li>
+
+                                            <!-- Android -->
+                                            <li><i class="fw fw-android"></i><span class="tag-name">Android</span></li>
                                             <ul>
-                                                <li>Android</li>
+                                                <li><h4>Android</h4><h6 class="tag-name">Ice Cream Sandwich</h6></li>
                                                 <ul>
-                                                    <li>ICS</li>
-                                                    <ul>
-                                                        <li>3.0</li>
-                                                        <li>3.0.1</li>
-                                                    </ul>
-                                                    <li>JB</li>
-                                                    <li>KK</li>
-                                                    <ul>
-                                                        <li>4.0</li>
-                                                        <li>4.4</li>
-                                                    </ul>
+                                                    <li><h3 class="tag-name">3.0</h3></li>
+                                                    <li><h3 class="tag-name">3.0.1</h3></li>
                                                 </ul>
-                                                <li>iOS</li>
-                                                <li>Windows</li>
+
+                                                <li><h4>Android</h4><h6 class="tag-name">Jelly Bean</h6></li>
+                                                <ul>
+                                                    <li><h3 class="tag-name">4.2</h3></li>
+                                                    <li><h3 class="tag-name">4.3</h3></li>
+                                                </ul>
+
+                                                <li><h4>Android</h4><h6 class="tag-name">KitKat</h6></li>
+                                                <ul>
+                                                    <li><h3 class="tag-name">4.4</h3></li>
+                                                </ul>
+
+                                                <li><h4>Android</h4><h6 class="tag-name">Lollipop</h6></li>
+                                                <ul>
+                                                    <li><h3 class="tag-name">5.0</h3></li>
+                                                    <li><h3 class="tag-name">5.0.1</h3></li>
+                                                    <li><h3 class="tag-name">5.0.2</h3></li>
+                                                </ul>
                                             </ul>
-                                            <li>Computer</li>
-                                            <ul>
-                                                <li>Desktop</li>
-                                                <li>Laptop</li>
-                                            </ul>
-                                            <li>IoT</li>
+
+                                            <!-- iOS -->
+                                            <li><i class="fw fw-apple"></i><span class="tag-name">iOS</span></li>
+
+                                            <!-- Windows -->
+                                            <li><i class="fw fw-windows"></i><span class="tag-name">Windows</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -62,7 +70,7 @@
                         </div>
                     </div>
                     <div class="wr-search-tags"></div>
-                    <a href="#" class="btn-search"><span class="glyphicon glyphicon-search"></span></a>
+                    <a href="#" class="btn-search"><i class="fw fw-search"></i></a>
                     <div class="input" id="search" data-value="" data-placeholder="Search devices ..." contenteditable="true"></div>
                     <div class="clearfix"></div>
                 </div>
@@ -72,9 +80,9 @@
             <div class="wr-filters col-xs-12 col-sm-5 col-md-4 wr-filters-right">
                 <div class="wr-filter-sort pull-right">
                     <a href="javascript:void(0)" onclick="selectAllDevices(this)" class="wr-btn">Select All Devices</a>
-                    <a href="javascript:void(0)" onclick="changeDeviceView('grid', this)" class="ico-filter ctrl-filter-grid view-toggle selected"><i class="wso2icon wso2-tile-menu"></i></a>
-                    <a href="javascript:void(0)" onclick="changeDeviceView('list', this)" class="ico-filter ctrl-filter-list view-toggle"><i class="wso2icon wso2-list"></i></a>
-                    <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><i class="wso2icon wso2-sort"></i></a></span>
+                    <a href="javascript:void(0)" onclick="changeDeviceView('grid', this)" class="ico-filter ctrl-filter-grid view-toggle"><i class="fw fw-grid"></i></a>
+                    <a href="javascript:void(0)" onclick="changeDeviceView('list', this)" class="ico-filter ctrl-filter-list view-toggle selected"><i class="fw fw-list"></i></a>
+                    <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><i class="fw fw-list-sort"></i></a></span>
                 </div>
             </div>
 

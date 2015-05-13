@@ -5,5 +5,6 @@ function onRequest(context){
     var ssoLogoutURL = mdmProps.appContext + "sso/logout";
     context.logoutURL = mdmProps.ssoConfiguration.enabled? ssoLogoutURL : localLogoutURL;
     context.user = session.get(constants.USER_SESSION_KEY);
+    context.homeLink = "/mdm";
     return context;
 }
