@@ -35,16 +35,15 @@ import javax.ws.rs.core.Response;
 
 public class Profile {
 	private static Log log = LogFactory.getLog(Profile.class);
+
 	@POST
-	public Message addProfile(org.wso2.carbon.policy.mgt.common.Profile profile) throws MDMAPIException {
+	public org.wso2.carbon.policy.mgt.common.Profile addProfile(org.wso2.carbon.policy.mgt.common.Profile profile) throws MDMAPIException {
 		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-		Message responseMsg = new Message();
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
-			pap.addProfile(profile);
+			profile = pap.addProfile(profile);
 			Response.status(HttpStatus.SC_CREATED);
-			responseMsg.setResponseMessage("Profile has been added successfully.");
-			return responseMsg;
+			return profile;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";
 			log.error(error, e);

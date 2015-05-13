@@ -1,5 +1,6 @@
 function onRequest(context){
-    var profiles = [{name : "Android devices"}, {name: "iOS devices"}];
+    var policyModule = require("/modules/policy.js").policyModule;
+    profiles = policyModule.getProfiles();
     context.profiles = profiles;
     return context;
 }

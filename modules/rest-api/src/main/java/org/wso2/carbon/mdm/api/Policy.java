@@ -55,13 +55,15 @@ public class Policy {
 	}
 	@POST
 	@Path("{id}")
-	public Message updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy,  @PathParam("id") String policyId)
+	public Message updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy,  @PathParam("id") int policyId)
 			throws MDMAPIException {
 		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
 		Message responseMsg = new Message();
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
 			policy.setProfile(pap.getProfile(policy.getProfileId()));
+			org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
+			policy.setPolicyName(previousPolicy.getPolicyName());
 			pap.updatePolicy(policy);
 			Response.status(HttpStatus.SC_OK);
 			responseMsg.setResponseMessage("Policy has been updated successfully.");
@@ -75,16 +77,13 @@ public class Policy {
 
 	@DELETE
 	@Path("{id}")
-	public Message deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+	public void deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
 		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
 		Message responseMsg = new Message();
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
 			org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
 			pap.deletePolicy(policy);
-			Response.status(HttpStatus.SC_OK);
-			responseMsg.setResponseMessage("Policy has been deleted successfully.");
-			return responseMsg;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";
 			log.error(error, e);
