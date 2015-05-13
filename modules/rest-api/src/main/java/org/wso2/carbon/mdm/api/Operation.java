@@ -110,9 +110,10 @@ public class Operation {
             if (applicationWrapper.getDeviceIdentifiers() != null){
                 for(DeviceIdentifier deviceIdentifier : applicationWrapper.getDeviceIdentifiers()){
                     deviceIdentifiers = new ArrayList<DeviceIdentifier>();
-                    if (deviceIdentifier.getType().equals(Platform.ANDROID.toString())){
+
+                    if (deviceIdentifier.getType().equals(Platform.android)){
                         operation = MDMUtil.createAndroidProfileOperation(mobileApp);
-                    }else if(deviceIdentifier.getType().equals(Platform.IOS.toString())){
+                    }else if(deviceIdentifier.getType().equals(Platform.ios)){
                         operation = MDMUtil.createIOSProfileOperation(mobileApp);
                     }
                     deviceIdentifiers.add(deviceIdentifier);
