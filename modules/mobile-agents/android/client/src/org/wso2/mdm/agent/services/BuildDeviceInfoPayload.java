@@ -37,7 +37,7 @@ public class BuildDeviceInfoPayload {
 	private static final String DEVICE_OWNERSHIP = "ownership";
 	private static final String DEVICE_PROPERTY_NAME = "name";
 	private static final String DEVICE_PROPERTY_VALUE = "value";
-	private static final String DEVICE_PROPERTY_USERNAME = "username";
+	private static final String DEVICE_PROPERTY_OWNER = "owner";
 	private static final String DEVICE_PROPERTY_DESCRIPTION = "device";
 	private static final String DEVICE_PROPERTY_IMEI = "imei";
 	private static final String DEVICE_PROPERTY_IMSI = "imsi";
@@ -53,26 +53,20 @@ public class BuildDeviceInfoPayload {
 	/**
 	 * Builds device information payload.
 	 * @param type - Device ownership type.
-	 * @param username - Current user name.
+	 * @param owner - Current user name.
 	 */
-	public void build(String type, String username){
+	public void build(String type, String owner){
 		result = new JSONObject();
 		
 		try{
     		result.put(DEVICE_IDENTIFIER, deviceInfo.getMACAddress());
-    		result.put(DEVICE_DESCRIPTION, deviceInfo.getDeviceName());
-    		result.put(DEVICE_OWNERSHIP, type);
+    		result.put(DEVICE_PROPERTY_NAME, deviceInfo.getDeviceName());
+            result.put(DEVICE_DESCRIPTION, deviceInfo.getDeviceName());
+            result.put(DEVICE_OWNERSHIP, type);
+            result.put(DEVICE_PROPERTY_OWNER, owner);
     		
     		JSONArray properties = new JSONArray();
     		JSONObject property = new JSONObject();
-    		property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_USERNAME);
-    		property.put(DEVICE_PROPERTY_VALUE, username);
-    		properties.put(property);
-    		
-    		property = new JSONObject();
-    		property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_DESCRIPTION);
-    		property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getDeviceName());
-    		properties.put(property);
     		
     		property = new JSONObject();
     		property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_IMEI);

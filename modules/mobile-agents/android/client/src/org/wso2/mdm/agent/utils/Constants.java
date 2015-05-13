@@ -27,21 +27,21 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 
-	public static final String SERVER_PORT = "9764";
+	public static final String SERVER_PORT = "9763";
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String API_VERSION = "1.0.0";
-	public static final String API_SERVER_PORT = "8281";
+	public static final String API_SERVER_PORT = "9763";
 
-	public static final String SERVER_APP_ENDPOINT = "/mdm-android-api/";
+	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
-	public static final String LICENSE_ENDPOINT = "/license/" + API_VERSION;
-	public static final String REGISTER_ENDPOINT = "/enroll/" + API_VERSION;
+	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
+	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
 
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
-	public static final String SENDER_ID_ENDPOINT = "devices/sender_id/";
-	public static final String IS_REGISTERED_ENDPOINT = "devices/isregistered/";
-	public static final String UNREGISTER_ENDPOINT = "devices/unregister/";
-	public static final String NOTIFICATION_ENDPOINT = "/operation/" + API_VERSION;
+	public static final String SENDER_ID_ENDPOINT = "device/sender_id/";
+	public static final String IS_REGISTERED_ENDPOINT = REGISTER_ENDPOINT;
+	public static final String UNREGISTER_ENDPOINT =  REGISTER_ENDPOINT;
+	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
@@ -55,8 +55,14 @@ public class Constants {
 	public static final String PASSWORD = "password";
 	public static final String STATUS = "status";
 	public static final String RESPONSE = "response";
-	public static final String PROPERTIES = "properties";
+	public static final String PAYLOAD = "payLoad";
 	public static final String CODE = "code";
+    public static final String TYPE = "type";
+    public static final String ID = "id";
+    public static final String TYPE_COMMAND = "COMMAND";
+    public static final String TYPE_CONFIG = "CONFIG";
+    public static final String TYPE_PROFILE = "PROFILE";
+    public static final String ENABLED= "enabled";
 	public static final String LOCAL = "LOCAL";
 	public static final String LOG_FILE = "wso2log.txt";
 
@@ -109,30 +115,37 @@ public class Constants {
 	/**
 	 * Operation IDs
 	 */
-	public static final String OPERATION_DEVICE_INFO = "500A";
-	public static final String OPERATION_DEVICE_LOCATION = "501A";
-	public static final String OPERATION_GET_APPLICATION_LIST = "502A";
-	public static final String OPERATION_LOCK_DEVICE = "DEVICE_LOCK";
-	public static final String OPERATION_WIPE_DATA = "504A";
-	public static final String OPERATION_CLEAR_PASSWORD = "505A";
-	public static final String OPERATION_NOTIFICATION = "506A";
-	public static final String OPERATION_WIFI = "507A";
-	public static final String OPERATION_DISABLE_CAMERA = "508A";
-	public static final String OPERATION_INSTALL_APPLICATION = "509A";
-	public static final String OPERATION_INSTALL_APPLICATION_BUNDLE = "509B";
-	public static final String OPERATION_UNINSTALL_APPLICATION = "510A";
-	public static final String OPERATION_ENCRYPT_STORAGE = "511A";
-	public static final String OPERATION_RING = "512A";
-	public static final String OPERATION_MUTE = "513A";
-	public static final String OPERATION_WEBCLIP = "518A";
-	public static final String OPERATION_PASSWORD_POLICY = "519A";
-	public static final String OPERATION_EMAIL_CONFIGURATION = "520A";
-	public static final String OPERATION_INSTALL_GOOGLE_APP = "522A";
-	public static final String OPERATION_CHANGE_LOCK_CODE = "526A";
-	public static final String OPERATION_ENTERPRISE_WIPE_DATA = "527A";
-	public static final String OPERATION_POLICY_BUNDLE = "500P";
-	public static final String OPERATION_POLICY_MONITOR = "501P";
-	public static final String OPERATION_BLACKLIST_APPS = "528B";
-	public static final String OPERATION_POLICY_REVOKE = "502P";
+
+    public final class Operation{
+        private Operation(){
+            throw new AssertionError();
+        }
+        public static final String DEVICE_LOCK = "DEVICE_LOCK";
+        public static final String DEVICE_LOCATION = "DEVICE_LOCATION";
+        public static final String WIFI = "WIFI";
+        public static final String CAMERA = "CAMERA";
+        public static final String EMAIL = "EMAIL";
+        public static final String DEVICE_MUTE = "DEVICE_MUTE";
+        public static final String PASSWORD_POLICY = "PASSWORD_POLICY";
+        public static final String DEVICE_INFO = "DEVICE_INFO";
+        public static final String ENTERPRISE_WIPE = "ENTERPRISE_WIPE";
+        public static final String CLEAR_PASSWORD = "CLEAR_PASSWORD";
+        public static final String WIPE_DATA = "WIPE_DATA";
+        public static final String APPLICATION_LIST = "APPLICATION_LIST";
+        public static final String CHANGE_LOCK_CODE = "CHANGE_LOCK_CODE";
+        public static final String INSTALL_APPLICATION = "INSTALL_APPLICATION";
+        public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
+        public static final String BLACKLIST_APPLICATIONS = "BLACKLIST_APPLICATIONS";
+        public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
+        public static final String DEVICE_RING = "DEVICE_RING";
+        public static final String PASSCODE_POLICY = "PASSCODE_POLICY";
+        public static final String NOTIFICATION = "NOTIFICATION";
+        public static final String INSTALL_APPLICATION_BUNDLE = "INSTALL_APPLICATION_BUNDLE";
+        public static final String WEBCLIP = "WEBCLIP";
+        public static final String INSTALL_GOOGLE_APP = "INSTALL_GOOGLE_APP";
+        public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
+        public static final String POLICY_MONITOR = "POLICY_MONITOR";
+        public static final String POLICY_REVOKE = "POLICY_REVOKE";
+    }
 
 }

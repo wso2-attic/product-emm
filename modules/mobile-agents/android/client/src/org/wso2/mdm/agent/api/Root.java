@@ -30,7 +30,7 @@ public class Root {
 	private static final String[] SU_CHECK_COMMAND = new String[] { "/system/xbin/which", "su" };
 	private static final String SU_TAG = "test-keys";
 	private static final String SU_APK = "/system/app/Superuser.apk";
-    	private String TAG = Root.class.getSimpleName();
+    private String TAG = Root.class.getSimpleName();
 
 	/**
 	 * Returns true if the device is rooted (if any of the root methods returns
@@ -55,11 +55,12 @@ public class Root {
 	 * @return - Device root status by build tags.
 	 */
 	public boolean checkRootByBuildTags() {
-        	String buildTags = android.os.Build.TAGS;
+
+        String buildTags = android.os.Build.TAGS;
 		if (buildTags != null && buildTags.contains(SU_TAG)) {
-            		if (Constants.DEBUG_MODE_ENABLED){
-                		Log.d(TAG, "Build tags found");
-            		}
+            if (Constants.DEBUG_MODE_ENABLED){
+                Log.d(TAG, "Build tags found");
+            }
 			return true;
 		}
 		return false;
@@ -73,9 +74,9 @@ public class Root {
 	public boolean checkRootBySuperUserApk() {
 		File suApk = new File(SU_APK);
 		if (suApk != null && suApk.exists()) {
-            		if (Constants.DEBUG_MODE_ENABLED){
-                		Log.d(TAG, "Super apk found");
-            		}
+            if (Constants.DEBUG_MODE_ENABLED){
+                Log.d(TAG, "Super apk found");
+            }
 			return true;
 		}
 		return false;
@@ -88,9 +89,9 @@ public class Root {
 	 */
 	public boolean checkRootBySuAccess() {
 		if (new ShellExecutor().executeCommand(SU_CHECK_COMMAND) != null) {
-            		if (Constants.DEBUG_MODE_ENABLED){
-                		Log.d(TAG, "su command enabled");
-            		}
+            if (Constants.DEBUG_MODE_ENABLED){
+                Log.d(TAG, "su command enabled");
+            }
 			return true;
 		} else {
 			return false;

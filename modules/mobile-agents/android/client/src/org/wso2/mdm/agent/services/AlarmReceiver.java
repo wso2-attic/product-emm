@@ -17,6 +17,7 @@
  */
 package org.wso2.mdm.agent.services;
 
+import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.utils.Constants;
 
 import android.content.BroadcastReceiver;
@@ -29,16 +30,20 @@ import android.util.Log;
  */
 public class AlarmReceiver extends BroadcastReceiver {
 
-	private static final String DEBUG_TAG = AlarmReceiver.class.getName();
+	private static final String TAG = AlarmReceiver.class.getName();
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(DEBUG_TAG, "Recurring alarm; requesting alarm service.");
+			Log.d(TAG, "Recurring alarm; requesting alarm service.");
 		}
 		
 		MessageProcessor messageProcessor = new MessageProcessor(context);
-		messageProcessor.getMessages();
-	}
+        try {
+            messageProcessor.getMessages();
+        } catch (AndroidAgentException e) {
+            Log.e(TAG, "Failed to perform operation." + e);
+        }
+    }
 
 }

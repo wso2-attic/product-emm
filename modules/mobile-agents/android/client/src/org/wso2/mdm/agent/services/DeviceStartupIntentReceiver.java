@@ -58,7 +58,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 				(Float) Preference
 						.getFloat(context, resources.getString(R.string.shared_pref_interval));
 
-		if (mode.trim().toUpperCase(Locale.ENGLISH).equals(NOTIFIER_MODE)) {
+		if (NOTIFIER_MODE.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
 			long startTime = SystemClock.elapsedRealtime() + DEFAULT_TIME_MILLISECONDS;
 
 			Intent alarmIntent = new Intent(context, AlarmReceiver.class);

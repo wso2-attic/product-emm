@@ -61,10 +61,10 @@ public class ServerDetails extends Activity {
 
 		Response compatibility = state.evaluateCompatibility();
 		if (!compatibility.getCode()) {
-			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
-			txtSeverAddress.setVisibility(View.VISIBLE);
-            		btnStartRegistration.setVisibility(View.GONE);
-            		evServerIP.setVisibility(View.GONE);
+            txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+            btnStartRegistration.setVisibility(View.GONE);
+            txtSeverAddress.setVisibility(View.VISIBLE);
+            evServerIP.setVisibility(View.GONE);
 		} else {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
@@ -85,9 +85,9 @@ public class ServerDetails extends Activity {
 					                     context.getResources()
 					                            .getString(R.string.shared_pref_device_active)
 					);
-			
-			if (deviceActive != null && deviceActive.equals(context.getResources()
-			                               .getString(R.string.shared_pref_reg_success))) {
+
+            if (deviceActive != null && deviceActive.equals(context.getResources()
+                    .getString(R.string.shared_pref_reg_success))) {
 				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);

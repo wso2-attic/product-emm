@@ -17,14 +17,11 @@
  */
 package org.wso2.mdm.agent.services;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.api.DeviceInfo;
@@ -38,144 +35,145 @@ import org.wso2.mdm.agent.utils.CommonUtils;
 import android.content.Context;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
- * This class handles all the functionalities related to coordinating the retrieval 
+ * This class handles all the functionalities related to coordinating the retrieval
  * and processing of messages from the server.
  */
 public class MessageProcessor implements APIResultCallBack {
 
-	private String TAG = MessageProcessor.class.getSimpleName();
-	private Context context;
-	private String deviceId;
-	private static final String DEVICE_ID_PREFERENCE_KEY = "deviceId";
-	private static final String ENCODE_METHOD_UTF_8 = "utf-8";
-	private static final String LABEL_DATA = "data";
+    private String TAG = MessageProcessor.class.getSimpleName();
+    private Context context;
+    private String deviceId;
+    private static final String DEVICE_ID_PREFERENCE_KEY = "deviceId";
+    private static List<org.wso2.mdm.agent.beans.Operation> replyPayload;
+    private org.wso2.mdm.agent.services.Operation operation;
+    private ObjectMapper mapper;
 
-	/**
-	 * Local notification message handler.
-	 * @param context Context of the application.
-	 */
-	public MessageProcessor(Context context) {
-		this.context = context;
+    /**
+     * Local notification message handler.
+     *
+     * @param context Context of the application.
+     */
+    public MessageProcessor(Context context) {
+        this.context = context;
 
-		deviceId = Preference.getString(context, DEVICE_ID_PREFERENCE_KEY);
-		if (deviceId == null) {
-			DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
-			deviceId = deviceInfo.getMACAddress();
-			Preference.putString(context, DEVICE_ID_PREFERENCE_KEY, deviceId);
-		}
-	}
+        deviceId = Preference.getString(context, DEVICE_ID_PREFERENCE_KEY);
+        operation = new org.wso2.mdm.agent.services.Operation(context.getApplicationContext());
+        mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-	/**
-	 * @param response Response received from the server that needs to be processed
-	 *                 and applied to the device.
-	 */
-	public void performOperation(String response) throws AndroidAgentException {
-		JSONArray replyPayload = null;
-		try {
-			JSONArray operations = new JSONArray(response);
-			for (int i = 0; i < operations.length(); i++) {
-				String featureCode = operations.getJSONObject(i).getString(Constants.CODE);
-				String properties = operations.getJSONObject(i).getString(Constants.PROPERTIES);
-				Operation operation = new Operation(context.getApplicationContext());
-				replyPayload = operation.doTask(featureCode, properties);
-			}
-		} catch (JSONException e) {
-			throw new AndroidAgentException("JSON Exception in response String.", e);
-		} finally {
-			if (replyPayload != null){
-				getMessages(replyPayload);
-			}
-		}
+        if (deviceId == null) {
+            DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
+            deviceId = deviceInfo.getMACAddress();
+            Preference.putString(context, DEVICE_ID_PREFERENCE_KEY, deviceId);
+        }
+    }
 
-	}
+    /**
+     * @param response Response received from the server that needs to be processed
+     *                 and applied to the device.
+     */
+    public void performOperation(String response) throws AndroidAgentException {
 
-	/**
-	 * Call the message retrieval end point of the server to get messages pending. This method 
-	 * will be called when there is a reply payload to be sent to the server.
-	 */
-	public void getMessages(JSONArray replyPayload) throws AndroidAgentException {
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(),
-				                     context.getResources().getString(R.string.shared_pref_ip));
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
-		String deviceIdentifier = null;
-		
-		try {
-			deviceIdentifier = URLEncoder.encode(deviceId, ENCODE_METHOD_UTF_8);
-		} catch (UnsupportedEncodingException e) {
-			Log.e(TAG, "Unsupport encoding." + e.toString());
-		}
-		
-		JSONObject requestParams = new JSONObject();
-		if (replyPayload != null) {
-			try {
-				requestParams.put(LABEL_DATA, replyPayload.toString());
-            		} catch (JSONException e) {
-    				throw new AndroidAgentException("JSON Exception in reply payload.", e);
-    			}
-		}
-		
-		CommonUtils.callSecuredAPI(context, utils.getAPIServerURL() +
-		                                    Constants.NOTIFICATION_ENDPOINT + File.separator +
-		                                    deviceIdentifier,
-		                           HTTP_METHODS.GET, requestParams, MessageProcessor.this,
-		                           Constants.NOTIFICATION_REQUEST_CODE
-		);
-	}
-	
-	/**
-	 * Call the message retrieval end point of the server to get messages pending.
-	 */
-	public void getMessages() {
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(),
-				                     context.getResources().getString(R.string.shared_pref_ip));
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
-		String deviceIdentifier = null;
-		
-		try {
-			deviceIdentifier = URLEncoder.encode(deviceId, ENCODE_METHOD_UTF_8);
-		} catch (UnsupportedEncodingException e) {
-			Log.e(TAG, "Unsupport encoding." + e.toString());
-		}
-		
-		CommonUtils.callSecuredAPI(context, utils.getAPIServerURL() +
-		                                    Constants.NOTIFICATION_ENDPOINT + File.separator +
-		                                    deviceIdentifier,
-		                           HTTP_METHODS.GET, new JSONObject(), MessageProcessor.this,
-		                           Constants.NOTIFICATION_REQUEST_CODE
-		);
-	}
+        List<org.wso2.mdm.agent.beans.Operation> operations = new ArrayList<>();
 
-	@SuppressWarnings("unused")
-    	@Override
-	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
-		String responseStatus;
-		String response;
-		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
-			if (result != null) {
-				responseStatus = result.get(Constants.STATUS_KEY);
-				if (Constants.REQUEST_SUCCESSFUL.equals(requestCode)) {
-					response = result.get(Constants.RESPONSE);
-					if (response != null && !response.isEmpty()) {
-						if (Constants.DEBUG_MODE_ENABLED) { 
-							Log.d(TAG, "onReceiveAPIResult." + response);
-						}
-						
-						try{
-							performOperation(response);
-						} catch (AndroidAgentException e) {
-							Log.e(TAG, "Failed to perform operation." + e);
-						}
-					}
-				}
+        try {
+            if (response != null) {
+                operations = mapper.readValue(
+                        response,
+                        mapper.getTypeFactory().constructCollectionType(List.class,
+                                org.wso2.mdm.agent.beans.Operation.class));
+            }
 
-			}
-		}
+        } catch (JsonProcessingException e) {
+            String msg = "Issue in json parsing.";
+            Log.e(TAG, msg);
+            throw new AndroidAgentException(msg, e);
 
-	}
+        } catch (IOException e) {
+            String msg = "Issue in stream parsing.";
+            Log.e(TAG, msg);
+            throw new AndroidAgentException(msg, e);
+        }
+
+
+        for (org.wso2.mdm.agent.beans.Operation op : operations) {
+            operation.doTask(op);
+        }
+        replyPayload = operation.getResultPayload();
+
+    }
+
+
+    /**
+     * Call the message retrieval end point of the server to get messages pending.
+     */
+    public void getMessages() throws AndroidAgentException {
+        String ipSaved =
+                Preference.getString(context.getApplicationContext(),
+                                     context.getResources().getString(R.string.shared_pref_ip));
+        ServerConfig utils = new ServerConfig();
+        utils.setServerIP(ipSaved);
+
+        String url = utils.getAPIServerURL() + Constants.NOTIFICATION_ENDPOINT + deviceId;
+        Log.i(TAG, "getMessage: calling-endpoint: " + url);
+
+        String requestParams;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            requestParams =  mapper.writeValueAsString(replyPayload);
+        } catch (JsonMappingException e) {
+            String msg = "Issue in json mapping.";
+            Log.e(TAG, msg);
+            throw new AndroidAgentException(msg, e);
+        } catch (JsonGenerationException e) {
+            String msg = "Issue in json generation.";
+            Log.e(TAG, msg);
+            throw new AndroidAgentException(msg, e);
+        } catch (IOException e) {
+            String msg = "Issue in parsing stream.";
+            Log.e(TAG, msg);
+            throw new AndroidAgentException(msg, e);
+        }
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "replay-payload: " + requestParams);
+        }
+
+        CommonUtils.callSecuredAPI(context, url,
+                                   HTTP_METHODS.PUT, requestParams, MessageProcessor.this,
+                                   Constants.NOTIFICATION_REQUEST_CODE
+        );
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
+        String responseStatus;
+        String response;
+        if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
+            if (result != null) {
+                responseStatus = result.get(Constants.STATUS_KEY);
+                if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
+                    response = result.get(Constants.RESPONSE);
+                    if (response != null && !response.isEmpty()) {
+                        if (Constants.DEBUG_MODE_ENABLED) {
+                            Log.d(TAG, "onReceiveAPIResult." + response);
+                        }
+                        try {
+                            performOperation(response);
+                        } catch (AndroidAgentException e) {
+                            Log.e(TAG, "Failed to perform operation." + e);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

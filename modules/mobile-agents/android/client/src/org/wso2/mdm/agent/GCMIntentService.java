@@ -69,8 +69,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 		
 		if (mode.trim().toUpperCase(Locale.getDefault()).equals(MESSAGE_MODE)) {
 			MessageProcessor msg = new MessageProcessor(context);
-			msg.getMessages();
-		}
+            try {
+                msg.getMessages();
+            } catch (AndroidAgentException e) {
+                Log.e(TAG, "Failed to perform operation." + e);
+            }
+        }
 	}
 
 	@Override

@@ -43,16 +43,14 @@ public class CommonUtils {
 
 	/**
 	 * Calls the secured API.
-	 * @param context           -The Activity which calls an API.
-	 * @param serverUrl         -The server url.
+	 * @param context           -The Activity which calls an API..
 	 * @param endpoint          -The API endpoint.
-	 * @param apiVersion        -The API version.
 	 * @param methodType        -The method type.
 	 * @param apiResultCallBack -The API result call back object.
 	 * @param requestCode       -The request code.
 	 */
 	public static void callSecuredAPI(Context context, String endpoint, HTTP_METHODS methodType,
-	                                  JSONObject requestParams,
+	                                  String requestParams,
 	                                  APIResultCallBack apiResultCallBack, int requestCode) {
 
 		EndPointInfo apiUtilities = new EndPointInfo();
@@ -102,19 +100,19 @@ public class CommonUtils {
 		editor.putString(context.getResources().getString(R.string.shared_pref_policy),
 		                 resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_isagreed),
-		                 resources.getString(R.string.shared_pref_device_active));
+		                 resources.getString(R.string.shared_pref_reg_fail));
 		editor.putString(context.getResources().getString(R.string.shared_pref_regId),
 		                 resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_registered),
-		                 resources.getString(R.string.shared_pref_device_active));
+		                 resources.getString(R.string.shared_pref_reg_fail));
 		editor.putString(context.getResources().getString(R.string.shared_pref_ip),
 		                 resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
 		                 resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_eula),
 		                 resources.getString(R.string.shared_pref_default_string));
-        	editor.putString(resources.getString(R.string.shared_pref_device_active),
-                         	 resources.getString(R.string.shared_pref_reg_fail));
+        editor.putString(resources.getString(R.string.shared_pref_device_active),
+                         resources.getString(R.string.shared_pref_reg_fail));
 		editor.commit();
 		
 		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);

@@ -17,119 +17,38 @@
  */
 package org.wso2.mdm.agent.services;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.wso2.mdm.agent.R;
+import org.wso2.mdm.agent.beans.Operation;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class handles building of the operation list result payload to be sent to the server.
  */
 public class BuildResultPayload {
-	private JSONArray operationListResult;
-	private JSONObject result;
-	private Resources resources;
-	private String TAG = BuildResultPayload.class.getName();
-	
-	public BuildResultPayload(Context context){
-		this.resources = context.getResources();
-		this.operationListResult = new JSONArray();
-		this.result = new JSONObject();
-	}
-	
-	/**
-	 * Add operation results to the array to be returned.
-	 * @param code     - Operation code.
-	 */
-	public void build(String code) {
-		try {
-			result.put(resources.getString(R.string.intent_extra_status),
-				           resources.getString(R.string.shared_pref_default_status));
-			
-			result.put(resources.getString(R.string.intent_extra_code), code);
-			
-			operationListResult.put(result);
-		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e.toString());
-		}
-	}
-	
-	/**
-	 * Add operation results to the array to be returned.
-	 * @param code     - Operation code.
-	 * @param data     - Data JSON object.
-	 */
-	public void build(String code, JSONObject data) {
-		try {
-			result.put(resources.getString(R.string.intent_extra_status),
-				          resources.getString(R.string.shared_pref_default_status));
 
-			result.put(resources.getString(R.string.intent_extra_code), code);
-			
-			if (data != null) {
-				result.put(resources.getString(R.string.intent_extra_data), data);
-			}
-			
-			operationListResult.put(result);
-		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e.toString());
-		}
-	}
+	private List<Operation> operationResponses;
 	
-	/**
-	 * Add operation results to the array to be returned.
-	 * @param code     - Operation code.
-	 * @param dataList - Data JSON Array.
-	 */
-	public void build(String code, JSONArray dataList) {
-		try {
-			result.put(resources.getString(R.string.intent_extra_status),
-			           	resources.getString(R.string.shared_pref_default_status));
-			
-			result.put(resources.getString(R.string.intent_extra_code), code);
+	public BuildResultPayload(){
+		this.operationResponses = new ArrayList<Operation>();
+	}
 
-			if (dataList != null) {
-				result.put(resources.getString(R.string.intent_extra_data), dataList);
-			}
-			
-			operationListResult.put(result);
-		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e.toString());
-		}
-	}
-	
 	/**
-	 * Add operation results to the array to be returned.
-	 * @param code     - Operation code.
-	 * @param customStatus - Operation status.
+	 * Setup the payload operation list
+	 * @param operation
 	 */
-	public void build(String code, String customStatus) {
-		try {
-			if (customStatus != null) {
-				result.put(resources.getString(R.string.intent_extra_status), customStatus);
-			} else {
-				result.put(resources.getString(R.string.intent_extra_status),
-				           resources.getString(R.string.shared_pref_default_status));
-			}
-			
-			result.put(resources.getString(R.string.intent_extra_code), code);
-			
-			operationListResult.put(result);
-		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON format." + e.toString());
-		}
+	public void build(org.wso2.mdm.agent.beans.Operation operation) {
+		operationResponses.add(operation);
 	}
 	
 	
 	/**
 	 * Return final results payload.
-	 * @return - Final payload.
+	 * @return - List of operations
 	 */
-	public JSONArray getResultPayload(){
-		return this.operationListResult;
+	public List<Operation> getResultPayload(){
+		return this.operationResponses;
 	}
 }

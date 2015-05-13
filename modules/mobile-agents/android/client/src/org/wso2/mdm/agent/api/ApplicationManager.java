@@ -24,8 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.beans.DeviceAppInfo;
@@ -72,24 +73,22 @@ public class ApplicationManager {
 	 * Returns a list of all the applications installed on the device.
 	 * @return - List of applications which installed on the device.
 	 */
-	public ArrayList<DeviceAppInfo> getInstalledApps() {
-		ArrayList<DeviceAppInfo> appList = new ArrayList<DeviceAppInfo>();
-		DeviceAppInfo app;
-		List<PackageInfo> packages = packageManager.
-									 	getInstalledPackages(SYSTEM_APPS_DISABLED_FLAG);
-		
-		for (PackageInfo packageInfo : packages) {
-			app = new DeviceAppInfo();
-			app.setAppname(packageInfo.applicationInfo.
-			                   	loadLabel(packageManager).toString());
-			app.setPackagename(packageInfo.packageName);
-			app.setVersionName(packageInfo.versionName);
-			app.setVersionCode(packageInfo.versionCode);
-			appList.add(app);
-		}
-		
-		return appList;
-	}
+    public Map<String, DeviceAppInfo> getInstalledApps() {
+        Map<String, DeviceAppInfo> appList = new HashMap<String, DeviceAppInfo>();
+        List<PackageInfo> packages = packageManager.getInstalledPackages(SYSTEM_APPS_DISABLED_FLAG);
+        DeviceAppInfo app;
+
+        for (PackageInfo packageInfo : packages) {
+            app = new DeviceAppInfo();
+            app.setAppname(packageInfo.applicationInfo.
+                    loadLabel(packageManager).toString());
+            app.setPackagename(packageInfo.packageName);
+            app.setVersionName(packageInfo.versionName);
+            app.setVersionCode(packageInfo.versionCode);
+            appList.put(packageInfo.packageName, app);
+        }
+        return appList;
+    }
 
 	/**
 	 * Returns the app name for a particular package name.

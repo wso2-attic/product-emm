@@ -19,9 +19,6 @@ package org.wso2.mdm.agent;
 
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.beans.ServerConfig;
 import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS;
@@ -47,6 +44,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -155,14 +153,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 	};
 
-	private DialogInterface.OnClickListener isRegisteredFailedOKBtnClickListerner =
-			new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface arg0,
-				                    int arg1) {
-					loadServerDetailsActivity();
-				}
-			};
 
 	/**
 	 * Send unregistration request.
@@ -180,13 +170,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		regId = Preference.getString(context,
 				                     context.getResources().getString(R.string.shared_pref_regId));
 
-		JSONObject requestParams = new JSONObject();
-		try {
-			requestParams.put(resources.getString(R.string.shared_pref_regId), regId);
-		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON." + e);
-		}
-
 		if (CommonUtils.isNetworkAvailable(context)) {
 			String serverIP =
 					Preference.getString(AlreadyRegisteredActivity.this,
@@ -197,9 +180,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			utils.setServerIP(serverIP);
 
 			CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-			                           utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT, HTTP_METHODS.DELETE,
-			                           requestParams, AlreadyRegisteredActivity.this,
-			                           Constants.UNREGISTER_REQUEST_CODE);
+			                            utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+                                        HTTP_METHODS.DELETE,
+			                            null, AlreadyRegisteredActivity.this,
+			                            Constants.UNREGISTER_REQUEST_CODE);
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
@@ -254,34 +238,45 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!freshRegFlag && !isUnregisterBtnClicked) {
-			if (CommonUtils.isNetworkAvailable(context)) {
-				JSONObject requestParams = new JSONObject();
-				try {
-					requestParams.put(resources.getString(R.string.shared_pref_regId), regId);
-				} catch (JSONException e) {
-						Log.e(TAG, "Invalid JSON." + e);
-				}
 
-				String serverIP =
-						Preference.getString(AlreadyRegisteredActivity.this,
-						                     context.getResources()
-						                            .getString(R.string.shared_pref_ip)
-						);
-				ServerConfig utils = new ServerConfig();
-				utils.setServerIP(serverIP);
+        if (Constants.DEBUG_MODE_ENABLED) {
+	        Log.d(TAG, "Calling onResume");
+        }
 
-				CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-				                           utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT, HTTP_METHODS.POST,
-				                           requestParams, AlreadyRegisteredActivity.this,
-				                           Constants.IS_REGISTERED_REQUEST_CODE);
-			} else {
-				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
-			}
-		}
+        String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
 
+        if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
+
+            if (CommonUtils.isNetworkAvailable(context)) {
+
+                String serverIP =
+                        Preference.getString(AlreadyRegisteredActivity.this,
+                                context.getResources()
+                                        .getString(R.string.shared_pref_ip)
+                        );
+                regId = Preference.getString(context, resources.
+                        getString(R.string.shared_pref_regId));
+
+                if (regId.isEmpty() && isUnregisterBtnClicked) {
+                    initiateUnregistration();
+                } else {
+                    ServerConfig utils = new ServerConfig();
+                    utils.setServerIP(serverIP);
+
+                    CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+                            utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
+                            HTTP_METHODS.GET,
+                            null, AlreadyRegisteredActivity.this,
+                            Constants.IS_REGISTERED_REQUEST_CODE);
+                }
+            } else {
+                CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+            }
+        } else {
+            initiateUnregistration();
+        }
 	}
-
+	
 	/**
 	 * Displays an internal server error message to the user.
 	 */
@@ -299,22 +294,28 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 */
 	private void clearAppData() {
 		CommonUtils.clearAppData(context);
-        	if (Constants.DEBUG_MODE_ENABLED) {
-            		Log.d(TAG, "App data cleared");
-        	}
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "App data cleared");
+        }
+
 	}
 
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
-		String responseStatus = null;
 
-		if (requestCode == Constants.UNREGISTER_REQUEST_CODE) {
+        String responseStatus;
+        if (Constants.DEBUG_MODE_ENABLED) {
+	        Log.d(TAG, "onReceiveAPIResult-requestcode: " + requestCode);
+        }
+
+
+        if (requestCode == Constants.UNREGISTER_REQUEST_CODE) {
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
+                if (responseStatus != null && Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					clearAppData();
-                    			initiateUnregistration();
+                    initiateUnregistration();
 				} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else {
@@ -323,7 +324,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			} else {
 				loadAuthenticationErrorActivity();
 			}
-
 		}
 
 		if (requestCode == Constants.IS_REGISTERED_REQUEST_CODE) {
@@ -347,7 +347,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Load device home screen.
 	 */
 
-	private void loadHomeScreen(){
+	private void loadHomeScreen() {
 		Intent i = new Intent();
 		i.setAction(Intent.ACTION_MAIN);
 		i.addCategory(Intent.CATEGORY_HOME);
@@ -358,12 +358,12 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	/**
 	 * Initiate unregistration.
 	 */
-	private void initiateUnregistration(){
+	private void initiateUnregistration() {
 		txtRegText.setText(R.string.register_text_view_text_unregister);
 		btnUnregister.setText(R.string.register_button_text);
 		btnUnregister.setTag(TAG_BTN_RE_REGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-        	LocalNotification.stopPolling(context);
+        LocalNotification.stopPolling(context);
 		CommonUtils.clearAppData(context);
 	}
 
@@ -371,7 +371,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Start device admin activation request.
 	 * @param cdmDeviceAdmin - Device admin component.
 	 */
-	private void startDeviceAdminPrompt(ComponentName cdmDeviceAdmin){
+	private void startDeviceAdminPrompt(ComponentName cdmDeviceAdmin) {
 		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
@@ -382,7 +382,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	/**
 	 * Display unregistration confirmation dialog.
 	 */
-	private void showUnregisterDialog(){
+	private void showUnregisterDialog() {
 		AlertDialog.Builder builder =
 				new AlertDialog.Builder(
 						AlreadyRegisteredActivity.this);
@@ -395,7 +395,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	/**
 	 * Load device info activity.
 	 */
-	private void loadDeviceInfoActivity(){
+	private void loadDeviceInfoActivity() {
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this,
 				           DisplayDeviceInfoActivity.class);
@@ -407,7 +407,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	/**
 	 * Load server details activity.
 	 */
-	private void loadServerDetailsActivity(){
+	private void loadServerDetailsActivity() {
 		Preference.putString(context, resources.getString(R.string.shared_pref_ip),
 		                     resources.getString(R.string.shared_pref_default_string));
 		Intent intent = new Intent(
@@ -425,7 +425,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	/**
 	 * Load PIN code activity.
 	 */
-	private void loadPinCodeActivity(){
+	private void loadPinCodeActivity() {
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this, PinCodeActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
