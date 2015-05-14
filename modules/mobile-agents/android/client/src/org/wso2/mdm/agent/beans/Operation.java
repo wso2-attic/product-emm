@@ -19,81 +19,84 @@ package org.wso2.mdm.agent.beans;
 
 import java.io.Serializable;
 
+/**
+ * This class represents the operation information.
+ */
 public class Operation implements Serializable {
 
-    private String code;
-    private String type;
-    private int id;
-    private String status;
-    private String receivedTimeStamp;
-    private String createdTimeStamp;
-    private boolean enabled;
-    private Object payLoad;
+	private String code;
+	private String type;
+	private int id;
+	private String status;
+	private String receivedTimeStamp;
+	private String createdTimeStamp;
+	private boolean enabled;
+	private Object payLoad;
 
-    public Operation() {
-    }
+	public Operation() {
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public String getReceivedTimeStamp() {
-        return receivedTimeStamp;
-    }
+	public String getReceivedTimeStamp() {
+		return receivedTimeStamp;
+	}
 
-    public void setReceivedTimeStamp(String receivedTimeStamp) {
-        this.receivedTimeStamp = receivedTimeStamp;
-    }
+	public void setReceivedTimeStamp(String receivedTimeStamp) {
+		this.receivedTimeStamp = receivedTimeStamp;
+	}
 
-    public String getCreatedTimeStamp() {
-        return createdTimeStamp;
-    }
+	public String getCreatedTimeStamp() {
+		return createdTimeStamp;
+	}
 
-    public void setCreatedTimeStamp(String createdTimeStamp) {
-        this.createdTimeStamp = createdTimeStamp;
-    }
+	public void setCreatedTimeStamp(String createdTimeStamp) {
+		this.createdTimeStamp = createdTimeStamp;
+	}
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    public Object getPayLoad() {
-        return payLoad;
-    }
+	public Object getPayLoad() {
+		return payLoad;
+	}
 
-    public void setPayLoad(Object payLoad) {
-        this.payLoad = payLoad;
-    }
+	public void setPayLoad(Object payLoad) {
+		this.payLoad = payLoad;
+	}
 }

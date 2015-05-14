@@ -48,7 +48,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	private ProgressDialog progressDialog;
 	private AlertDialog.Builder alertDialog;
 	private BuildDeviceInfoPayload deviceInfoBuilder;
-    private Resources resources;
+	private Resources resources;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +56,10 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		setContentView(R.layout.activity_main);
 		context = this;
 		deviceInfoBuilder = new BuildDeviceInfoPayload(context);
-        resources = context.getResources();
+		resources = context.getResources();
 		DeviceInfo deviceInfo = new DeviceInfo(context);
-        String deviceIdentifier = deviceInfo.getMACAddress();
-        Preference.putString(context, resources.getString(R.string.shared_pref_regId), deviceIdentifier);
+		String deviceIdentifier = deviceInfo.getMACAddress();
+		Preference.putString(context, resources.getString(R.string.shared_pref_regId), deviceIdentifier);
 		registerDevice();
 	}
 
@@ -89,20 +89,20 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			// Call device registration API.
 			String ipSaved =
 					Preference.getString(context.getApplicationContext(),
-					                     context.getResources()
-					                            .getString(R.string.shared_pref_ip)
+							context.getResources()
+									.getString(R.string.shared_pref_ip)
 					);
-			
+
 			ServerConfig utils = new ServerConfig();
 			utils.setServerIP(ipSaved);
 
-            CommonUtils.callSecuredAPI(RegistrationActivity.this,
-                                       utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
-			                           HTTP_METHODS.POST,
-									   deviceInfoBuilder.getDeviceInfoPayload().toString(),
-			                           RegistrationActivity.this,
-			                           Constants.REGISTER_REQUEST_CODE);
-			
+			CommonUtils.callSecuredAPI(RegistrationActivity.this,
+					utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
+					HTTP_METHODS.POST,
+					deviceInfoBuilder.getDeviceInfoPayload().toString(),
+					RegistrationActivity.this,
+					Constants.REGISTER_REQUEST_CODE);
+
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
@@ -185,7 +185,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		CommonDialogUtils.stopProgressDialog(progressDialog);
 		String responseStatus;
 		if (result != null) {
-            responseStatus = result.get(Constants.STATUS_KEY);
+			responseStatus = result.get(Constants.STATUS_KEY);
 
 			if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 				loadAlreadyRegisteredActivity();

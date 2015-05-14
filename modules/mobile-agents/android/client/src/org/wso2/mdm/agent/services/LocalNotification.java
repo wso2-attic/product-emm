@@ -43,22 +43,22 @@ public class LocalNotification {
 			Intent alarm = new Intent(context, AlarmReceiver.class);
 			PendingIntent recurringAlarm =
 					PendingIntent.getBroadcast(context,
-					                           REQUEST_CODE,
-					                           alarm,
-					                           PendingIntent.FLAG_CANCEL_CURRENT);
+							REQUEST_CODE,
+							alarm,
+							PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, currentTime, interval,
-			                    recurringAlarm);
+					recurringAlarm);
 		}
 	}
 
-    public static void stopPolling(Context context) {
-        if (localNoticicationInvoked == true) {
-            localNoticicationInvoked = false;
-            Intent alarm = new Intent(context, AlarmReceiver.class);
-            PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, 0);
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.cancel(sender);
-        }
-    }
+	public static void stopPolling(Context context) {
+		if (localNoticicationInvoked == true) {
+			localNoticicationInvoked = false;
+			Intent alarm = new Intent(context, AlarmReceiver.class);
+			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, 0);
+			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(sender);
+		}
+	}
 }

@@ -50,8 +50,8 @@ public class CommonUtils {
 	 * @param requestCode       -The request code.
 	 */
 	public static void callSecuredAPI(Context context, String endpoint, HTTP_METHODS methodType,
-	                                  String requestParams,
-	                                  APIResultCallBack apiResultCallBack, int requestCode) {
+									  String requestParams,
+									  APIResultCallBack apiResultCallBack, int requestCode) {
 
 		EndPointInfo apiUtilities = new EndPointInfo();
 		apiUtilities.setEndPoint(endpoint);
@@ -62,20 +62,20 @@ public class CommonUtils {
 		APIController apiController;
 		String clientKey =
 				Preference.getString(context,
-				                     context.getResources()
-				                            .getString(R.string.shared_pref_client_id)
+						context.getResources()
+								.getString(R.string.shared_pref_client_id)
 				);
 		String clientSecret =
 				Preference.getString(context,
-				                     context.getResources()
-				                            .getString(R.string.shared_pref_client_secret)
+						context.getResources()
+								.getString(R.string.shared_pref_client_secret)
 				);
 		if (clientKey!=null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
 			apiController = new APIController(clientKey, clientSecret);
 			apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
-			                        context.getApplicationContext());
+					context.getApplicationContext());
 		}
-		
+
 	}
 
 	/**
@@ -92,32 +92,32 @@ public class CommonUtils {
 		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		SharedPreferences mainPref =
 				context.getSharedPreferences(context.getResources()
-				                                    .getString(R.string.shared_pref_package),
-				                             Context.MODE_PRIVATE
+								.getString(R.string.shared_pref_package),
+						Context.MODE_PRIVATE
 				);
-		
+
 		Editor editor = mainPref.edit();
 		editor.putString(context.getResources().getString(R.string.shared_pref_policy),
-		                 resources.getString(R.string.shared_pref_default_string));
+				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_isagreed),
-		                 resources.getString(R.string.shared_pref_reg_fail));
+				resources.getString(R.string.shared_pref_reg_fail));
 		editor.putString(context.getResources().getString(R.string.shared_pref_regId),
-		                 resources.getString(R.string.shared_pref_default_string));
+				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_registered),
-		                 resources.getString(R.string.shared_pref_reg_fail));
+				resources.getString(R.string.shared_pref_reg_fail));
 		editor.putString(context.getResources().getString(R.string.shared_pref_ip),
-		                 resources.getString(R.string.shared_pref_default_string));
+				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
-		                 resources.getString(R.string.shared_pref_default_string));
+				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_eula),
-		                 resources.getString(R.string.shared_pref_default_string));
-        editor.putString(resources.getString(R.string.shared_pref_device_active),
-                         resources.getString(R.string.shared_pref_reg_fail));
+				resources.getString(R.string.shared_pref_default_string));
+		editor.putString(resources.getString(R.string.shared_pref_device_active),
+				resources.getString(R.string.shared_pref_reg_fail));
 		editor.commit();
-		
+
 		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);
 	}
-	
+
 	/**
 	 * Returns network availability status.
 	 * @param context - Application context.

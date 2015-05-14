@@ -30,7 +30,7 @@ import java.util.List;
 public class BuildResultPayload {
 
 	private List<Operation> operationResponses;
-	
+
 	public BuildResultPayload(){
 		this.operationResponses = new ArrayList<Operation>();
 	}
@@ -42,8 +42,7 @@ public class BuildResultPayload {
 	public void build(org.wso2.mdm.agent.beans.Operation operation) {
 		operationResponses.add(operation);
 	}
-	
-	
+
 	/**
 	 * Return final results payload.
 	 * @return - List of operations

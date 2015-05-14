@@ -24,40 +24,40 @@ import java.util.List;
 
 public class ApplicationWrapper {
 
-    private List<String> userNameList;
-    private List<String> roleNameList;
-    private List<DeviceIdentifier> deviceIdentifiers;
+	private List<String> userNameList;
+	private List<String> roleNameList;
+	private List<DeviceIdentifier> deviceIdentifiers;
 	private MobileApp application;
 
-    public MobileApp getApplication() {
-        return application;
-    }
+	public MobileApp getApplication() {
+		return application;
+	}
 
-    public void setApplication(MobileApp application) {
-        this.application = application;
-    }
-    public List<String> getUserNameList() {
-        return userNameList;
-    }
+	public void setApplication(MobileApp application) {
+		this.application = application;
+	}
+	public List<String> getUserNameList() {
+		return userNameList;
+	}
 
-    public void setUserNameList(List<String> userNameList) {
-        this.userNameList = userNameList;
-    }
+	public void setUserNameList(List<String> userNameList) {
+		this.userNameList = userNameList;
+	}
 
-    public List<String> getRoleNameList() {
-        return roleNameList;
-    }
+	public List<String> getRoleNameList() {
+		return roleNameList;
+	}
 
-    public void setRoleNameList(List<String> roleNameList) {
-        this.roleNameList = roleNameList;
-    }
+	public void setRoleNameList(List<String> roleNameList) {
+		this.roleNameList = roleNameList;
+	}
 
-    public List<DeviceIdentifier> getDeviceIdentifiers() {
-        return deviceIdentifiers;
-    }
+	public List<DeviceIdentifier> getDeviceIdentifiers() {
+		return deviceIdentifiers;
+	}
 
-    public void setDeviceIdentifiers(List<DeviceIdentifier> deviceIdentifiers) {
-        this.deviceIdentifiers = deviceIdentifiers;
-    }
+	public void setDeviceIdentifiers(List<DeviceIdentifier> deviceIdentifiers) {
+		this.deviceIdentifiers = deviceIdentifiers;
+	}
 
 }

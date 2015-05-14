@@ -57,12 +57,12 @@ public class Constants {
 	public static final String RESPONSE = "response";
 	public static final String PAYLOAD = "payLoad";
 	public static final String CODE = "code";
-    public static final String TYPE = "type";
-    public static final String ID = "id";
-    public static final String TYPE_COMMAND = "COMMAND";
-    public static final String TYPE_CONFIG = "CONFIG";
-    public static final String TYPE_PROFILE = "PROFILE";
-    public static final String ENABLED= "enabled";
+	public static final String TYPE = "type";
+	public static final String ID = "id";
+	public static final String TYPE_COMMAND = "COMMAND";
+	public static final String TYPE_CONFIG = "CONFIG";
+	public static final String TYPE_PROFILE = "PROFILE";
+	public static final String ENABLED= "enabled";
 	public static final String LOCAL = "LOCAL";
 	public static final String LOG_FILE = "wso2log.txt";
 
@@ -116,36 +116,36 @@ public class Constants {
 	 * Operation IDs
 	 */
 
-    public final class Operation{
-        private Operation(){
-            throw new AssertionError();
-        }
-        public static final String DEVICE_LOCK = "DEVICE_LOCK";
-        public static final String DEVICE_LOCATION = "DEVICE_LOCATION";
-        public static final String WIFI = "WIFI";
-        public static final String CAMERA = "CAMERA";
-        public static final String EMAIL = "EMAIL";
-        public static final String DEVICE_MUTE = "DEVICE_MUTE";
-        public static final String PASSWORD_POLICY = "PASSWORD_POLICY";
-        public static final String DEVICE_INFO = "DEVICE_INFO";
-        public static final String ENTERPRISE_WIPE = "ENTERPRISE_WIPE";
-        public static final String CLEAR_PASSWORD = "CLEAR_PASSWORD";
-        public static final String WIPE_DATA = "WIPE_DATA";
-        public static final String APPLICATION_LIST = "APPLICATION_LIST";
-        public static final String CHANGE_LOCK_CODE = "CHANGE_LOCK_CODE";
-        public static final String INSTALL_APPLICATION = "INSTALL_APPLICATION";
-        public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
-        public static final String BLACKLIST_APPLICATIONS = "BLACKLIST_APPLICATIONS";
-        public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
-        public static final String DEVICE_RING = "DEVICE_RING";
-        public static final String PASSCODE_POLICY = "PASSCODE_POLICY";
-        public static final String NOTIFICATION = "NOTIFICATION";
-        public static final String INSTALL_APPLICATION_BUNDLE = "INSTALL_APPLICATION_BUNDLE";
-        public static final String WEBCLIP = "WEBCLIP";
-        public static final String INSTALL_GOOGLE_APP = "INSTALL_GOOGLE_APP";
-        public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
-        public static final String POLICY_MONITOR = "POLICY_MONITOR";
-        public static final String POLICY_REVOKE = "POLICY_REVOKE";
-    }
+	public final class Operation{
+		private Operation(){
+			throw new AssertionError();
+		}
+		public static final String DEVICE_LOCK = "DEVICE_LOCK";
+		public static final String DEVICE_LOCATION = "DEVICE_LOCATION";
+		public static final String WIFI = "WIFI";
+		public static final String CAMERA = "CAMERA";
+		public static final String EMAIL = "EMAIL";
+		public static final String DEVICE_MUTE = "DEVICE_MUTE";
+		public static final String PASSWORD_POLICY = "PASSWORD_POLICY";
+		public static final String DEVICE_INFO = "DEVICE_INFO";
+		public static final String ENTERPRISE_WIPE = "ENTERPRISE_WIPE";
+		public static final String CLEAR_PASSWORD = "CLEAR_PASSWORD";
+		public static final String WIPE_DATA = "WIPE_DATA";
+		public static final String APPLICATION_LIST = "APPLICATION_LIST";
+		public static final String CHANGE_LOCK_CODE = "CHANGE_LOCK_CODE";
+		public static final String INSTALL_APPLICATION = "INSTALL_APPLICATION";
+		public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
+		public static final String BLACKLIST_APPLICATIONS = "BLACKLIST_APPLICATIONS";
+		public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
+		public static final String DEVICE_RING = "DEVICE_RING";
+		public static final String PASSCODE_POLICY = "PASSCODE_POLICY";
+		public static final String NOTIFICATION = "NOTIFICATION";
+		public static final String INSTALL_APPLICATION_BUNDLE = "INSTALL_APPLICATION_BUNDLE";
+		public static final String WEBCLIP = "WEBCLIP";
+		public static final String INSTALL_GOOGLE_APP = "INSTALL_GOOGLE_APP";
+		public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
+		public static final String POLICY_MONITOR = "POLICY_MONITOR";
+		public static final String POLICY_REVOKE = "POLICY_REVOKE";
+	}
 
 }

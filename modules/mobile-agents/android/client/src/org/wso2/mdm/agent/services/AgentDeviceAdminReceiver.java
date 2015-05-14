@@ -53,18 +53,18 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		super.onEnabled(context, intent);
 		Resources resources = context.getResources();
 		Preference.putString(context,
-		                     context.getResources().getString(R.string.shared_pref_device_active),
-		                     resources.getString(R.string.shared_pref_reg_success));
+				context.getResources().getString(R.string.shared_pref_device_active),
+				resources.getString(R.string.shared_pref_reg_success));
 
 		MessageProcessor processor = new MessageProcessor(context);
-        try {
-            processor.getMessages();
-        } catch (AndroidAgentException e) {
-            Log.e(TAG, "Failed to perform operation." + e);
-        }
+		try {
+			processor.getMessages();
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Failed to perform operation." + e);
+		}
 
-        Toast.makeText(context, R.string.device_admin_enabled,
-		               Toast.LENGTH_LONG).show();
+		Toast.makeText(context, R.string.device_admin_enabled,
+				Toast.LENGTH_LONG).show();
 		LocalNotification.startPolling(context);
 	}
 
@@ -92,28 +92,28 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void startUnRegistration(Context context) {
 		String regId = Preference.getString(context, context
 				.getResources().getString(R.string.shared_pref_regId));
-        LocalNotification.stopPolling(context);
-        String serverIP =
-                Preference.getString(context,
-                        context.getResources()
-                                .getString(R.string.shared_pref_ip)
-                );
+		LocalNotification.stopPolling(context);
+		String serverIP =
+				Preference.getString(context,
+						context.getResources()
+								.getString(R.string.shared_pref_ip)
+				);
 
-        ServerConfig utils = new ServerConfig();
-        utils.setServerIP(serverIP);
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(serverIP);
 
-        CommonUtils.callSecuredAPI(context,
-                utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
-                HTTP_METHODS.DELETE,
-                null, AgentDeviceAdminReceiver.this,
-                Constants.UNREGISTER_REQUEST_CODE);
-        CommonUtils.clearAppData(context);
+		CommonUtils.callSecuredAPI(context,
+				utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+				HTTP_METHODS.DELETE,
+				null, AgentDeviceAdminReceiver.this,
+				Constants.UNREGISTER_REQUEST_CODE);
+		CommonUtils.clearAppData(context);
 	}
 
 	@Override
 	public void onPasswordChanged(Context context, Intent intent) {
 		super.onPasswordChanged(context, intent);
-		if (Constants.DEBUG_MODE_ENABLED) { 
+		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "onPasswordChanged.");
 		}
 	}

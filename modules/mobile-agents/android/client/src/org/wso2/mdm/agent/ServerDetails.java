@@ -61,16 +61,16 @@ public class ServerDetails extends Activity {
 
 		Response compatibility = state.evaluateCompatibility();
 		if (!compatibility.getCode()) {
-            txtSeverAddress.setText(compatibility.getDescriptionResourceID());
-            btnStartRegistration.setVisibility(View.GONE);
-            txtSeverAddress.setVisibility(View.VISIBLE);
-            evServerIP.setVisibility(View.GONE);
+			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+			btnStartRegistration.setVisibility(View.GONE);
+			txtSeverAddress.setVisibility(View.VISIBLE);
+			evServerIP.setVisibility(View.GONE);
 		} else {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
 			String ipSaved =
 					Preference.getString(context.getApplicationContext(),
-					                     getResources().getString(R.string.shared_pref_ip));
+							getResources().getString(R.string.shared_pref_ip));
 
 			// check if we have the IP saved previously.
 			if (ipSaved != null && !ipSaved.isEmpty()) {
@@ -82,12 +82,12 @@ public class ServerDetails extends Activity {
 
 			String deviceActive =
 					Preference.getString(context,
-					                     context.getResources()
-					                            .getString(R.string.shared_pref_device_active)
+							context.getResources()
+									.getString(R.string.shared_pref_device_active)
 					);
 
-            if (deviceActive != null && deviceActive.equals(context.getResources()
-                    .getString(R.string.shared_pref_reg_success))) {
+			if (deviceActive != null && deviceActive.equals(context.getResources()
+					.getString(R.string.shared_pref_reg_success))) {
 				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);

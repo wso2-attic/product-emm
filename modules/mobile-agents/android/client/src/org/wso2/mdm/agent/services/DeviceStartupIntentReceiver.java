@@ -64,13 +64,13 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 			Intent alarmIntent = new Intent(context, AlarmReceiver.class);
 			PendingIntent recurringAlarmIntent =
 					PendingIntent.getBroadcast(context,
-					                           DEFAULT_REQUEST_CODE,
-					                           alarmIntent,
-					                           PendingIntent.FLAG_CANCEL_CURRENT);
+							DEFAULT_REQUEST_CODE,
+							alarmIntent,
+							PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager alarmManager =
 					(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, startTime,
-			                          interval.intValue(), recurringAlarmIntent);
+					interval.intValue(), recurringAlarmIntent);
 		}
 	}
 }

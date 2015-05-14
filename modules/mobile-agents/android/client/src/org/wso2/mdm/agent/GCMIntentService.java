@@ -63,18 +63,18 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		String mode =
 				Preference.getString(context,
-				                     context.getResources()
-				                            .getString(R.string.shared_pref_message_mode)
+						context.getResources()
+								.getString(R.string.shared_pref_message_mode)
 				);
-		
+
 		if (mode.trim().toUpperCase(Locale.getDefault()).equals(MESSAGE_MODE)) {
 			MessageProcessor msg = new MessageProcessor(context);
-            try {
-                msg.getMessages();
-            } catch (AndroidAgentException e) {
-                Log.e(TAG, "Failed to perform operation." + e);
-            }
-        }
+			try {
+				msg.getMessages();
+			} catch (AndroidAgentException e) {
+				Log.e(TAG, "Failed to perform operation." + e);
+			}
+		}
 	}
 
 	@Override

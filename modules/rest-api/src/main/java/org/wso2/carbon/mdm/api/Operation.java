@@ -135,45 +135,4 @@ public class Operation {
             throw new MDMAPIException(msg, e);
         }
     }
-
-	@GET
-	@Path("appdummy")
-	@Produces({ MediaType.APPLICATION_JSON})
-	public ApplicationWrapper getApplicationDummy() throws MDMAPIException {
-
-		ApplicationWrapper applicationWrapper = new ApplicationWrapper();
-
-
-		MobileApp mobileApp = new MobileApp();
-		mobileApp.setAppIdentifier("asdf");
-		mobileApp.setIconImage("http://gogle.com");
-		mobileApp.setId("id");
-		mobileApp.setLocation("location");
-		mobileApp.setIdentifier("sdfsdfldfs");
-		mobileApp.setName("test");
-		mobileApp.setPackageName("com.google.mail");
-		mobileApp.setPlatform("android");
-		mobileApp.setVersion("1.0");
-		mobileApp.setType(MobileAppTypes.ENTERPRISE);
-
-
-		ArrayList<String> userNameList = new ArrayList<String>();
-		userNameList.add("admin");
-
-		ArrayList<String> roleNameList = new ArrayList<String>();
-		roleNameList.add("admin");
-
-		ArrayList<DeviceIdentifier> deviceIdentifiers = new ArrayList<DeviceIdentifier>();
-		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-		deviceIdentifier.setId("08:00:27:fe:27:7b");
-		deviceIdentifier.setType("android");
-		deviceIdentifiers.add(deviceIdentifier);
-
-		applicationWrapper.setApplication(mobileApp);
-		applicationWrapper.setRoleNameList(roleNameList);
-		applicationWrapper.setUserNameList(userNameList);
-		applicationWrapper.setDeviceIdentifiers(deviceIdentifiers);
-
-		return applicationWrapper;
-	}
 }

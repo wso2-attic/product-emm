@@ -37,13 +37,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Recurring alarm; requesting alarm service.");
 		}
-		
+
 		MessageProcessor messageProcessor = new MessageProcessor(context);
-        try {
-            messageProcessor.getMessages();
-        } catch (AndroidAgentException e) {
-            Log.e(TAG, "Failed to perform operation." + e);
-        }
-    }
+		try {
+			messageProcessor.getMessages();
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Failed to perform operation." + e);
+		}
+	}
 
 }

@@ -47,133 +47,133 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class MessageProcessor implements APIResultCallBack {
 
-    private String TAG = MessageProcessor.class.getSimpleName();
-    private Context context;
-    private String deviceId;
-    private static final String DEVICE_ID_PREFERENCE_KEY = "deviceId";
-    private static List<org.wso2.mdm.agent.beans.Operation> replyPayload;
-    private org.wso2.mdm.agent.services.Operation operation;
-    private ObjectMapper mapper;
+	private String TAG = MessageProcessor.class.getSimpleName();
+	private Context context;
+	private String deviceId;
+	private static final String DEVICE_ID_PREFERENCE_KEY = "deviceId";
+	private static List<org.wso2.mdm.agent.beans.Operation> replyPayload;
+	private org.wso2.mdm.agent.services.Operation operation;
+	private ObjectMapper mapper;
 
-    /**
-     * Local notification message handler.
-     *
-     * @param context Context of the application.
-     */
-    public MessageProcessor(Context context) {
-        this.context = context;
+	/**
+	 * Local notification message handler.
+	 *
+	 * @param context Context of the application.
+	 */
+	public MessageProcessor(Context context) {
+		this.context = context;
 
-        deviceId = Preference.getString(context, DEVICE_ID_PREFERENCE_KEY);
-        operation = new org.wso2.mdm.agent.services.Operation(context.getApplicationContext());
-        mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		deviceId = Preference.getString(context, DEVICE_ID_PREFERENCE_KEY);
+		operation = new org.wso2.mdm.agent.services.Operation(context.getApplicationContext());
+		mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        if (deviceId == null) {
-            DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
-            deviceId = deviceInfo.getMACAddress();
-            Preference.putString(context, DEVICE_ID_PREFERENCE_KEY, deviceId);
-        }
-    }
+		if (deviceId == null) {
+			DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
+			deviceId = deviceInfo.getMACAddress();
+			Preference.putString(context, DEVICE_ID_PREFERENCE_KEY, deviceId);
+		}
+	}
 
-    /**
-     * @param response Response received from the server that needs to be processed
-     *                 and applied to the device.
-     */
-    public void performOperation(String response) throws AndroidAgentException {
+	/**
+	 * @param response Response received from the server that needs to be processed
+	 *                 and applied to the device.
+	 */
+	public void performOperation(String response) throws AndroidAgentException {
 
-        List<org.wso2.mdm.agent.beans.Operation> operations = new ArrayList<>();
+		List<org.wso2.mdm.agent.beans.Operation> operations = new ArrayList<>();
 
-        try {
-            if (response != null) {
-                operations = mapper.readValue(
-                        response,
-                        mapper.getTypeFactory().constructCollectionType(List.class,
-                                org.wso2.mdm.agent.beans.Operation.class));
-            }
+		try {
+			if (response != null) {
+				operations = mapper.readValue(
+						response,
+						mapper.getTypeFactory().constructCollectionType(List.class,
+								org.wso2.mdm.agent.beans.Operation.class));
+			}
 
-        } catch (JsonProcessingException e) {
-            String msg = "Issue in json parsing.";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+		} catch (JsonProcessingException e) {
+			String msg = "Issue in json parsing.";
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
 
-        } catch (IOException e) {
-            String msg = "Issue in stream parsing.";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
-        }
-
-
-        for (org.wso2.mdm.agent.beans.Operation op : operations) {
-            operation.doTask(op);
-        }
-        replyPayload = operation.getResultPayload();
-
-    }
+		} catch (IOException e) {
+			String msg = "Issue in stream parsing.";
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
+		}
 
 
-    /**
-     * Call the message retrieval end point of the server to get messages pending.
-     */
-    public void getMessages() throws AndroidAgentException {
-        String ipSaved =
-                Preference.getString(context.getApplicationContext(),
-                                     context.getResources().getString(R.string.shared_pref_ip));
-        ServerConfig utils = new ServerConfig();
-        utils.setServerIP(ipSaved);
+		for (org.wso2.mdm.agent.beans.Operation op : operations) {
+			operation.doTask(op);
+		}
+		replyPayload = operation.getResultPayload();
 
-        String url = utils.getAPIServerURL() + Constants.NOTIFICATION_ENDPOINT + deviceId;
-        Log.i(TAG, "getMessage: calling-endpoint: " + url);
+	}
 
-        String requestParams;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            requestParams =  mapper.writeValueAsString(replyPayload);
-        } catch (JsonMappingException e) {
-            String msg = "Issue in json mapping.";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
-        } catch (JsonGenerationException e) {
-            String msg = "Issue in json generation.";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
-        } catch (IOException e) {
-            String msg = "Issue in parsing stream.";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
-        }
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "replay-payload: " + requestParams);
-        }
 
-        CommonUtils.callSecuredAPI(context, url,
-                                   HTTP_METHODS.PUT, requestParams, MessageProcessor.this,
-                                   Constants.NOTIFICATION_REQUEST_CODE
-        );
-    }
+	/**
+	 * Call the message retrieval end point of the server to get messages pending.
+	 */
+	public void getMessages() throws AndroidAgentException {
+		String ipSaved =
+				Preference.getString(context.getApplicationContext(),
+						context.getResources().getString(R.string.shared_pref_ip));
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(ipSaved);
 
-    @SuppressWarnings("unused")
-    @Override
-    public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
-        String responseStatus;
-        String response;
-        if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
-            if (result != null) {
-                responseStatus = result.get(Constants.STATUS_KEY);
-                if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
-                    response = result.get(Constants.RESPONSE);
-                    if (response != null && !response.isEmpty()) {
-                        if (Constants.DEBUG_MODE_ENABLED) {
-                            Log.d(TAG, "onReceiveAPIResult." + response);
-                        }
-                        try {
-                            performOperation(response);
-                        } catch (AndroidAgentException e) {
-                            Log.e(TAG, "Failed to perform operation." + e);
-                        }
-                    }
-                }
-            }
-        }
-    }
+		String url = utils.getAPIServerURL() + Constants.NOTIFICATION_ENDPOINT + deviceId;
+		Log.i(TAG, "getMessage: calling-endpoint: " + url);
+
+		String requestParams;
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			requestParams =  mapper.writeValueAsString(replyPayload);
+		} catch (JsonMappingException e) {
+			String msg = "Issue in json mapping.";
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
+		} catch (JsonGenerationException e) {
+			String msg = "Issue in json generation.";
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
+		} catch (IOException e) {
+			String msg = "Issue in parsing stream.";
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
+		}
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "replay-payload: " + requestParams);
+		}
+
+		CommonUtils.callSecuredAPI(context, url,
+				HTTP_METHODS.PUT, requestParams, MessageProcessor.this,
+				Constants.NOTIFICATION_REQUEST_CODE
+		);
+	}
+
+	@SuppressWarnings("unused")
+	@Override
+	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
+		String responseStatus;
+		String response;
+		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
+			if (result != null) {
+				responseStatus = result.get(Constants.STATUS_KEY);
+				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
+					response = result.get(Constants.RESPONSE);
+					if (response != null && !response.isEmpty()) {
+						if (Constants.DEBUG_MODE_ENABLED) {
+							Log.d(TAG, "onReceiveAPIResult." + response);
+						}
+						try {
+							performOperation(response);
+						} catch (AndroidAgentException e) {
+							Log.e(TAG, "Failed to perform operation." + e);
+						}
+					}
+				}
+			}
+		}
+	}
 
 }

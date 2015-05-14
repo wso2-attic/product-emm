@@ -163,27 +163,27 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		progressDialog =
 				ProgressDialog.show(AlreadyRegisteredActivity.this,
-				                    getResources().getString(R.string.dialog_message_unregistering),
-				                    getResources().getString(R.string.dialog_message_please_wait),
-				                    true);
+						getResources().getString(R.string.dialog_message_unregistering),
+						getResources().getString(R.string.dialog_message_please_wait),
+						true);
 
 		regId = Preference.getString(context,
-				                     context.getResources().getString(R.string.shared_pref_regId));
+				context.getResources().getString(R.string.shared_pref_regId));
 
 		if (CommonUtils.isNetworkAvailable(context)) {
 			String serverIP =
 					Preference.getString(AlreadyRegisteredActivity.this,
-					                     context.getResources()
-					                            .getString(R.string.shared_pref_ip)
+							context.getResources()
+									.getString(R.string.shared_pref_ip)
 					);
 			ServerConfig utils = new ServerConfig();
 			utils.setServerIP(serverIP);
 
 			CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-			                            utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
-                                        HTTP_METHODS.DELETE,
-			                            null, AlreadyRegisteredActivity.this,
-			                            Constants.UNREGISTER_REQUEST_CODE);
+					utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+					HTTP_METHODS.DELETE,
+					null, AlreadyRegisteredActivity.this,
+					Constants.UNREGISTER_REQUEST_CODE);
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
@@ -239,42 +239,42 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	protected void onResume() {
 		super.onResume();
 
-        if (Constants.DEBUG_MODE_ENABLED) {
-	        Log.d(TAG, "Calling onResume");
-        }
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "Calling onResume");
+		}
 
-        String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
+		String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
 
-        if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
+		if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
 
-            if (CommonUtils.isNetworkAvailable(context)) {
+			if (CommonUtils.isNetworkAvailable(context)) {
 
-                String serverIP =
-                        Preference.getString(AlreadyRegisteredActivity.this,
-                                context.getResources()
-                                        .getString(R.string.shared_pref_ip)
-                        );
-                regId = Preference.getString(context, resources.
-                        getString(R.string.shared_pref_regId));
+				String serverIP =
+						Preference.getString(AlreadyRegisteredActivity.this,
+								context.getResources()
+										.getString(R.string.shared_pref_ip)
+						);
+				regId = Preference.getString(context, resources.
+						getString(R.string.shared_pref_regId));
 
-                if (regId.isEmpty() && isUnregisterBtnClicked) {
-                    initiateUnregistration();
-                } else {
-                    ServerConfig utils = new ServerConfig();
-                    utils.setServerIP(serverIP);
+				if (regId.isEmpty() && isUnregisterBtnClicked) {
+					initiateUnregistration();
+				} else {
+					ServerConfig utils = new ServerConfig();
+					utils.setServerIP(serverIP);
 
-                    CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-                            utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
-                            HTTP_METHODS.GET,
-                            null, AlreadyRegisteredActivity.this,
-                            Constants.IS_REGISTERED_REQUEST_CODE);
-                }
-            } else {
-                CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
-            }
-        } else {
-            initiateUnregistration();
-        }
+					CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+							utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
+							HTTP_METHODS.GET,
+							null, AlreadyRegisteredActivity.this,
+							Constants.IS_REGISTERED_REQUEST_CODE);
+				}
+			} else {
+				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+			}
+		} else {
+			initiateUnregistration();
+		}
 	}
 	
 	/**
@@ -294,28 +294,27 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 */
 	private void clearAppData() {
 		CommonUtils.clearAppData(context);
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "App data cleared");
-        }
-
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "App data cleared");
+		}
 	}
 
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 
-        String responseStatus;
-        if (Constants.DEBUG_MODE_ENABLED) {
-	        Log.d(TAG, "onReceiveAPIResult-requestcode: " + requestCode);
-        }
+		String responseStatus;
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "onReceiveAPIResult-requestcode: " + requestCode);
+		}
 
 
-        if (requestCode == Constants.UNREGISTER_REQUEST_CODE) {
+		if (requestCode == Constants.UNREGISTER_REQUEST_CODE) {
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-                if (responseStatus != null && Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
+				if (responseStatus != null && Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
 					clearAppData();
-                    initiateUnregistration();
+					initiateUnregistration();
 				} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else {
@@ -340,7 +339,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			}
 
 		}
-
 	}
 
 	/**
@@ -363,7 +361,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister.setText(R.string.register_button_text);
 		btnUnregister.setTag(TAG_BTN_RE_REGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-        LocalNotification.stopPolling(context);
+		LocalNotification.stopPolling(context);
 		CommonUtils.clearAppData(context);
 	}
 
