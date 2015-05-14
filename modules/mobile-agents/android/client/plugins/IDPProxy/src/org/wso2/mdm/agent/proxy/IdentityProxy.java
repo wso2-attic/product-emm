@@ -76,7 +76,7 @@ public class IdentityProxy implements CallBack {
 			Log.d(TAG, token.getAccessToken());
 			Log.d(TAG, token.getRefreshToken());
 		}
-		
+
 		IdentityProxy.token = token;
 		apiAccessCallBack.onAPIAccessReceive(status);
 	}
@@ -112,7 +112,7 @@ public class IdentityProxy implements CallBack {
 	}
 
 	public void requestToken(Context context, TokenCallBack tokenCallBack, String clientID,
-	                         String clientSecret) {
+							 String clientSecret) {
 		this.context = context;
 		this.tokenCallBack = tokenCallBack;
 		IdentityProxy.clientID = clientID;
@@ -124,7 +124,7 @@ public class IdentityProxy implements CallBack {
 			if (!isExpired) {
 				synchronized(this){
 					IdentityProxy.getInstance().receiveNewAccessToken(Constants.REQUEST_SUCCESSFUL,
-					                                                  "success", token);
+							"success", token);
 				}
 			} else {
 				validateStoredToken();
@@ -134,7 +134,7 @@ public class IdentityProxy implements CallBack {
 
 	private void validateStoredToken() {
 		SharedPreferences mainPref = context.getSharedPreferences(Constants.APPLICATION_PACKAGE,
-		                                                          Context.MODE_PRIVATE);
+				Context.MODE_PRIVATE);
 		String refreshToken = mainPref.getString(Constants.REFRESH_TOKEN, null).toString();
 		String accessToken = mainPref.getString(Constants.ACCESS_TOKEN, null).toString();
 		String date = mainPref.getString(Constants.DATE_LABEL, null).toString();
@@ -150,8 +150,8 @@ public class IdentityProxy implements CallBack {
 			if (!isExpired) {
 				synchronized(this){
 					IdentityProxy.getInstance().receiveNewAccessToken(Constants.REQUEST_SUCCESSFUL,
-					                                                  Constants.SUCCESS_RESPONSE,
-					                                                  token);
+							Constants.SUCCESS_RESPONSE,
+							token);
 				}
 			} else {
 				refreshToken();
@@ -159,7 +159,7 @@ public class IdentityProxy implements CallBack {
 		} else {
 			synchronized(this){
 				IdentityProxy.getInstance().receiveNewAccessToken(Constants.ACCESS_FAILURE,
-				                                                  Constants.FAILURE_RESPONSE, token);
+						Constants.FAILURE_RESPONSE, token);
 			}
 		}
 	}

@@ -17,6 +17,7 @@
  */
 package org.wso2.mdm.agent.proxy.utils;
 
+import android.preference.Preference;
 import android.util.Log;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -24,8 +25,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -39,6 +42,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.mdm.agent.proxy.IDPTokenManagerException;
 import org.wso2.mdm.agent.proxy.IdentityProxy;
@@ -62,7 +66,7 @@ import java.util.Map.Entry;
 public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";
 	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
-	                                                                  Locale.getDefault());
+			Locale.getDefault());
 
 	/**
 	 * Validate the token expiration date.
@@ -111,12 +115,12 @@ public class ServerUtilities {
 				bodyBuilder.append('&');
 			}
 		}
-		
+
 		return bodyBuilder.toString();
 	}
 
 	public static HttpRequestBase buildHeaders(HttpRequestBase httpRequestBase,
-	                                           Map<String, String> headers, HTTP_METHODS httpMethod) {
+											   Map<String, String> headers) {
 		Iterator<Entry<String, String>> iterator = headers.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<String, String> header = iterator.next();
@@ -126,14 +130,20 @@ public class ServerUtilities {
 	}
 
 	public static Map<String, String> postData(EndPointInfo endPointInfo,
-	                                           Map<String, String> headers)
+											   Map<String, String> headers)
 			throws IDPTokenManagerException {
 
 		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
 		String url = endPointInfo.getEndPoint();
-		JSONObject params = endPointInfo.getRequestParams();
+
+		String params = "";
+
+		if(endPointInfo.getRequestParams() != null){
+			params = endPointInfo.getRequestParams();
+		}
+
 		Map<String, String> responseParams = new HashMap<String, String>();
-		
+
 		switch (httpMethod) {
 			case GET:
 				responseParams = sendGetRequest(url, params, headers);
@@ -141,15 +151,22 @@ public class ServerUtilities {
 			case POST:
 				responseParams = sendPostRequest(url, params, headers);
 				break;
+			case DELETE:
+				responseParams = sendDeleteRequest(url, params, headers);
+				break;
+			case PUT:
+				responseParams = sendPutRequest(url, params, headers);
+				break;
 		}
 
 		return responseParams;
 
 	}
-	
-	public static Map<String, String> sendGetRequest(String url, JSONObject params, Map<String, String> headers) throws IDPTokenManagerException{
+
+	public static Map<String, String> sendGetRequest(String url, String params, Map<String,
+			String> headers) throws IDPTokenManagerException {
 		HttpGet httpGet = new HttpGet(url);
-		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet, headers, HTTP_METHODS.GET);
+		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet, headers);
 		HttpClient httpClient = getCertifiedHttpClient();
 		Map<String, String> responseParams = new HashMap<String, String>();
 
@@ -157,33 +174,62 @@ public class ServerUtilities {
 			HttpResponse response = httpClient.execute(httpGetWithHeaders);
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-			                   String.valueOf(response.getStatusLine().getStatusCode()));
+					String.valueOf(response.getStatusLine().getStatusCode()));
 		} catch (ClientProtocolException e) {
 			throw new IDPTokenManagerException("Invalid client protocol.", e);
 		} catch (IOException e) {
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-			                   Constants.INTERNAL_SERVER_ERROR);
+					Constants.INTERNAL_SERVER_ERROR);
 			throw new IDPTokenManagerException("Server connectivity failure.", e);
 		}
-		
+
 		return responseParams;
 	}
-	
-	public static Map<String, String> sendPostRequest(String url, JSONObject params, Map<String, String> headers) throws IDPTokenManagerException{
+
+	public static Map<String, String> sendDeleteRequest(String url, String params, Map<String, String> headers)
+			throws IDPTokenManagerException {
+
+		Map<String, String> responseParams = new HashMap<String, String>();
+		HttpDelete httpDelete = new HttpDelete(url);
+		HttpDelete httpDeleteWithHeaders = (HttpDelete) buildHeaders(httpDelete, headers);
+
+		try {
+
+			HttpClient httpClient = getCertifiedHttpClient();
+
+			HttpResponse response = httpClient.execute(httpDeleteWithHeaders);
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					String.valueOf(response.getStatusLine().getStatusCode()));
+
+		} catch (ClientProtocolException e) {
+			throw new IDPTokenManagerException("Invalid client protocol.", e);
+		} catch (IOException e) {
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			throw new IDPTokenManagerException("Server connectivity failure.", e);
+		}
+
+		return responseParams;
+	}
+
+	public static Map<String, String> sendPostRequest(String url, String params, Map<String, String> headers)
+			throws IDPTokenManagerException {
 		HttpPost httpPost = new HttpPost(url);
 		HttpClient httpClient = getCertifiedHttpClient();
 		Map<String, String> responseParams = new HashMap<String, String>();
-		
+
 		if (params != null) {
 			try {
-				httpPost.setEntity(new StringEntity(params.toString()));
+				httpPost.setEntity(new StringEntity(params));
 			} catch (UnsupportedEncodingException e) {
 				throw new IDPTokenManagerException("Invalid encoding type.", e);
 			}
 		}
 
-		HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers, HTTP_METHODS.POST);
+		HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers);
 		try {
 			HttpResponse response = httpClient.execute(httpPostWithHeaders);
 			String status = String.valueOf(response.getStatusLine().getStatusCode());
@@ -196,15 +242,48 @@ public class ServerUtilities {
 		} catch (IOException e) {
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-			                   Constants.INTERNAL_SERVER_ERROR);
+					Constants.INTERNAL_SERVER_ERROR);
 			throw new IDPTokenManagerException("Server connectivity failure.", e);
 		}
-		
+
+		return responseParams;
+	}
+
+	public static Map<String, String> sendPutRequest(String url, String params, Map<String,
+			String> headers) throws IDPTokenManagerException {
+
+		HttpPut httpPut = new HttpPut(url);
+		HttpClient httpClient = getCertifiedHttpClient();
+		HttpPut httpPutWithHeaders = (HttpPut) buildHeaders(httpPut, headers);
+		Map<String, String> responseParams = new HashMap<String, String>();
+
+		if (params != null) {
+			try {
+				httpPutWithHeaders.setEntity(new StringEntity(params));
+			} catch (UnsupportedEncodingException e) {
+				throw new IDPTokenManagerException("Invalid encoding type.", e);
+			}
+		}
+		try {
+			HttpResponse response = httpClient.execute(httpPutWithHeaders);
+			String status = String.valueOf(response.getStatusLine().getStatusCode());
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
+
+		} catch (ClientProtocolException e) {
+			throw new IDPTokenManagerException("Invalid client protocol.", e);
+		} catch (IOException e) {
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			throw new IDPTokenManagerException("Server connectivity failure.", e);
+		}
+
 		return responseParams;
 	}
 
 	public static Map<String, String> postDataAPI(EndPointInfo endPointInfo,
-	                                              Map<String, String> headers)
+												  Map<String, String> headers)
 			throws IDPTokenManagerException {
 		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
 		String url = endPointInfo.getEndPoint();
@@ -213,10 +292,10 @@ public class ServerUtilities {
 		Map<String, String> responseParams = new HashMap<String, String>();
 		HttpClient httpclient = getCertifiedHttpClient();
 		String payload = buildPayload(params);
-		
-		if (httpMethod.equals(HTTP_METHODS.POST)) {		
+
+		if (httpMethod.equals(HTTP_METHODS.POST)) {
 			HttpPost httpPost = new HttpPost(url);
-			HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers, httpMethod);
+			HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers);
 			byte[] postData = payload.getBytes();
 			try {
 				httpPostWithHeaders.setEntity(new ByteArrayEntity(postData));
@@ -231,7 +310,7 @@ public class ServerUtilities {
 			} catch (IOException e) {
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-				                   Constants.INTERNAL_SERVER_ERROR);
+						Constants.INTERNAL_SERVER_ERROR);
 				throw new IDPTokenManagerException("Server connectivity failure.", e);
 			}
 		}
@@ -247,19 +326,19 @@ public class ServerUtilities {
 				KeyStore localTrustStore = KeyStore.getInstance("BKS");
 				inStream =
 						IdentityProxy.getInstance().getContext().getResources()
-						             .openRawResource(R.raw.emm_truststore);
+								.openRawResource(R.raw.emm_truststore);
 				localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
 
 				SchemeRegistry schemeRegistry = new SchemeRegistry();
 				schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(),
-				                                   80));
+						80));
 				SSLSocketFactory sslSocketFactory = new SSLSocketFactory(localTrustStore);
 				sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 				schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
 				HttpParams params = new BasicHttpParams();
 				ClientConnectionManager connectionManager =
 						new ThreadSafeClientConnManager(params,
-						                                schemeRegistry);
+								schemeRegistry);
 
 				client = new DefaultHttpClient(connectionManager, params);
 
@@ -278,7 +357,8 @@ public class ServerUtilities {
 		} catch (KeyManagementException e) {
 			throw new IDPTokenManagerException("Invalid keystore.", e);
 		} catch (IOException e) {
-			throw new IDPTokenManagerException("Trust store failed to load.", e);
+			String msg = "Trust store failed to load. " + e.getMessage();
+			throw new IDPTokenManagerException(msg, e);
 		} finally {
 			StreamHandlerUtil.closeInputStream(inStream, TAG);
 		}
@@ -310,7 +390,7 @@ public class ServerUtilities {
 	}
 
 	public static String getResponseBodyContent(final HttpEntity entity) throws IOException,
-	                                                                            ParseException {
+			ParseException {
 
 		InputStream instream = entity.getContent();
 
