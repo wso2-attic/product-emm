@@ -18,8 +18,8 @@
 -->
 <resources>
 
-    <string name="client_id">${clientKey}</string>
-    <string name="client_secret">${clientSecret}</string>
+    <string name="client_id">GrZKlupJWRVp2VXfBTfAkOLxFz8a</string>
+    <string name="client_secret">mkrdFhCz3Ds80u8VhSGAy45YgB4a</string>
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
     <string name="already_registered">Device is already registered on server.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>
@@ -72,6 +72,9 @@
     <string name="title_init_msg_error">Initialization Failed. Please try again.</string>
     <string name="title_head_init_error">Initialization Failed</string>
     <string name="title_head_confirm_pin">Re-type the PIN to Confirm</string>
+    <string name="app_url">url</string>
+    <string name="app_type">type</string>
+    <string name="app_identifier">appIdentifier</string>
 
     <!-- TEXT FIELD HINTS -->
     <string name="hint_new_pin">New PIN Code</string>
@@ -84,6 +87,8 @@
     <string name="toast_error_password">Please enter password</string>
     <string name="toast_message_wipe">Device is being wiped</string>
     <string name="toast_message_wipe_failed">Device wipe failed due to wrong PIN</string>
+    <string name="toast_message_disenroll">Device disenrolled</string>
+
 
     <!-- INTENT EXTRAS -->
     <string name="intent_extra_from_activity">from_activity_name</string>
@@ -93,6 +98,7 @@
     <string name="intent_extra_token">token</string>
     <string name="intent_extra_data">data</string>
     <string name="intent_extra_code">code</string>
+    <string name="intent_extra_operation_id">id</string>
     <string name="intent_extra_message_id">msgID</string>
     <string name="intent_extra_status">status</string>
     <string name="intent_extra_status_ok">200</string>
@@ -100,12 +106,12 @@
     <string name="intent_extra_fresh_reg_flag">freshRegFlag</string>
     <string name="intent_extra_username">username</string>
     <string name="intent_extra_ssid">ssid</string>
+    <string name="intent_extra_lock_code">lockCode</string>
     <string name="intent_extra_password">password</string>
     <string name="intent_extra_function">function</string>
     <string name="intent_extra_enable">enable</string>
     <string name="intent_extra_disable">disable</string>
-    <string name="intent_extra_encrypt">encrypt</string>
-    <string name="intent_extra_decrypt">decrypt</string>
+    <string name="intent_extra_encrypt">encrypted</string>
     <string name="intent_extra_notification">notification</string>
     <string name="intent_extra_identity">identity</string>
     <string name="intent_extra_title">title</string>
@@ -117,16 +123,16 @@
     <string name="intent_extra_not_rooted">notrooted</string>
     <string name="intent_extra_platform_id">platform_id</string>
     <string name="intent_extra_os">os</string>
-    <string name="intent_extra_enterprise">Enterprise</string>
+    <string name="intent_extra_enterprise">enterprise</string>
     <string name="intent_extra_android">android</string>
-    <string name="intent_extra_market">Market</string>
+    <string name="intent_extra_public">public</string>
+    <string name="intent_extra_web">webapp</string>
     <string name="intent_extra_at">/@</string>
     <string name="intent_extra_space">/ </string>
     <string name="intent_extra_comma">, / </string>
     <string name="intent_extra_stop_ringing">Your phone is ringing</string>
     <string name="intent_extra_alert">alert</string>
     <string name="intent_extra_ring">ring</string>
-
 
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>
@@ -217,6 +223,7 @@
     <string name="dialog_init_end_general"> are you sure you want to proceed ?</string>
     <string name="dialog_unregister">You are trying to unregister from EMM. Are you sure you want to proceed ?</string>
 
+
     <!-- REGISTRATION -->
     <string name="register_button_text">Register</string>
     <string name="register_text_view_text_unregister">Device un-registration successful, click to re-register to the MDM</string>
@@ -248,6 +255,7 @@
     <string name="button_ok">OK</string>
     <string name="button_agree">Agree</string>
     <string name="button_settings">Settings</string>
+    <string name="button_stop">Stop</string>
     <string name="txt_message">Message from MDM Server</string>
     <string name="txt_notification">Message from MDM Server</string>
     <string name="button_cancel">Cancel</string>
@@ -291,5 +299,20 @@
 
     <!-- Validation Errors -->
     <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>
+
+    <!-- Operation Result -->
+    <string name="operation_code">code</string>
+    <string name="operation_properties">properties</string>
+    <string name="operation_type">type</string>
+    <string name="operation_id">id</string>
+    <string name="operation_status">status</string>
+    <string name="operation_receivedTimeStamp">receivedTimeStamp</string>
+    <string name="operation_createdTimeStamp">createdTimeStamp</string>
+    <string name="operation_payLoad">payLoad</string>
+    <string name="operation_configProperties">configProperties</string>
+    <string name="operation_enabled">enabled</string>
+    <string name="operation_value_null">null</string>
+    <string name="operation_value_completed">COMPLETED</string>
+    <string name="operation_value_error">ERROR</string>
 
 </resources>
