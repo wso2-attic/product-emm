@@ -17,6 +17,10 @@
  */
 package org.wso2.carbon.mdm.beans;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 public class MobileApp {
 
     private String id;
@@ -29,6 +33,7 @@ public class MobileApp {
     private String packageName;
     private String appIdentifier;
     private String location;
+    private Properties properties;
 
     public MobileAppTypes getType() {
         return type;
@@ -108,6 +113,14 @@ public class MobileApp {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
 
 }
