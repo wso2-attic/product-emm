@@ -37,7 +37,7 @@ public class AndroidDeviceUtils {
 	private static final String COMMA_SEPARATION_PATTERN = ", ";
 
 	public DeviceIDHolder validateDeviceIdentifiers(List<String> deviceIDs,
-													Message message, MediaType responseMediaType) {
+		Message message, MediaType responseMediaType) {
 
 		if (deviceIDs == null) {
 			message.setResponseMessage("Device identifier list is empty");
@@ -67,7 +67,7 @@ public class AndroidDeviceUtils {
 				Device device = AndroidAPIUtils.getDeviceManagementService().
 						getDevice(deviceIdentifier);
 
-				if (device == null || device.getDeviceIdentifier() == null ||
+				if (device == null || device.getDeviceIdentifier() == null || 
 						device.getDeviceIdentifier().isEmpty()) {
 					errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
 							deviceIDCounter));
