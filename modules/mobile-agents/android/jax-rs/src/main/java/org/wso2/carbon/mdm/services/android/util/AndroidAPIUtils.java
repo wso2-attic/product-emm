@@ -107,7 +107,21 @@ public class AndroidAPIUtils {
 	}
 
 
-	public static void updateOperation(int operationID, Operation.Status status) 
+	public static PolicyManagerService getPolicyManagerService() {
+
+		PolicyManagerService policyManager;
+		PrivilegedCarbonContext.startTenantFlow();
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+		policyManager =
+				(PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
+		PrivilegedCarbonContext.endTenantFlow();
+
+		return policyManager;
+	}
+
+	public static void updateOperation(int operationID, Operation.Status status)
 		throws OperationManagementException {
 		getDeviceManagementService().updateOperation(operationID, status);
 	}
@@ -119,20 +133,5 @@ public class AndroidAPIUtils {
 		operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
 
 		return operations;
-	}
-
-
-	public static PolicyManagerService getPolicyManagerService() {
-
-        PolicyManagerService policyManager;
-		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		policyManager =
-				(PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
-		PrivilegedCarbonContext.endTenantFlow();
-
-		return policyManager;
 	}
 }

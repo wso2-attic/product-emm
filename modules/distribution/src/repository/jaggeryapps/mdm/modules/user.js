@@ -307,10 +307,13 @@ var userModule = function () {
         }
         return permissions;
     };
-    /*
+
+    /**
+     * Get User Roles from user store.
      * If "Internal/Everyone" role is required - true param needs to be passed.
+     * @param enableInternalEveryone boolean value true/false to enable Internal/Everyone role
      */
-    publicMethods.getRoles = function(enableInternalEveryone){
+    publicMethods.getRoles = function (enableInternalEveryone) {
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
         var carbonUser = session.get(constants.USER_SESSION_KEY);
@@ -320,18 +323,19 @@ var userModule = function () {
         }
         var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
         var allRoles = userManager.allRoles();
-        var i = 0;
         var filteredRoles = [];
-        while (allRoles[i]) {
-            if (enableInternalEveryone &&  allRoles[i] == "Internal/everyone"){
+        var i;
+        for (i = 0; i < allRoles.length; i++) {
+            if (enableInternalEveryone && allRoles[i] == "Internal/everyone") {
                 filteredRoles.push(allRoles[i]);
             }
-            if (allRoles[i].indexOf("Internal/") !== 0){
+            if (allRoles[i].indexOf("Internal/") != 0) {
                 filteredRoles.push(allRoles[i]);
             }
-            i++;
         }
+        return filteredRoles;
     };
+
     return publicMethods;
 }();
 

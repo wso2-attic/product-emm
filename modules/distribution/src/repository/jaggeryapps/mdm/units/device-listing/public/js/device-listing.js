@@ -19,18 +19,6 @@
 (function () {
     var cache = {};
     var permissionSet = {};
-    $.template = function (name, location, callback) {
-        var template = cache[name];
-        if (!template) {
-            $.get(location, function (data) {
-                var compiledTemplate = Handlebars.compile(data);
-                cache[name] = compiledTemplate;
-                callback(compiledTemplate);
-            });
-        } else {
-            callback(template);
-        }
-    };
 
     Handlebars.registerHelper("deviceMap", function (device) {
         var arr = device.properties;
