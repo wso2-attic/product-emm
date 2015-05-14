@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.mdm.services.android.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -39,8 +37,6 @@ import java.util.List;
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
  */
 public class AndroidAPIUtils {
-
-	private static Log log = LogFactory.getLog(AndroidAPIUtils.class);
 
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
 		DeviceIdentifier identifier = new DeviceIdentifier();
@@ -110,6 +106,20 @@ public class AndroidAPIUtils {
 				type(responseMediaType).build();
 	}
 
+	public static void updateOperation(int operationID, Operation.Status status) 
+		throws OperationManagementException {
+		getDeviceManagementService().updateOperation(operationID, status);
+	}
+
+	public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
+		(DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+
+		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+		operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
+
+		return operations;
+	}
+
 	public static PolicyManagerService getPolicyManagerService() {
 
         PolicyManagerService policyManager;
@@ -123,5 +133,4 @@ public class AndroidAPIUtils {
 
 		return policyManager;
 	}
-
 }
