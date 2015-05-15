@@ -36,6 +36,7 @@ import org.wso2.carbon.mdm.api.util.Message;
 import org.wso2.carbon.mdm.beans.ApplicationWrapper;
 import org.wso2.carbon.mdm.beans.MobileApp;
 import org.wso2.carbon.mdm.beans.MobileAppTypes;
+import org.wso2.carbon.mdm.beans.ios.IOSAPPConstants;
 import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -44,6 +45,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Operation related REST-API implementation.
@@ -136,4 +138,50 @@ public class Operation {
             throw new MDMAPIException(msg, e);
         }
     }
+
+	@GET
+	@Path("appdummy")
+	@Produces({ MediaType.APPLICATION_JSON})
+	public ApplicationWrapper getApplicationDummy() throws MDMAPIException {
+
+		ApplicationWrapper applicationWrapper = new ApplicationWrapper();
+
+
+		MobileApp mobileApp = new MobileApp();
+		mobileApp.setAppIdentifier("asdf");
+		mobileApp.setIconImage("http://gogle.com");
+		mobileApp.setId("id");
+		mobileApp.setLocation("location");
+		mobileApp.setIdentifier("sdfsdfldfs");
+		mobileApp.setName("test");
+		mobileApp.setPackageName("com.google.mail");
+		mobileApp.setPlatform("android");
+		mobileApp.setVersion("1.0");
+		mobileApp.setType(MobileAppTypes.ENTERPRISE);
+
+		Properties properties = new Properties();
+		properties.setProperty(IOSAPPConstants.IS_PREVENT_BACKUP, "true");
+		properties.setProperty(IOSAPPConstants.IS_REMOVE_APP, "true");
+
+		mobileApp.setProperties(properties);
+
+		ArrayList<String> userNameList = new ArrayList<String>();
+		userNameList.add("admin");
+
+		ArrayList<String> roleNameList = new ArrayList<String>();
+		roleNameList.add("admin");
+
+		ArrayList<DeviceIdentifier> deviceIdentifiers = new ArrayList<DeviceIdentifier>();
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		deviceIdentifier.setId("08:00:27:fe:27:7b");
+		deviceIdentifier.setType("ios");
+		deviceIdentifiers.add(deviceIdentifier);
+
+		applicationWrapper.setApplication(mobileApp);
+		applicationWrapper.setRoleNameList(roleNameList);
+		applicationWrapper.setUserNameList(userNameList);
+		applicationWrapper.setDeviceIdentifiers(deviceIdentifiers);
+
+		return applicationWrapper;
+	}
 }

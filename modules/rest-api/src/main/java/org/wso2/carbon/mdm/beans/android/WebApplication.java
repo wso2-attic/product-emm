@@ -26,6 +26,7 @@ public class WebApplication implements Serializable {
 
 	private String name;
 	private String url;
+	private String type;
 
 	public String getName() {
 		return name;
@@ -41,6 +42,14 @@ public class WebApplication implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String toJSON() throws MDMAPIException {
