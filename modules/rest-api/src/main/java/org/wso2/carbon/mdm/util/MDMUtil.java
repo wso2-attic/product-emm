@@ -81,6 +81,7 @@ public class MDMUtil {
                 operation.setCode(IOSAPPConstants.OPCODE_INSTALL_STORE_APPLICATION);
                 operation.setType(Operation.Type.COMMAND);
                 operation.setPayLoad(appStoreApplication.toJSON());
+                break;
             case WEBAPP:
                 WebClip webClip = new WebClip();
                 webClip.setIcon(application.getIconImage());
@@ -91,6 +92,7 @@ public class MDMUtil {
                 operation.setCode(IOSAPPConstants.OPCODE_INSTALL_WEB_APPLICATION);
                 operation.setType(Operation.Type.PROFILE);
                 operation.setPayLoad(webClip.toJSON());
+                break;
         }
         return operation;
     }
