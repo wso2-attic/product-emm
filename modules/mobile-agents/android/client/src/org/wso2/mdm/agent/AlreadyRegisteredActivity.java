@@ -82,16 +82,16 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		resources = context.getResources();
 		Bundle extras = getIntent().getExtras();
 
-        if (extras != null) {
-            if (extras.containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
-			freshRegFlag = extras.getBoolean(
-                                getResources().getString(R.string.intent_extra_fresh_reg_flag));
+		if (extras != null) {
+			if (extras.containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
+				freshRegFlag = extras.getBoolean(
+						getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
 
 		}
 
 		String registrationId =
-                	Preference.getString(context, resources.getString(R.string.shared_pref_regId));
+				Preference.getString(context, resources.getString(R.string.shared_pref_regId));
 
 		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
@@ -99,7 +99,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (freshRegFlag) {
 			Preference.putString(context, resources.getString(R.string.shared_pref_registered),
-			                     			resources.getString(R.string.shared_pref_reg_success));
+					resources.getString(R.string.shared_pref_reg_success));
 
 			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
@@ -180,116 +180,116 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				ServerConfig utils = new ServerConfig();
 				utils.setServerIP(serverIP);
 
-			CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-					utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
-					HTTP_METHODS.DELETE,
-					null, AlreadyRegisteredActivity.this,
-					Constants.UNREGISTER_REQUEST_CODE);
-		} else {
-			CommonDialogUtils.stopProgressDialog(progressDialog);
-			CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+				CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+						utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+						HTTP_METHODS.DELETE,
+						null, AlreadyRegisteredActivity.this,
+						Constants.UNREGISTER_REQUEST_CODE);
+			} else {
+				CommonDialogUtils.stopProgressDialog(progressDialog);
+				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+			}
+
 		}
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			getSupportMenuInflater().inflate(R.menu.sherlock_menu_debug, menu);
-		} else {
-			getSupportMenuInflater().inflate(R.menu.sherlock_menu, menu);
-		}
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.info_setting:
-				loadDeviceInfoActivity();
-				return true;
-			case R.id.pin_setting:
-				loadPinCodeActivity();
-				return true;
-			case R.id.ip_setting:
-				loadServerDetailsActivity();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
-
-	@Override
-	public void onBackPressed() {
-		loadHomeScreen();
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			loadHomeScreen();
-			return true;
-		} else if (keyCode == KeyEvent.KEYCODE_HOME) {
-			loadHomeScreen();
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			if (Constants.DEBUG_MODE_ENABLED) {
+				getSupportMenuInflater().inflate(R.menu.sherlock_menu_debug, menu);
+			} else {
+				getSupportMenuInflater().inflate(R.menu.sherlock_menu, menu);
+			}
 			return true;
 		}
-		return super.onKeyDown(keyCode, event);
-	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(TAG, "Calling onResume");
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+				case R.id.info_setting:
+					loadDeviceInfoActivity();
+					return true;
+				case R.id.pin_setting:
+					loadPinCodeActivity();
+					return true;
+				case R.id.ip_setting:
+					loadServerDetailsActivity();
+					return true;
+				default:
+					return super.onOptionsItemSelected(item);
+			}
 		}
 
-		String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
+		@Override
+		public void onBackPressed() {
+			loadHomeScreen();
+		}
 
-		if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
+		@Override
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			if (keyCode == KeyEvent.KEYCODE_BACK) {
+				loadHomeScreen();
+				return true;
+			} else if (keyCode == KeyEvent.KEYCODE_HOME) {
+				loadHomeScreen();
+				return true;
+			}
+			return super.onKeyDown(keyCode, event);
+		}
 
-			if (CommonUtils.isNetworkAvailable(context)) {
+		@Override
+		protected void onResume() {
+			super.onResume();
 
-                String serverIP =
-                        Preference.getString(AlreadyRegisteredActivity.this,
-                                context.getResources()
-                                        .getString(R.string.shared_pref_ip)
-                        );
-                regId = Preference.getString(context, resources.
-                        getString(R.string.shared_pref_regId));
-				if (regId != null) {
-					if (regId.isEmpty() && isUnregisterBtnClicked) {
-						initiateUnregistration();
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "Calling onResume");
+			}
+
+			String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
+
+			if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
+
+				if (CommonUtils.isNetworkAvailable(context)) {
+
+					String serverIP =
+							Preference.getString(AlreadyRegisteredActivity.this,
+									context.getResources()
+											.getString(R.string.shared_pref_ip)
+							);
+					regId = Preference.getString(context, resources.
+							getString(R.string.shared_pref_regId));
+					if (regId != null) {
+						if (regId.isEmpty() && isUnregisterBtnClicked) {
+							initiateUnregistration();
+						} else {
+							ServerConfig utils = new ServerConfig();
+							utils.setServerIP(serverIP);
+
+							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+									utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
+									HTTP_METHODS.GET,
+									null, AlreadyRegisteredActivity.this,
+									Constants.IS_REGISTERED_REQUEST_CODE);
+						}
 					} else {
-						ServerConfig utils = new ServerConfig();
-						utils.setServerIP(serverIP);
-
-						CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-								utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
-								HTTP_METHODS.GET,
-								null, AlreadyRegisteredActivity.this,
-								Constants.IS_REGISTERED_REQUEST_CODE);
+						showUnregisterDialog();
 					}
 				} else {
-					showUnregisterDialog();
+					CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
 				}
-            } else {
-                CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
-            }
-        } else {
-            initiateUnregistration();
-        }
-	}
-	
-	/**
-	 * Displays an internal server error message to the user.
-	 */
+			} else {
+				initiateUnregistration();
+			}
+		}
+
+		/**
+		 * Displays an internal server error message to the user.
+		 */
 	private void displayInternalServerError() {
 		alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-                                            getResources().getString(R.string.title_head_connection_error),
-                                            getResources().getString(R.string.error_internal_server),
-                                            getResources().getString(R.string.button_ok),
-                                            null);
+				getResources().getString(R.string.title_head_connection_error),
+				getResources().getString(R.string.error_internal_server),
+				getResources().getString(R.string.button_ok),
+				null);
 		alertDialog.show();
 	}
 
@@ -377,7 +377,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                					getResources().getString(R.string.device_admin_enable_alert));
+				getResources().getString(R.string.device_admin_enable_alert));
 		startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
 	}
 
@@ -389,9 +389,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				new AlertDialog.Builder(
 						AlreadyRegisteredActivity.this);
 		builder.setMessage(getResources().getString(R.string.dialog_unregister))
-                .setNegativeButton(getResources().getString(R.string.yes), dialogClickListener)
-                .setPositiveButton(getResources().getString(R.string.no),
-		                          dialogClickListener).show();
+				.setNegativeButton(getResources().getString(R.string.yes), dialogClickListener)
+				.setPositiveButton(getResources().getString(R.string.no),
+						dialogClickListener).show();
 	}
 
 	/**
@@ -400,9 +400,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private void loadDeviceInfoActivity() {
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this,
-				           DisplayDeviceInfoActivity.class);
+						DisplayDeviceInfoActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-		                  AlreadyRegisteredActivity.class.getSimpleName());
+				AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
 	}
 
@@ -411,14 +411,14 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 */
 	private void loadServerDetailsActivity() {
 		Preference.putString(context, resources.getString(R.string.shared_pref_ip),
-		                     resources.getString(R.string.shared_pref_default_string));
+				resources.getString(R.string.shared_pref_default_string));
 		Intent intent = new Intent(
-		                           AlreadyRegisteredActivity.this,
-		                           			ServerDetails.class);
+				AlreadyRegisteredActivity.this,
+				ServerDetails.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_regid),
-		                regId);
+				regId);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-		                AlreadyRegisteredActivity.class.getSimpleName());
+				AlreadyRegisteredActivity.class.getSimpleName());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 		finish();
@@ -431,7 +431,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this, PinCodeActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-		                   AlreadyRegisteredActivity.class.getSimpleName());
+				AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
 	}
 
@@ -441,10 +441,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private void loadAuthenticationErrorActivity() {
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this,
-				           AuthenticationErrorActivity.class);
+						AuthenticationErrorActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_regid), regId);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-		                AlreadyRegisteredActivity.class.getSimpleName());
+				AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
 	}
 

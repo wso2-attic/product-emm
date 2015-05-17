@@ -18,8 +18,8 @@
 -->
 <resources>
 
-    <string name="client_id">GrZKlupJWRVp2VXfBTfAkOLxFz8a</string>
-    <string name="client_secret">mkrdFhCz3Ds80u8VhSGAy45YgB4a</string>
+    <string name="client_id">${clientKey}</string>
+    <string name="client_secret">${clientSecret}</string>
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
     <string name="already_registered">Device is already registered on server.</string>
     <string name="gcm_registered">From GCM: device successfully registered!</string>
