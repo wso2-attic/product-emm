@@ -116,14 +116,6 @@ public class Operation {
                         operation = MDMIOSOperationUtil.createInstallAppOperation(mobileApp);
                     }
                     deviceIdentifiers.add(deviceIdentifier);
-                    try {
-                        deviceManagementService.addOperation(operation, deviceIdentifiers);
-                    }catch(OperationManagementException opMgtEx){
-                         String errorMsg = "Error add operation for device identifier: "+operation.toString() + ": " +
-                                 ""+deviceIdentifier.toString();
-                        log.error(errorMsg,opMgtEx);
-                        throw new MDMAPIException(errorMsg,opMgtEx);
-                    }
                 }
                 appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
             }
@@ -159,14 +151,6 @@ public class Operation {
 						operation = MDMAndroidOperationUtil.createAppUninstallOperation(mobileApp);
 					}
 					deviceIdentifiers.add(deviceIdentifier);
-					try {
-						deviceManagementService.addOperation(operation, deviceIdentifiers);
-					}catch(OperationManagementException opMgtEx){
-						String errorMsg = "Error add operation for device identifier: "+operation.toString() + ": " +
-								""+deviceIdentifier.toString();
-						log.error(errorMsg,opMgtEx);
-						throw new MDMAPIException(errorMsg,opMgtEx);
-					}
 				}
 				appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
 			}

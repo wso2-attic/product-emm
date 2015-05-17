@@ -19,6 +19,7 @@ package org.wso2.carbon.mdm.services.android;
 
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.DeviceInfo;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
@@ -94,39 +95,38 @@ public class DeviceMgtService {
 		}
 	}
 
-	/**
-	 * Update Android device details of given device id.
-	 *
-	 * @param id     Device Id
-	 * @param device Device Details
-	 * @return Message
-	 * @throws AndroidAgentException
-	 */
-	@PUT
-	@Path("{id}")
-	public Message updateDevice(@PathParam("id") String id,
-	                            org.wso2.carbon.device.mgt.common.Device device) throws
-	                                                                             AndroidAgentException {
-		String msg;
-		Message responseMessage = new Message();
-		boolean result;
-		try {
-			device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-			result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device);
-			if (result) {
-				Response.status(Response.Status.ACCEPTED);
-				responseMessage.setResponseMessage("Device information has modified successfully.");
-			} else {
-				Response.status(Response.Status.NOT_MODIFIED);
-				responseMessage.setResponseMessage("Device not found for the update.");
-			}
-			return responseMessage;
-		} catch (DeviceManagementException e) {
-			msg = "Error occurred while modifying the device information.";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
-		}
-	}
+    /**
+     * Update Android device details of given device id.
+     *
+     * @param id     Device Id
+     * @param deviceInfo Device Details
+     * @return Message
+     * @throws AndroidAgentException
+     */
+    @PUT
+    @Path("{id}")
+    public Message updateDevice(@PathParam("id") String id, DeviceInfo deviceInfo) throws AndroidAgentException {
+        String msg;
+        Message responseMessage = new Message();
+        boolean result;
+        Device device = deviceInfo.getDevice();
+        try {
+            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device, deviceInfo.getApplicationList());
+            if (result) {
+                Response.status(Response.Status.ACCEPTED);
+                responseMessage.setResponseMessage("Device information has modified successfully.");
+            } else {
+                Response.status(Response.Status.NOT_MODIFIED);
+                responseMessage.setResponseMessage("Device not found for the update.");
+            }
+            return responseMessage;
+        } catch (DeviceManagementException e) {
+            msg = "Error occurred while modifying the device information.";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
+        }
+    }
 
 	@GET
 	@Path("license")
