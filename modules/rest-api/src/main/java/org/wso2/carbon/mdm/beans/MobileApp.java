@@ -21,6 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * This class represents the generic mobile Application information
+ * which is used by AppM.
+ */
 public class MobileApp {
 
     private String id;
