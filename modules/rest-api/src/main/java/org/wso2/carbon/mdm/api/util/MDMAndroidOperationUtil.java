@@ -89,14 +89,14 @@ public class MDMAndroidOperationUtil {
 				org.wso2.carbon.mdm.beans.android.EnterpriseApplication enterpriseApplication =
 						new org.wso2.carbon.mdm.beans.android.EnterpriseApplication();
 				enterpriseApplication.setType(application.getType().toString());
-				enterpriseApplication.setUrl(application.getLocation());
+				enterpriseApplication.setAppIdentifier(application.getAppIdentifier());
 				operation.setPayLoad(enterpriseApplication.toJSON());
 				break;
 			case PUBLIC:
 				org.wso2.carbon.mdm.beans.android.AppStoreApplication appStoreApplication =
 						new org.wso2.carbon.mdm.beans.android.AppStoreApplication();
 				appStoreApplication.setType(application.getType().toString());
-				appStoreApplication.setAppIdentifier(application.getIdentifier());
+				appStoreApplication.setAppIdentifier(application.getAppIdentifier());
 				operation.setPayLoad(appStoreApplication.toJSON());
 				break;
 			case WEBAPP:

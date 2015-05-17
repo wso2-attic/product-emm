@@ -22,6 +22,9 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * This class represents the Web Application information.
+ */
 public class WebApplication implements Serializable {
 
 	private String name;
