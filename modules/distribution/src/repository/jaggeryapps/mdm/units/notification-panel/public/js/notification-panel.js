@@ -89,5 +89,11 @@ function toggleNotificationbar(){
  * Set notification bar height to fill window height
  */
 function setNotificationbarHeight(){
-    $(notificationBar).height($('html').height() - (offset+20));
+    var windowTop = $(window).scrollTop(); // returns number
+    if (headerHeight < windowTop){
+        $(notificationBar).height($('html').height() - (navHeight));
+    }
+    else {
+        $(notificationBar).height($('html').height() - (offset+20));
+    }
 }

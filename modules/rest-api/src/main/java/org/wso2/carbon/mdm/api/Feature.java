@@ -50,7 +50,9 @@ public class Feature {
 			dmService = MDMAPIUtils.getDeviceManagementService();
 			features = dmService.getFeatureManager(type).getFeatures();
 		} catch (DeviceManagementException e) {
-            throw new MDMAPIException("Error occurred while retrieving the list of features", e);
+			String msg = "Error occurred while retrieving the list of features";
+			log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
         return features;
 	}

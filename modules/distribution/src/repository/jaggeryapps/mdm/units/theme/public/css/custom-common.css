@@ -1,3 +1,5 @@
+@import "fontwso2.css";
+@import "fontwso2-extend.css";
 
 /* Regular */
 @font-face {
@@ -139,7 +141,7 @@ html {
     min-height: 100%;
     margin:0;
     padding:0;
-    height:100%;
+    height: 100%;
 }
 
 body {
@@ -150,7 +152,7 @@ body {
     font-size: 14px;
     margin:0;
     padding:0;
-    height:100%;
+    height: 100%;
 }
 
 .container {
@@ -218,7 +220,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index:10;
+    z-index:100000;
 }
 
 .auth-user {
@@ -268,6 +270,49 @@ header {
 br.c-both {
     clear:both;
 }
+
+/* dhanuka */
+/* panels */
+.panel-body {
+    padding:15px !important;
+}
+
+.wr-input-control .helper {
+    font-weight:100;
+}
+
+.wr-input-control .cus-col-25 {
+    float:left;
+    width:25%;
+}
+
+.wr-input-control .cus-col-50 {
+    float:left;
+    width:60%;
+}
+
+.wr-input-control .cus-col-70 {
+    float:left;
+    width:70%;
+}
+
+.wr-input-control .cus-col-50 input {
+    width:65%;
+}
+
+.wr-input-control .cus-col-70 input {
+    width:95%;
+}
+
+.wr-input-control .cus-col-25 input {
+    width:65%;
+}
+
+.wr-input-control .cus-col-50 span, .wr-input-control .cus-col-25 span {
+    padding-left:20px;
+}
+
+
 
 
 

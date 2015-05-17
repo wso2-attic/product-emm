@@ -29,7 +29,7 @@ var policyModule = function () {
     var privateMethods = {};
 
     publicMethods.getPolicies = function (){
-        log.info(policyAdminPoint.getPolicies());
+        log.debug(policyAdminPoint.getPolicies());
         var policies = policyAdminPoint.getPolicies();
         var policyList = [];
         for (var i = 0; i < policies.size(); i++) {
