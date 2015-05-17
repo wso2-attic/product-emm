@@ -170,14 +170,15 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		regId = Preference.getString(context,
 				context.getResources().getString(R.string.shared_pref_regId));
 
-		if (CommonUtils.isNetworkAvailable(context)) {
-			String serverIP =
-					Preference.getString(AlreadyRegisteredActivity.this,
-							context.getResources()
-									.getString(R.string.shared_pref_ip)
-					);
-			ServerConfig utils = new ServerConfig();
-			utils.setServerIP(serverIP);
+		if (regId != null && !regId.isEmpty()) {
+			if (CommonUtils.isNetworkAvailable(context)) {
+				String serverIP =
+						Preference.getString(AlreadyRegisteredActivity.this,
+								context.getResources()
+										.getString(R.string.shared_pref_ip)
+						);
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(serverIP);
 
 			CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
 					utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
@@ -249,32 +250,35 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 			if (CommonUtils.isNetworkAvailable(context)) {
 
-				String serverIP =
-						Preference.getString(AlreadyRegisteredActivity.this,
-								context.getResources()
-										.getString(R.string.shared_pref_ip)
-						);
-				regId = Preference.getString(context, resources.
-						getString(R.string.shared_pref_regId));
+                String serverIP =
+                        Preference.getString(AlreadyRegisteredActivity.this,
+                                context.getResources()
+                                        .getString(R.string.shared_pref_ip)
+                        );
+                regId = Preference.getString(context, resources.
+                        getString(R.string.shared_pref_regId));
+				if (regId != null) {
+					if (regId.isEmpty() && isUnregisterBtnClicked) {
+						initiateUnregistration();
+					} else {
+						ServerConfig utils = new ServerConfig();
+						utils.setServerIP(serverIP);
 
-				if (regId.isEmpty() && isUnregisterBtnClicked) {
-					initiateUnregistration();
+						CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+								utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
+								HTTP_METHODS.GET,
+								null, AlreadyRegisteredActivity.this,
+								Constants.IS_REGISTERED_REQUEST_CODE);
+					}
 				} else {
-					ServerConfig utils = new ServerConfig();
-					utils.setServerIP(serverIP);
-
-					CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-							utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
-							HTTP_METHODS.GET,
-							null, AlreadyRegisteredActivity.this,
-							Constants.IS_REGISTERED_REQUEST_CODE);
+					showUnregisterDialog();
 				}
-			} else {
-				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
-			}
-		} else {
-			initiateUnregistration();
-		}
+            } else {
+                CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+            }
+        } else {
+            initiateUnregistration();
+        }
 	}
 	
 	/**

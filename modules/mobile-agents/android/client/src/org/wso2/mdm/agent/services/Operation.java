@@ -644,11 +644,13 @@ public class Operation {
     public void createWebClip(org.wso2.mdm.agent.beans.Operation operation) throws AndroidAgentException {
         String appUrl;
         String title;
+        String operationType;
 
         try {
             JSONObject webClipData = new JSONObject(operation.getPayLoad().toString());
             appUrl = (String) webClipData.get(resources.getString(R.string.intent_extra_identity));
             title = (String) webClipData.get(resources.getString(R.string.intent_extra_title));
+            operationType = webClipData.getString(resources.getString(R.string.operation_type));
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
             resultBuilder.build(operation);
@@ -659,7 +661,7 @@ public class Operation {
         resultBuilder.build(operation);
 
         if (appUrl != null && title != null) {
-            appList.createWebAppBookmark(appUrl, title);
+            appList.manageWebAppBookmark(appUrl, title, operationType);
         }
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "Created webclip");
@@ -958,6 +960,7 @@ public class Operation {
         String appUrl;
         String type;
         String name;
+        String operationType;
 
         try {
             if (!data.isNull(resources.getString(R.string.app_type))) {
@@ -978,9 +981,11 @@ public class Operation {
                 } else if (type.equalsIgnoreCase(resources.getString(R.string.intent_extra_web))) {
                     name = data.getString(resources.getString(R.string.intent_extra_name));
                     appUrl = data.getString(resources.getString(R.string.app_url));
+                    operationType = resources.getString(R.string.operation_install);
                     JSONObject payload = new JSONObject();
                     payload.put(resources.getString(R.string.intent_extra_identity), appUrl);
                     payload.put(resources.getString(R.string.intent_extra_title), name);
+                    payload.put(resources.getString(R.string.operation_type), operationType);
                     operation.setPayLoad(payload.toString());
                     createWebClip(operation);
 

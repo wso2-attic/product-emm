@@ -65,7 +65,7 @@
     <string name="menu_item_pin">Change PIN</string>
     <string name="menu_item_ip">Change Server Address</string>
     <string name="menu_item_log">Debug Log</string>
-    <string name="title_activity_alert">Message from EMM</string>
+    <string name="title_activity_alert">Message from MDM</string>
     <string name="device_admin_enable_alert">This will enable device administration</string>
     <string name="device_enroll_type_byod">BYOD</string>
     <string name="device_enroll_type_cope">COPE</string>
@@ -221,7 +221,7 @@
     <string name="dialog_init_device_type">Device type</string>
     <string name="dialog_init_end"> device, are you sure you want to proceed ?</string>
     <string name="dialog_init_end_general"> are you sure you want to proceed ?</string>
-    <string name="dialog_unregister">You are trying to unregister from EMM. Are you sure you want to proceed ?</string>
+    <string name="dialog_unregister">You are trying to unregister from MDM. Are you sure you want to proceed ?</string>
 
 
     <!-- REGISTRATION -->
@@ -287,7 +287,8 @@
     <string name="application_mgr_download_file_name">update.apk</string>
     <string name="application_mgr_mime">application/vnd.android.package-archive</string>
     <string name="application_package_prefix">package:</string>
-    <string name="application_package_launcher_action">com.android.launcher.action.INSTALL_SHORTCUT</string>
+    <string name="application_package_launcher_install_action">com.android.launcher.action.INSTALL_SHORTCUT</string>
+    <string name="application_package_launcher_uninstall_action">com.android.launcher.action.UNINSTALL_SHORTCUT</string>
 
     <!-- SERVER UTILITIES -->
     <string name="server_util_req_type_post">POST</string>
@@ -314,5 +315,7 @@
     <string name="operation_value_null">null</string>
     <string name="operation_value_completed">COMPLETED</string>
     <string name="operation_value_error">ERROR</string>
+    <string name="operation_install">install</string>
+    <string name="operation_uninstall">uninstall</string>
 
 </resources>

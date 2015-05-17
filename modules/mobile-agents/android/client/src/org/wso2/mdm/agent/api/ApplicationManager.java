@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.beans.DeviceAppInfo;
 import org.wso2.mdm.agent.utils.StreamHandler;
@@ -157,7 +158,8 @@ public class ApplicationManager {
 	 * @param url   - URL should be passed in as a String.
 	 * @param title - Title(Web app title) should be passed in as a String.
 	 */
-	public void createWebAppBookmark(String url, String title) {
+	public void manageWebAppBookmark(String url, String title, String operationType)
+			throws AndroidAgentException {
 		final Intent bookmarkIntent = new Intent();
 		final Intent actionIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		long urlHash = url.hashCode();
@@ -167,11 +169,23 @@ public class ApplicationManager {
 		bookmarkIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, actionIntent);
 		bookmarkIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
 		bookmarkIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-		                        Intent.ShortcutIconResource.fromContext(context,
-		                                                                R.drawable.ic_bookmark)
+				Intent.ShortcutIconResource.fromContext(context,
+						R.drawable.ic_bookmark)
 		);
-		
-		bookmarkIntent.setAction(resources.getString(R.string.application_package_launcher_action));
+		if (operationType != null) {
+			if (resources.getString(R.string.operation_install).equalsIgnoreCase(operationType)) {
+				bookmarkIntent.
+						setAction(resources.getString(R.string.application_package_launcher_install_action));
+			} else if (resources.getString(R.string.operation_uninstall).equalsIgnoreCase(operationType)) {
+				bookmarkIntent.
+						setAction(resources.getString(R.string.application_package_launcher_uninstall_action));
+			} else {
+				throw new AndroidAgentException("Cannot create webclip due to invalid operation type.");
+			}
+		} else {
+			bookmarkIntent.
+					setAction(resources.getString(R.string.application_package_launcher_install_action));
+		}
 		context.sendBroadcast(bookmarkIntent);
 	}
 
