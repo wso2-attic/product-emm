@@ -82,7 +82,7 @@ public class AccessTokenHandler extends Activity {
 			endPointInfo.setHttpMethod(HTTP_METHODS.POST);
 			endPointInfo.setRequestParamsMap(request_params);
 			byte[] credentials = Base64.encodeBase64((info.getClientID() + COLON +
-			                                          info.getClientSecret()).getBytes());
+					info.getClientSecret()).getBytes());
 			String encodedCredentials = new String(credentials);
 
 			Map<String, String> headers = new HashMap<String, String>();
@@ -129,9 +129,9 @@ public class AccessTokenHandler extends Activity {
 
 						SharedPreferences mainPref =
 								IdentityProxy.getInstance()
-								             .getContext()
-								             .getSharedPreferences(Constants.APPLICATION_PACKAGE,
-								                                   Context.MODE_PRIVATE);
+										.getContext()
+										.getSharedPreferences(Constants.APPLICATION_PACKAGE,
+												Context.MODE_PRIVATE);
 						Editor editor = mainPref.edit();
 						editor.putString(Constants.ACCESS_TOKEN, accessToken);
 						editor.putString(Constants.REFRESH_TOKEN, refreshToken);
@@ -144,7 +144,7 @@ public class AccessTokenHandler extends Activity {
 						editor.commit();
 
 						identityProxy.receiveAccessToken(responseCode, Constants.SUCCESS_RESPONSE,
-						                                 token);
+								token);
 					} catch (JSONException e) {
 						Log.e(TAG, "Invalid JSON format." + e);
 					}

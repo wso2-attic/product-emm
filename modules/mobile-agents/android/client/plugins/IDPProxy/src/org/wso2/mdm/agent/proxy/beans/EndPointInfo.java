@@ -28,7 +28,7 @@ import java.util.Map;
 public class EndPointInfo {
 	private HTTP_METHODS httpMethod;
 	private String endPoint;
-	private JSONObject requestParams;
+	private String requestParams;
 	private Map<String, String> requestParamsMap;
 
 	public Map<String, String> getRequestParamsMap() {
@@ -39,11 +39,11 @@ public class EndPointInfo {
 		this.requestParamsMap = requestParams;
 	}
 
-	public JSONObject getRequestParams() {
+	public String getRequestParams() {
 		return requestParams;
 	}
 
-	public void setRequestParams(JSONObject requestParams) {
+	public void setRequestParams(String requestParams) {
 		this.requestParams = requestParams;
 	}
 

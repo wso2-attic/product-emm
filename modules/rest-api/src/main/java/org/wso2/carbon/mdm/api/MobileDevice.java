@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
@@ -60,6 +61,7 @@ public class MobileDevice {
                 allDevices = service.getAllDevices();
             }
             return allDevices;
+
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while fetching the device list.";
             log.error(msg, e);
@@ -101,14 +103,15 @@ public class MobileDevice {
 	 * Fetch Android device details of a given user.
 	 *
 	 * @param user   User Name
+	 * @param tenantDomain tenant domain
 	 * @return Device
 	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
 	 *
 	 */
 	@GET
-	@Path("{user}")
-	public List<org.wso2.carbon.device.mgt.common.Device> getDevice(@PathParam("user") String user)
-			throws MDMAPIException {
+	@Path("{user}/{tenantDomain}")
+	public List<org.wso2.carbon.device.mgt.common.Device> getDeviceByUser(@PathParam("user") String user,
+			@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 		String msg;
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
 		try {

@@ -19,9 +19,9 @@ package org.wso2.mdm.agent.services;
 
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.R;
+import org.wso2.mdm.agent.beans.ServerConfig;
 import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.mdm.agent.utils.Constants;
@@ -53,14 +53,18 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		super.onEnabled(context, intent);
 		Resources resources = context.getResources();
 		Preference.putString(context,
-		                     context.getResources().getString(R.string.shared_pref_device_active),
-		                     resources.getString(R.string.shared_pref_reg_success));
+				context.getResources().getString(R.string.shared_pref_device_active),
+				resources.getString(R.string.shared_pref_reg_success));
 
 		MessageProcessor processor = new MessageProcessor(context);
-		processor.getMessages();
+		try {
+			processor.getMessages();
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Failed to perform operation." + e);
+		}
 
 		Toast.makeText(context, R.string.device_admin_enabled,
-		               Toast.LENGTH_LONG).show();
+				Toast.LENGTH_LONG).show();
 		LocalNotification.startPolling(context);
 	}
 
@@ -88,20 +92,22 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void startUnRegistration(Context context) {
 		String regId = Preference.getString(context, context
 				.getResources().getString(R.string.shared_pref_regId));
-        	LocalNotification.stopPolling(context);
-		JSONObject requestParams = new JSONObject();
-		try {
-			requestParams.put(context.getResources().getString(R.string.shared_pref_regId), regId);
-		} catch (JSONException e) {
-			Log.e(TAG, "Registration ID not retrieved." + e.toString());
-		}
+		LocalNotification.stopPolling(context);
+		String serverIP =
+				Preference.getString(context,
+						context.getResources()
+								.getString(R.string.shared_pref_ip)
+				);
 
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(serverIP);
+
+		CommonUtils.callSecuredAPI(context,
+				utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+				HTTP_METHODS.DELETE,
+				null, AgentDeviceAdminReceiver.this,
+				Constants.UNREGISTER_REQUEST_CODE);
 		CommonUtils.clearAppData(context);
-        	CommonUtils.callSecuredAPI(context,
-                	Constants.UNREGISTER_ENDPOINT,
-                	HTTP_METHODS.POST, requestParams,
-                	AgentDeviceAdminReceiver.this,
-                	Constants.UNREGISTER_REQUEST_CODE);
 	}
 
 	@Override

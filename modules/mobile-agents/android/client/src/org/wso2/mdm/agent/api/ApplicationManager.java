@@ -24,9 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.R;
 import org.wso2.mdm.agent.beans.DeviceAppInfo;
 import org.wso2.mdm.agent.utils.StreamHandler;
@@ -72,22 +74,20 @@ public class ApplicationManager {
 	 * Returns a list of all the applications installed on the device.
 	 * @return - List of applications which installed on the device.
 	 */
-	public ArrayList<DeviceAppInfo> getInstalledApps() {
-		ArrayList<DeviceAppInfo> appList = new ArrayList<DeviceAppInfo>();
+	public Map<String, DeviceAppInfo> getInstalledApps() {
+		Map<String, DeviceAppInfo> appList = new HashMap<String, DeviceAppInfo>();
+		List<PackageInfo> packages = packageManager.getInstalledPackages(SYSTEM_APPS_DISABLED_FLAG);
 		DeviceAppInfo app;
-		List<PackageInfo> packages = packageManager.
-									 	getInstalledPackages(SYSTEM_APPS_DISABLED_FLAG);
-		
+
 		for (PackageInfo packageInfo : packages) {
 			app = new DeviceAppInfo();
 			app.setAppname(packageInfo.applicationInfo.
-			                   	loadLabel(packageManager).toString());
+					loadLabel(packageManager).toString());
 			app.setPackagename(packageInfo.packageName);
 			app.setVersionName(packageInfo.versionName);
 			app.setVersionCode(packageInfo.versionCode);
-			appList.add(app);
+			appList.put(packageInfo.packageName, app);
 		}
-		
 		return appList;
 	}
 
@@ -158,7 +158,8 @@ public class ApplicationManager {
 	 * @param url   - URL should be passed in as a String.
 	 * @param title - Title(Web app title) should be passed in as a String.
 	 */
-	public void createWebAppBookmark(String url, String title) {
+	public void manageWebAppBookmark(String url, String title, String operationType)
+			throws AndroidAgentException {
 		final Intent bookmarkIntent = new Intent();
 		final Intent actionIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		long urlHash = url.hashCode();
@@ -168,11 +169,23 @@ public class ApplicationManager {
 		bookmarkIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, actionIntent);
 		bookmarkIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
 		bookmarkIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-		                        Intent.ShortcutIconResource.fromContext(context,
-		                                                                R.drawable.ic_bookmark)
+				Intent.ShortcutIconResource.fromContext(context,
+						R.drawable.ic_bookmark)
 		);
-		
-		bookmarkIntent.setAction(resources.getString(R.string.application_package_launcher_action));
+		if (operationType != null) {
+			if (resources.getString(R.string.operation_install).equalsIgnoreCase(operationType)) {
+				bookmarkIntent.
+						setAction(resources.getString(R.string.application_package_launcher_install_action));
+			} else if (resources.getString(R.string.operation_uninstall).equalsIgnoreCase(operationType)) {
+				bookmarkIntent.
+						setAction(resources.getString(R.string.application_package_launcher_uninstall_action));
+			} else {
+				throw new AndroidAgentException("Cannot create webclip due to invalid operation type.");
+			}
+		} else {
+			bookmarkIntent.
+					setAction(resources.getString(R.string.application_package_launcher_install_action));
+		}
 		context.sendBroadcast(bookmarkIntent);
 	}
 

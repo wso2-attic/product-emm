@@ -126,7 +126,7 @@ public class MDMAPIUtils {
 		ctx.setTenantDomain(tenantDomain);
 		ctx.setTenantId(tenantId);
 		appService = (AppManagerConnector) ctx.getOSGiService(AppManagerConnector.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
+		PrivilegedCarbonContext.endTenantFlow();
 		return appService;
 	}
 

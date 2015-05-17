@@ -24,8 +24,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -39,7 +41,6 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONObject;
 import org.wso2.mdm.agent.proxy.IDPTokenManagerException;
 import org.wso2.mdm.agent.proxy.IdentityProxy;
 import org.wso2.mdm.agent.proxy.R;
@@ -62,7 +63,7 @@ import java.util.Map.Entry;
 public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";
 	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
-	                                                                  Locale.getDefault());
+			Locale.getDefault());
 
 	/**
 	 * Validate the token expiration date.
@@ -77,11 +78,7 @@ public class ServerUtilities {
 
 		boolean isExpired = currentDate.after(expirationDate);
 		boolean isEqual = currentDate.equals(expirationDate);
-		if (isExpired == true || isEqual == true) {
-			return true;
-		}
-
-		return false;
+		return isExpired || isEqual;
 	}
 
 	/**
@@ -111,45 +108,56 @@ public class ServerUtilities {
 				bodyBuilder.append('&');
 			}
 		}
-		
+
 		return bodyBuilder.toString();
 	}
 
 	public static HttpRequestBase buildHeaders(HttpRequestBase httpRequestBase,
-	                                           Map<String, String> headers, HTTP_METHODS httpMethod) {
-		Iterator<Entry<String, String>> iterator = headers.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Entry<String, String> header = iterator.next();
+											   Map<String, String> headers) {
+		for (Entry<String, String> header : headers.entrySet()) {
 			httpRequestBase.setHeader(header.getKey(), header.getValue());
 		}
 		return httpRequestBase;
 	}
 
 	public static Map<String, String> postData(EndPointInfo endPointInfo,
-	                                           Map<String, String> headers)
+											   Map<String, String> headers)
 			throws IDPTokenManagerException {
 
 		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
 		String url = endPointInfo.getEndPoint();
-		JSONObject params = endPointInfo.getRequestParams();
+
+		String params = null;
+
+		if(endPointInfo != null && endPointInfo.getRequestParams() != null){
+			params = endPointInfo.getRequestParams();
+		}
+
 		Map<String, String> responseParams = new HashMap<String, String>();
-		
+
 		switch (httpMethod) {
 			case GET:
-				responseParams = sendGetRequest(url, params, headers);
+				responseParams = sendGetRequest(url, headers);
 				break;
 			case POST:
 				responseParams = sendPostRequest(url, params, headers);
+				break;
+			case DELETE:
+				responseParams = sendDeleteRequest(url, headers);
+				break;
+			case PUT:
+				responseParams = sendPutRequest(url, params, headers);
 				break;
 		}
 
 		return responseParams;
 
 	}
-	
-	public static Map<String, String> sendGetRequest(String url, JSONObject params, Map<String, String> headers) throws IDPTokenManagerException{
+
+	public static Map<String, String> sendGetRequest(String url, Map<String,
+			String> headers) throws IDPTokenManagerException {
 		HttpGet httpGet = new HttpGet(url);
-		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet, headers, HTTP_METHODS.GET);
+		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet, headers);
 		HttpClient httpClient = getCertifiedHttpClient();
 		Map<String, String> responseParams = new HashMap<String, String>();
 
@@ -157,54 +165,151 @@ public class ServerUtilities {
 			HttpResponse response = httpClient.execute(httpGetWithHeaders);
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-			                   String.valueOf(response.getStatusLine().getStatusCode()));
+					String.valueOf(response.getStatusLine().getStatusCode()));
 		} catch (ClientProtocolException e) {
-			throw new IDPTokenManagerException("Invalid client protocol.", e);
-		} catch (IOException e) {
+			String errorMsg =
+					"Error occurred while sending 'Get' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-			                   Constants.INTERNAL_SERVER_ERROR);
-			throw new IDPTokenManagerException("Server connectivity failure.", e);
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
+		} catch (IOException e) {
+			String errorMsg =
+					"Error occurred while sending 'Get' request due to failure of server connection";
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		}
-		
+
 		return responseParams;
 	}
-	
-	public static Map<String, String> sendPostRequest(String url, JSONObject params, Map<String, String> headers) throws IDPTokenManagerException{
+
+	public static Map<String, String> sendDeleteRequest(String url, Map<String, String> headers)
+			throws IDPTokenManagerException {
+
+		Map<String, String> responseParams = new HashMap<String, String>();
+		HttpDelete httpDelete = new HttpDelete(url);
+		HttpDelete httpDeleteWithHeaders = (HttpDelete) buildHeaders(httpDelete, headers);
+
+		try {
+
+			HttpClient httpClient = getCertifiedHttpClient();
+
+			HttpResponse response = httpClient.execute(httpDeleteWithHeaders);
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					String.valueOf(response.getStatusLine().getStatusCode()));
+
+		} catch (ClientProtocolException e) {
+			String errorMsg =
+					"Error occurred while sending 'Delete' request due to an invalid client protocol being used";
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
+		} catch (IOException e) {
+			String errorMsg =
+					"Error occurred while sending 'Delete' request due to failure of server connection";
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
+		}
+
+		return responseParams;
+	}
+
+	public static Map<String, String> sendPostRequest(String url, String params, Map<String, String> headers)
+			throws IDPTokenManagerException {
 		HttpPost httpPost = new HttpPost(url);
 		HttpClient httpClient = getCertifiedHttpClient();
 		Map<String, String> responseParams = new HashMap<String, String>();
-		
+
 		if (params != null) {
 			try {
-				httpPost.setEntity(new StringEntity(params.toString()));
+				httpPost.setEntity(new StringEntity(params));
 			} catch (UnsupportedEncodingException e) {
 				throw new IDPTokenManagerException("Invalid encoding type.", e);
 			}
 		}
 
-		HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers, HTTP_METHODS.POST);
+		httpPost = (HttpPost) buildHeaders(httpPost, headers);
 		try {
-			HttpResponse response = httpClient.execute(httpPostWithHeaders);
+			HttpResponse response = httpClient.execute(httpPost);
 			String status = String.valueOf(response.getStatusLine().getStatusCode());
 
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
 
 		} catch (ClientProtocolException e) {
-			throw new IDPTokenManagerException("Invalid client protocol.", e);
-		} catch (IOException e) {
+			String errorMsg =
+					"Error occurred while sending 'Post' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-			                   Constants.INTERNAL_SERVER_ERROR);
-			throw new IDPTokenManagerException("Server connectivity failure.", e);
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
+		} catch (IOException e) {
+			String errorMsg =
+					"Error occurred while sending 'Post' request due to failure of server connection";
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		}
-		
+
+		return responseParams;
+	}
+
+	public static Map<String, String> sendPutRequest(String url, String params, Map<String,
+			String> headers) throws IDPTokenManagerException {
+
+		HttpPut httpPut = new HttpPut(url);
+		HttpClient httpClient = getCertifiedHttpClient();
+		httpPut = (HttpPut) buildHeaders(httpPut, headers);
+		Map<String, String> responseParams = new HashMap<String, String>();
+
+		if (params != null) {
+			try {
+				httpPut.setEntity(new StringEntity(params));
+			} catch (UnsupportedEncodingException e) {
+				throw new IDPTokenManagerException("Invalid encoding type.", e);
+			}
+		}
+		try {
+			HttpResponse response = httpClient.execute(httpPut);
+			String status = String.valueOf(response.getStatusLine().getStatusCode());
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
+
+		} catch (ClientProtocolException e) {
+			String errorMsg =
+					"Error occurred while sending 'Put' request due to an invalid client protocol being used";
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
+		} catch (IOException e) {
+			String errorMsg =
+					"Error occurred while sending 'Put' request due to failure of server connection";
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+					Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
+		}
 		return responseParams;
 	}
 
 	public static Map<String, String> postDataAPI(EndPointInfo endPointInfo,
-	                                              Map<String, String> headers)
+												  Map<String, String> headers)
 			throws IDPTokenManagerException {
 		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
 		String url = endPointInfo.getEndPoint();
@@ -213,29 +318,37 @@ public class ServerUtilities {
 		Map<String, String> responseParams = new HashMap<String, String>();
 		HttpClient httpclient = getCertifiedHttpClient();
 		String payload = buildPayload(params);
-		
-		if (httpMethod.equals(HTTP_METHODS.POST)) {		
+
+		if (httpMethod.equals(HTTP_METHODS.POST)) {
 			HttpPost httpPost = new HttpPost(url);
-			HttpPost httpPostWithHeaders = (HttpPost) buildHeaders(httpPost, headers, httpMethod);
+			httpPost = (HttpPost) buildHeaders(httpPost, headers);
 			byte[] postData = payload.getBytes();
 			try {
-				httpPostWithHeaders.setEntity(new ByteArrayEntity(postData));
-				HttpResponse response = httpclient.execute(httpPostWithHeaders);
+				httpPost.setEntity(new ByteArrayEntity(postData));
+				HttpResponse response = httpclient.execute(httpPost);
 				String status = String.valueOf(response.getStatusLine().getStatusCode());
 
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
 				return responseParams;
 			} catch (ClientProtocolException e) {
-				throw new IDPTokenManagerException("Invalid client protocol.", e);
-			} catch (IOException e) {
+				String errorMsg =
+						"Error occurred while sending 'Post' request due to an invalid client protocol being used";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-				                   Constants.INTERNAL_SERVER_ERROR);
-				throw new IDPTokenManagerException("Server connectivity failure.", e);
+						Constants.INTERNAL_SERVER_ERROR);
+				Log.e(TAG, errorMsg);
+				throw new IDPTokenManagerException(errorMsg, e);
+			} catch (IOException e) {
+				String errorMsg =
+						"Error occurred while sending 'Post' request due to failure of server connection";
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
+						Constants.INTERNAL_SERVER_ERROR);
+				Log.e(TAG, errorMsg);
+				throw new IDPTokenManagerException(errorMsg, e);
 			}
 		}
-
 		return responseParams;
 	}
 
@@ -247,19 +360,19 @@ public class ServerUtilities {
 				KeyStore localTrustStore = KeyStore.getInstance("BKS");
 				inStream =
 						IdentityProxy.getInstance().getContext().getResources()
-						             .openRawResource(R.raw.emm_truststore);
+								.openRawResource(R.raw.emm_truststore);
 				localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
 
 				SchemeRegistry schemeRegistry = new SchemeRegistry();
 				schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(),
-				                                   80));
+						Constants.HTTP));
 				SSLSocketFactory sslSocketFactory = new SSLSocketFactory(localTrustStore);
 				sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-				schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
+				schemeRegistry.register(new Scheme("https", sslSocketFactory, Constants.HTTPS));
 				HttpParams params = new BasicHttpParams();
 				ClientConnectionManager connectionManager =
 						new ThreadSafeClientConnManager(params,
-						                                schemeRegistry);
+								schemeRegistry);
 
 				client = new DefaultHttpClient(connectionManager, params);
 
@@ -268,21 +381,32 @@ public class ServerUtilities {
 			}
 
 		} catch (KeyStoreException e) {
-			throw new IDPTokenManagerException("Invalid keystore.", e);
+			String errorMsg = "Error occurred while accessing keystore.";
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (CertificateException e) {
-			throw new IDPTokenManagerException("Invalid certificate.", e);
+			String errorMsg = "Error occurred while loading certificate.";
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (NoSuchAlgorithmException e) {
-			throw new IDPTokenManagerException("Keystore algorithm does not match.", e);
+			String errorMsg = "Error occurred while due to mismatch of defined algorithm.";
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (UnrecoverableKeyException e) {
-			throw new IDPTokenManagerException("Invalid keystore.", e);
+			String errorMsg = "Error occurred while accessing keystore.";
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (KeyManagementException e) {
-			throw new IDPTokenManagerException("Invalid keystore.", e);
+			String errorMsg = "Error occurred while accessing keystore.";
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (IOException e) {
-			throw new IDPTokenManagerException("Trust store failed to load.", e);
+			String errorMsg = "Error occurred while loading trust store. ";
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		} finally {
 			StreamHandlerUtil.closeInputStream(inStream, TAG);
 		}
-
 		return client;
 	}
 
@@ -295,27 +419,32 @@ public class ServerUtilities {
 			entity = response.getEntity();
 			responseBody = getResponseBodyContent(entity);
 		} catch (ParseException e) {
-			throw new IDPTokenManagerException("Invalid response.", e);
+			String errorMsg = "Error occurred while parsing response body.";
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (IOException e) {
 			if (entity != null) {
 				try {
 					entity.consumeContent();
 				} catch (IOException ex) {
-					throw new IDPTokenManagerException("HTTP Response failure.", e);
+					String errorMsg = "Error occurred due to failure of HTTP response.";
+					Log.e(TAG, errorMsg);
+					throw new IDPTokenManagerException(errorMsg, e);
 				}
 			}
 		}
-
 		return responseBody;
 	}
 
 	public static String getResponseBodyContent(final HttpEntity entity) throws IOException,
-	                                                                            ParseException {
+			ParseException {
 
 		InputStream instream = entity.getContent();
 
 		if (entity.getContentLength() > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException("HTTP entity too large to be buffered in memory.");
+			String errorMsg = "HTTP entity too large to be buffered in memory.";
+			Log.e(TAG, errorMsg);
+			throw new IllegalArgumentException(errorMsg);
 		}
 
 		String charset = getContentCharSet(entity);
@@ -337,9 +466,7 @@ public class ServerUtilities {
 		} finally {
 			reader.close();
 		}
-
 		return buffer.toString();
-
 	}
 
 	public static String getContentCharSet(final HttpEntity entity) throws ParseException {
@@ -357,9 +484,6 @@ public class ServerUtilities {
 				}
 			}
 		}
-
 		return charSet;
-
 	}
-
 }
