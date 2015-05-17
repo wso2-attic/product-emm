@@ -21,9 +21,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
-import org.wso2.carbon.mdm.api.util.MDMAPIConstants;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
 import javax.ws.rs.*;
@@ -39,7 +39,7 @@ public class MobileDevice {
     private static Log log = LogFactory.getLog(MobileDevice.class);
 
     /**
-     * Get all devices.Returns list of Android devices registered in MDM.
+     * Get all devices. Returns list of Android devices registered in MDM.
      *
      * @return Device List
      * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
@@ -51,7 +51,8 @@ public class MobileDevice {
         List<org.wso2.carbon.device.mgt.common.Device> devices;
 
         try {
-            devices = MDMAPIUtils.getDeviceManagementService().getAllDevices(MDMAPIConstants.MOBILE_DEVICE_TYPE);
+            devices = MDMAPIUtils.getDeviceManagementService().
+					getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             return devices;
         } catch (DeviceManagementException e) {
             msg = "Error occurred while fetching the device list.";
@@ -94,14 +95,15 @@ public class MobileDevice {
 	 * Fetch Android device details of a given user.
 	 *
 	 * @param user   User Name
+	 * @param tenantDomain tenant domain
 	 * @return Device
 	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
 	 *
 	 */
 	@GET
-	@Path("{user}")
-	public List<org.wso2.carbon.device.mgt.common.Device> getDevice(@PathParam("user") String user)
-			throws MDMAPIException {
+	@Path("{user}/{tenantDomain}")
+	public List<org.wso2.carbon.device.mgt.common.Device> getDeviceByUser(@PathParam("user") String user,
+			@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 		String msg;
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
 
