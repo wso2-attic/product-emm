@@ -24,9 +24,11 @@ import org.wso2.mdm.agent.proxy.beans.EndPointInfo;
 import org.wso2.mdm.agent.proxy.beans.Token;
 import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.proxy.interfaces.TokenCallBack;
+import org.wso2.mdm.agent.proxy.utils.Constants;
 import org.wso2.mdm.agent.proxy.utils.ServerUtilities;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -39,7 +41,7 @@ public class APIController implements TokenCallBack {
 	private String clientKey, clientSecret;
 	private APIResultCallBack apiResultCallback;
 	private EndPointInfo apiEndPointInfo;
-	
+
 	public APIController(String clientKey, String clientSecret){
 		this.clientKey = clientKey;
 		this.clientSecret = clientSecret;
@@ -48,13 +50,13 @@ public class APIController implements TokenCallBack {
 	/**
 	 * Invoking an API using retrieved token.
 	 *
-	 * @param endPointInfo      - Server and API end point information.
+	 * @param apiEndPointInfo      - Server and API end point information.
 	 * @param apiResultCallBack - API result callback data.
 	 * @param requestCode       - Request code to avoid response complications.
 	 * @param context           - Application context.
 	 */
 	public void invokeAPI(EndPointInfo apiEndPointInfo, APIResultCallBack apiResultCallBack,
-	                      int requestCode, Context context) {
+						  int requestCode, Context context) {
 
 		this.apiResultCallback = apiResultCallBack;
 		this.apiEndPointInfo = apiEndPointInfo;
@@ -66,8 +68,8 @@ public class APIController implements TokenCallBack {
 		IdentityProxy.getInstance().setRequestCode(requestCode);
 
 		IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
-		                                         this.clientKey,
-		                                         this.clientSecret);
+				this.clientKey,
+				this.clientSecret);
 	}
 
 	@Override
@@ -100,6 +102,19 @@ public class APIController implements TokenCallBack {
 
 			try {
 				responseParams = ServerUtilities.postData(endPointInfo, headers);
+				if (Constants.DEBUG_ENABLED) {
+					Iterator<Map.Entry<String, String>> iterator = responseParams.entrySet().iterator();
+					while (iterator.hasNext()) {
+						Map.Entry<String, String> respParams = iterator.next();
+						StringBuilder paras = new StringBuilder();
+						paras.append("response-params: key:");
+						paras.append(respParams.getKey());
+						paras.append(", value:");
+						paras.append(respParams.getValue());
+						Log.d(TAG, paras.toString());
+					}
+				}
+
 			} catch (IDPTokenManagerException e) {
 				Log.e(TAG, "Failed to contact server." + e);
 			}
@@ -110,7 +125,7 @@ public class APIController implements TokenCallBack {
 		@Override
 		protected void onPostExecute(Map<String, String> result) {
 			apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance()
-			                                                          .getRequestCode());
+					.getRequestCode());
 		}
 	}
 

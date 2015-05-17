@@ -18,7 +18,7 @@
 package org.wso2.mdm.agent;
 
 import java.util.Map;
-import org.wso2.mdm.agent.R;
+import org.wso2.mdm.agent.api.DeviceInfo;
 import org.wso2.mdm.agent.beans.ServerConfig;
 import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS;
@@ -34,6 +34,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -47,6 +48,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	private ProgressDialog progressDialog;
 	private AlertDialog.Builder alertDialog;
 	private BuildDeviceInfoPayload deviceInfoBuilder;
+	private Resources resources;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,10 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		setContentView(R.layout.activity_main);
 		context = this;
 		deviceInfoBuilder = new BuildDeviceInfoPayload(context);
+		resources = context.getResources();
+		DeviceInfo deviceInfo = new DeviceInfo(context);
+		String deviceIdentifier = deviceInfo.getMACAddress();
+		Preference.putString(context, resources.getString(R.string.shared_pref_regId), deviceIdentifier);
 		registerDevice();
 	}
 
@@ -83,20 +89,20 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			// Call device registration API.
 			String ipSaved =
 					Preference.getString(context.getApplicationContext(),
-					                     context.getResources()
-					                            .getString(R.string.shared_pref_ip)
+							context.getResources()
+									.getString(R.string.shared_pref_ip)
 					);
-			
+
 			ServerConfig utils = new ServerConfig();
 			utils.setServerIP(ipSaved);
-			
-			CommonUtils.callSecuredAPI(RegistrationActivity.this, utils.getAPIServerURL() +
-			                                                      Constants.REGISTER_ENDPOINT,
-			                           HTTP_METHODS.POST, deviceInfoBuilder.getDeviceInfoPayload(),
-			                           RegistrationActivity.this,
-			                           Constants.REGISTER_REQUEST_CODE
-			);
-			
+
+			CommonUtils.callSecuredAPI(RegistrationActivity.this,
+					utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
+					HTTP_METHODS.POST,
+					deviceInfoBuilder.getDeviceInfoPayload().toString(),
+					RegistrationActivity.this,
+					Constants.REGISTER_REQUEST_CODE);
+
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
@@ -177,7 +183,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		CommonDialogUtils.stopProgressDialog(progressDialog);
-		String responseStatus = null;
+		String responseStatus;
 		if (result != null) {
 			responseStatus = result.get(Constants.STATUS_KEY);
 

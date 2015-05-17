@@ -23,7 +23,9 @@ import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -48,6 +50,7 @@ public class AlertActivity extends SherlockActivity {
 	private static final String RING = "ring";
 	private static final String TAG = AlertActivity.class.getSimpleName();
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,9 +62,11 @@ public class AlertActivity extends SherlockActivity {
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
+
 			if (extras.containsKey(getResources().getString(R.string.intent_extra_message))) {
 				message = extras.getString(getResources().getString(R.string.intent_extra_message));
 			}
+
 			type = extras.getString(getResources().getString(R.string.intent_extra_type));
 
 			if (RING.equalsIgnoreCase(type)) {
