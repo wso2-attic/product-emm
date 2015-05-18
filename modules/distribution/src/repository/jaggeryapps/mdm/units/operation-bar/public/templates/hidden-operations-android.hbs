@@ -32,7 +32,7 @@
             <div class="panel panel-default operation-data" data-operation="{{features.ENCRYPT_STORAGE.code}}">
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#enableEncryption" aria-expanded="true" aria-controls="enableEncryption">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#enableEncryptionTab" aria-expanded="true" aria-controls="enableEncryptionTab">
                                     <span class="fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
@@ -41,11 +41,11 @@
                         </a>
                     </h2>
                 </div>
-                <div id="enableEncryption" class="panel-collapse panel-body collapse in" role="tabpanel" aria-labelledby="enableEncryption">
+                <div id="enableEncryptionTab" class="panel-collapse panel-body collapse in" role="tabpanel" aria-labelledby="enableEncryptionTab">
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input type="checkbox" class="operationDataKeys" id="appRemoval" data-key="appRemoval" />
-                            <span class="helper" title="Remove App upon dis-enrollment">Enable Encryption<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></span>
+                            <input type="checkbox" class="operationDataKeys" id="enableEncryption" data-key="enableEncryption" />
+                            <span class="helper" title="Enable Encryption">Enable Encryption<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></span>
                         </label>
                     </div>
                     <a href="javascript:runOperation('{{features.ENCRYPT_STORAGE.code}}')" class="btn-operations">Configure</a>
@@ -54,16 +54,16 @@
             <div class="panel panel-default operation-data" data-operation="{{features.PASSCODE_POLICY.code}}">
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#changeLockCode" aria-expanded="false" aria-controls="changeLockCode" class="collapsed">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#passCodePolicy" aria-expanded="false" aria-controls="passCodePolicy" class="collapsed">
                                     <span class="fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
                                     </span>
-                            Change Lock code
+                            Passcode Policy
                         </a>
                     </h2>
                 </div>
-                <div id="changeLockCode" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="changeLockCode">
+                <div id="passCodePolicy" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="passCodePolicy">
 
                     <label class="wr-input-label col-sm-4" for="maxFailedAttempts">Maximum Failed Attempts</label>
                     <div class="wr-input-control">
@@ -112,7 +112,7 @@
 
         <!-- wi-fi -->
         <div class="wr-hidden-operation panel-body" data-operation="wifi">
-            <div class="operationData" data-operation="{{features.CAMERA.code}}">
+            <div class="operation-data" data-operation="{{features.WIFI.code}}">
                 <label class="wr-input-label" title="Identification of the wireless network to connect to">Service Set Identifier<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
                 <!--span>Identification of the wireless network to connect to</span-->
                 <div class="wr-input-control">

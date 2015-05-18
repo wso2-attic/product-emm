@@ -21,7 +21,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
@@ -55,9 +54,11 @@ public class MobileDevice {
             List<Device> allDevices;
             if (type != null) {
                 allDevices = service.getAllDevices(type);
-            }else if (user != null) {
-                allDevices = service.getDeviceListOfUser(user);
-            }else {
+            } else if (user != null) {
+                allDevices = service.getAllDevicesOfUser(user);
+            } else if (role != null){
+                allDevices = service.getAllDevicesOfRole(role);
+            } else {
                 allDevices = service.getAllDevices();
             }
             return allDevices;
