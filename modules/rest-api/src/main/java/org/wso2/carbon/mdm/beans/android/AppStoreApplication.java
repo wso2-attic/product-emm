@@ -22,6 +22,9 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * This class represents the Appstore Application information.
+ */
 public class AppStoreApplication implements Serializable {
 
 	private String type;

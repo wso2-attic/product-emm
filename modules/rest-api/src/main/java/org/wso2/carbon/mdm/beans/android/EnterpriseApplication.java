@@ -22,10 +22,22 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * This class represents the Enterprise Application information.
+ */
 public class EnterpriseApplication implements Serializable {
 
 	private String type;
 	private String url;
+	private String appIdentifier;
+
+	public String getAppIdentifier() {
+		return appIdentifier;
+	}
+
+	public void setAppIdentifier(String appIdentifier) {
+		this.appIdentifier = appIdentifier;
+	}
 
 	public String getType() {
 		return type;
