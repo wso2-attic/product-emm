@@ -99,20 +99,20 @@ public class DeviceMgtService {
      * Update Android device details of given device id.
      *
      * @param id     Device Id
-     * @param deviceInfo Device Details
+     * @param device Device Details
      * @return Message
      * @throws AndroidAgentException
      */
     @PUT
     @Path("{id}")
-    public Message updateDevice(@PathParam("id") String id, DeviceInfo deviceInfo) throws AndroidAgentException {
+    public Message updateDevice(@PathParam("id") String id, Device device) throws AndroidAgentException {
         String msg;
         Message responseMessage = new Message();
         boolean result;
-        Device device = deviceInfo.getDevice();
+
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device, deviceInfo.getApplicationList());
+            result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device);
             if (result) {
                 Response.status(Response.Status.ACCEPTED);
                 responseMessage.setResponseMessage("Device information has modified successfully.");
