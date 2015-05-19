@@ -20,90 +20,212 @@ package org.wso2.mdm.agent.services;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.mdm.agent.AndroidAgentException;
 import org.wso2.mdm.agent.api.DeviceInfo;
+import org.wso2.mdm.agent.api.GPSTracker;
+import org.wso2.mdm.agent.beans.Device;
+import org.wso2.mdm.agent.factory.DeviceStateFactory;
+import org.wso2.mdm.agent.interfaces.DeviceState;
+import org.wso2.mdm.agent.utils.Constants;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class handles building of the device information payload to be sent to the server.
  */
 public class BuildDeviceInfoPayload {
-	private JSONObject result;
 	private DeviceInfo deviceInfo;
+	private Device device;
+	private Context context;
 	private static final String TAG = BuildDeviceInfoPayload.class.getName();
-	private static final String DEVICE_IDENTIFIER = "deviceIdentifier";
-	private static final String DEVICE_DESCRIPTION = "description";
-	private static final String DEVICE_OWNERSHIP = "ownership";
-	private static final String DEVICE_PROPERTY_NAME = "name";
-	private static final String DEVICE_PROPERTY_VALUE = "value";
-	private static final String DEVICE_PROPERTY_OWNER = "owner";
-	private static final String DEVICE_PROPERTY_DESCRIPTION = "device";
-	private static final String DEVICE_PROPERTY_IMEI = "imei";
-	private static final String DEVICE_PROPERTY_IMSI = "imsi";
-	private static final String DEVICE_PROPERTY_MODEL = "model";
-	private static final String DEVICE_PROPERTY_VENDOR = "vendor";
-	private static final String DEVICE_PROPERTY_OS = "osVersion";
-	private static final String DEVICE_PROPERTY_TAG = "properties";
-	
-	public BuildDeviceInfoPayload(Context context){
+	ObjectMapper mapper;
+
+	public BuildDeviceInfoPayload(Context context) {
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
+		this.context = context;
+		mapper = new ObjectMapper();
 	}
-	
+
 	/**
 	 * Builds device information payload.
+	 *
 	 * @param type - Device ownership type.
 	 * @param owner - Current user name.
 	 */
-	public void build(String type, String owner){
-		result = new JSONObject();
+	public void build(String type, String owner) {
+		device = new Device();
 
-		try{
-			result.put(DEVICE_IDENTIFIER, deviceInfo.getMACAddress());
-			result.put(DEVICE_PROPERTY_NAME, deviceInfo.getDeviceName());
-			result.put(DEVICE_DESCRIPTION, deviceInfo.getDeviceName());
-			result.put(DEVICE_OWNERSHIP, type);
-			result.put(DEVICE_PROPERTY_OWNER, owner);
+		//setting up basic details of the device
+		device.setOwner(owner);
+		device.setDeviceIdentifier(deviceInfo.getMACAddress());
+		device.setDescription(deviceInfo.getDeviceName());
+		device.setName(deviceInfo.getDeviceName());
+		device.setOwnership(type);
 
-			JSONArray properties = new JSONArray();
-			JSONObject property = new JSONObject();
+		//adding extra properties
+		List<Device.Property> properties = new ArrayList<>();
+		Device.Property property = new Device.Property();
+		property.setName(Constants.Device.IMEI);
+		property.setValue(deviceInfo.getDeviceId());
+		properties.add(property);
 
-			property = new JSONObject();
-			property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_IMEI);
-			property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getDeviceId());
-			properties.put(property);
+		property = new Device.Property();
+		property.setName(Constants.Device.IMSI);
+		property.setValue(deviceInfo.getIMSINumber());
+		properties.add(property);
 
-			property = new JSONObject();
-			property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_IMSI);
-			property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getIMSINumber());
-			properties.put(property);
+		property = new Device.Property();
+		property.setName(Constants.Device.MODEL);
+		property.setValue(deviceInfo.getDeviceModel());
+		properties.add(property);
 
-			property = new JSONObject();
-			property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_MODEL);
-			property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getDeviceModel());
-			properties.put(property);
+		property = new Device.Property();
+		property.setName(Constants.Device.VENDOR);
+		property.setValue(deviceInfo.getDeviceManufacturer());
+		properties.add(property);
 
-			property = new JSONObject();
-			property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_VENDOR);
-			property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getDeviceManufacturer());
-			properties.put(property);
+		property = new Device.Property();
+		property.setName(Constants.Device.OS);
+		property.setValue(deviceInfo.getOsVersion());
+		properties.add(property);
 
-			property = new JSONObject();
-			property.put(DEVICE_PROPERTY_NAME, DEVICE_PROPERTY_OS);
-			property.put(DEVICE_PROPERTY_VALUE, deviceInfo.getOsVersion());
-			properties.put(property);
+		property = new Device.Property();
+		property.setName(Constants.Device.NAME);
+		property.setValue(deviceInfo.getDeviceName());
+		properties.add(property);
 
-			result.put(DEVICE_PROPERTY_TAG, properties);
-		}catch(JSONException e){
-			Log.e(TAG, "Invalid object saved in JSON.");
-		}
+		device.setProperties(properties);
 	}
-	
+
+	/**
+	 * This method builds the payload including device current state.
+	 *
+	 * @throws AndroidAgentException
+	 */
+	public void build() throws AndroidAgentException {
+		DeviceState phoneState = DeviceStateFactory.getDeviceState(context.getApplicationContext(),
+				deviceInfo.getSdkVersion());
+		GPSTracker gps = new GPSTracker(context.getApplicationContext());
+
+		device = new Device();
+
+		device.setDeviceIdentifier(deviceInfo.getMACAddress());
+		device.setDescription(deviceInfo.getDeviceName());
+		device.setName(deviceInfo.getDeviceName());
+
+		List<Device.Property> properties = new ArrayList<>();
+		Device.Property property = new Device.Property();
+		property.setName(Constants.Device.IMEI);
+		property.setValue(deviceInfo.getDeviceId());
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.IMSI);
+		property.setValue(deviceInfo.getIMSINumber());
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.MODEL);
+		property.setValue(deviceInfo.getDeviceModel());
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.VENDOR);
+		property.setValue(deviceInfo.getDeviceManufacturer());
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.OS);
+		property.setValue(deviceInfo.getOsVersion());
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.NAME);
+		property.setValue(deviceInfo.getDeviceName());
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.BATTERY_LEVEL);
+		int batteryLevel = Math.round(phoneState.getBatteryLevel());
+		property.setValue(String.valueOf(batteryLevel));
+		properties.add(property);
+
+		double latitude = gps.getLatitude();
+		double longitude = gps.getLongitude();
+
+		if (latitude != 0 && longitude !=0) {
+			property = new Device.Property();
+			property.setName(Constants.Device.MOBILE_DEVICE_LATITUDE);
+			property.setValue(String.valueOf(latitude));
+			properties.add(property);
+
+			property = new Device.Property();
+			property.setName(Constants.Device.MOBILE_DEVICE_LONGITUDE);
+			property.setValue(String.valueOf(longitude));
+			properties.add(property);
+		}
+
+		property = new Device.Property();
+		property.setName(Constants.Device.MEMORY_INFO_INTERNAL_TOTAL);
+		property.setValue(String.valueOf(phoneState.getTotalInternalMemorySize()));
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.MEMORY_INFO_INTERNAL_AVAILABLE);
+		property.setValue(String.valueOf(phoneState.getAvailableInternalMemorySize()));
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.MEMORY_INFO_EXTERNAL_TOTAL);
+		property.setValue(String.valueOf(phoneState.getTotalExternalMemorySize()));
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.MEMORY_INFO_EXTERNAL_AVAILABLE);
+		property.setValue(String.valueOf(phoneState.getAvailableExternalMemorySize()));
+		properties.add(property);
+
+		property = new Device.Property();
+		property.setName(Constants.Device.NETWORK_OPERATOR);
+		property.setValue(String.valueOf(deviceInfo.getNetworkOperatorName()));
+		properties.add(property);
+
+		// building device info json payload
+		String deviceInfoPayload;
+		try {
+			deviceInfoPayload = mapper.writeValueAsString(properties);
+		} catch (JsonProcessingException e) {
+			String errorMsg = "Error occurred while parsing property object to json.";
+			Log.e(TAG, errorMsg);
+			throw new AndroidAgentException(errorMsg, e);
+		}
+		property = new Device.Property();
+		property.setName(Constants.Device.INFO);
+		property.setValue(deviceInfoPayload);
+		properties.add(property);
+
+		device.setProperties(properties);
+
+	}
+
 	/**
 	 * Returns the final payload.
-	 * @return - Device info payload.
+	 *
+	 * @return - Device info payload as a string.
 	 */
-	public JSONObject getDeviceInfoPayload(){
-		return this.result;
+	public String getDeviceInfoPayload() {
+		try {
+			return device.toJSON();
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Error occurred while building device info payload. " + e.getMessage());
+		}
+		return null;
 	}
 }

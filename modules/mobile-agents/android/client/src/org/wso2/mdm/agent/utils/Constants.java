@@ -38,7 +38,7 @@ public class Constants {
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
 
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
-	public static final String SENDER_ID_ENDPOINT = "device/sender_id/";
+	public static final String DEVICE_ENDPOINT = SERVER_APP_ENDPOINT + "device/";
 	public static final String IS_REGISTERED_ENDPOINT = REGISTER_ENDPOINT;
 	public static final String UNREGISTER_ENDPOINT =  REGISTER_ENDPOINT;
 	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
@@ -75,6 +75,7 @@ public class Constants {
 	public static final int LICENSE_REQUEST_CODE = 304;
 	public static final int UNREGISTER_REQUEST_CODE = 305;
 	public static final int NOTIFICATION_REQUEST_CODE = 306;
+	public static final int DEVICE_INFO_REQUEST_CODE = 307;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -115,8 +116,7 @@ public class Constants {
 	/**
 	 * Operation IDs
 	 */
-
-	public final class Operation{
+	public final class Operation {
 		private Operation(){
 			throw new AssertionError();
 		}
@@ -146,6 +146,30 @@ public class Constants {
 		public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
 		public static final String POLICY_MONITOR = "POLICY_MONITOR";
 		public static final String POLICY_REVOKE = "POLICY_REVOKE";
+	}
+
+	/**
+	 *  Device specific constants
+	 */
+	public final class Device {
+		private Device() {
+			throw new AssertionError();
+		}
+		public static final String IMEI = "IMEI";
+		public static final String IMSI = "IMSI";
+		public static final String MODEL = "DEVICE_MODEL";
+		public static final String VENDOR = "VENDOR";
+		public static final String OS = "OS_VERSION";
+		public static final String NAME = "DEVICE_NAME";
+		public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
+		public static final String MOBILE_DEVICE_LATITUDE = "LATITUDE";
+		public static final String MOBILE_DEVICE_LONGITUDE = "LONGITUDE";
+		public static final String MEMORY_INFO_INTERNAL_TOTAL = "INTERNAL_TOTAL_MEMORY";
+		public static final String MEMORY_INFO_EXTERNAL_TOTAL = "EXTERNAL_TOTAL_MEMORY";
+		public static final String MEMORY_INFO_INTERNAL_AVAILABLE = "INTERNAL_AVAILABLE_MEMORY";
+		public static final String MEMORY_INFO_EXTERNAL_AVAILABLE = "EXTERNAL_AVAILABLE_MEMORY";
+		public static final String NETWORK_OPERATOR = "OPERATOR";
+		public static final String INFO = "DEVICE_INFO";
 	}
 
 }
