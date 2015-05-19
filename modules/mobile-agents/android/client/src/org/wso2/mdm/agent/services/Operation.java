@@ -32,9 +32,12 @@ import org.wso2.mdm.agent.api.ApplicationManager;
 import org.wso2.mdm.agent.api.DeviceInfo;
 import org.wso2.mdm.agent.api.GPSTracker;
 import org.wso2.mdm.agent.api.WiFiConfig;
+import org.wso2.mdm.agent.beans.Device;
 import org.wso2.mdm.agent.beans.DeviceAppInfo;
+import org.wso2.mdm.agent.beans.ServerConfig;
 import org.wso2.mdm.agent.factory.DeviceStateFactory;
 import org.wso2.mdm.agent.interfaces.DeviceState;
+import org.wso2.mdm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.mdm.agent.utils.Constants;
 import org.wso2.mdm.agent.utils.Preference;
 import org.wso2.mdm.agent.utils.CommonUtils;
@@ -52,7 +55,7 @@ import android.widget.Toast;
 /**
  * This class handles all the functionalities related to device management operations.
  */
-public class Operation {
+public class Operation implements APIResultCallBack {
 
 	private Context context;
 	private DevicePolicyManager devicePolicyManager;
@@ -60,20 +63,12 @@ public class Operation {
 	private Resources resources;
 	private BuildResultPayload resultBuilder;
 	private DeviceInfo deviceInfo;
-	private DeviceState phoneState;
 	private GPSTracker gps;
 
 	private static final String TAG = "Operation Handler";
-	private static final String MEMORY_INFO_TAG_TOTAL = "total";
-	private static final String MEMORY_INFO_TAG_AVAILABLE = "available";
-	private static final String MEMORY_INFO_TAG_INTERNAL = "internal_memory";
-	private static final String MEMORY_INFO_TAG_EXTERNAL = "external_memory";
-	private static final String BATTERY_INFO_TAG_LEVEL = "level";
-	private static final String BATTERY_INFO_TAG = "battery";
+
 	private static final String LOCATION_INFO_TAG_LONGITUDE = "longitude";
 	private static final String LOCATION_INFO_TAG_LATITUDE = "latitude";
-	private static final String LOCATION_INFO_TAG = "location_obj";
-	private static final String NETWORK_OPERATOR_TAG = "operator";
 	private static final String APP_INFO_TAG_NAME = "name";
 	private static final String APP_INFO_TAG_PACKAGE = "package";
 	private static final String APP_INFO_TAG_ICON = "icon";
@@ -95,8 +90,6 @@ public class Operation {
 		this.appList = new ApplicationManager(context.getApplicationContext());
 		this.resultBuilder = new BuildResultPayload();
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
-		phoneState = DeviceStateFactory.getDeviceState(context.getApplicationContext(),
-				deviceInfo.getSdkVersion());
 		gps = new GPSTracker(context.getApplicationContext());
 	}
 
@@ -106,7 +99,6 @@ public class Operation {
 	 * @param operation - Operation object.
 	 */
 	public void doTask(org.wso2.mdm.agent.beans.Operation operation) throws AndroidAgentException {
-
 		switch (operation.getCode()) {
 			case Constants.Operation.DEVICE_INFO:
 				getDeviceInfo(operation);
@@ -185,55 +177,34 @@ public class Operation {
 	 *
 	 * @param operation - Operation object.
 	 */
-	public void getDeviceInfo(org.wso2.mdm.agent.beans.Operation operation) throws AndroidAgentException {
-		JSONObject result = new JSONObject();
-		JSONObject batteryInfo = new JSONObject();
-		JSONObject internalMemoryInfo = new JSONObject();
-		JSONObject externalMemoryInfo = new JSONObject();
-		JSONObject locationInfo = new JSONObject();
-		double latitude;
-		double longitude;
+	public void getDeviceInfo(org.wso2.mdm.agent.beans.Operation operation)
+			throws AndroidAgentException {
 
-		try {
-			latitude = gps.getLatitude();
-			longitude = gps.getLongitude();
-			int batteryLevel = (int) Math.floor(phoneState.getBatteryLevel());
-			batteryInfo.put(BATTERY_INFO_TAG_LEVEL, batteryLevel);
+		BuildDeviceInfoPayload deviceInfoPayload = new BuildDeviceInfoPayload(context);
+		deviceInfoPayload.build();
 
-			internalMemoryInfo.put(MEMORY_INFO_TAG_TOTAL, phoneState.getTotalInternalMemorySize());
-			internalMemoryInfo.put(MEMORY_INFO_TAG_AVAILABLE,
-					phoneState.getAvailableInternalMemorySize());
-			externalMemoryInfo.put(MEMORY_INFO_TAG_TOTAL, phoneState.getTotalExternalMemorySize());
-			externalMemoryInfo.put(MEMORY_INFO_TAG_AVAILABLE,
-					phoneState.getAvailableExternalMemorySize());
-			locationInfo.put(LOCATION_INFO_TAG_LATITUDE, latitude);
-			locationInfo.put(LOCATION_INFO_TAG_LONGITUDE, longitude);
+		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
 
-			result.put(BATTERY_INFO_TAG, batteryInfo);
-			result.put(MEMORY_INFO_TAG_INTERNAL, internalMemoryInfo);
-			result.put(MEMORY_INFO_TAG_EXTERNAL, externalMemoryInfo);
+		String ipSaved =
+				Preference.getString(context.getApplicationContext(),
+						context.getResources().getString(R.string.shared_pref_ip));
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(ipSaved);
 
-			if (latitude != 0 && longitude != 0) {
-				result.put(LOCATION_INFO_TAG, locationInfo);
-			}
-			result.put(NETWORK_OPERATOR_TAG, deviceInfo.getNetworkOperatorName());
-			operation.setPayLoad(result.toString());
-			operation.setStatus(resources.getString(R.string.operation_value_completed));
-			resultBuilder.build(operation);
+		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getMACAddress();
 
-			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Device information sent");
-			}
+		CommonUtils.callSecuredAPI(context, url,
+				org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload, Operation.this,
+				Constants.DEVICE_INFO_REQUEST_CODE
+		);
 
-		} catch (JSONException e) {
-			operation.setStatus(resources.getString(R.string.operation_value_error));
-			resultBuilder.build(operation);
-			throw new AndroidAgentException("Invalid JSON format.", e);
-		}
+		operation.setPayLoad(replyPayload);
+		operation.setStatus(resources.getString(R.string.operation_value_completed));
+		resultBuilder.build(operation);
 	}
 
 	/**
-	 * Retrieve device information.
+	 * Retrieve location device information.
 	 *
 	 * @param operation - Operation object.
 	 */
@@ -970,6 +941,8 @@ public class Operation {
 
 	/**
 	 * Install an Application
+	 *
+	 * @param operation - Operation object.
 	 */
 	private void installApplication(JSONObject data, org.wso2.mdm.agent.beans.Operation operation) throws AndroidAgentException {
 		String appUrl;
@@ -1022,7 +995,39 @@ public class Operation {
 		}
 	}
 
+	/**
+	 * This method returns the completed operations list
+	 *
+	 * @return operation list
+	 */
 	public List<org.wso2.mdm.agent.beans.Operation> getResultPayload() {
 		return resultBuilder.getResultPayload();
+	}
+
+	/**
+	 * This method is being invoked when get info operation get executed.
+	 *
+	 * @param result response result
+	 * @param requestCode code of the requested operation
+	 */
+	@Override
+	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
+		String responseStatus;
+		String response;
+		if (requestCode == Constants.DEVICE_INFO_REQUEST_CODE) {
+			if (result != null) {
+				responseStatus = result.get(Constants.STATUS_KEY);
+				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
+					response = result.get(Constants.RESPONSE);
+					if (response != null && !response.isEmpty()) {
+						if (Constants.DEBUG_MODE_ENABLED) {
+							Log.d(TAG, "onReceiveAPIResult." + response);
+							Log.d(TAG, "Device information sent");
+
+						}
+					}
+				}
+			}
+		}
 	}
 }

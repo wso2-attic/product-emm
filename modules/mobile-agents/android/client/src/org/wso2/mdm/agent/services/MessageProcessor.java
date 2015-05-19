@@ -40,6 +40,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * This class handles all the functionalities related to coordinating the retrieval
@@ -67,6 +68,7 @@ public class MessageProcessor implements APIResultCallBack {
 		operation = new org.wso2.mdm.agent.services.Operation(context.getApplicationContext());
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
 		if (deviceId == null) {
 			DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
@@ -76,10 +78,13 @@ public class MessageProcessor implements APIResultCallBack {
 	}
 
 	/**
+	 * This method executes the set of pending operations which is recieved from the
+	 * backend server.
+	 *
 	 * @param response Response received from the server that needs to be processed
 	 *                 and applied to the device.
 	 */
-	public void performOperation(String response) throws AndroidAgentException {
+	public void performOperation(String response) {
 
 		List<org.wso2.mdm.agent.beans.Operation> operations = new ArrayList<>();
 
@@ -94,20 +99,20 @@ public class MessageProcessor implements APIResultCallBack {
 		} catch (JsonProcessingException e) {
 			String msg = "Issue in json parsing.";
 			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
 
 		} catch (IOException e) {
 			String msg = "Issue in stream parsing.";
 			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
 		}
-
 
 		for (org.wso2.mdm.agent.beans.Operation op : operations) {
-			operation.doTask(op);
+			try {
+				operation.doTask(op);
+			} catch (AndroidAgentException e) {
+				Log.e(TAG, "Failed to perform operation." + e.getMessage());
+			}
 		}
 		replyPayload = operation.getResultPayload();
-
 	}
 
 
@@ -165,11 +170,7 @@ public class MessageProcessor implements APIResultCallBack {
 						if (Constants.DEBUG_MODE_ENABLED) {
 							Log.d(TAG, "onReceiveAPIResult." + response);
 						}
-						try {
-							performOperation(response);
-						} catch (AndroidAgentException e) {
-							Log.e(TAG, "Failed to perform operation." + e);
-						}
+						performOperation(response);
 					}
 				}
 			}
