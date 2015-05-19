@@ -98,7 +98,7 @@ public class DeviceMgtService {
      * Update Android device details of given device id.
      *
      * @param id     Device Id
-     * @param device device
+     * @param device Device Details
      * @return Message
      * @throws AndroidAgentException
      */
@@ -107,9 +107,9 @@ public class DeviceMgtService {
     public Message updateDevice(@PathParam("id") String id, Device device) throws AndroidAgentException {
         String msg;
         Message responseMessage = new Message();
-		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-		deviceIdentifier.setId(id);
-		deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+	DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+	deviceIdentifier.setId(id);
+	deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
         boolean result;
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
