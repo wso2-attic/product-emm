@@ -177,8 +177,7 @@ public class Operation implements APIResultCallBack {
 	 *
 	 * @param operation - Operation object.
 	 */
-	public void getDeviceInfo(org.wso2.mdm.agent.beans.Operation operation)
-			throws AndroidAgentException {
+	public void getDeviceInfo(org.wso2.mdm.agent.beans.Operation operation) throws AndroidAgentException {
 
 		BuildDeviceInfoPayload deviceInfoPayload = new BuildDeviceInfoPayload(context);
 		deviceInfoPayload.build();
@@ -194,7 +193,8 @@ public class Operation implements APIResultCallBack {
 		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getMACAddress();
 
 		CommonUtils.callSecuredAPI(context, url,
-				org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload, Operation.this,
+				org.wso2.mdm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload, 
+				Operation.this,
 				Constants.DEVICE_INFO_REQUEST_CODE
 		);
 
