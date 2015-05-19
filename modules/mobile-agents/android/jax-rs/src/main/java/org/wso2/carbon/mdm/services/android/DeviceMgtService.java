@@ -107,10 +107,13 @@ public class DeviceMgtService {
     public Message updateDevice(@PathParam("id") String id, Device device) throws AndroidAgentException {
         String msg;
         Message responseMessage = new Message();
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		deviceIdentifier.setId(id);
+		deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
         boolean result;
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(device);
+            result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(deviceIdentifier, device);
             if (result) {
                 Response.status(Response.Status.ACCEPTED);
                 responseMessage.setResponseMessage("Device information has modified successfully.");
