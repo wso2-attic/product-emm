@@ -90,18 +90,25 @@ function containerUpdate(asset){
     var options = $(asset).next('ul').length ? $(asset).next('ul').html() : "";
 
     $(menuSubContainer).html('<ul class="selected"><li level="'+ $(asset).attr('level') +'" '
-        +'onclick="selectAsset(this)"'
-        +'asset="' + $(asset).attr('asset') + '">'+ $(asset).html() +'</li>'
-        +'<a id="goBack" href="javascript:void(0);" onclick="goBack(this); return false;" '
-        +'class="cu-btn" title="Go Back"><i class="wso2icon wso2-c-left-arrow"></i></a>'
-        +'<a id="resetNav" href="javascript:void(0);" onclick="resetNav(); return false;" '
-        +'class="cu-btn" title="Reset"><i class="wso2icon wso2-refresh"></i></a>'
-        +'</ul>' + '<ul class="options">'+ options +'</ul>');
+    +'onclick="selectAsset(this)"'
+    +'asset="' + $(asset).attr('asset') + '">'+ $(asset).html() +'</li>'
+    +'<a id="goBack" href="javascript:void(0);" onclick="goBack(this); return false;" '
+    +'class="cu-btn" title="Go Back">'
+    +'<span class="fw-stack">'
+    +'<i class="fw fw-ring fw-stack-2x"></i>'
+    +'<i class="fw fw-left-arrow fw-stack-1x"></i>'
+    +'</span></a>'
+    +'<a id="resetNav" href="javascript:void(0);" onclick="resetNav(); return false;" '
+    +'class="cu-btn" title="Reset">'
+    +'<span class="fw-stack">'
+    +'<i class="fw fw-refresh fw-stack-2x"></i>'
+    +'</span></a>'
+    +'</ul>' + '<ul class="options">'+ options +'</ul>');
 
     prevSelected = ($(menuSubContainer + ' ul.selected li').attr('asset'));
 
-    $(menuSubContainer + ' ul.options li').length == 0 ? $(menuSubContainer + ' ul.options').hide() :
-        + $(menuSubContainer + ' ul.options').show();
+    //$(menuSubContainer + ' ul.options li').length == 0 ? $(menuSubContainer + ' ul.options').hide() :
+    //    + $(menuSubContainer + ' ul.options').show();
 
     addingIdentity();
 }
@@ -111,11 +118,14 @@ function containerUpdate(asset){
  * @param  asset: Selected asset
  */
 function selectAsset(asset){
-    $(tagsContainer +' span').each(function(){
-        if($(this).attr('level') == $(asset).attr('level')){
-            removeTags(this);
-        }
-    });
+    var platformType = $(asset).data("type");
+    loadOperationBar(platformType);
+    loadDevices(platformType)
+    //$(tagsContainer +' span').each(function(){
+    //    if($(this).attr('level') == $(asset).attr('level')){
+    //        removeTags(this);
+    //    }
+    //});
 
     containerUpdate(asset);
 
@@ -179,13 +189,13 @@ function addTags(tag){
     var level = $(tag).attr('level'),
         selection = tag,
         content = '<span asset="'+ $(tag).attr('asset') +'" level="'+ $(tag).attr('level') +'" '
-            +'onclick="removeTags(this)">' + $(tag).html() + ' <b>x</b></span>';
+            +'onclick="removeTags(this)">' + $(tag).find('.tag-name').html() + ' <b>x</b></span>';
 
     if(level !== 1) {
         for (var i = 1; i < level; i++) {
             content = '<span asset="'+ $(getParent(selection)).attr('asset') +'" level="'
             + $(getParent(selection)).attr('level')
-            +'" onclick="removeTags(this)">' + $(getParent(selection)).html() + ' <b>x</b></span>'
+            +'" onclick="removeTags(this)">' + $(getParent(selection)).find('.tag-name').html() + ' <b>x</b></span>'
             +content;
 
             selection = getParent(selection);
@@ -204,4 +214,6 @@ function removeTags(tag){
         $($(menuContainer + ' [asset='+ $(this).attr('asset') +']')).removeClass('selected');
         $(this).remove();
     });
+    unloadOperationBar();
+    loadDevices();
 }
