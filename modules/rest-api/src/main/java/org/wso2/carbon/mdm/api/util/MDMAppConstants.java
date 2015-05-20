@@ -33,6 +33,7 @@ public class MDMAppConstants {
 		public static final String OPCODE_INSTALL_ENTERPRISE_APPLICATION = "INSTALL_ENTERPRISE_APPLICATION";
 		public static final String OPCODE_INSTALL_STORE_APPLICATION = "INSTALL_STORE_APPLICATION";
 		public static final String OPCODE_INSTALL_WEB_APPLICATION = "WEB_CLIP";
+		public static final String OPCODE_REMOVE_APPLICATION = "REMOVE_APPLICATION";
 	}
 
 	public class AndroidConstants {
