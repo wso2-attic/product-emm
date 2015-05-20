@@ -89,4 +89,18 @@ public class MDMIOSOperationUtil {
 		}
 		return operation;
 	}
+
+	public static Operation createAppUninstallOperation(MobileApp application) throws MDMAPIException{
+
+		ProfileOperation operation = new ProfileOperation();
+		operation.setCode(MDMAppConstants.IOSConstants.OPCODE_REMOVE_APPLICATION);
+		operation.setType(Operation.Type.PROFILE);
+
+		org.wso2.carbon.mdm.beans.ios.RemoveApplication removeApplication =
+				new org.wso2.carbon.mdm.beans.ios.RemoveApplication();
+		removeApplication.setBundleId(application.getIdentifier());
+		operation.setPayLoad(removeApplication.toJSON());
+
+		return operation;
+	}
 }

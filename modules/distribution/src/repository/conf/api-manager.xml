@@ -286,7 +286,7 @@
              In distributed deployment we should configure this property in key manager node by pointing
              gateway https url. Also please note that we should point gateway revoke service to key manager
         -->
-        <RevokeAPIURL>https://${carbon.local.ip}:${mgt.transport.https.port}/revoke</RevokeAPIURL>
+        <RevokeAPIURL>https://${carbon.local.ip}:${mgt.transport.https.port}/oauth2/revoke</RevokeAPIURL>
 
         <!-- Whether to encrypt tokens when storing in the Database
         Note: If changing this value to true, change the value of <TokenPersistenceProcessor> to

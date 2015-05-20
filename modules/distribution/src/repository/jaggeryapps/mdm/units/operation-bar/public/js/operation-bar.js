@@ -21,41 +21,66 @@
  */
 
 var operations = '.wr-operations',
-    modelPopup = '.wr-modalpopup',
-    modelPopupContent = modelPopup + ' .modalpopup-content',
-    deviceSelection = '.device-select',
+    modalPopup = '.wr-modalpopup',
+    modalPopupContainer = modalPopup + ' .modalpopup-container',
+    modalPopupContent = modalPopup + ' .modalpopup-content',
     deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]',
     showOperationsBtn = '#showOperationsBtn',
-    maxOperationsLimit = 15;
-
+    navHeight = $('#nav').height(),
+    headerHeight = $('header').height(),
+    offset = (headerHeight + navHeight),
+    maxOperationsLimit = 15,
+    hiddenOperation = '.wr-hidden-operations-content > div',
+    deviceSelection = '.device-select',
+    currentOperationList = [];
 
 /*
  * DOM ready functions.
  */
 $(document).ready(function(){
-    /* collapse operations to a toggle menu, if exceeds max operations limit */
     if($(operations + "> a").length > maxOperationsLimit){
         $(showOperationsBtn).show();
     }
     else{
         $(operations).show();
     }
-    var operationBar = $("#operations-bar");
-    var operationBarSrc = operationBar.attr("src");
-    var platformType = "android";
-    $.template("operations-bar", operationBarSrc, function (template) {
-        var serviceURL = "https://localhost:9443/mdm-admin/features/" + platformType;
-        var successCallback = function (data) {
-            var viewModel = {};
-            viewModel.features = data;
-            var content = template(viewModel);
-            $(".wr-operations").html(content);
-        };
-        invokerUtil.get(serviceURL,
-            successCallback, function(message){
-                console.log(message);
-            });
-    });
+    toggleMoreOperationsHeight();
+    //loadOperationBar("ios");
+    /**
+     * Android App type javascript
+     */
+    $(".wr-modalpopup").on("click", ".appTypesInput", function(){
+        var appType = $(".appTypesInput").val();
+        if (appType == "Public") {
+            $('.appURLInput').prop( "disabled", true );
+        }else if (appType == "Enterprise"){
+            $('.appURLInput').prop( "disabled", false );
+        }
+    }).trigger("change");
+});
+
+
+/*
+ * On window loaded functions.
+ */
+$(window).load(function(){
+    setPopupMaxHeight();
+});
+
+/*
+ * On window resize functions.
+ */
+$(window).resize(function(){
+    toggleMoreOperationsHeight();
+    setPopupMaxHeight();
+});
+
+/*
+ * On main div.container resize functions.
+ * @required  jquery.resize.js
+ */
+$('.container').resize(function(){
+    toggleMoreOperationsHeight();
 });
 
 /*
@@ -70,7 +95,14 @@ function showOperations(){
  * @param selection: Selected operation
  */
 function operationSelect(selection){
-    $(modelPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
+    var deviceIdList = getSelectedDeviceIds();
+    $(modalPopupContent).addClass("operation-data");
+    if (deviceIdList == 0){
+        $(modalPopupContent).html($('#errorOperations').html());
+    }else {
+        $(modalPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
+        $(modalPopupContent).data("operation", selection);
+    }
     showPopup();
 }
 
@@ -78,15 +110,51 @@ function operationSelect(selection){
  * show popup function.
  */
 function showPopup() {
-    $(modelPopup).show();
+    $(modalPopup).show();
 }
 
 /*
  * hide popup function.
  */
 function hidePopup() {
-    $(modelPopupContent).html('');
-    $(modelPopup).hide();
+    $(modalPopupContent).html('');
+    $(modalPopupContent).removeClass("operation-data");
+    $(modalPopup).hide();
+}
+
+/*
+ * set popup maximum height function.
+ */
+function setPopupMaxHeight() {
+    $(modalPopupContent).css('max-height', ($('body').height() - ($('body').height()/100 * 30)));
+    $(modalPopupContainer).css('margin-top', (-($(modalPopupContainer).height()/2)));
+}
+
+
+/*
+ * Function to open hidden device operations list
+ */
+function toggleMoreOperations(){
+    $('.wr-hidden-operations, .wr-page-content').toggleClass('toggled');
+    $(showOperationsBtn).toggleClass('selected');
+    //$('.footer').toggleClass('wr-hidden-operations-toggled');
+}
+
+/*
+ * Function to fit hidden device operation window height with the screen
+ */
+function toggleMoreOperationsHeight(){
+    $('.wr-hidden-operations').css('min-height', $('html').height() - (offset+140));
+}
+
+/*
+ * Advance operations sub categories show/hide toggle function
+ */
+function showAdvanceOperation(operation, button){
+    $(button).addClass('selected');
+    $(button).siblings().removeClass('selected');
+    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
+    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 }
 
 /*
@@ -121,6 +189,65 @@ function getDevicesByTypes(deviceList){
     });
     return deviceTypes;
 }
+function unloadOperationBar(){
+    $("#showOperationsBtn").addClass("hidden");
+    $(".wr-operations").html("");
+}
+
+function loadOperationBar(deviceType){
+    var operationBar = $("#operations-bar");
+    var operationBarSrc = operationBar.attr("src");
+    var platformType = deviceType;
+    $.template("operations-bar", operationBarSrc, function (template) {
+        var serviceURL = "https://localhost:9443/mdm-admin/features/" + platformType;
+        var successCallback = function (data) {
+            var viewModel = {};
+            var iconMap = {};
+            data = data.filter(function(current){
+                var iconName;
+                if (deviceType == "android"){
+                    var iconName = getAndroidIconForFeature(current.code);
+                } else if (deviceType == "ios"){
+                    var iconName = getiOSIconForFeature(current.code);
+                }
+                if (iconName){
+                    current.icon = iconName;
+                    return current;
+                }
+            });
+            viewModel.features = data;
+            var content = template(viewModel);
+            $(".wr-operations").html(content);
+        };
+        invokerUtil.get(serviceURL,
+            successCallback, function(message){
+                console.log(message);
+            });
+    });
+    var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
+    var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
+    $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
+        var serviceURL = "https://localhost:9443/mdm-admin/features/" + platformType;
+        var successCallback = function (data) {
+            var viewModel = {};
+            viewModel.features = data.reduce(function (total, current) {
+                total[current.code] = current;
+                return total;
+            }, {});
+            currentOperationList = viewModel.features;
+            var content = template(viewModel);
+            $(".wr-hidden-operations").html(content);
+        };
+        invokerUtil.get(serviceURL,
+            successCallback, function(message){
+                console.log(message);
+            });
+    });
+    $("#showOperationsBtn").removeClass("hidden");
+}
+
+
+
 function getiOSServiceEndpoint (operationName) {
     var featureMap = {
         DEVICE_LOCK: "lock",
@@ -131,16 +258,19 @@ function getiOSServiceEndpoint (operationName) {
         INSTALL_ENTERPRISE_APPLICATION: "enterpriseapplication",
         REMOVE_APPLICATION: "removeapplication",
         RESTRICTION: "restriction",
-        CELLULAR: "cellular"
+        CELLULAR: "cellular",
+        ENTERPRISE_WIPE: "enterprisewipe",
+        WIFI: "wifi"
     };
     return "https://localhost:9443/ios/operation/" + featureMap[operationName];
 }
+
 function createiOSPayload(operationName, operationData, devices) {
     // Command operations doesn't need a payload
     var payload;
+    var operationType = "profile";
     if (operationName == "AIR_PLAY") {
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "airPlayDestinations": [
                     operationData.location
@@ -151,9 +281,8 @@ function createiOSPayload(operationName, operationData, devices) {
                 }]
             }
         };
-    }else if (operationName == "INSTALL_ENTERPRISE_APPLICATION") {
+    }else if (operationName == "INSTALL_STORE_APPLICATION") {
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "identifier": operationData.appIdentifier,
                 "iTunesStoreID": operationData.ituneID,
@@ -162,9 +291,8 @@ function createiOSPayload(operationName, operationData, devices) {
                 "bundleId": operationData.bundleId
             }
         };
-    } else if (operationName == "INSTALL_STORE_APPLICATION") {
+    } else if (operationName == "INSTALL_ENTERPRISE_APPLICATION") {
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "identifier": operationData.appIdentifier,
                 "manifestURL": operationData.manifestURL,
@@ -175,14 +303,12 @@ function createiOSPayload(operationName, operationData, devices) {
         };
     } else if (operationName == "REMOVE_APPLICATION"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "bundleId": operationData.bundleId
             }
         };
     } else if (operationName == "RESTRICTION"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "allowCamera": operationData.allowCamera,
                 "allowCloudBackup": operationData.allowCloudBackup,
@@ -193,7 +319,6 @@ function createiOSPayload(operationName, operationData, devices) {
         };
     }  else if (operationName == "CELLULAR"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "attachAPNName": null,
                 "authenticationType": null,
@@ -211,31 +336,102 @@ function createiOSPayload(operationName, operationData, devices) {
                 ]
             }
         };
-    }else {
+    } else if (operationName == "WIFI"){
+        payload = {
+            "operation": {
+                "hiddenNetwork": operationData.hiddenNetwork,
+                "autoJoin": operationData.autoJoin,
+                "encryptionType": operationData.encryptionType,
+                "hotspot": false,
+                "domainName": null,
+                "serviceProviderRoamingEnabled": false,
+                "displayedOperatorName": null,
+                "proxyType": null,
+                "roamingConsortiumOIs": null,
+                "password": operationData.password,
+                "clientConfiguration": {
+                    "username": null,
+                    "acceptEAPTypes": null,
+                    "userPassword": null,
+                    "oneTimePassword": false,
+                    "payloadCertificateAnchorUUID": null,
+                    "outerIdentity": null,
+                    "tlstrustedServerNames": null,
+                    "tlsallowTrustExceptions": false,
+                    "tlscertificateIsRequired": false,
+                    "ttlsinnerAuthentication": null,
+                    "eapfastusePAC": false,
+                    "eapfastprovisionPAC": false,
+                    "eapfastprovisionPACAnonymously": false,
+                    "eapsimnumberOfRANDs": 0
+                },
+                "payloadCertificateUUID": null,
+                "proxyServer": null,
+                "proxyPort": 0,
+                "proxyUsername": null,
+                "proxyPassword": null,
+                "proxyPACURL": null,
+                "proxyPACFallbackAllowed": false,
+                "ssid": operationData.ssid,
+                "nairealmNames": null,
+                "mccandMNCs": null
+            }
+        };
+    } else if (operationName == "MAIL"){
+        payload = {
+            "operation": {
+                "attachAPNName": null,
+                "authenticationType": null,
+                "username": null,
+                "password": null,
+                "apnConfigurations": [
+                    {
+                        "configurationName": null,
+                        "authenticationType": null,
+                        "username": null,
+                        "password": null,
+                        "proxyServer": null,
+                        "proxyPort": 0
+                    }
+                ]
+            }
+        };
+    } else {
         // The payload of command operations are set as device ids
         payload = devices;
+        operationType = "command";
+    }
+    if (operationType == "profile" && devices) {
+        payload.deviceIDs = devices;
     }
     return payload;
 }
+function getiOSIconForFeature(featureName){
+    var featureMap = {
+        DEVICE_LOCK: "fw-lock",
+        LOCATION: "fw-map-location",
+        ENTERPRISE_WIPE: "fw-clean",
+        ALARM: "fw-dial-up"
+    };
+    return featureMap[featureName];
+}
 function createAndroidPayload(operationName, operationData, devices) {
     var payload;
+    var operationType = "profile";
     if (operationName == "CAMERA") {
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "enabled" : operationData.enableCamera
             }
         };
     } else if (operationName == "CHANGE_LOCK_CODE") {
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "lockCode" : operationData.lockCode
             }
         };
     } else if (operationName == "ENCRYPT_STORAGE") {
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "encrypted" : operationData.enableEncryption
             }
@@ -249,7 +445,6 @@ function createAndroidPayload(operationName, operationData, devices) {
         };
     } else if (operationName == "WEBCLIP"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "identity": operationData.url,
                 "title": operationData.title
@@ -258,7 +453,6 @@ function createAndroidPayload(operationName, operationData, devices) {
         };
     } else if (operationName == "INSTALL_APPLICATION"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "appIdentifier": operationData.packageName,
                 "type": operationData.type,
@@ -267,21 +461,18 @@ function createAndroidPayload(operationName, operationData, devices) {
         };
     } else if (operationName == "UNINSTALL_APPLICATION"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "appIdentifier": operationData.packageName
             }
         };
     } else if (operationName == "BLACKLIST_APPLICATIONS"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "appIdentifier": operationData.packageNames
             }
         };
     } else if (operationName == "PASSCODE_POLICY"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "maxFailedAttempts": operationData.maxFailedAttempts,
                 "minLength": operationData.minLength,
@@ -295,7 +486,6 @@ function createAndroidPayload(operationName, operationData, devices) {
         };
     } else if (operationName == "WIFI"){
         payload = {
-            "deviceIDs": devices,
             "operation": {
                 "ssid": operationData.ssid,
                 "password": operationData.password
@@ -303,7 +493,11 @@ function createAndroidPayload(operationName, operationData, devices) {
             }
         };
     } else {
+        operationType = "command";
         payload = devices;
+    }
+    if (operationType == "profile" && devices) {
+        payload.deviceIDs = devices;
     }
     return payload;
 }
@@ -330,48 +524,95 @@ function getAndroidServiceEndpoint (operationName) {
     };
     return "https://localhost:9443/mdm-android-agent/operation/" + featureMap[operationName];
 }
-
-function runOperation(operationName) {
+function getAndroidIconForFeature(featureName){
+    var featureMap = {
+        DEVICE_LOCK: "fw-lock",
+        DEVICE_LOCATION: "fw-map-location",
+        CLEAR_PASSWORD: "fw-key",
+        ENTERPRISE_WIPE: "fw-clean",
+        WIPE_DATA: "fw-database",
+        DEVICE_RING: "fw-dial-up",
+        DEVICE_MUTE: "fw-incoming-call",
+        NOTIFICATION: "fw-message",
+        CHANGE_LOCK_CODE: "fw-padlock"
+    };
+    return featureMap[featureName];
+}
+$.fn.filterByData = function(prop, val) {
+    return this.filter(
+        function() { return $(this).data(prop)==val; }
+    );
+}
+/*
+ @DeviceType = Device Type of the profile
+ @operationCode = Feature Codes to generate the profile from
+ @DeviceList = Optional device list to include in payload body for operations
+ */
+function generatePayload(deviceType, operationCode, deviceList){
+    var payload;
     var operationData = {};
-    $(".modalpopup-content > .operationData[data-operation='"+operationName+"']").find(".operationDataKeys").each(
+    $(".operation-data").filterByData("operation", operationCode).find(".operationDataKeys").each(
         function(index){
             var operationDataObj = $(this);
             var key = operationDataObj.data("key");
             var value = operationDataObj.val();
             if (operationDataObj.is(':checkbox')){
-                if (value=="on"){
-                    value = true;
-                }else if(value=="off"){
-                    value = false;
-                }
+                value = operationDataObj.is(":checked");
             }else if (operationDataObj.is('select')){
-                value = operationDataObj.find("option:selected").text();
+                var value = operationDataObj.find("option:selected").data("id");
+                if (!value){
+                    value = operationDataObj.find("option:selected").text();
+                }
             }
             operationData[key] = value;
         });
+    if(deviceType == "ios"){
+        payload = createiOSPayload(operationCode, operationData, deviceList);
+    }
+    if(deviceType == "android"){
+        payload = createAndroidPayload(operationCode, operationData, deviceList);
+    }
+    return payload;
+}
+
+/*
+    @DeviceType = Device Type of the profile
+    @FeatureCodes = Feature Codes to generate the profile from
+ */
+function generateProfile(deviceType, featureCodes){
+    var generatedProfile = {};
+    for (var i = 0; i < featureCodes.length; ++i) {
+        var featureCode = featureCodes[i];
+        var payload = generatePayload(deviceType, featureCode);
+        generatedProfile[featureCode] = payload;
+    }
+    return generatedProfile;
+}
+function runOperation(operationName) {
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
     var successCallback = function(message){
         console.log(message);
         $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
-        'class="wr-notification-operation">Device ' + operationName.toLowerCase() +
-        'Operation Successful!</div><hr /> </div>');
+        'class="wr-notification-operation">' + currentOperationList[operationName].name +
+        '- Operation Successful!</div><hr /></div>');
         var notificationCount = parseInt($(".wr-notification-bubble").html());
         notificationCount++;
         $(".wr-notification-bubble").html(notificationCount);
     };
     if(list["ios"]){
-        var payload = createiOSPayload(operationName, operationData, list["ios"]);
+        var payload = generatePayload("ios", operationName, list["ios"]);
         var serviceEndPoint = getiOSServiceEndpoint(operationName);
 
     }
     if(list["android"]){
-        var payload = createAndroidPayload(operationName, operationData, list["android"]);
+        var payload = generatePayload("android", operationName, list["android"]);
         var serviceEndPoint = getAndroidServiceEndpoint(operationName);
     }
     invokerUtil.post(serviceEndPoint, payload,
         successCallback, function(jqXHR, textStatus, errorThrown){
             console.log(textStatus);
         });
+    $(modalPopupContent).removeData();
     hidePopup();
 }
