@@ -99,7 +99,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			CommonUtils.callSecuredAPI(RegistrationActivity.this,
 					utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
 					HTTP_METHODS.POST,
-					deviceInfoBuilder.getDeviceInfoPayload().toString(),
+					deviceInfoBuilder.getDeviceInfoPayload(),
 					RegistrationActivity.this,
 					Constants.REGISTER_REQUEST_CODE);
 
