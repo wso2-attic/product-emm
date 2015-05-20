@@ -4,7 +4,7 @@ function onRequest(context) {
     var allUsers = userModule.getUsers();
     if (allUsers.length == 1) {
         context.users = [];
-        context.listUsersStatus = "No other Users found.";
+        context.listUsersStatus = "Oops, Sorry, No other Users found.";
     } else {
         var i, filteredUserList = [];
         for (i = 0; i < allUsers.length; i++) {
