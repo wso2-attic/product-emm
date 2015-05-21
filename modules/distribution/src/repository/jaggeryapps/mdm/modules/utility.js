@@ -43,6 +43,9 @@ var utility = function () {
         userModule.addPermissions([{key: "admin", name: "Device Management Admin"}], "device-mgt", type);
         userModule.addPermissions([{key: "user", name: "Device Management User"}], "device-mgt", type);
 
+        userModule.addPermissions([{key: "dashboard", name: "Dashboard"}], "device-mgt/user", type);
+        userModule.addPermissions([{key: "dashboard/view", name: "View Dashboard"}], "device-mgt/user", type);
+
         userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "devices/list", name: "List Devices"}], "device-mgt/admin", type);
         userModule.addPermissions([{key: "devices/operation", name: "Perform Operation"}], "device-mgt/admin", type);
@@ -56,6 +59,10 @@ var utility = function () {
         userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/user", type);
         userModule.addPermissions([{key: "devices/list", name: "List Devices"}], "device-mgt/user", type);
         userModule.addPermissions([{key: "devices/operation", name: "Perform Operation"}], "device-mgt/user", "init");
+
+        userModule.addPermissions([{key: "policies", name: "Policy"}], "device-mgt/admin", type);
+        userModule.addPermissions([{key: "policies/add", name: "Add Policy"}], "device-mgt/admin", type);
+        userModule.addPermissions([{key: "policies/list", name: "List Policy"}], "device-mgt/admin", type);
     };
 
     return publicMethods;

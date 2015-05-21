@@ -8,9 +8,9 @@ function onRequest(context) {
     } else {
         var i, filteredUserList = [];
         for (i = 0; i < allUsers.length; i++) {
-            if (String(allUsers[i].username) != "admin") {
+            //if (String(allUsers[i].username) != "admin") {
                 filteredUserList.push(allUsers[i]);
-            }
+            //}
         }
         context.users = filteredUserList;
         context.listUsersStatus = "Total number of Users found : " + filteredUserList.length;

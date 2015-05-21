@@ -23,6 +23,7 @@ var constants = require('/modules/constants.js');
 var carbonModule = require("carbon");
 var log = new Log();
 var apiWrapperUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
+var userModule = require("/modules/user.js").userModule;
 var keyStoreParams = {
     keyStoreName: dataConfig.ssoConfiguration.keyStoreName,
     keyStorePassword: dataConfig.ssoConfiguration.keyStorePassword,
@@ -39,8 +40,11 @@ sso.acs(
         if(log.isDebugEnabled()){
             log.debug("User logged in: "+username);
         }
-        apiWrapperUtil.setupAccessTokenPair("saml", samlResponse);
-        response.sendRedirect(dataConfig.appContext);
+        var permissions = userModule.getUIPermissions();
+        if (permissions.DASHBOARD_VIEW){
+            apiWrapperUtil.setupAccessTokenPair("saml", samlResponse);
+            response.sendRedirect(dataConfig.appContext + "/device-mgt");
+        }
     }, function() {
         if(log.isDebugEnabled()){
             log.debug("User logged out");

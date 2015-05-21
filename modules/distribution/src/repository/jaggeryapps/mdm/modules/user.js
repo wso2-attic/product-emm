@@ -266,11 +266,15 @@ var userModule = function () {
         var i, userObject;
         for (i = 0; i < userList.size(); i++) {
             userObject = userList.get(i);
-            users.push({
+            var userObj = {
                 "username" : userObject.getUserName(),
                 "email" : userObject.getEmail(),
                 "name" : userObject.getFirstName() + " " + userObject.getLastName()
-            });
+            };
+            if(userObj.username == "admin"){
+                userObj.name = "admin";
+            }
+            users.push(userObj);
         }
         return users;
     };
@@ -305,6 +309,16 @@ var userModule = function () {
         if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/add")) {
             permissions.ADD_USER = true;
         }
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/policies/add")) {
+            permissions.ADD_POLICY = true;
+        }
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/policies/list")) {
+            permissions.LIST_POLICIES = true;
+        }
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/dashboard/view")) {
+            permissions.DASHBOARD_VIEW = true;
+        }
+
         return permissions;
     };
 
