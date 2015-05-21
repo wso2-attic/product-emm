@@ -99,4 +99,20 @@ public class Policy {
 			throw new MDMAPIException(error, e);
 		}
 	}
+
+	@GET
+	@Path("count")
+	public int getPolicyCount() throws MDMAPIException {
+		int policyCount = 0;
+		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+		try {
+			PolicyAdministratorPoint pap = policyManagementService.getPAP();
+			policyCount = pap.getPolicyCount();
+			return policyCount;
+		} catch (PolicyManagementException e) {
+			String error = "Policy Management related exception";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		}
+	}
 }
