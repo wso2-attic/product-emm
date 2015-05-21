@@ -203,7 +203,16 @@ h2.app-title {
         margin-right:10px;
     }
     h2.app-title {
-        font-size: 17px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 570px) {
+    h2.app-title:after {
+        content: "MDM";
+    }
+    h2.app-title span {
+        display: none;
     }
 }
 
@@ -302,9 +311,9 @@ br.c-both {
     width:65%;
 }
 
-.wr-input-control .cus-col-50 span, .wr-input-control .cus-col-25 span {
-    padding-left:20px;
-}
+/*.wr-input-control .cus-col-50 span, .wr-input-control .cus-col-25 span {*/
+/*padding-left:20px;*/
+/*}*/
 
 /* wizard */
 .wr-wizard {

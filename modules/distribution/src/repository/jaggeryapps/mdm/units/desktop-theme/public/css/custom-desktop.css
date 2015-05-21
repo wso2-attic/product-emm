@@ -28,7 +28,7 @@
 
 @media (max-width:500px){
 	.wr-content {
-		padding: 0;
+		padding: 20px 0 0 0;
 	}
 }
 
@@ -217,6 +217,12 @@ a.ast-type-item:hover {
 .wr-btn-grp {
 	margin-top: 20px;
 }
+
+.wr-btn-grp .wr-btn {
+	/*padding: 8px 8px 6px;*/
+	text-transform: uppercase;
+}
+
 
 .ast-container {
 	clear:both;
@@ -1458,6 +1464,14 @@ a.wr-side-panel-toggle-btn.selected {
 	font-size: 32px;
 	margin-right: 10px;
 	color: #11375B;
+}
+
+.wr-form .user-select {
+	display: none;
+}
+
+.wr-form .wr-input-control.radio.light input[type="radio"]:checked + .helper:after {
+	background-color: #444;
 }
 
 
