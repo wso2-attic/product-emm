@@ -21,8 +21,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
@@ -39,23 +39,32 @@ public class MobileDevice {
     private static Log log = LogFactory.getLog(MobileDevice.class);
 
     /**
-     * Get all devices. Returns list of Android devices registered in MDM.
+     * Get all devices
      *
      * @return Device List
      * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
      *
      */
     @GET
-    public List<Device> getAllDevices() throws MDMAPIException {
-        String msg;
+    public List<Device> getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
+                                      @QueryParam("role") String role) throws MDMAPIException {
         List<org.wso2.carbon.device.mgt.common.Device> devices;
-
         try {
-            devices = MDMAPIUtils.getDeviceManagementService().
-					getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            return devices;
+            DeviceManagementService service = MDMAPIUtils.getDeviceManagementService();
+            List<Device> allDevices;
+            if (type != null) {
+                allDevices = service.getAllDevices(type);
+            } else if (user != null) {
+                allDevices = service.getAllDevicesOfUser(user);
+            } else if (role != null){
+                allDevices = service.getAllDevicesOfRole(role);
+            } else {
+                allDevices = service.getAllDevices();
+            }
+            return allDevices;
+
         } catch (DeviceManagementException e) {
-            msg = "Error occurred while fetching the device list.";
+            String msg = "Error occurred while fetching the device list.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -106,7 +115,6 @@ public class MobileDevice {
 				@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 		String msg;
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
-
 		try {
 			devices = MDMAPIUtils.getDeviceManagementService().getDeviceListOfUser(user);
 			if (devices == null) {

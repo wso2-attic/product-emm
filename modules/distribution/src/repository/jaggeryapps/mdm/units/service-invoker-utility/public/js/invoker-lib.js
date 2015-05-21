@@ -38,7 +38,7 @@ var invokerUtil = function () {
                 type: method,
                 contentType: "application/json",
                 accept: "application/json",
-                dataType: "json",
+                //dataType: "json",
                 success: successCallback
             };
             if (payload){

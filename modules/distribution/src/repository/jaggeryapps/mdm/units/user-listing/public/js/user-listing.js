@@ -2,10 +2,10 @@
  * Sorting function of users
  * listed on User Management page in WSO2 MDM Console.
  */
-$(function() {
+$(function () {
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
-        beforeStop: function(event, ui){
+        beforeStop : function () {
             var sortedIDs = $(this).sortable('toArray');
             console.log(sortedIDs);
         }
@@ -18,7 +18,7 @@ $(function() {
  * when a user clicks on "Invite" link
  * on User Management page in WSO2 MDM Console.
  */
-$("a#invite-user-link").click(function() {
+$("a#invite-user-link").click(function () {
     var username = $(this).data("username");
     var inviteUserAPI = "/mdm/api/users/" + username + "/invite";
     var userResponse = confirm("An invitation mail will be sent to User (" + username + ") " +
@@ -27,10 +27,10 @@ $("a#invite-user-link").click(function() {
         $.ajax({
             type : "GET",
             url : inviteUserAPI,
-            success : function(data) {
+            success : function () {
                 alert("User invitation for enrollment sent.");
             },
-            error: function() {
+            error: function () {
                 alert("An unexpected error occurred.");
             }
         });
@@ -42,7 +42,7 @@ $("a#invite-user-link").click(function() {
  * when a user clicks on "Remove" link
  * on User Management page in WSO2 MDM Console.
  */
-$("a#remove-user-link").click(function() {
+$("a#remove-user-link").click(function () {
     var username = $(this).data("username");
     var removeUserAPI = "/mdm/api/users/" + username + "/remove";
     var userResponse = confirm("Do you really want to remove this user (" + username + ") from MDM User Store?");
@@ -50,7 +50,7 @@ $("a#remove-user-link").click(function() {
         $.ajax({
             type : "GET",
             url : removeUserAPI,
-            success : function(data) {
+            success : function (data) {
                 if (data == 200) {
                     alert("User (" + username + ") was successfully removed.");
                     location.reload();
@@ -62,7 +62,7 @@ $("a#remove-user-link").click(function() {
                     alert("User (" + username + ") does not exist.");
                 }
             },
-            error : function() {
+            error : function () {
                 alert("An unexpected error occurred.");
             }
         });

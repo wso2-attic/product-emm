@@ -19,11 +19,15 @@
 (function () {
     var cache = {};
     var permissionSet = {};
-
+    var validateAndReturn = function (value) {
+        return (value == undefined || value == null) ? "Unspecified" : value;
+    };
     Handlebars.registerHelper("deviceMap", function (device) {
+        device.owner = validateAndReturn(device.owner);
+        device.ownership = validateAndReturn(device.ownership);
         var arr = device.properties;
         device.properties = arr.reduce(function (total, current) {
-            total[current.name] = current.value;
+            total[current.name] = validateAndReturn(current.value);
             return total;
         }, {});
     });
@@ -121,21 +125,23 @@ function addDeviceSelectedClass(checkbox) {
         $(checkbox).closest(".ctrl-wr-asset").removeClass("selected device-select");
     }
 }
-
-$(document).ready(function () {
+function loadDevices(type){
     var deviceListing = $("#device-listing");
     var deviceListingSrc = deviceListing.attr("src");
     var imageResource = deviceListing.data("image-resource");
     $.template("device-listing", deviceListingSrc, function (template) {
         var serviceURL;
         if ($.hasPermission("LIST_DEVICES")) {
-            serviceURL = "/mdm/api/devices";
+            serviceURL = "/mdm-admin/devices";
         } else if ($.hasPermission("LIST_OWN_DEVICES")) {
             //Get authenticated users devices
             serviceURL = "/mdm/api/user/devices";
         } else {
             $("#ast-container").html("Permission denied");
             return;
+        }
+        if (type){
+            serviceURL = serviceURL + "?type=" + type;
         }
         var successCallback = function (data) {
             var viewModel = {};
@@ -155,4 +161,7 @@ $(document).ready(function () {
                 console.log(message);
             });
     });
+}
+$(document).ready(function () {
+    loadDevices();
 });
