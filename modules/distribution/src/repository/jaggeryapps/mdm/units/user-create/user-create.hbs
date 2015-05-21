@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <!-- content -->
-            <div class="container col-centered wr-content">
+            <div id="user-create-form" class="container col-centered wr-content">
                 <div class="wr-form">
                     <h1 class="wr-title">Add User</h1>
                     Please note that * sign represents required fields of data.
@@ -43,6 +43,23 @@
                         </div>
                     </div>
                     <button id="add-user-btn" class="wr-btn">Add User</button>
+                </div>
+            </div>
+            <div id="user-created-msg" class="container col-centered wr-content hidden">
+                <div class="wr-form">
+                    <h1 class="wr-title">User added successfully.</h1>
+                    An invitation mail will also be sent to this user to initiate a device enrollment.<br>
+                    Please click <b>"Add another user"</b>, if you wish to add another user or click
+                    <b>"View User List"</b> to complete the process and go back to the user list.
+                    <hr />
+                    <button class="wr-btn" onclick="window.location.href='/mdm/users'">View User List</button>
+                    <a href="/mdm/users/add-user" class="cu-btn-inner">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-add fw-stack-1x"></i>
+                        </span>
+                        Add another user
+                    </a>
                 </div>
             </div>
             <!-- /content -->
