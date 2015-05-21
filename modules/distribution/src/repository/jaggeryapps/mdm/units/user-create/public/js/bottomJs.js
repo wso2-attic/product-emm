@@ -65,14 +65,15 @@ $("button#add-user-btn").click(function() {
             data : JSON.stringify(addUserFormData),
             success : function(data) {
                 if (data == 201) {
-                    $(".wr-validation-summary p").text("User (" + username + ") was added. " +
-                        "An invitation mail will also be sent to this user to initiate a device enrollment.");
                     // Clearing user input fields.
                     $("input#username").val("");
                     $("input#firstname").val("");
                     $("input#lastname").val("");
                     $("input#email").val("");
                     $("select#roles").select2("val", "");
+                    // Refreshing with success message
+                    $("#user-create-form").addClass("hidden");
+                    $("#user-created-msg").removeClass("hidden");
                 } else if (data == 400) {
                     $(".wr-validation-summary p").text("Exception occurred at backend.");
                 } else if (data == 403) {
