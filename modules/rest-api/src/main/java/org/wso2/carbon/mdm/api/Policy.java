@@ -42,7 +42,6 @@ public class Policy {
 		Message responseMsg = new Message();
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
-			policy.setProfile(pap.getProfile(policy.getProfileId()));
 			pap.addPolicy(policy);
 			Response.status(HttpStatus.SC_CREATED);
 			responseMsg.setResponseMessage("Policy has been added successfully.");

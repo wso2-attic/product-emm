@@ -6,27 +6,145 @@ $('select.select2[multiple=multiple]').select2({
     placeholder: 'Select..',
     tags: true
 });
+var stepperRegistry = {},
+    hiddenOperation = '.wr-hidden-operations-content > div',
+    advanceOperation = '.wr-advance-operations';
+function initStepper(selector){
+    $(selector).click(function(){
+        var nextStep = $(this).data("next");
+        var currentStep = $(this).data("current");
+        var action = stepperRegistry[currentStep];
+        if (action){
+            action(this);
+        }
+        if (!nextStep) {
+            var direct = $(this).data("direct");
+            window.location.href = direct;
+        }
+        $(".itm-wiz").each(function(){
+            var step = $(this).data("step");
+            if (step == nextStep){
+                $(this).addClass("itm-wiz-current");
+            }else{
+                $(this).removeClass("itm-wiz-current");
+            }
+        });
+        $(".wr-wizard").html($(".wr-steps").html());
+        $("." + nextStep).removeClass("hidden");
+        $("." + currentStep).addClass("hidden");
+
+    });
+}
+function showAdvanceOperation(operation, button){
+    $(button).addClass('selected');
+    $(button).siblings().removeClass('selected');
+    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
+    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
+}
+
+var policy = {};
+var configuredProfiles = [];
+
+function savePolicy(){
+    var profilePayloads = [];
+    for (var key in policy.profile) {
+        if (policy.profile.hasOwnProperty(key)) {
+           profilePayloads.push({
+               featureCode: key,
+               deviceTypeId: policy.platformId,
+               content: policy.profile[key]
+           });
+        }
+    }
+    var payload = {
+        policyName: policy.policyName,
+        users: policy.selectedUsers,
+        roles: policy.selectedUserRoles,
+        profile: {
+            profileName: policy.policyName,
+            deviceType: {
+                id: policy.platformId
+            },
+            profileFeaturesList: profilePayloads
+        }
+    };
+    invokerUtil.post("https://localhost:9443/mdm-admin/policies", payload, function(){
+        $(".policy-message").removeClass("hidden");
+        $(".add-policy").addClass("hidden");
+    }, function(){
+
+    });
+}
 
 $(document).ready(function(){
-    $("#policy-create").click(function(){
+    initStepper(".wizard-stepper");
+    //Adds an event listener to swithc
+    $(advanceOperation).on("click", ".wr-input-control.switch", function(evt){
+        var operation = $(this).parents(".operation-data").data("operation");
+        //prevents event bubbling by figuring out what element it's being called from
+        if (evt.target.tagName == "INPUT") {
+            if(!$(this).hasClass('collapsed')){
+                configuredProfiles.push(operation);
+            }else {
+                //splicing the array if operation is present
+                var index = jQuery.inArray( operation, configuredProfiles );
+                if (index!= -1){
+                    configuredProfiles.splice( index, 1 );
+                }
+            }
+            console.log(configuredProfiles);
+        }
+
+    });
+    stepperRegistry['policy-content']  = function (actionButton){
+        policy.policyName = $("#policy-name-input").val();
+        policy.policyDescription = $("#policy-description-input").val();
+        //All data is collected. Policy can now be created.
+        savePolicy();
+    };
+    stepperRegistry['policy-criteria']  = function (actionButton){
+        policy.selectedUserRoles = $("#user-roles-input").val();
+        policy.selectedUsers = $("#users-input").val();
+        policy.selectedAction = $("#action-input").val();
+        policy.selectedOwnership = $("#ownership-input").val();
+
+    };
+    stepperRegistry['policy-profile']  = function (actionButton){
+        var deviceType = policy.platform;
+        var generatedProfile = operationModule.generateProfile(deviceType, configuredProfiles);
+        policy.profile = generatedProfile;
+    };
+    stepperRegistry['policy-platform'] = function (actionButton){
+        policy.platform = $(actionButton).data("platform");
+        policy.platformId = $(actionButton).data("platform-id");
+        var deviceType = policy.platform;
+        var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
+        var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
+        $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
+            var serviceURL = "https://localhost:9443/mdm-admin/features/" + deviceType;
+            var successCallback = function (data) {
+                var viewModel = {};
+                viewModel.features = data.reduce(function (total, current) {
+                    total[current.code] = current;
+                    return total;
+                }, {});
+                var content = template(viewModel);
+                $(".wr-advance-operations").html(content);
+            };
+            invokerUtil.get(serviceURL,
+                successCallback, function(message){
+                    console.log(message);
+                });
+        });
+    };
+    $(".uu").click(function(){
         var policyName = $("#policy-name-input").val();
         var selectedProfiles = $("#profile-input").find(":selected");
         var selectedProfileId = selectedProfiles.data("id");
         var selectedUserRoles = $("#user-roles-input").val();
         var selectedUsers = $("#users-input").val();
         var selectedAction = $("#action-input").val();
-        var payload = {
-            policyName: policyName,
-            users: selectedUsers,
-            roleList: selectedUserRoles,
-            profileId: selectedProfileId
-        };
-        invokerUtil.post("https://localhost:9443/mdm-admin/policies", payload, function(){
-            $(".policy-message").removeClass("hidden");
-            $(".add-policy").addClass("hidden");
-        }, function(){
 
-        });
 
     });
 });

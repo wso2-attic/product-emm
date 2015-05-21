@@ -125,7 +125,7 @@ function addDeviceSelectedClass(checkbox) {
         $(checkbox).closest(".ctrl-wr-asset").removeClass("selected device-select");
     }
 }
-function loadDevices(type){
+function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
     var deviceListingSrc = deviceListing.attr("src");
     var imageResource = deviceListing.data("image-resource");
@@ -140,8 +140,14 @@ function loadDevices(type){
             $("#ast-container").html("Permission denied");
             return;
         }
-        if (type){
-            serviceURL = serviceURL + "?type=" + type;
+        if (searchParam){
+            if(searchType == "users"){
+                serviceURL = serviceURL + "?user=" + searchParam;
+            }else if(searchType == "user-roles"){
+                serviceURL = serviceURL + "?role=" + searchParam;
+            }else{
+                serviceURL = serviceURL + "?type=" + searchParam;
+            }
         }
         var successCallback = function (data) {
             var viewModel = {};
