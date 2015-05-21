@@ -78,20 +78,20 @@ $(document).ready(function () {
  * @param button: Select All Device button
  */
 function selectAllDevices(button) {
-    if (!$(button).data("select")) {
-        $(deviceCheckbox).each(function () {
+    if(!$(button).data('select')){
+        $(deviceCheckbox).each(function(index){
+            $(this).prop('checked', true);
             addDeviceSelectedClass(this);
-            $(this).prop("checked", true);
         });
-        $(button).data("select", true);
-        $(button).html("Deselect All Devices");
-    } else {
-        $(deviceCheckbox).each(function () {
+        $(button).data('select', true);
+        $(button).html('Deselect All Devices');
+    }else{
+        $(deviceCheckbox).each(function(index){
+            $(this).prop('checked', false);
             addDeviceSelectedClass(this);
-            $(this).prop("checked", false);
         });
-        $(button).data("select", false);
-        $(button).html("Select All Devices");
+        $(button).data('select', false);
+        $(button).html('Select All Devices');
     }
 }
 

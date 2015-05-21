@@ -271,12 +271,6 @@ br.c-both {
     clear:both;
 }
 
-/* dhanuka */
-/* panels */
-.panel-body {
-    padding:15px !important;
-}
-
 .wr-input-control .helper {
     font-weight:100;
 }
