@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.Message;
+import org.wso2.carbon.mdm.beans.PolicyWrapper;
 import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -37,9 +38,20 @@ import javax.ws.rs.core.Response;
 public class Policy {
 	private static Log log = LogFactory.getLog(Policy.class);
 	@POST
-	public Message addPolicy(org.wso2.carbon.policy.mgt.common.Policy policy) throws MDMAPIException {
-		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+	public Message addPolicy(PolicyWrapper policyWrapper) throws MDMAPIException {
+
+        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
 		Message responseMsg = new Message();
+        org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
+        policy.setPolicyName(policyWrapper.getPolicyName());
+        policy.setProfileId(policyWrapper.getProfileId());
+        policy.setProfile(policyWrapper.getProfile());
+        policy.setOwnershipType(policyWrapper.getOwnershipType());
+        policy.setRoles(policyWrapper.getRoles());
+        policy.setUsers(policyWrapper.getUsers());
+        policy.setTenantId(policyWrapper.getTenantId());
+
+
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
 			pap.addPolicy(policy);

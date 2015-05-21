@@ -719,6 +719,11 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.annotation.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -820,6 +825,7 @@
         <joda-time.version>2.2</joda-time.version>
         <commons-io.version>2.4</commons-io.version>
         <jsr311-api.version>1.1.1</jsr311-api.version>
+        <jackson.annotation.version>2.4.0</jackson.annotation.version>
     </properties>
 
     <scm>
