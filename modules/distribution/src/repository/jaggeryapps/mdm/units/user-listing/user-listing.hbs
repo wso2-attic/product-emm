@@ -23,13 +23,15 @@
                                     </span>
                                     Invite
                                 </a>
-                                <a href="#" id="remove-user-link" class="cu-btn-inner" data-username="{{username}}">
+                                {{#unequal "admin" username }}
+                                    <a href="#" id="remove-user-link" class="cu-btn-inner" data-username="{{username}}">
                                     <span class="fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-delete fw-stack-1x"></i>
                                     </span>
-                                    Remove
-                                </a>
+                                        Remove
+                                    </a>
+                                {{/unequal}}
                             </span>
                             <div class="clearfix"></div>
                         </span>

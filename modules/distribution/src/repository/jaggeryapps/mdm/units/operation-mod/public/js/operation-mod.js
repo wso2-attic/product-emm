@@ -300,7 +300,7 @@ var operationModule = function () {
             ENTERPRISE_WIPE: "fw-clean",
             ALARM: "fw-dial-up"
         };
-        return featureMap[featureName];
+        return featureMap[featureCode];
     };
     /**
      * Filter a list by a data attribute

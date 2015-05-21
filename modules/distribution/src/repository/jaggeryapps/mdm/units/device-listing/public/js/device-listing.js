@@ -135,7 +135,7 @@ function loadDevices(searchType, searchParam){
             serviceURL = "/mdm-admin/devices";
         } else if ($.hasPermission("LIST_OWN_DEVICES")) {
             //Get authenticated users devices
-            serviceURL = "/mdm/api/user/devices";
+            serviceURL = "/mdm-admin/api/user/devices";
         } else {
             $("#ast-container").html("Permission denied");
             return;
