@@ -231,12 +231,8 @@ a.ctrl-filter-category:hover {
 	border-radius: 0;
 }
 
-.panel-default {
-
-}
-
 .panel {
-	margin-bottom: 20px;
+	margin-bottom: 0;
 	background-color: transparent;
 	border: 0 solid #e4e4e4;
 	border-radius: 0;
