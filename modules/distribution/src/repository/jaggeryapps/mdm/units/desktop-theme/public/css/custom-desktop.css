@@ -176,18 +176,22 @@ a.ast-type-item:hover {
 
 .wr-btn, a.wr-btn  {
 	font-weight: normal;
-	font-size:13px;
-	color:#fff;
+	font-size: 13px;
+	color: #fff;
 	background:#11375B;
-	padding:10px 10px;
-	display:inline-block;
-	margin-right:20px;
+	padding: 10px 10px;
+	display: inline-block;
+	margin-right: 5px;
 	border: none;
 	text-decoration: none;
 }
 
 .wr-btn:hover {
 	background-color: #16436D;
+}
+
+.wr-btn-grp {
+	margin-top: 20px;
 }
 
 .ast-container {
@@ -531,6 +535,12 @@ a.cu-btn-inner:hover {
 
 .wr-filter-sort a.ico-filter:hover, .wr-filter-sort a.ico-filter.selected {
 	background:#e4e4e4;
+}
+
+.sort-index {
+	margin: 20px;
+	font-size: 15px;
+	font-weight: 400;
 }
 
 .sort-title, .sort-options {
@@ -1797,16 +1807,19 @@ a.wr-side-panel-toggle-btn.selected {
 	transition: left 0.4s ease 0s;
 	overflow-y: hidden;
 	overflow-x: hidden;
-	border: 1px solid #e4e4e4;
+}
+
+.wr-advance-operations {
 	height: 100%;
 	background: #e4e4e4;
+	border: 1px solid #e4e4e4;
 }
 
 .wr-hidden-operation {
 	display: none;
 }
 
-.wr-hidden-operations .row:first-child {
+.wr-advance-operations .row:first-child {
 	height: 100%;
 }
 
@@ -1814,7 +1827,7 @@ a.wr-side-panel-toggle-btn.selected {
 	left: 0;
 }
 
-.wr-hidden-operations .wr-hidden-operations-nav a {
+.wr-advance-operations .wr-hidden-operations-nav a {
 	display: block;
 	background: #fff;
 	color: #526A84;
@@ -1824,11 +1837,11 @@ a.wr-side-panel-toggle-btn.selected {
 	font-size: 16px;
 }
 
-.wr-hidden-operations .wr-hidden-operations-nav a:hover {
+.wr-advance-operations .wr-hidden-operations-nav a:hover {
 	background: #f4f4f4;
 }
 
-.wr-hidden-operations .wr-hidden-operations-nav a.selected, .wr-hidden-operations .wr-hidden-operations-nav a.selected:hover {
+.wr-advance-operations .wr-hidden-operations-nav a.selected, .wr-hidden-operations .wr-hidden-operations-nav a.selected:hover {
 	color: #fff;
 	background: #526A84;
 }
@@ -1869,12 +1882,35 @@ a.wr-side-panel-toggle-btn.selected {
 	font-size: 16px;
 }
 
-.wr-hidden-operations-content .panel-title a {
+.wr-hidden-operations-content .panel-title {
 	padding: 5px;
 	background: #e4e4e4;
 	border-bottom: 1px solid #fff;
 	color: #555;
+}
+
+.wr-hidden-operations-content .panel-title .fw-stack.collapsed .fw-down-arrow:before {
+	content: "\e634";
+}
+
+.wr-hidden-operations-content .panel-title .wr-input-control.switch {
+	margin-top: 8px;
+	margin-right: 0;
+}
+
+.wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"]:not(:checked) + .helper:after {
+	background: #fff;
+}
+
+.wr-hidden-operations-content .panel-title label {
+	float: right;
+}
+
+.wr-hidden-operations-content .panel-title:after {
+	clear: both;
+	content: " ";
 	display: block;
+	height: 0;
 }
 
 .wr-hidden-operations-content .panel-body {
@@ -2009,14 +2045,13 @@ a.show-operations-btn .btn-text:before {
 	list-style: none;
 	display: inline-block;
 	text-align: center;
-	margin: 0 6px 9px 0;
 	line-height: 17px;
 }
 
 .tile-buttons li a {
 	color: #fff;
 	text-decoration: none;
-	width: 120px;
+	width: 100%;
 	height: 120px;
 	padding: 20px;
 	background: #132D45;
@@ -2155,4 +2190,12 @@ a.cu-btn-inner.inverse {
 }
 a.cu-btn-inner.inverse:hover {
 	background: #526A84;
+}
+
+.wiz-lbl {
+	line-height: 50px;
+}
+
+.policy-list .wr-list-desc {
+
 }

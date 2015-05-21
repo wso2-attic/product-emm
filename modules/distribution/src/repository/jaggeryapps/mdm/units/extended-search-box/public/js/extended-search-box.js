@@ -28,7 +28,8 @@ var menuButton = '.ctrl-asset-type-switcher',
     tagsContainer = '.wr-search-tags',
     searchField = '#search',
     menuItemsID = 0,
-    prevSelected = 0;
+    prevSelected = 0,
+    searchBtn = ".btn-search";
 
 /*
  * DOM ready functions.
@@ -46,6 +47,11 @@ $(document).ready(function(){
             'onclick':'selectAsset(this)',
             'level': $(this).parents('ul').length
         });
+    });
+    $(searchBtn).click(function(){
+        var input = $(searchField).html();
+        var searchType = $(searchField).data("search-type");
+        loadDevices(searchType, input);
     });
 });
 
@@ -80,6 +86,7 @@ $('#advance-filter-options input[type=radio]').change(function() {
     }
 
     $(searchField).attr('data-placeholder', 'Search '+ this.value + ' ...');
+    $(searchField).data("search-type", $(this).data("type"));
 });
 
 /*
@@ -120,7 +127,7 @@ function containerUpdate(asset){
 function selectAsset(asset){
     var platformType = $(asset).data("type");
     loadOperationBar(platformType);
-    loadDevices(platformType)
+    loadDevices("type", platformType);
     //$(tagsContainer +' span').each(function(){
     //    if($(this).attr('level') == $(asset).attr('level')){
     //        removeTags(this);

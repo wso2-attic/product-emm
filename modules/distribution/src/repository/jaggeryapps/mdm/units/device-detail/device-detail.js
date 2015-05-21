@@ -11,6 +11,7 @@ function onRequest(context) {
         if (device){
             var viewModel = {};
             var deviceInfo = device.properties.DEVICE_INFO;
+            log.info(deviceInfo);
             if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0){
                 deviceInfo = JSON.parse(deviceInfo);
                 if (device.type == "ios"){
@@ -25,18 +26,25 @@ function onRequest(context) {
                     viewModel.DeviceCapacityPercentage = Math.round(viewModel.DeviceCapacityUsed
                         / viewModel.DeviceCapacity * 10000) /100;
                 }else if(device.type == "android"){
-                    viewModel.imei = device.properties.imei;
+
+                    viewModel.imei = device.properties.IMEI;
+                    viewModel.model = device.properties.DEVICE_MODEL;
+                    viewModel.vendor = device.properties.VENDOR;
                     viewModel.internal_memory = {};
                     viewModel.external_memory = {};
-                    viewModel.BatteryLevel = deviceInfo.battery.level;
-                    viewModel.internal_memory.FreeCapacity = Math.round((deviceInfo.internal_memory.total -
-                    deviceInfo.internal_memory.available) * 100) / 100;
-                    viewModel.internal_memory.DeviceCapacityPercentage = Math.round(deviceInfo.internal_memory.available
-                        / deviceInfo.internal_memory.total * 10000) / 100;
-                    viewModel.external_memory.FreeCapacity = Math.round((deviceInfo.external_memory.total -
-                        deviceInfo.external_memory.available) * 100) / 100;
-                    viewModel.external_memory.DeviceCapacityPercentage = Math.round(deviceInfo.external_memory.available
-                        /deviceInfo.external_memory.total * 10000) /100;
+                    viewModel.location = {
+                        latitude: device.properties.LATITUDE,
+                        longitude: device.properties.LONGITUDE
+                    };
+                    viewModel.BatteryLevel = deviceInfo.BATTERY_LEVEL;
+                    viewModel.internal_memory.FreeCapacity = Math.round((deviceInfo.INTERNAL_TOTAL_MEMORY -
+                    deviceInfo.INTERNAL_AVAILABLE_MEMORY) * 100) / 100;
+                    viewModel.internal_memory.DeviceCapacityPercentage = Math.round(deviceInfo.INTERNAL_AVAILABLE_MEMORY
+                        / deviceInfo.INTERNAL_TOTAL_MEMORY * 10000) / 100;
+                    viewModel.external_memory.FreeCapacity = Math.round((deviceInfo.EXTERNAL_TOTAL_MEMORY -
+                        deviceInfo.EXTERNAL_AVAILABLE_MEMORY) * 100) / 100;
+                    viewModel.external_memory.DeviceCapacityPercentage = Math.round(deviceInfo.EXTERNAL_AVAILABLE_MEMORY
+                        /deviceInfo.EXTERNAL_TOTAL_MEMORY * 10000) /100;
                 }
                 device.viewModel = viewModel;
             }
