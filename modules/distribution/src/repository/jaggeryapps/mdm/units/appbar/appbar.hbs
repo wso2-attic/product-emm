@@ -7,6 +7,9 @@
                     <span class="fw-stack">
                         <i class="fw fw-tiles fw-stack-1-5x"></i>
                     </span>
+                </a><a class="cu-btn page-title" href='javascript:location.reload();'>
+                        <span class="fw-stack"></span>
+                        {{title}}
                 </a>{{#each currentActions}}<a href="{{url}}" class="cu-btn">
                         <span class="fw-stack">
                             <i class="fw fw-ring fw-stack-2x"></i>
@@ -14,9 +17,7 @@
                         </span>
                         {{title}}
                     </a>
-                {{/each}}
-                {{#if enableBack}}
-                    <a href="javascript:history.go(-1)" class="cu-btn">
+                {{/each}}{{#if enableBack}}<a href="javascript:history.go(-1)" class="cu-btn">
                     <span class="fw-stack">
                         <i class="fw fw-ring fw-stack-2x"></i>
                         <i class="fw fw-left-arrow fw-stack-1x"></i>
@@ -38,15 +39,14 @@
     <!-- common navigation -->
     <div id="hiddenNav" class="wr-hidden-nav">
         <ul>
-            <!--Below area is used to add navigations links from other units-->
+            <!--Below area is used to add navigational links from other units-->
             {{defineZone "common-navigation"}}
-            {{#if permissions.LIST_USERS}}
-                <li><a href="/mdm/users"><i class="fw fw-user"></i>User Management</a></li>
-            {{/if}}
             {{#if permissions.LIST_DEVICES}}
                 <li><a href="/mdm/device-mgt"><i class="fw fw-devices"></i>Device Management</a></li>
             {{/if}}
-            <li><a href="/mdm/profiles"><i class="fw fw-settings"></i>Profile Management</a></li>
+            {{#if permissions.LIST_USERS}}
+                <li><a href="/mdm/users"><i class="fw fw-user"></i>User Management</a></li>
+            {{/if}}
             <li><a href="/mdm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
         </ul>
     </div>
