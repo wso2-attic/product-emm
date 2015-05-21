@@ -101,9 +101,9 @@ public class MobileDevice {
 	 *
 	 */
 	@GET
-	@Path("{user}/{tenantDomain}")
+	@Path("user/{user}/{tenantDomain}")
 	public List<org.wso2.carbon.device.mgt.common.Device> getDeviceByUser(@PathParam("user") String user,
-			@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+				@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 		String msg;
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
 
