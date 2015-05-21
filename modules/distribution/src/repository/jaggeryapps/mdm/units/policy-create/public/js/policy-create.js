@@ -61,7 +61,7 @@ function savePolicy(){
     }
     var payload = {
         policyName: policy.policyName,
-        ownership: policy.selectedOwnership,
+        ownershipType: policy.selectedOwnership,
         profile: {
             profileName: policy.policyName,
             deviceType: {

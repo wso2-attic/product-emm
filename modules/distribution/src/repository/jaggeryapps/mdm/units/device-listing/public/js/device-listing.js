@@ -153,14 +153,18 @@ function loadDevices(searchType, searchParam){
             var viewModel = {};
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;
-            var content = template(viewModel);
-            $("#ast-container").html(content);
-            /*
-             * On device checkbox select add parent selected style class
-             */
-            $(deviceCheckbox).click(function () {
-                addDeviceSelectedClass(this);
-            });
+            if(data.length == 0){
+                $("#ast-container").html("No Devices found");
+            }else{
+                var content = template(viewModel);
+                $("#ast-container").html(content);
+                /*
+                 * On device checkbox select add parent selected style class
+                 */
+                $(deviceCheckbox).click(function () {
+                    addDeviceSelectedClass(this);
+                });
+            }
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){
