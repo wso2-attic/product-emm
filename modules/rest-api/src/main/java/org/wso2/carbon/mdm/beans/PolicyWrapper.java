@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.beans;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.policy.mgt.common.Profile;
 
@@ -60,6 +61,7 @@ public class PolicyWrapper {
         this.policyName = policyName;
     }
 
+    @JsonIgnore
     public List<String> getRoles() {
         return roles;
     }
@@ -76,6 +78,7 @@ public class PolicyWrapper {
         this.ownershipType = ownershipType;
     }
 
+    @JsonIgnore
     public List<Device> getDevices() {
         return devices;
     }
@@ -84,6 +87,7 @@ public class PolicyWrapper {
         this.devices = devices;
     }
 
+    @JsonIgnore
     public List<String> getUsers() {
         return users;
     }

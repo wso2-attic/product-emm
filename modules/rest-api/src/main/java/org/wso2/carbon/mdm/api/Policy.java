@@ -29,14 +29,12 @@ import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 public class Policy {
 	private static Log log = LogFactory.getLog(Policy.class);
+
 	@POST
 	public Message addPolicy(PolicyWrapper policyWrapper) throws MDMAPIException {
 
