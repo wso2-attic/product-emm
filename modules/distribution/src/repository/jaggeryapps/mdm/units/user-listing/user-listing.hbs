@@ -12,8 +12,10 @@
                             <i class="wr-list-icon fw fw-user"></i>
                             <div class="wr-list-desc">
                                 <h3 class="wr-list-name">{{name}}</h3>
-                                <span class="wr-list-username">{{username}} | </span>
-                                <a href="mailto:{{email}}" class="wr-list-email">{{email}}</a>
+                                <span class="wr-list-username">{{username}}</span>
+                                {{#unequal "admin" username }}
+                                    <a href="mailto:{{email}}" class="wr-list-email"> | {{email}}</a>
+                                {{/unequal}}
                             </div>
                             <span class="list-group-item-actions">
                                 <a href="#" id="invite-user-link" class="cu-btn-inner" data-username="{{username}}">
