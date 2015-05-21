@@ -458,7 +458,7 @@ public class OperationMgtService {
 									   InstallApplicationBeanWrapper installApplicationBeanWrapper) {
 
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking InstallApplication operation");
+			log.debug("Invoking 'InstallApplication' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -505,7 +505,7 @@ public class OperationMgtService {
 	public Response uninstallApplication(@HeaderParam("Accept") String acceptHeader,
 										 UninstallApplicationBeanWrapper uninstallApplicationBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking UninstallApplication operation");
+			log.debug("Invoking 'UninstallApplication' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -552,7 +552,7 @@ public class OperationMgtService {
 	public Response blacklistApplications(@HeaderParam("Accept") String acceptHeader,
 										  BlacklistApplicationsBeanWrapper blacklistApplicationsBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking Blacklist-Applications operation");
+			log.debug("Invoking 'Blacklist-Applications' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -600,7 +600,7 @@ public class OperationMgtService {
 	public Response sendNotification(@HeaderParam("Accept") String acceptHeader,
 									 NotificationBeanWrapper notificationBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking notification operation");
+			log.debug("Invoking 'notification' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -648,7 +648,7 @@ public class OperationMgtService {
 	public Response configureWifi(@HeaderParam("Accept") String acceptHeader,
 								  WifiBeanWrapper wifiBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking configure wifi operation");
+			log.debug("Invoking 'configure wifi' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -696,7 +696,7 @@ public class OperationMgtService {
 	public Response encryptStorage(@HeaderParam("Accept") String acceptHeader,
 								  EncryptBeanWrapper encryptBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking encrypt operation");
+			log.debug("Invoking 'encrypt' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -738,7 +738,7 @@ public class OperationMgtService {
 	public Response changeLockCode(@HeaderParam("Accept") String acceptHeader,
 								   LockCodeBeanWrapper lockCodeBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking encrypt operation");
+			log.debug("Invoking 'change lock code' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -786,7 +786,7 @@ public class OperationMgtService {
 	public Response setPasswordPolicy(@HeaderParam("Accept") String acceptHeader,
 								   PasswordPolicyBeanWrapper passwordPolicyBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking password policy operation");
+			log.debug("Invoking 'password policy' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
@@ -834,7 +834,7 @@ public class OperationMgtService {
 	public Response setWebClip(@HeaderParam("Accept") String acceptHeader,
 									  WebClipBeanWrapper webClipBeanWrapper) {
 		if (log.isDebugEnabled()) {
-			log.debug("Invoking webclip policy operation");
+			log.debug("Invoking 'webclip' operation");
 		}
 
 		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
