@@ -27,16 +27,36 @@ $(document).ready(function () {
     });
 
     $(sortUpdateBtn).click(function () {
+        //console.log(sortedIDs);
+        //alert(sortedIDs.length);
         $(sortUpdateBtn).prop('disabled', true);
+
         var newPolicyPriorityList = [];
-        var i, policy = {};
+        var policy;
+        var i;
         for (i = 0; i < sortedIDs.length; i++) {
+            policy = {};
             policy.id = parseInt(sortedIDs[i]);
-            policy.priority = parseInt(++i);
+            policy.priority = i+1;
             newPolicyPriorityList.push(policy);
         }
 
-        alert(newPolicyPriorityList);
+        var updatePolicyAPI = "/mdm/api/policies/update";
+
+        $.ajax({
+            type : "POST",
+            url : updatePolicyAPI,
+            contentType : "application/json",
+            data : JSON.stringify(newPolicyPriorityList),
+            success : function (data) {
+                alert("New Policy priorities were successfully updated.");
+            },
+            error : function () {
+                alert("Policy update failed");
+            }
+        });
+
+        // alert(JSON.stringify(newPolicyPriorityList));
     });
 
     // -------------------------------

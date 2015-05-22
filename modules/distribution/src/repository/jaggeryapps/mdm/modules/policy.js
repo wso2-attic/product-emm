@@ -24,6 +24,8 @@ policyModule = function () {
     //var dataConfig = require("/config/mdm-props.js").config();
     var utility = require("/modules/utility.js").utility;
 
+    var policyObj = Packages.org.wso2.carbon.policy.mgt.common.Policy;
+
     var policyManagementService = utility.getPolicyManagementService();
     var policyAdminPoint = policyManagementService.getPAP();
     var publicMethods = {};
@@ -66,8 +68,20 @@ policyModule = function () {
         return profileList;
     };
 
-    publicMethods.updatePolicyPriorities = function () {
-
+    publicMethods.updatePolicyPriorities = function (payload) {
+        log.info("inside module" + stringify(payload));
+        var policyCount = payload.length;
+        var policyArrayList = new java.util.ArrayList();
+        var i, obj;
+        for (i = 0; i < policyCount; i++) {
+            obj = new policyObj();
+            //log.info("inside for()" + payload[i].id);
+            obj.setId(payload[i].id);
+            //log.info("inside for()" + payload[i].priority);
+            obj.setPriorityId(payload[i].priority);
+            policyArrayList.add(obj);
+        }
+        policyAdminPoint.updatePolicyPriorities(policyArrayList);
     };
 
     return publicMethods;
