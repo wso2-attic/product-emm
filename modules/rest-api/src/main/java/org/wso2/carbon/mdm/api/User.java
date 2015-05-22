@@ -110,4 +110,24 @@ public class User {
 		}
 	}
 
+	@GET
+	@Path("count/{tenantDomain}")
+	public int getUserCount(@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+		int userCount = 0;
+		String msg;
+		List<org.wso2.carbon.device.mgt.user.common.User> users;
+		int tenantId = MDMAPIUtils.getTenantId(tenantDomain);
+		try {
+			users = MDMAPIUtils.getUserManagementService().getUsersForTenant(tenantId);
+			if (users != null) {
+				userCount = users.size();
+			}
+			return userCount;
+		} catch (UserManagementException e) {
+			msg = "Error occurred while retrieving users count.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+	}
+
 }
