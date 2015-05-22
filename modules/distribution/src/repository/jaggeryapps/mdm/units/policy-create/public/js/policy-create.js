@@ -71,6 +71,8 @@ function savePolicy(){
             profileFeaturesList: profilePayloads
         }
     };
+    payload.users = [];
+    payload.roles = [];
     if (policy.selectedUsers){
         payload.users = policy.selectedUsers;
     }else if (policy.selectedUserRoles){
