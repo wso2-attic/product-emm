@@ -25,6 +25,7 @@
         <servlet-class>
             org.apache.cxf.transport.servlet.CXFServlet
         </servlet-class>
+
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

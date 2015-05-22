@@ -135,7 +135,7 @@ function loadDevices(searchType, searchParam){
             serviceURL = "/mdm-admin/devices";
         } else if ($.hasPermission("LIST_OWN_DEVICES")) {
             //Get authenticated users devices
-            serviceURL = "/mdm/api/user/devices";
+            serviceURL = "/mdm-admin/api/user/devices";
         } else {
             $("#ast-container").html("Permission denied");
             return;
@@ -153,14 +153,18 @@ function loadDevices(searchType, searchParam){
             var viewModel = {};
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;
-            var content = template(viewModel);
-            $("#ast-container").html(content);
-            /*
-             * On device checkbox select add parent selected style class
-             */
-            $(deviceCheckbox).click(function () {
-                addDeviceSelectedClass(this);
-            });
+            if(data.length == 0){
+                $("#ast-container").html("No Devices found");
+            }else{
+                var content = template(viewModel);
+                $("#ast-container").html(content);
+                /*
+                 * On device checkbox select add parent selected style class
+                 */
+                $(deviceCheckbox).click(function () {
+                    addDeviceSelectedClass(this);
+                });
+            }
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){

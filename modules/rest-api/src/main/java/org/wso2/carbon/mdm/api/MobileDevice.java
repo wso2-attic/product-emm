@@ -110,9 +110,9 @@ public class MobileDevice {
 	 *
 	 */
 	@GET
-	@Path("{user}/{tenantDomain}")
+	@Path("user/{user}/{tenantDomain}")
 	public List<org.wso2.carbon.device.mgt.common.Device> getDeviceByUser(@PathParam("user") String user,
-			@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+				@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 		String msg;
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
 		try {
@@ -123,6 +123,27 @@ public class MobileDevice {
 			return devices;
 		} catch (DeviceManagementException deviceMgtEx) {
 			msg = "Error occurred while fetching the device information.";
+			log.error(msg, deviceMgtEx);
+			throw new MDMAPIException(msg, deviceMgtEx);
+		}
+	}
+
+	@GET
+	@Path("count")
+	public int getDeviceCount() throws MDMAPIException {
+
+		int deviceCount = 0;
+		List<org.wso2.carbon.device.mgt.common.Device> devices;
+		try {
+			devices = MDMAPIUtils.getDeviceManagementService().getAllDevices();
+			if (devices == null) {
+				Response.status(Response.Status.NOT_FOUND);
+			} else {
+				deviceCount = devices.size();
+			}
+			return deviceCount;
+		} catch (DeviceManagementException deviceMgtEx) {
+			String msg = "Error occurred while fetching the device information.";
 			log.error(msg, deviceMgtEx);
 			throw new MDMAPIException(msg, deviceMgtEx);
 		}

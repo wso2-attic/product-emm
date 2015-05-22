@@ -13,9 +13,12 @@ function initStepper(selector){
     $(selector).click(function(){
         var nextStep = $(this).data("next");
         var currentStep = $(this).data("current");
-        var action = stepperRegistry[currentStep];
-        if (action){
-            action(this);
+        var isBack = $(this).data("back");
+        if (!isBack){
+            var action = stepperRegistry[currentStep];
+            if (action){
+                action(this);
+            }
         }
         if (!nextStep) {
             var direct = $(this).data("direct");
@@ -58,8 +61,8 @@ function savePolicy(){
     }
     var payload = {
         policyName: policy.policyName,
-        users: policy.selectedUsers,
-        roles: policy.selectedUserRoles,
+        compliance: policy.selectedAction,
+        ownershipType: policy.selectedOwnership,
         profile: {
             profileName: policy.policyName,
             deviceType: {
@@ -68,6 +71,11 @@ function savePolicy(){
             profileFeaturesList: profilePayloads
         }
     };
+    if (policy.selectedUsers){
+        payload.users = policy.selectedUsers;
+    }else if (policy.selectedUserRoles){
+        payload.roles = policy.selectedUserRoles;
+    }
     invokerUtil.post("https://localhost:9443/mdm-admin/policies", payload, function(){
         $(".policy-message").removeClass("hidden");
         $(".add-policy").addClass("hidden");
@@ -78,6 +86,10 @@ function savePolicy(){
 
 $(document).ready(function(){
     initStepper(".wizard-stepper");
+    $( "input[type='radio'].user-select-radio" ).change(function() {
+        $('.user-select').hide();
+        $('#'+$(this).val()).show();
+    });
     //Adds an event listener to swithc
     $(advanceOperation).on("click", ".wr-input-control.switch", function(evt){
         var operation = $(this).parents(".operation-data").data("operation");
@@ -103,9 +115,18 @@ $(document).ready(function(){
         savePolicy();
     };
     stepperRegistry['policy-criteria']  = function (actionButton){
-        policy.selectedUserRoles = $("#user-roles-input").val();
-        policy.selectedUsers = $("#users-input").val();
-        policy.selectedAction = $("#action-input").val();
+        $( "input[type='radio'].user-select-radio").each(function(){
+           if ( $(this).is(':radio')){
+               if ($(this).is(":checked")){
+                   if($(this).val() == "userSelectField"){
+                       policy.selectedUsers = $("#users-input").val();
+                   }else if($(this).val() == "userRoleSelectField"){
+                       policy.selectedUserRoles = $("#user-roles-input").val();
+                   }
+               }
+           }
+        });
+        policy.selectedAction = $("#action-input").find(":selected").data("action");
         policy.selectedOwnership = $("#ownership-input").val();
 
     };

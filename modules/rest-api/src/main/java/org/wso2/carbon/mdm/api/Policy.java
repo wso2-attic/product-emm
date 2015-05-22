@@ -48,7 +48,7 @@ public class Policy {
         policy.setRoles(policyWrapper.getRoles());
         policy.setUsers(policyWrapper.getUsers());
         policy.setTenantId(policyWrapper.getTenantId());
-
+		policy.setCompliance(policyWrapper.getCompliance());
 
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
@@ -93,6 +93,22 @@ public class Policy {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
 			org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
 			pap.deletePolicy(policy);
+		} catch (PolicyManagementException e) {
+			String error = "Policy Management related exception";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		}
+	}
+
+	@GET
+	@Path("count")
+	public int getPolicyCount() throws MDMAPIException {
+		int policyCount = 0;
+		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+		try {
+			PolicyAdministratorPoint pap = policyManagementService.getPAP();
+			policyCount = pap.getPolicyCount();
+			return policyCount;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";
 			log.error(error, e);

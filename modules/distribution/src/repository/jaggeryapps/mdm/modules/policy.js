@@ -16,33 +16,46 @@
  * under the License.
  */
 
-var policyModule = function () {
+var policyModule;
+policyModule = function () {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
-    var dataConfig = require("/config/mdm-props.js").config();
+    //var dataConfig = require("/config/mdm-props.js").config();
     var utility = require("/modules/utility.js").utility;
+
+    var policyObj = Packages.org.wso2.carbon.policy.mgt.common.Policy;
 
     var policyManagementService = utility.getPolicyManagementService();
     var policyAdminPoint = policyManagementService.getPAP();
     var publicMethods = {};
-    var privateMethods = {};
+    // var privateMethods = {};
 
-    publicMethods.getPolicies = function (){
+    publicMethods.getPolicies = function () {
         log.debug(policyAdminPoint.getPolicies());
+
         var policies = policyAdminPoint.getPolicies();
         var policyList = [];
+
         for (var i = 0; i < policies.size(); i++) {
             var policy = policies.get(i);
             var policyObject = {};
-            policyObject.name = policy.getPolicyName();
+
             policyObject.id = policy.getId();
+            policyObject.priorityId = policy.getPriorityId();
+            policyObject.name = policy.getPolicyName();
+            policyObject.platform = policy.getProfile().getDeviceType().getName();
+            policyObject.ownershiptype = policy.getOwnershipType();
+            policyObject.roles = policy.getRoles();
+            policyObject.users = policy.getUsers();
+            policyObject.compliance = policy.getCompliance();
+
             policyList.push(policyObject);
         }
         return policyList;
     };
 
-    publicMethods.getProfiles = function (){
+    publicMethods.getProfiles = function () {
         var profiles = policyAdminPoint.getProfiles();
         var profileList = [];
         for (var i = 0; i < profiles.size(); i++) {
@@ -54,6 +67,23 @@ var policyModule = function () {
         }
         return profileList;
     };
+
+    publicMethods.updatePolicyPriorities = function (payload) {
+        log.info("inside module" + stringify(payload));
+        var policyCount = payload.length;
+        var policyArrayList = new java.util.ArrayList();
+        var i, obj;
+        for (i = 0; i < policyCount; i++) {
+            obj = new policyObj();
+            //log.info("inside for()" + payload[i].id);
+            obj.setId(payload[i].id);
+            //log.info("inside for()" + payload[i].priority);
+            obj.setPriorityId(payload[i].priority);
+            policyArrayList.add(obj);
+        }
+        policyAdminPoint.updatePolicyPriorities(policyArrayList);
+    };
+
     return publicMethods;
 }();
 

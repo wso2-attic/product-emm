@@ -23,7 +23,7 @@
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>
                     <span class="fw-stack">
-                        <i class="fw fw-lock fw-stack-2x"></i>
+                        <i class="fw {{icon}} fw-stack-2x"></i>
                     </span>
                         {{#equal code "NOTIFICATION"}}
                             Compose Message
@@ -32,9 +32,12 @@
                             Change Lockcode
                         {{/equal}}
                         {{#unequal code "NOTIFICATION"}}
-                            Are you sure you want to {{name}} the selected devices ?
+                            Are you sure you want to perform the below operation on the selected devices ?
                         {{/unequal}}
                     </h3>
+                    <div>
+                        {{name}}
+                    </div>
                     {{#equal code "NOTIFICATION"}}
                         Type a message and click "SEND" to send it to all the selected device/s
                         <div><textarea class="form-control operationDataKeys" id="message" data-key="message"></textarea></div>

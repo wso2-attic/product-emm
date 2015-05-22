@@ -41,7 +41,12 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
             }
             utility.insertAppPermissions(userModule, "login");
             apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
-            response.sendRedirect(constants.WEB_APP_CONTEXT);
+            var permissions = userModule.getUIPermissions();
+            if (permissions.DASHBOARD_VIEW){
+                response.sendRedirect(constants.WEB_APP_CONTEXT);
+            }else {
+                response.sendRedirect(constants.WEB_APP_CONTEXT + "/device-mgt");
+            }
         }, function() {
             response.sendRedirect(mdmProps.appContext + "login?#auth-failed");
         });

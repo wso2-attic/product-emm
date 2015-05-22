@@ -13,10 +13,12 @@ function onRequest(context) {
         icon: "fw-left-arrow",
         url: "/mdm"
     };
-    links.users.push(dashboardLink);
-    links.policies.push(dashboardLink);
-    links.profiles.push(dashboardLink);
-    links['device-mgt'].push(dashboardLink);
+    if (permissions.DASHBOARD_VIEW){
+        links.users.push(dashboardLink);
+        links.policies.push(dashboardLink);
+        links.profiles.push(dashboardLink);
+        links['device-mgt'].push(dashboardLink);
+    }
     if (permissions.ADD_USER) {
         links.users.push({
             title: "Add User",
@@ -24,7 +26,7 @@ function onRequest(context) {
             url: "/mdm/users/add-user"
         });
     }
-    if (permissions.ADD_USER) {
+    if (permissions.ADD_POLICY) {
         links.policies.push({
             title: "Add Policy",
             icon: "fw-policy",
@@ -38,6 +40,8 @@ function onRequest(context) {
             url: "/mdm/profiles/add-profile"
         });
     }
+    log.info("**");
+    log.info(context);
     context.currentActions = links[context.link];
     return context;
 }

@@ -5,6 +5,8 @@ function onRequest(context){
         permissions.push("LIST_DEVICES");
     }else if(userModule.isAuthorized("/permission/device-mgt/user/devices/list")){
         permissions.push("LIST_OWN_DEVICES");
+    }else if(userModule.isAuthorized("/permission/device-mgt/admin/policies/list")){
+        permissions.push("LIST_POLICIES");
     }
     context.permissions = stringify(permissions);
     return context;
