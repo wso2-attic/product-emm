@@ -1,6 +1,7 @@
 function onRequest(context) {
+    // var log = new Log("policy-listing.js");
     var policyModule = require("/modules/policy.js").policyModule;
-    var policies = policyModule.getPolicies();
-    context.policies = policies;
+    context.policies = policyModule.getPolicies();
+
     return context;
 }

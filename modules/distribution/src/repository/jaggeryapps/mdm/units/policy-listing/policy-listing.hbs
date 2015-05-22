@@ -4,51 +4,78 @@
 
             <!-- content -->
             <div class="wr-content">
-
-                <div class="wr-list-group">
-                    <div class="policy-delete-message hidden">
-                        <div class="content">Policy deleted successfully</div>
-                        <div class="buttons">
-                            <a href="javascript:hidePopup()" class="btn-operations">OK</a>
-                        </div>
-                    </div>
-                    <div class="policy-delete-failed-message hidden">
-                        <div class="content">Policy deletion failed</div>
-                        <div class="buttons">
-                            <a href="javascript:hidePopup()" class="btn-operations">OK</a>
-                        </div>
-                    </div>
+                <h1 class="page-sub-title">Policy List by priority list</h1>
+                <h4 class="page-sub-title-desc">Drag & move to reorder list priority</h4>
+                <div class="wr-list-group wr-sortable policy-list">
+                    <!--<div class="policy-delete-message hidden">-->
+                    <!--<div class="content">Policy deleted successfully</div>-->
+                    <!--<div class="buttons">-->
+                    <!--<a href="javascript:hidePopup()" class="btn-operations">OK</a>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="policy-delete-failed-message hidden">-->
+                    <!--<div class="content">Policy deletion failed</div>-->
+                    <!--<div class="buttons">-->
+                    <!--<a href="javascript:hidePopup()" class="btn-operations">OK</a>-->
+                    <!--</div>-->
+                    <!--</div>-->
                     {{#each policies}}
                         <span class="list-group-item">
-                            <div class="wr-list-desc">{{name}}</div>
-                            <span class="list-group-item-actions">
-                                <a href="/mdm/policies/add-policy" class="cu-btn-inner">
-                                    <span class="fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="fw fw-view fw-stack-1x"></i>
+                            <div class="row">
+                                <div class="col-lg-3 clearfix">
+                                    <span class="wr-sortable-icon"><i class="fw fw-sort"></i></span>
+                                    <span class="wr-sort-index"><i></i></span>
+                                    <span class="wr-list-icon"><i class=" fw fw-android"></i></span>
+                                    <span class="wr-list-desc">
+                                        <h3 class="wr-list-name">{{name}}</h3>
+                                        <span class="wr-list-username">{{platform}}</span>
                                     </span>
-                                    View
-                                </a>
-                                <a href="/mdm/policies/add-policy" class="cu-btn-inner">
-                                    <span class="fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="fw fw-settings fw-stack-1x"></i>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row no-gutter">
+                                        <div class="wr-desc-list-configs highlight col-lg-4">
+                                            <div><b>Ownership Type:</b> {{ownershiptype}}</div>
+                                        </div>
+                                        <div class="wr-desc-list-configs highlight col-lg-4">
+                                            <div><b>Assigned Role(s):</b> {{roles}}</div>
+                                        </div>
+                                        <div class="wr-desc-list-configs col-lg-4">
+                                            <div><b>Compliance Type:</b> {{compliance}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <span class="list-group-item-actions">
+                                        <a href="#" class="cu-btn-inner">
+                                            <span class="fw-stack">
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                                <i class="fw fw-view fw-stack-1x"></i>
+                                            </span>
+                                            View
+                                        </a>
+                                        <a href="#" class="cu-btn-inner">
+                                            <span class="fw-stack">
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                                <i class="fw fw-settings fw-stack-1x"></i>
+                                            </span>
+                                            Re-Configure
+                                        </a>
+                                        <a href="#" class="cu-btn-inner policy-delete">
+                                            <span class="fw-stack">
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                                <i class="fw fw-delete fw-stack-1x"></i>
+                                            </span>
+                                            Delete
+                                        </a>
                                     </span>
-                                    Re-Configure
-                                </a>
-                                <a href="#" class="cu-btn-inner policy-delete" data-id="{{id}}">
-                                    <span class="fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="fw fw-delete fw-stack-1x"></i>
-                                    </span>
-                                    Delete
-                                </a>
-                            </span>
-                            <div class="clearfix"></div>
+                                </div>
+                            </div>
                         </span>
                     {{/each}}
                 </div>
-
+                <div class="wr-input-control wr-btn-grp">
+                    <button class="wr-btn" disabled>Update</button>
+                </div>
             </div>
             <!-- /content -->
 
