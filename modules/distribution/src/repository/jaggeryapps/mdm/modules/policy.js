@@ -65,6 +65,11 @@ policyModule = function () {
         }
         return profileList;
     };
+
+    publicMethods.updatePolicyPriorities = function () {
+
+    };
+
     return publicMethods;
 }();
 

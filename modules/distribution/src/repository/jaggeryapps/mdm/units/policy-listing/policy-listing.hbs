@@ -20,11 +20,11 @@
                     <!--</div>-->
                     <!--</div>-->
                     {{#each policies}}
-                        <span class="list-group-item">
+                        <span class="list-group-item" id="{{id}}">
                             <div class="row">
                                 <div class="col-lg-3 clearfix">
                                     <span class="wr-sortable-icon"><i class="fw fw-sort"></i></span>
-                                    <span class="wr-sort-index"><i></i></span>
+                                    <span class="wr-sort-index"><i>{{priorityId}}</i></span>
                                     <span class="wr-list-icon"><i class=" fw fw-android"></i></span>
                                     <span class="wr-list-desc">
                                         <h3 class="wr-list-name">{{name}}</h3>
@@ -46,21 +46,21 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <span class="list-group-item-actions">
-                                        <a href="#" class="cu-btn-inner">
+                                        <a href="#" class="cu-btn-inner policy-view-link" data-id="{{id}}">
                                             <span class="fw-stack">
                                                 <i class="fw fw-ring fw-stack-2x"></i>
                                                 <i class="fw fw-view fw-stack-1x"></i>
                                             </span>
                                             View
                                         </a>
-                                        <a href="#" class="cu-btn-inner">
+                                        <a href="#" class="cu-btn-inner policy-update-link" data-id="{{id}}">
                                             <span class="fw-stack">
                                                 <i class="fw fw-ring fw-stack-2x"></i>
                                                 <i class="fw fw-settings fw-stack-1x"></i>
                                             </span>
                                             Re-Configure
                                         </a>
-                                        <a href="#" class="cu-btn-inner policy-delete">
+                                        <a href="#" class="cu-btn-inner policy-delete-link" data-id="{{id}}">
                                             <span class="fw-stack">
                                                 <i class="fw fw-ring fw-stack-2x"></i>
                                                 <i class="fw fw-delete fw-stack-1x"></i>
@@ -74,7 +74,7 @@
                     {{/each}}
                 </div>
                 <div class="wr-input-control wr-btn-grp">
-                    <button class="wr-btn" disabled>Update</button>
+                    <button class="wr-btn" id="sortUpdateBtn" data-policycount="{{policyCount}}" disabled>Update Policies with changed priorities</button>
                 </div>
             </div>
             <!-- /content -->
