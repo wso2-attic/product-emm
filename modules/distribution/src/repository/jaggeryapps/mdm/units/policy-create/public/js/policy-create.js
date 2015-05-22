@@ -61,6 +61,7 @@ function savePolicy(){
     }
     var payload = {
         policyName: policy.policyName,
+        compliance: policy.selectedAction,
         ownershipType: policy.selectedOwnership,
         profile: {
             profileName: policy.policyName,
@@ -125,7 +126,7 @@ $(document).ready(function(){
                }
            }
         });
-        policy.selectedAction = $("#action-input").val();
+        policy.selectedAction = $("#action-input").find(":selected").data("action");
         policy.selectedOwnership = $("#ownership-input").val();
 
     };

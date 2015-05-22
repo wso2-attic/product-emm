@@ -29,6 +29,10 @@ public class PolicyWrapper {
     private int id;
     private Profile profile;
     private String policyName;
+
+
+    private String compliance;
+
     private List<String> roles;
     private String ownershipType;
     private List<Device> devices;
@@ -52,6 +56,15 @@ public class PolicyWrapper {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+
+    public String getCompliance() {
+        return compliance;
+    }
+
+    public void setCompliance(String compliance) {
+        this.compliance = compliance;
+    }
+
 
     public String getPolicyName() {
         return policyName;
