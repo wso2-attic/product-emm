@@ -56,9 +56,10 @@ policyModule = function () {
     publicMethods.getProfiles = function () {
         var profiles = policyAdminPoint.getProfiles();
         var profileList = [];
-        for (var i = 0; i < profiles.size(); i++) {
-            var profile = profiles.get(i);
-            var profileObject = {};
+        var i, profile, profileObject;
+        for (i = 0; i < profiles.size(); i++) {
+            profile = profiles.get(i);
+            profileObject = {};
             profileObject.name = profile.getProfileName();
             profileObject.id = profile.getProfileId();
             profileList.push(profileObject);
