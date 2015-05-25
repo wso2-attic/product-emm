@@ -28,7 +28,6 @@ var policyModule = require("/modules/policy.js").policyModule;
 
 if (uriMatcher.match("/{context}/api/policies/update")) {
     payload = request.getContent();
-    // log.info(stringify(payload));
     policyModule.updatePolicyPriorities(payload);
 }
 %>

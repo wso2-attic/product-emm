@@ -7,8 +7,13 @@ $(document).ready(function () {
     var sortUpdateBtn = '#sortUpdateBtn',
         sortedIDs;
 
+    var saveNewPrioritiesButtonEnabled = Boolean($("#save-new-priorities-button").data("enabled"));
+    if (!saveNewPrioritiesButtonEnabled) {
+        $("#save-new-priorities-button").addClass("hide");
+    }
+
     function addSortableIndexNumbers(){
-        $('.wr-sortable .list-group-item').not('.ui-sortable-placeholder').each(function(i){
+        $('.wr-sortable .list-group-item').not('.ui-sortable-placeholder').each(function(i) {
             $('.wr-sort-index', this).html(i+1);
         });
     }
@@ -27,8 +32,6 @@ $(document).ready(function () {
     });
 
     $(sortUpdateBtn).click(function () {
-        //console.log(sortedIDs);
-        //alert(sortedIDs.length);
         $(sortUpdateBtn).prop('disabled', true);
 
         var newPolicyPriorityList = [];
@@ -55,8 +58,6 @@ $(document).ready(function () {
                 alert("Policy update failed");
             }
         });
-
-        // alert(JSON.stringify(newPolicyPriorityList));
     });
 
     // -------------------------------
