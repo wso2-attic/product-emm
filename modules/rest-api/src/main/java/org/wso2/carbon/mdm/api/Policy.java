@@ -25,6 +25,7 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.Message;
 import org.wso2.carbon.mdm.beans.PolicyWrapper;
+import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -43,7 +44,8 @@ public class Policy {
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
-        policy.setProfile(policyWrapper.getProfile());
+
+        policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
         policy.setOwnershipType(policyWrapper.getOwnershipType());
         policy.setRoles(policyWrapper.getRoles());
         policy.setUsers(policyWrapper.getUsers());
