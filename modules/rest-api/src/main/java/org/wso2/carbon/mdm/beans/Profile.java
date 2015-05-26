@@ -21,8 +21,6 @@ package org.wso2.carbon.mdm.beans;
 
 
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
-import org.wso2.carbon.policy.mgt.common.ProfileFeature;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
@@ -38,7 +36,7 @@ public class Profile {
     private Timestamp createdDate;
     private Timestamp updatedDate;
 //    private List<Feature> featuresList;     // Features included in the policies.
-    private List<org.wso2.carbon.policy.mgt.common.ProfileFeature> profileFeaturesList;     // Features included in the policies.
+    private List<ProfileFeature> profileFeaturesList;     // Features included in the policies.
 
     public DeviceType getDeviceType() {
         return deviceType;
@@ -100,7 +98,7 @@ public class Profile {
     }
 
     @XmlElement
-    public List<org.wso2.carbon.policy.mgt.common.ProfileFeature> getProfileFeaturesList() {
+    public List<ProfileFeature> getProfileFeaturesList() {
         return profileFeaturesList;
     }
 
