@@ -8,8 +8,8 @@ $(document).ready(function () {
         sortedIDs;
 
     var saveNewPrioritiesButtonEnabled = Boolean($("#save-new-priorities-button").data("enabled"));
-    if (!saveNewPrioritiesButtonEnabled) {
-        $("#save-new-priorities-button").addClass("hide");
+    if (saveNewPrioritiesButtonEnabled) {
+        $("#save-new-priorities-button").removeClass("hide");
     }
 
     function addSortableIndexNumbers(){

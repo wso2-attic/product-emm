@@ -6,18 +6,6 @@
                 <h1 class="page-sub-title">Policy List by priority order</h1>
                 <h4 class="page-sub-title-desc">{{policyCountStatusMsg}}</h4>
                 <div class="wr-list-group wr-sortable policy-list">
-                    <!--<div class="policy-delete-message hidden">-->
-                    <!--<div class="content">Policy deleted successfully</div>-->
-                    <!--<div class="buttons">-->
-                    <!--<a href="javascript:hidePopup()" class="btn-operations">OK</a>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="policy-delete-failed-message hidden">-->
-                    <!--<div class="content">Policy deletion failed</div>-->
-                    <!--<div class="buttons">-->
-                    <!--<a href="javascript:hidePopup()" class="btn-operations">OK</a>-->
-                    <!--</div>-->
-                    <!--</div>-->
                     {{#each policies}}
                         <span class="list-group-item" id="{{id}}">
                             <div class="row">
@@ -74,12 +62,11 @@
                         </span>
                     {{/each}}
                 </div>
-                <div id="save-new-priorities-button" class="wr-input-control wr-btn-grp" data-enabled="{{saveNewPrioritiesButtonEnabled}}">
+                <div id="save-new-priorities-button" class="wr-input-control wr-btn-grp hide" data-enabled="{{saveNewPrioritiesButtonEnabled}}">
                     <button class="wr-btn" id="sortUpdateBtn" data-policycount="{{policyCount}}" disabled>Save New Priority Order</button>
                 </div>
             </div>
             <!-- /content -->
-
         </div>
     </div>
 {{/zone}}
