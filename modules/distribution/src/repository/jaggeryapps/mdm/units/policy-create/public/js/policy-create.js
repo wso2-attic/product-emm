@@ -78,7 +78,7 @@ function savePolicy(){
     }else if (policy.selectedUserRoles){
         payload.roles = policy.selectedUserRoles;
     }
-    invokerUtil.post("https://localhost:9443/mdm-admin/policies", payload, function(){
+    invokerUtil.post("/mdm-admin/policies", payload, function(){
         $(".policy-message").removeClass("hidden");
         $(".add-policy").addClass("hidden");
     }, function(){
@@ -144,7 +144,7 @@ $(document).ready(function(){
         var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
         var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
         $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
-            var serviceURL = "https://localhost:9443/mdm-admin/features/" + deviceType;
+            var serviceURL = "/mdm-admin/features/" + deviceType;
             var successCallback = function (data) {
                 var viewModel = {};
                 viewModel.features = data.reduce(function (total, current) {

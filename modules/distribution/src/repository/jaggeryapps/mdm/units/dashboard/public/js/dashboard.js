@@ -8,7 +8,7 @@ var updateStats = function(serviceURL, id){
 }
 
 $(document).ready(function(){
-    updateStats("https://localhost:9443/mdm-admin/devices/count", "#deviceCount");
-    updateStats("https://localhost:9443/mdm-admin/policies/count", "#policyCount");
-    updateStats("https://localhost:9443/mdm-admin/users/count/" + "carbon.super", "#userCount");
+    updateStats("/mdm-admin/devices/count", "#deviceCount");
+    updateStats("/mdm-admin/policies/count", "#policyCount");
+    updateStats("/mdm-admin/users/count/" + "carbon.super", "#userCount");
 });

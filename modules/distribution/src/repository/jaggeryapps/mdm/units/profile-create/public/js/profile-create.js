@@ -15,7 +15,7 @@ $(document).ready(function(){
                 content: ""
             }]
         };
-        invokerUtil.post("https://localhost:9443/mdm-admin/profiles", payload, function(data){
+        invokerUtil.post("/mdm-admin/profiles", payload, function(data){
             profileId = data.profileId;
             $(".create-profile").addClass("hidden");
             $(".add-policy-profile").removeClass("hidden");
@@ -28,7 +28,7 @@ $(document).ready(function(){
             id: policyId,
             profileId: profileId
         };
-        invokerUtil.post("https://localhost:9443/mdm-admin/policies/" + policyId, payload, function(){
+        invokerUtil.post("/mdm-admin/policies/" + policyId, payload, function(){
             $(".add-policy-profile").addClass("hidden");
             $(".profile-message").removeClass("hidden");
         }, function(){

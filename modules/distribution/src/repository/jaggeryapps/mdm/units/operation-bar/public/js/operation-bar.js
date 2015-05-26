@@ -199,7 +199,7 @@ function loadOperationBar(deviceType){
     var operationBarSrc = operationBar.attr("src");
     var platformType = deviceType;
     $.template("operations-bar", operationBarSrc, function (template) {
-        var serviceURL = "https://localhost:9443/mdm-admin/features/" + platformType;
+        var serviceURL = "/mdm-admin/features/" + platformType;
         var successCallback = function (data) {
             var viewModel = {};
             var iconMap = {};
@@ -227,7 +227,7 @@ function loadOperationBar(deviceType){
     var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
     var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
     $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
-        var serviceURL = "https://localhost:9443/mdm-admin/features/" + platformType;
+        var serviceURL = "/mdm-admin/features/" + platformType;
         var successCallback = function (data) {
             var viewModel = {};
             viewModel.features = data.reduce(function (total, current) {

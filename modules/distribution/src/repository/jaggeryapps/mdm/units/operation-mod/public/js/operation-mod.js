@@ -15,7 +15,7 @@ var operationModule = function () {
             ENTERPRISE_WIPE: "enterprisewipe",
             WIFI: "wifi"
         };
-        return "https://localhost:9443/ios/operation/" + featureMap[operationName];
+        return "/ios/operation/" + featureMap[operationName];
     }
 
     function createiOSPayload(operationName, operationData, devices) {
@@ -267,7 +267,7 @@ var operationModule = function () {
             BLACKLIST_APPLICATIONS: "blacklist-applications",
             PASSCODE_POLICY: "password-policy"
         };
-        return "https://localhost:9443/mdm-android-agent/operation/" + featureMap[operationName];
+        return "/mdm-android-agent/operation/" + featureMap[operationName];
     };
     /**
      * Get the icon for the featureCode
