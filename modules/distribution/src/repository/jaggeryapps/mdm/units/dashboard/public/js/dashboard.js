@@ -10,7 +10,7 @@ var updateStats = function (serviceURL, id) {
 };
 
 $(document).ready(function(){
-    updateStats("/mdm-admin/devices/count", "#deviceCount");
-    updateStats("/mdm-admin/policies/count", "#policyCount");
-    updateStats("/mdm-admin/users/count/" + "carbon.super", "#userCount");
+    updateStats("/mdm-admin/devices/count", "#device-count");
+    updateStats("/mdm-admin/policies/count", "#policy-count");
+    updateStats("/mdm-admin/users/count/" + "carbon.super", "#user-count");
 });
