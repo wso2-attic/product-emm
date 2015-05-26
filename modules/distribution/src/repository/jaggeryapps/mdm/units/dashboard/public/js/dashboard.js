@@ -1,11 +1,13 @@
-var updateStats = function(serviceURL, id){
-    invokerUtil.get(serviceURL,
-        function(data){
+var updateStats = function (serviceURL, id) {
+    invokerUtil.get(
+        serviceURL,
+        function (data) {
             $(id).html(data);
-        }, function(message){
+        }, function (message) {
             console.log(message);
-        });
-}
+        }
+    );
+};
 
 $(document).ready(function(){
     updateStats("/mdm-admin/devices/count", "#deviceCount");

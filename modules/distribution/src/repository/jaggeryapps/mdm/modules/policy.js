@@ -21,31 +21,30 @@ policyModule = function () {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
-    //var dataConfig = require("/config/mdm-props.js").config();
     var utility = require("/modules/utility.js").utility;
 
-    var policyObj = Packages.org.wso2.carbon.policy.mgt.common.Policy;
+    // Class imports from java layer.
+    var Policy = Packages.org.wso2.carbon.policy.mgt.common.Policy;
 
     var policyManagementService = utility.getPolicyManagementService();
     var policyAdminPoint = policyManagementService.getPAP();
     var publicMethods = {};
-    // var privateMethods = {};
 
     publicMethods.getPolicies = function () {
         log.debug(policyAdminPoint.getPolicies());
 
         var policies = policyAdminPoint.getPolicies();
         var policyList = [];
-
-        for (var i = 0; i < policies.size(); i++) {
-            var policy = policies.get(i);
-            var policyObject = {};
+        var i, policy, policyObject;
+        for (i = 0; i < policies.size(); i++) {
+            policy = policies.get(i);
+            policyObject = {};
 
             policyObject.id = policy.getId();
             policyObject.priorityId = policy.getPriorityId();
             policyObject.name = policy.getPolicyName();
             policyObject.platform = policy.getProfile().getDeviceType().getName();
-            policyObject.ownershiptype = policy.getOwnershipType();
+            policyObject.ownershipType = policy.getOwnershipType();
             policyObject.roles = policy.getRoles();
             policyObject.users = policy.getUsers();
             policyObject.compliance = policy.getCompliance();
@@ -58,9 +57,10 @@ policyModule = function () {
     publicMethods.getProfiles = function () {
         var profiles = policyAdminPoint.getProfiles();
         var profileList = [];
-        for (var i = 0; i < profiles.size(); i++) {
-            var profile = profiles.get(i);
-            var profileObject = {};
+        var i, profile, profileObject;
+        for (i = 0; i < profiles.size(); i++) {
+            profile = profiles.get(i);
+            profileObject = {};
             profileObject.name = profile.getProfileName();
             profileObject.id = profile.getProfileId();
             profileList.push(profileObject);
@@ -69,19 +69,32 @@ policyModule = function () {
     };
 
     publicMethods.updatePolicyPriorities = function (payload) {
-        log.info("inside module" + stringify(payload));
         var policyCount = payload.length;
-        var policyArrayList = new java.util.ArrayList();
-        var i, obj;
+        var policyList = new java.util.ArrayList();
+        var i, policyObject;
         for (i = 0; i < policyCount; i++) {
-            obj = new policyObj();
-            //log.info("inside for()" + payload[i].id);
-            obj.setId(payload[i].id);
-            //log.info("inside for()" + payload[i].priority);
-            obj.setPriorityId(payload[i].priority);
-            policyArrayList.add(obj);
+            policyObject = new Policy();
+            policyObject.setId(payload[i].id);
+            policyObject.setPriorityId(payload[i].priority);
+            policyList.add(policyObject);
         }
-        policyAdminPoint.updatePolicyPriorities(policyArrayList);
+        policyAdminPoint.updatePolicyPriorities(policyList);
+    };
+
+    publicMethods.deletePolicy = function (policyId) {
+        var isDeleted;
+        try {
+            isDeleted = policyAdminPoint.deletePolicy(policyId);
+            if (isDeleted) {
+                // http status code 200 refers to - success.
+                return 200;
+            } else {
+                // http status code 409 refers to - conflict.
+                return 409;
+            }
+        } catch (e) {
+            throw e;
+        }
     };
 
     return publicMethods;

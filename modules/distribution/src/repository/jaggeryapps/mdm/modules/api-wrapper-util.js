@@ -18,25 +18,24 @@
 
 var apiWrapperUtil = function () {
     var module = {};
-    var util = require("/modules/util.js").util;
+    var tokenUtil = require("/modules/util.js").util;
     module.refreshToken = function () {
         var tokenPair = session.get("accessTokenPair");
-        var accessToken, refreshToken;
-        tokenPair = {"accessToken": accessToken, "refreshToken": refreshToken};
+        tokenPair = tokenUtil.refreshToken(tokenPair);
         session.put("accessTokenPair", tokenPair);
-        response.addCookie({'name': 'accessToken', 'value': accessToken});
+        response.addCookie({'name': 'accessToken', 'value': tokenPair.accessToken});
     };
     module.setupAccessTokenPair = function (type, properties) {
-        var accessToken = "", refreshToken = "";
-        var clientId = "7iM9XgOL4lxso5QO_F0kE4aa6Yka";
-        var clientSecret = "UGj3ftqGmYJYr_eJwnzIimMBOc0a";
+        var tokenPair;
+        var clientId = "pY0FbBUC_GI7mfHVS1FvhWAifEwa";
+        var clientSecret = "Tu5Za1R3fHtGc5yH4KK8TNiLVSca";
         if (type == "password") {
-            //util.getTokenWithPasswordGrantType(properties.username, properties.password, clientId, clientSecret);
+            //tokenPair = tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, clientId, clientSecret);
         } else if (type == "saml") {
 
         }
-        //session.put("accessTokenPair", {"accessToken": accessToken, "refreshToken": refreshToken});
-        //response.addCookie({'name': 'accessToken', 'value': accessToken});
+        //session.put("accessTokenPair", tokenPair);
+        //response.addCookie({'name': 'accessToken', 'value': tokenPair.accessToken});
     };
     return module;
 }();

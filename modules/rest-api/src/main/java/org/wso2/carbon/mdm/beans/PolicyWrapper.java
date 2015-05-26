@@ -18,11 +18,7 @@
 
 package org.wso2.carbon.mdm.beans;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.IncludeDocument;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.policy.mgt.common.Profile;
-
 import java.util.List;
 
 public class PolicyWrapper {
@@ -30,7 +26,6 @@ public class PolicyWrapper {
     private int id;
     private Profile profile;
     private String policyName;
-
 
     private String compliance;
 
@@ -66,7 +61,6 @@ public class PolicyWrapper {
         this.compliance = compliance;
     }
 
-
     public String getPolicyName() {
         return policyName;
     }
@@ -91,7 +85,6 @@ public class PolicyWrapper {
         this.ownershipType = ownershipType;
     }
 
-
     public List<Device> getDevices() {
         return devices;
     }
@@ -99,7 +92,6 @@ public class PolicyWrapper {
     public void setDevices(List<Device> devices) {
         this.devices = devices;
     }
-
 
     public List<String> getUsers() {
         return users;
