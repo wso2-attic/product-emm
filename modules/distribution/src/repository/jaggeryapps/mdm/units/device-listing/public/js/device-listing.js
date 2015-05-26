@@ -26,10 +26,12 @@
         device.owner = validateAndReturn(device.owner);
         device.ownership = validateAndReturn(device.ownership);
         var arr = device.properties;
-        device.properties = arr.reduce(function (total, current) {
-            total[current.name] = validateAndReturn(current.value);
-            return total;
-        }, {});
+        if (arr){
+            device.properties = arr.reduce(function (total, current) {
+                total[current.name] = validateAndReturn(current.value);
+                return total;
+            }, {});
+        }
     });
 
     //This method is used to setup permission for device listing
@@ -135,7 +137,7 @@ function loadDevices(searchType, searchParam){
             serviceURL = "/mdm-admin/devices";
         } else if ($.hasPermission("LIST_OWN_DEVICES")) {
             //Get authenticated users devices
-            serviceURL = "/mdm-admin/api/user/devices";
+            serviceURL = "/mdm-admin/devices";
         } else {
             $("#ast-container").html("Permission denied");
             return;

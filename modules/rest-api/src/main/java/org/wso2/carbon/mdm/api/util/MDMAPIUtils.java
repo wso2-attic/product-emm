@@ -24,6 +24,7 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnector;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.service.EmailService;
+import org.wso2.carbon.device.mgt.user.core.UserManager;
 import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -77,7 +78,7 @@ public class MDMAPIUtils {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
         ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        umService = (UserManagementService) ctx.getOSGiService(UserManagementService.class, null);
+        umService = (UserManagementService) ctx.getOSGiService(UserManager.class, null);
 
         if (umService == null){
             String msg = "user management service not initialized";

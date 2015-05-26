@@ -69,7 +69,7 @@ public class WiFiConfig {
 		WifiConfiguration wifiConfig = new WifiConfiguration();
 		wifiConfig.SSID = "\"" + ssid + "\"";
 		wifiConfig.hiddenSSID = true;
-		wifiConfig.status = WifiConfiguration.Status.DISABLED;
+		wifiConfig.status = WifiConfiguration.Status.CURRENT;
 		wifiConfig.priority = WIFI_CONFIG_PRIORITY;
 		wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 		wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);

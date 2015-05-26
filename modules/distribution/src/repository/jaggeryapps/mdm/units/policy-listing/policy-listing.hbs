@@ -1,11 +1,10 @@
 {{#zone "main"}}
     <div class="row">
         <div class="col-md-12">
-
             <!-- content -->
             <div class="wr-content">
-                <h1 class="page-sub-title">Policy List by priority list</h1>
-                <h4 class="page-sub-title-desc">Drag & move to reorder list priority</h4>
+                <h1 class="page-sub-title">Policy List by priority order</h1>
+                <h4 class="page-sub-title-desc">{{policyCountStatusMsg}}</h4>
                 <div class="wr-list-group wr-sortable policy-list">
                     <!--<div class="policy-delete-message hidden">-->
                     <!--<div class="content">Policy deleted successfully</div>-->
@@ -34,13 +33,15 @@
                                 <div class="col-lg-6">
                                     <div class="row no-gutter">
                                         <div class="wr-desc-list-configs highlight col-lg-4">
-                                            <div><b>Ownership Type:</b> {{ownershiptype}}</div>
+                                            <div><b>Ownership Type:</b> {{ownershipType}}</div>
                                         </div>
                                         <div class="wr-desc-list-configs highlight col-lg-4">
-                                            <div><b>Assigned Role(s):</b> {{roles}}</div>
+                                            <div>
+                                                <b>Assigned Role(s) :</b> {{roles}}
+                                            </div>
                                         </div>
                                         <div class="wr-desc-list-configs col-lg-4">
-                                            <div><b>Compliance Type:</b> {{compliance}}</div>
+                                            <div><b>Compliance Type :</b> {{compliance}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -73,8 +74,8 @@
                         </span>
                     {{/each}}
                 </div>
-                <div class="wr-input-control wr-btn-grp">
-                    <button class="wr-btn" id="sortUpdateBtn" data-policycount="{{policyCount}}" disabled>Update Policies with changed priorities</button>
+                <div id="save-new-priorities-button" class="wr-input-control wr-btn-grp" data-enabled="{{saveNewPrioritiesButtonEnabled}}">
+                    <button class="wr-btn" id="sortUpdateBtn" data-policycount="{{policyCount}}" disabled>Save New Priority Order</button>
                 </div>
             </div>
             <!-- /content -->

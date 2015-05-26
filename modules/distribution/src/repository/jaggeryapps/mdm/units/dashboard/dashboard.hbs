@@ -7,7 +7,7 @@
                     <div>
                         <div class="tile-icon"><i class="fw fw-devices"></i></div>
                         <div class="tile-stats">
-                            532
+                            <span id="deviceCount">Loading...</span>
                             <span class="tile-stats-free">
                                 <a href="/mdm/device-mgt">
                                     <span class="fw-stack">
@@ -27,7 +27,7 @@
                     <div>
                         <div class="tile-icon"><i class="fw fw-user"></i></div>
                         <div class="tile-stats">
-                            503
+                            <span id="userCount">Loading...</span>
                             <span class="tile-stats-free">
                                 <a href="/mdm/users/">
                                     <span class="fw-stack">
@@ -54,7 +54,7 @@
                     <div>
                         <div class="tile-icon"><i class="fw fw-policy"></i></div>
                         <div class="tile-stats">
-                            8
+                            <span id="policyCount">Loading...</span>
                             <span class="tile-stats-free">
                                 <a href="/mdm/policies/">
                                     <span class="fw-stack">
@@ -77,4 +77,7 @@
             </div>
         </div>
     </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/dashboard.js"></script>
 {{/zone}}

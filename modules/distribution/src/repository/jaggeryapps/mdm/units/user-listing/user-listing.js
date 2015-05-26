@@ -2,7 +2,7 @@ function onRequest(context) {
     // var log = new Log("user-listing");
     var userModule = require("/modules/user.js").userModule;
     var allUsers = userModule.getUsers();
-    if (allUsers.length == 1) {
+    if (allUsers.length == 0) {
         context.users = [];
         context.listUsersStatus = "Oops, Sorry, No other Users found.";
     } else {
