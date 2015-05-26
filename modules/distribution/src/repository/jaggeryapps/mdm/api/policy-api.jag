@@ -44,6 +44,6 @@ if (uriMatcher.match("/{context}/api/policies/update")) {
 
 // returning the result.
 if (result) {
-    print(result);
+    response.content = result;
 }
 %>
