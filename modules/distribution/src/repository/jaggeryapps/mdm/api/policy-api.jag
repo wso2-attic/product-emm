@@ -37,7 +37,7 @@ if (uriMatcher.match("/{context}/api/policies/update")) {
         result = policyModule.deletePolicy(policyId);
     } catch (e) {
         log.error("Exception occurred while trying to delete policy for id:" + policyId, e);
-        // http status code 400 refers to - Bad request.
+        // http status code 500 refers to - Internal Server Error.
         result = 500;
     }
 }
