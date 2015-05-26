@@ -21,13 +21,21 @@
                                 <div class="col-lg-6">
                                     <div class="row no-gutter">
                                         <div class="wr-desc-list-configs highlight col-lg-4">
-                                            <div><b>Ownership Type:</b> {{ownershipType}}</div>
+                                            <div><b>Ownership Type : </b> {{ownershipType}}</div>
                                         </div>
-                                        <div class="wr-desc-list-configs highlight col-lg-4">
-                                            <div>
-                                                <b>Assigned Role(s) :</b> {{roles}}
+                                        {{#if roles}}
+                                            <div class="wr-desc-list-configs highlight col-lg-4">
+                                                <div>
+                                                    <b>Assigned Role(s) : </b> {{roles}}
+                                                </div>
                                             </div>
-                                        </div>
+                                        {{else}}
+                                            <div class="wr-desc-list-configs highlight col-lg-4">
+                                                <div>
+                                                    <b>Assigned User(s) : </b> {{users}}
+                                                </div>
+                                            </div>
+                                        {{/if}}
                                         <div class="wr-desc-list-configs col-lg-4">
                                             <div><b>Compliance Type :</b> {{compliance}}</div>
                                         </div>
