@@ -23,6 +23,7 @@ policyModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js").utility;
 
+    // Class imports from java layer.
     var Policy = Packages.org.wso2.carbon.policy.mgt.common.Policy;
 
     var policyManagementService = utility.getPolicyManagementService();
@@ -78,6 +79,22 @@ policyModule = function () {
             policyList.add(policyObject);
         }
         policyAdminPoint.updatePolicyPriorities(policyList);
+    };
+
+    publicMethods.deletePolicy = function (policyId) {
+        var isDeleted;
+        try {
+            isDeleted = policyAdminPoint.deletePolicy(policyId);
+            if (isDeleted) {
+                // http status code 200 refers to - success.
+                return 200;
+            } else {
+                // http status code 409 refers to - conflict.
+                return 409;
+            }
+        } catch (e) {
+            throw e;
+        }
     };
 
     return publicMethods;

@@ -26,8 +26,24 @@ var constants = require("/modules/constants.js");
 var mdmProps = require('/config/mdm-props.js').config();
 var policyModule = require("/modules/policy.js").policyModule;
 
+var result;
 if (uriMatcher.match("/{context}/api/policies/update")) {
     payload = request.getContent();
     policyModule.updatePolicyPriorities(payload);
+} else if (uriMatcher.match("/{context}/api/policies/{id}/delete")) {
+    elements = uriMatcher.elements();
+    policyId = elements.id;
+    try {
+        result = policyModule.deletePolicy(policyId);
+    } catch (e) {
+        log.error("Exception occurred while trying to delete policy for id:" + policyId, e);
+        // http status code 400 refers to - Bad request.
+        result = 500;
+    }
+}
+
+// returning the result.
+if (result) {
+    print(result);
 }
 %>

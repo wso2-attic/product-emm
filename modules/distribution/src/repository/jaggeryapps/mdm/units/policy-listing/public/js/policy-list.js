@@ -55,7 +55,7 @@ $(document).ready(function () {
                 alert("New Policy priorities were successfully updated.");
             },
             error : function () {
-                alert("Policy update failed");
+                alert("Policy update failed.");
             }
         });
     });
@@ -66,19 +66,29 @@ $(document).ready(function () {
     });
 
 
-    $(".policy-delete").click(function () {
+    $(".policy-delete-link").click(function () {
         var policyId = $(this).data("id");
-        $(modelPopupContent).html($('.policy-delete-message').html());
-        $(modelPopup).show();
-        invokerUtil.delete(serviceEndPoint + policyId,
-            function () {
-                $(modelPopupContent).html($('.policy-delete-message').html());
-                $(modelPopup).show();
-            }, function (jqXHR, textStatus, errorThrown) {
-                $(modelPopupContent).html($('policy-delete-failed-message').html());
-                $(modelPopup).show();
-                console.log(textStatus);
+        var deletePolicyAPI = "/mdm/api/policies/" + policyId + "/delete";
+        var userResponse = confirm("Do you really want to delete this policy?");
+        if (userResponse == true) {
+            $.ajax({
+                type : "GET",
+                url : deletePolicyAPI,
+                success : function (data) {
+                    if (data == 200) {
+                        alert("Policy was successfully removed.");
+                        location.reload();
+                    } else if (data == 409) {
+                        alert("Policy does not exist.");
+                    } else if (data == 500) {
+                        alert("Exception at Backend.");
+                    }
+                },
+                error : function () {
+                    alert("An unexpected error occurred.");
+                }
             });
+        }
     });
 });
 
