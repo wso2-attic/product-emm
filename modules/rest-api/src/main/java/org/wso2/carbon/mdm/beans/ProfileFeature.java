@@ -18,9 +18,14 @@
 
 package org.wso2.carbon.mdm.beans;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonRawValue;
+import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class ProfileFeature implements Serializable {
 
@@ -29,6 +34,7 @@ public class ProfileFeature implements Serializable {
     private int profileId;
     private int deviceTypeId;
     private Object content;
+    private String payLoad;
 
     public int getId() {
         return id;
@@ -62,6 +68,15 @@ public class ProfileFeature implements Serializable {
         this.deviceTypeId = deviceTypeId;
     }
 
+    @JsonIgnore
+    public String getPayLoad() {
+        return payLoad;
+    }
+
+    public void setPayLoad(String payLoad) {
+        this.payLoad = payLoad;
+    }
+
     @JsonRawValue
     public Object getContent() {
         return content;
@@ -69,5 +84,9 @@ public class ProfileFeature implements Serializable {
 
     public void setContent(Object content) {
         this.content = content;
+        LinkedHashMap<String,String> contentMap = (LinkedHashMap)content;
+        JSONObject  jsonObject = new JSONObject(contentMap);
+        this.payLoad =  jsonObject.toString();
     }
+
 }

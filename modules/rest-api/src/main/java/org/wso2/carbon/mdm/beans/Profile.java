@@ -35,7 +35,6 @@ public class Profile {
     private DeviceType deviceType;
     private Timestamp createdDate;
     private Timestamp updatedDate;
-//    private List<Feature> featuresList;     // Features included in the policies.
     private List<ProfileFeature> profileFeaturesList;     // Features included in the policies.
 
     public DeviceType getDeviceType() {

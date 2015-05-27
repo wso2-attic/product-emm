@@ -92,23 +92,6 @@ public class User {
 		}
 	}
 
-	@GET
-	@Path("send")
-	public void sendEmail() throws MDMAPIException {
-
-		try {
-			EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-			emailMessageProperties.setMailTo(new String[] { "manojgunawardena@gmail.com" });
-			emailMessageProperties.setMessageBody("Test Mail");
-			emailMessageProperties.setSubject("test subject");
-
-			MDMAPIUtils.getEmailService().sendEmail(emailMessageProperties);
-		} catch (DeviceManagementException e) {
-			String msg = "Email service error.";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-	}
 
 	@GET
 	@Path("count/{tenantDomain}")
