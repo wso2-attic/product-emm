@@ -312,7 +312,7 @@ var operationModule = function () {
         return this.filter(
             function() { return $(this).data(prop)==val; }
         );
-    }
+    };
 
     /*
      @DeviceType = Device Type of the profile
@@ -344,7 +344,7 @@ var operationModule = function () {
             payload = createAndroidPayload(operationCode, operationData, deviceList);
         }
         return payload;
-    }
+    };
 
     /*
      @DeviceType = Device Type of the profile
@@ -355,9 +355,9 @@ var operationModule = function () {
         for (var i = 0; i < featureCodes.length; ++i) {
             var featureCode = featureCodes[i];
             var payload = module.generatePayload(deviceType, featureCode);
-            generatedProfile[featureCode] = payload;
+            generatedProfile[featureCode] = payload.operation;
         }
         return generatedProfile;
-    }
+    };
     return module;
 }();

@@ -17,6 +17,7 @@ function onRequest(context){
         viewModel.header = "Step 1. Download and install Agent";
         viewModel.link = "itms-services://?action=download-manifest&url=itms-services://?" +
             "action=download-manifest&url=" + mdmProps.httpsURL + "/mdm/ios/manifest";
+        viewModel.rootCertificateURL = "/mdm/controller/ios/ca";
     }
     return viewModel;
 }

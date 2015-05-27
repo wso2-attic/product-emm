@@ -182,10 +182,7 @@ function getDevicesByTypes(deviceList){
         if(item.type == "ios"){
             //for iOS we are sending only the IDS cause we are sending it to the JAX-RS
             deviceTypes[item.type].push(item.id);
-        }else{
-            deviceTypes[item.type].push(item);
         }
-
     });
     return deviceTypes;
 }

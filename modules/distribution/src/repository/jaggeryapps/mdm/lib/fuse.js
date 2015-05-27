@@ -205,7 +205,7 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
                     log.debug('[' + requestId + '] reading file "' + path + '"');
                     unitModel.definition = require(path);
                 } else {
-                    log.warn('[' + requestId + '] for unit "' + unitName + '", unable to find a definition file');
+                    //log.warn('[' + requestId + '] for unit "' + unitName + '", unable to find a definition file');
                     unitModel.definition = {};
                 }
 

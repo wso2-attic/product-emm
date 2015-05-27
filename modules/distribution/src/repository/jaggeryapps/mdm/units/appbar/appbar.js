@@ -40,8 +40,6 @@ function onRequest(context) {
             url: "/mdm/profiles/add-profile"
         });
     }
-    log.info("**");
-    log.info(context);
     context.currentActions = links[context.link];
     return context;
 }
