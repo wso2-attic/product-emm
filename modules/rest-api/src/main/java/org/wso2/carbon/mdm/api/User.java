@@ -90,7 +90,6 @@ public class User {
 			throw new MDMAPIException(msg, e);
 		}
 	}
-
 	@GET
 	@Path("count/{tenantDomain}")
 	public int getUserCount(@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {

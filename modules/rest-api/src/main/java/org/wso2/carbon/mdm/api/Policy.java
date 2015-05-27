@@ -21,6 +21,7 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.Message;
@@ -64,6 +65,7 @@ public class Policy {
 			throw new MDMAPIException(error, e);
 		}
 	}
+
 	@POST
 	@Path("{id}")
 	public Message updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy,  @PathParam("id") int policyId)

@@ -50,7 +50,7 @@ public class MDMUtil {
                 .ProfileFeature();
 
         profileFeature.setProfileId(mdmProfileFeature.getProfileId());
-        profileFeature.setContent(mdmProfileFeature.getContent());
+        profileFeature.setContent(mdmProfileFeature.getPayLoad());
         profileFeature.setDeviceTypeId(mdmProfileFeature.getDeviceTypeId());
         profileFeature.setFeatureCode(mdmProfileFeature.getFeatureCode());
         profileFeature.setId(mdmProfileFeature.getId());

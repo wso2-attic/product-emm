@@ -5,7 +5,7 @@ function onRequest(context) {
     context.saveNewPrioritiesButtonEnabled = false;
     var policyCount = policies.length;
     if (policyCount == 0) {
-        context.policyCountStatusMsg = "Oops, No Policies to show.";
+        context.policyCountStatusMsg = "No Policies to show currently.";
     } else {
         context.policyCountStatusMsg = "Drag & Move to re-order Policy Priority."
         if (policyCount > 1) {
