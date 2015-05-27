@@ -29,6 +29,7 @@ policyModule = function () {
     var policyManagementService = utility.getPolicyManagementService();
     var policyAdminPoint = policyManagementService.getPAP();
     var publicMethods = {};
+    var privateMethods = {};
 
     publicMethods.getPolicies = function () {
         log.debug(policyAdminPoint.getPolicies());
@@ -45,13 +46,25 @@ policyModule = function () {
             policyObject.name = policy.getPolicyName();
             policyObject.platform = policy.getProfile().getDeviceType().getName();
             policyObject.ownershipType = policy.getOwnershipType();
-            policyObject.roles = policy.getRoles();
-            policyObject.users = policy.getUsers();
+            policyObject.roles = privateMethods.getElementsInAString(policy.getRoles());
+            policyObject.users = privateMethods.getElementsInAString(policy.getUsers());
             policyObject.compliance = policy.getCompliance();
 
             policyList.push(policyObject);
         }
         return policyList;
+    };
+
+    privateMethods.getElementsInAString = function (elementList) {
+        var i, elementsInAString = "";
+        for (i = 0; i < elementList.size(); i++) {
+            if (i == elementList.size() - 1) {
+                elementsInAString += elementList.get(i);
+            } else {
+                elementsInAString += elementList.get(i) + ", ";
+            }
+        }
+        return elementsInAString;
     };
 
     publicMethods.getProfiles = function () {
@@ -99,5 +112,3 @@ policyModule = function () {
 
     return publicMethods;
 }();
-
-

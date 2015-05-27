@@ -21,35 +21,69 @@ var util = function () {
     var Base64 = Packages.org.apache.commons.codec.binary.Base64;
     var String = Packages.java.lang.String;
     var log = new Log();
+
+    /**
+     * Encode the payload in Base64
+     * @param payload
+     * @returns {Packages.java.lang.String}
+     */
     function encode(payload){
-        log.info(payload);
-        log.info(Base64.encodeBase64(new String(payload).getBytes()));
         return new String(Base64.encodeBase64(new String(payload).getBytes()));
     }
 
+    /**
+     * Get an AccessToken pair based on username and password
+     * @param username
+     * @param password
+     * @param clientId
+     * @param clientSecret
+     * @param scope
+     * @returns {{accessToken: "", refreshToken: ""}}
+     */
     module.getTokenWithPasswordGrantType = function (username, password, clientId, clientSecret, scope) {
         var xhr = new XMLHttpRequest();
         var tokenEndpoint = "https://localhost:9443/oauth2/token";
         var encodedClientKeys = encode(clientId + ":" + clientSecret);
-        log.info("*****");
-        log.info(encodedClientKeys);
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
         xhr.send("grant_type=password&username=" + username + "&password=" + password + "&scope=" + scope);
         delete password, delete clientSecret, delete encodedClientKeys;
-        log.info(xhr.status);
+        var tokenPair = {};
         if (xhr.status == 200) {
-            log.info("+++");
-            log.info(parse(xhr.responseText));
+            var data = parse(xhr.responseText);
+            tokenPair.refreshToken = data.refresh_token;
+            tokenPair.accessToken = data.access_token;
         } else if (xhr.status == 403) {
             throw "Error in obtaining token with Password Grant Type";
         } else {
             throw "Error in obtaining token with Password Grant Type";
         }
+        return tokenPair;
     };
     module.getTokenWithSAMLGrantType = function () {
 
+    };
+    module.refreshToken = function(tokenPair){
+        var xhr = new XMLHttpRequest();
+        var tokenEndpoint = "https://localhost:9443/oauth2/token";
+        var encodedClientKeys = encode(clientId + ":" + clientSecret);
+        xhr.open("POST", tokenEndpoint, false);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
+        xhr.send("grant_type=refresh_token&refresh_token=" + tokenPair.refreshToken + "&scope=" + scope);
+        delete password, delete clientSecret, delete encodedClientKeys;
+        var tokenPair = {};
+        if (xhr.status == 200) {
+            var data = parse(xhr.responseText);
+            tokenPair.refreshToken = data.refresh_token;
+            tokenPair.accessToken = data.access_token;
+        } else if (xhr.status == 403) {
+            throw "Error in obtaining token with Password Grant Type";
+        } else {
+            throw "Error in obtaining token with Password Grant Type";
+        }
+        return tokenPair;
     };
     return module;
 }();

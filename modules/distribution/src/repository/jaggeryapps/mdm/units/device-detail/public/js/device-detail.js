@@ -22,9 +22,9 @@
     var deviceType = deviceId.data("type");
     var payload = [deviceIdentifier];
     if (deviceType == "ios") {
-        var serviceUrl = "https://localhost:9443/ios/operation/deviceinfo";
+        var serviceUrl = "/ios/operation/deviceinfo";
     } else if (deviceType == "android") {
-        var serviceUrl = "https://localhost:9443/mdm-android-agent/operation/device-info";
+        var serviceUrl = "/mdm-android-agent/operation/device-info";
     }
     invokerUtil.post(serviceUrl, payload,
         function(message){

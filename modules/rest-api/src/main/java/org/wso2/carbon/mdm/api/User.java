@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.user.common.Role;
 import org.wso2.carbon.device.mgt.user.common.UserManagementException;
@@ -91,8 +90,6 @@ public class User {
 			throw new MDMAPIException(msg, e);
 		}
 	}
-
-
 	@GET
 	@Path("count/{tenantDomain}")
 	public int getUserCount(@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
