@@ -7,7 +7,7 @@
                 <p>{{listUsersStatus}}</p>
                 <div class="wr-list-group wr-sortable">
                     {{#each users}}
-                        <span class="list-group-item">
+                        <span id="{{username}}" class="list-group-item">
                             <i class="wr-sortable-icon fw fw-sort hide"></i>
                             <i class="wr-list-icon fw fw-user"></i>
                             <div class="wr-list-desc">
@@ -18,7 +18,7 @@
                                 {{/unequal}}
                             </div>
                             <span class="list-group-item-actions">
-                                <a href="#" id="invite-user-link" class="cu-btn-inner" data-username="{{username}}">
+                                <a href="#" class="invite-user-link cu-btn-inner" data-username="{{username}}">
                                     <span class="fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-invitation fw-stack-1x"></i>
@@ -26,7 +26,7 @@
                                     Invite
                                 </a>
                                 {{#unequal "admin" username }}
-                                    <a href="#" id="remove-user-link" class="cu-btn-inner" data-username="{{username}}">
+                                    <a href="#" class="remove-user-link cu-btn-inner" data-username="{{username}}">
                                     <span class="fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-delete fw-stack-1x"></i>
@@ -43,6 +43,97 @@
             <!-- /content -->
         </div>
     </div>
+
+    <div id="remove-user-modal-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Do you really want to remove this user from MDM User Store?</h3>
+                    <div class="buttons">
+                        <a href="#" id="remove-user-modal-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-user-200-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>User was successfully removed.</h3>
+                    <div class="buttons">
+                        <a href="#" id="remove-user-200-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-user-400-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Exception at backend.</h3>
+                    <div class="buttons">
+                        <a href="#" id="remove-user-400-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-user-403-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Action not permitted.</h3>
+                    <div class="buttons">
+                        <a href="#" id="remove-user-403-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-user-409-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>User does not exist.</h3>
+                    <div class="buttons">
+                        <a href="#" id="remove-user-409-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-user-unexpected-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>User does not exist.</h3>
+                    <div class="buttons">
+                        <a href="#" id="remove-user-unexpected-error-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {{/zone}}
 {{#zone "common-navigation"}}
     <!--Later add the navigation menu from here-->
@@ -50,10 +141,10 @@
 {{#zone "action-bar"}}
     {{#if permissions.ADD_USER}}
         <a href="/mdm/users/add-user" class="cu-btn">
-                        <span class="fw-stack">
-                            <i class="fw fw-ring fw-stack-2x"></i>
-                            <i class="fw fw-add-user fw-stack-1x"></i>
-                        </span>
+            <span class="fw-stack">
+                <i class="fw fw-ring fw-stack-2x"></i>
+                <i class="fw fw-add-user fw-stack-1x"></i>
+            </span>
             Add User
         </a>
     {{/if}}
