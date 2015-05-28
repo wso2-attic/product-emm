@@ -13,33 +13,39 @@
                     </span>
                     <div class="row">
                         <div class="col-lg-8">
-                            <label class="wr-input-label">User Name *</label>
-                                <div class="wr-input-control">
-                                    <input type="text" id="username" value="" placeholder="input text"/>
-                                </div>
+                            <label class="wr-input-label">
+                                User Name * <br>
+                                ( should be in minimum 3 characters long, lower-case and not include any whitespaces )
+                            </label>
+                            <div class="wr-input-control">
+                                <input type="text" id="username" value="" placeholder="input text"/>
+                            </div>
                             <label class="wr-input-label">First Name *</label>
-                                <div class="wr-input-control">
-                                    <input type="text" id="firstname" value="" placeholder="input text"/>
-                                </div>
+                            <div class="wr-input-control">
+                                <input type="text" id="firstname" value="" placeholder="input text"/>
+                            </div>
                             <label class="wr-input-label">Last Name *</label>
-                                <div class="wr-input-control">
-                                    <input type="text" id="lastname" value="" placeholder="input text"/>
-                                </div>
-                            <label class="wr-input-label">Email Address *</label>
-                                <div class="wr-input-control">
-                                    <input type="email" id="email" value="" placeholder="input text"/>
-                                </div>
+                            <div class="wr-input-control">
+                                <input type="text" id="lastname" value="" placeholder="input text"/>
+                            </div>
+                            <label class="wr-input-label">
+                                Email Address * <br>
+                                ( ex: sam@gmail.com )
+                            </label>
+                            <div class="wr-input-control">
+                                <input type="email" id="email" value="" placeholder="input text"/>
+                            </div>
                             <label class="wr-input-label">
                                 User Roles
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </label>
-                                <div class="wr-input-control">
-                                    <select id="roles" class="form-control select2" multiple="multiple">
-                                        {{#each roles}}
-                                            <option>{{this}}</option>
-                                        {{/each}}
-                                    </select>
-                                </div>
+                            <div class="wr-input-control">
+                                <select id="roles" class="form-control select2" multiple="multiple">
+                                    {{#each roles}}
+                                        <option>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <button id="add-user-btn" class="wr-btn">Add User</button>

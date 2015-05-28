@@ -10,6 +10,17 @@ $( document ).ready(function() {
 });
 
 /**
+ * Checks if provided input is valid against RegEx input.
+ *
+ * @param regEx Regular expression
+ * @param inputString Input string to check
+ * @returns {boolean} Returns true if input matches RegEx
+ */
+var inputIsValid = function (regEx, inputString) {
+    return regEx.test(inputString);
+};
+
+/**
  * Checks if an email address has the valid format or not.
  *
  * @param email Email address
@@ -36,6 +47,9 @@ $("button#add-user-btn").click(function() {
     if (!username) {
         $(".wr-validation-summary p").text("Username is a required field. It cannot be empty.");
         $(".wr-validation-summary").removeClass("hidden");
+    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\(\)\\|\\\\&lt;&gt;,\'\"" "A-Z0-9]{3,30}$/, username)) {
+        $(".wr-validation-summary p").text("Entered Username is invalid. Please check.");
+        $(".wr-validation-summary").removeClass("hidden");
     } else if (!firstname) {
         $(".wr-validation-summary p").text("Firstname is a required field. It cannot be empty.");
         $(".wr-validation-summary").removeClass("hidden");
@@ -50,14 +64,17 @@ $("button#add-user-btn").click(function() {
         $(".wr-validation-summary").removeClass("hidden");
     } else {
         var addUserFormData = {};
+
         addUserFormData.username = username;
         addUserFormData.firstname = firstname;
         addUserFormData.lastname = lastname;
         addUserFormData.emailAddress = emailAddress;
         addUserFormData.userRoles = userRoles;
+
         var addUserAPI = "/mdm/api/users/add";
+
         invokerUtil.post(addUserAPI, addUserFormData,
-            function(data){
+            function (data) {
                 if (data == 201) {
                     // Clearing user input fields.
                     $("input#username").val("");
@@ -76,7 +93,7 @@ $("button#add-user-btn").click(function() {
                     $(".wr-validation-summary p").text("Sorry, User already exists.");
                 }
                 $(".wr-validation-summary").removeClass("hidden");
-            }, function(jqXHR, textStatus, errorThrown){
+            }, function () {
                 $(".wr-validation-summary p").text("An unexpected error occurred.");
                 $(".wr-validation-summary").removeClass("hidden");
             });
