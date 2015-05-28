@@ -34,8 +34,4 @@
     <session-config>
         <session-timeout>60</session-timeout>
     </session-config>
-    <context-param>
-        <param-name>authentication-scheme</param-name>
-        <param-value>OAuth</param-value>
-    </context-param>
 </web-app>

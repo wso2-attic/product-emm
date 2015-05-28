@@ -122,12 +122,18 @@ public class MobileDevice {
 			}
 			return devices;
 		} catch (DeviceManagementException deviceMgtEx) {
-			msg = "Error occurred while fetching the device information.";
+			msg = "Error occurred while fetching the devices list of given user.";
 			log.error(msg, deviceMgtEx);
 			throw new MDMAPIException(msg, deviceMgtEx);
 		}
 	}
 
+	/**
+	 * Get current device count
+	 *
+	 * @return device count
+	 * @throws MDMAPIException
+	 */
 	@GET
 	@Path("count")
 	public int getDeviceCount() throws MDMAPIException {
@@ -143,9 +149,35 @@ public class MobileDevice {
 			}
 			return deviceCount;
 		} catch (DeviceManagementException deviceMgtEx) {
-			String msg = "Error occurred while fetching the device information.";
+			String msg = "Error occurred while fetching the device count.";
 			log.error(msg, deviceMgtEx);
 			throw new MDMAPIException(msg, deviceMgtEx);
 		}
+	}
+
+	/**
+	 * Get the list of devices that matches with the given name.
+	 *
+	 * @param deviceName Device name
+	 * @param tenantDomain
+	 * @return list of devices.
+	 * @throws MDMAPIException If some unusual behaviour is observed while fetching the
+	 * device list
+	 */
+	@GET
+	@Path("name/{name}/{tenantDomain}")
+	public List<org.wso2.carbon.device.mgt.common.Device> getDevicesByName(@PathParam("name") String deviceName,
+				@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+
+		List<org.wso2.carbon.device.mgt.common.Device> devices;
+		int tenantId = MDMAPIUtils.getTenantId(tenantDomain);
+		try {
+			devices = MDMAPIUtils.getDeviceManagementService().getDevicesByName(deviceName, tenantId);
+		} catch (DeviceManagementException e) {
+			String msg = "Error occurred while fetching the devices list of device name.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return devices;
 	}
 }
