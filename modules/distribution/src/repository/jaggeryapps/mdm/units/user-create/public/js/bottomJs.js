@@ -55,15 +55,9 @@ $("button#add-user-btn").click(function() {
         addUserFormData.lastname = lastname;
         addUserFormData.emailAddress = emailAddress;
         addUserFormData.userRoles = userRoles;
-
         var addUserAPI = "/mdm/api/users/add";
-
-        $.ajax({
-            type : "POST",
-            url : addUserAPI,
-            contentType : "application/json",
-            data : JSON.stringify(addUserFormData),
-            success : function(data) {
+        invokerUtil.post(addUserAPI, addUserFormData,
+            function(data){
                 if (data == 201) {
                     // Clearing user input fields.
                     $("input#username").val("");
@@ -82,11 +76,9 @@ $("button#add-user-btn").click(function() {
                     $(".wr-validation-summary p").text("Sorry, User already exists.");
                 }
                 $(".wr-validation-summary").removeClass("hidden");
-            },
-            error : function() {
+            }, function(jqXHR, textStatus, errorThrown){
                 $(".wr-validation-summary p").text("An unexpected error occurred.");
                 $(".wr-validation-summary").removeClass("hidden");
-            }
-        });
+            });
     }
 });

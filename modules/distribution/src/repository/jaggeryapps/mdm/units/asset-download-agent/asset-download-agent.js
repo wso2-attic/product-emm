@@ -10,7 +10,6 @@ function onRequest(context){
     var viewModel = context;
     viewModel.link = os.name;
     if(os.name == "Android"){
-        log.info("Android detected");
         viewModel.header = "Download and install Agent";
         viewModel.link = mdmProps.httpURL + app.publicURL + "/asset/" + mdmProps.androidAgentApp;
     }else if(os.name == "iOS"){

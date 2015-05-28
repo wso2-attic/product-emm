@@ -24,16 +24,12 @@ $("a#invite-user-link").click(function () {
     var userResponse = confirm("An invitation mail will be sent to User (" + username + ") " +
                                "to initiate Enrollment Process");
     if (userResponse == true) {
-        $.ajax({
-            type : "GET",
-            url : inviteUserAPI,
-            success : function () {
+        invokerUtil.get(inviteUserAPI,
+            function () {
                 alert("User invitation for enrollment sent.");
-            },
-            error: function () {
+            }, function () {
                 alert("An unexpected error occurred.");
-            }
-        });
+            });
     }
 });
 
@@ -47,10 +43,8 @@ $("a#remove-user-link").click(function () {
     var removeUserAPI = "/mdm/api/users/" + username + "/remove";
     var userResponse = confirm("Do you really want to remove this user (" + username + ") from MDM User Store?");
     if (userResponse == true) {
-        $.ajax({
-            type : "GET",
-            url : removeUserAPI,
-            success : function (data) {
+        invokerUtil.get(removeUserAPI,
+            function (data) {
                 if (data == 200) {
                     alert("User (" + username + ") was successfully removed.");
                     location.reload();
@@ -61,11 +55,9 @@ $("a#remove-user-link").click(function () {
                 } else if (data == 409) {
                     alert("User (" + username + ") does not exist.");
                 }
-            },
-            error : function () {
+            }, function () {
                 alert("An unexpected error occurred.");
-            }
-        });
+            });
     }
 });
 

@@ -285,7 +285,8 @@ var userModule = function () {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
             log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
+            response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
+            exit();
         }
         var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
         var user = new carbonModule.user.User(userManager, carbonUser.username);

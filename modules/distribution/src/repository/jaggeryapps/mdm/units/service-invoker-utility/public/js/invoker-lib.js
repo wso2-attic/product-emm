@@ -51,7 +51,13 @@ var invokerUtil = function () {
                     "Authorization": "Bearer " + accessToken
                 };
             }
-            $.ajax(data).error(errorCallback);
+            $.ajax(data).fail(function(jqXHR){
+                if(jqXHR.status == "401"){
+                    window.location.replace("/mdm");
+                }else{
+                    errorCallback(jqXHR);
+                }
+            });
         }
         if (flagAuth){
             if (accessToken){
