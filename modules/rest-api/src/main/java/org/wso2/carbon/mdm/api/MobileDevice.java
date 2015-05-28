@@ -155,6 +155,15 @@ public class MobileDevice {
 		}
 	}
 
+	/**
+	 * Get the list of devices that matches with the given name.
+	 *
+	 * @param deviceName Device name
+	 * @param tenantDomain
+	 * @return list of devices.
+	 * @throws MDMAPIException If some unusual behaviour is observed while fetching the
+	 * device list
+	 */
 	@GET
 	@Path("name/{name}/{tenantDomain}")
 	public List<org.wso2.carbon.device.mgt.common.Device> getDevicesByName(@PathParam("name") String deviceName,
