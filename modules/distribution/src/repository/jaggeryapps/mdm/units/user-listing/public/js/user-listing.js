@@ -13,26 +13,6 @@ $(function () {
     $(sortableElem).disableSelection();
 });
 
-/**
- * Following click function would execute
- * when a user clicks on "Invite" link
- * on User Management page in WSO2 MDM Console.
- */
-$("a.invite-user-link").click(function () {
-    var username = $(this).data("username");
-    var inviteUserAPI = "/mdm/api/users/" + username + "/invite";
-    var userResponse = confirm("An invitation mail will be sent to User (" + username + ") " +
-                               "to initiate Enrollment Process");
-    if (userResponse == true) {
-        invokerUtil.get(inviteUserAPI,
-            function () {
-                alert("User invitation for enrollment sent.");
-            }, function () {
-                alert("An unexpected error occurred.");
-            });
-    }
-});
-
 var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
@@ -64,6 +44,41 @@ function hidePopup() {
 
 /**
  * Following click function would execute
+ * when a user clicks on "Invite" link
+ * on User Management page in WSO2 MDM Console.
+ */
+$("a.invite-user-link").click(function () {
+    var username = $(this).data("username");
+    var inviteUserAPI = "/mdm/api/users/" + username + "/invite";
+
+    $(modalPopupContent).html($('#invite-user-modal-content').html());
+    showPopup();
+
+    $("a#invite-user-yes-link").click(function () {
+        invokerUtil.get(
+            inviteUserAPI,
+            function () {
+                $(modalPopupContent).html($('#invite-user-success-content').html());
+                $("a#invite-user-success-link").click(function () {
+                    hidePopup();
+                });
+            },
+            function () {
+                $(modalPopupContent).html($('#invite-user-error-content').html());
+                $("a#invite-user-error-link").click(function () {
+                    hidePopup();
+                });
+            }
+        );
+    });
+
+    $("a#invite-user-cancel-link").click(function () {
+        hidePopup();
+    });
+});
+
+/**
+ * Following click function would execute
  * when a user clicks on "Remove" link
  * on User Management page in WSO2 MDM Console.
  */
@@ -74,7 +89,7 @@ $("a.remove-user-link").click(function () {
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
 
-    $("a#remove-user-modal-link").click(function () {
+    $("a#remove-user-yes-link").click(function () {
         invokerUtil.get(
             removeUserAPI,
             function (data) {
@@ -100,7 +115,8 @@ $("a.remove-user-link").click(function () {
                         hidePopup();
                     });
                 }
-            }, function () {
+            },
+            function () {
                 $(modalPopupContent).html($('#remove-user-unexpected-error-content').html());
                 $("a#remove-user-unexpected-error-link").click(function () {
                     hidePopup();
@@ -108,7 +124,8 @@ $("a.remove-user-link").click(function () {
             }
         );
     });
+
+    $("a#remove-user-cancel-link").click(function () {
+        hidePopup();
+    });
 });
-
-
-
