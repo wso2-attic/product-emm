@@ -7,9 +7,10 @@ $(document).ready(function () {
     var sortUpdateBtn = '#sortUpdateBtn',
         sortedIDs;
 
-    var saveNewPrioritiesButtonEnabled = Boolean($("#save-new-priorities-button").data("enabled"));
+    var saveNewPrioritiesButton = "#save-new-priorities-button";
+    var saveNewPrioritiesButtonEnabled = Boolean($(saveNewPrioritiesButton).data("enabled"));
     if (saveNewPrioritiesButtonEnabled) {
-        $("#save-new-priorities-button").removeClass("hide");
+        $(saveNewPrioritiesButton).removeClass("hide");
     }
 
     function addSortableIndexNumbers(){
@@ -22,7 +23,7 @@ $(document).ready(function () {
         addSortableIndexNumbers();
         var sortableElem = '.wr-sortable';
         $(sortableElem).sortable({
-            beforeStop: function(event, ui){
+            beforeStop: function () {
                 sortedIDs = $(this).sortable('toArray');
                 addSortableIndexNumbers();
                 $(sortUpdateBtn).prop('disabled', false);

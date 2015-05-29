@@ -23,10 +23,12 @@
 
                 <div class="wr-form">
 
-                    <h1 class="wr-title">Policy creation successful</h1>
+                    <h1 class="wr-title">Policy creation is successful</h1>
                     Please click <b>"Finish"</b> to complete the process and go back to the policy list
                     <hr />
-                    <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/mdm/policies/" onclick="window.location.href=''">Finish</button>
+                    <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/mdm/policies/" onclick="window.location.href=''">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Finish&nbsp;&nbsp;&nbsp;&nbsp;
+                    </button>
 
                 </div>
 
@@ -35,12 +37,9 @@
 
                 <div class="wr-form">
 
-                    <h1 class="wr-title">Create Policy</h1>
-                    <hr />
+                    <h1 class="page-sub-title">Add Policy</h1>
 
-                    <div class="row wr-wizard">
-
-                    </div>
+                    <div class="row wr-wizard"></div>
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -74,19 +73,15 @@
                         </div>
                     </div>
 
-
                 </div>
             </div>
             <div class="container col-centered wr-content policy-criteria hidden">
 
                 <div class="wr-form">
 
-                    <h1 class="wr-title">Create Policy</h1>
-                    <hr />
+                    <h1 class="page-sub-title">Add Policy</h1>
 
-                    <div class="row wr-wizard">
-
-                    </div>
+                    <div class="row wr-wizard"></div>
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -117,7 +112,7 @@
 
                                 <div id="userSelectField" class="user-select">
                                     <label class="wr-input-label" title="">
-                                        Set User
+                                        Set User(s)
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </label>
                                     <div class="wr-input-control">
@@ -134,13 +129,12 @@
 
                                 <div id="userRoleSelectField" class="user-select" style="display:none">
                                     <label class="wr-input-label" title="">
-                                        Set User Roles
+                                        Set User Role(s)
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </label>
                                     <div class="wr-input-control">
                                         <div class="cus-col-50">
                                             <select id="user-roles-input"  class="form-control select2" multiple="multiple">
-                                                <option>Any</option>
                                                 {{#each roles}}
                                                     <option>{{this}}</option>
                                                 {{/each}}
@@ -151,7 +145,7 @@
                                 </div>
 
                                 <label class="wr-input-label" title="">
-                                    Action upon Non-compliance
+                                    Set Action upon Non-compliance
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </label>
                                 <div class="wr-input-control">
@@ -177,12 +171,9 @@
 
                 <div class="wr-form">
 
-                    <h1 class="wr-title">Create Policy</h1>
-                    <hr />
+                    <h1 class="page-sub-title">Add Policy</h1>
 
-                    <div class="row wr-wizard">
-
-                    </div>
+                    <div class="row wr-wizard"></div>
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -201,8 +192,7 @@
 
                 <div class="wr-form">
 
-                    <h1 class="wr-title">Create Policy</h1>
-                    <hr />
+                    <h1 class="page-sub-title">Add Policy</h1>
 
                     <div class="row wr-wizard">
                         <div class="col-md-3 col-xs-3">
@@ -225,92 +215,21 @@
 
                     <div class="row">
                         <div class="col-lg-12">
-
                             <div class="row wr-tile-buttons-list">
-                                <div class="col-lg-12">
-                                    <div class="wr-input-control">
-                                        <ul class="tile-buttons row">
-                                            <li class="col-lg-4"><a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="android" data-platform-id="1"><i class="fw fw-android"></i>Android</a></li>
-                                            <li class="col-lg-4"><a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="ios" data-platform-id="2"><i class="fw fw-apple"></i>iOS</a></li>
-                                            <li class="col-lg-4"><a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="windows" data-platform-id="3"><i class="fw fw-windows"></i>Windows</a></li>
-                                        </ul>
-                                    </div>
+                                <div class="wr-input-control">
+                                    <ul class="tile-buttons row">
+                                        <li class="col-lg-4"><a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="android" data-platform-id="1"><i class="fw fw-android"></i>Android</a></li>
+                                        <li class="col-lg-4"><a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="ios" data-platform-id="2"><i class="fw fw-apple"></i>iOS</a></li>
+                                        <li class="col-lg-4"><a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="windows" data-platform-id="3"><i class="fw fw-windows"></i>Windows</a></li>
+                                    </ul>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
                 </div>
             </div>
             <!-- content -->
-            <!--<div class="container col-centered wr-content add-policy">-->
-
-                <!--<div class="wr-form">-->
-
-                    <!--<h1 class="wr-title">Create Policy</h1>-->
-                    <!--<hr />-->
-
-                    <!--<div class="row">-->
-                        <!--<div class="col-lg-8">-->
-
-                            <!--<label class="wr-input-label">Policy Name</label>-->
-                            <!--<div class="wr-input-control">-->
-                                <!--<input id="policy-name-input" type="text" value="" placeholder="input text"/>-->
-                            <!--</div>-->
-
-                            <!--<label class="wr-input-label">Profile<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>-->
-                            <!--<div class="wr-input-control">-->
-                                <!--<select id="profile-input" class="form-control select2">-->
-                                    <!--{{#each profiles}}-->
-                                        <!--<option data-id="{{this.id}}">{{this.name}}</option>-->
-                                    <!--{{/each}}-->
-                                <!--</select>-->
-                            <!--</div>-->
-
-                            <!--<label class="wr-input-label">User Roles<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>-->
-                            <!--<div class="wr-input-control">-->
-                                <!--<select id="users-roles-input" class="form-control select2" multiple="multiple">-->
-                                    <!--{{#each roles}}-->
-                                        <!--<option>{{this}}</option>-->
-                                    <!--{{/each}}-->
-                                <!--</select>-->
-                            <!--</div>-->
-
-                            <!--<label class="wr-input-label">Users<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>-->
-                            <!--<div class="wr-input-control">-->
-                                <!--<select id="users-input" class="form-control select2" multiple="multiple">-->
-                                    <!--{{#each users}}-->
-                                        <!--<option>{{this.username}}</option>-->
-                                    <!--{{/each}}-->
-                                <!--</select>-->
-                            <!--</div>-->
-
-                            <!--&lt;!&ndash;<br />&ndash;&gt;-->
-                            <!--&lt;!&ndash;<h2 class="sub-title">Location & Time</h2>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<hr />&ndash;&gt;-->
-
-                            <!--<label class="wr-input-label">Non compliance Actions<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>-->
-                            <!--<div class="wr-input-control">-->
-                                <!--<select id="action-input" class="form-control select2" multiple="multiple">-->
-                                    <!--{{#each actions}}-->
-                                        <!--<option>{{this}}</option>-->
-                                    <!--{{/each}}-->
-                                <!--</select>-->
-                            <!--</div>-->
-
-                        <!--</div>-->
-                    <!--</div>-->
-
-                    <!--<button id="policy-create" class="wr-btn">Create Policy</button>-->
-
-                <!--</div>-->
-
-            <!--</div>-->
-
-            <!-- /content -->
-
-
         </div>
     </div>
 {{/zone}}
