@@ -22,14 +22,20 @@
             <div class="container col-centered wr-content policy-message hidden">
 
                 <div class="wr-form">
-
-                    <h1 class="wr-title">Policy creation is successful</h1>
-                    Please click <b>"Finish"</b> to complete the process and go back to the policy list
+                    <p class="page-sub-title">Policy creation is successful.</p>
+                    <br>Please click <b>"Add Another Policy"</b>, if you wish to add another policy or click
+                    <b>"View Policy List"</b> to complete the process and go back to the policy list.
                     <hr />
-                    <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/mdm/policies/" onclick="window.location.href=''">
-                        &nbsp;&nbsp;&nbsp;&nbsp;Finish&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/mdm/policies/">
+                        &nbsp;&nbsp;&nbsp;&nbsp;View Policy List&nbsp;&nbsp;&nbsp;&nbsp;
                     </button>
-
+                    <a href="/mdm/policies/add-policy" class="cu-btn-inner">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-add fw-stack-1x"></i>
+                        </span>
+                        Add Another Policy
+                    </a>
                 </div>
 
             </div>
