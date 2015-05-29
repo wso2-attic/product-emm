@@ -1,11 +1,7 @@
-var serviceEndPoint = "/mdm-admin/policies/";
-var modelPopup = '.wr-modalpopup';
-var modelPopupContent = modelPopup + ' .modalpopup-content';
-
 $(document).ready(function () {
     /* sorting function */
-    var sortUpdateBtn = '#sortUpdateBtn',
-        sortedIDs;
+    var sortUpdateBtn = '#sortUpdateBtn';
+    var sortedIDs;
 
     var saveNewPrioritiesButton = "#save-new-priorities-button";
     var saveNewPrioritiesButtonEnabled = Boolean($(saveNewPrioritiesButton).data("enabled"));
@@ -13,13 +9,13 @@ $(document).ready(function () {
         $(saveNewPrioritiesButton).removeClass("hide");
     }
 
-    function addSortableIndexNumbers(){
+    var addSortableIndexNumbers = function () {
         $('.wr-sortable .list-group-item').not('.ui-sortable-placeholder').each(function(i) {
             $('.wr-sort-index', this).html(i+1);
         });
-    }
+    };
 
-    $(function() {
+    var sortElements = function () {
         addSortableIndexNumbers();
         var sortableElem = '.wr-sortable';
         $(sortableElem).sortable({
@@ -30,7 +26,9 @@ $(document).ready(function () {
             }
         });
         $(sortableElem).disableSelection();
-    });
+    };
+
+    sortElements();
 
     $(sortUpdateBtn).click(function () {
         $(sortUpdateBtn).prop('disabled', true);
@@ -61,13 +59,7 @@ $(document).ready(function () {
         });
     });
 
-    // -------------------------------
-    $(".policy-view-link").click(function () {
-        //alert("id = " + $(this).data("id"));
-    });
-
-
-    $(".policy-delete-link").click(function () {
+    $(".policy-remove-link").click(function () {
         var policyId = $(this).data("id");
         var deletePolicyAPI = "/mdm/api/policies/" + policyId + "/delete";
         var userResponse = confirm("Do you really want to delete this policy?");
@@ -77,8 +69,14 @@ $(document).ready(function () {
                 url : deletePolicyAPI,
                 success : function (data) {
                     if (data == 200) {
+                        $("#" + policyId).remove();
+                        sortElements();
+                        var newPolicyListCount = $(".policy-list > span").length;
+                        if (newPolicyListCount == 1) {
+                            $(saveNewPrioritiesButton).addClass("hide");
+                        }
                         alert("Policy was successfully removed.");
-                        location.reload();
+                        //location.reload();
                     } else if (data == 409) {
                         alert("Policy does not exist.");
                     } else if (data == 500) {
@@ -92,8 +90,3 @@ $(document).ready(function () {
         }
     });
 });
-
-function hidePopup() {
-    $(modelPopupContent).html('');
-    $(modelPopup).hide();
-}
