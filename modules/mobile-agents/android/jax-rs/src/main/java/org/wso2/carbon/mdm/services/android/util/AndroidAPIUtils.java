@@ -121,9 +121,9 @@ public class AndroidAPIUtils {
 		return policyManager;
 	}
 
-	public static void updateOperation(int operationID, Operation.Status status)
+	public static void updateOperation(int deviceId, int operationID, Operation.Status status)
 		throws OperationManagementException {
-		getDeviceManagementService().updateOperation(operationID, status);
+		getDeviceManagementService().updateOperation(deviceId, operationID, status);
 	}
 
 	public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
