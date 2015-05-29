@@ -19,11 +19,13 @@
 package org.wso2.carbon.mdm.services.android.util;
 
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -121,9 +123,12 @@ public class AndroidAPIUtils {
 		return policyManager;
 	}
 
-	public static void updateOperation(int deviceId, int operationID, Operation.Status status)
+	public static void updateOperation(String deviceId, int operationID, Operation.Status status)
 		throws OperationManagementException {
-		getDeviceManagementService().updateOperation(deviceId, operationID, status);
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        deviceIdentifier.setId(deviceId);
+        deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+		getDeviceManagementService().updateOperation(deviceIdentifier, operationID, status);
 	}
 
 	public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations

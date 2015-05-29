@@ -61,7 +61,7 @@ public class OperationMgtService {
 
         try {
             if (resultOperations != null) {
-                updateOperations(Integer.parseInt(id), resultOperations);
+                updateOperations(id, resultOperations);
             }
         } catch (OperationManagementException e) {
             message.setResponseMessage("Issue in retrieving operation management service instance");
@@ -876,7 +876,7 @@ public class OperationMgtService {
         }
     }
 
-    private void updateOperations(int deviceId,
+    private void updateOperations(String deviceId,
             List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
             throws OperationManagementException {
 
