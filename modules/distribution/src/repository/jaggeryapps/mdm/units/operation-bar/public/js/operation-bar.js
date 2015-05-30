@@ -176,11 +176,14 @@ function getSelectedDeviceIds(){
 function getDevicesByTypes(deviceList){
     var deviceTypes = {};
     jQuery.each(deviceList, function(index, item) {
-        if(!deviceTypes[item.type]){
-            deviceTypes[item.type] = [];
+        deviceTypes[item.type] = [];
+        if(item.type == "android"){
+            deviceTypes[item.type].push(item.id);
         }
         if(item.type == "ios"){
-            //for iOS we are sending only the IDS cause we are sending it to the JAX-RS
+            deviceTypes[item.type].push(item.id);
+        }
+        if(item.type == "TemperatureController"){
             deviceTypes[item.type].push(item.id);
         }
     });
@@ -197,15 +200,34 @@ function loadOperationBar(deviceType){
     var platformType = deviceType;
     $.template("operations-bar", operationBarSrc, function (template) {
         var serviceURL = "/mdm-admin/features/" + platformType;
+        if (deviceType == "TemperatureController") {
+            serviceURL = "/mdm-admin/features/android";
+        }
         var successCallback = function (data) {
             var viewModel = {};
             var iconMap = {};
+            if (deviceType == "TemperatureController") {
+                data = [{
+                    "id": 0,
+                    "code": "BUZZER",
+                    "name": "Buzz",
+                    "description": "Buzz the device",
+                    "deviceType": "TemperatureController",
+                    "metadataEntries": null
+                }];
+                currentOperationList = viewModel.features = data.reduce(function (total, current) {
+                    total[current.code] = current;
+                    return total;
+                }, {});
+            }
             data = data.filter(function(current){
                 var iconName;
                 if (deviceType == "android"){
                     var iconName = operationModule.getAndroidIconForFeature(current.code);
                 } else if (deviceType == "ios"){
                     var iconName = operationModule.getiOSIconForFeature(current.code);
+                } else if (deviceType == "TemperatureController"){
+                    var iconName = operationModule.getTemperatureControllerIconForFeature(current.code);
                 }
                 if (iconName){
                     current.icon = iconName;
@@ -223,29 +245,33 @@ function loadOperationBar(deviceType){
     });
     var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
     var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
-    $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
-        var serviceURL = "/mdm-admin/features/" + platformType;
-        var successCallback = function (data) {
-            var viewModel = {};
-            viewModel.features = data.reduce(function (total, current) {
-                total[current.code] = current;
-                return total;
-            }, {});
-            currentOperationList = viewModel.features;
-            var content = template(viewModel);
-            $(".wr-hidden-operations").html(content);
-        };
-        invokerUtil.get(serviceURL,
-            successCallback, function(message){
-                console.log(message);
-            });
-    });
-    $("#showOperationsBtn").removeClass("hidden");
+    if (hiddenOperationBarSrc){
+        $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
+            var serviceURL = "/mdm-admin/features/" + platformType;
+            var successCallback = function (data) {
+                var viewModel = {};
+                viewModel.features = data.reduce(function (total, current) {
+                    total[current.code] = current;
+                    return total;
+                }, {});
+                currentOperationList = viewModel.features;
+                var content = template(viewModel);
+                $(".wr-hidden-operations").html(content);
+            };
+            invokerUtil.get(serviceURL,
+                successCallback, function(message){
+                    console.log(message);
+                });
+        });
+        $("#showOperationsBtn").removeClass("hidden");
+    }
+
 }
 
 function runOperation(operationName) {
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
+
     var successCallback = function(message){
         console.log(message);
         $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
@@ -263,6 +289,10 @@ function runOperation(operationName) {
     if(list["android"]){
         var payload = operationModule.generatePayload("android", operationName, list["android"]);
         var serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
+    }
+    if(list["TemperatureController"]){
+        var payload = operationModule.generatePayload("TemperatureController", operationName, list["TemperatureController"]);
+        var serviceEndPoint = operationModule.getTemperatureControllerServiceEndpoint(operationName);
     }
     invokerUtil.post(serviceEndPoint, payload,
         successCallback, function(jqXHR, textStatus, errorThrown){

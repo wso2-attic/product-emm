@@ -80,6 +80,9 @@ var invokerUtil = function () {
     module.post = function(url, payload, successCallback, errorCallback){
         call("POST", url, payload, successCallback, errorCallback);
     };
+    module.put = function(url, payload, successCallback, errorCallback){
+        call("PUT", url, payload, successCallback, errorCallback);
+    };
     module.delete = function(url, successCallback, errorCallback){
         var payload = null;
         call("DELETE", url, payload, successCallback, errorCallback);

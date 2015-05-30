@@ -288,6 +288,7 @@ var operationModule = function () {
         };
         return featureMap[featureCode];
     };
+
     /**
      * Get the icon for the featureCode
      * @param featureCode
@@ -299,6 +300,37 @@ var operationModule = function () {
             LOCATION: "fw-map-location",
             ENTERPRISE_WIPE: "fw-clean",
             ALARM: "fw-dial-up"
+        };
+        return featureMap[featureCode];
+    };
+
+    function createTemperatureControllerPayload(operationName, operationData, devices) {
+        var payload;
+        var operationType = "profile";
+        if (operationName == "BUZZER") {
+            payload = {
+                "operation": {
+                    "enabled" : operationData.enableBuzzer
+                }
+            };
+        } else {
+            operationType = "command";
+            payload = devices;
+        }
+        if (operationType == "profile" && devices) {
+            payload.deviceIDs = devices;
+        }
+        return payload;
+    }
+    module.getTemperatureControllerServiceEndpoint = function(operationName) {
+        var featureMap = {
+            BUZZER: "buzzer"
+        };
+        return "/temp-controller-agent/operations/" + featureMap[operationName];
+    };
+    module.getTemperatureControllerIconForFeature = function(featureCode){
+        var featureMap = {
+            BUZZER: "fw-dial-up"
         };
         return featureMap[featureCode];
     };
@@ -342,6 +374,9 @@ var operationModule = function () {
         }
         if(deviceType == "android"){
             payload = createAndroidPayload(operationCode, operationData, deviceList);
+        }
+        if(deviceType == "TemperatureController"){
+            payload = createTemperatureControllerPayload(operationCode, operationData, deviceList);
         }
         return payload;
     };

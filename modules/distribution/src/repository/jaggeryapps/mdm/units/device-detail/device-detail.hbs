@@ -1,12 +1,23 @@
 {{#zone "main"}}
     <div class="row wr-device-board">
         <div class="col-lg-12 wr-secondary-bar">
-            <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
-                Device {{device.name}}
-                <span class="lbl-device">
+            {{#unequal device.type "TemperatureController"}}
+                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
+                    Device {{device.name}}
+                    <span class="lbl-device">
                     ({{device.viewModel.vendor}} {{device.viewModel.model}})
                 </span>
-            </label>
+                </label>
+            {{/unequal}}
+            {{#equal device.type "TemperatureController"}}
+                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
+                    Device - {{device.properties.platform}}
+                    <span class="lbl-device">
+                    ({{device.properties.version}})
+                </span>
+                </label>
+            {{/equal}}
+
         </div>
     </div>
     <div class="wr-device-list row">
@@ -26,11 +37,18 @@
                                 <img src="{{self.publicURL}}/img/device_icons/{{device.type}}.png" style="width:200px" />
                             </div>
                             <div class="col-lg-12 col-sm-4 ast-desc">
-                                <div class="ast-device-desc"><b>Device:</b> {{device.viewModel.vendor}} {{device.properties.model}}</div>
-                                <div class="ast-device-desc"><b>Model:</b>  {{device.viewModel.model}}</div>
-                                <div class="ast-device-desc"><b>IMEI:</b>  {{device.viewModel.imei}}</div>
-                                {{#if device.viewModel.udid}}<div class="ast-device-desc"><b>UDID:</b>  {{device.viewModel.udid}}</div>{{/if}}
-                                {{#if device.viewModel.phoneNumber}}<div class="ast-device-desc"><b>Phone Number:</b>  {{device.viewModel.phoneNumber}}</div>{{/if}}
+                                {{#unequal device.type "TemperatureController"}}
+                                    <div class="ast-device-desc"><b>Device:</b> {{device.viewModel.vendor}} {{device.properties.model}}</div>
+                                    <div class="ast-device-desc"><b>Model:</b>  {{device.viewModel.model}}</div>
+                                    <div class="ast-device-desc"><b>IMEI:</b>  {{device.viewModel.imei}}</div>
+                                    {{#if device.viewModel.udid}}<div class="ast-device-desc"><b>UDID:</b>  {{device.viewModel.udid}}</div>{{/if}}
+                                    {{#if device.viewModel.phoneNumber}}<div class="ast-device-desc"><b>Phone Number:</b>  {{device.viewModel.phoneNumber}}</div>{{/if}}
+                                {{/unequal}}
+                                {{#equal device.type "TemperatureController"}}
+                                    <div class="ast-device-desc"><b>Serial:</b> {{device.deviceIdentifier}}</div>
+                                    <div class="ast-device-desc"><b>Model:</b>  {{device.properties.platform}}</div>
+
+                                {{/equal}}
                             </div>
                         </div>
                     </div>
@@ -92,7 +110,7 @@
                         <!-- /device summary -->
 
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-
+                            {{#if viewModel.location}}
                             <!-- device location -->
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="headingOne">
@@ -107,11 +125,52 @@
                                     </h2>
                                 </div>
                                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                    <div id="device-location" style="height:400px" class="panel-body">
 
+                                        <div id="device-location" data-lat="{{viewModel.location.latitude}}" data-lat="{{viewModel.location.longitude}}" style="height:200px" class="panel-body">
+
+                                        </div>
+
+                                </div>
+                            </div>
+                            {{/if}}
+                            {{#equal device.type "TemperatureController"}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingFour">
+                                    <h2 class="sub-title panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                        <span class="fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
+                                        </span>
+                                            Device Properties
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+                                    <div class="panel-body">
+
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Property</th>
+                                                <th>Value</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {{#each device.properties}}
+                                                <!--<span><b></b> :  </span>-->
+                                                <tr>
+                                                    <td>{{@key}}</td>
+                                                    <td>{{this}}</td>
+                                                </tr>
+                                            {{/each}}
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
+                            {{/equal}}
                             <!-- /device location -->
 
                             <!-- policies -->

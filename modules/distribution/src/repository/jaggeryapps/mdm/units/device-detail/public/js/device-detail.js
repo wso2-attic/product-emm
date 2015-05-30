@@ -26,15 +26,20 @@
     } else if (deviceType == "android") {
         var serviceUrl = "/mdm-android-agent/operation/device-info";
     }
-    invokerUtil.post(serviceUrl, payload,
-        function(message){
-            console.log(message);
-        }, function (message) {
-            console.log(message);
-        });
+    if(serviceUrl){
+        invokerUtil.post(serviceUrl, payload,
+            function(message){
+                console.log(message);
+            }, function (message) {
+                console.log(message);
+            });
+    }
     $(document).ready(function(){
         loadOperationBar(deviceType);
-        loadMap();
+        if (document.getElementById('device-location')){
+            loadMap();
+        }
+
     });
     function loadMap(){
         var map;
@@ -42,19 +47,22 @@
             var mapOptions = {
                 zoom: 18
             };
-            var lat = 6.9098591;
-            var long = 79.8523753;
-            map = new google.maps.Map(document.getElementById('device-location'),
-                mapOptions);
 
-            var pos = new google.maps.LatLng(lat,
-                long);
-            var marker = new google.maps.Marker({
-                position: pos,
-                map: map
-            });
+                var lat = $("#device-location").data("lat");
+                var long = $("#device-location").data("long");
 
-            map.setCenter(pos);
+                map = new google.maps.Map(document.getElementById('device-location'),
+                    mapOptions);
+
+                var pos = new google.maps.LatLng(lat,
+                    long);
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map
+                });
+
+                map.setCenter(pos);
+
         }
         google.maps.event.addDomListener(window, 'load', initialize);
     }
