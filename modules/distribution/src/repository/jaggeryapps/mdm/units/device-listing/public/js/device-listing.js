@@ -72,6 +72,20 @@ $(document).ready(function () {
             return $("#content-filter-types").html();
         }
     });
+
+    $(".ast-container").on("click", ".claim-btn", function(e){
+        e.stopPropagation();
+        var deviceId = $(this).data("deviceid");
+        var deviceListing = $("#device-listing");
+        var currentUser = deviceListing.data("current-user");
+        var serviceURL = "/temp-controller-agent/enrollment/claim?username=" + currentUser;
+        var deviceIdentifier = {id: deviceId, type: "TemperatureController"};
+        invokerUtil.put(serviceURL, deviceIdentifier, function(message){
+            console.log(message);
+        }, function(message){
+                console.log(message);
+            });
+    });
 });
 
 /*
@@ -131,13 +145,14 @@ function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
     var deviceListingSrc = deviceListing.attr("src");
     var imageResource = deviceListing.data("image-resource");
+    var currentUser = deviceListing.data("currentUser");
     $.template("device-listing", deviceListingSrc, function (template) {
         var serviceURL;
         if ($.hasPermission("LIST_DEVICES")) {
             serviceURL = "/mdm-admin/devices";
         } else if ($.hasPermission("LIST_OWN_DEVICES")) {
             //Get authenticated users devices
-            serviceURL = "/mdm-admin/user/chan/carbon.super";
+            serviceURL = "/mdm-admin/user/"+currentUser+"/carbon.super";
         } else {
             $("#ast-container").html("Permission denied");
             return;

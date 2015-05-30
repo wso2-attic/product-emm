@@ -5,6 +5,6 @@
     </div>
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script id="device-listing" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/device-listing.hbs" type="text/x-handlebars-template" ></script>
+    <script id="device-listing" data-current-user="{{currentUser.username}}" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/device-listing.hbs" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/device-listing.js"></script>
 {{/zone}}
