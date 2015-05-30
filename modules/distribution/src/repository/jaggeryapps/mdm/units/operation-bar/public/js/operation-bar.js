@@ -176,8 +176,10 @@ function getSelectedDeviceIds(){
 function getDevicesByTypes(deviceList){
     var deviceTypes = {};
     jQuery.each(deviceList, function(index, item) {
-        if(!deviceTypes[item.type]){
+        if(item.type == "android"){
+            //for iOS we are sending only the IDS cause we are sending it to the JAX-RS
             deviceTypes[item.type] = [];
+            deviceTypes[item.type].push(item.id);
         }
         if(item.type == "ios"){
             //for iOS we are sending only the IDS cause we are sending it to the JAX-RS
@@ -246,6 +248,7 @@ function loadOperationBar(deviceType){
 function runOperation(operationName) {
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
+
     var successCallback = function(message){
         console.log(message);
         $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
