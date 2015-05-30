@@ -20,6 +20,11 @@
                         <span class="ast-ver">{{properties.osVersion}}</span>
                         <span class="ast-published">{{properties.vendor}} {{model}}</span>
                     </div>
+                    {{#equal type "TemperatureController"}}
+                        {{#equal type "TemperatureController"}}
+                            <button class="btn" data-deviceid="{{device.deviceIdentifier}}">Claim</button>
+                        {{/equal}}
+                    {{/equal}}
                 </div>
                 <br class="c-both" />
             </a>

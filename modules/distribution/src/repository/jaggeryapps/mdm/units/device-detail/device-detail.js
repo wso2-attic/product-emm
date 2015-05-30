@@ -45,6 +45,12 @@ function onRequest(context) {
                         deviceInfo.EXTERNAL_AVAILABLE_MEMORY) * 100) / 100;
                     viewModel.external_memory.DeviceCapacityPercentage = Math.round(deviceInfo.EXTERNAL_AVAILABLE_MEMORY
                         /deviceInfo.EXTERNAL_TOTAL_MEMORY * 10000) /100;
+                } else if(device.type == "TemperatureController"){
+                    viewModel.system = device.properties.IMEI;
+                    viewModel.machine = device.properties.DEVICE_MODEL;
+                    viewModel.vendor = device.properties.VENDOR;
+                    viewModel.internal_memory = {};
+                    viewModel.external_memory = {};
                 }
                 device.viewModel = viewModel;
             }
