@@ -69,7 +69,7 @@ public final class AndroidConstants {
 		public static final String WIFI = "WIFI";
 		public static final String CAMERA = "CAMERA";
 		public static final String DEVICE_MUTE = "DEVICE_MUTE";
-		public static final String PASSWORD_POLICY = "PASSWORD_POLICY";
+		public static final String PASSCODE_POLICY = "PASSCODE_POLICY";
 		public static final String DEVICE_INFO = "DEVICE_INFO";
 		public static final String ENTERPRISE_WIPE = "ENTERPRISE_WIPE";
 		public static final String CLEAR_PASSWORD = "CLEAR_PASSWORD";

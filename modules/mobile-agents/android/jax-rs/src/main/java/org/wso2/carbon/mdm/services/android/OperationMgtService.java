@@ -800,7 +800,7 @@ public class OperationMgtService {
             }
 
             ProfileOperation operation = new ProfileOperation();
-            operation.setCode(AndroidConstants.OperationCodes.PASSWORD_POLICY);
+            operation.setCode(AndroidConstants.OperationCodes.PASSCODE_POLICY);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(passwordPolicy.toJSON());
 

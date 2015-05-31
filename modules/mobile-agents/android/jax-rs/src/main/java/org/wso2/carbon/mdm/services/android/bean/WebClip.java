@@ -24,6 +24,7 @@ public class WebClip extends Operation implements Serializable {
 
 	private String identity;
 	private String title;
+	private String type;
 
 	public String getIdentity() {
 		return identity;
@@ -39,5 +40,13 @@ public class WebClip extends Operation implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

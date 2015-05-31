@@ -131,7 +131,7 @@ public class DeviceMgtService {
 
 	@GET
 	@Path("license")
-	@Produces("text/plain")
+	@Produces("text/html")
 	public String getLicense() throws AndroidAgentException {
 		String msg;
 		License license;
@@ -146,9 +146,9 @@ public class DeviceMgtService {
                 "or electronic format, used in connection with the operation of or provision of services to WSO2 " +
                 "THEREBY AUTHORIZING SOR OR ITS AGENTS TO INSTALL, UPDATE AND REMOVE THE APPS FROM YOUR DEVICE AS " +
                 "DESCRIBED IN THIS AGREEMENT.  YOU ARE ALSO EXPLICITLY ACKNOWLEDGING AND AGREEING THAT (1) THIS IS A " +
-                 "BINDING CONTRACT AND (2) YOU HAVE READ AND AGREE TO THE TERMS OF THIS AGREEMENT. \n\n"+
+                 "BINDING CONTRACT AND (2) YOU HAVE READ AND AGREE TO THE TERMS OF THIS AGREEMENT.<br/><br/>"+
 
-                "IF YOU DO NOT ACCEPT+ THESE TERMS, DO NOT ENROLL YOUR DEVICE AND DO NOT PROCEED ANY FURTHER.\n\n"+
+                "IF YOU DO NOT ACCEPT THESE TERMS, DO NOT ENROLL YOUR DEVICE AND DO NOT PROCEED ANY FURTHER.<br/><br/>"+
 
                 "You agree that: (1) You understand and agree to be bound by the terms and conditions contained in " +
                 "this "+
