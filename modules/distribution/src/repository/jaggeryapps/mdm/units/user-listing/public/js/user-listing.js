@@ -94,7 +94,7 @@ $("a.remove-user-link").click(function () {
             removeUserAPI,
             function (data) {
                 if (data == 200) {
-                    $("#" + username).addClass("hide");
+                    $("#" + username).remove();
                     $(modalPopupContent).html($('#remove-user-200-content').html());
                     $("a#remove-user-200-link").click(function () {
                         hidePopup();
