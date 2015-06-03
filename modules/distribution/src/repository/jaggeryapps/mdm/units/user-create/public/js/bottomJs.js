@@ -47,7 +47,7 @@ $("button#add-user-btn").click(function() {
     if (!username) {
         $(".wr-validation-summary p").text("Username is a required field. It cannot be empty.");
         $(".wr-validation-summary").removeClass("hide");
-    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"" "A-Z0-9]{3,}$/, username)) {
+    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"" "A-Z0-9]{3,30}$/, username)) {
         $(".wr-validation-summary p").text("Entered Username is invalid. Please check.");
         $(".wr-validation-summary").removeClass("hide");
     } else if (!firstname) {
