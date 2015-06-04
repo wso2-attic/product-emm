@@ -6,11 +6,11 @@ function onRequest(context) {
     var policyCount = policies.length;
     if (policyCount == 0) {
         context.policyCountStatusMsg = "No Policies to show currently.";
+    } else if (policyCount == 1) {
+        context.policyCountStatusMsg = "Add more policies to set-up a priority order.";
     } else {
         context.policyCountStatusMsg = "Drag & Move to re-order Policy Priority."
-        if (policyCount > 1) {
-            context.saveNewPrioritiesButtonEnabled = true;
-        }
+        context.saveNewPrioritiesButtonEnabled = true;
     }
     context.policies = policies;
     return context;

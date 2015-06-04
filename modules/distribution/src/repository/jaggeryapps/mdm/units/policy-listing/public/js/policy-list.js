@@ -120,6 +120,7 @@ $(".policy-remove-link").click(function () {
                     var newPolicyListCount = $(".policy-list > span").length;
                     if (newPolicyListCount == 1) {
                         $(saveNewPrioritiesButton).addClass("hide");
+                        $("#policy-count-status-msg").text("Add more policies to set-up a priority order.");
                     } else if (newPolicyListCount == 0) {
                         $("#policy-count-status-msg").text("No Policies to show currently.");
                     }
