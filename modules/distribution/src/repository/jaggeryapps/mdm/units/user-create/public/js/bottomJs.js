@@ -48,19 +48,25 @@ $("button#add-user-btn").click(function() {
         $(".wr-validation-summary p").text("Username is a required field. It cannot be empty.");
         $(".wr-validation-summary").removeClass("hide");
     } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"" "A-Z0-9]{3,30}$/, username)) {
-        $(".wr-validation-summary p").text("Entered Username is invalid. Please check.");
+        $(".wr-validation-summary p").text("Provided username is invalid. Please check.");
         $(".wr-validation-summary").removeClass("hide");
     } else if (!firstname) {
         $(".wr-validation-summary p").text("Firstname is a required field. It cannot be empty.");
         $(".wr-validation-summary").removeClass("hide");
+    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"0-9]{1,30}$/, firstname)) {
+        $(".wr-validation-summary p").text("Provided firstname is invalid. Please check.");
+        $(".wr-validation-summary").removeClass("hide");
     } else if (!lastname) {
         $(".wr-validation-summary p").text("Lastname is a required field. It cannot be empty.");
+        $(".wr-validation-summary").removeClass("hide");
+    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;.,'"0-9]{1,30}$/, lastname)) {
+        $(".wr-validation-summary p").text("Provided lastname is invalid. Please check.");
         $(".wr-validation-summary").removeClass("hide");
     } else if (!emailAddress) {
         $(".wr-validation-summary p").text("Email is a required field. It cannot be empty.");
         $(".wr-validation-summary").removeClass("hide");
     } else if (!emailIsValid(emailAddress)) {
-        $(".wr-validation-summary p").text("Email is not valid. Please enter a correct email address.");
+        $(".wr-validation-summary p").text("Provided email is invalid. Please check.");
         $(".wr-validation-summary").removeClass("hide");
     } else {
         var addUserFormData = {};
