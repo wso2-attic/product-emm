@@ -78,17 +78,6 @@ $("a.invite-user-link").click(function () {
 });
 
 /**
- * userCount (global) variable would always hold
- * the current user-count.
- */
-var userListingStatus = "#user-listing-status";
-var userCount;
-
-$( document ).ready(function () {
-    userCount = parseInt($(userListingStatus).data("user-count"));
-});
-
-/**
  * Following click function would execute
  * when a user clicks on "Remove" link
  * on User Listing page in WSO2 MDM Console.
@@ -106,10 +95,10 @@ $("a.remove-user-link").click(function () {
             function (data) {
                 if (data == 200) {
                     $("#" + username).remove();
-                    // Update userCount (global) value
-                    userCount--;
-                    // update user-listing-status with new user-count
-                    $(userListingStatus).text("Total number of Users found : " + userCount);
+                    // get new user-list-count
+                    var newUserListCount = $(".user-list > span").length;
+                    // update user-listing-status-msg with new user-count
+                    $("#user-count-status-msg").text("Total number of Users found : " + newUserListCount);
                     // update modal-content with success message
                     $(modalPopupContent).html($('#remove-user-200-content').html());
                     $("a#remove-user-200-link").click(function () {

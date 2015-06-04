@@ -4,8 +4,8 @@
             <!-- content -->
             <div class="wr-content">
                 <p class="page-sub-title">Users</p>
-                <p id="user-listing-status" data-user-count="{{userCount}}">{{userListingStatus}}</p>
-                <div class="wr-list-group wr-sortable">
+                <p id="user-count-status-msg">{{userCountStatusMsg}}</p>
+                <div class="wr-list-group wr-sortable user-list">
                     {{#each users}}
                         <span id="{{username}}" class="list-group-item">
                             <i class="wr-sortable-icon fw fw-sort hide"></i>
