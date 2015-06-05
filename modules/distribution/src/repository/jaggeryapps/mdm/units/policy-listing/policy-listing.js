@@ -9,7 +9,7 @@ function onRequest(context) {
     } else if (policyCount == 1) {
         context.policyCountStatusMsg = "Add more policies to set-up a priority order.";
     } else {
-        context.policyCountStatusMsg = "Drag & Move to re-order Policy Priority."
+        context.policyCountStatusMsg = "Drag & Move to re-order Policy Priority.";
         context.saveNewPrioritiesButtonEnabled = true;
     }
     context.policies = policies;
