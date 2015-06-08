@@ -105,7 +105,7 @@ function savePolicy(){
     );
 }
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     initStepper(".wizard-stepper");
 
@@ -123,57 +123,30 @@ $(document).ready(function(){
     });
 
     //Adds an event listener to switch
-    $(advanceOperation).on("click", ".wr-input-control.switch", function(evt) {
+    $(advanceOperation).on("click", ".wr-input-control.switch", function (event) {
         var operation = $(this).parents(".operation-data").data("operation");
         //prevents event bubbling by figuring out what element it's being called from
-        if (evt.target.tagName == "INPUT") {
-            if(!$(this).hasClass('collapsed')){
+        if (event.target.tagName == "INPUT") {
+            if (!$(this).hasClass("collapsed")) {
                 configuredProfiles.push(operation);
-            }else {
+            } else {
                 //splicing the array if operation is present
-                var index = jQuery.inArray( operation, configuredProfiles );
-                if (index!= -1){
-                    configuredProfiles.splice( index, 1 );
+                var index = $.inArray(operation, configuredProfiles);
+                if (index != -1) {
+                    configuredProfiles.splice(index, 1);
                 }
             }
-            console.log(configuredProfiles);
         }
-
     });
 
-    stepperRegistry['policy-content'] = function (actionButton) {
-        policy.policyName = $("#policy-name-input").val();
-        policy.policyDescription = $("#policy-description-input").val();
-        //All data is collected. Policy can now be created.
-        savePolicy();
-    };
-
-    stepperRegistry['policy-criteria'] = function (actionButton) {
-        $("input[type='radio'].select-users-radio").each(function () {
-           if ( $(this).is(':radio')) {
-               if ($(this).is(":checked")) {
-                   if($(this).attr("id") == "users-radio-btn") {
-                       policy.selectedUsers = $("#users-input").val();
-                   } else if ($(this).attr("id") == "user-roles-radio-btn") {
-                       policy.selectedUserRoles = $("#user-roles-input").val();
-                   }
-               }
-           }
-        });
-        policy.selectedAction = $("#action-input").find(":selected").data("action");
-        policy.selectedOwnership = $("#ownership-input").val();
-    };
-
-    stepperRegistry['policy-profile'] = function (actionButton) {
-        policy.profile = operationModule.generateProfile(policy.platform, configuredProfiles);
-    };
-
-    stepperRegistry['policy-platform'] = function (actionButton) {
+    stepperRegistry["policy-platform"] = function (actionButton) {
         policy.platform = $(actionButton).data("platform");
         policy.platformId = $(actionButton).data("platform-id");
+
         var deviceType = policy.platform;
         var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
         var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
+
         $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
             var serviceURL = "/mdm-admin/features/" + deviceType;
             var successCallback = function (data) {
@@ -188,10 +161,37 @@ $(document).ready(function(){
             invokerUtil.get(
                 serviceURL,
                 successCallback,
-                function(message){
+                function(message) {
                     console.log(message);
                 }
             );
         });
+    };
+
+    stepperRegistry["policy-profile"] = function () {
+        policy.profile = operationModule.generateProfile(policy.platform, configuredProfiles);
+    };
+
+    stepperRegistry["policy-criteria"] = function () {
+        $("input[type='radio'].select-users-radio").each(function () {
+            if ( $(this).is(':radio')) {
+                if ($(this).is(":checked")) {
+                    if($(this).attr("id") == "users-radio-btn") {
+                        policy.selectedUsers = $("#users-input").val();
+                    } else if ($(this).attr("id") == "user-roles-radio-btn") {
+                        policy.selectedUserRoles = $("#user-roles-input").val();
+                    }
+                }
+            }
+        });
+        policy.selectedAction = $("#action-input").find(":selected").data("action");
+        policy.selectedOwnership = $("#ownership-input").val();
+    };
+
+    stepperRegistry["policy-naming"] = function () {
+        policy.policyName = $("#policy-name-input").val();
+        policy.policyDescription = $("#policy-description-input").val();
+        //All data is collected. Policy can now be created.
+        savePolicy();
     };
 });
