@@ -1783,14 +1783,32 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-list-group .wr-desc-list-configs {
-    height: 50px;
+    min-height: 50px;
+    height: 100%;
     padding: 15px;
     text-align: center;
 }
 
+/*@media (min-width: 768px) {*/
+/*.wr-list-group .wr-desc-list-configs-grp {*/
+/*display: table;*/
+/*width: 100%;*/
+/*}*/
+
+/*.wr-list-group .wr-desc-list-configs {*/
+/*float: none;*/
+/*display: table-cell;*/
+/*}*/
+/*}*/
+
+
 .wr-list-group .wr-desc-list-configs.highlight {
     background: #14212E;
     color: #fff;
+}
+
+.wr-list-group .wr-desc-list-configs.highlight2 {
+    background: #CDCDCD;
 }
 
 .wr-list-group .wr-desc-list-configs b {

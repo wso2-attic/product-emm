@@ -1,14 +1,26 @@
-$('select.select2').select2({
-    placeholder: 'Select..'
+$("select.select2").select2({
+    placeholder : "Select..."
 });
 
-$('select.select2[multiple=multiple]').select2({
-    placeholder: 'Select..',
-    tags: true
+$("select.select2[multiple=multiple]").select2({
+    placeholder : "Select...",
+    tags : true
 });
+
+$("#users-input, #user-roles-input").select2({
+    tags : true
+}).on("select2:select", function (e) {
+    if (e.params.data.id == "ANY") {
+        $(this).val("ANY").trigger("change");
+    } else {
+        $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
+    }
+});
+
 var stepperRegistry = {},
     hiddenOperation = '.wr-hidden-operations-content > div',
     advanceOperation = '.wr-advance-operations';
+
 function initStepper(selector){
     $(selector).click(function(){
         var nextStep = $(this).data("next");
@@ -21,8 +33,7 @@ function initStepper(selector){
             }
         }
         if (!nextStep) {
-            var direct = $(this).data("direct");
-            window.location.href = direct;
+            window.location.href = $(this).data("direct");
         }
         $(".itm-wiz").each(function(){
             var step = $(this).data("step");
@@ -87,11 +98,15 @@ function savePolicy(){
 }
 
 $(document).ready(function(){
+
+    $("#user-role-select-field").show();
+
     initStepper(".wizard-stepper");
     $( "input[type='radio'].user-select-radio" ).change(function() {
         $('.user-select').hide();
         $('#'+$(this).val()).show();
     });
+
     //Adds an event listener to swithc
     $(advanceOperation).on("click", ".wr-input-control.switch", function(evt){
         var operation = $(this).parents(".operation-data").data("operation");

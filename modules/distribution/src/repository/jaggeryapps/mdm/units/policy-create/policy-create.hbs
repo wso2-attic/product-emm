@@ -73,8 +73,12 @@
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-content" data-back="true" data-next="policy-criteria">Back</a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-content" data-next="policy-message">Save</a>
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-content" data-back="true" data-next="policy-criteria">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-content" data-next="policy-message">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Publish&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -99,33 +103,33 @@
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
                                         <select id="ownership-input" class="form-control">
-                                            <option>COPE</option>
-                                            <option>BYOD</option>
+                                            <option value="ANY" selected>ANY</option>
+                                            <option value="BYOD">BYOD (Bring Your Own Device) </option>
+                                            <option value="COPE">COPE (Corporate-Owned, Personally Enabled)</option>
                                         </select>
                                     </div>
                                     <br class="c-both" />
                                 </div>
                                 <div class="wr-input-control">
+                                    <label class="wr-input-control radio light">
+                                        <input id="userRoleRadio" type="radio" name="user-select" value="userRoleSelectField" class="user-select-radio" checked/>
+                                        <span class="helper">Set User Role(s)</span>
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </label>
                                     <label class="wr-input-control radio light" rel="assetfilter">
                                         <input id="userRadio" type="radio" name="user-select" value="userSelectField" class="user-select-radio" />
-                                        <span class="helper">User</span>
-                                    </label>
-                                    <label class="wr-input-control radio light">
-                                        <input id="userRoleRadio" type="radio" name="user-select" value="userRoleSelectField" class="user-select-radio" />
-                                        <span class="helper">User Role</span>
+                                        <span class="helper">Set User(s)</span>
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </label>
                                 </div>
 
-                                <div id="userSelectField" class="user-select">
-                                    <label class="wr-input-label" title="">
-                                        Set User(s)
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </label>
+                                <div id="user-role-select-field" class="user-select">
                                     <div class="wr-input-control">
                                         <div class="cus-col-50">
-                                            <select id="users-input" class="form-control select2" multiple="multiple">
-                                                {{#each users}}
-                                                    <option>{{username}}</option>
+                                            <select id="user-roles-input"  class="form-control select2" multiple="multiple">
+                                                <option value="ANY" selected>ANY</option>
+                                                {{#each roles}}
+                                                    <option>{{this}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
@@ -133,16 +137,13 @@
                                     </div>
                                 </div>
 
-                                <div id="userRoleSelectField" class="user-select" style="display:none">
-                                    <label class="wr-input-label" title="">
-                                        Set User Role(s)
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </label>
+                                <div id="userSelectField" class="user-select">
                                     <div class="wr-input-control">
                                         <div class="cus-col-50">
-                                            <select id="user-roles-input"  class="form-control select2" multiple="multiple">
-                                                {{#each roles}}
-                                                    <option>{{this}}</option>
+                                            <select id="users-input" class="form-control select2" multiple="multiple">
+                                                <option value="ANY" selected>ANY</option>
+                                                {{#each users}}
+                                                    <option>{{username}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
@@ -157,7 +158,7 @@
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
                                         <select id="action-input" class="form-control">
-                                            <option data-action="enforce">Enforce</option>
+                                            <option data-action="enforce" selected>Enforce</option>
                                             <option data-action="warn">Warn</option>
                                             <option data-action="monitor">Monitor</option>
                                         </select>
@@ -166,8 +167,12 @@
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-criteria" data-back="true" data-next="policy-profile">Back</a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-criteria" data-next="policy-content">Continue</a>
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-criteria" data-back="true" data-next="policy-profile">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-criteria" data-next="policy-content">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Continue&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -187,8 +192,12 @@
 
                             </div>
                             <div class="wr-input-control wr-btn-grp">
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-back="true" data-next="policy-platform">Back</a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-next="policy-criteria">Continue</a>
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-back="true" data-next="policy-platform">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-next="policy-criteria">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Continue&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
                             </div>
                         </div>
                     </div>
