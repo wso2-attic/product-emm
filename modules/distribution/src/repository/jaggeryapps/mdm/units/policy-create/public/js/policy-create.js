@@ -17,16 +17,16 @@ $("#users-input, #user-roles-input").select2({
     }
 });
 
-var stepperRegistry = {},
-    hiddenOperation = '.wr-hidden-operations-content > div',
-    advanceOperation = '.wr-advance-operations';
+var stepperRegistry = {};
+var hiddenOperation = ".wr-hidden-operations-content > div";
+var advanceOperation = ".wr-advance-operations";
 
-function initStepper(selector){
-    $(selector).click(function(){
+function initStepper(selector) {
+    $(selector).click(function () {
         var nextStep = $(this).data("next");
         var currentStep = $(this).data("current");
         var isBack = $(this).data("back");
-        if (!isBack){
+        if (!isBack) {
             var action = stepperRegistry[currentStep];
             if (action){
                 action(this);
@@ -35,7 +35,7 @@ function initStepper(selector){
         if (!nextStep) {
             window.location.href = $(this).data("direct");
         }
-        $(".itm-wiz").each(function(){
+        $(".itm-wiz").each(function () {
             var step = $(this).data("step");
             if (step == nextStep){
                 $(this).addClass("itm-wiz-current");
@@ -46,10 +46,10 @@ function initStepper(selector){
         $(".wr-wizard").html($(".wr-steps").html());
         $("." + nextStep).removeClass("hidden");
         $("." + currentStep).addClass("hidden");
-
     });
 }
-function showAdvanceOperation(operation, button){
+
+function showAdvanceOperation(operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
     $(hiddenOperation + '[data-operation="' + operation + '"]').show();
@@ -84,31 +84,46 @@ function savePolicy(){
     };
     payload.users = [];
     payload.roles = [];
-    if (policy.selectedUsers){
+    if (policy.selectedUsers) {
         payload.users = policy.selectedUsers;
-    }else if (policy.selectedUserRoles){
+    } else if (policy.selectedUserRoles) {
         payload.roles = policy.selectedUserRoles;
     }
-    invokerUtil.post("/mdm-admin/policies", payload, function(){
-        $(".policy-message").removeClass("hidden");
-        $(".add-policy").addClass("hidden");
-    }, function(){
 
-    });
+    console.log(JSON.stringify(payload));
+
+    invokerUtil.post(
+        "/mdm-admin/policies",
+        payload,
+        function () {
+            $(".policy-message").removeClass("hidden");
+            $(".add-policy").addClass("hidden");
+        },
+        function () {
+
+        }
+    );
 }
 
 $(document).ready(function(){
 
-    $("#user-role-select-field").show();
-
     initStepper(".wizard-stepper");
-    $( "input[type='radio'].user-select-radio" ).change(function() {
-        $('.user-select').hide();
-        $('#'+$(this).val()).show();
+
+    $("#users-select-field").hide();
+    $("#user-roles-select-field").show();
+    $("input[type='radio'].select-users-radio").change(function () {
+        if ($("#users-radio-btn").is(":checked")) {
+            $("#user-roles-select-field").hide();
+            $("#users-select-field").show();
+        }
+        if ($("#user-roles-radio-btn").is(":checked")) {
+            $("#users-select-field").hide();
+            $("#user-roles-select-field").show();
+        }
     });
 
-    //Adds an event listener to swithc
-    $(advanceOperation).on("click", ".wr-input-control.switch", function(evt){
+    //Adds an event listener to switch
+    $(advanceOperation).on("click", ".wr-input-control.switch", function(evt) {
         var operation = $(this).parents(".operation-data").data("operation");
         //prevents event bubbling by figuring out what element it's being called from
         if (evt.target.tagName == "INPUT") {
@@ -125,19 +140,21 @@ $(document).ready(function(){
         }
 
     });
-    stepperRegistry['policy-content']  = function (actionButton){
+
+    stepperRegistry['policy-content'] = function (actionButton) {
         policy.policyName = $("#policy-name-input").val();
         policy.policyDescription = $("#policy-description-input").val();
         //All data is collected. Policy can now be created.
         savePolicy();
     };
-    stepperRegistry['policy-criteria']  = function (actionButton){
-        $( "input[type='radio'].user-select-radio").each(function(){
-           if ( $(this).is(':radio')){
-               if ($(this).is(":checked")){
-                   if($(this).val() == "userSelectField"){
+
+    stepperRegistry['policy-criteria'] = function (actionButton) {
+        $("input[type='radio'].select-users-radio").each(function () {
+           if ( $(this).is(':radio')) {
+               if ($(this).is(":checked")) {
+                   if($(this).attr("id") == "users-radio-btn") {
                        policy.selectedUsers = $("#users-input").val();
-                   }else if($(this).val() == "userRoleSelectField"){
+                   } else if ($(this).attr("id") == "user-roles-radio-btn") {
                        policy.selectedUserRoles = $("#user-roles-input").val();
                    }
                }
@@ -145,14 +162,13 @@ $(document).ready(function(){
         });
         policy.selectedAction = $("#action-input").find(":selected").data("action");
         policy.selectedOwnership = $("#ownership-input").val();
+    };
 
+    stepperRegistry['policy-profile'] = function (actionButton) {
+        policy.profile = operationModule.generateProfile(policy.platform, configuredProfiles);
     };
-    stepperRegistry['policy-profile']  = function (actionButton){
-        var deviceType = policy.platform;
-        var generatedProfile = operationModule.generateProfile(deviceType, configuredProfiles);
-        policy.profile = generatedProfile;
-    };
-    stepperRegistry['policy-platform'] = function (actionButton){
+
+    stepperRegistry['policy-platform'] = function (actionButton) {
         policy.platform = $(actionButton).data("platform");
         policy.platformId = $(actionButton).data("platform-id");
         var deviceType = policy.platform;
@@ -169,20 +185,13 @@ $(document).ready(function(){
                 var content = template(viewModel);
                 $(".wr-advance-operations").html(content);
             };
-            invokerUtil.get(serviceURL,
-                successCallback, function(message){
+            invokerUtil.get(
+                serviceURL,
+                successCallback,
+                function(message){
                     console.log(message);
-                });
+                }
+            );
         });
     };
-    $(".uu").click(function(){
-        var policyName = $("#policy-name-input").val();
-        var selectedProfiles = $("#profile-input").find(":selected");
-        var selectedProfileId = selectedProfiles.data("id");
-        var selectedUserRoles = $("#user-roles-input").val();
-        var selectedUsers = $("#users-input").val();
-        var selectedAction = $("#action-input").val();
-
-
-    });
 });

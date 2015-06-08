@@ -1,9 +1,10 @@
 {{#zone "main"}}
     <div class="row">
         <div class="col-md-12">
-            <div class="hidden wr-steps">
+
+            <div class="wr-steps hidden">
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz itm-wiz-current" data-step="policy-platform"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Select Platform</span></div></div>
+                    <div class="itm-wiz" data-step="policy-platform"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Select Platform</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
@@ -11,7 +12,7 @@
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Assign to a group</span></div></div>
+                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Assign to a Group</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
@@ -19,8 +20,8 @@
                     <br class="c-both" />
                 </div>
             </div>
-            <div class="container col-centered wr-content policy-message hidden">
 
+            <div class="container col-centered wr-content policy-message hidden">
                 <div class="wr-form">
                     <p class="page-sub-title">Policy creation is successful.</p>
                     <br>Please click <b>"Add Another Policy"</b>, if you wish to add another policy or click
@@ -37,16 +38,12 @@
                         Add Another Policy
                     </a>
                 </div>
-
             </div>
+
             <div class="container col-centered wr-content policy-content hidden">
-
                 <div class="wr-form">
-
                     <h1 class="page-sub-title">Add Policy</h1>
-
                     <div class="row wr-wizard"></div>
-
                     <div class="row">
                         <div class="col-lg-12">
                             <div>
@@ -60,7 +57,6 @@
                                     </div>
                                     <br class="c-both" />
                                 </div>
-
                                 <label class="wr-input-label" title="">
                                     Set Description
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -82,17 +78,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+
             <div class="container col-centered wr-content policy-criteria hidden">
-
                 <div class="wr-form">
-
                     <h1 class="page-sub-title">Add Policy</h1>
-
                     <div class="row wr-wizard"></div>
-
                     <div class="row">
                         <div class="col-lg-12">
                             <div>
@@ -112,18 +104,17 @@
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control radio light">
-                                        <input id="userRoleRadio" type="radio" name="user-select" value="userRoleSelectField" class="user-select-radio" checked/>
+                                        <input id="user-roles-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" checked/>
                                         <span class="helper">Set User Role(s)</span>
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </label>
                                     <label class="wr-input-control radio light" rel="assetfilter">
-                                        <input id="userRadio" type="radio" name="user-select" value="userSelectField" class="user-select-radio" />
+                                        <input id="users-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" />
                                         <span class="helper">Set User(s)</span>
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </label>
                                 </div>
-
-                                <div id="user-role-select-field" class="user-select">
+                                <div id="user-roles-select-field" class="select-users">
                                     <div class="wr-input-control">
                                         <div class="cus-col-50">
                                             <select id="user-roles-input"  class="form-control select2" multiple="multiple">
@@ -136,8 +127,7 @@
                                         <br class="c-both" />
                                     </div>
                                 </div>
-
-                                <div id="userSelectField" class="user-select">
+                                <div id="users-select-field" class="select-users">
                                     <div class="wr-input-control">
                                         <div class="cus-col-50">
                                             <select id="users-input" class="form-control select2" multiple="multiple">
@@ -150,7 +140,6 @@
                                         <br class="c-both" />
                                     </div>
                                 </div>
-
                                 <label class="wr-input-label" title="">
                                     Set Action upon Non-compliance
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -178,18 +167,14 @@
                     </div>
                 </div>
             </div>
+
             <div class="container col-centered wr-content policy-profile hidden">
-
                 <div class="wr-form">
-
                     <h1 class="page-sub-title">Add Policy</h1>
-
                     <div class="row wr-wizard"></div>
-
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="wr-advance-operations">
-
                             </div>
                             <div class="wr-input-control wr-btn-grp">
                                 <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-back="true" data-next="policy-platform">
@@ -203,12 +188,10 @@
                     </div>
                 </div>
             </div>
+
             <div class="container col-centered wr-content policy-platform">
-
                 <div class="wr-form">
-
                     <h1 class="page-sub-title">Add Policy</h1>
-
                     <div class="row wr-wizard">
                         <div class="col-md-3 col-xs-3">
                             <div class="itm-wiz itm-wiz-current" data-step="policy-platform"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Select Platform</span></div></div>
@@ -219,7 +202,7 @@
                             <br class="c-both" />
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Assign to a group</span></div></div>
+                            <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Assign to a Group</span></div></div>
                             <br class="c-both" />
                         </div>
                         <div class="col-md-3 col-xs-3">
@@ -227,7 +210,6 @@
                             <br class="c-both" />
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row wr-tile-buttons-list">
@@ -241,10 +223,10 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- content -->
+
         </div>
     </div>
 {{/zone}}
