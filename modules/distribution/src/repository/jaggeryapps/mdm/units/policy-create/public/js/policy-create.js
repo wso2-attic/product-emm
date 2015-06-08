@@ -56,30 +56,27 @@ function showAdvanceOperation(operation, button) {
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 }
 
-var policy = {};
-var configuredProfiles = [];
-
-function savePolicy(){
+function savePolicy(policy) {
     var profilePayloads = [];
     for (var key in policy.profile) {
         if (policy.profile.hasOwnProperty(key)) {
            profilePayloads.push({
-               featureCode: key,
-               deviceTypeId: policy.platformId,
-               content: policy.profile[key]
+               featureCode : key,
+               deviceTypeId : policy.platformId,
+               content : policy.profile[key]
            });
         }
     }
     var payload = {
-        policyName: policy.policyName,
-        compliance: policy.selectedAction,
-        ownershipType: policy.selectedOwnership,
-        profile: {
-            profileName: policy.policyName,
-            deviceType: {
-                id: policy.platformId
+        policyName : policy.policyName,
+        compliance : policy.selectedAction,
+        ownershipType : policy.selectedOwnership,
+        profile : {
+            profileName : policy.policyName,
+            deviceType : {
+                id : policy.platformId
             },
-            profileFeaturesList: profilePayloads
+            profileFeaturesList : profilePayloads
         }
     };
     payload.users = [];
@@ -121,6 +118,9 @@ $(document).ready(function () {
             $("#user-roles-select-field").show();
         }
     });
+
+    var policy = {};
+    var configuredProfiles = [];
 
     //Adds an event listener to switch
     $(advanceOperation).on("click", ".wr-input-control.switch", function (event) {
@@ -192,6 +192,6 @@ $(document).ready(function () {
         policy.policyName = $("#policy-name-input").val();
         policy.policyDescription = $("#policy-description-input").val();
         //All data is collected. Policy can now be created.
-        savePolicy();
+        savePolicy(policy);
     };
 });
