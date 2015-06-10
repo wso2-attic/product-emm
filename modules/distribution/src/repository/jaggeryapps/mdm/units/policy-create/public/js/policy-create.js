@@ -3,7 +3,7 @@ var hiddenOperation = ".wr-hidden-operations-content > div";
 var advanceOperation = ".wr-advance-operations";
 
 var policy = {};
-var configuredProfiles = [];
+var configuredFeatures = [];
 
 stepperRegistry["policy-platform"] = function (actionButton) {
     policy.platform = $(actionButton).data("platform");
@@ -35,7 +35,7 @@ stepperRegistry["policy-platform"] = function (actionButton) {
 };
 
 stepperRegistry["policy-profile"] = function () {
-    policy.profile = operationModule.generateProfile(policy.platform, configuredProfiles);
+    policy.profile = operationModule.generateProfile(policy.platform, configuredFeatures);
 };
 
 stepperRegistry["policy-criteria"] = function () {
@@ -150,12 +150,12 @@ $(document).ready(function () {
         //prevents event bubbling by figuring out what element it's being called from
         if (event.target.tagName == "INPUT") {
             if (!$(this).hasClass("collapsed")) {
-                configuredProfiles.push(operation);
+                configuredFeatures.push(operation);
             } else {
                 //splicing the array if operation is present
-                var index = $.inArray(operation, configuredProfiles);
+                var index = $.inArray(operation, configuredFeatures);
                 if (index != -1) {
-                    configuredProfiles.splice(index, 1);
+                    configuredFeatures.splice(index, 1);
                 }
             }
         }
@@ -164,8 +164,8 @@ $(document).ready(function () {
     $(".wizard-stepper").click(function () {
         var nextStep = $(this).data("next");
         var currentStep = $(this).data("current");
-        var isBack = $(this).data("back");
-        if (!isBack) {
+        var isBackButton = $(this).data("back");
+        if (!isBackButton) {
             var action = stepperRegistry[currentStep];
             if (action) {
                 action(this);
