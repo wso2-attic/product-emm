@@ -1,7 +1,4 @@
 var stepperRegistry = {};
-var hiddenOperation = ".wr-hidden-operations-content > div";
-var advanceOperation = ".wr-advance-operations";
-
 var policy = {};
 var configuredFeatures = [];
 
@@ -15,18 +12,19 @@ stepperRegistry["policy-platform"] = function (actionButton) {
 
     $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
         var serviceURL = "/mdm-admin/features/" + deviceType;
-        var successCallback = function (data) {
-            var viewModel = {};
-            viewModel.features = data.reduce(function (total, current) {
-                total[current.code] = current;
-                return total;
-            }, {});
-            var content = template(viewModel);
-            $(".wr-advance-operations").html(content);
-        };
         invokerUtil.get(
             serviceURL,
-            successCallback,
+            // function to run when request is successful.
+            function (data) {
+                var viewModel = {};
+                viewModel.features = data.reduce(function (total, current) {
+                    total[current.code] = current;
+                    return total;
+                }, {});
+                var content = template(viewModel);
+                $(".wr-advance-operations").html(content);
+            },
+            // function to run when request fails.
             function (message) {
                 console.log(message);
             }
@@ -110,6 +108,7 @@ function savePolicy(policy) {
 function showAdvanceOperation(operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
+    var hiddenOperation = ".wr-hidden-operations-content > div";
     $(hiddenOperation + '[data-operation="' + operation + '"]').show();
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 }
@@ -144,15 +143,15 @@ $(document).ready(function () {
         }
     });
 
-    //Adds an event listener to switch
-    $(advanceOperation).on("click", ".wr-input-control.switch", function (event) {
+    // Maintains an array of configured features of the profile
+    $(".wr-advance-operations").on("click", ".wr-input-control.switch", function (event) {
         var operation = $(this).parents(".operation-data").data("operation");
-        //prevents event bubbling by figuring out what element it's being called from
+        // prevents event bubbling by figuring out what element it's being called from.
         if (event.target.tagName == "INPUT") {
             if (!$(this).hasClass("collapsed")) {
                 configuredFeatures.push(operation);
             } else {
-                //splicing the array if operation is present
+                //splicing the array if operation is present.
                 var index = $.inArray(operation, configuredFeatures);
                 if (index != -1) {
                     configuredFeatures.splice(index, 1);
@@ -162,28 +161,40 @@ $(document).ready(function () {
     });
 
     $(".wizard-stepper").click(function () {
+        // button clicked here can be either a continue button or a back button.
         var nextStep = $(this).data("next");
         var currentStep = $(this).data("current");
-        var isBackButton = $(this).data("back");
-        if (!isBackButton) {
+        var isBackBtn = $(this).data("is-back-btn");
+
+        // if current button is a continuation...
+        if (!isBackBtn) {
+            // initiate stepperRegistry functions to gather form data.
             var action = stepperRegistry[currentStep];
             if (action) {
                 action(this);
             }
         }
+
+        // following step occurs only at the last stage of the wizard.
         if (!nextStep) {
             window.location.href = $(this).data("direct");
         }
+
+        // updating next wizard step as current.
         $(".itm-wiz").each(function () {
             var step = $(this).data("step");
-            if (step == nextStep){
+            if (step == nextStep) {
                 $(this).addClass("itm-wiz-current");
-            }else{
+            } else {
                 $(this).removeClass("itm-wiz-current");
             }
         });
+
+        // adding next update of wizard-steps.
         $(".wr-wizard").html($(".wr-steps").html());
-        $("." + nextStep).removeClass("hidden");
+
+        // hiding current section of the wizard and showing next section.
         $("." + currentStep).addClass("hidden");
+        $("." + nextStep).removeClass("hidden");
     });
 });
