@@ -115,18 +115,11 @@ function showAdvanceOperation(operation, button) {
 
 $(document).ready(function () {
 
+    // Add initial state of wizard-steps.
+    $("#policy-platform-wizard-steps").html($(".wr-steps").html());
+
     $("select.select2[multiple=multiple]").select2({
         tags : true
-    });
-
-    $("#users-input, #user-roles-input").select2({
-        tags : true
-    }).on("select2:select", function (e) {
-        if (e.params.data.id == "ANY") {
-            $(this).val("ANY").trigger("change");
-        } else {
-            $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
-        }
     });
 
     $("#users-select-field").hide();
@@ -140,6 +133,17 @@ $(document).ready(function () {
         if ($("#user-roles-radio-btn").is(":checked")) {
             $("#users-select-field").hide();
             $("#user-roles-select-field").show();
+        }
+    });
+
+    // Support for special input type "ANY" on user(s) & user-role(s) selection
+    $("#users-input, #user-roles-input").select2({
+        tags : true
+    }).on("select2:select", function (e) {
+        if (e.params.data.id == "ANY") {
+            $(this).val("ANY").trigger("change");
+        } else {
+            $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
         }
     });
 
@@ -191,7 +195,7 @@ $(document).ready(function () {
         });
 
         // adding next update of wizard-steps.
-        $(".wr-wizard").html($(".wr-steps").html());
+        $("#" + nextStep + "-wizard-steps").html($(".wr-steps").html());
 
         // hiding current section of the wizard and showing next section.
         $("." + currentStep).addClass("hidden");
