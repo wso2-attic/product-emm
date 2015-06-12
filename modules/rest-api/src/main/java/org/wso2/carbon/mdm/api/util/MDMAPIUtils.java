@@ -21,9 +21,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnector;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.carbon.device.mgt.core.service.EmailService;
+import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.user.core.UserManager;
 import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
@@ -40,12 +39,13 @@ public class MDMAPIUtils {
     private static Log log = LogFactory.getLog(MDMAPIUtils.class);
 
 
-	public static DeviceManagementService getDeviceManagementService(String tenantDomain) throws MDMAPIException {
+	public static DeviceManagementProviderService getDeviceManagementService(
+            String tenantDomain) throws MDMAPIException {
 		// until complete login this is use to load super tenant context
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		int tenantId;
-		DeviceManagementService dmService;
+		DeviceManagementProviderService dmService;
 		if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)){
 			tenantId = MultitenantConstants.SUPER_TENANT_ID;
 		}else{
@@ -53,11 +53,11 @@ public class MDMAPIUtils {
 		}
 		ctx.setTenantDomain(tenantDomain);
 		ctx.setTenantId(tenantId);
-		dmService = (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
+		dmService = (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
 		return dmService;
 	}
 
-	public static DeviceManagementService getDeviceManagementService() throws MDMAPIException {
+	public static DeviceManagementProviderService getDeviceManagementService() throws MDMAPIException {
 		return getDeviceManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 	}
 
@@ -89,23 +89,6 @@ public class MDMAPIUtils {
         return umService;
     }
 
-    public static EmailService getEmailService() throws MDMAPIException{
-        EmailService emailService;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        emailService = (EmailService) ctx.getOSGiService(EmailService.class, null);
-
-        if (emailService == null){
-            String msg = "email service not initialized";
-            log.error(msg);
-            throw new MDMAPIException(msg);
-        }
-        PrivilegedCarbonContext.endTenantFlow();
-        return emailService;
-    }
-
 	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId, String deviceType) {
 		DeviceIdentifier identifier = new DeviceIdentifier();
 		identifier.setId(deviceId);
@@ -113,12 +96,12 @@ public class MDMAPIUtils {
 		return identifier;
 	}
 
-	public static AppManagerConnector getAppManagementService(String tenantDomain) throws MDMAPIException {
+	public static ApplicationManager getAppManagementService(String tenantDomain) throws MDMAPIException {
 		// until complete login this is use to load super tenant context
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		int tenantId;
-		AppManagerConnector appService;
+		ApplicationManager appService;
 		if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)){
 			tenantId = MultitenantConstants.SUPER_TENANT_ID;
 		}else{
@@ -126,12 +109,12 @@ public class MDMAPIUtils {
 		}
 		ctx.setTenantDomain(tenantDomain);
 		ctx.setTenantId(tenantId);
-		appService = (AppManagerConnector) ctx.getOSGiService(AppManagerConnector.class, null);
+		appService = (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
 		PrivilegedCarbonContext.endTenantFlow();
 		return appService;
 	}
 
-	public static AppManagerConnector getAppManagementService() throws MDMAPIException {
+	public static ApplicationManager getAppManagementService() throws MDMAPIException {
 		return getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 	}
 

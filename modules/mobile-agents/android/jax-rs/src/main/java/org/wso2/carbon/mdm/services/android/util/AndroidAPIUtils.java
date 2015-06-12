@@ -19,15 +19,13 @@
 package org.wso2.carbon.mdm.services.android.util;
 
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -40,103 +38,103 @@ import java.util.List;
  */
 public class AndroidAPIUtils {
 
-	public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
-		DeviceIdentifier identifier = new DeviceIdentifier();
-		identifier.setId(deviceId);
-		identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-		return identifier;
-	}
+    public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
+        DeviceIdentifier identifier = new DeviceIdentifier();
+        identifier.setId(deviceId);
+        identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+        return identifier;
+    }
 
-	public static DeviceManagementService getDeviceManagementService() {
+    public static DeviceManagementProviderService getDeviceManagementService() {
 
-		//TODO: complete login change super tenent context
-		DeviceManagementService dmService;
-		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		dmService =
-				(DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class, null);
-		PrivilegedCarbonContext.endTenantFlow();
-		return dmService;
-	}
+        //TODO: complete login change super tenent context
+        DeviceManagementProviderService dmService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        dmService =
+                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
+        return dmService;
+    }
 
-	public static LicenseManagementService getLicenseManagerService() {
+    public static LicenseManagementService getLicenseManagerService() {
 
-		//TODO: complete login change super tenent context
-		LicenseManagementService licenseManagementService;
-		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		licenseManagementService =
-				(LicenseManagementService) ctx.getOSGiService(LicenseManagementService.class, null);
-		PrivilegedCarbonContext.endTenantFlow();
-		return licenseManagementService;
-	}
+        //TODO: complete login change super tenent context
+        LicenseManagementService licenseManagementService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        licenseManagementService =
+                (LicenseManagementService) ctx.getOSGiService(LicenseManagementService.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
+        return licenseManagementService;
+    }
 
-	public static MediaType getResponseMediaType(String acceptHeader) {
+    public static MediaType getResponseMediaType(String acceptHeader) {
 
-		MediaType responseMediaType;
-		if (MediaType.WILDCARD.equals(acceptHeader)) {
-			responseMediaType = MediaType.APPLICATION_JSON_TYPE;
-		} else {
-			responseMediaType = MediaType.valueOf(acceptHeader);
-		}
+        MediaType responseMediaType;
+        if (MediaType.WILDCARD.equals(acceptHeader)) {
+            responseMediaType = MediaType.APPLICATION_JSON_TYPE;
+        } else {
+            responseMediaType = MediaType.valueOf(acceptHeader);
+        }
 
-		return responseMediaType;
-	}
+        return responseMediaType;
+    }
 
-	public static Response getOperationResponse(List<String> deviceIDs, Operation operation,
-	                                            Message message, MediaType responseMediaType)
-			throws DeviceManagementException, OperationManagementException {
+    public static Response getOperationResponse(List<String> deviceIDs, Operation operation,
+                                                Message message, MediaType responseMediaType)
+            throws DeviceManagementException, OperationManagementException {
 
-		AndroidDeviceUtils deviceUtils = new AndroidDeviceUtils();
-		DeviceIDHolder deviceIDHolder = deviceUtils.validateDeviceIdentifiers(deviceIDs,
-		                                                                message, responseMediaType);
+        AndroidDeviceUtils deviceUtils = new AndroidDeviceUtils();
+        DeviceIDHolder deviceIDHolder = deviceUtils.validateDeviceIdentifiers(deviceIDs,
+                message, responseMediaType);
 
-		getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
+        getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
 
-		if (!deviceIDHolder.getErrorDeviceIdList().isEmpty()) {
-			return javax.ws.rs.core.Response.status(AndroidConstants.StatusCodes.
-					                                MULTI_STATUS_HTTP_CODE).type(
-					responseMediaType).entity(deviceUtils.
-	     	        convertErrorMapIntoErrorMessage(deviceIDHolder.getErrorDeviceIdList())).build();
-		}
+        if (!deviceIDHolder.getErrorDeviceIdList().isEmpty()) {
+            return javax.ws.rs.core.Response.status(AndroidConstants.StatusCodes.
+                    MULTI_STATUS_HTTP_CODE).type(
+                    responseMediaType).entity(deviceUtils.
+                    convertErrorMapIntoErrorMessage(deviceIDHolder.getErrorDeviceIdList())).build();
+        }
 
-		return javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.CREATED).
-				type(responseMediaType).build();
-	}
+        return javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.CREATED).
+                type(responseMediaType).build();
+    }
 
 
-	public static PolicyManagerService getPolicyManagerService() {
+    public static PolicyManagerService getPolicyManagerService() {
 
-		PolicyManagerService policyManager;
-		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		policyManager =
-				(PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
-		PrivilegedCarbonContext.endTenantFlow();
+        PolicyManagerService policyManager;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        policyManager =
+                (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
 
-		return policyManager;
-	}
+        return policyManager;
+    }
 
-	public static void updateOperation(String deviceId, int operationID, Operation.Status status)
-		throws OperationManagementException {
+    public static void updateOperation(String deviceId, int operationID, Operation.Status status)
+            throws OperationManagementException {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setId(deviceId);
         deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-		getDeviceManagementService().updateOperation(deviceIdentifier, operationID, status);
-	}
+        getDeviceManagementService().updateOperation(deviceIdentifier, operationID, status);
+    }
 
-	public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
-		(DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+    public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
+            (DeviceIdentifier deviceIdentifier) throws OperationManagementException {
 
-		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-		operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
+        List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+        operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
 
-		return operations;
-	}
+        return operations;
+    }
 }

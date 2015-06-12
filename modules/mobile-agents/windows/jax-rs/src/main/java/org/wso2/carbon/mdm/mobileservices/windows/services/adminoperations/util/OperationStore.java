@@ -28,8 +28,8 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.DeviceManagementServiceProviderImpl;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Device;
@@ -47,7 +47,7 @@ public class OperationStore {
 
     public static boolean storeOperation(OperationRequest operationRequest, Operation.Type type,
                                          String commandType) throws
-                                         WindowsDeviceEnrolmentException {
+            WindowsDeviceEnrolmentException {
 
         List<Device> devices = operationRequest.getDeviceList();
         List<DeviceIdentifier> deviceIdentifiers = new ArrayList<DeviceIdentifier>();
@@ -77,29 +77,29 @@ public class OperationStore {
         return true;
     }
 
-    private static DeviceManagementServiceProviderImpl getDeviceManagementServiceProvider() {
+    private static DeviceManagementProviderService getDeviceManagementServiceProvider() {
         try {
-            DeviceManagementServiceProviderImpl deviceManager;
+            DeviceManagementProviderService deviceManager;
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
             ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
             ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-            deviceManager = (DeviceManagementServiceProviderImpl) ctx.getOSGiService(DeviceManagementServiceProviderImpl.class, null);
+            deviceManager =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
 
             if (deviceManager == null) {
                 String msg = "Device management service is not initialized.";
                 log.error(msg);
             }
             return deviceManager;
-        }
-        finally {
+        } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
     }
 
     private static Operation transformBasicOperation(OperationRequest operationRequest, Operation.Type type,
                                                      String commandType) throws
-                                                     WindowsDeviceEnrolmentException {
+            WindowsDeviceEnrolmentException {
 
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         Operation operation = new Operation();
@@ -113,14 +113,13 @@ public class OperationStore {
             operation.setType(type);
 
             try {
-                Wifi wifiObject = (Wifi)operationRequest.getBasicOperation();
+                Wifi wifiObject = (Wifi) operationRequest.getBasicOperation();
                 operation.setPayLoad(objectWriter.writeValueAsString(wifiObject));
             } catch (IOException e) {
                 throw new WindowsDeviceEnrolmentException(
                         "Failure in resolving JSON payload of WIFI operation.", e);
             }
-        }
-        else {
+        } else {
 //            no operation.....
         }
 

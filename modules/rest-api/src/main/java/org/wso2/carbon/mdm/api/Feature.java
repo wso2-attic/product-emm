@@ -20,7 +20,7 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
@@ -30,31 +30,33 @@ import java.util.List;
 /**
  * Features
  */
-@Produces({ "application/json", "application/xml" })
-@Consumes({ "application/json", "application/xml" })
+@Produces({"application/json", "application/xml"})
+@Consumes({"application/json", "application/xml"})
 public class Feature {
-	private static Log log = LogFactory.getLog(Feature.class);
-	/**
-	 * Get all features for Mobile Device Type
-	 *
-	 * @return Feature
-	 * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
-	 */
-	@GET
-	@Path("/{type}")
-	public List<org.wso2.carbon.device.mgt.common.Feature> getFeatures(@PathParam("type") String type)
-			throws MDMAPIException {
-		List<org.wso2.carbon.device.mgt.common.Feature> features;
-		DeviceManagementService dmService;
-		try {
-			dmService = MDMAPIUtils.getDeviceManagementService();
-			features = dmService.getFeatureManager(type).getFeatures();
-		} catch (DeviceManagementException e) {
-			String msg = "Error occurred while retrieving the list of features";
-			log.error(msg, e);
+    private static Log log = LogFactory.getLog(Feature.class);
+
+    /**
+     * Get all features for Mobile Device Type
+     *
+     * @return Feature
+     * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
+     *
+     */
+    @GET
+    @Path("/{type}")
+    public List<org.wso2.carbon.device.mgt.common.Feature> getFeatures(@PathParam("type") String type)
+            throws MDMAPIException {
+        List<org.wso2.carbon.device.mgt.common.Feature> features;
+        DeviceManagementProviderService dmService;
+        try {
+            dmService = MDMAPIUtils.getDeviceManagementService();
+            features = dmService.getFeatureManager(type).getFeatures();
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while retrieving the list of features";
+            log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
         return features;
-	}
+    }
 
 }

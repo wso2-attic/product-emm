@@ -21,8 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.core.operation.mgt.OperationManagerImpl;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
@@ -37,15 +36,16 @@ public class SyncmlUtils {
      *
      * @return DeviceManagementServiceObject
      */
-    public static DeviceManagementService getDeviceManagementService() {
+    public static DeviceManagementProviderService getDeviceManagementService() {
         try {
-            DeviceManagementService deviceManagementService;
+            DeviceManagementProviderService deviceManagementService;
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext context = PrivilegedCarbonContext.getThreadLocalCarbonContext();
             context.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
             context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-            deviceManagementService = (DeviceManagementService) context.getOSGiService(
-                    DeviceManagementService.class, null);
+            deviceManagementService =
+                    (DeviceManagementProviderService) context.getOSGiService(DeviceManagementProviderService.class,
+                            null);
             return deviceManagementService;
         } finally {
             PrivilegedCarbonContext.endTenantFlow();

@@ -23,18 +23,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.Platform;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnector;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnectorException;
+import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.context.DeviceOperationContext;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.mdm.api.util.MDMAndroidOperationUtil;
 import org.wso2.carbon.mdm.api.util.MDMIOSOperationUtil;
 import org.wso2.carbon.mdm.api.util.Message;
 import org.wso2.carbon.mdm.beans.ApplicationWrapper;
 import org.wso2.carbon.mdm.beans.MobileApp;
-import org.wso2.carbon.mdm.api.util.MDMAndroidOperationUtil;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.*;
@@ -45,74 +45,74 @@ import java.util.List;
 /**
  * Operation related REST-API implementation.
  */
-@Produces({ "application/json", "application/xml" })
-@Consumes({ "application/json", "application/xml" })
+@Produces({"application/json", "application/xml"})
+@Consumes({"application/json", "application/xml"})
 public class Operation {
 
-	private static Log log = LogFactory.getLog(Operation.class);
+    private static Log log = LogFactory.getLog(Operation.class);
 
-	@GET
-	public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
-			throws MDMAPIException {
-		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-		DeviceManagementService dmService;
-		try {
-			dmService = MDMAPIUtils.getDeviceManagementService();
-			operations = dmService.getOperations(null);
-		} catch (OperationManagementException e) {
-			String msg = "Error occurred while fetching the operations for the device.";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-		return operations;
-	}
+    @GET
+    public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
+            throws MDMAPIException {
+        List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+        DeviceManagementProviderService dmService;
+        try {
+            dmService = MDMAPIUtils.getDeviceManagementService();
+            operations = dmService.getOperations(null);
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while fetching the operations for the device.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return operations;
+    }
 
-	@POST
-	public Message addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
-		DeviceManagementService dmService;
-		Message responseMsg = new Message();
-		try {
-			dmService = MDMAPIUtils.getDeviceManagementService();
-			boolean status = dmService.addOperation(operationContext.getOperation(),
-			                                               operationContext.getDevices());
-			if (status) {
-				Response.status(HttpStatus.SC_CREATED);
-				responseMsg.setResponseMessage("Operation has added successfully.");
-			} else {
-				Response.status(HttpStatus.SC_OK);
-				responseMsg.setResponseMessage("Failure in adding the Operation.");
-			}
-			return responseMsg;
-		} catch (OperationManagementException e) {
-			String msg = "Error occurred while saving the operation";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-	}
+    @POST
+    public Message addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
+        DeviceManagementProviderService dmService;
+        Message responseMsg = new Message();
+        try {
+            dmService = MDMAPIUtils.getDeviceManagementService();
+            boolean status = dmService.addOperation(operationContext.getOperation(),
+                    operationContext.getDevices());
+            if (status) {
+                Response.status(HttpStatus.SC_CREATED);
+                responseMsg.setResponseMessage("Operation has added successfully.");
+            } else {
+                Response.status(HttpStatus.SC_OK);
+                responseMsg.setResponseMessage("Failure in adding the Operation.");
+            }
+            return responseMsg;
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while saving the operation";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+    }
 
     @POST
     @Path("installApp/{tenantDomain}")
     public Message installApplication(ApplicationWrapper applicationWrapper,
-									  @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+                                      @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 
         Message responseMsg = new Message();
-        AppManagerConnector appManagerConnector;
-        DeviceManagementService deviceManagementService;
+        ApplicationManager appManagerConnector;
+        DeviceManagementProviderService deviceManagementService;
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
         ArrayList<DeviceIdentifier> deviceIdentifiers;
-        try{
+        try {
             appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            deviceManagementService =  MDMAPIUtils.getDeviceManagementService(MultitenantConstants
+            deviceManagementService = MDMAPIUtils.getDeviceManagementService(MultitenantConstants
                     .SUPER_TENANT_DOMAIN_NAME);
             MobileApp mobileApp = applicationWrapper.getApplication();
 
-            if (applicationWrapper.getDeviceIdentifiers() != null){
-                for(DeviceIdentifier deviceIdentifier : applicationWrapper.getDeviceIdentifiers()){
+            if (applicationWrapper.getDeviceIdentifiers() != null) {
+                for (DeviceIdentifier deviceIdentifier : applicationWrapper.getDeviceIdentifiers()) {
                     deviceIdentifiers = new ArrayList<DeviceIdentifier>();
 
-                    if (deviceIdentifier.getType().equals(Platform.android.toString())){
+                    if (deviceIdentifier.getType().equals(Platform.android.toString())) {
                         operation = MDMAndroidOperationUtil.createInstallAppOperation(mobileApp);
-                    }else if(deviceIdentifier.getType().equals(Platform.ios.toString())){
+                    } else if (deviceIdentifier.getType().equals(Platform.ios.toString())) {
                         operation = MDMIOSOperationUtil.createInstallAppOperation(mobileApp);
                     }
                     deviceIdentifiers.add(deviceIdentifier);
@@ -120,47 +120,47 @@ public class Operation {
                 appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
             }
             return responseMsg;
-        } catch (AppManagerConnectorException e) {
+        } catch (ApplicationManagementException e) {
             String msg = "Error occurred while saving the operation";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
     }
 
-	@POST
-	@Path("uninstallApp/{tenantDomain}")
-	public Message uninstallApplication(ApplicationWrapper applicationWrapper,
-										@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+    @POST
+    @Path("uninstallApp/{tenantDomain}")
+    public Message uninstallApplication(ApplicationWrapper applicationWrapper,
+                                        @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 
-		Message responseMsg = new Message();
-		AppManagerConnector appManagerConnector;
-		DeviceManagementService deviceManagementService;
-		org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
-		ArrayList<DeviceIdentifier> deviceIdentifiers;
-		try{
-			appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			deviceManagementService =  MDMAPIUtils.getDeviceManagementService(MultitenantConstants
-					.SUPER_TENANT_DOMAIN_NAME);
-			MobileApp mobileApp = applicationWrapper.getApplication();
+        Message responseMsg = new Message();
+        ApplicationManager appManagerConnector;
+        DeviceManagementProviderService deviceManagementService;
+        org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
+        ArrayList<DeviceIdentifier> deviceIdentifiers;
+        try {
+            appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            deviceManagementService = MDMAPIUtils.getDeviceManagementService(MultitenantConstants
+                    .SUPER_TENANT_DOMAIN_NAME);
+            MobileApp mobileApp = applicationWrapper.getApplication();
 
-			if (applicationWrapper.getDeviceIdentifiers() != null){
-				for(DeviceIdentifier deviceIdentifier : applicationWrapper.getDeviceIdentifiers()){
-					deviceIdentifiers = new ArrayList<DeviceIdentifier>();
+            if (applicationWrapper.getDeviceIdentifiers() != null) {
+                for (DeviceIdentifier deviceIdentifier : applicationWrapper.getDeviceIdentifiers()) {
+                    deviceIdentifiers = new ArrayList<DeviceIdentifier>();
 
-					if (deviceIdentifier.getType().equals(Platform.android.toString())) {
-						operation = MDMAndroidOperationUtil.createAppUninstallOperation(mobileApp);
-					} else if (deviceIdentifier.getType().equals(Platform.ios.toString())) {
-						operation = MDMIOSOperationUtil.createAppUninstallOperation(mobileApp);
-					}
-					deviceIdentifiers.add(deviceIdentifier);
-				}
-				appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
-			}
-			return responseMsg;
-		} catch (AppManagerConnectorException e) {
-			String msg = "Error occurred while saving the operation";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-	}
+                    if (deviceIdentifier.getType().equals(Platform.android.toString())) {
+                        operation = MDMAndroidOperationUtil.createAppUninstallOperation(mobileApp);
+                    } else if (deviceIdentifier.getType().equals(Platform.ios.toString())) {
+                        operation = MDMIOSOperationUtil.createAppUninstallOperation(mobileApp);
+                    }
+                    deviceIdentifiers.add(deviceIdentifier);
+                }
+                appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
+            }
+            return responseMsg;
+        } catch (ApplicationManagementException e) {
+            String msg = "Error occurred while saving the operation";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+    }
 }

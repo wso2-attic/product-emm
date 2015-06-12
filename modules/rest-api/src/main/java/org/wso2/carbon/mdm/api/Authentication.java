@@ -20,35 +20,25 @@ package org.wso2.carbon.mdm.api;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Credential;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnector;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnectorException;
-import org.wso2.carbon.mdm.api.common.MDMAPIException;
-import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Authentication related REST-API implementation.
  */
 public class Authentication {
-	private static Log log = LogFactory.getLog(Authentication.class);
+    private static Log log = LogFactory.getLog(Authentication.class);
 
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("credentials")
-	public Credential auth() throws MDMAPIException {
-		AppManagerConnector appManager;
-		try {
-			appManager = MDMAPIUtils.getAppManagementService();
-			return appManager.getClientCredentials();
-		} catch (AppManagerConnectorException e) {
-			String errorMsg = "Device management error";
-			log.error(errorMsg, e);
-			throw new MDMAPIException(errorMsg, e);
-		}
-	}
+//	@GET
+//	@Produces({ MediaType.APPLICATION_JSON })
+//	@Path("credentials")
+//	public Credential auth() throws MDMAPIException {
+//		AppManagerConnector appManager;
+//		try {
+//			appManager = MDMAPIUtils.getAppManagementService();
+//			return appManager.getClientCredentials();
+//		} catch (AppManagerConnectorException e) {
+//			String errorMsg = "Device management error";
+//			log.error(errorMsg, e);
+//			throw new MDMAPIException(errorMsg, e);
+//		}
+//	}
 }
