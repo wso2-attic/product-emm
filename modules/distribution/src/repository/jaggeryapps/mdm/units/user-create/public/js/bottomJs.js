@@ -1,14 +1,3 @@
-$( document ).ready(function() {
-    $("select.select2").select2({
-        placeholder : "Select..."
-    });
-
-    $("select.select2[multiple=multiple]").select2({
-        placeholder : "Select...",
-        tags : true
-    });
-});
-
 /**
  * Checks if provided input is valid against RegEx input.
  *
@@ -16,9 +5,9 @@ $( document ).ready(function() {
  * @param inputString Input string to check
  * @returns {boolean} Returns true if input matches RegEx
  */
-var inputIsValid = function (regEx, inputString) {
+function inputIsValid(regEx, inputString) {
     return regEx.test(inputString);
-};
+}
 
 /**
  * Checks if an email address has the valid format or not.
@@ -26,82 +15,93 @@ var inputIsValid = function (regEx, inputString) {
  * @param email Email address
  * @returns {boolean} true if email has the valid format, otherwise false.
  */
-var emailIsValid = function(email) {
+function emailIsValid(email) {
     var atPosition = email.indexOf("@");
     var dotPosition = email.lastIndexOf(".");
     return !(atPosition < 1 || ( dotPosition - atPosition < 2 ));
-};
+}
 
-/**
- * Following click function would execute
- * when a user clicks on "Add User" button
- * on Add User page in WSO2 MDM Console.
- */
-$("button#add-user-btn").click(function() {
-    var username = $("input#username").val();
-    var firstname = $("input#firstname").val();
-    var lastname = $("input#lastname").val();
-    var emailAddress = $("input#email").val();
-    var userRoles = $("select#roles").val();
+$(document).ready(function () {
+    $("select.select2[multiple=multiple]").select2({
+        tags : true
+    });
 
-    if (!username) {
-        $(".wr-validation-summary p").text("Username is a required field. It cannot be empty.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"" "A-Z0-9]{3,30}$/, username)) {
-        $(".wr-validation-summary p").text("Provided username is invalid. Please check.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else if (!firstname) {
-        $(".wr-validation-summary p").text("Firstname is a required field. It cannot be empty.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"0-9]{1,30}$/, firstname)) {
-        $(".wr-validation-summary p").text("Provided firstname is invalid. Please check.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else if (!lastname) {
-        $(".wr-validation-summary p").text("Lastname is a required field. It cannot be empty.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;.,'"0-9]{1,30}$/, lastname)) {
-        $(".wr-validation-summary p").text("Provided lastname is invalid. Please check.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else if (!emailAddress) {
-        $(".wr-validation-summary p").text("Email is a required field. It cannot be empty.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else if (!emailIsValid(emailAddress)) {
-        $(".wr-validation-summary p").text("Provided email is invalid. Please check.");
-        $(".wr-validation-summary").removeClass("hide");
-    } else {
-        var addUserFormData = {};
+    /**
+     * Following click function would execute
+     * when a user clicks on "Add User" button
+     * on Add User page in WSO2 MDM Console.
+     */
+    $("button#add-user-btn").click(function() {
+        var username = $("input#username").val();
+        var firstname = $("input#firstname").val();
+        var lastname = $("input#lastname").val();
+        var emailAddress = $("input#email").val();
+        var userRoles = $("select#roles").val();
 
-        addUserFormData.username = username;
-        addUserFormData.firstname = firstname;
-        addUserFormData.lastname = lastname;
-        addUserFormData.emailAddress = emailAddress;
-        addUserFormData.userRoles = userRoles;
+        var errorMsgWrapper = "#user-create-error-msg";
+        var errorMsg = "#user-create-error-msg span";
+        if (!username) {
+            $(errorMsg).text("Username is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"" "A-Z0-9]{3,30}$/, username)) {
+            $(errorMsg).text("Provided username is invalid. Please check.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!firstname) {
+            $(errorMsg).text("Firstname is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"0-9]{1,30}$/, firstname)) {
+            $(errorMsg).text("Provided firstname is invalid. Please check.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!lastname) {
+            $(errorMsg).text("Lastname is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;.,'"0-9]{1,30}$/, lastname)) {
+            $(errorMsg).text("Provided lastname is invalid. Please check.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!emailAddress) {
+            $(errorMsg).text("Email is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!emailIsValid(emailAddress)) {
+            $(errorMsg).text("Provided email is invalid. Please check.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else {
+            var addUserFormData = {};
 
-        var addUserAPI = "/mdm/api/users/add";
+            addUserFormData.username = username;
+            addUserFormData.firstname = firstname;
+            addUserFormData.lastname = lastname;
+            addUserFormData.emailAddress = emailAddress;
+            addUserFormData.userRoles = userRoles;
 
-        invokerUtil.post(addUserAPI, addUserFormData,
-            function (data) {
-                if (data == 201) {
-                    // Clearing user input fields.
-                    $("input#username").val("");
-                    $("input#firstname").val("");
-                    $("input#lastname").val("");
-                    $("input#email").val("");
-                    $("select#roles").select2("val", "");
-                    // Refreshing with success message
-                    $("#user-create-form").addClass("hide");
-                    $("#user-created-msg").removeClass("hide");
-                } else if (data == 400) {
-                    $(".wr-validation-summary p").text("Exception occurred at backend.");
-                } else if (data == 403) {
-                    $(".wr-validation-summary p").text("Action was not permitted.");
-                } else if (data == 409) {
-                    $(".wr-validation-summary p").text("Sorry, User already exists.");
+            var addUserAPI = "/mdm/api/users/add";
+
+            invokerUtil.post(
+                addUserAPI,
+                addUserFormData,
+                function (data) {
+                    if (data == 201) {
+                        // Clearing user input fields.
+                        $("input#username").val("");
+                        $("input#firstname").val("");
+                        $("input#lastname").val("");
+                        $("input#email").val("");
+                        $("select#roles").select2("val", "");
+                        // Refreshing with success message
+                        $("#user-create-form").addClass("hidden");
+                        $("#user-created-msg").removeClass("hidden");
+                    } else if (data == 400) {
+                        $(errorMsg).text("Exception occurred at backend.");
+                    } else if (data == 403) {
+                        $(errorMsg).text("Action was not permitted.");
+                    } else if (data == 409) {
+                        $(errorMsg).text("Sorry, User already exists.");
+                    }
+                    $(errorMsgWrapper).removeClass("hidden");
+                }, function () {
+                    $(errorMsg).text("An unexpected error occurred.");
+                    $(errorMsgWrapper).removeClass("hidden");
                 }
-                $(".wr-validation-summary").removeClass("hide");
-            }, function () {
-                $(".wr-validation-summary p").text("An unexpected error occurred.");
-                $(".wr-validation-summary").removeClass("hide");
-            });
-    }
+            );
+        }
+    });
 });
