@@ -17,6 +17,7 @@
  */
 package org.wso2.mdm.agent.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,10 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * This class handles all the functionalities related to device management operations.
@@ -851,17 +856,36 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void setPolicyBundle(org.wso2.mdm.agent.beans.Operation operation) throws AndroidAgentException {
+		String payload = operation.getPayLoad().toString();
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "Policy payload: " + payload);
+		}
+		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
 		try {
-			operation.setStatus(resources.getString(R.string.operation_value_completed));
-			operation.setPayLoad(new JSONObject(bundleParams.toString()));
-			resultBuilder.build(operation);
-			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Policy bundle set");
+			List<org.wso2.mdm.agent.beans.Operation> operations = mapper.readValue(
+					payload,
+					mapper.getTypeFactory().constructCollectionType(List.class,
+							org.wso2.mdm.agent.beans.Operation.class));
+			for (org.wso2.mdm.agent.beans.Operation op : operations) {
+				op = operationsMapper.getOperation(op);
+				this.doTask(op);
 			}
-		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_completed));
+			resultBuilder.build(operation);
+
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "Policy applied");
+			}
+		} catch (IOException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
 			resultBuilder.build(operation);
-			throw new AndroidAgentException("Invalid JSON format.", e);
+			String msg = "Error occurred while parsing stream." + e.getMessage();
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
 		}
 	}
 

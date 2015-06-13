@@ -17,7 +17,14 @@
 
 package org.wso2.mdm.agent.beans;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * This class represents the operation information.
@@ -92,11 +99,21 @@ public class Operation implements Serializable {
 		this.enabled = enabled;
 	}
 
+	@JsonRawValue
 	public Object getPayLoad() {
 		return payLoad;
 	}
 
 	public void setPayLoad(Object payLoad) {
 		this.payLoad = payLoad;
+		JSONArray convertedOperations = new JSONArray();
+		if (payLoad instanceof ArrayList) {
+			ArrayList<LinkedHashMap<String, String>> operations = (ArrayList) payLoad;
+			for (LinkedHashMap operation : operations) {
+				JSONObject jsonObject = new JSONObject(operation);
+				convertedOperations.put(jsonObject);
+			}
+			this.payLoad = convertedOperations.toString();
+		}
 	}
 }
