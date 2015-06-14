@@ -98,7 +98,7 @@ a.ast-type-item:hover {
 }
 
 .wr-action-btn-bar .page-title {
-    background-color: #B37D55;
+    background-color: #526A84;
     margin: 0;
 }
 
@@ -1995,9 +1995,7 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-hidden-operations-content .panel-body {
-    margin-top: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin: 5px;
     border: 1px solid #e8e8e8;
     padding: 20px;
     background: #ffffff;
@@ -2012,12 +2010,10 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-hidden-operations-content .panel-title {
-    margin-top: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin: 5px;
     border: 1px solid #e8e8e8;
     padding: 5px;
-    background: #ffffeb;
+    background: #ffffff;
     color: #555;
 }
 
@@ -2108,7 +2104,7 @@ a.show-operations-btn .btn-text:before {
 
 
 
-/* resource selectbox specific styles */
+/* resource select box specific styles */
 .select2-results .item, .select2-selection .item {
     padding: 5px;
 }
