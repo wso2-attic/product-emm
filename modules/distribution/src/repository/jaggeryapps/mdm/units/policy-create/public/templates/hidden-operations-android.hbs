@@ -1,45 +1,47 @@
 <div class="row no-gutter">
     <div class="wr-hidden-operations-nav col-lg-4">
         <a href="javascript:void(0)" onclick="showAdvanceOperation('passcode-policy', this)" class="selected">
-                    <span class="wr-hidden-operations-icon fw-stack">
-                        <i class="fw fw-key fw-stack-2x"></i>
-                    </span>
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-key fw-stack-2x"></i>
+                </span>
             Passcode Policy
+            <span class="has-error status-icon"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('restrictions', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
                     <i class="fw fw-block fw-stack-2x"></i>
                 </span>
             Restrictions
+            <span class="has-success status-icon"><i class="fw fw-ok"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('encrypt-storage', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
                     <i class="fw fw-gadget fw-stack-2x"></i>
                 </span>
-            Storage Encryption
+            Encryption Settings
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('wifi', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
                     <i class="fw fw-wifi fw-stack-2x"></i>
                 </span>
-            Wi-Fi
+            Wi-Fi Settings
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('install-apps', this)">
-                    <span class="wr-hidden-operations-icon fw-stack">
-                        <i class="fw fw-application fw-stack-2x"></i>
-                    </span>
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-application fw-stack-2x"></i>
+                </span>
             App Installations
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('blacklist-apps', this)">
-                    <span class="wr-hidden-operations-icon fw-stack">
-                        <i class="fw fw-block fw-stack-2x"></i>
-                    </span>
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-block fw-stack-2x"></i>
+                </span>
             App Blacklisting
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('web-clips', this)">
-                    <span class="wr-hidden-operations-icon fw-stack">
-                        <i class="fw fw-website fw-stack-2x"></i>
-                    </span>
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-website fw-stack-2x"></i>
+                </span>
             Web clips
         </a>
     </div>
@@ -53,9 +55,9 @@
                         <br>
                         &nbsp;&nbsp;&nbsp;Passcode Policy
                         <label class="wr-input-control switch" data-toggle="collapse" data-target="#passCodePolicy">
-                            <span class="text">Enabled</span>
-                            <input type="checkbox">
+                            <input type="checkbox" />
                             <span class="helper"></span>
+                            <span class="text"></span>
                         </label>
                         <hr>
                         &nbsp;&nbsp;&nbsp;End-user will have to ensure setting his/her device passcode in compliance with <br>
@@ -118,9 +120,9 @@
                         <br>
                         &nbsp;&nbsp;&nbsp;Restrictions on Camera
                         <label class="wr-input-control switch" data-toggle="collapse" data-target="#cameraDisable">
-                            <span class="text">Enabled</span>
-                            <input type="checkbox">
+                            <input type="checkbox" />
                             <span class="helper"></span>
+                            <span class="text"></span>
                         </label>
                         <hr>
                         &nbsp;&nbsp;&nbsp;Camera on an end-user's device can be disabled together with all apps using the camera. <br>
@@ -148,11 +150,11 @@
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         <br>
-                        &nbsp;&nbsp;&nbsp;Storage Encryption
+                        &nbsp;&nbsp;&nbsp;Encryption Settings
                         <label class="wr-input-control switch" data-toggle="collapse" data-target="#enableEncryptionTab">
-                            <span class="text">Enabled</span>
-                            <input type="checkbox">
+                            <input type="checkbox" />
                             <span class="helper"></span>
+                            <span class="text"></span>
                         </label>
                         <hr>
                         &nbsp;&nbsp;&nbsp;This configuration is used to encrypt data on an Android device, when the device is locked and <br>
@@ -180,11 +182,11 @@
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         <br>
-                        &nbsp;&nbsp;&nbsp;Wi-Fi
+                        &nbsp;&nbsp;&nbsp;Wi-Fi Settings
                         <label class="wr-input-control switch" data-toggle="collapse" data-target="#wifi">
-                            <span class="text">Enabled</span>
-                            <input type="checkbox">
+                            <input type="checkbox" />
                             <span class="helper"></span>
+                            <span class="text"></span>
                         </label>
                         <hr>
                         &nbsp;&nbsp;&nbsp;These configurations can be used to configure Wi-Fi access on an end-user's device.
@@ -218,9 +220,9 @@
                         <br>
                         &nbsp;&nbsp;&nbsp;App Installations
                         <label class="wr-input-control switch" data-toggle="collapse" data-target="#installApp">
-                            <span class="text">Enabled</span>
-                            <input type="checkbox">
+                            <input type="checkbox" />
                             <span class="helper"></span>
+                            <span class="text"></span>
                         </label>
                         <br>
                         <br>
@@ -260,9 +262,9 @@
                         <br>
                         &nbsp;&nbsp;&nbsp;App Uninstallations
                         <label class="wr-input-control switch" data-toggle="collapse" data-target="#uninstallApp">
-                            <span class="text">Enabled</span>
-                            <input type="checkbox">
+                            <input type="checkbox" />
                             <span class="helper"></span>
+                            <span class="text"></span>
                         </label>
                         <br>
                         <br>
@@ -288,9 +290,9 @@
                         <br>
                         &nbsp;&nbsp;&nbsp;Web clips
                         <label class="wr-input-control switch" data-toggle="collapse" data-target="#installWebClip">
-                            <span class="text">Enabled</span>
-                            <input type="checkbox">
+                            <input type="checkbox" />
                             <span class="helper"></span>
+                            <span class="text"></span>
                         </label>
                         <br>
                         <br>

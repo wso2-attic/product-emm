@@ -9,7 +9,7 @@ function onRequest(context) {
         "device-mgt": []
     };
     var dashboardLink = {
-        title: "Go back to Dashboard",
+        title: "Back to Dashboard",
         icon: "fw-left-arrow",
         url: "/mdm"
     };
@@ -22,22 +22,15 @@ function onRequest(context) {
     if (permissions.ADD_USER) {
         links.users.push({
             title: "Add User",
-            icon: "fw-add-user",
+            icon: "fw-add",
             url: "/mdm/users/add-user"
         });
     }
     if (permissions.ADD_POLICY) {
         links.policies.push({
             title: "Add Policy",
-            icon: "fw-policy",
+            icon: "fw-add",
             url: "/mdm/policies/add-policy"
-        });
-    }
-    if (permissions.ADD_USER) {
-        links.profiles.push({
-            title: "Add Profile",
-            icon: "fw-settings",
-            url: "/mdm/profiles/add-profile"
         });
     }
     context.currentActions = links[context.link];

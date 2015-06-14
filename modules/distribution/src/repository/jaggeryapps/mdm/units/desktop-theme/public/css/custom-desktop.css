@@ -98,7 +98,7 @@ a.ast-type-item:hover {
 }
 
 .wr-action-btn-bar .page-title {
-    background-color: #14212E;
+    background-color: #B37D55;
     margin: 0;
 }
 
@@ -1490,7 +1490,7 @@ a.wr-side-panel-toggle-btn.selected {
     opacity: 0;
 }
 .wr-input-control.switch .helper {
-    padding-left: 52px;
+    padding-left: 60px;
     position: relative;
 }
 
@@ -1530,9 +1530,9 @@ a.wr-side-panel-toggle-btn.selected {
     width: 24px;
     height: 24px;
     /*outline: 2px #333 solid;*/
-    border: 1px #333 solid;
+    border: 1px #526A84 solid;
     cursor: pointer;
-    background: #11375B;
+    background: #526A84;
     z-index: 2;
     border-radius: 12px;
     /*box-shadow: 0 1px 2px #888888;*/
@@ -1648,7 +1648,7 @@ a.wr-side-panel-toggle-btn.selected {
     width: 20px;
     content: "";
     text-indent: -9999px;
-    border: 2px #eaf0f1 solid;
+    border: 1px #999999 solid;
     z-index: 1;
     opacity: 1;
     top: 0;
@@ -1803,8 +1803,8 @@ a.wr-side-panel-toggle-btn.selected {
 /*}*/
 
 .wr-list-group .wr-desc-list-configs.highlight {
-    background: #14212E;
-    color: #fff;
+    background: #E8E8E8;
+    color: #591616;
 }
 
 .wr-list-group .wr-desc-list-configs.highlight2 {
@@ -1885,9 +1885,65 @@ a.wr-side-panel-toggle-btn.selected {
     background: #132D45;
 }
 
-
 .wr-device-list {
     position: relative;
+}
+
+.wr-advance-operations {
+    height: 100%;
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+}
+
+.wr-advance-operations .row:first-child {
+    height: 100%;
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a {
+    display: block;
+    margin: 5px;
+    border: 1px solid #e8e8e8;
+    background: #ffffff;
+    color: #526A84;
+    padding: 10px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a.has-error,
+.wr-advance-operations .wr-hidden-operations-nav a.has-error:hover,
+.wr-advance-operations .wr-hidden-operations-nav a.has-error.selected {
+    background: #B23E37;
+    color: #ffffff;
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a.has-success,
+.wr-advance-operations .wr-hidden-operations-nav a.has-success:hover,
+.wr-advance-operations .wr-hidden-operations-nav a.has-success.active {
+    /*background: #4F853C;*/
+    /*color: #fff;*/
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a span.status-icon {
+    float: right;
+    font-size: 20px;
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a span.has-success.status-icon {
+    color: #A4C639;
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a span.has-error.status-icon {
+    color: #F47415;
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a:hover {
+    background: #f4f4f4;
+}
+
+.wr-advance-operations .wr-hidden-operations-nav a.selected, .wr-hidden-operations .wr-hidden-operations-nav a.selected:hover {
+    color: #ffffff;
+    background: #526A84;
 }
 
 .wr-hidden-operations {
@@ -1903,61 +1959,12 @@ a.wr-side-panel-toggle-btn.selected {
     overflow-x: hidden;
 }
 
-.wr-advance-operations {
-    height: 100%;
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
-}
-
 .wr-hidden-operation {
     display: none;
 }
 
-.wr-advance-operations .row:first-child {
-    height: 100%;
-}
-
 .wr-hidden-operations.toggled {
     left: 0;
-}
-
-.wr-advance-operations .wr-hidden-operations-nav a {
-    display: block;
-    background: #fff;
-    color: #526A84;
-    border-bottom: 1px solid #e4e4e4;
-    padding: 10px;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.wr-advance-operations .wr-hidden-operations-nav a.has-error,
-.wr-advance-operations .wr-hidden-operations-nav a.has-error:hover,
-.wr-advance-operations .wr-hidden-operations-nav a.has-error.selected {
-    background: #B23E37;
-    color: #fff;
-}
-
-.wr-advance-operations .wr-hidden-operations-nav a.has-success,
-.wr-advance-operations .wr-hidden-operations-nav a.has-success:hover,
-.wr-advance-operations .wr-hidden-operations-nav a.has-success.active {
-    /*background: #4F853C;*/
-    /*color: #fff;*/
-}
-
-.wr-advance-operations .wr-hidden-operations-nav a .status-icon {
-    float: right;
-    font-size: 20px;
-    margin-top: 0;
-}
-
-.wr-advance-operations .wr-hidden-operations-nav a:hover {
-    background: #f4f4f4;
-}
-
-.wr-advance-operations .wr-hidden-operations-nav a.selected, .wr-hidden-operations .wr-hidden-operations-nav a.selected:hover {
-    color: #fff;
-    background: #526A84;
 }
 
 .wr-hidden-operations-icon {
@@ -1968,8 +1975,7 @@ a.wr-side-panel-toggle-btn.selected {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
-    background: #fff;
-    border-left: 1px solid #e4e4e4;
+    background: #ffffff;
 }
 
 .wr-hidden-operations-content::-webkit-scrollbar {
@@ -1979,18 +1985,22 @@ a.wr-side-panel-toggle-btn.selected {
     cursor: all-scroll;
 }
 .wr-hidden-operations-content::-webkit-scrollbar-thumb {
-    background: #e4e4e4;
+    background: #f5f5f5;
 }
 .wr-hidden-operations-content::-webkit-scrollbar-thumb:hover {
-    background: #e4e4e4;
+    background: #f5f5f5;
 }
 .wr-hidden-operations-content::-webkit-scrollbar-thumb:active {
-    background: #e4e4e4;
+    background: #f5f5f5;
 }
 
 .wr-hidden-operations-content .panel-body {
-    margin-bottom: 0;
-    padding: 15px;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #e8e8e8;
+    padding: 20px;
+    background: #ffffff;
 }
 
 .wr-advance-operations.wizard-content .panel-title .fw-stack {
@@ -2002,9 +2012,12 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-hidden-operations-content .panel-title {
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #e8e8e8;
     padding: 5px;
-    background: #e4e4e4;
-    border-bottom: 1px solid #fff;
+    background: #ffffeb;
     color: #555;
 }
 
@@ -2017,27 +2030,27 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-hidden-operations-content .panel-title .wr-input-control.switch {
-    margin-top: 8px;
+    margin-top: 0;
     margin-right: 0;
 }
 
 .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"]:not(:checked) + .helper:after {
-    background: #fff;
+    background: #ffffff;
 }
 
 .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"] + .helper + .text {
     display: inline-block;
     float: left;
-    margin-right: 5px;
+    margin-right: 10px;
     margin-top: -1px;
 }
 
 .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"] + .helper + .text:after {
-    content: "Disabled";
+    content: "Off";
 }
 
 .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"]:checked + .helper + .text:after {
-    content: "Enabled";
+    content: "On";
 }
 
 .wr-hidden-operations-content .panel-title label {

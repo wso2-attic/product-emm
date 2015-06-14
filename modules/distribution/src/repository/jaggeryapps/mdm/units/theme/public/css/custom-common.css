@@ -317,9 +317,7 @@ br.c-both {
 
 /* wizard */
 .wr-wizard {
-    border-bottom:1px solid #f0f0f0;
-    padding-bottom:20px;
-    margin-bottom:20px;
+
 }
 
 .itm-wiz-current .wiz-no {
