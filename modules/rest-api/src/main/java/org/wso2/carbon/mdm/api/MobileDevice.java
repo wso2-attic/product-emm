@@ -48,21 +48,20 @@ public class MobileDevice {
     @GET
     public List<Device> getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
                                       @QueryParam("role") String role) throws MDMAPIException {
-        List<org.wso2.carbon.device.mgt.common.Device> devices;
+        List<Device> devices;
         try {
             DeviceManagementProviderService service = MDMAPIUtils.getDeviceManagementService();
             List<Device> allDevices;
             if (type != null) {
                 allDevices = service.getAllDevices(type);
             } else if (user != null) {
-                allDevices = service.getAllDevicesOfUser(user);
+                allDevices = service.getDevicesOfUser(user);
             } else if (role != null){
                 allDevices = service.getAllDevicesOfRole(role);
             } else {
                 allDevices = service.getAllDevices();
             }
             return allDevices;
-
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while fetching the device list.";
             log.error(msg, e);
@@ -81,11 +80,10 @@ public class MobileDevice {
      */
     @GET
     @Path("{type}/{id}")
-    public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id, @PathParam("type") String type)
-            throws MDMAPIException {
+    public org.wso2.carbon.device.mgt.common.Device getDevice(
+            @PathParam("id") String id, @PathParam("type") String type) throws MDMAPIException {
         String msg;
-        org.wso2.carbon.device.mgt.common.Device device;
-
+        Device device;
         try {
             DeviceIdentifier deviceIdentifier = MDMAPIUtils.convertToDeviceIdentifierObject(id, type);
             device = MDMAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
@@ -93,10 +91,10 @@ public class MobileDevice {
                 Response.status(Response.Status.NOT_FOUND);
             }
             return device;
-        } catch (DeviceManagementException deviceMgtEx) {
+        } catch (DeviceManagementException e) {
             msg = "Error occurred while fetching the device information.";
-            log.error(msg, deviceMgtEx);
-            throw new MDMAPIException(msg, deviceMgtEx);
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
@@ -111,20 +109,20 @@ public class MobileDevice {
 	 */
 	@GET
 	@Path("user/{user}/{tenantDomain}")
-	public List<org.wso2.carbon.device.mgt.common.Device> getDeviceByUser(@PathParam("user") String user,
+	public List<Device> getDeviceByUser(@PathParam("user") String user,
 				@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 		String msg;
-		List<org.wso2.carbon.device.mgt.common.Device> devices;
+		List<Device> devices;
 		try {
-			devices = MDMAPIUtils.getDeviceManagementService().getDeviceListOfUser(user);
+			devices = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(user);
 			if (devices == null) {
 				Response.status(Response.Status.NOT_FOUND);
 			}
 			return devices;
-		} catch (DeviceManagementException deviceMgtEx) {
+		} catch (DeviceManagementException e) {
 			msg = "Error occurred while fetching the devices list of given user.";
-			log.error(msg, deviceMgtEx);
-			throw new MDMAPIException(msg, deviceMgtEx);
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
 		}
 	}
 
@@ -139,7 +137,7 @@ public class MobileDevice {
 	public int getDeviceCount() throws MDMAPIException {
 
 		int deviceCount = 0;
-		List<org.wso2.carbon.device.mgt.common.Device> devices;
+		List<Device> devices;
 		try {
 			devices = MDMAPIUtils.getDeviceManagementService().getAllDevices();
 			if (devices == null) {
@@ -148,10 +146,10 @@ public class MobileDevice {
 				deviceCount = devices.size();
 			}
 			return deviceCount;
-		} catch (DeviceManagementException deviceMgtEx) {
+		} catch (DeviceManagementException e) {
 			String msg = "Error occurred while fetching the device count.";
-			log.error(msg, deviceMgtEx);
-			throw new MDMAPIException(msg, deviceMgtEx);
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
 		}
 	}
 
@@ -159,20 +157,19 @@ public class MobileDevice {
 	 * Get the list of devices that matches with the given name.
 	 *
 	 * @param deviceName Device name
-	 * @param tenantDomain
+	 * @param tenantDomain Callee tenant domain
 	 * @return list of devices.
-	 * @throws MDMAPIException If some unusual behaviour is observed while fetching the
-	 * device list
+	 * @throws MDMAPIException If some unusual behaviour is observed while fetching the device list
 	 */
 	@GET
 	@Path("name/{name}/{tenantDomain}")
-	public List<org.wso2.carbon.device.mgt.common.Device> getDevicesByName(@PathParam("name") String deviceName,
+	public List<Device> getDevicesByName(@PathParam("name") String deviceName,
 				@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 
-		List<org.wso2.carbon.device.mgt.common.Device> devices;
+		List<Device> devices;
 		int tenantId = MDMAPIUtils.getTenantId(tenantDomain);
 		try {
-			devices = MDMAPIUtils.getDeviceManagementService().getDevicesByName(deviceName, tenantId);
+			devices = MDMAPIUtils.getDeviceManagementService().getDevicesByName(deviceName);
 		} catch (DeviceManagementException e) {
 			String msg = "Error occurred while fetching the devices list of device name.";
 			log.error(msg, e);
