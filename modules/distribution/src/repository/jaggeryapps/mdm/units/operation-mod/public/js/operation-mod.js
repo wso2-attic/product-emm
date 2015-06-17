@@ -89,7 +89,7 @@ var operationModule = function () {
                     "allowCamera": operationData["allowCamera"],
                     "allowCloudBackup": operationData["allowCloudBackup"],
                     "allowSafari": operationData["allowSafari"],
-                    "allowScreenShot": operationData["allowScreenshot"],
+                    "allowScreenShot": operationData["allowScreenShot"],
                     "allowAirDrop": operationData["allowAirDrop"]
                 }
             };
@@ -282,7 +282,7 @@ var operationModule = function () {
         return payload;
     };
 
-    publicMethods.getAndroidServiceEndpoint = function(operationName) {
+    publicMethods.getAndroidServiceEndpoint = function (operationName) {
         var featureMap = {
             "WIFI": "wifi",
             "CAMERA": "camera",
