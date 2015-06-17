@@ -22,17 +22,17 @@ var operationModule = function () {
 
     publicMethods.getIOSServiceEndpoint = function (operationName) {
         var featureMap = {
-            DEVICE_LOCK: "lock",
-            ALARM: "alarm",
-            LOCATION: "location",
-            AIR_PLAY: "airplay",
-            INSTALL_STORE_APPLICATION: "storeapplication",
-            INSTALL_ENTERPRISE_APPLICATION: "enterpriseapplication",
-            REMOVE_APPLICATION: "removeapplication",
-            RESTRICTION: "restriction",
-            CELLULAR: "cellular",
-            ENTERPRISE_WIPE: "enterprisewipe",
-            WIFI: "wifi"
+            "DEVICE_LOCK": "lock",
+            "ALARM": "alarm",
+            "LOCATION": "location",
+            "AIR_PLAY": "airplay",
+            "RESTRICTION": "restriction",
+            "CELLULAR": "cellular",
+            "WIFI": "wifi",
+            "INSTALL_STORE_APPLICATION": "storeapplication",
+            "INSTALL_ENTERPRISE_APPLICATION": "enterpriseapplication",
+            "REMOVE_APPLICATION": "removeapplication",
+            "ENTERPRISE_WIPE": "enterprisewipe"
         };
         return "/ios/operation/" + featureMap[operationName];
     };
@@ -43,72 +43,72 @@ var operationModule = function () {
         if (operationName == "AIR_PLAY") {
             operationType = "profile";
             payload = {
-                operation: {
-                    airPlayDestinations: [
-                        operationData.location
+                "operation": {
+                    "airPlayDestinations": [
+                        operationData["location"]
                     ],
-                    airPlayCredentials: [{
-                        deviceName: operationData.deviceName,
-                        password: operationData.password
+                    "airPlayCredentials": [{
+                        "deviceName": operationData["deviceName"],
+                        "password": operationData["password"]
                     }]
                 }
             };
         } else if (operationName == "INSTALL_STORE_APPLICATION") {
             operationType = "profile";
             payload = {
-                operation: {
-                    identifier: operationData.appIdentifier,
-                    iTunesStoreID: operationData.ituneID,
-                    removeAppUponMDMProfileRemoval: operationData.appRemoval,
-                    preventBackupOfAppData: operationData.backupData,
-                    bundleId: operationData.bundleId
+                "operation": {
+                    "identifier": operationData["appIdentifier"],
+                    "iTunesStoreID": operationData["ituneID"],
+                    "removeAppUponMDMProfileRemoval": operationData["appRemoval"],
+                    "preventBackupOfAppData": operationData["backupData"],
+                    "bundleId": operationData["bundleId"]
                 }
             };
         } else if (operationName == "INSTALL_ENTERPRISE_APPLICATION") {
             operationType = "profile";
             payload = {
-                operation: {
-                    identifier: operationData.appIdentifier,
-                    manifestURL: operationData.manifestURL,
-                    removeAppUponMDMProfileRemoval: operationData.appRemoval,
-                    preventBackupOfAppData: operationData.backupData,
-                    bundleId: operationData.bundleId
+                "operation": {
+                    "identifier": operationData["appIdentifier"],
+                    "manifestURL": operationData["manifestURL"],
+                    "removeAppUponMDMProfileRemoval": operationData["appRemoval"],
+                    "preventBackupOfAppData": operationData["backupData"],
+                    "bundleId": operationData["bundleId"]
                 }
             };
         } else if (operationName == "REMOVE_APPLICATION") {
             operationType = "profile";
             payload = {
-                operation: {
-                    bundleId: operationData.bundleId
+                "operation": {
+                    "bundleId": operationData["bundleId"]
                 }
             };
         } else if (operationName == "RESTRICTION") {
             operationType = "profile";
             payload = {
-                operation: {
-                    allowCamera: operationData.allowCamera,
-                    allowCloudBackup: operationData.allowCloudBackup,
-                    allowSafari: operationData.allowSafari,
-                    allowScreenShot: operationData.allowScreenshot,
-                    allowAirDrop: operationData.allowAirDrop
+                "operation": {
+                    "allowCamera": operationData["allowCamera"],
+                    "allowCloudBackup": operationData["allowCloudBackup"],
+                    "allowSafari": operationData["allowSafari"],
+                    "allowScreenShot": operationData["allowScreenshot"],
+                    "allowAirDrop": operationData["allowAirDrop"]
                 }
             };
         }  else if (operationName == "CELLULAR") {
             operationType = "profile";
             payload = {
-                operation: {
-                    attachAPNName: null,
-                    authenticationType: null,
-                    username: null,
-                    password: null,
-                    apnConfigurations: [
+                "operation": {
+                    "attachAPNName": null,
+                    "authenticationType": null,
+                    "username": null,
+                    "password": null,
+                    "apnConfigurations": [
                         {
-                            configurationName: null,
-                            authenticationType: null,
-                            username: null,
-                            password: null,
-                            proxyServer: null,
-                            proxyPort: 0
+                            "configurationName": null,
+                            "authenticationType": null,
+                            "username": null,
+                            "password": null,
+                            "proxyServer": null,
+                            "proxyPort": 0
                         }
                     ]
                 }
@@ -116,61 +116,61 @@ var operationModule = function () {
         } else if (operationName == "WIFI") {
             operationType = "profile";
             payload = {
-                operation: {
-                    hiddenNetwork: operationData.hiddenNetwork,
-                    autoJoin: operationData.autoJoin,
-                    encryptionType: operationData.encryptionType,
-                    hotspot: false,
-                    domainName: null,
-                    serviceProviderRoamingEnabled: false,
-                    displayedOperatorName: null,
-                    proxyType: null,
-                    roamingConsortiumOIs: null,
-                    password: operationData.password,
-                    clientConfiguration: {
-                        username: null,
-                        acceptEAPTypes: null,
-                        userPassword: null,
-                        oneTimePassword: false,
-                        payloadCertificateAnchorUUID: null,
-                        outerIdentity: null,
-                        tlstrustedServerNames: null,
-                        tlsallowTrustExceptions: false,
-                        tlscertificateIsRequired: false,
-                        ttlsinnerAuthentication: null,
-                        eapfastusePAC: false,
-                        eapfastprovisionPAC: false,
-                        eapfastprovisionPACAnonymously: false,
-                        eapsimnumberOfRANDs: 0
+                "operation": {
+                    "hiddenNetwork": operationData["hiddenNetwork"],
+                    "autoJoin": operationData["autoJoin"],
+                    "encryptionType": operationData["encryptionType"],
+                    "hotspot": false,
+                    "domainName": null,
+                    "serviceProviderRoamingEnabled": false,
+                    "displayedOperatorName": null,
+                    "proxyType": null,
+                    "roamingConsortiumOIs": null,
+                    "password": operationData["password"],
+                    "clientConfiguration": {
+                        "username": null,
+                        "acceptEAPTypes": null,
+                        "userPassword": null,
+                        "oneTimePassword": false,
+                        "payloadCertificateAnchorUUID": null,
+                        "outerIdentity": null,
+                        "tlstrustedServerNames": null,
+                        "tlsallowTrustExceptions": false,
+                        "tlscertificateIsRequired": false,
+                        "ttlsinnerAuthentication": null,
+                        "eapfastusePAC": false,
+                        "eapfastprovisionPAC": false,
+                        "eapfastprovisionPACAnonymously": false,
+                        "eapsimnumberOfRANDs": 0
                     },
-                    payloadCertificateUUID: null,
-                    proxyServer: null,
-                    proxyPort: 0,
-                    proxyUsername: null,
-                    proxyPassword: null,
-                    proxyPACURL: null,
-                    proxyPACFallbackAllowed: false,
-                    ssid: operationData.ssid,
-                    nairealmNames: null,
-                    mccandMNCs: null
+                    "payloadCertificateUUID": null,
+                    "proxyServer": null,
+                    "proxyPort": 0,
+                    "proxyUsername": null,
+                    "proxyPassword": null,
+                    "proxyPACURL": null,
+                    "proxyPACFallbackAllowed": false,
+                    "ssid": operationData["ssid"],
+                    "nairealmNames": null,
+                    "mccandMNCs": null
                 }
             };
         } else if (operationName == "MAIL") {
             operationType = "profile";
             payload = {
-                operation: {
-                    attachAPNName: null,
-                    authenticationType: null,
-                    username: null,
-                    password: null,
-                    apnConfigurations: [
+                "operation": {
+                    "attachAPNName": null,
+                    "authenticationType": null,
+                    "username": null,
+                    "password": null,
+                    "apnConfigurations": [
                         {
-                            configurationName: null,
-                            authenticationType: null,
-                            username: null,
-                            password: null,
-                            proxyServer: null,
-                            proxyPort: 0
+                            "configurationName": null,
+                            "authenticationType": null,
+                            "username": null,
+                            "password": null,
+                            "proxyServer": null,
+                            "proxyPort": 0
                         }
                     ]
                 }
@@ -182,7 +182,7 @@ var operationModule = function () {
             payload = deviceList;
         }
         if (operationType == "profile" && deviceList) {
-            payload.deviceIDs = deviceList;
+            payload["deviceIDs"] = deviceList;
         }
         return payload;
     };
@@ -193,82 +193,81 @@ var operationModule = function () {
         if (operationName == "CAMERA") {
             operationType = "profile";
             payload = {
-                operation: {
-                    enabled : operationData.enableCamera
+                "operation": {
+                    "enabled" : operationData["enableCamera"]
                 }
             };
         } else if (operationName == "CHANGE_LOCK_CODE") {
             operationType = "profile";
             payload = {
-                operation: {
-                    lockCode : operationData.lockCode
+                "operation": {
+                    "lockCode" : operationData["lockCode"]
                 }
             };
         } else if (operationName == "ENCRYPT_STORAGE") {
             operationType = "profile";
             payload = {
-                operation: {
-                    encrypted : operationData.enableEncryption
+                "operation": {
+                    "encrypted" : operationData["enableEncryption"]
                 }
             };
         } else if (operationName == "NOTIFICATION") {
             operationType = "profile";
             payload = {
-                deviceIDs: devices,
-                operation: {
-                    message : operationData.message
+                "operation": {
+                    "message" : operationData["message"]
                 }
             };
         } else if (operationName == "WEBCLIP") {
             operationType = "profile";
             payload = {
-                operation: {
-                    identity: operationData.url,
-                    title: operationData.title
+                "operation": {
+                    "identity": operationData["url"],
+                    "title": operationData["title"]
                 }
             };
         } else if (operationName == "INSTALL_APPLICATION") {
             operationType = "profile";
             payload = {
-                operation: {
-                    appIdentifier: operationData.packageName,
-                    type: operationData.type,
-                    url: operationData.url
+                "operation": {
+                    "appIdentifier": operationData["packageName"],
+                    "type": operationData["type"],
+                    "url": operationData["url"]
                 }
             };
         } else if (operationName == "UNINSTALL_APPLICATION") {
             operationType = "profile";
             payload = {
-                operation: {
-                    appIdentifier: operationData.packageName
+                "operation": {
+                    "appIdentifier": operationData["packageName"]
                 }
             };
         } else if (operationName == "BLACKLIST_APPLICATIONS") {
             operationType = "profile";
             payload = {
-                operation: {
-                    appIdentifier: operationData.packageNames
+                "operation": {
+                    "appIdentifier": operationData["packageNames"]
                 }
             };
         } else if (operationName == "PASSCODE_POLICY") {
             operationType = "profile";
             payload = {
-                operation: {
-                    maxFailedAttempts: operationData.maxFailedAttempts,
-                    minLength: operationData.minLength,
-                    pinHistory: operationData.pinHistory,
-                    minComplexChars: operationData.minComplexChars,
-                    maxPINAgeInDays: operationData.maxPINAgeInDays,
-                    requireAlphanumeric: operationData.requireAlphanumeric,
-                    allowSimple: operationData.allowSimple
+                "operation": {
+                    "maxFailedAttempts": operationData["maxFailedAttempts"],
+                    "minLength": operationData["minLength"],
+                    "pinHistory": operationData["pinHistory"],
+                    "minComplexChars": operationData["minComplexChars"],
+                    "maxPINAgeInDays": operationData["maxPINAgeInDays"],
+                    "requireAlphanumeric": operationData["requireAlphanumeric"],
+                    "allowSimple": operationData["allowSimple"]
                 }
             };
         } else if (operationName == "WIFI") {
             operationType = "profile";
             payload = {
-                operation: {
-                    ssid: operationData.ssid,
-                    password: operationData.password
+                "operation": {
+                    "ssid": operationData["ssid"],
+                    "password": operationData["password"]
                 }
             };
         } else {
@@ -278,31 +277,31 @@ var operationModule = function () {
             payload = deviceList;
         }
         if (operationType == "profile" && deviceList) {
-            payload.deviceIDs = deviceList;
+            payload["deviceIDs"] = deviceList;
         }
         return payload;
     };
 
     publicMethods.getAndroidServiceEndpoint = function(operationName) {
         var featureMap = {
-            DEVICE_LOCK: "lock",
-            DEVICE_LOCATION: "location",
-            CLEAR_PASSWORD: "clear-password",
-            CAMERA: "camera",
-            ENTERPRISE_WIPE: "enterprise-wipe",
-            WIPE_DATA: "wipe-data",
-            APPLICATION_LIST: "get-application-list",
-            DEVICE_RING: "ring-device",
-            DEVICE_MUTE: "mute",
-            NOTIFICATION: "notification",
-            WIFI: "wifi",
-            ENCRYPT_STORAGE: "encrypt",
-            CHANGE_LOCK_CODE: "change-lock-code",
-            WEBCLIP: "webclip",
-            INSTALL_APPLICATION: "install-application",
-            UNINSTALL_APPLICATION: "uninstall-application",
-            BLACKLIST_APPLICATIONS: "blacklist-applications",
-            PASSCODE_POLICY: "password-policy"
+            "WIFI": "wifi",
+            "CAMERA": "camera",
+            "DEVICE_LOCK": "lock",
+            "DEVICE_LOCATION": "location",
+            "CLEAR_PASSWORD": "clear-password",
+            "APPLICATION_LIST": "get-application-list",
+            "DEVICE_RING": "ring-device",
+            "DEVICE_MUTE": "mute",
+            "NOTIFICATION": "notification",
+            "ENCRYPT_STORAGE": "encrypt",
+            "CHANGE_LOCK_CODE": "change-lock-code",
+            "WEBCLIP": "webclip",
+            "INSTALL_APPLICATION": "install-application",
+            "UNINSTALL_APPLICATION": "uninstall-application",
+            "BLACKLIST_APPLICATIONS": "blacklist-applications",
+            "PASSCODE_POLICY": "password-policy",
+            "ENTERPRISE_WIPE": "enterprise-wipe",
+            "WIPE_DATA": "wipe-data"
         };
         return "/mdm-android-agent/operation/" + featureMap[operationName];
     };
@@ -312,17 +311,17 @@ var operationModule = function () {
      * @param featureCode
      * @returns icon class
      */
-    publicMethods.getAndroidIconForFeature = function(featureCode){
+    publicMethods.getAndroidIconForFeature = function (featureCode) {
         var featureMap = {
-            DEVICE_LOCK: "fw-lock",
-            DEVICE_LOCATION: "fw-map-location",
-            CLEAR_PASSWORD: "fw-key",
-            ENTERPRISE_WIPE: "fw-clean",
-            WIPE_DATA: "fw-database",
-            DEVICE_RING: "fw-dial-up",
-            DEVICE_MUTE: "fw-incoming-call",
-            NOTIFICATION: "fw-message",
-            CHANGE_LOCK_CODE: "fw-padlock"
+            "DEVICE_LOCK": "fw-lock",
+            "DEVICE_LOCATION": "fw-map-location",
+            "CLEAR_PASSWORD": "fw-key",
+            "ENTERPRISE_WIPE": "fw-clean",
+            "WIPE_DATA": "fw-database",
+            "DEVICE_RING": "fw-dial-up",
+            "DEVICE_MUTE": "fw-incoming-call",
+            "NOTIFICATION": "fw-message",
+            "CHANGE_LOCK_CODE": "fw-padlock"
         };
         return featureMap[featureCode];
     };
@@ -334,21 +333,22 @@ var operationModule = function () {
      */
     publicMethods.getIOSIconForFeature = function (featureCode) {
         var featureMap = {
-            DEVICE_LOCK: "fw-lock",
-            LOCATION: "fw-map-location",
-            ENTERPRISE_WIPE: "fw-clean",
-            ALARM: "fw-dial-up"
+            "DEVICE_LOCK": "fw-lock",
+            "LOCATION": "fw-map-location",
+            "ENTERPRISE_WIPE": "fw-clean",
+            "ALARM": "fw-dial-up"
         };
         return featureMap[featureCode];
     };
 
     privateMethods.createTemperatureControllerPayload = function (operationName, operationData, devices) {
         var payload;
-        var operationType = "profile";
+        var operationType;
         if (operationName == "BUZZER") {
+            operationType = "profile";
             payload = {
                 "operation": {
-                    "enabled" : operationData.enableBuzzer
+                    "enabled" : operationData["enableBuzzer"]
                 }
             };
         } else {
@@ -356,21 +356,21 @@ var operationModule = function () {
             payload = devices;
         }
         if (operationType == "profile" && devices) {
-            payload.deviceIDs = devices;
+            payload["deviceIDs"] = devices;
         }
         return payload;
     };
 
     publicMethods.getTemperatureControllerServiceEndpoint = function (operationName) {
         var featureMap = {
-            BUZZER: "buzzer"
+            "BUZZER": "buzzer"
         };
         return "/temp-controller-agent/operations/" + featureMap[operationName];
     };
 
     publicMethods.getTemperatureControllerIconForFeature = function (featureCode) {
         var featureMap = {
-            BUZZER: "fw-dial-up"
+            "BUZZER": "fw-dial-up"
         };
         return featureMap[featureCode];
     };
@@ -383,7 +383,7 @@ var operationModule = function () {
      */
     $.fn.filterByData = function (prop, val) {
         return this.filter(
-            function() { return $(this).data(prop)==val; }
+            function () { return $(this).data(prop) == val; }
         );
     };
 
@@ -427,12 +427,12 @@ var operationModule = function () {
      @DeviceType = Device Type of the profile
      @FeatureCodes = Feature Codes to generate the profile from
      */
-    publicMethods.generateProfile = function(deviceType, featureCodes) {
+    publicMethods.generateProfile = function (deviceType, featureCodes) {
         var generatedProfile = {};
         for (var i = 0; i < featureCodes.length; ++i) {
             var featureCode = featureCodes[i];
             var payload = publicMethods.generatePayload(deviceType, featureCode);
-            generatedProfile[featureCode] = payload.operation;
+            generatedProfile[featureCode] = payload["operation"];
         }
         return generatedProfile;
     };
