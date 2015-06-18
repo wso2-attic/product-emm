@@ -22,6 +22,32 @@ var util = function () {
     var String = Packages.java.lang.String;
     var log = new Log();
 
+    module.getDyanmicCredentials = function(){
+        var payload = {
+            "callbackUrl": "http://localhost:9763/mdm-admin",
+            "clientName": "MDM-app",
+            "tokenScope": "admin",
+            "owner": "MDM-app",
+            "grantType": "password"
+        };
+        var xhr = new XMLHttpRequest();
+        var tokenEndpoint = "http://localhost:9763/dynamic-client-manager/register/";
+        xhr.open("POST", tokenEndpoint, false);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(payload);
+        var clientData;
+        if (xhr.status == 200) {
+            var data = parse(xhr.responseText);
+            clientData.clientId = data.clientId;
+            clientData.clientSecret = data.clientSecret;
+        } else if (xhr.status == 403) {
+            throw "Error in obtaining token with Password Grant Type";
+        } else {
+            throw "Error in obtaining token with Password Grant Type";
+        }
+        return clientData;
+    };
+
     /**
      * Encode the payload in Base64
      * @param payload
@@ -64,14 +90,19 @@ var util = function () {
     module.getTokenWithSAMLGrantType = function () {
 
     };
-    module.refreshToken = function(tokenPair){
+    module.refreshToken = function(tokenPair,clientId, clientSecret, scope){
         var xhr = new XMLHttpRequest();
         var tokenEndpoint = "https://localhost:9443/oauth2/token";
         var encodedClientKeys = encode(clientId + ":" + clientSecret);
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
-        xhr.send("grant_type=refresh_token&refresh_token=" + tokenPair.refreshToken + "&scope=" + scope);
+        var url = "grant_type=refresh_token&refresh_token=" + tokenPair.refreshToken;
+        if (scope){
+            url = url + "&scope=" + scope
+        }
+        log.info(url);
+        xhr.send(url);
         delete password, delete clientSecret, delete encodedClientKeys;
         var tokenPair = {};
         if (xhr.status == 200) {
