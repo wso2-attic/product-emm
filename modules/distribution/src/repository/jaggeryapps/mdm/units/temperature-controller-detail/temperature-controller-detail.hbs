@@ -1,0 +1,55 @@
+{{#zone "device-detail-top"}}
+    <div class="row wr-device-board">
+        <div class="col-lg-12 wr-secondary-bar">
+            <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
+                Device - {{device.properties.platform}}
+                <span class="lbl-device">
+                ({{device.properties.version}})
+            </span>
+            </label>
+        </div>
+    </div>
+{{/zone}}
+
+{{#zone "device-detail-properties"}}
+    <div class="ast-device-desc"><b>Serial:</b> {{device.deviceIdentifier}}</div>
+    <div class="ast-device-desc"><b>Model:</b>  {{device.properties.platform}}</div>
+{{/zone}}
+
+{{#zone "device-detail-properties"}}
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingFour">
+                <h2 class="sub-title panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
+                                    </span>
+                        Device Properties
+                    </a>
+                </h2>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each device.properties}}
+                                <tr>
+                                    <td>{{@key}}</td>
+                                    <td>{{this}}</td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/zone}}
