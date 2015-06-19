@@ -1,25 +1,17 @@
 {{#zone "main"}}
-    <div class="row wr-device-board">
-        <div class="col-lg-12 wr-secondary-bar">
-            {{#unequal device.type "TemperatureController"}}
-                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
-                    Device {{device.name}}
-                    <span class="lbl-device">
+    {{#defineZone "device-detail-top"}}
+        <div class="row wr-device-board">
+            <div class="col-lg-12 wr-secondary-bar">
+                    <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
+                        Device {{device.name}}
+                        <span class="lbl-device">
                     ({{device.viewModel.vendor}} {{device.viewModel.model}})
                 </span>
-                </label>
-            {{/unequal}}
-            {{#equal device.type "TemperatureController"}}
-                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
-                    Device - {{device.properties.platform}}
-                    <span class="lbl-device">
-                    ({{device.properties.version}})
-                </span>
-                </label>
-            {{/equal}}
-
+                    </label>
+            </div>
         </div>
-    </div>
+    {{/defineZone}}
+
     <div class="wr-device-list row">
         <div class="wr-hidden-operations wr-advance-operations">
 
@@ -37,186 +29,139 @@
                                 <img src="{{self.publicURL}}/img/device_icons/{{device.type}}.png" style="width:200px" />
                             </div>
                             <div class="col-lg-12 col-sm-4 ast-desc">
-                                {{#unequal device.type "TemperatureController"}}
+                                {{#defineZone "device-detail-properties"}}
                                     <div class="ast-device-desc"><b>Device:</b> {{device.viewModel.vendor}} {{device.properties.model}}</div>
                                     <div class="ast-device-desc"><b>Model:</b>  {{device.viewModel.model}}</div>
                                     <div class="ast-device-desc"><b>IMEI:</b>  {{device.viewModel.imei}}</div>
                                     {{#if device.viewModel.udid}}<div class="ast-device-desc"><b>UDID:</b>  {{device.viewModel.udid}}</div>{{/if}}
                                     {{#if device.viewModel.phoneNumber}}<div class="ast-device-desc"><b>Phone Number:</b>  {{device.viewModel.phoneNumber}}</div>{{/if}}
-                                {{/unequal}}
-                                {{#equal device.type "TemperatureController"}}
-                                    <div class="ast-device-desc"><b>Serial:</b> {{device.deviceIdentifier}}</div>
-                                    <div class="ast-device-desc"><b>Model:</b>  {{device.properties.platform}}</div>
-
-                                {{/equal}}
+                                {{/defineZone}}
                             </div>
                         </div>
                     </div>
 
                     <div class="col-lg-10 tiles">
+                        {{#defineZone "device-detail-properties"}}
+                            <!-- device summary -->
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    {{#if device.viewModel.BatteryLevel}}
+                                        <div class="col-lg-4">
+                                            <div class="wr-stats-board-tile">
+                                                <div class="tile-name">BATTERY</div>
+                                                <div>
+                                                    <div class="tile-icon"><i class="fw fw-battery"></i></div>
+                                                    <div class="tile-stats">{{device.viewModel.BatteryLevel}}%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{/if}}
 
-                        <!-- device summary -->
-                        <div class="row">
+                                    {{#if device.viewModel.DeviceCapacity}}
+                                        <div class="col-lg-4">
+                                            <div class="wr-stats-board-tile">
+                                                <div class="tile-name">STORAGE</div>
+                                                <div>
+                                                    <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                                    <div class="tile-stats">{{device.viewModel.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.DeviceCapacityUsed}} GB Free</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+                                    {{#if device.viewModel.internal_memory.FreeCapacity}}
+                                        <div class="col-lg-4">
+                                            <div class="wr-stats-board-tile">
+                                                <div class="tile-name">LOCAL STORAGE</div>
+                                                <div>
+                                                    <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                                    <div class="tile-stats">{{device.viewModel.internal_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.internal_memory.FreeCapacity}} GB Free</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+                                    {{#if device.viewModel.external_memory.FreeCapacity}}
+                                        <div class="col-lg-4">
+                                            <div class="wr-stats-board-tile">
+                                                <div class="tile-name">EXTERNAL STORAGE</div>
+                                                <div>
+                                                    <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                                    <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}} GB Free</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+                                </div>
 
-                            <div class="col-lg-6 col-md-6">
-                                {{#if device.viewModel.BatteryLevel}}
-                                    <div class="col-lg-4">
-                                        <div class="wr-stats-board-tile">
-                                            <div class="tile-name">BATTERY</div>
-                                            <div>
-                                                <div class="tile-icon"><i class="fw fw-battery"></i></div>
-                                                <div class="tile-stats">{{device.viewModel.BatteryLevel}}%</div>
+                            </div>
+                            <!-- /device summary -->
+
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                {{#if viewModel.location}}
+                                    <!-- device location -->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h2 class="sub-title panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <span class="fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
+                                        </span>
+                                                    Device Location
+                                                </a>
+                                            </h2>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                            <div id="device-location" data-lat="{{viewModel.location.latitude}}" data-lat="{{viewModel.location.longitude}}" style="height:200px" class="panel-body">
+
                                             </div>
                                         </div>
                                     </div>
                                 {{/if}}
 
-                                {{#if device.viewModel.DeviceCapacity}}
-                                    <div class="col-lg-4">
-                                        <div class="wr-stats-board-tile">
-                                            <div class="tile-name">STORAGE</div>
-                                            <div>
-                                                <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                <div class="tile-stats">{{device.viewModel.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.DeviceCapacityUsed}} GB Free</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{/if}}
-                                {{#if device.viewModel.internal_memory.FreeCapacity}}
-                                    <div class="col-lg-4">
-                                        <div class="wr-stats-board-tile">
-                                            <div class="tile-name">LOCAL STORAGE</div>
-                                            <div>
-                                                <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                <div class="tile-stats">{{device.viewModel.internal_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.internal_memory.FreeCapacity}} GB Free</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{/if}}
-                                {{#if device.viewModel.external_memory.FreeCapacity}}
-                                    <div class="col-lg-4">
-                                        <div class="wr-stats-board-tile">
-                                            <div class="tile-name">EXTERNAL STORAGE</div>
-                                            <div>
-                                                <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}} GB Free</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{/if}}
-                            </div>
-
-                        </div>
-                        <!-- /device summary -->
-
-                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            {{#if viewModel.location}}
-                            <!-- device location -->
-                            <div class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="headingOne">
-                                    <h2 class="sub-title panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <!-- policies -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <h2 class="sub-title panel-title">
+                                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                         <span class="fw-stack">
                                             <i class="fw fw-ring fw-stack-2x"></i>
                                             <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
                                         </span>
-                                            Device Location
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-
-                                        <div id="device-location" data-lat="{{viewModel.location.latitude}}" data-lat="{{viewModel.location.longitude}}" style="height:200px" class="panel-body">
-
+                                                Policies
+                                            </a>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                        <div class="panel-body">
+                                            Not available yet
                                         </div>
-
+                                    </div>
                                 </div>
-                            </div>
-                            {{/if}}
-                            {{#equal device.type "TemperatureController"}}
-                            <div class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="headingFour">
-                                    <h2 class="sub-title panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                <!-- /policies -->
+
+                                <!-- installed applications -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingThree">
+                                        <h2 class="sub-title panel-title">
+                                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                         <span class="fw-stack">
                                             <i class="fw fw-ring fw-stack-2x"></i>
                                             <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
                                         </span>
-                                            Device Properties
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
-                                    <div class="panel-body">
-
-                                        <table class="table">
-                                            <thead>
-                                            <tr>
-                                                <th>Property</th>
-                                                <th>Value</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {{#each device.properties}}
-                                                <!--<span><b></b> :  </span>-->
-                                                <tr>
-                                                    <td>{{@key}}</td>
-                                                    <td>{{this}}</td>
-                                                </tr>
-                                            {{/each}}
-
-                                            </tbody>
-                                        </table>
+                                                Installed Applications
+                                            </a>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                        <div class="panel-body">
+                                            Not available yet
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- /installed applications -->
+
                             </div>
-                            {{/equal}}
-                            <!-- /device location -->
-
-                            <!-- policies -->
-                            <div class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="headingTwo">
-                                    <h2 class="sub-title panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        <span class="fw-stack">
-                                            <i class="fw fw-ring fw-stack-2x"></i>
-                                            <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
-                                        </span>
-                                            Policies
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                    <div class="panel-body">
-                                        Not available yet
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /policies -->
-
-                            <!-- installed applications -->
-                            <div class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="headingThree">
-                                    <h2 class="sub-title panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        <span class="fw-stack">
-                                            <i class="fw fw-ring fw-stack-2x"></i>
-                                            <i class="fw fw-arrow fw-down-arrow fw-stack-1x"></i>
-                                        </span>
-                                            Installed Applications
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                    <div class="panel-body">
-                                        Not available yet
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /installed applications -->
-
-                        </div>
-
+                        {{/defineZone}}
                     </div>
 
                     <!-- /content -->

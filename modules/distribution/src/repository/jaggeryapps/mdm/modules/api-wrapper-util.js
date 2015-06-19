@@ -21,21 +21,27 @@ var apiWrapperUtil = function () {
     var tokenUtil = require("/modules/util.js").util;
     module.refreshToken = function () {
         var tokenPair = session.get("accessTokenPair");
-        tokenPair = tokenUtil.refreshToken(tokenPair);
+        var clientData = tokenUtil.getDyanmicCredentials();
+        var clientData = {};
+        new Log().info(tokenPair);
+        tokenPair = tokenUtil.refreshToken(tokenPair, clientData.clientId, clientData.clientSecret);
         session.put("accessTokenPair", tokenPair);
-        response.addCookie({'name': 'accessToken', 'value': tokenPair.accessToken});
+        var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge' : -1,'path' : "/mdm/"};
+        response.addCookie(tokenCookie);
+        return tokenCookie;
     };
     module.setupAccessTokenPair = function (type, properties) {
         var tokenPair;
-        var clientId = "pY0FbBUC_GI7mfHVS1FvhWAifEwa";
-        var clientSecret = "Tu5Za1R3fHtGc5yH4KK8TNiLVSca";
+        var clientData = tokenUtil.getDyanmicCredentials();
+        var clientData = {};
         if (type == "password") {
-            //tokenPair = tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, clientId, clientSecret);
+            tokenPair = tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, clientData.clientId, clientData.clientSecret);
         } else if (type == "saml") {
 
         }
-        //session.put("accessTokenPair", tokenPair);
-        //response.addCookie({'name': 'accessToken', 'value': tokenPair.accessToken});
+        session.put("accessTokenPair", tokenPair);
+        var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge' : -1,'path' : "/mdm/"};
+        response.addCookie(tokenCookie);
     };
     return module;
 }();

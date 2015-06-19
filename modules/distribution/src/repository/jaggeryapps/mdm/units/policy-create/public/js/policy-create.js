@@ -1,12 +1,30 @@
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 var stepperRegistry = {};
 var policy = {};
 var configuredFeatures = [];
 
 stepperRegistry["policy-platform"] = function (actionButton) {
-    policy.platform = $(actionButton).data("platform");
-    policy.platformId = $(actionButton).data("platform-id");
+    policy["platform"] = $(actionButton).data("platform");
+    policy["platformId"] = $(actionButton).data("platform-id");
 
-    var deviceType = policy.platform;
+    var deviceType = policy["platform"];
     var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
     var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
 
@@ -17,8 +35,10 @@ stepperRegistry["policy-platform"] = function (actionButton) {
             // function to run when request is successful.
             function (data) {
                 var viewModel = {};
-                viewModel.features = data.reduce(function (total, current) {
-                    total[current.code] = current;
+                // here we take data that come as an array and traverse each element as "current"
+                // and update total, i.e. {}
+                viewModel["features"] = data.reduce(function (total, current) {
+                    total[current["code"]] = current;
                     return total;
                 }, {});
                 var content = template(viewModel);
@@ -33,7 +53,7 @@ stepperRegistry["policy-platform"] = function (actionButton) {
 };
 
 stepperRegistry["policy-profile"] = function () {
-    policy.profile = operationModule.generateProfile(policy.platform, configuredFeatures);
+    policy["profile"] = operationModule.generateProfile(policy["platform"], configuredFeatures);
 };
 
 stepperRegistry["policy-criteria"] = function () {
@@ -41,53 +61,57 @@ stepperRegistry["policy-criteria"] = function () {
         if ( $(this).is(':radio')) {
             if ($(this).is(":checked")) {
                 if($(this).attr("id") == "users-radio-btn") {
-                    policy.selectedUsers = $("#users-input").val();
+                    policy["selectedUsers"] = $("#users-input").val();
                 } else if ($(this).attr("id") == "user-roles-radio-btn") {
-                    policy.selectedUserRoles = $("#user-roles-input").val();
+                    policy["selectedUserRoles"] = $("#user-roles-input").val();
                 }
             }
         }
     });
-    policy.selectedNonCompliancyAction = $("#action-input").find(":selected").data("action");
-    policy.selectedOwnership = $("#ownership-input").val();
+    policy["selectedNonCompliantAction"] = $("#action-input").find(":selected").data("action");
+    policy["selectedOwnership"] = $("#ownership-input").val();
 };
 
 stepperRegistry["policy-naming"] = function () {
-    policy.policyName = $("#policy-name-input").val();
-    policy.policyDescription = $("#policy-description-input").val();
+    policy["policyName"] = $("#policy-name-input").val();
+    policy["policyDescription"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be created.
     savePolicy(policy);
 };
 
 function savePolicy(policy) {
     var profilePayloads = [];
-    for (var key in policy.profile) {
-        if (policy.profile.hasOwnProperty(key)) {
+    // traverses key by key in policy["profile"]
+    var key;
+    for (key in policy["profile"]) {
+        if (policy["profile"].hasOwnProperty(key)) {
             profilePayloads.push({
-                featureCode : key,
-                deviceTypeId : policy.platformId,
-                content : policy.profile[key]
+                "featureCode": key,
+                "deviceTypeId": policy["platformId"],
+                "content": policy["profile"][key]
             });
         }
     }
     var payload = {
-        policyName : policy.policyName,
-        compliance : policy.selectedNonCompliancyAction,
-        ownershipType : policy.selectedOwnership,
-        profile : {
-            profileName : policy.policyName,
-            deviceType : {
-                id : policy.platformId
+        "policyName": policy["policyName"],
+        "compliance": policy["selectedNonCompliantAction"],
+        "ownershipType": policy["selectedOwnership"],
+        "profile": {
+            "profileName": policy["policyName"],
+            "deviceType": {
+                "id": policy["platformId"]
             },
-            profileFeaturesList : profilePayloads
+            "profileFeaturesList": profilePayloads
         }
     };
-    payload.users = [];
-    payload.roles = [];
-    if (policy.selectedUsers) {
-        payload.users = policy.selectedUsers;
-    } else if (policy.selectedUserRoles) {
-        payload.roles = policy.selectedUserRoles;
+
+    if (policy["selectedUsers"]) {
+        payload["users"] = policy["selectedUsers"];
+    } else if (policy["selectedUserRoles"]) {
+        payload["roles"] = policy["selectedUserRoles"];
+    } else {
+        payload["users"] = [];
+        payload["roles"] = [];
     }
 
     console.log(JSON.stringify(payload));
@@ -119,7 +143,7 @@ $(document).ready(function () {
     $("#policy-platform-wizard-steps").html($(".wr-steps").html());
 
     $("select.select2[multiple=multiple]").select2({
-        tags : true
+        "tags": true
     });
 
     $("#users-select-field").hide();
@@ -138,7 +162,7 @@ $(document).ready(function () {
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
     $("#users-input, #user-roles-input").select2({
-        tags : true
+        "tags": true
     }).on("select2:select", function (e) {
         if (e.params.data.id == "ANY") {
             $(this).val("ANY").trigger("change");

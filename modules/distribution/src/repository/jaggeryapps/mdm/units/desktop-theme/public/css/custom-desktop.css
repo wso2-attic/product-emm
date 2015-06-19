@@ -1995,8 +1995,12 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-hidden-operations-content .panel-body {
-    margin: 5px;
-    border: 1px solid #e8e8e8;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-right: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    border-left: 1px solid #e8e8e8;
     padding: 20px;
     background: #ffffff;
 }
@@ -2010,7 +2014,9 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-hidden-operations-content .panel-title {
-    margin: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
     border: 1px solid #e8e8e8;
     padding: 5px;
     background: #ffffff;
