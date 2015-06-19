@@ -54,7 +54,6 @@ public class MDMUtil {
         profileFeature.setDeviceTypeId(mdmProfileFeature.getDeviceTypeId());
         profileFeature.setFeatureCode(mdmProfileFeature.getFeatureCode());
         profileFeature.setId(mdmProfileFeature.getId());
-
         return profileFeature;
 
     }

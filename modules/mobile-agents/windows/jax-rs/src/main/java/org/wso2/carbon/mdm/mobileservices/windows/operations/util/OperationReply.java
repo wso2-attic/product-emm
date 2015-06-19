@@ -20,9 +20,9 @@
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
 
+import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
@@ -228,6 +228,7 @@ public class OperationReply {
     private List<Add> appendAddConfiguration(Operation operation) throws WindowsOperationException {
 
         List<Add> addList = new ArrayList<Add>();
+        Gson gson = new Gson();
 
         if (SyncmlCommandType.WIFI.getValue().equals(operation.getCode())) {
 
@@ -235,12 +236,7 @@ public class OperationReply {
 
             String operationCode = operation.getCode();
 
-            Wifi wifiObject;
-            try {
-                wifiObject = new ObjectMapper().readValue((String)operation.getPayLoad(), Wifi.class);
-            } catch (IOException e) {
-                throw new WindowsOperationException("Failure while creating Wifi operation object.", e);
-            }
+            Wifi wifiObject = gson.fromJson((String)operation.getPayLoad(), Wifi.class);
 
             String data = "&lt;?xml version=&quot;1.0&quot;?&gt;&lt;WLANProfile" +
                     "xmlns=&quot;http://www.microsoft.com/networking/WLAN/profile/v1&quot;&gt;&lt;name&gt;" +

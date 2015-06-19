@@ -55,7 +55,7 @@ public class MobileDevice {
             if (type != null) {
                 allDevices = service.getAllDevices(type);
             } else if (user != null) {
-                allDevices = service.getAllDevicesOfUser(user);
+                allDevices = service.getDevicesOfUser(user);
             } else if (role != null){
                 allDevices = service.getAllDevicesOfRole(role);
             } else {
@@ -116,7 +116,7 @@ public class MobileDevice {
 		String msg;
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
 		try {
-			devices = MDMAPIUtils.getDeviceManagementService().getDeviceListOfUser(user);
+			devices = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(user);
 			if (devices == null) {
 				Response.status(Response.Status.NOT_FOUND);
 			}
@@ -172,7 +172,7 @@ public class MobileDevice {
 		List<org.wso2.carbon.device.mgt.common.Device> devices;
 		int tenantId = MDMAPIUtils.getTenantId(tenantDomain);
 		try {
-			devices = MDMAPIUtils.getDeviceManagementService().getDevicesByName(deviceName, tenantId);
+			devices = MDMAPIUtils.getDeviceManagementService().getDevicesByName(deviceName);
 		} catch (DeviceManagementException e) {
 			String msg = "Error occurred while fetching the devices list of device name.";
 			log.error(msg, e);

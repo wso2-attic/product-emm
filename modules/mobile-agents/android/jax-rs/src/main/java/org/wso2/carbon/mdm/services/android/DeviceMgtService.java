@@ -19,6 +19,7 @@ package org.wso2.carbon.mdm.services.android;
 
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
+import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
@@ -28,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.List;
+import java.util.*;
 
 /**
  * Android Device Management REST-API implementation.

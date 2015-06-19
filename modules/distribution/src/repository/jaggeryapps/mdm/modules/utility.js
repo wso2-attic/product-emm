@@ -21,13 +21,15 @@ var utility = function () {
     var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext;
 
     var getOsgiService = function (className) {
+        var log = new Log("modules/utility.js");
+        log.info(className);
         return PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(JavaClass.forName(className));
     };
 
     var publicMethods = {};
 
     publicMethods.getDeviceManagementService = function () {
-        return getOsgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementService');
+        return getOsgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService');
     };
 
     publicMethods.getUserManagementService = function () {

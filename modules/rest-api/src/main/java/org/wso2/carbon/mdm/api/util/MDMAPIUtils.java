@@ -45,7 +45,7 @@ public class MDMAPIUtils {
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		int tenantId;
-		DeviceManagementProviderService dmService;
+        DeviceManagementProviderService dmService;
 		if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)){
 			tenantId = MultitenantConstants.SUPER_TENANT_ID;
 		}else{

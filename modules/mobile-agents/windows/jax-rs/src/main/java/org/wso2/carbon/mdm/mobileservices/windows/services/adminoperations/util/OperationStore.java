@@ -18,10 +18,9 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.util;
 
+import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -98,13 +97,12 @@ public class OperationStore {
     }
 
     private static Operation transformBasicOperation(OperationRequest operationRequest, Operation.Type type,
-                                                     String commandType) throws
-            WindowsDeviceEnrolmentException {
+            String commandType) throws WindowsDeviceEnrolmentException {
 
-        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         Operation operation = new Operation();
         operation.setCode(commandType);
         operation.setType(type);
+        Gson gson = new Gson();
 
         if (commandType == SyncmlCommandType.WIFI.getValue()) {
 
@@ -112,13 +110,8 @@ public class OperationStore {
             operation.setCode(commandType);
             operation.setType(type);
 
-            try {
-                Wifi wifiObject = (Wifi) operationRequest.getBasicOperation();
-                operation.setPayLoad(objectWriter.writeValueAsString(wifiObject));
-            } catch (IOException e) {
-                throw new WindowsDeviceEnrolmentException(
-                        "Failure in resolving JSON payload of WIFI operation.", e);
-            }
+            Wifi wifiObject = (Wifi) operationRequest.getBasicOperation();
+            operation.setPayLoad(gson.toJson(wifiObject));
         } else {
 //            no operation.....
         }
