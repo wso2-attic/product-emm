@@ -18,6 +18,7 @@
 package org.wso2.carbon.mdm.services.android;
 
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
