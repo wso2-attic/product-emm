@@ -17,12 +17,11 @@
  */
 
 var utility = function () {
+    // var log = new Log("modules/utility.js");
     var JavaClass = Packages.java.lang.Class;
     var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext;
 
     var getOsgiService = function (className) {
-        var log = new Log("modules/utility.js");
-        log.info(className);
         return PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(JavaClass.forName(className));
     };
 
@@ -33,11 +32,11 @@ var utility = function () {
     };
 
     publicMethods.getUserManagementService = function () {
-        return getOsgiService('org.wso2.carbon.device.mgt.user.core.UserManager');
+        return getOsgiService("org.wso2.carbon.device.mgt.user.core.UserManager");
     };
 
     publicMethods.getPolicyManagementService = function () {
-        return getOsgiService('org.wso2.carbon.policy.mgt.core.PolicyManagerService');
+        return getOsgiService("org.wso2.carbon.policy.mgt.core.PolicyManagerService");
     };
 
     publicMethods.insertAppPermissions = function (userModule, type) {
