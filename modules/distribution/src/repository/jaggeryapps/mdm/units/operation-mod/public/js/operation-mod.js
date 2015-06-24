@@ -395,7 +395,7 @@ var operationModule = function () {
     publicMethods.generatePayload = function (deviceType, operationCode, deviceList) {
         var payload;
         var operationData = {};
-        $(".operation-data").filterByData("operation", operationCode).find(".operationDataKeys").each(
+        $(".operation-data").filterByData("operation-code", operationCode).find(".operationDataKeys").each(
             function () {
                 var operationDataObj = $(this);
                 var key = operationDataObj.data("key");
@@ -403,10 +403,7 @@ var operationModule = function () {
                 if (operationDataObj.is(':checkbox')) {
                     value = operationDataObj.is(":checked");
                 } else if (operationDataObj.is('select')) {
-                    value = operationDataObj.find("option:selected").data("id");
-                    if (!value) {
-                        value = operationDataObj.find("option:selected").text();
-                    }
+                    value = operationDataObj.find("option:selected").attr("value");
                 }
                 operationData[key] = value;
             }

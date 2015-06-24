@@ -43,19 +43,19 @@ $(document).ready(function () {
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"" "A-Z0-9]{3,30}$/, username)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z0-9]{3,30}$/, username)) {
             $(errorMsg).text("Provided username is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;,'"0-9]{1,30}$/, firstname)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"0-9]{1,30}$/, firstname)) {
             $(errorMsg).text("Provided firstname is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!lastname) {
             $(errorMsg).text("Lastname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]()|<>;.,'"0-9]{1,30}$/, lastname)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>.,'"0-9]{1,30}$/, lastname)) {
             $(errorMsg).text("Provided lastname is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailAddress) {

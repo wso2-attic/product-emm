@@ -17,6 +17,8 @@
  */
 
 var stepperRegistry = {};
+var stepsCompleted = 0;
+var stepperRegistryValidation = {};
 var policy = {};
 var configuredFeatures = [];
 
@@ -25,30 +27,12 @@ stepperRegistry["policy-platform"] = function (actionButton) {
     policy["platformId"] = $(actionButton).data("platform-id");
 
     var deviceType = policy["platform"];
-    var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
-    var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
+    var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
+    var hiddenOperationsByDeviceTypeSrc = hiddenOperationsByDeviceType.attr("src");
 
-    $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
-        var serviceURL = "/mdm-admin/features/" + deviceType;
-        invokerUtil.get(
-            serviceURL,
-            // function to run when request is successful.
-            function (data) {
-                var viewModel = {};
-                // here we take data that come as an array and traverse each element as "current"
-                // and update total, i.e. {}
-                viewModel["features"] = data.reduce(function (total, current) {
-                    total[current["code"]] = current;
-                    return total;
-                }, {});
-                var content = template(viewModel);
-                $(".wr-advance-operations").html(content);
-            },
-            // function to run when request fails.
-            function (message) {
-                console.log(message);
-            }
-        );
+    $.template(hiddenOperationsByDeviceType, hiddenOperationsByDeviceTypeSrc, function (template) {
+        var content = template();
+        $(".wr-advance-operations").html(content);
     });
 };
 
@@ -79,7 +63,166 @@ stepperRegistry["policy-naming"] = function () {
     savePolicy(policy);
 };
 
-function savePolicy(policy) {
+stepperRegistryValidation["policy-naming"] = function () {
+    var validationStatus = {};
+
+    // taking values of inputs to be validated
+    var policyName = $("input#policy-name-input").val();
+    // starting validation process and updating validationStatus
+    if (!policyName) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] = "Policy name is empty. You cannot proceed.";
+    } else if (!inputIsValid(/^[^*^`]{1,30}$/, policyName)) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] = "Policy name either contains invalid characters or exceeds maximum allowed length. Please check again";
+    } else {
+        validationStatus["error"] = false;
+    }
+    // ending validation process
+
+    // start taking specific actions upon validation
+    var stepperIsToBeContinued;
+    if (validationStatus["error"]) {
+        stepperIsToBeContinued = false;
+        var mainErrorMsgWrapper = "#policy-naming-main-error-msg";
+        var mainErrorMsg = mainErrorMsgWrapper + " span";
+        $(mainErrorMsg).text(validationStatus["mainErrorMsg"]);
+        $(mainErrorMsgWrapper).removeClass("hidden");
+    } else {
+        stepperIsToBeContinued = true;
+    }
+
+    return stepperIsToBeContinued;
+};
+
+/**
+ * Checks if provided input is valid against RegEx input.
+ *
+ * @param regEx Regular expression
+ * @param inputString Input string to check
+ * @returns {boolean} Returns true if input matches RegEx
+ */
+var inputIsValid = function (regEx, inputString) {
+    return regEx.test(inputString);
+};
+
+stepperRegistryValidation["policy-profile"] = function () {
+    var validationStatusArray = [];
+    var validationStatus;
+    // starting validation process and updating validationStatus
+    if (policy.platform == "android") {
+        if (configuredFeatures.length == 0) {
+            validationStatus = {
+                "error": true,
+                "mainErrorMsg": "You cannot continue. Zero configured features."
+            };
+            validationStatusArray.push(validationStatus);
+        } else {
+            if ($.inArray("PASSCODE_POLICY", configuredFeatures) != -1) {
+                // if PASSCODE_POLICY is configured
+                validationStatus = {
+                    "error": false,
+                    "okFeature": "passcode-policy"
+                };
+                validationStatusArray.push(validationStatus);
+            }
+            if ($.inArray("CAMERA", configuredFeatures) != -1) {
+                // if CAMERA is configured
+                validationStatus = {
+                    "error": false,
+                    "okFeature": "restrictions"
+                };
+                validationStatusArray.push(validationStatus);
+            }
+            if ($.inArray("ENCRYPT_STORAGE", configuredFeatures) != -1) {
+                // if ENCRYPT_STORAGE is configured
+                validationStatus = {
+                    "error": false,
+                    "okFeature": "encrypt-storage"
+                };
+                validationStatusArray.push(validationStatus);
+            }
+            if ($.inArray("WIFI", configuredFeatures) != -1) {
+                // if WIFI is configured
+                var ssid = $("input#ssid").val();
+                if (!ssid) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "WIFI SSID is not given. You cannot proceed.",
+                        "erroneousFeature": "wifi"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else if (!inputIsValid(/^[^*^`]{1,30}$/, ssid)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "WIFI SSID either contains invalid characters or exceeds maximum allowed length. Please check again.",
+                        "erroneousFeature": "wifi"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "wifi"
+                    };
+                    validationStatusArray.push(validationStatus);
+                }
+            }
+        }
+    } else if (policy.platform == "ios") {
+        validationStatus = {
+            "error": false
+        };
+        validationStatusArray.push(validationStatus);
+    }
+    // ending validation process
+
+    // start taking specific actions upon validation
+    var stepperIsToBeContinued;
+    var errorCount = 0;
+    var mainErrorMsgWrapper, mainErrorMsg, subErrorMsgWrapper, subErrorMsg, subErrorIcon, subOkIcon;
+    var i;
+    for (i = 0; i < validationStatusArray.length; i++) {
+        validationStatus = validationStatusArray[i];
+        if (validationStatus["error"]) {
+            errorCount++;
+            if (validationStatus["mainErrorMsg"]) {
+                mainErrorMsgWrapper = "#policy-profile-main-error-msg";
+                mainErrorMsg = mainErrorMsgWrapper + " span";
+                $(mainErrorMsg).text(validationStatus["mainErrorMsg"]);
+                $(mainErrorMsgWrapper).removeClass("hidden");
+            } else if (validationStatus["subErrorMsg"]) {
+                subErrorMsgWrapper = "#" + validationStatus["erroneousFeature"] + "-feature-error-msg";
+                subErrorMsg = subErrorMsgWrapper + " span";
+                subErrorIcon = "#" + validationStatus["erroneousFeature"] + "-error";
+                subOkIcon = "#" + validationStatus["erroneousFeature"] + "-ok";
+                $(subErrorMsg).text(validationStatus["subErrorMsg"]);
+                $(subErrorMsgWrapper).removeClass("hidden");
+                if (!$(subOkIcon).hasClass("hidden")) {
+                    $(subOkIcon).addClass("hidden");
+                }
+                $(subErrorIcon).removeClass("hidden");
+            }
+        } else {
+            if (validationStatus["okFeature"]) {
+                subErrorMsgWrapper = "#" + validationStatus["okFeature"] + "-feature-error-msg";
+                subOkIcon = "#" + validationStatus["okFeature"] + "-ok";
+                subErrorIcon = "#" + validationStatus["okFeature"] + "-error";
+                if (!$(subErrorMsgWrapper).hasClass("hidden")) {
+                    $(subErrorMsgWrapper).addClass("hidden");
+                }
+                if (!$(subErrorIcon).hasClass("hidden")) {
+                    $(subErrorIcon).addClass("hidden");
+                }
+                $(subOkIcon).removeClass("hidden");
+            }
+        }
+    }
+
+    stepperIsToBeContinued = (errorCount == 0);
+    return stepperIsToBeContinued;
+};
+
+var savePolicy = function (policy) {
     var profilePayloads = [];
     // traverses key by key in policy["profile"]
     var key;
@@ -127,15 +270,15 @@ function savePolicy(policy) {
 
         }
     );
-}
+};
 
-function showAdvanceOperation(operation, button) {
+var showAdvanceOperation = function (operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
     var hiddenOperation = ".wr-hidden-operations-content > div";
     $(hiddenOperation + '[data-operation="' + operation + '"]').show();
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
-}
+};
 
 $(document).ready(function () {
 
@@ -173,56 +316,125 @@ $(document).ready(function () {
 
     // Maintains an array of configured features of the profile
     $(".wr-advance-operations").on("click", ".wr-input-control.switch", function (event) {
+        var operationCode = $(this).parents(".operation-data").data("operation-code");
         var operation = $(this).parents(".operation-data").data("operation");
+        var operationDataWrapper = $(this).data("target");
         // prevents event bubbling by figuring out what element it's being called from.
         if (event.target.tagName == "INPUT") {
+            var zeroConfiguredFeaturesErrorMsg = "#policy-profile-main-error-msg";
             if (!$(this).hasClass("collapsed")) {
-                configuredFeatures.push(operation);
+                configuredFeatures.push(operationCode);
+                // when a feature is enabled, if "zero-configured-features" msg is available, hide that.
+                if (!$(zeroConfiguredFeaturesErrorMsg).hasClass("hidden")) {
+                    $(zeroConfiguredFeaturesErrorMsg).addClass("hidden");
+                }
             } else {
                 //splicing the array if operation is present.
-                var index = $.inArray(operation, configuredFeatures);
+                var index = $.inArray(operationCode, configuredFeatures);
                 if (index != -1) {
                     configuredFeatures.splice(index, 1);
                 }
+                // when a feature is disabled, clearing all its current error or success states
+                var subErrorMsgWrapper = "#" + operation + "-feature-error-msg";
+                var subErrorIcon = "#" + operation + "-error";
+                var subOkIcon = "#" + operation + "-ok";
+                if (!$(subErrorMsgWrapper).hasClass("hidden")) {
+                    $(subErrorMsgWrapper).addClass("hidden");
+                }
+                if (!$(subErrorIcon).hasClass("hidden")) {
+                    $(subErrorIcon).addClass("hidden");
+                }
+                if (!$(subOkIcon).hasClass("hidden")) {
+                    $(subOkIcon).addClass("hidden");
+                }
+                // clearing input fields
+                $(operationDataWrapper + " input").each(
+                    function () {
+                        if ($(this).is("input:text") || $(this).is("input:password")) {
+                            $(this).val("");
+                        } else if ($(this).is("input:checkbox")) {
+                            $(this).prop("checked", "checked");
+                        }
+                    }
+                );
+                // clearing select fields
+                $(operationDataWrapper + " select").each(
+                    function () {
+                        $("option:first", this).prop("selected", "selected");
+                    }
+                );
             }
         }
     });
 
     $(".wizard-stepper").click(function () {
         // button clicked here can be either a continue button or a back button.
-        var nextStep = $(this).data("next");
         var currentStep = $(this).data("current");
-        var isBackBtn = $(this).data("is-back-btn");
+        var validationIsRequired = $(this).data("validate");
+        var stepperIsToBeContinued;
 
-        // if current button is a continuation...
-        if (!isBackBtn) {
-            // initiate stepperRegistry functions to gather form data.
-            var action = stepperRegistry[currentStep];
-            if (action) {
-                action(this);
-            }
+        if (validationIsRequired) {
+            stepperIsToBeContinued = stepperRegistryValidation[currentStep]();
+        } else {
+            stepperIsToBeContinued = true;
         }
 
-        // following step occurs only at the last stage of the wizard.
-        if (!nextStep) {
-            window.location.href = $(this).data("direct");
-        }
+        if (stepperIsToBeContinued) {
+            // When moving back and forth, following code segment will
+            // remove if there are any visible error-messages and error-icons.
+            var errorMsgWrappers = ".alert.alert-danger";
+            $(errorMsgWrappers).each(
+                function () {
+                    if (!$(this).hasClass("hidden")) {
+                        $(this).addClass("hidden");
+                    }
+                }
+            );
 
-        // updating next wizard step as current.
-        $(".itm-wiz").each(function () {
-            var step = $(this).data("step");
-            if (step == nextStep) {
-                $(this).addClass("itm-wiz-current");
+            var nextStep = $(this).data("next");
+            var isBackBtn = $(this).data("is-back-btn");
+
+            // if current button is a continuation...
+            if (!isBackBtn) {
+                // initiate stepperRegistry functions to gather form data.
+                var action = stepperRegistry[currentStep];
+                if (action) {
+                    action(this);
+                }
+                stepsCompleted++;
+                if (stepsCompleted > 0 && stepsCompleted < 4) {
+                    $("#" + nextStep + "-page-wizard-title").text("ADD " + policy.platform + " POLICY");
+                }
             } else {
-                $(this).removeClass("itm-wiz-current");
+                stepsCompleted--;
+                // if user traverses back to a platform select
+                if (stepsCompleted == 0) {
+                    // reinitialize configuredFeatures
+                    configuredFeatures = [];
+                }
             }
-        });
 
-        // adding next update of wizard-steps.
-        $("#" + nextStep + "-wizard-steps").html($(".wr-steps").html());
+            // following step occurs only at the last stage of the wizard.
+            if (!nextStep) {
+                window.location.href = $(this).data("direct");
+            }
 
-        // hiding current section of the wizard and showing next section.
-        $("." + currentStep).addClass("hidden");
-        $("." + nextStep).removeClass("hidden");
+            // updating next wizard step as current.
+            $(".itm-wiz").each(function () {
+                var step = $(this).data("step");
+                if (step == nextStep) {
+                    $(this).addClass("itm-wiz-current");
+                } else {
+                    $(this).removeClass("itm-wiz-current");
+                }
+            });
+
+            // adding next update of wizard-steps.
+            $("#" + nextStep + "-wizard-steps").html($(".wr-steps").html());
+
+            // hiding current section of the wizard and showing next section.
+            $("." + currentStep).addClass("hidden");
+            $("." + nextStep).removeClass("hidden");
+        }
     });
 });
