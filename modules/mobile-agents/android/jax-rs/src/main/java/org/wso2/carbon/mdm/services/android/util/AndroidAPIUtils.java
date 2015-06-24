@@ -24,6 +24,7 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.api.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -119,6 +120,20 @@ public class AndroidAPIUtils {
         PrivilegedCarbonContext.endTenantFlow();
 
         return policyManager;
+    }
+
+    public static ApplicationManagementProviderService getApplicationManagerService() {
+
+        ApplicationManagementProviderService applicationManagementProviderService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        applicationManagementProviderService =
+                (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
+
+        return applicationManagementProviderService;
     }
 
     public static void updateOperation(String deviceId, Operation operation)
