@@ -19,8 +19,8 @@
 function onRequest(context) {
     // var log = new Log("units/appbar/appbar.js");
     var userModule = require("/modules/user.js").userModule;
-    var permissions = userModule.getUIPermissions();
-    context["permissions"] = permissions;
+    var uiPermissions = userModule.getUIPermissions();
+    context["permissions"] = uiPermissions;
 
     var links = {
         "users": [],
@@ -28,19 +28,19 @@ function onRequest(context) {
         "device-mgt": []
     };
 
-    var dashboardLink = {
+    var backToDashboardLink = {
         "title": "Back to Dashboard",
         "icon": "fw-left-arrow",
         "url": "/mdm"
     };
 
-    if (permissions.VIEW_DASHBOARD){
-        links["users"].push(dashboardLink);
-        links["policies"].push(dashboardLink);
-        links["device-mgt"].push(dashboardLink);
+    if (uiPermissions["VIEW_DASHBOARD"]) {
+        links["users"].push(backToDashboardLink);
+        links["policies"].push(backToDashboardLink);
+        links["device-mgt"].push(backToDashboardLink);
     }
 
-    if (permissions.ADD_USER) {
+    if (uiPermissions["ADD_USER"]) {
         links["users"].push({
             "title": "Add User",
             "icon": "fw-add",
@@ -48,7 +48,7 @@ function onRequest(context) {
         });
     }
 
-    if (permissions.ADD_POLICY) {
+    if (uiPermissions["ADD_POLICY"]) {
         links["policies"].push({
             "title": "Add Policy",
             "icon": "fw-add",
@@ -59,7 +59,7 @@ function onRequest(context) {
     // following context.link value comes here based on the value passed at the point
     // where units are attached to a page zone.
     // eg: {{unit "appbar" link="users" title="User Management"}}
-    context["currentActions"] = links[context.link];
+    context["currentActions"] = links[context["link"]];
 
     return context;
 }
