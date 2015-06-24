@@ -41,7 +41,7 @@ sso.acs(
             log.debug("User logged in: "+username);
         }
         var permissions = userModule.getUIPermissions();
-        if (permissions.DASHBOARD_VIEW){
+        if (permissions.VIEW_DASHBOARD){
             apiWrapperUtil.setupAccessTokenPair("saml", samlResponse);
             response.sendRedirect(dataConfig.appContext + "/device-mgt");
         }

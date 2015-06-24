@@ -42,7 +42,7 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
             utility.insertAppPermissions(userModule, "login");
             //apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
             var permissions = userModule.getUIPermissions();
-            if (permissions.DASHBOARD_VIEW){
+            if (permissions.VIEW_DASHBOARD){
                 response.sendRedirect(constants.WEB_APP_CONTEXT);
             }else {
                 response.sendRedirect(constants.WEB_APP_CONTEXT + "/device-mgt");

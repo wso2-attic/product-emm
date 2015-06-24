@@ -301,23 +301,23 @@ var userModule = function () {
     publicMethods.getUIPermissions = function(){
         var permissions = {};
         if (publicMethods.isAuthorized("/permission/device-mgt/admin/devices/list") ||
-            publicMethods.isAuthorized("/permission/device-mgt/user/devices/list")) {
-            permissions.LIST_DEVICES = true;
+                        publicMethods.isAuthorized("/permission/device-mgt/user/devices/list")) {
+            permissions["LIST_DEVICES"] = true;
         }
         if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/list")) {
-            permissions.LIST_USERS = true;
-        }
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/add")) {
-            permissions.ADD_USER = true;
-        }
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/policies/add")) {
-            permissions.ADD_POLICY = true;
+            permissions["LIST_USERS"] = true;
         }
         if (publicMethods.isAuthorized("/permission/device-mgt/admin/policies/list")) {
-            permissions.LIST_POLICIES = true;
+            permissions["LIST_POLICIES"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/add")) {
+            permissions["ADD_USER"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/device-mgt/admin/policies/add")) {
+            permissions["ADD_POLICY"] = true;
         }
         if (publicMethods.isAuthorized("/permission/device-mgt/admin/dashboard/view")) {
-            permissions.DASHBOARD_VIEW = true;
+            permissions["VIEW_DASHBOARD"] = true;
         }
 
         return permissions;
