@@ -28,9 +28,10 @@ stepperRegistry["policy-platform"] = function (actionButton) {
 
     var deviceType = policy["platform"];
     var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
+    var hiddenOperationsByDeviceTypeCacheKey = deviceType + "HiddenOperations";
     var hiddenOperationsByDeviceTypeSrc = hiddenOperationsByDeviceType.attr("src");
 
-    $.template(hiddenOperationsByDeviceType, hiddenOperationsByDeviceTypeSrc, function (template) {
+    $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
         var content = template();
         $(".wr-advance-operations").html(content);
     });
@@ -282,7 +283,7 @@ var showAdvanceOperation = function (operation, button) {
 
 $(document).ready(function () {
 
-    // Add initial state of wizard-steps.
+    // Adding initial state of wizard-steps.
     $("#policy-platform-wizard-steps").html($(".wr-steps").html());
 
     $("select.select2[multiple=multiple]").select2({
@@ -411,6 +412,20 @@ $(document).ready(function () {
                 if (stepsCompleted == 0) {
                     // reinitialize configuredFeatures
                     configuredFeatures = [];
+                    // clearing already-loaded platform specific hidden-operations html content from the relevant div
+                    // so that, the wrong content would not be shown at the first glance in case
+                    // the user selects a different platform
+                    $(".wr-advance-operations").html(
+                        "<div class='wr-advance-operations-init'>" +
+                            "<br>" +
+                            "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                            "<i class='fw fw-settings fw-spin fw-2x'></i>" +
+                            "&nbsp;&nbsp;" +
+                            "Loading Platform Features..." +
+                            "<br>" +
+                            "<br>" +
+                        "</div>"
+                    );
                 }
             }
 
