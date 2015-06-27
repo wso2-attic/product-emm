@@ -1,12 +1,12 @@
 /**
  * Checks if provided input is valid against RegEx input.
  *
- * @param regEx Regular expression
+ * @param regExp Regular expression
  * @param inputString Input string to check
  * @returns {boolean} Returns true if input matches RegEx
  */
-function inputIsValid(regEx, inputString) {
-    return regEx.test(inputString);
+function inputIsValid(regExp, inputString) {
+    return regExp.test(inputString);
 }
 
 /**
@@ -16,9 +16,8 @@ function inputIsValid(regEx, inputString) {
  * @returns {boolean} true if email has the valid format, otherwise false.
  */
 function emailIsValid(email) {
-    var atPosition = email.indexOf("@");
-    var dotPosition = email.lastIndexOf(".");
-    return !(atPosition < 1 || ( dotPosition - atPosition < 2 ));
+    var regExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return regExp.test(email);
 }
 
 $(document).ready(function () {

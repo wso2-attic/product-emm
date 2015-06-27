@@ -40,139 +40,20 @@ var operationModule = function () {
     privateMethods.generateIOSOperationPayload = function (operationName, operationData, deviceList) {
         var payload;
         var operationType;
-        if (operationName == "AIR_PLAY") {
+        if (operationName == "PASSCODE_POLICY") {
             operationType = "profile";
             payload = {
                 "operation": {
-                    "airPlayDestinations": [
-                        operationData["location"]
-                    ],
-                    "airPlayCredentials": [{
-                        "deviceName": operationData["deviceName"],
-                        "password": operationData["password"]
-                    }]
-                }
-            };
-        } else if (operationName == "INSTALL_STORE_APPLICATION") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "identifier": operationData["appIdentifier"],
-                    "iTunesStoreID": operationData["ituneID"],
-                    "removeAppUponMDMProfileRemoval": operationData["appRemoval"],
-                    "preventBackupOfAppData": operationData["backupData"],
-                    "bundleId": operationData["bundleId"]
-                }
-            };
-        } else if (operationName == "INSTALL_ENTERPRISE_APPLICATION") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "identifier": operationData["appIdentifier"],
-                    "manifestURL": operationData["manifestURL"],
-                    "removeAppUponMDMProfileRemoval": operationData["appRemoval"],
-                    "preventBackupOfAppData": operationData["backupData"],
-                    "bundleId": operationData["bundleId"]
-                }
-            };
-        } else if (operationName == "REMOVE_APPLICATION") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "bundleId": operationData["bundleId"]
-                }
-            };
-        } else if (operationName == "RESTRICTION") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "allowCamera": operationData["allowCamera"],
-                    "allowCloudBackup": operationData["allowCloudBackup"],
-                    "allowSafari": operationData["allowSafari"],
-                    "allowScreenShot": operationData["allowScreenShot"],
-                    "allowAirDrop": operationData["allowAirDrop"]
-                }
-            };
-        }  else if (operationName == "CELLULAR") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "attachAPNName": null,
-                    "authenticationType": null,
-                    "username": null,
-                    "password": null,
-                    "apnConfigurations": [
-                        {
-                            "configurationName": null,
-                            "authenticationType": null,
-                            "username": null,
-                            "password": null,
-                            "proxyServer": null,
-                            "proxyPort": 0
-                        }
-                    ]
-                }
-            };
-        } else if (operationName == "WIFI") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "hiddenNetwork": operationData["hiddenNetwork"],
-                    "autoJoin": operationData["autoJoin"],
-                    "encryptionType": operationData["encryptionType"],
-                    "hotspot": false,
-                    "domainName": null,
-                    "serviceProviderRoamingEnabled": false,
-                    "displayedOperatorName": null,
-                    "proxyType": null,
-                    "roamingConsortiumOIs": null,
-                    "password": operationData["password"],
-                    "clientConfiguration": {
-                        "username": null,
-                        "acceptEAPTypes": null,
-                        "userPassword": null,
-                        "oneTimePassword": false,
-                        "payloadCertificateAnchorUUID": null,
-                        "outerIdentity": null,
-                        "tlstrustedServerNames": null,
-                        "tlsallowTrustExceptions": false,
-                        "tlscertificateIsRequired": false,
-                        "ttlsinnerAuthentication": null,
-                        "eapfastusePAC": false,
-                        "eapfastprovisionPAC": false,
-                        "eapfastprovisionPACAnonymously": false,
-                        "eapsimnumberOfRANDs": 0
-                    },
-                    "payloadCertificateUUID": null,
-                    "proxyServer": null,
-                    "proxyPort": 0,
-                    "proxyUsername": null,
-                    "proxyPassword": null,
-                    "proxyPACURL": null,
-                    "proxyPACFallbackAllowed": false,
-                    "ssid": operationData["ssid"],
-                    "nairealmNames": null,
-                    "mccandMNCs": null
-                }
-            };
-        } else if (operationName == "MAIL") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "attachAPNName": null,
-                    "authenticationType": null,
-                    "username": null,
-                    "password": null,
-                    "apnConfigurations": [
-                        {
-                            "configurationName": null,
-                            "authenticationType": null,
-                            "username": null,
-                            "password": null,
-                            "proxyServer": null,
-                            "proxyPort": 0
-                        }
-                    ]
+                    "forcePIN": operationData["forcePIN"],
+                    "allowSimple": operationData["allowSimple"],
+                    "requireAlphanumeric": operationData["requireAlphanumeric"],
+                    "minLength": operationData["minLength"],
+                    "minComplexChars": operationData["minComplexChars"],
+                    "maxPINAgeInDays": operationData["maxPINAgeInDays"],
+                    "pinHistory": operationData["pinHistory"],
+                    "maxInactivity": operationData["maxAutoLock"],
+                    "maxGracePeriod": operationData["gracePeriod"],
+                    "maxFailedAttempts": operationData["maxFailedAttempts"]
                 }
             };
         } else {
@@ -253,13 +134,13 @@ var operationModule = function () {
             operationType = "profile";
             payload = {
                 "operation": {
-                    "maxFailedAttempts": operationData["maxFailedAttempts"],
+                    "allowSimple": operationData["allowSimple"],
+                    "requireAlphanumeric": operationData["requireAlphanumeric"],
                     "minLength": operationData["minLength"],
-                    "pinHistory": operationData["pinHistory"],
                     "minComplexChars": operationData["minComplexChars"],
                     "maxPINAgeInDays": operationData["maxPINAgeInDays"],
-                    "requireAlphanumeric": operationData["requireAlphanumeric"],
-                    "allowSimple": operationData["allowSimple"]
+                    "pinHistory": operationData["pinHistory"],
+                    "maxFailedAttempts": operationData["maxFailedAttempts"]
                 }
             };
         } else if (operationName == "WIFI") {

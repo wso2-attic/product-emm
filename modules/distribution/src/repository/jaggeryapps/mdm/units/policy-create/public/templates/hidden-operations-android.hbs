@@ -13,8 +13,8 @@
                     <i class="fw fw-block fw-stack-2x"></i>
                 </span>
             Restrictions on Camera
-            <span id="restrictions-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span class="restrictions-error status-icon hidden"><i class="fw fw-error"></i></span>
+            <span id="camera-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span class="camera-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('encrypt-storage', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label col-sm-4" for="minLength">
+                        <label class="wr-input-label" for="minLength">
                             Minimum passcode length
                             <span class="helper" title="Minimum number of characters allowed in a passcode">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -129,8 +129,8 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label col-sm-4" for="minComplexChars">
-                            Minimum complex characters
+                        <label class="wr-input-label" for="minComplexChars">
+                            Minimum number of complex characters
                             <span class="helper" title="Minimum number of complex or non-alphanumeric characters allowed in a passcode">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
@@ -149,59 +149,29 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label col-sm-4" for="lockcode">
-                            Maximum passcode age in days
+                        <label class="wr-input-label" for="maxPINAgeInDays">
+                            Maximum passcode age in days <br>
+                            ( Should be in between 1-to-730 days or none )
                             <span class="helper" title="Number of days after which a passcode must be changed">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input type="text" class="form-control operationDataKeys" id="maxPINAgeInDays" data-key="maxPINAgeInDays" placeholder="Enter maximum passcode age in days">-->
-                        <select id="maxPINAgeInDays" class="form-control operationDataKeys" data-key="maxPINAgeInDays">
-                            <option value="" selected="selected">
-                                None
-                            </option>
-                            <option value="1">01</option>
-                            <option value="2">02</option>
-                            <option value="3">03</option>
-                            <option value="4">04</option>
-                            <option value="5">05</option>
-                            <option value="6">06</option>
-                            <option value="7">07</option>
-                            <option value="14">14</option>
-                            <option value="21">21</option>
-                            <option value="28">28</option>
-                            <option value="30">30</option>
-                            <option value="31">31</option>
-                        </select>
+                        <input id="maxPINAgeInDays" type="text" class="form-control operationDataKeys" data-key="maxPINAgeInDays" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label col-sm-4" for="pinHistory">
-                            Passcode history
+                        <label class="wr-input-label" for="pinHistory">
+                            Passcode history <br>
+                            ( Should be in between 1-to-50 passcodes or none )
                             <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input type="text" class="form-control operationDataKeys" id="pinHistory" data-key="pinHistory" placeholder="Enter Passcode history">-->
-                        <select id="pinHistory" class="form-control operationDataKeys" data-key="pinHistory">
-                            <option value="" selected="selected">
-                                None
-                            </option>
-                            <option value="5">05</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                            <option value="35">35</option>
-                            <option value="40">40</option>
-                            <option value="45">45</option>
-                            <option value="50">50</option>
-                        </select>
+                        <input id="pinHistory" type="text" class="form-control operationDataKeys" data-key="pinHistory" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label col-sm-4" for="maxFailedAttempts">
+                        <label class="wr-input-label" for="maxFailedAttempts">
                             Maximum number of failed attempts
                             <span class="helper" title="Maximum number of passcode entry attempts allowed before all data on a device will be erased">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -240,7 +210,7 @@
                         </label>
                         <hr>
                         <div class="panel-title-description">
-                            This configuration can be used to restrict the usage of camera on an Android device together with all apps using the camera.
+                            This configuration can be used to restrict the usage of camera on an Android device together with all the applications using the camera.
                             Once this configuration profile is installed on a device, corresponding users will not be able
                             to modify these settings on their devices.
                         </div>
@@ -345,7 +315,10 @@
                         <input id="ssid" type="text" class="form-control operationDataKeys" data-key="ssid" placeholder="[ Required field ]"/>
                     </div>
 
-                    <label class="wr-input-label" title="Password for the wireless network">Password<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>
+                    <label class="wr-input-label" title="Password for the wireless network">
+                        Password
+                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </label>
                     <!--span>Password for the wireless network</span-->
                     <div class="wr-input-control">
                         <input id="password" type="password" class="form-control operationDataKeys" data-key="password" placeholder="[ Optional field ]"/>

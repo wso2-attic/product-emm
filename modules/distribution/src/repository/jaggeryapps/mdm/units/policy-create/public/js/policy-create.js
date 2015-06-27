@@ -16,32 +16,60 @@
  * under the License.
  */
 
-var stepperRegistry = {};
-var stepsCompleted = 0;
-var stepperRegistryValidation = {};
+var stepForwardFrom = {};
+var stepBackFrom = {};
+var validateStep = {};
 var policy = {};
 var configuredFeatures = [];
 
-stepperRegistry["policy-platform"] = function (actionButton) {
+stepForwardFrom["policy-platform"] = function (actionButton) {
     policy["platform"] = $(actionButton).data("platform");
     policy["platformId"] = $(actionButton).data("platform-id");
+    // updating next-page wizard title with selected platform
+    $("#policy-profile-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
 
     var deviceType = policy["platform"];
     var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
     var hiddenOperationsByDeviceTypeCacheKey = deviceType + "HiddenOperations";
     var hiddenOperationsByDeviceTypeSrc = hiddenOperationsByDeviceType.attr("src");
 
-    $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
-        var content = template();
-        $(".wr-advance-operations").html(content);
-    });
+    setTimeout(
+        function () {
+            $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
+                var content = template();
+                $(".wr-advance-operations").html(content);
+            });
+        },
+        250 // time delayed for the execution of above function, 500 milliseconds
+    );
 };
 
-stepperRegistry["policy-profile"] = function () {
+stepForwardFrom["policy-profile"] = function () {
     policy["profile"] = operationModule.generateProfile(policy["platform"], configuredFeatures);
+    // updating next-page wizard title with selected platform
+    $("#policy-criteria-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
 };
 
-stepperRegistry["policy-criteria"] = function () {
+stepBackFrom["policy-profile"] = function () {
+    // reinitialize configuredFeatures
+    configuredFeatures = [];
+    // clearing already-loaded platform specific hidden-operations html content from the relevant div
+    // so that, the wrong content would not be shown at the first glance, in case
+    // the user selects a different platform
+    $(".wr-advance-operations").html(
+        "<div class='wr-advance-operations-init'>" +
+            "<br>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+            "<i class='fw fw-settings fw-spin fw-2x'></i>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;" +
+            "Loading Platform Features . . ." +
+            "<br>" +
+            "<br>" +
+        "</div>"
+    );
+};
+
+stepForwardFrom["policy-criteria"] = function () {
     $("input[type='radio'].select-users-radio").each(function () {
         if ( $(this).is(':radio')) {
             if ($(this).is(":checked")) {
@@ -55,61 +83,26 @@ stepperRegistry["policy-criteria"] = function () {
     });
     policy["selectedNonCompliantAction"] = $("#action-input").find(":selected").data("action");
     policy["selectedOwnership"] = $("#ownership-input").val();
-};
-
-stepperRegistry["policy-naming"] = function () {
-    policy["policyName"] = $("#policy-name-input").val();
-    policy["policyDescription"] = $("#policy-description-input").val();
-    //All data is collected. Policy can now be created.
-    savePolicy(policy);
-};
-
-stepperRegistryValidation["policy-naming"] = function () {
-    var validationStatus = {};
-
-    // taking values of inputs to be validated
-    var policyName = $("input#policy-name-input").val();
-    // starting validation process and updating validationStatus
-    if (!policyName) {
-        validationStatus["error"] = true;
-        validationStatus["mainErrorMsg"] = "Policy name is empty. You cannot proceed.";
-    } else if (!inputIsValid(/^[^*^`]{1,30}$/, policyName)) {
-        validationStatus["error"] = true;
-        validationStatus["mainErrorMsg"] = "Policy name either contains invalid characters or exceeds maximum allowed length. Please check again";
-    } else {
-        validationStatus["error"] = false;
-    }
-    // ending validation process
-
-    // start taking specific actions upon validation
-    var stepperIsToBeContinued;
-    if (validationStatus["error"]) {
-        stepperIsToBeContinued = false;
-        var mainErrorMsgWrapper = "#policy-naming-main-error-msg";
-        var mainErrorMsg = mainErrorMsgWrapper + " span";
-        $(mainErrorMsg).text(validationStatus["mainErrorMsg"]);
-        $(mainErrorMsgWrapper).removeClass("hidden");
-    } else {
-        stepperIsToBeContinued = true;
-    }
-
-    return stepperIsToBeContinued;
+    // updating next-page wizard title with selected platform
+    $("#policy-naming-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
 };
 
 /**
- * Checks if provided input is valid against RegEx input.
+ * Checks if provided number is valid against a range.
  *
- * @param regEx Regular expression
- * @param inputString Input string to check
- * @returns {boolean} Returns true if input matches RegEx
+ * @param numberInput
+ * @param min
+ * @param max
+ * @returns {boolean}
  */
-var inputIsValid = function (regEx, inputString) {
-    return regEx.test(inputString);
+var inputIsValidAgainstRange = function (numberInput, min, max) {
+    return (numberInput == min || (numberInput > min && numberInput < max) || numberInput == max);
 };
 
-stepperRegistryValidation["policy-profile"] = function () {
+validateStep["policy-profile"] = function () {
     var validationStatusArray = [];
     var validationStatus;
+
     // starting validation process and updating validationStatus
     if (policy.platform == "android") {
         if (configuredFeatures.length == 0) {
@@ -121,17 +114,83 @@ stepperRegistryValidation["policy-profile"] = function () {
         } else {
             if ($.inArray("PASSCODE_POLICY", configuredFeatures) != -1) {
                 // if PASSCODE_POLICY is configured
-                validationStatus = {
-                    "error": false,
-                    "okFeature": "passcode-policy"
-                };
-                validationStatusArray.push(validationStatus);
+                var maxPasscodeAgeInDays = $("input#maxPINAgeInDays").val();
+                var passcodeHistory = $("input#pinHistory").val();
+                // initializing continueToCheckNextInput to true
+                var continueToCheckNextInput = true;
+
+                // validating first input: maxPasscodeAgeInDays
+                if (maxPasscodeAgeInDays) {
+                    if (!$.isNumeric(maxPasscodeAgeInDays)) {
+                        continueToCheckNextInput = false;
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Provided passcode age is not a number. Please check.",
+                            "erroneousFeature": "passcode-policy"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else {
+                        maxPasscodeAgeInDays = parseInt(maxPasscodeAgeInDays);
+                        if (!inputIsValidAgainstRange(maxPasscodeAgeInDays, 1, 730)) {
+                            continueToCheckNextInput = false;
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg":
+                                    "Provided passcode age is not with in the range of 1-to-730. Please check.",
+                                "erroneousFeature": "passcode-policy"
+                            };
+                            validationStatusArray.push(validationStatus);
+                        } else {
+                            continueToCheckNextInput = true;
+                        }
+                    }
+                } else {
+                    continueToCheckNextInput = true;
+                }
+
+                // validating second and last input: passcodeHistory
+                if (continueToCheckNextInput) {
+                    if (passcodeHistory) {
+                        if (!$.isNumeric(passcodeHistory)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Provided passcode history is not a number. Please check.",
+                                "erroneousFeature": "passcode-policy"
+                            };
+                            validationStatusArray.push(validationStatus);
+                        } else if ($.isNumeric(passcodeHistory)) {
+                            passcodeHistory = parseInt(passcodeHistory);
+                            if (!inputIsValidAgainstRange(passcodeHistory, 1, 50)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg":
+                                        "Provided passcode history is not with in the range" +
+                                        " of 1-to-50. Please check.",
+                                    "erroneousFeature": "passcode-policy"
+                                };
+                                validationStatusArray.push(validationStatus);
+                            } else {
+                                validationStatus = {
+                                    "error": false,
+                                    "okFeature": "passcode-policy"
+                                };
+                                validationStatusArray.push(validationStatus);
+                            }
+                        }
+                    } else {
+                        validationStatus = {
+                            "error": false,
+                            "okFeature": "passcode-policy"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    }
+                }
             }
             if ($.inArray("CAMERA", configuredFeatures) != -1) {
                 // if CAMERA is configured
                 validationStatus = {
                     "error": false,
-                    "okFeature": "restrictions"
+                    "okFeature": "camera"
                 };
                 validationStatusArray.push(validationStatus);
             }
@@ -153,10 +212,10 @@ stepperRegistryValidation["policy-profile"] = function () {
                         "erroneousFeature": "wifi"
                     };
                     validationStatusArray.push(validationStatus);
-                } else if (!inputIsValid(/^[^*^`]{1,30}$/, ssid)) {
+                } else if (!inputIsValidAgainstLength(ssid, 1, 30)) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "WIFI SSID either contains invalid characters or exceeds maximum allowed length. Please check again.",
+                        "subErrorMsg": "WIFI SSID exceeds maximum allowed length. Please check.",
                         "erroneousFeature": "wifi"
                     };
                     validationStatusArray.push(validationStatus);
@@ -170,15 +229,93 @@ stepperRegistryValidation["policy-profile"] = function () {
             }
         }
     } else if (policy.platform == "ios") {
-        validationStatus = {
-            "error": false
-        };
-        validationStatusArray.push(validationStatus);
+        if (configuredFeatures.length == 0) {
+            validationStatus = {
+                "error": true,
+                "mainErrorMsg": "You cannot continue. Zero configured features."
+            };
+            validationStatusArray.push(validationStatus);
+        } else {
+            if ($.inArray("PASSCODE_POLICY", configuredFeatures) != -1) {
+                // if PASSCODE_POLICY is configured
+                maxPasscodeAgeInDays = $("input#maxPINAgeInDays").val();
+                passcodeHistory = $("input#pinHistory").val();
+                // initializing continueToCheckNextInput to true
+                continueToCheckNextInput = true;
+
+                // validating first input: maxPasscodeAgeInDays
+                if (maxPasscodeAgeInDays) {
+                    if (!$.isNumeric(maxPasscodeAgeInDays)) {
+                        continueToCheckNextInput = false;
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Provided passcode age is not a number. Please check.",
+                            "erroneousFeature": "passcode-policy"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else {
+                        maxPasscodeAgeInDays = parseInt(maxPasscodeAgeInDays);
+                        if (!inputIsValidAgainstRange(maxPasscodeAgeInDays, 1, 730)) {
+                            continueToCheckNextInput = false;
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg":
+                                    "Provided passcode age is not with in the range of 1-to-730. Please check.",
+                                "erroneousFeature": "passcode-policy"
+                            };
+                            validationStatusArray.push(validationStatus);
+                        } else {
+                            continueToCheckNextInput = true;
+                        }
+                    }
+                } else {
+                    continueToCheckNextInput = true;
+                }
+
+                // validating second and last input: passcodeHistory
+                if (continueToCheckNextInput) {
+                    if (passcodeHistory) {
+                        if (!$.isNumeric(passcodeHistory)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Provided passcode history is not a number. Please check.",
+                                "erroneousFeature": "passcode-policy"
+                            };
+                            validationStatusArray.push(validationStatus);
+                        } else if ($.isNumeric(passcodeHistory)) {
+                            passcodeHistory = parseInt(passcodeHistory);
+                            if (!inputIsValidAgainstRange(passcodeHistory, 1, 50)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg":
+                                        "Provided passcode history is not with in the range" +
+                                        " of 1-to-50. Please check.",
+                                    "erroneousFeature": "passcode-policy"
+                                };
+                                validationStatusArray.push(validationStatus);
+                            } else {
+                                validationStatus = {
+                                    "error": false,
+                                    "okFeature": "passcode-policy"
+                                };
+                                validationStatusArray.push(validationStatus);
+                            }
+                        }
+                    } else {
+                        validationStatus = {
+                            "error": false,
+                            "okFeature": "passcode-policy"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    }
+                }
+            }
+        }
     }
     // ending validation process
 
-    // start taking specific actions upon validation
-    var stepperIsToBeContinued;
+    // start taking specific notifying actions upon validation
+    var wizardIsToBeContinued;
     var errorCount = 0;
     var mainErrorMsgWrapper, mainErrorMsg, subErrorMsgWrapper, subErrorMsg, subErrorIcon, subOkIcon;
     var i;
@@ -219,8 +356,61 @@ stepperRegistryValidation["policy-profile"] = function () {
         }
     }
 
-    stepperIsToBeContinued = (errorCount == 0);
-    return stepperIsToBeContinued;
+    wizardIsToBeContinued = (errorCount == 0);
+    return wizardIsToBeContinued;
+};
+
+/**
+ * Checks if provided input is valid against provided length range.
+ *
+ * @param input Alphanumeric or non-alphanumeric input
+ * @param minLength Minimum Required Length
+ * @param maxLength Maximum Required Length
+ * @returns {boolean} Returns true if input matches the provided minimum length and maximum length
+ */
+var inputIsValidAgainstLength = function (input, minLength, maxLength) {
+    var length = input.length;
+    return (length == minLength || (length > minLength && length < maxLength) || length == maxLength);
+};
+
+validateStep["policy-naming"] = function () {
+    var validationStatus = {};
+
+    // taking values of inputs to be validated
+    var policyName = $("input#policy-name-input").val();
+    // starting validation process and updating validationStatus
+    if (!policyName) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] = "Policy name is empty. You cannot proceed.";
+    } else if (!inputIsValidAgainstLength(policyName, 1, 30)) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] =
+            "Policy name exceeds maximum allowed length. Please check.";
+    } else {
+        validationStatus["error"] = false;
+    }
+    // ending validation process
+
+    // start taking specific actions upon validation
+    var wizardIsToBeContinued;
+    if (validationStatus["error"]) {
+        wizardIsToBeContinued = false;
+        var mainErrorMsgWrapper = "#policy-naming-main-error-msg";
+        var mainErrorMsg = mainErrorMsgWrapper + " span";
+        $(mainErrorMsg).text(validationStatus["mainErrorMsg"]);
+        $(mainErrorMsgWrapper).removeClass("hidden");
+    } else {
+        wizardIsToBeContinued = true;
+    }
+
+    return wizardIsToBeContinued;
+};
+
+stepForwardFrom["policy-naming"] = function () {
+    policy["policyName"] = $("#policy-name-input").val();
+    policy["policyDescription"] = $("#policy-description-input").val();
+    //All data is collected. Policy can now be created.
+    savePolicy(policy);
 };
 
 var savePolicy = function (policy) {
@@ -372,17 +562,17 @@ $(document).ready(function () {
         // button clicked here can be either a continue button or a back button.
         var currentStep = $(this).data("current");
         var validationIsRequired = $(this).data("validate");
-        var stepperIsToBeContinued;
+        var wizardIsToBeContinued;
 
         if (validationIsRequired) {
-            stepperIsToBeContinued = stepperRegistryValidation[currentStep]();
+            wizardIsToBeContinued = validateStep[currentStep]();
         } else {
-            stepperIsToBeContinued = true;
+            wizardIsToBeContinued = true;
         }
 
-        if (stepperIsToBeContinued) {
+        if (wizardIsToBeContinued) {
             // When moving back and forth, following code segment will
-            // remove if there are any visible error-messages and error-icons.
+            // remove if there are any visible error-messages.
             var errorMsgWrappers = ".alert.alert-danger";
             $(errorMsgWrappers).each(
                 function () {
@@ -397,35 +587,14 @@ $(document).ready(function () {
 
             // if current button is a continuation...
             if (!isBackBtn) {
-                // initiate stepperRegistry functions to gather form data.
-                var action = stepperRegistry[currentStep];
-                if (action) {
-                    action(this);
-                }
-                stepsCompleted++;
-                if (stepsCompleted > 0 && stepsCompleted < 4) {
-                    $("#" + nextStep + "-page-wizard-title").text("ADD " + policy.platform + " POLICY");
+                // initiate stepForwardFrom[*] functions to gather form data.
+                if (stepForwardFrom[currentStep]) {
+                    stepForwardFrom[currentStep](this);
                 }
             } else {
-                stepsCompleted--;
-                // if user traverses back to a platform select
-                if (stepsCompleted == 0) {
-                    // reinitialize configuredFeatures
-                    configuredFeatures = [];
-                    // clearing already-loaded platform specific hidden-operations html content from the relevant div
-                    // so that, the wrong content would not be shown at the first glance in case
-                    // the user selects a different platform
-                    $(".wr-advance-operations").html(
-                        "<div class='wr-advance-operations-init'>" +
-                            "<br>" +
-                            "&nbsp;&nbsp;&nbsp;&nbsp;" +
-                            "<i class='fw fw-settings fw-spin fw-2x'></i>" +
-                            "&nbsp;&nbsp;" +
-                            "Loading Platform Features..." +
-                            "<br>" +
-                            "<br>" +
-                        "</div>"
-                    );
+                // initiate stepBackFrom[*] functions to rollback.
+                if (stepBackFrom[currentStep]) {
+                    stepBackFrom[currentStep]();
                 }
             }
 
