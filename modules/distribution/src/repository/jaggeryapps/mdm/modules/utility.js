@@ -16,7 +16,8 @@
  * under the License.
  */
 
-var utility = function () {
+var utility;
+utility = function () {
     // var log = new Log("modules/utility.js");
     var JavaClass = Packages.java.lang.Class;
     var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext;

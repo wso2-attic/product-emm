@@ -16,9 +16,9 @@
  * under the License.
  */
 
+var validateStep = {};
 var stepForwardFrom = {};
 var stepBackFrom = {};
-var validateStep = {};
 var policy = {};
 var configuredFeatures = [];
 
@@ -40,51 +40,8 @@ stepForwardFrom["policy-platform"] = function (actionButton) {
                 $(".wr-advance-operations").html(content);
             });
         },
-        250 // time delayed for the execution of above function, 500 milliseconds
+        250 // time delayed for the execution of above function, 250 milliseconds
     );
-};
-
-stepForwardFrom["policy-profile"] = function () {
-    policy["profile"] = operationModule.generateProfile(policy["platform"], configuredFeatures);
-    // updating next-page wizard title with selected platform
-    $("#policy-criteria-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
-};
-
-stepBackFrom["policy-profile"] = function () {
-    // reinitialize configuredFeatures
-    configuredFeatures = [];
-    // clearing already-loaded platform specific hidden-operations html content from the relevant div
-    // so that, the wrong content would not be shown at the first glance, in case
-    // the user selects a different platform
-    $(".wr-advance-operations").html(
-        "<div class='wr-advance-operations-init'>" +
-            "<br>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-            "<i class='fw fw-settings fw-spin fw-2x'></i>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;" +
-            "Loading Platform Features . . ." +
-            "<br>" +
-            "<br>" +
-        "</div>"
-    );
-};
-
-stepForwardFrom["policy-criteria"] = function () {
-    $("input[type='radio'].select-users-radio").each(function () {
-        if ( $(this).is(':radio')) {
-            if ($(this).is(":checked")) {
-                if($(this).attr("id") == "users-radio-btn") {
-                    policy["selectedUsers"] = $("#users-input").val();
-                } else if ($(this).attr("id") == "user-roles-radio-btn") {
-                    policy["selectedUserRoles"] = $("#user-roles-input").val();
-                }
-            }
-        }
-    });
-    policy["selectedNonCompliantAction"] = $("#action-input").find(":selected").data("action");
-    policy["selectedOwnership"] = $("#ownership-input").val();
-    // updating next-page wizard title with selected platform
-    $("#policy-naming-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
 };
 
 /**
@@ -358,6 +315,49 @@ validateStep["policy-profile"] = function () {
 
     wizardIsToBeContinued = (errorCount == 0);
     return wizardIsToBeContinued;
+};
+
+stepForwardFrom["policy-profile"] = function () {
+    policy["profile"] = operationModule.generateProfile(policy["platform"], configuredFeatures);
+    // updating next-page wizard title with selected platform
+    $("#policy-criteria-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
+};
+
+stepBackFrom["policy-profile"] = function () {
+    // reinitialize configuredFeatures
+    configuredFeatures = [];
+    // clearing already-loaded platform specific hidden-operations html content from the relevant div
+    // so that, the wrong content would not be shown at the first glance, in case
+    // the user selects a different platform
+    $(".wr-advance-operations").html(
+        "<div class='wr-advance-operations-init'>" +
+            "<br>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+            "<i class='fw fw-settings fw-spin fw-2x'></i>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;" +
+            "Loading Platform Features . . ." +
+            "<br>" +
+            "<br>" +
+        "</div>"
+    );
+};
+
+stepForwardFrom["policy-criteria"] = function () {
+    $("input[type='radio'].select-users-radio").each(function () {
+        if ( $(this).is(':radio')) {
+            if ($(this).is(":checked")) {
+                if($(this).attr("id") == "users-radio-btn") {
+                    policy["selectedUsers"] = $("#users-input").val();
+                } else if ($(this).attr("id") == "user-roles-radio-btn") {
+                    policy["selectedUserRoles"] = $("#user-roles-input").val();
+                }
+            }
+        }
+    });
+    policy["selectedNonCompliantAction"] = $("#action-input").find(":selected").data("action");
+    policy["selectedOwnership"] = $("#ownership-input").val();
+    // updating next-page wizard title with selected platform
+    $("#policy-naming-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
 };
 
 /**
