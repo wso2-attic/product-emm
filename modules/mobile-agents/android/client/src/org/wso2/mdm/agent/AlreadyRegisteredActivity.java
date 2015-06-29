@@ -193,98 +193,94 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 	}	
 
-		@Override
-		public boolean onCreateOptionsMenu(Menu menu) {
-			if (Constants.DEBUG_MODE_ENABLED) {
-				getSupportMenuInflater().inflate(R.menu.sherlock_menu_debug, menu);
-			} else {
-				getSupportMenuInflater().inflate(R.menu.sherlock_menu, menu);
-			}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (Constants.DEBUG_MODE_ENABLED) {
+			getSupportMenuInflater().inflate(R.menu.sherlock_menu_debug, menu);
+		} else {
+			getSupportMenuInflater().inflate(R.menu.sherlock_menu, menu);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.info_setting:
+				loadDeviceInfoActivity();
+				return true;
+			case R.id.pin_setting:
+				loadPinCodeActivity();
+				return true;
+			case R.id.ip_setting:
+				loadServerDetailsActivity();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		loadHomeScreen();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			loadHomeScreen();
+			return true;
+		} else if (keyCode == KeyEvent.KEYCODE_HOME) {
+			loadHomeScreen();
 			return true;
 		}
+		return super.onKeyDown(keyCode, event);
+	}
 
-		@Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-				case R.id.info_setting:
-					loadDeviceInfoActivity();
-					return true;
-				case R.id.pin_setting:
-					loadPinCodeActivity();
-					return true;
-				case R.id.ip_setting:
-					loadServerDetailsActivity();
-					return true;
-				default:
-					return super.onOptionsItemSelected(item);
-			}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "Calling onResume");
 		}
+		String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
 
-		@Override
-		public void onBackPressed() {
-			loadHomeScreen();
-		}
+		if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
+			if (CommonUtils.isNetworkAvailable(context)) {
 
-		@Override
-		public boolean onKeyDown(int keyCode, KeyEvent event) {
-			if (keyCode == KeyEvent.KEYCODE_BACK) {
-				loadHomeScreen();
-				return true;
-			} else if (keyCode == KeyEvent.KEYCODE_HOME) {
-				loadHomeScreen();
-				return true;
-			}
-			return super.onKeyDown(keyCode, event);
-		}
-
-		@Override
-		protected void onResume() {
-			super.onResume();
-
-			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Calling onResume");
-			}
-
-			String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
-
-			if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
-
-				if (CommonUtils.isNetworkAvailable(context)) {
-
-					String serverIP =
-							Preference.getString(AlreadyRegisteredActivity.this,
+				String serverIP =
+						Preference.getString(AlreadyRegisteredActivity.this,
 									context.getResources()
-											.getString(R.string.shared_pref_ip)
-							);
-					regId = Preference.getString(context, resources.
-							getString(R.string.shared_pref_regId));
-					if (regId != null) {
-						if (regId.isEmpty() && isUnregisterBtnClicked) {
-							initiateUnregistration();
-						} else {
-							ServerConfig utils = new ServerConfig();
-							utils.setServerIP(serverIP);
-
-							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-									utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
-									HTTP_METHODS.GET,
-									null, AlreadyRegisteredActivity.this,
-									Constants.IS_REGISTERED_REQUEST_CODE);
-						}
+										.getString(R.string.shared_pref_ip)
+						);
+				regId = Preference.getString(context, resources.
+						getString(R.string.shared_pref_regId));
+				if (regId != null) {
+					if (regId.isEmpty() && isUnregisterBtnClicked) {
+						initiateUnregistration();
 					} else {
-						showUnregisterDialog();
+						ServerConfig utils = new ServerConfig();
+						utils.setServerIP(serverIP);
+							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+								utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
+								HTTP_METHODS.GET,
+								null, AlreadyRegisteredActivity.this,
+								Constants.IS_REGISTERED_REQUEST_CODE);
 					}
 				} else {
-					CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+					showUnregisterDialog();
 				}
 			} else {
-				initiateUnregistration();
+				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
 			}
+		} else {
+			initiateUnregistration();
 		}
+	}
 
-		/**
-		 * Displays an internal server error message to the user.
-		 */
+	/**
+	 * Displays an internal server error message to the user.
+	 */
 	private void displayInternalServerError() {
 		alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
 				getResources().getString(R.string.title_head_connection_error),
