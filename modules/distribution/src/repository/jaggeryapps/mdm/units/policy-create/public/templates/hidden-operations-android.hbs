@@ -220,10 +220,10 @@
                     <div id="camera-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
+                    Un-check following checkbox in case you need to disable camera.
+                    <br>
+                    <br>
                     <div class="wr-input-control">
-                        Un-check following checkbox in case you need to disable camera.
-                        <br>
-                        <br>
                         <label class="wr-input-control checkbox">
                             <input id="enableCamera" type="checkbox" class="operationDataKeys" data-key="enableCamera" checked="checked" />
                             <span class="helper" title="Having this checked would enable Usage of phone camera in the device">
@@ -261,10 +261,10 @@
                     <div id="encrypt-storage-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
+                    Un-check following checkbox in case you need to disable storage-encryption.
+                    <br>
+                    <br>
                     <div class="wr-input-control">
-                        Un-check following checkbox in case you need to disable storage-encryption.
-                        <br>
-                        <br>
                         <label class="wr-input-control checkbox">
                             <input id="enableEncryption" type="checkbox" class="operationDataKeys" data-key="enableEncryption" checked="checked" />
                             <span class="helper" title="Having this checked would enable Storage-encryption in the device">
@@ -299,36 +299,50 @@
                     </h2>
                 </div>
                 <div id="wifi" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="wifi">
-                    <div id="wifi-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                        <i class="icon fw fw-error"></i><span></span>
-                    </div>
-                    Please note that * sign represents required fields of data.
-                    <br>
-                    <br>
-                    <label class="wr-input-label" title="Identification of the wireless network to be configured">
-                        Service Set Identifier (SSID) * <br>
-                        ( should be 1-to-30 characters long )
-                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                    </label>
-                    <!--span>Identification of the wireless network to connect to</span-->
-                    <div class="wr-input-control">
-                        <input id="ssid" type="text" class="form-control operationDataKeys" data-key="ssid" placeholder="[ Required field ]"/>
-                    </div>
-
-                    <label class="wr-input-label" title="Password for the wireless network">
-                        Password
-                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                    </label>
-                    <!--span>Password for the wireless network</span-->
-                    <div class="wr-input-control">
-                        <input id="password" type="password" class="form-control operationDataKeys" data-key="password" placeholder="[ Optional field ]"/>
-                    </div>
+                    <!--<div class="cloneable">-->
+                        <!--<a href="#" class="multi-view add enabled">-->
+                            <!--<span class="icon fw-stack">-->
+                                <!--<i class="fw fw-add fw-stack-1x"></i>-->
+                                <!--<i class="fw fw-ring fw-stack-2x"></i>-->
+                            <!--</span>-->
+                        <!--</a>-->
+                        <!--<a href="#" class="multi-view remove disabled">-->
+                            <!--<span class="icon fw-stack">-->
+                                <!--<i class="fw fw-minus fw-stack-1x"></i>-->
+                                <!--<i class="fw fw-ring fw-stack-2x"></i>-->
+                            <!--</span>-->
+                        <!--</a>-->
+                        <!--Wi-Fi Setting :-->
+                        <!--<br>-->
+                        <!--<br>-->
+                        Please note that * sign represents required fields of data.
+                        <br>
+                        <br>
+                        <div id="wifi-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                            <i class="icon fw fw-error"></i><span></span>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" title="Identification of the wireless network to be configured">
+                                Service Set Identifier (SSID) * <br>
+                                ( should be 1-to-30 characters long )
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </label>
+                            <input id="ssid" type="text" class="form-control operationDataKeys" data-key="ssid" placeholder="[ Required field ]"/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" title="Password for the wireless network">
+                                Password
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </label>
+                            <input id="password" type="password" class="form-control operationDataKeys" data-key="password" placeholder="[ Optional field ]"/>
+                        </div>
+                    <!--</div>-->
                 </div>
             </div>
         </div>
         <!-- /wi-fi -->
 
-        <!--&lt;!&ndash; install-applications &ndash;&gt;-->
+        <!-- install-applications -->
         <!--<div class="wr-hidden-operation" data-operation="install-apps">-->
             <!--<div class="panel panel-default operation-data" data-operation="INSTALL_APPLICATION">-->
                 <!--<div class="panel-heading" role="tab">-->
@@ -370,9 +384,9 @@
                 <!--</div>-->
             <!--</div>-->
         <!--</div>-->
-        <!--&lt;!&ndash; /install-applications &ndash;&gt;-->
+        <!-- /install-applications -->
 
-        <!--&lt;!&ndash; /uninstall-applications &ndash;&gt;-->
+        <!-- /uninstall-applications -->
         <!--<div class="wr-hidden-operation" data-operation="uninstall-apps">-->
             <!--<div class="panel panel-default operation-data" data-operation="UNINSTALL_APPLICATION">-->
                 <!--<div class="panel-heading" role="tab">-->
@@ -393,16 +407,16 @@
                         <!--<i class="icon fw fw-error"></i><span></span>-->
                     <!--</div>-->
                     <!--<label class="wr-input-label" title="Application Identifier">App Identifier<span class="wr-help-tip glyphicon glyphicon-question-sign"></span></label>-->
-                    <!--&lt;!&ndash;span>Identification of the wireless network to connect to</span&ndash;&gt;-->
+                    <!--<!--span>Identification of the wireless network to connect to</span-->
                     <!--<div class="wr-input-control">-->
                         <!--<input type="text" class="form-control operationDataKeys" id="package-name" data-key="packageName" placeholder="Enter App Identifier"/>-->
                     <!--</div>-->
                 <!--</div>-->
             <!--</div>-->
         <!--</div>-->
-        <!--&lt;!&ndash; /uninstall-applications &ndash;&gt;-->
+        <!-- /uninstall-applications -->
 
-        <!--&lt;!&ndash; /web-clips &ndash;&gt;-->
+        <!-- /web-clips -->
         <!--<div class="wr-hidden-operation" data-operation="web-clips">-->
             <!--<div class="panel panel-default operation-data" data-operation="WEBCLIP">-->
                 <!--<div class="panel-heading" role="tab">-->
@@ -433,6 +447,6 @@
                 <!--</div>-->
             <!--</div>-->
         <!--</div>-->
-        <!--&lt;!&ndash; /web-clips &ndash;&gt;-->
+        <!-- /web-clips -->
     </div>
 </div>

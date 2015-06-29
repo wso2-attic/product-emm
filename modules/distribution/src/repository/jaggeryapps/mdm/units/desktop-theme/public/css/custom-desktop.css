@@ -1997,7 +1997,7 @@ a.wr-side-panel-toggle-btn.selected {
 .wr-hidden-operations-content .panel-body {
     margin: 5px;
     /*border: 1px solid #e8e8e8;*/
-    padding: 20px;
+    padding: 20px 20px 30px;
     background: #ffffff;
 }
 
@@ -2420,10 +2420,6 @@ a.cu-btn-inner.inverse:hover {
  * multi-view
  */
 
-.multi-view {
-    margin: 40px 0;
-}
-
 .multi-view .nav ul {
     list-style: none;
     padding: 0;
@@ -2537,14 +2533,25 @@ a.cu-btn-inner.inverse:hover {
     font-size: 22px;
 }
 
-.multi-view .content .panel-heading .panel-title a {
-    padding: 5px 5px 1px 10px;
+a.multi-view {
+    padding-left: 5px;
+    color: #9F9F9F;
+    text-decoration: none;
     float: right;
-    font-size: 18px;
+    font-size: 15px;
 }
 
-.multi-view .content .panel-heading .panel-title a:hover {
-    background: #e4e4e4;
+a.multi-view.disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+a:hover.multi-view.add.enabled {
+    color: #A7E43A;
+}
+
+a:hover.multi-view.remove.enabled {
+    color: #F4A6B0;
 }
 
 .multi-view .content .panel-heading .panel-title .wr-input-control.switch {

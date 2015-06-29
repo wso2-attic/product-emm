@@ -506,7 +506,8 @@ $(document).ready(function () {
     });
 
     // Maintains an array of configured features of the profile
-    $(".wr-advance-operations").on("click", ".wr-input-control.switch", function (event) {
+    var advanceOperations = ".wr-advance-operations";
+    $(advanceOperations).on("click", ".wr-input-control.switch", function (event) {
         var operationCode = $(this).parents(".operation-data").data("operation-code");
         var operation = $(this).parents(".operation-data").data("operation");
         var operationDataWrapper = $(this).data("target");
@@ -556,6 +557,28 @@ $(document).ready(function () {
                 );
             }
         }
+    });
+
+    $(advanceOperations).on("click", ".multi-view.add.enabled", function () {
+        // get a copy of .cloneable and create new .cloned div element
+        var cloned = "<div class='cloned'><hr>" + $(".cloneable", $(this).parent().parent()).html() + "</div>";
+        // append newly created .cloned div element to panel-body
+        $(this).parent().parent().append(cloned);
+        // enable remove action of newly cloned div element
+        $(".cloned", $(this).parent().parent()).each(
+            function () {
+                if ($(".multi-view.remove", this).hasClass("disabled")) {
+                    $(".multi-view.remove", this).removeClass("disabled");
+                }
+                if (!$(".multi-view.remove", this).hasClass("enabled")) {
+                    $(".multi-view.remove", this).addClass("enabled");
+                }
+            }
+        );
+    });
+
+    $(advanceOperations).on("click", ".multi-view.remove.enabled", function () {
+        $(this).parent().remove();
     });
 
     $(".wizard-stepper").click(function () {
