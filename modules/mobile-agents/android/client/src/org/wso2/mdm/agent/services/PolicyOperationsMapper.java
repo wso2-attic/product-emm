@@ -32,6 +32,8 @@ import org.wso2.mdm.agent.utils.Constants;
 public class PolicyOperationsMapper {
 
 	private static final String TAG = PolicyOperationsMapper.class.getSimpleName();
+	// invalid flag is used to denote operations that are built within agent
+	// thus, it does not have to send to server
 	private static final int INVALID_FLAG = -1;
 
 	public Operation getOperation(org.wso2.mdm.agent.beans.Operation operation) throws AndroidAgentException {
