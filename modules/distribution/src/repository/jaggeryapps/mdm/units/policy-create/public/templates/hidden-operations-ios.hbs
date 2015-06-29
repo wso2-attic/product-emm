@@ -8,6 +8,14 @@
             <span id="passcode-policy-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="passcode-policy-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('wifi-settings', this)" class="selected">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-key fw-stack-2x"></i>
+            </span>
+            Wifi Settings
+            <span id="wifi-settings-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="wifi-settings-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('restrictions', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-block fw-stack-2x"></i>
@@ -259,6 +267,198 @@
             </div>
         </div>
         <!-- /passcode-policy -->
+
+        <!-- Wifi Settings -->
+        <div class="wr-hidden-operation" data-operation="wifi-settings" style="display: block">
+            <div class="panel panel-default operation-data" data-operation="wifi-settings" data-operation-code="WIFI_SETTINGS">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Wifi Settings
+                        <label id="wifi-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#wifiSettings">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to configure how the device connects to your wireless network, including the necessary authentication
+                            information
+                        </div>
+                    </h2>
+                </div>
+                <div id="wifiSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="wifiSettings">
+
+                    <div id="wifi-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="forcePIN" type="checkbox" class="form-control operationDataKeys" data-key="forcePIN" checked="checked" />
+                            <span class="helper" title="Determines whether the user is forced to set a passcode.">
+                                &nbsp;&nbsp;&nbsp;Force Passcode
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="allowSimple" type="checkbox" class="form-control operationDataKeys" data-key="allowSimple" checked="checked" />
+                            <span class="helper" title="Permit the use of repeating, ascending and descending character sequences">
+                                &nbsp;&nbsp;&nbsp;Allow simple value
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="requireAlphanumeric" type="checkbox" class="form-control operationDataKeys" data-key="requireAlphanumeric" checked="checked" />
+                            <span class="helper" title="Require passcode to contain both letters and numbers">
+                                &nbsp;&nbsp;&nbsp;Require alphanumeric value
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="minLength">
+                            Minimum passcode length
+                            <span class="helper" title="Minimum number of characters allowed in a passcode">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <!--<input id="minLength" type="text" class="form-control operationDataKeys" data-key="minLength" placeholder="Enter minimum passcode length">-->
+                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength">
+                            <option value="" selected="selected">
+                                None
+                            </option>
+                            <option value="1">01</option>
+                            <option value="2">02</option>
+                            <option value="3">03</option>
+                            <option value="4">04</option>
+                            <option value="5">05</option>
+                            <option value="6">06</option>
+                            <option value="7">07</option>
+                            <option value="8">08</option>
+                            <option value="9">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="minComplexChars">
+                            Minimum number of complex characters
+                            <span class="helper" title="Minimum number of complex or non-alphanumeric characters allowed in a passcode">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars">
+                            <option value="" selected="selected">
+                                None
+                            </option>
+                            <option value="1">01</option>
+                            <option value="2">02</option>
+                            <option value="3">03</option>
+                            <option value="4">04</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="maxPINAgeInDays">
+                            Maximum passcode age in days <br>
+                            ( Should be in between 1-to-730 days or none )
+                            <span class="helper" title="Number of days after which a passcode must be changed">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="maxPINAgeInDays" type="text" class="form-control operationDataKeys" data-key="maxPINAgeInDays" placeholder="[ Requires Number Input ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="pinHistory">
+                            Passcode history <br>
+                            ( Should be in between 1-to-50 passcodes or none )
+                            <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="pinHistory" type="text" class="form-control operationDataKeys" data-key="pinHistory" placeholder="[ Requires Number Input ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="maxAutoLock">
+                            Auto Lock Time in minutes
+                            <span class="helper" title="A device will be automatically locked when this time period elapses">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="maxAutoLock" class="form-control operationDataKeys" data-key="maxAutoLock">
+                            <option value="" selected="selected">
+                                None
+                            </option>
+                            <option value="1">01</option>
+                            <option value="2">02</option>
+                            <option value="3">03</option>
+                            <option value="4">04</option>
+                            <option value="5">05</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="gracePeriod">
+                            Grace period in minutes for device lock
+                            <span class="helper" title="Amount of time the device will be locked without prompting for passcode on unlock">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="gracePeriod" class="form-control operationDataKeys" data-key="gracePeriod">
+                            <option value="" selected="selected">
+                                None
+                            </option>
+                            <option value="0">Immediately</option>
+                            <option value="1">01</option>
+                            <option value="5">05</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="60">60</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="maxFailedAttempts">
+                            Maximum number of failed attempts
+                            <span class="helper" title="Maximum number of passcode entry attempts allowed before all data on a device will be erased">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <!--<input type="text" class="form-control operationDataKeys" id="maxFailedAttempts" data-key="maxFailedAttempts" placeholder="Enter maximum number of failed attempts">-->
+                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts">
+                            <option value="" selected="selected">
+                                None
+                            </option>
+                            <option value="3">03</option>
+                            <option value="4">04</option>
+                            <option value="5">05</option>
+                            <option value="6">06</option>
+                            <option value="7">07</option>
+                            <option value="8">08</option>
+                            <option value="9">09</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Wifi Settings -->
 
         <!-- Restrictions -->
         <div class="wr-hidden-operation" data-operation="restrictions">

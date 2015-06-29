@@ -27,7 +27,14 @@ var userModule = function () {
     var dataConfig = require("/config/mdm-props.js").config();
     var utility = require("/modules/utility.js").utility;
 
-    var userManagementService = utility.getUserManagementService();
+    //var userManagementService = utility.getUserManagementService();
+    /* Initializing user manager */
+    var carbon = require('carbon');
+    var tenantId = carbon.server.tenantId();
+    var url = carbon.server.address('https') + "/admin/services";
+    var server = new carbon.server.Server(url);
+    var userManager = new carbon.user.UserManager(server, tenantId);
+
     var deviceManagementService = utility.getDeviceManagementService();
     var EmailMessageProperties = Packages.org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 
@@ -199,13 +206,14 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        var user = userManagementService.getUser(username, carbonUser.tenantId);
+        //var user = userManagementService.getUser(username, carbonUser.tenantId);
 
         var emailTo = [];
         emailTo[0] = user.getEmail();
         var emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setMailTo(emailTo);
-        emailMessageProperties.setFirstName(user.getFirstName());
+        //emailMessageProperties.setFirstName(user.getFirstName());
+        emailMessageProperties.setFirstName(userManager.getClaim(username, "http://wso2.org/claims/givenname", null));
         emailMessageProperties.setUserName(username);
         emailMessageProperties.setPassword(password);
         emailMessageProperties.setEnrolmentUrl(enrollmentURL);
@@ -243,14 +251,15 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        var user = userManagementService.getUser(username, carbonUser.tenantId);
+        //var user = userManagementService.getUser(username, carbonUser.tenantId);
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
 
         var emailProperties = new EmailMessageProperties();
         var emailTo = [];
         emailTo[0] = user.getEmail();
         emailProperties.setMailTo(emailTo);
-        emailProperties.setFirstName(user.getFirstName());
+        //emailProperties.setFirstName(user.getFirstName());
+        emailProperties.setFirstName(userManager.getClaim(username, "http://wso2.org/claims/givenname", null));
         emailProperties.setEnrolmentUrl(enrollmentURL);
         deviceManagementService.sendEnrolmentInvitation(emailProperties);
     };
@@ -262,14 +271,19 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        var userList = userManagementService.getUsersForTenant(carbonUser.tenantId);
-        var i, userObject;
-        for (i = 0; i < userList.size(); i++) {
-            userObject = userList.get(i);
-            var userObj = {
-                "username" : userObject.getUserName(),
-                "email" : userObject.getEmail(),
-                "name" : userObject.getFirstName() + " " + userObject.getLastName()
+        var userList = userManager.listUsers("");
+        var i, userObj;
+        for (i = 0; i < userList.length; i++) {
+            var username = userList[i];
+            userObj = userManager.getUser(username);
+
+            var email = userManager.getClaim(username, "http://wso2.org/claims/emailaddress", null);
+            var firstName = userManager.getClaim(username, "http://wso2.org/claims/givenname", null);
+            var lastName = userManager.getClaim(username, "http://wso2.org/claims/lastname", null);
+            var user = {
+                "username" : username,
+                "email" : email,
+                "name" : firstName + " " + lastName
             };
             if(userObj.username == "admin"){
                 userObj.name = "admin";
