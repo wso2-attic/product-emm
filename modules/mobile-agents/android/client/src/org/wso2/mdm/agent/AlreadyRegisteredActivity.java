@@ -191,6 +191,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			}
 
 		}
+	}	
 
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
