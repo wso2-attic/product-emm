@@ -29,7 +29,7 @@ utility = function () {
     var publicMethods = {};
 
     publicMethods.getDeviceManagementService = function () {
-        return getOsgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService');
+        return getOsgiService('org.wso2.carbon.device.mgt.core.service.DeviceManagementService');
     };
 
     publicMethods.getUserManagementService = function () {
