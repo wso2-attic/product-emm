@@ -8,13 +8,37 @@
             <span id="passcode-policy-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="passcode-policy-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('wifi-settings', this)" class="selected">
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('wifi-settings', this)">
             <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-key fw-stack-2x"></i>
+                <i class="fw fw-wifi fw-stack-2x"></i>
             </span>
             Wifi Settings
             <span id="wifi-settings-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-settings-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('contacts', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-wifi fw-stack-2x"></i>
+            </span>
+            Contacts
+            <span id="contacts-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="contacts-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('scep', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-wifi fw-stack-2x"></i>
+            </span>
+            SCEP
+            <span id="scep-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="scep-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('web-clips', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-wifi fw-stack-2x"></i>
+            </span>
+            Web Clips
+            <span id="web-clips-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="web-clips-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('restrictions', this)">
             <span class="wr-hidden-operations-icon fw-stack">
@@ -24,21 +48,13 @@
             <span id="restrictions-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span class="restrictions-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('email', this)">
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('email-settings', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-invitation fw-stack-2x"></i>
             </span>
             Email Settings
             <span id="email-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="email-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('wifi', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-wifi fw-stack-2x"></i>
-            </span>
-            Wi-Fi Settings
-            <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('ldap', this)">
             <span class="wr-hidden-operations-icon fw-stack">
@@ -55,6 +71,14 @@
             Calendar
             <span id="calendar-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="calendar-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('subscribed-calendars', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-calendar fw-stack-2x"></i>
+            </span>
+            Subscribed Calendars
+            <span id="subscribed-calendars-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="subscribed-calendars-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('airplay', this)">
             <span class="wr-hidden-operations-icon fw-stack">
@@ -75,7 +99,7 @@
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
-        <!-- passcode-policy -->
+        <!-- Passcode policy -->
         <div class="wr-hidden-operation" data-operation="passcode-policy" style="display: block">
             <div class="panel panel-default operation-data" data-operation="passcode-policy" data-operation-code="PASSCODE_POLICY">
                 <div class="panel-heading" role="tab">
@@ -266,10 +290,10 @@
                 </div>
             </div>
         </div>
-        <!-- /passcode-policy -->
+        <!-- End of Passcode policy -->
 
         <!-- Wifi Settings -->
-        <div class="wr-hidden-operation" data-operation="wifi-settings" style="display: block">
+        <div class="wr-hidden-operation" data-operation="wifi-settings">
             <div class="panel panel-default operation-data" data-operation="wifi-settings" data-operation-code="WIFI_SETTINGS">
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
@@ -293,20 +317,20 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="forcePIN" type="checkbox" class="form-control operationDataKeys" data-key="forcePIN" checked="checked" />
-                            <span class="helper" title="Determines whether the user is forced to set a passcode.">
-                                &nbsp;&nbsp;&nbsp;Force Passcode
+                        <label class="wr-input-label" for="ssid">
+                            Service Set Identifier (SSID)
+                            <span class="helper" title="Identification of the wireless network to connect to">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
+                        <input id="ssid" type="text" class="form-control operationDataKeys" data-key="ssid" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="allowSimple" type="checkbox" class="form-control operationDataKeys" data-key="allowSimple" checked="checked" />
-                            <span class="helper" title="Permit the use of repeating, ascending and descending character sequences">
-                                &nbsp;&nbsp;&nbsp;Allow simple value
+                            <input id="hiddenNetwork" type="checkbox" class="form-control operationDataKeys" data-key="hiddenNetwork" checked="unchecked" />
+                            <span class="helper" title="Enable if target network is not open or broadcasting">
+                                Hidden Network
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
@@ -314,151 +338,747 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="requireAlphanumeric" type="checkbox" class="form-control operationDataKeys" data-key="requireAlphanumeric" checked="checked" />
-                            <span class="helper" title="Require passcode to contain both letters and numbers">
-                                &nbsp;&nbsp;&nbsp;Require alphanumeric value
+                            <input id="autoJoin" type="checkbox" class="form-control operationDataKeys" data-key="autoJoin" checked="checked" />
+                            <span class="helper" title="Automatically join this wireless network">
+                                Auto Join
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="minLength">
-                            Minimum passcode length
-                            <span class="helper" title="Minimum number of characters allowed in a passcode">
+                        <label class="wr-input-label" for="proxySetup">
+                            Proxy Setup
+                            <span class="helper" title="Configures proxies to be used with this network">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input id="minLength" type="text" class="form-control operationDataKeys" data-key="minLength" placeholder="Enter minimum passcode length">-->
-                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength">
-                            <option value="" selected="selected">
+                        <select id="proxySetup" class="form-control operationDataKeys" data-key="proxySetup">
+                            <option value="None" selected="selected">
                                 None
                             </option>
-                            <option value="1">01</option>
-                            <option value="2">02</option>
-                            <option value="3">03</option>
-                            <option value="4">04</option>
-                            <option value="5">05</option>
-                            <option value="6">06</option>
-                            <option value="7">07</option>
-                            <option value="8">08</option>
-                            <option value="9">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
+                            <option value="Manual">Manual</option>
+                            <option value="Automatic">Automatic</option>
                         </select>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="minComplexChars">
-                            Minimum number of complex characters
-                            <span class="helper" title="Minimum number of complex or non-alphanumeric characters allowed in a passcode">
+                        <label class="wr-input-label" for="securityType">
+                            Security Type
+                            <span class="helper" title="Wireless network encryption to use when connecting">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars">
-                            <option value="" selected="selected">
+                        <select id="securityType" class="form-control operationDataKeys" data-key="securityType">
+                            <option value="None" selected="selected">
                                 None
                             </option>
-                            <option value="1">01</option>
-                            <option value="2">02</option>
-                            <option value="3">03</option>
-                            <option value="4">04</option>
+                            <option value="WEP">WEP</option>
+                            <option value="WPA / WPA2 Personal">WPA / WPA2 Personal</option>
+                            <option value="WPA2 Personal (iOS 8 or later except Apple TV)">WPA2 Personal (iOS 8 or later except Apple TV)</option>
+                            <option value="Any (Personal)">Any (Personal)</option>
+                            <option value="Dynamic WEP">Dynamic WEP</option>
+                            <option value="WPA / WPA2 Enterprise">WPA / WPA2 Enterprise</option>
+                            <option value="WPA2 Enterprise (iOS 8 or later except Apple TV)">WPA2 Enterprise (iOS 8 or later except Apple TV)</option>
+                            <option value="Any (Enterprise)">Any (Enterprise)</option>
                         </select>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxPINAgeInDays">
-                            Maximum passcode age in days <br>
-                            ( Should be in between 1-to-730 days or none )
-                            <span class="helper" title="Number of days after which a passcode must be changed">
+                        <label class="wr-input-label" for="networkType">
+                            Security Type
+                            <span class="helper" title="Configures network to appear as Legacy or Passpoint">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="maxPINAgeInDays" type="text" class="form-control operationDataKeys" data-key="maxPINAgeInDays" placeholder="[ Requires Number Input ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="pinHistory">
-                            Passcode history <br>
-                            ( Should be in between 1-to-50 passcodes or none )
-                            <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="pinHistory" type="text" class="form-control operationDataKeys" data-key="pinHistory" placeholder="[ Requires Number Input ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxAutoLock">
-                            Auto Lock Time in minutes
-                            <span class="helper" title="A device will be automatically locked when this time period elapses">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <select id="maxAutoLock" class="form-control operationDataKeys" data-key="maxAutoLock">
-                            <option value="" selected="selected">
-                                None
+                        <select id="networkType" class="form-control operationDataKeys" data-key="networkType">
+                            <option value="Standard" selected="selected">
+                                Standard
                             </option>
-                            <option value="1">01</option>
-                            <option value="2">02</option>
-                            <option value="3">03</option>
-                            <option value="4">04</option>
-                            <option value="5">05</option>
-                        </select>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="gracePeriod">
-                            Grace period in minutes for device lock
-                            <span class="helper" title="Amount of time the device will be locked without prompting for passcode on unlock">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <select id="gracePeriod" class="form-control operationDataKeys" data-key="gracePeriod">
-                            <option value="" selected="selected">
-                                None
-                            </option>
-                            <option value="0">Immediately</option>
-                            <option value="1">01</option>
-                            <option value="5">05</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="60">60</option>
-                        </select>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxFailedAttempts">
-                            Maximum number of failed attempts
-                            <span class="helper" title="Maximum number of passcode entry attempts allowed before all data on a device will be erased">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <!--<input type="text" class="form-control operationDataKeys" id="maxFailedAttempts" data-key="maxFailedAttempts" placeholder="Enter maximum number of failed attempts">-->
-                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts">
-                            <option value="" selected="selected">
-                                None
-                            </option>
-                            <option value="3">03</option>
-                            <option value="4">04</option>
-                            <option value="5">05</option>
-                            <option value="6">06</option>
-                            <option value="7">07</option>
-                            <option value="8">08</option>
-                            <option value="9">09</option>
-                            <option value="10">10</option>
+                            <option value="Legacy Hotspot">Legacy Hotspot</option>
+                            <option value="Passpoint">Passpoint</option>
                         </select>
                     </div>
                 </div>
             </div>
         </div>
         <!-- End of Wifi Settings -->
+
+        <!-- Contacts -->
+        <div class="wr-hidden-operation" data-operation="contacts">
+            <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="CONTACTS">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Contacts
+                        <label id="contacts-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#contacts">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to define settings for connecting to CardDAV servers
+                        </div>
+                    </h2>
+                </div>
+                <div id="contacts" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="contacts">
+
+                    <div id="contacts-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="accountDescription">
+                            Account Description
+                            <span class="helper" title="The display name of the account (e.g. Company CardDAV Account)">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" placeholder="[ My CardDAV Account ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="accountHostname">
+                            Account Hostname and Port
+                            <span class="helper" title="The CardDave hostname or IP address and port number">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="accountHostname" type="text" class="form-control operationDataKeys" data-key="accountHostname" placeholder="[ Required ]"> :
+                        <input id="accountPort" type="text" class="form-control operationDataKeys" data-key="accountPort" placeholder="[ 8843 ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="principalURL">
+                            Principal URL
+                            <span class="helper" title="The principal URL for the CardDAV account">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="accountUsername">
+                            Account Username
+                            <span class="helper" title="The CardDav username">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" placeholder="[ Set On Device ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="accountPassword">
+                            Account Password
+                            <span class="helper" title="The CardDAV password">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="accountPassword" type="text" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="useSSL" type="checkbox" class="form-control operationDataKeys" data-key="useSSL" checked="checked" />
+                            <span class="helper" title="Enable Secure Socket Layer communication with CardDAV server">
+                                Use SSL
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Contacts -->
+
+        <!-- Calendar -->
+        <div class="wr-hidden-operation" data-operation="calendar">
+            <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="CALENDAR">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Calendar
+                        <label id="calendar-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#calendar">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to define settings for connecting to CalDAV servers
+                        </div>
+                    </h2>
+                </div>
+                <div id="calendar" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="calendar">
+
+                    <div id="calendar-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calAccountDescription">
+                            Account Description
+                            <span class="helper" title="The display name of the account (e.g. Company CalDAV Account)">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calAccountDescription" type="text" class="form-control operationDataKeys" data-key="calAccountDescription" placeholder="[ My CalDAV Account ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calAccountHostname">
+                            Account Hostname and Port
+                            <span class="helper" title="The CalDave hostname or IP address and port number">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calAccountHostname" type="text" class="form-control operationDataKeys" data-key="calAccountHostname" placeholder="[ Required ]"> :
+                        <input id="calAccountPort" type="text" class="form-control operationDataKeys" data-key="calAccountPort" placeholder="[ 8843 ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calPrincipalURL">
+                            Principal URL
+                            <span class="helper" title="The principal URL for the CalDAV account">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calPrincipalURL" type="text" class="form-control operationDataKeys" data-key="calPrincipalURL" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calAccountUsername">
+                            Account Username
+                            <span class="helper" title="The CalDAV username">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calAccountUsername" type="text" class="form-control operationDataKeys" data-key="calAccountUsername" placeholder="[ Set On Device ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calAccountPassword">
+                            Account Password
+                            <span class="helper" title="The CalDav password">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calAccountPassword" type="text" class="form-control operationDataKeys" data-key="calAccountPassword" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="calUseSSL" type="checkbox" class="form-control operationDataKeys" data-key="calUseSSL" checked="checked" />
+                            <span class="helper" title="Enable Secure Socket Layer communication with CalDAV server">
+                                Use SSL
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Calendar -->
+
+        <!-- Subscribed Calendars -->
+        <div class="wr-hidden-operation" data-operation="subscribed-calendars">
+            <div class="panel panel-default operation-data" data-operation="subscribed-calendars" data-operation-code="SUBSCRIBED_CALENDARS">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Subscribed Calendars
+                        <label id="subscribed-calendars-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#subscribedCalendars">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to define settings for connecting to CalDAV servers
+                        </div>
+                    </h2>
+                </div>
+                <div id="subscribedCalendars" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="subscribedCalendars">
+
+                    <div id="subscribed-calendars-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendarSubscriptionDescription">
+                            Description
+                            <span class="helper" title="The description of the calendar subscription">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendarSubscriptionDescription" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionDescription" placeholder="[ My Subscribed Calendar ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendarSubscriptionURL">
+                            URL
+                            <span class="helper" title="The URL of the calendar file">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendarSubscriptionURL" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionURL" placeholder="[ Required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendarSubscriptionUsername">
+                            Username
+                            <span class="helper" title="Username for this subscription">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendarSubscriptionUsername" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionUsername" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendarSubscriptionPassword">
+                            Password
+                            <span class="helper" title="Password for this subscription">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendarSubscriptionPassword" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionPassword" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="calendarSubscriptionUseSSL" type="checkbox" class="form-control operationDataKeys" data-key="calendarSubscriptionUseSSL" checked="checked" />
+                            <span class="helper" title="Enable Secure Socket Layer communication">
+                                Use SSL
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Subscribed Calendars -->
+
+        <!-- SCEP Settings -->
+        <div class="wr-hidden-operation" data-operation="scep-settings">
+            <div class="panel panel-default operation-data" data-operation="wifi-settings" data-operation-code="SCEP_SETTINGS">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        SCEP Settings
+                        <label id="scep-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#scepSettings">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to define settings for obtaining certificates from SCEP servers
+                        </div>
+                    </h2>
+                </div>
+                <div id="scepSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="scepSettings">
+
+                    <div id="scep-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepURL">
+                            URL
+                            <span class="helper" title="The base URL for the SCEP server">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepURL" type="text" class="form-control operationDataKeys" data-key="scepURL" placeholder="[ Required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepName">
+                            Name
+                            <span class="helper" title="The name of the instance: CA-IDENT">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepName" type="text" class="form-control operationDataKeys" data-key="scepName" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepSubject">
+                            Subject
+                            <span class="helper" title="The name of the instance: CA-IDENT">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepSubject" type="text" class="form-control operationDataKeys" data-key="scepSubject" placeholder="[ Optional ] Ex. O=Company Name, CN=Foo">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepSubjectAlternativeNameType">
+                            Subject Alternative Name Type
+                            <span class="helper" title="The type of a subject alternative name">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="scepSubjectAlternativeNameType" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameType">
+                            <option value="None" selected="selected">
+                                None
+                            </option>
+                            <option value="RFC 822 Name">RFC 822 Name</option>
+                            <option value="DNS Name">DNS Name</option>
+                            <option value="Uniform Resource Identifier">Uniform Resource Identifier</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepSubjectAlternativeNameValue">
+                            Subject Alternative Name Value
+                            <span class="helper" title="The value of a subject alternative name">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepSubjectAlternativeNameValue" type="text" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameValue" placeholder="">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepNTprincipalName">
+                            NT Principal Name
+                            <span class="helper" title="A NT principal name for use in the certificate request">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepNTprincipalName" type="text" class="form-control operationDataKeys" data-key="scepNTprincipalName" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepRetries">
+                            Retries
+                            <span class="helper" title="The number of times to poll the SCEP server for a signed certificate before giving up">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepRetries" type="text" class="form-control operationDataKeys" data-key="scepRetries" placeholder="[ Valid numeric value is required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepRetryDelay">
+                            Retry Delay
+                            <span class="helper" title="The number of seconds to wait between poll attempts">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepRetryDelay" type="text" class="form-control operationDataKeys" data-key="scepRetryDelay" placeholder="[ Valid numeric value is required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepChallenge">
+                            Retry Delay
+                            <span class="helper" title="Used as the pre-shared key for automatic enrollment">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepChallenge" type="text" class="form-control operationDataKeys" data-key="scepChallenge" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepKeySize">
+                            Key Size
+                            <span class="helper" title="Key size in bits">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="scepKeySize" class="form-control operationDataKeys" data-key="scepKeySize">
+                            <option value="1024" selected="selected">1024</option>
+                            <option value="2048">2048</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="scepUsedAsDS" type="checkbox" class="form-control operationDataKeys" data-key="scepUsedAsDS" checked="unchecked" />
+                            <span class="helper" title="Indicates if this needs to be used as the Digital Signature">
+                                Use as digital signature
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="scepUseForKE" type="checkbox" class="form-control operationDataKeys" data-key="scepUseForKE" checked="unchecked" />
+                            <span class="helper" title="Indicates if this needs to be used for Key Encipherment">
+                                Use for key encipherment
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="scepFingerprint">
+                            Fingerprint
+                            <span class="helper" title="Enter hex string to be used as a fingerprint or use button to create fingerprint from certificate">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="scepFingerprint" type="text" class="form-control operationDataKeys" data-key="scepFingerprint" placeholder="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of SCEP Configurations -->
+
+        <!-- APN -->
+        <div class="wr-hidden-operation" data-operation="apn">
+            <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="APN_SETTINGS">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        APN
+                        <label id="apn-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#apnSettings">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to specify advanced settings, such as a carrier Access Point Name (APN). (These settings should
+                            be managed only by trained professionals)
+                        </div>
+                    </h2>
+                </div>
+                <div id="apnSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="apnSettings">
+
+                    <div id="apn-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apnAccessPointName">
+                            Access Point Name (APN)
+                            <span class="helper" title="The name of the carrier (GPRS) access point">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="apnAccessPointName" type="text" class="form-control operationDataKeys" data-key="apnAccessPointName" placeholder="[ Required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apnAccessPointUsername">
+                            Access Point Username
+                            <span class="helper" title="The username to connect to the access point">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="apnAccessPointUsername" type="text" class="form-control operationDataKeys" data-key="apnAccessPointUsername" placeholder="[ Set On Device ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apnAccessPointPassword">
+                            Access Point Password
+                            <span class="helper" title="The password to connect to the access point">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="apnAccessPointPassword" type="text" class="form-control operationDataKeys" data-key="apnAccessPointPassword" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apnProxyServer">
+                            Proxy Server and Port
+                            <span class="helper" title="Hostname or IP address, and port number for the proxy server">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="apnProxyServer" type="text" class="form-control operationDataKeys" data-key="apnProxyServer" placeholder="[ Optional ]"> :
+                        <input id="apnProxyPort" type="text" class="form-control operationDataKeys" data-key="apnProxyPort" placeholder="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of APN -->
+
+        <!-- Web Clips -->
+        <div class="wr-hidden-operation" data-operation="web-clips">
+            <div class="panel panel-default operation-data" data-operation="subscribed_calendar" data-operation-code="WEB_CLIPS">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Web Clips
+                        <label id="web-clips-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#webClips">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to configure Web Clips
+                        </div>
+                    </h2>
+                </div>
+                <div id="webClips" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="webClips">
+
+                    <div id="web-clips-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wcLabel">
+                            Label
+                            <span class="helper" title="The name to display for the Web Clip">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wcLabel" type="text" class="form-control operationDataKeys" data-key="wcLabel" placeholder="[ Required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wcURL">
+                            URL
+                            <span class="helper" title="The URL to be displayed when opening the Web Clip">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wcURL" type="text" class="form-control operationDataKeys" data-key="wcURL" placeholder="[ Required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wcRemovable" type="checkbox" class="form-control operationDataKeys" data-key="wcRemovable" checked="checked" />
+                            <span class="helper" title="Enable removal of the Web Clip">
+                                Removable
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wcPrecomposedIcon" type="checkbox" class="form-control operationDataKeys" data-key="wcPrecomposedIcon" checked="unchecked" />
+                            <span class="helper" title="The icon will be displayed with no added visual effects">
+                                Pre-composed Icon
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wcFullScreen" type="checkbox" class="form-control operationDataKeys" data-key="wcFullScreen" checked="unchecked" />
+                            <span class="helper" title="Displays the Web Clip as a full screen application">
+                                Full Screen
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Web Clips -->
+
+        <!-- Email Settings -->
+        <div class="wr-hidden-operation" data-operation="email-settings">
+            <div class="panel panel-default operation-data" data-operation="email-settings" data-operation-code="EMAIL_SETTINGS">
+                <div class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Wifi Settings
+                        <label id="email-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#emailSettings">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            Use this section to define settings for connecting to your IMAL or POP email accounts
+                        </div>
+                    </h2>
+                </div>
+                <div id="emailSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="emailSettings">
+
+                    <div id="email-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="emAccountDescription">
+                            Account Description
+                            <span class="helper" title="The display name of the account (e.g. Company Mail Account)">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="emAccountDescription" type="text" class="form-control operationDataKeys" data-key="emAccountDescription" placeholder="[ Required ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="emAccountType">
+                            Account Type
+                            <span class="helper" title="The protocol for accessing the email account">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="emAccountType" class="form-control operationDataKeys" data-key="emAccountType">
+                            <option value="IMAP" selected="selected">IMAP</option>
+                            <option value="POP">POP</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="emUserDisplayName">
+                            User Display Name
+                            <span class="helper" title="The display name of the user (e.g. 'John Appleseed')">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="emUserDisplayName" type="text" class="form-control operationDataKeys" data-key="emUserDisplayName" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="emAddress">
+                            Email Address
+                            <span class="helper" title="The address of the account (e.g. 'john@example.com')">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="emAddress" type="text" class="form-control operationDataKeys" data-key="emAddress" placeholder="[ Set On Device ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="emAllowMovingMessages" type="checkbox" class="form-control operationDataKeys" data-key="emAllowMovingMessages" checked="checked" />
+                            <span class="helper" title="Messages can be moved from this account to another">
+                                Allow user to move messages from this account
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="emAllowAddressSyncing" type="checkbox" class="form-control operationDataKeys" data-key="emAllowAddressSyncing" checked="checked" />
+                            <span class="helper" title="Include this account in recent address syncing">
+                                Allow recent address syncing
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="emUseInMail" type="checkbox" class="form-control operationDataKeys" data-key="emUseInMail" checked="unchecked" />
+                            <span class="helper" title="Send outgoing mails from this account only from Mail app">
+                                Use only in Mail
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="emEnableMime" type="checkbox" class="form-control operationDataKeys" data-key="emEnableMime" checked="unchecked" />
+                            <span class="helper" title="Support S/MIME for this account">
+                                Enable S/MIME
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Email Settings -->
 
         <!-- Restrictions -->
         <div class="wr-hidden-operation" data-operation="restrictions">
