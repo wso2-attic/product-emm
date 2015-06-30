@@ -20,6 +20,17 @@ var operationModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
+    /* Enum to define operation types available */
+    var OperationType = {
+        PROFILE: "profile",
+        CONFIG: "config",
+        COMMAND: "command"
+    };
+
+    if (Object.freeze) {
+        Object.freeze(OperationType);
+    }
+
     publicMethods.getIOSServiceEndpoint = function (operationName) {
         var featureMap = {
             "DEVICE_LOCK": "lock",
@@ -40,29 +51,145 @@ var operationModule = function () {
     privateMethods.generateIOSOperationPayload = function (operationName, operationData, deviceList) {
         var payload;
         var operationType;
-        if (operationName == "PASSCODE_POLICY") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "forcePIN": operationData["forcePIN"],
-                    "allowSimple": operationData["allowSimple"],
-                    "requireAlphanumeric": operationData["requireAlphanumeric"],
-                    "minLength": operationData["minLength"],
-                    "minComplexChars": operationData["minComplexChars"],
-                    "maxPINAgeInDays": operationData["maxPINAgeInDays"],
-                    "pinHistory": operationData["pinHistory"],
-                    "maxInactivity": operationData["maxAutoLock"],
-                    "maxGracePeriod": operationData["gracePeriod"],
-                    "maxFailedAttempts": operationData["maxFailedAttempts"]
-                }
-            };
-        } else {
-            // If the operation is neither of above, it is a command operation
-            operationType = "command";
-            // Operation payload of a command operation is simply an array of device IDs
-            payload = deviceList;
+        switch (operationName) {
+            case "PASSCODE_POLICY":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'forcePIN': operationData["forcePIN"],
+                        'allowSimple': operationData["allowSimple"],
+                        'requireAlphanumeric': operationData["requireAlphanumeric"],
+                        'minLength': operationData["minLength"],
+                        'minComplexChars': operationData["minComplexChars"],
+                        'maxPINAgeInDays': operationData["maxPINAgeInDays"],
+                        'pinHistory': operationData["pinHistory"],
+                        'maxInactivity': operationData["maxAutoLock"],
+                        'maxGracePeriod': operationData["gracePeriod"],
+                        'maxFailedAttempts': operationData["maxFailedAttempts"]
+                    }
+                };
+                break;
+            case "WIFI_SETTINGS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'ssid': operationData["ssid"],
+                        'hiddenNetwork': operationData["hiddenNetwork"],
+                        'autoJoin': operationData["autoJoin"],
+                        'proxySetup': operationData["proxySetup"],
+                        'securityType': operationData["securityType"],
+                        'networkType': operationData["networkType"]
+                    }
+                };
+                break;
+            case "CONTACTS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'accountDescription': operationData["accountDescription"],
+                        'accountHostname': operationData["accountHostname"],
+                        'accountPort': operationData["accountPort"],
+                        'principalURL': operationData["principalURL"],
+                        'accountUsername': operationData["accountUsername"],
+                        'accountPassword': operationData["accountPassword"],
+                        'useSSL': operationData["useSSL"]
+                    }
+                };
+                break;
+            case "CALENDAR":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'calAccountDescription': operationData["calAccountDescription"],
+                        'calAccountHostname': operationData["calAccountHostname"],
+                        'calAccountPort': operationData["calAccountPort"],
+                        'calPrincipalURL': operationData["calPrincipalURL"],
+                        'accountUsername': operationData["accountUsername"],
+                        'accountPassword': operationData["accountPassword"],
+                        'calAccountPassword': operationData["calAccountPassword"],
+                        'calUseSSL': operationData["calUseSSL"]
+                    }
+                };
+                break;
+            case "SUBSCRIBED_CALENDARS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'csDescription': operationData["csDescription"],
+                        'csURL': operationData["csURL"],
+                        'csUsername': operationData["csUsername"],
+                        'csPassword': operationData["csPassword"],
+                        'csUseSSL': operationData["csUseSSL"]
+                    }
+                };
+                break;
+            case "SCEP_SETTINGS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'scepURL': operationData["scepURL"],
+                        'scepName': operationData["scepName"],
+                        'scepSubject': operationData["scepSubject"],
+                        'scepSubjectAlternativeNameType': operationData["scepSubjectAlternativeNameType"],
+                        'scepSubjectAlternativeNameValue': operationData["scepSubjectAlternativeNameValue"],
+                        'scepNTprincipalName': operationData["scepNTprincipalName"],
+                        'scepRetries': operationData["scepRetries"],
+                        'scepRetryDelay': operationData["scepRetryDelay"],
+                        'scepChallenge': operationData["scepChallenge"],
+                        'scepKeySize': operationData["scepKeySize"],
+                        'scepUsedAsDS': operationData["scepUsedAsDS"],
+                        'scepUseForKE': operationData["scepUseForKE"],
+                        'scepFingerprint': operationData["scepFingerprint"]
+                    }
+                };
+                break;
+            case "APN_SETTINGS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'apnAccessPointName': operationData["apnAccessPointName"],
+                        'apnAccessPointUsername': operationData["apnAccessPointUsername"],
+                        'apnAccessPointPassword': operationData["apnAccessPointPassword"],
+                        'apnProxyServer': operationData["apnProxyServer"],
+                        'apnProxyPort': operationData["apnProxyPort"]
+                    }
+                };
+                break;
+            case "WEB_CLIPS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'wcLabel': operationData["wcLabel"],
+                        'wcURL': operationData["wcURL"],
+                        'wcRemovable': operationData["wcRemovable"],
+                        'wcPrecomposedIcon': operationData["wcPrecomposedIcon"],
+                        'wcFullScreen': operationData["wcFullScreen"],
+                        'apnProxyPort': operationData["apnProxyPort"]
+                    }
+                };
+                break;
+            case "EMAIL_SETTINGS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    'operation': {
+                        'emAccountDescription': operationData["emAccountDescription"],
+                        'emAccountType': operationData["emAccountType"],
+                        'emUserDisplayName': operationData["emAddress"],
+                        'wcPrecomposedIcon': operationData["emAllowMovingMessages"],
+                        'emAllowAddressSyncing': operationData["emAllowAddressSyncing"],
+                        'emUseInMail': operationData["emUseInMail"],
+                        'emEnableMime': operationData["emEnableMime"]
+                    }
+                };
+                break;
+            default:
+                // If the operation is neither of above, it is a command operation
+                operationType = "command";
+                // Operation payload of a command operation is simply an array of device IDs
+                payload = deviceList;
+                break;
         }
-        if (operationType == "profile" && deviceList) {
+        if (operationType == OperationType.PROFILE && deviceList) {
             payload["deviceIDs"] = deviceList;
         }
         return payload;
@@ -71,92 +198,105 @@ var operationModule = function () {
     privateMethods.generateAndroidOperationPayload = function (operationName, operationData, deviceList) {
         var payload;
         var operationType;
-        if (operationName == "CAMERA") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "enabled" : operationData["enableCamera"]
-                }
-            };
-        } else if (operationName == "CHANGE_LOCK_CODE") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "lockCode" : operationData["lockCode"]
-                }
-            };
-        } else if (operationName == "ENCRYPT_STORAGE") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "encrypted" : operationData["enableEncryption"]
-                }
-            };
-        } else if (operationName == "NOTIFICATION") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "message" : operationData["message"]
-                }
-            };
-        } else if (operationName == "WEBCLIP") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "identity": operationData["url"],
-                    "title": operationData["title"]
-                }
-            };
-        } else if (operationName == "INSTALL_APPLICATION") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "appIdentifier": operationData["packageName"],
-                    "type": operationData["type"],
-                    "url": operationData["url"]
-                }
-            };
-        } else if (operationName == "UNINSTALL_APPLICATION") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "appIdentifier": operationData["packageName"]
-                }
-            };
-        } else if (operationName == "BLACKLIST_APPLICATIONS") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "appIdentifier": operationData["packageNames"]
-                }
-            };
-        } else if (operationName == "PASSCODE_POLICY") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "allowSimple": operationData["allowSimple"],
-                    "requireAlphanumeric": operationData["requireAlphanumeric"],
-                    "minLength": operationData["minLength"],
-                    "minComplexChars": operationData["minComplexChars"],
-                    "maxPINAgeInDays": operationData["maxPINAgeInDays"],
-                    "pinHistory": operationData["pinHistory"],
-                    "maxFailedAttempts": operationData["maxFailedAttempts"]
-                }
-            };
-        } else if (operationName == "WIFI") {
-            operationType = "profile";
-            payload = {
-                "operation": {
-                    "ssid": operationData["ssid"],
-                    "password": operationData["password"]
-                }
-            };
-        } else {
-            // If the operation is neither of above, it is a command operation
-            operationType = "command";
-            // Operation payload of a command operation is simply an array of device IDs
-            payload = deviceList;
+        switch (operationName) {
+            case "CAMERA":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "enabled" : operationData["enableCamera"]
+                    }
+                };
+                break;
+            case "CHANGE_LOCK_CODE":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "lockCode" : operationData["lockCode"]
+                    }
+                };
+                break;
+            case "ENCRYPT_STORAGE":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "encrypted" : operationData["enableEncryption"]
+                    }
+                };
+                break;
+            case "NOTIFICATION":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "message" : operationData["message"]
+                    }
+                };
+                break;
+            case "WEBCLIP":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "identity": operationData["url"],
+                        "title": operationData["title"]
+                    }
+                };
+                break;
+            case "INSTALL_APPLICATION":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "appIdentifier": operationData["packageName"],
+                        "type": operationData["type"],
+                        "url": operationData["url"]
+                    }
+                };
+                break;
+            case "UNINSTALL_APPLICATION":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "appIdentifier": operationData["packageName"]
+                    }
+                };
+                break;
+            case "BLACKLIST_APPLICATIONS":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "appIdentifier": operationData["packageNames"]
+                    }
+                };
+                break;
+            case "PASSCODE_POLICY":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "allowSimple": operationData["allowSimple"],
+                        "requireAlphanumeric": operationData["requireAlphanumeric"],
+                        "minLength": operationData["minLength"],
+                        "minComplexChars": operationData["minComplexChars"],
+                        "maxPINAgeInDays": operationData["maxPINAgeInDays"],
+                        "pinHistory": operationData["pinHistory"],
+                        "maxFailedAttempts": operationData["maxFailedAttempts"]
+                    }
+                };
+                break;
+            case "WIFI":
+                operationType = OperationType.PROFILE;
+                payload = {
+                    "operation": {
+                        "ssid": operationData["ssid"],
+                        "password": operationData["password"]
+                    }
+                };
+                break;
+            default:
+                // If the operation is neither of above, it is a command operation
+                operationType = OperationType.COMMAND;
+                // Operation payload of a command operation is simply an array of device IDs
+                payload = deviceList;
+                break;
         }
+
         if (operationType == "profile" && deviceList) {
             payload["deviceIDs"] = deviceList;
         }

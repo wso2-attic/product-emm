@@ -24,7 +24,7 @@
             <span id="contacts-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="contacts-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('scep', this)">
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('scep-settings', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-wifi fw-stack-2x"></i>
             </span>
@@ -328,7 +328,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="hiddenNetwork" type="checkbox" class="form-control operationDataKeys" data-key="hiddenNetwork" checked="unchecked" />
+                            <input id="hiddenNetwork" type="checkbox" class="form-control operationDataKeys" data-key="hiddenNetwork"/>
                             <span class="helper" title="Enable if target network is not open or broadcasting">
                                 Hidden Network
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -386,7 +386,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="networkType">
-                            Security Type
+                            Network Type
                             <span class="helper" title="Configures network to appear as Legacy or Passpoint">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
@@ -440,12 +440,14 @@
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="accountHostname">
                             Account Hostname and Port
-                            <span class="helper" title="The CardDave hostname or IP address and port number">
+                            <span class="helper" title="The CardDAV hostname or IP address and port number">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountHostname" type="text" class="form-control operationDataKeys" data-key="accountHostname" placeholder="[ Required ]"> :
-                        <input id="accountPort" type="text" class="form-control operationDataKeys" data-key="accountPort" placeholder="[ 8843 ]">
+                        <div class="clearfix">
+                            <div class="col-md-7"><input id="accountHostname" type="text" class="form-control operationDataKeys" data-key="accountHostname" placeholder="[ Required ]"> : </div>
+                            <div class="col-md-5"><input id="accountPort" type="text" class="form-control operationDataKeys" data-key="accountPort" placeholder="[ 8843 ]"></div>
+                        </div>
                     </div>
 
                     <div class="wr-input-control">
@@ -604,48 +606,48 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="calendarSubscriptionDescription">
+                        <label class="wr-input-label" for="csDescription">
                             Description
                             <span class="helper" title="The description of the calendar subscription">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendarSubscriptionDescription" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionDescription" placeholder="[ My Subscribed Calendar ]">
+                        <input id="csDescription" type="text" class="form-control operationDataKeys" data-key="csDescription" placeholder="[ My Subscribed Calendar ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="calendarSubscriptionURL">
+                        <label class="wr-input-label" for="csURL">
                             URL
                             <span class="helper" title="The URL of the calendar file">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendarSubscriptionURL" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionURL" placeholder="[ Required ]">
+                        <input id="csURL" type="text" class="form-control operationDataKeys" data-key="csURL" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="calendarSubscriptionUsername">
+                        <label class="wr-input-label" for="csUsername">
                             Username
                             <span class="helper" title="Username for this subscription">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendarSubscriptionUsername" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionUsername" placeholder="[ Optional ]">
+                        <input id="csUsername" type="text" class="form-control operationDataKeys" data-key="csUsername" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="calendarSubscriptionPassword">
+                        <label class="wr-input-label" for="csPassword">
                             Password
                             <span class="helper" title="Password for this subscription">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendarSubscriptionPassword" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionPassword" placeholder="[ Optional ]">
+                        <input id="csPassword" type="text" class="form-control operationDataKeys" data-key="csPassword" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="calendarSubscriptionUseSSL" type="checkbox" class="form-control operationDataKeys" data-key="calendarSubscriptionUseSSL" checked="checked" />
+                            <input id="csUseSSL" type="checkbox" class="form-control operationDataKeys" data-key="csUseSSL" checked="checked" />
                             <span class="helper" title="Enable Secure Socket Layer communication">
                                 Use SSL
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -659,7 +661,7 @@
 
         <!-- SCEP Settings -->
         <div class="wr-hidden-operation" data-operation="scep-settings">
-            <div class="panel panel-default operation-data" data-operation="wifi-settings" data-operation-code="SCEP_SETTINGS">
+            <div class="panel panel-default operation-data" data-operation="scep-settings" data-operation-code="SCEP_SETTINGS">
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         SCEP Settings
@@ -948,7 +950,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="wcPrecomposedIcon" type="checkbox" class="form-control operationDataKeys" data-key="wcPrecomposedIcon" checked="unchecked" />
+                            <input id="wcPrecomposedIcon" type="checkbox" class="form-control operationDataKeys" data-key="wcPrecomposedIcon"/>
                             <span class="helper" title="The icon will be displayed with no added visual effects">
                                 Pre-composed Icon
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -958,7 +960,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="wcFullScreen" type="checkbox" class="form-control operationDataKeys" data-key="wcFullScreen" checked="unchecked" />
+                            <input id="wcFullScreen" type="checkbox" class="form-control operationDataKeys" data-key="wcFullScreen"/>
                             <span class="helper" title="Displays the Web Clip as a full screen application">
                                 Full Screen
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -975,7 +977,7 @@
             <div class="panel panel-default operation-data" data-operation="email-settings" data-operation-code="EMAIL_SETTINGS">
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        Wifi Settings
+                        Email Settings
                         <label id="email-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#emailSettings">
                             <input type="checkbox" />
                             <span class="helper"></span>
@@ -1213,6 +1215,6 @@
                 </div>
             </div>
         </div>
-        <!-- /Restrictions -->
+        <!-- End of Restrictions -->
     </div>
 </div>

@@ -22,6 +22,11 @@ var stepBackFrom = {};
 var policy = {};
 var configuredFeatures = [];
 
+var PlatformType = {
+    ANDROID: "android",
+    IOS: "ios"
+};
+
 stepForwardFrom["policy-platform"] = function (actionButton) {
     policy["platform"] = $(actionButton).data("platform");
     policy["platformId"] = $(actionButton).data("platform-id");
@@ -61,7 +66,7 @@ validateStep["policy-profile"] = function () {
     var validationStatus;
 
     // starting validation process and updating validationStatus
-    if (policy.platform == "android") {
+    if (policy.platform == PlatformType.ANDROID) {
         if (configuredFeatures.length == 0) {
             validationStatus = {
                 "error": true,
@@ -185,7 +190,7 @@ validateStep["policy-profile"] = function () {
                 }
             }
         }
-    } else if (policy.platform == "ios") {
+    } else if (policy.platform == PlatformType.IOS) {
         if (configuredFeatures.length == 0) {
             validationStatus = {
                 "error": true,
@@ -267,9 +272,299 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
+            if ($.inArray("WIFI_SETTINGS", configuredFeatures) != -1) {
+                // if WIFI is configured
+                ssid = $("input#ssid").val();
+                if (!ssid) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "WIFI SSID is not given. You cannot proceed.",
+                        "erroneousFeature": "wifi-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else if (!inputIsValidAgainstLength(ssid, 1, 30)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "WIFI SSID exceeds maximum allowed length. Please check.",
+                        "erroneousFeature": "wifi-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "wifi-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                }
+            }
+            if ($.inArray("CONTACTS", configuredFeatures) != -1) {
+                /* Validating hostname of the CardDAV server */
+                var accountHostname = $("input#accountHostname").val();
+                if (!accountHostname) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Hostname of the target CardDAV server is not provided. Please provide a valid hostname to proceed.",
+                        "erroneousFeature": "contacts"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = false;
+                } else if (!inputIsValid(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, accountHostname)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Hostname provided is invalid. Please provide a valid hostname to proceed",
+                        "erroneousFeature": "contacts"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = false;
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "contacts"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = true;
+                }
+
+                if (continueToCheckNextInput) {
+                    /* Validating port of the CardDAV server */
+                    var accountPort = $("input#accountPort").val();
+                    if (!accountPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Port of the target CardDAV server is not provided. Please provide a valid port number to proceed.",
+                            "erroneousFeature": "contacts"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else if (!inputIsValidAgainstLength(accountPort, 1, 6)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Port provided is invalid and outside the allowed range. Please provide a valid port number to proceed",
+                            "erroneousFeature": "contacts"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else if (!$.isNumeric(accountPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Port provided is not a valid number. Please provide a valid port number to proceed",
+                            "erroneousFeature": "contacts"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else {
+                        validationStatus = {
+                            "error": false,
+                            "okFeature": "contacts"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    }
+                }
+            }
+            if ($.inArray("CALENDAR", configuredFeatures) != -1) {
+                /* Validating hostname of the CardDAV server */
+                var calAccountHostname = $("input#calAccountHostname").val();
+                if (!calAccountHostname) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Hostname of the target CalDAV server is not provided. Please provide a valid hostname to proceed.",
+                        "erroneousFeature": "calendar"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = false;
+                } else if (!inputIsValid(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, calAccountHostname)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Hostname provided is invalid. Please provide a valid hostname to proceed",
+                        "erroneousFeature": "calendar"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = false;
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "calendar"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = true;
+                }
+
+                if (continueToCheckNextInput) {
+                    /* Validating port of the CardDAV server */
+                    var calAccountPort = $("input#calAccountPort").val();
+                    if (!calAccountPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Port of the target CalDAV server is not provided. Please provide a valid port number to proceed.",
+                            "erroneousFeature": "calendar"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else if (!inputIsValidAgainstLength(accountPort, 1, 6)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Port provided is invalid and outside the allowed range. Please provide a valid port number to proceed",
+                            "erroneousFeature": "calendar"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else if (!$.isNumeric(calAccountPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Port provided is not a valid number. Please provide a valid port number to proceed",
+                            "erroneousFeature": "calendar"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else {
+                        validationStatus = {
+                            "error": false,
+                            "okFeature": "calendar"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    }
+                }
+            }
+            if ($.inArray("SUBSCRIBED_CALENDARS", configuredFeatures) != -1) {
+                /* Validating hostname of the CardDAV server */
+                var csURL = $("input#csURL").val();
+                if (!csURL) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "URL of the calendar file is not provided. Please provide a valid URL to proceed.",
+                        "erroneousFeature": "subscribed-calendars"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } if (!inputIsValid(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/, csURL)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "URL of the calendar file provided is invalid. Please provide a valid URL to proceed.",
+                        "erroneousFeature": "subscribed-calendars"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "subscribed-calendars"
+                    };
+                    validationStatusArray.push(validationStatus);
+                }
+            }
+            if ($.inArray("APN_SETTINGS", configuredFeatures) != -1) {
+                /* Validating Access Point Name */
+                var apnAccessPointName = $("input#apnAccessPointName").val();
+                if (!apnAccessPointName) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Name of the carrier (GPRS) access point is not provided. Please provide a valid name to proceed.",
+                        "erroneousFeature": "apn-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "apn-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                }
+            }
+            if ($.inArray("WEB_CLIPS", configuredFeatures) != -1) {
+                /* Validating hostname of the CardDAV server */
+                var wcLabel = $("input#wcLabel").val();
+                if (!wcLabel) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "The name to display for the Web Clip is not provided. Please provide a valid name to proceed.",
+                        "erroneousFeature": "web-clips"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = false;
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "web-clips"
+                    };
+                    validationStatusArray.push(validationStatus);
+                    continueToCheckNextInput = true;
+                }
+
+                if (continueToCheckNextInput) {
+                    /* Validating hostname of the CardDAV server */
+                    var wcURL = $("input#wcURL").val();
+                    if (!wcURL) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "URL to be displayed when opening the Web Clip is not provided. Please provide a valid URL to proceed.",
+                            "erroneousFeature": "web-clips"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } if (!inputIsValid(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/, wcURL)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "URL to be displayed when opening the Web Clip provided is invalid. Please provide a valid URL to proceed.",
+                            "erroneousFeature": "web-clips"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else {
+                        validationStatus = {
+                            "error": false,
+                            "okFeature": "web-clips"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    }
+                }
+            }
+            if ($.inArray("SCEP_SETTINGS", configuredFeatures) != -1) {
+                /* Validating hostname of the CardDAV server */
+                var scepURL = $("input#scepURL").val();
+                if (!scepURL) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "URL of the SCEP base server is not provided. Please provide a valid URL to proceed.",
+                        "erroneousFeature": "scep-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } if (!inputIsValid(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/, scepURL)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "URL of the SCEP base server provided is invalid. Please provide a valid URL to proceed.",
+                        "erroneousFeature": "scep-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "scep-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                }
+            }
+            if ($.inArray("EMAIL_SETTINGS", configuredFeatures) != -1) {
+                /* Validating Access Point Name */
+                var emAccountDescription = $("input#emAccountDescription").val();
+                if (!emAccountDescription) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Display name of the account is not provided. Please provide a valid name to proceed.",
+                        "erroneousFeature": "email-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "email-settings"
+                    };
+                    validationStatusArray.push(validationStatus);
+                }
+            }
         }
     }
     // ending validation process
+
+    /**
+     * Checks if provided input is valid against RegEx input.
+     *
+     * @param regExp Regular expression
+     * @param inputString Input string to check
+     * @returns {boolean} Returns true if input matches RegEx
+     */
+    function inputIsValid(regExp, inputString) {
+        return regExp.test(inputString);
+    }
 
     // start taking specific notifying actions upon validation
     var wizardIsToBeContinued;
