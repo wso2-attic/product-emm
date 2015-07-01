@@ -834,17 +834,36 @@ $(document).ready(function () {
                 if (!$(subOkIcon).hasClass("hidden")) {
                     $(subOkIcon).addClass("hidden");
                 }
-                // clearing input fields
+                // reinitializing input fields into the defaults
                 $(operationDataWrapper + " input").each(
                     function () {
                         if ($(this).is("input:text") || $(this).is("input:password")) {
                             $(this).val("");
                         } else if ($(this).is("input:checkbox")) {
-                            $(this).prop("checked", "checked");
+                            $(this).prop("checked", $(this).data("default"));
+                            // if this checkbox is the parent input of a grouped-input
+                            if ($(this).hasClass("parent-input")) {
+                                var groupedInput = $(this).parent().parent().parent();
+                                if ($(this).is(":checked")) {
+                                    $(".child-input", groupedInput).each(function () {
+                                        $(this).prop('disabled', false);
+                                    });
+                                    if ($("ul", groupedInput).hasClass("disabled")) {
+                                        $("ul", groupedInput).removeClass("disabled");
+                                    }
+                                } else {
+                                    $(".child-input", groupedInput).each(function () {
+                                        $(this).prop('disabled', true);
+                                    });
+                                    if (!$("ul", groupedInput).hasClass("disabled")) {
+                                        $("ul", groupedInput).addClass("disabled");
+                                    }
+                                }
+                            }
                         }
                     }
                 );
-                // clearing select fields
+                // reinitializing select fields
                 $(operationDataWrapper + " select").each(
                     function () {
                         $("option:first", this).prop("selected", "selected");
@@ -854,6 +873,7 @@ $(document).ready(function () {
         }
     });
 
+    // adding support for cloning multiple profiles per feature with cloneable class definitions
     $(advanceOperations).on("click", ".multi-view.add.enabled", function () {
         // get a copy of .cloneable and create new .cloned div element
         var cloned = "<div class='cloned'><hr>" + $(".cloneable", $(this).parent().parent()).html() + "</div>";
@@ -874,6 +894,25 @@ $(document).ready(function () {
 
     $(advanceOperations).on("click", ".multi-view.remove.enabled", function () {
         $(this).parent().remove();
+    });
+
+    // enabling or disabling grouped-input based on the status of a parent check-box
+    $(advanceOperations).on("click", ".grouped-input", function () {
+        if ($(".parent-input", this).is(":checked")) {
+            if ($("ul", this).hasClass("disabled")) {
+                $("ul", this).removeClass("disabled");
+            }
+            $(".child-input", this).each(function () {
+                $(this).prop('disabled', false);
+            });
+        } else {
+            if (!$("ul", this).hasClass("disabled")) {
+                $("ul", this).addClass("disabled");
+            }
+            $(".child-input", this).each(function () {
+                $(this).prop('disabled', true);
+            });
+        }
     });
 
     $(".wizard-stepper").click(function () {

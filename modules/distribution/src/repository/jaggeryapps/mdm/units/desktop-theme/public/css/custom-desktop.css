@@ -2582,3 +2582,7 @@ ul.listing, ul.listing li {
     padding: 0;
 }
 
+ul.listing li.grouped-input ul.disabled {
+    opacity: 0.3;
+}
+
