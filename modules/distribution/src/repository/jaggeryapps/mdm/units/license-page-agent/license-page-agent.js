@@ -8,9 +8,9 @@ function onRequest(context){
     var os = parser.getOS();
     var viewModel = context;
     viewModel.link = os.name; if(os.name == "iOS"){
-        viewModel.header = "Step 3. Login to Mobile Device Manager";
+        viewModel.header = "Step 3. Login to Enterprise Mobility Manager";
     }else if(os.name == "Windows Phone"){
-        viewModel.header = "Step 1. Login to Mobile Device Manager";
+        viewModel.header = "Step 1. Login to Enterprise Mobility Manager";
     }
     return viewModel;
 }

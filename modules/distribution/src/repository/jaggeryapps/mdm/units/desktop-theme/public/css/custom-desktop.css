@@ -2576,3 +2576,13 @@ a:hover.multi-view.remove.enabled {
     content: "Enabled";
 }
 
+ul.listing, ul.listing li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.listing li.grouped-input ul.disabled {
+    opacity: 0.3;
+}
+
