@@ -73,12 +73,41 @@ var operationModule = function () {
                 operationType = OperationType.PROFILE;
                 payload = {
                     'operation': {
-                        'ssid': operationData["ssid"],
-                        'hiddenNetwork': operationData["hiddenNetwork"],
-                        'autoJoin': operationData["autoJoin"],
-                        'proxySetup': operationData["proxySetup"],
-                        'securityType': operationData["securityType"],
-                        'networkType': operationData["networkType"]
+                        'ssid': operationData["wfSsid"],
+                        'hiddenNetwork': operationData["wfHiddenNetwork"],
+                        'autoJoin': operationData["wfAutoJoin"],
+                        'proxyType': operationData["wfProxyType"],
+                        'encryptionType': operationData["wfEncryptionType"],
+                        'domainName': operationData["wfDomainName"],
+                        'serviceProviderRoamingEnabled': operationData["wfSpRomainEnabled"],
+                        'displayedOperatorName': operationData["wfDisplayedOperatorName"],
+                        'roamingConsortiumOIs': operationData[""],
+                        'password': operationData["wfEncPassword"],
+                        'clientConfiguration': {
+                            'username': operationData["wfEncEapUsername"],
+                            'acceptEAPTypes': operationData[""],
+                            'userPassword': operationData["wfEncEapUserPassword"],
+                            'oneTimePassword': operationData["wfEncEapOneTimePassword"],
+                            'payloadCertificateAnchorUUID': operationData[""],
+                            'outerIdentity': operationData["wfEncEapOuterIdentity"],
+                            'tlstrustedServerNames': operationData[""],
+                            'tlsallowTrustExceptions': operationData["wfEncEapTlsAllowTrustExceptions"],
+                            'tlscertificateIsRequired': operationData["wfEncEapTlsCertIsRequired"],
+                            'ttlsinnerAuthentication': operationData["wfEapTlsInnerAuthType"],
+                            'eapfastusePAC': operationData["wfEncEapFastUsePac"],
+                            'eapfastprovisionPAC': operationData["wfEncEapFastProvisionPac"],
+                            'eapfastprovisionPACAnonymously': operationData["wfEncEapFastProvisionPacAnon"],
+                            'eapsimnumberOfRANDs': operationData[""]
+                        },
+                        'payloadCertificateUUID': operationData["wfEncPayloadCertUuid"],
+                        'proxyServer': operationData["wfProxyServer"],
+                        'proxyPort': operationData["wfProxyPort"],
+                        'proxyUsername': operationData["wfProxyUsername"],
+                        'proxyPassword': operationData["wfProxyPassword"],
+                        'proxyPACURL': operationData["wfProxyPacUrl"],
+                        'proxyPACFallbackAllowed': operationData["wfProxyAllowPacFallback"],
+                        'nairealmNames': operationData[""],
+                        'mccandMNCs': operationData[""]
                     }
                 };
                 break;
@@ -100,14 +129,13 @@ var operationModule = function () {
                 operationType = OperationType.PROFILE;
                 payload = {
                     'operation': {
-                        'calAccountDescription': operationData["calAccountDescription"],
-                        'calAccountHostname': operationData["calAccountHostname"],
-                        'calAccountPort': operationData["calAccountPort"],
-                        'calPrincipalURL': operationData["calPrincipalURL"],
-                        'accountUsername': operationData["accountUsername"],
-                        'accountPassword': operationData["accountPassword"],
-                        'calAccountPassword': operationData["calAccountPassword"],
-                        'calUseSSL': operationData["calUseSSL"]
+                        'accountDescription': operationData["calAccountDescription"],
+                        'hostName': operationData["calAccountHostname"],
+                        'port': operationData["calAccountPort"],
+                        'principalURL': operationData["calPrincipalURL"],
+                        'username': operationData["calAccountUsername"],
+                        'password': operationData["calAccountPassword"],
+                        'useSSL': operationData["calUseSSL"]
                     }
                 };
                 break;
@@ -115,11 +143,11 @@ var operationModule = function () {
                 operationType = OperationType.PROFILE;
                 payload = {
                     'operation': {
-                        'csDescription': operationData["csDescription"],
-                        'csURL': operationData["csURL"],
-                        'csUsername': operationData["csUsername"],
-                        'csPassword': operationData["csPassword"],
-                        'csUseSSL': operationData["csUseSSL"]
+                        'accountDescription': operationData["csDescription"],
+                        'hostName': operationData["csURL"],
+                        'username': operationData["csUsername"],
+                        'password': operationData["csPassword"],
+                        'useSSL': operationData["csUseSSL"]
                     }
                 };
                 break;
@@ -147,11 +175,11 @@ var operationModule = function () {
                 operationType = OperationType.PROFILE;
                 payload = {
                     'operation': {
-                        'apnAccessPointName': operationData["apnAccessPointName"],
-                        'apnAccessPointUsername': operationData["apnAccessPointUsername"],
-                        'apnAccessPointPassword': operationData["apnAccessPointPassword"],
-                        'apnProxyServer': operationData["apnProxyServer"],
-                        'apnProxyPort': operationData["apnProxyPort"]
+                        'apn': operationData["apnAccessPointName"],
+                        'username': operationData["apnAccessPointUsername"],
+                        'password': operationData["apnAccessPointPassword"],
+                        'proxyServer': operationData["apnProxyServer"],
+                        'proxyPort': operationData["apnProxyPort"]
                     }
                 };
                 break;
@@ -159,12 +187,12 @@ var operationModule = function () {
                 operationType = OperationType.PROFILE;
                 payload = {
                     'operation': {
-                        'wcLabel': operationData["wcLabel"],
-                        'wcURL': operationData["wcURL"],
-                        'wcRemovable': operationData["wcRemovable"],
-                        'wcPrecomposedIcon': operationData["wcPrecomposedIcon"],
-                        'wcFullScreen': operationData["wcFullScreen"],
-                        'apnProxyPort': operationData["apnProxyPort"]
+                        'label': operationData["wcLabel"],
+                        'url': operationData["wcURL"],
+                        'icon': "",
+                        'isRemovable': operationData["wcRemovable"],
+                        'isPrecomposed': operationData["wcPrecomposedIcon"],
+                        'isFullScreen': operationData["wcFullScreen"]
                     }
                 };
                 break;
@@ -429,14 +457,17 @@ var operationModule = function () {
                 operationData[key] = value;
             }
         );
-        if (deviceType == "ios") {
-            payload = privateMethods.generateIOSOperationPayload(operationCode, operationData, deviceList);
-        }
-        if (deviceType == "android") {
-            payload = privateMethods.generateAndroidOperationPayload(operationCode, operationData, deviceList);
-        }
-        if (deviceType == "TemperatureController") {
-            payload = privateMethods.createTemperatureControllerPayload(operationCode, operationData, deviceList);
+        switch (deviceType) {
+            case PlatformType.ANDROID:
+                payload = privateMethods.generateAndroidOperationPayload(operationCode, operationData, deviceList);
+                break;
+            case PlatformType.IOS:
+                payload = privateMethods.generateIOSOperationPayload(operationCode, operationData, deviceList);
+                break;
+            default:
+                //handle default case properly
+                payload = privateMethods.generateAndroidOperationPayload(operationCode, operationData, deviceList);
+                break;
         }
         return payload;
     };

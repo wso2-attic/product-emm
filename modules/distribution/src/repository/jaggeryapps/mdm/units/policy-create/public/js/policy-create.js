@@ -940,3 +940,21 @@ $(document).ready(function () {
         }
     });
 });
+
+var showProxyConfiguration = function(controller) {
+    var proxyType = $(controller).find("option:selected").val();
+    if (proxyType == "Manual") {
+        $(".manual-proxy-config").slideDown();
+    } else {
+        $(".manual-proxy-config").slideUp();
+    }
+};
+
+var showEncryptionPolicyConfiguration = function(controller) {
+    var proxyType = $(controller).find("option:selected").val();
+    if (proxyType != "None") {
+        $(".enc-policy-config").slideDown();
+    } else {
+        $(".enc-policy-config").slideUp();
+    }
+};

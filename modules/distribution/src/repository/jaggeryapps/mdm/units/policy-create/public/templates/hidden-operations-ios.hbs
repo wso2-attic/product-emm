@@ -317,18 +317,226 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="ssid">
+                        <label class="wr-input-label" for="wfSsid">
                             Service Set Identifier (SSID)
                             <span class="helper" title="Identification of the wireless network to connect to">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="ssid" type="text" class="form-control operationDataKeys" data-key="ssid" placeholder="[ Required ]">
+                        <input id="wfSsid" type="text" class="form-control operationDataKeys" data-key="wfSsid" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="hiddenNetwork" type="checkbox" class="form-control operationDataKeys" data-key="hiddenNetwork"/>
+                            <input id="wfIsHotSpot" type="checkbox" class="form-control operationDataKeys" data-key="wfIsHotSpot"/>
+                            <span class="helper" title="Indicates if the network is treated as a hotspot">
+                                Hot Spot
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wfDomainName">
+                            Domain Name
+                            <span class="helper" title="Domain Name used for Wi-Fi Hotspot 2.0 negotiation. This field can be provided instead of 'SSID'">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wfDomainName" type="text" class="form-control operationDataKeys" data-key="wfDomainName" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wfEncryptionType">
+                            Encryption Type
+                            <span class="helper" title="Wireless network encryption to use when connecting">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="wfEncryptionType" class="form-control operationDataKeys" data-key="wfEncryptionType" onchange="showEncryptionPolicyConfiguration(this)">
+                            <option value="None" selected="selected">None</option>
+                            <option value="WEP">WEP</option>
+                            <option value="WPA">WPA</option>
+                            <option value="Any">Any</option>
+                        </select>
+                    </div>
+
+                    <div class="panel enc-policy-config" role="tab" style="display:none;">
+                        <div class="panel">
+                            Encryption Policy Configuration
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wfEncPassword">
+                                Password
+                            <span class="helper" title="Password used for the encryption configuration">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <input id="wfEncPassword" type="password" class="form-control operationDataKeys" data-key="wfEncPassword" placeholder="[ Optional ]">
+                        </div>
+
+                        <div class="panel-heading eap-client-config" role="tab">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="wfEncEapUsername">
+                                    Username
+                            <span class="helper" title="Unless you know the exact user name, this property won't appear in an imported configuration.
+                            Users can enter this information when they authenticate">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                                <input id="wfEncEapUsername" type="text" class="form-control operationDataKeys" data-key="wfEncEapUsername" placeholder="[ Optional ]">
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="wfEncEapUserPassword">
+                                    User Password
+                            <span class="helper" title="If not provided, the user may be prompted during login">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                                <input id="wfEncEapUserPassword" type="password" class="form-control operationDataKeys" data-key="wfEncEapUserPassword" placeholder="[ Optional ]">
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="wfEncEapOneTimePassword">
+                                    One Time Password
+                            <span class="helper" title="If enabled, the user will be prompted for a password each time they connect to the network">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                                <input id="wfEncEapOneTimePassword" type="password" class="form-control operationDataKeys" data-key="wfEncEapOneTimePassword" placeholder="[ Optional ]">
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-control checkbox">
+                                    <input id="wfEncEapTlsAllowTrustExceptions" type="checkbox" class="form-control operationDataKeys" data-key="wfEncEapTlsAllowTrustExceptions" checked="checked"/>
+                            <span class="helper" title="Allows/disallows a dynamic trust decision by the user.
+                            The dynamic trust is the certificate dialogue that appears when a certificate isn't trusted.
+                            If this is disabled, the authentication fails if the certificate isn't already trusted.
+                            Refer PayloadCertificateAnchorUUIDand TLSTrustedNames above.
+                            By default this is enabled unless either PayloadCertificateAnchorUUID or TLSTrustedServerNames is supplied, in which case this defaults to disabled">
+                                TLS Allow Trust Exceptions
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-control checkbox">
+                                    <input id="wfEncEapTlsCertIsRequired" type="checkbox" class="form-control operationDataKeys" data-key="wfEncEapTlsCertIsRequired" checked="checked"/>
+                            <span class="helper" title="If enabled, allows for two-factor authentication for EAP-TTLS, PEAP, or EAP-FAST.
+                            If disabled, allows for zero-factor authentication for EAP-TLS. By default this is enabled for EAP-TLS, and disabled for other EAP types">
+                                Require TLS Certificates
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="wfEapTlsInnerAuthType">
+                                    TTLS Inner Authentication Type
+                            <span class="helper" title="This is the inner authentication used by the TTLS module">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                                <select id="wfEapTlsInnerAuthType" class="form-control operationDataKeys" data-key="wfEapTlsInnerAuthType">
+                                    <option value="MSCHAPv2" selected="selected">MSCHAPv2</option>
+                                    <option value="PAP">PAP</option>
+                                    <option value="CHAP">CHAP</option>
+                                    <option value="MSCHAP">MSCHAP</option>
+                                </select>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="wfEncEapOuterIdentity">
+                                    Outer Identity
+                            <span class="helper" title="This key is only relevant to TTLS, PEAP, and EAP-FAST. This allows the user to hide his or her identity.
+                            The user's actual name appears only inside the encrypted tunnel. For example, it could be set to 'anonymous' or 'anon', or
+                            'anon@mycompany.net'.
+                            It can increase security because an attacker can't see the authenticating user's name in the clear">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                                <input id="wfEncEapOuterIdentity" type="text" class="form-control operationDataKeys" data-key="wfEncEapOuterIdentity" placeholder="[ Optional ]">
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-control checkbox">
+                                    <input id="wfEncEapFastUsePac" type="checkbox" class="form-control operationDataKeys" data-key="wfEncEapFastUsePac"/>
+                            <span class="helper" title="The device will use an existing PAC if it's present. Otherwise, the server must present its identity using a certificate">
+                                Use existing PAC for EAP-FAST
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-control checkbox">
+                                    <input id="wfEncEapFastProvisionPac" type="checkbox" class="form-control operationDataKeys" data-key="wfEncEapFastProvisionPac"/>
+                            <span class="helper" title="Used only if EAPFASTUsePAC is enabled. If enabled, allows PAC provisioning. This particular attribute must be enabled
+                            for EAP-FAST PAC usage to succeed, because there is no other way to provision a PAC">
+                                Allow PAC Provisioning
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-control checkbox">
+                                    <input id="wfEncEapFastProvisionPacAnon" type="checkbox" class="form-control operationDataKeys" data-key="wfEncEapFastProvisionPacAnon"/>
+                            <span class="helper" title="If enabled, provisions the device anonymously. Note that there are known man-in-the-middle attacks for anonymous provisioning">
+                                Allow Anonymous PAC Provisioning
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="wfEncEapSimNoOfRands">
+                                    Number of expected RANDs for EAPSIM
+                            <span class="helper" title="Valid values are 2 and 3. Defaults to 3">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                </label>
+                                <input id="wfEncEapSimNoOfRands" type="text" class="form-control operationDataKeys" data-key="wfEncEapSimNoOfRands" placeholder="[ Optional ]">
+                            </div>
+
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wfEncPayloadCertUuid">
+                                Payload Certificate UUID
+                            <span class="helper" title="Operator name being displayed">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <input id="wfEncPayloadCertUuid" type="text" class="form-control operationDataKeys" data-key="wfEncPayloadCertUuid" placeholder="[ Optional ]">
+                        </div>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wfSpRomainEnabled" type="checkbox" class="form-control operationDataKeys" data-key="wfSpRomainEnabled"/>
+                            <span class="helper" title="Indicates if connecting to roaming service providers is allowed">
+                                Enable Service Provider Roaming
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wfDisplayedOperatorName">
+                            Displayed Operator Name
+                            <span class="helper" title="Operator name being displayed">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wfDisplayedOperatorName" type="text" class="form-control operationDataKeys" data-key="wfDisplayedOperatorName" placeholder="[ Optional ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wfHiddenNetwork" type="checkbox" class="form-control operationDataKeys" data-key="wfHiddenNetwork"/>
                             <span class="helper" title="Enable if target network is not open or broadcasting">
                                 Hidden Network
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -337,23 +545,13 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="autoJoin" type="checkbox" class="form-control operationDataKeys" data-key="autoJoin" checked="checked" />
-                            <span class="helper" title="Automatically join this wireless network">
-                                Auto Join
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="proxySetup">
-                            Proxy Setup
+                        <label class="wr-input-label" for="wfProxyType">
+                            Proxy Type
                             <span class="helper" title="Configures proxies to be used with this network">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="proxySetup" class="form-control operationDataKeys" data-key="proxySetup">
+                        <select id="wfProxyType" class="form-control operationDataKeys" data-key="wfProxyType" onchange="showProxyConfiguration(this)">
                             <option value="None" selected="selected">
                                 None
                             </option>
@@ -362,42 +560,79 @@
                         </select>
                     </div>
 
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="securityType">
-                            Security Type
-                            <span class="helper" title="Wireless network encryption to use when connecting">
+                    <div class="panel manual-proxy-config" role="tab" style="display:none;">
+                        <div class="panel">
+                            Proxy Configuration
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wfProxyServer">
+                                Proxy Server
+                            <span class="helper" title="The proxy server's network address">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
-                        </label>
-                        <select id="securityType" class="form-control operationDataKeys" data-key="securityType">
-                            <option value="None" selected="selected">
-                                None
-                            </option>
-                            <option value="WEP">WEP</option>
-                            <option value="WPA / WPA2 Personal">WPA / WPA2 Personal</option>
-                            <option value="WPA2 Personal (iOS 8 or later except Apple TV)">WPA2 Personal (iOS 8 or later except Apple TV)</option>
-                            <option value="Any (Personal)">Any (Personal)</option>
-                            <option value="Dynamic WEP">Dynamic WEP</option>
-                            <option value="WPA / WPA2 Enterprise">WPA / WPA2 Enterprise</option>
-                            <option value="WPA2 Enterprise (iOS 8 or later except Apple TV)">WPA2 Enterprise (iOS 8 or later except Apple TV)</option>
-                            <option value="Any (Enterprise)">Any (Enterprise)</option>
-                        </select>
+                            </label>
+                            <input id="wfProxyServer" type="text" class="form-control operationDataKeys" data-key="wfProxyServer" placeholder="[ Optional ]">
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wfProxyPort">
+                                Proxy Port
+                            <span class="helper" title="The proxy server's port">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <input id="wfProxyPort" type="text" class="form-control operationDataKeys" data-key="wfProxyPort" placeholder="[ Optional ]">
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wfProxyUsername">
+                                Proxy Username
+                            <span class="helper" title="The username used to authenticate to the proxy server">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <input id="wfProxyUsername" type="text" class="form-control operationDataKeys" data-key="wfProxyUsername" placeholder="[ Optional ]">
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wfProxyPassword">
+                                Proxy Password
+                            <span class="helper" title="The password used to authenticate to the proxy server">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <input id="wfProxyPassword" type="password" class="form-control operationDataKeys" data-key="wfProxyPassword" placeholder="[ Optional ]">
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wfProxyPacUrl">
+                                Proxy PAC URL
+                            <span class="helper" title="The URL of the PAC file that defines the proxy configuration">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <input id="wfProxyPacUrl" type="text" class="form-control operationDataKeys" data-key="wfProxyPacUrl" placeholder="[ Optional ]">
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="wfProxyAllowPacFallback" type="checkbox" class="form-control operationDataKeys" data-key="wfProxyAllowPacFallback" checked="checked"/>
+                            <span class="helper" title="If disabled, prevents the device from connecting directly to the destination if the PAC file is unreachable">
+                                Allow Proxy PAC Fallback
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="networkType">
-                            Network Type
-                            <span class="helper" title="Configures network to appear as Legacy or Passpoint">
+                        <label class="wr-input-control checkbox">
+                            <input id="wfAutoJoin" type="checkbox" class="form-control operationDataKeys" data-key="wfAutoJoin" checked="checked" />
+                            <span class="helper" title="Automatically join this wireless network">
+                                Auto Join
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="networkType" class="form-control operationDataKeys" data-key="networkType">
-                            <option value="Standard" selected="selected">
-                                Standard
-                            </option>
-                            <option value="Legacy Hotspot">Legacy Hotspot</option>
-                            <option value="Passpoint">Passpoint</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -477,7 +712,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountPassword" type="text" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]">
+                        <input id="accountPassword" type="password" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -565,7 +800,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calAccountPassword" type="text" class="form-control operationDataKeys" data-key="calAccountPassword" placeholder="[ Optional ]">
+                        <input id="calAccountPassword" type="password" class="form-control operationDataKeys" data-key="calAccountPassword" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -642,7 +877,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="csPassword" type="text" class="form-control operationDataKeys" data-key="csPassword" placeholder="[ Optional ]">
+                        <input id="csPassword" type="password" class="form-control operationDataKeys" data-key="csPassword" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -877,7 +1112,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnAccessPointPassword" type="text" class="form-control operationDataKeys" data-key="apnAccessPointPassword" placeholder="[ Optional ]">
+                        <input id="apnAccessPointPassword" type="password" class="form-control operationDataKeys" data-key="apnAccessPointPassword" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
