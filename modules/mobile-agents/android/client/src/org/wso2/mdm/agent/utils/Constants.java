@@ -26,6 +26,8 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = true;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
+    public static final String GCM_PROJECT_NUMBER = "487975211959";
+    public static final String REG_ID = "reg_id";
 
 	public static final String SERVER_PORT = "9763";
 	public static final String SERVER_PROTOCOL = "http://";
@@ -65,6 +67,7 @@ public class Constants {
 	public static final String ENABLED= "enabled";
 	public static final String LOCAL = "LOCAL";
 	public static final String LOG_FILE = "wso2log.txt";
+    public static final String messageTypeGCM = "gcm";
 
 	/**
 	 * Request codes.
@@ -76,6 +79,7 @@ public class Constants {
 	public static final int UNREGISTER_REQUEST_CODE = 305;
 	public static final int NOTIFICATION_REQUEST_CODE = 306;
 	public static final int DEVICE_INFO_REQUEST_CODE = 307;
+	public static final int GCM_REGISTRATION_ID_SEND_CODE = 308;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -170,6 +174,7 @@ public class Constants {
 		public static final String MEMORY_INFO_EXTERNAL_AVAILABLE = "EXTERNAL_AVAILABLE_MEMORY";
 		public static final String NETWORK_OPERATOR = "OPERATOR";
 		public static final String INFO = "DEVICE_INFO";
+        public static final String GCM_TOKEN = "GCM_TOKEN";
 	}
 
 }
