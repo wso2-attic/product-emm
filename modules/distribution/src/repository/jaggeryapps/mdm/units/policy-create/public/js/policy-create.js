@@ -77,7 +77,7 @@ validateStep["policy-profile"] = function () {
     var validationStatus;
 
     // starting validation process and updating validationStatus
-    if (policy.platform == PlatformType.ANDROID) {
+    if (policy.platform == PlatformType["ANDROID"]) {
         if (configuredFeatures.length == 0) {
             validationStatus = {
                 "error": true,
@@ -201,7 +201,7 @@ validateStep["policy-profile"] = function () {
                 }
             }
         }
-    } else if (policy.platform == PlatformType.IOS) {
+    } else if (policy.platform == PlatformType["IOS"]) {
         if (configuredFeatures.length == 0) {
             validationStatus = {
                 "error": true,

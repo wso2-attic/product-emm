@@ -53,166 +53,166 @@ var operationModule = function () {
         var operationType;
         switch (operationName) {
             case "PASSCODE_POLICY":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'forcePIN': operationData["forcePIN"],
-                        'allowSimple': operationData["allowSimple"],
-                        'requireAlphanumeric': operationData["requireAlphanumeric"],
-                        'minLength': operationData["minLength"],
-                        'minComplexChars': operationData["minComplexChars"],
-                        'maxPINAgeInDays': operationData["maxPINAgeInDays"],
-                        'pinHistory': operationData["pinHistory"],
-                        'maxInactivity': operationData["maxAutoLock"],
-                        'maxGracePeriod': operationData["gracePeriod"],
-                        'maxFailedAttempts': operationData["maxFailedAttempts"]
+                    "operation": {
+                        "forcePIN": operationData["forcePIN"],
+                        "allowSimple": operationData["allowSimple"],
+                        "requireAlphanumeric": operationData["requireAlphanumeric"],
+                        "minLength": operationData["minLength"],
+                        "minComplexChars": operationData["minComplexChars"],
+                        "maxPINAgeInDays": operationData["maxPINAgeInDays"],
+                        "pinHistory": operationData["pinHistory"],
+                        "maxInactivity": operationData["maxAutoLock"],
+                        "maxGracePeriod": operationData["gracePeriod"],
+                        "maxFailedAttempts": operationData["maxFailedAttempts"]
                     }
                 };
                 break;
             case "WIFI_SETTINGS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'ssid': operationData["wfSsid"],
-                        'hiddenNetwork': operationData["wfHiddenNetwork"],
-                        'autoJoin': operationData["wfAutoJoin"],
-                        'proxyType': operationData["wfProxyType"],
-                        'encryptionType': operationData["wfEncryptionType"],
-                        'domainName': operationData["wfDomainName"],
-                        'serviceProviderRoamingEnabled': operationData["wfSpRomainEnabled"],
-                        'displayedOperatorName': operationData["wfDisplayedOperatorName"],
-                        'roamingConsortiumOIs': operationData[""],
-                        'password': operationData["wfEncPassword"],
-                        'clientConfiguration': {
-                            'username': operationData["wfEncEapUsername"],
-                            'acceptEAPTypes': operationData[""],
-                            'userPassword': operationData["wfEncEapUserPassword"],
-                            'oneTimePassword': operationData["wfEncEapOneTimePassword"],
-                            'payloadCertificateAnchorUUID': operationData[""],
-                            'outerIdentity': operationData["wfEncEapOuterIdentity"],
-                            'tlstrustedServerNames': operationData[""],
-                            'tlsallowTrustExceptions': operationData["wfEncEapTlsAllowTrustExceptions"],
-                            'tlscertificateIsRequired': operationData["wfEncEapTlsCertIsRequired"],
-                            'ttlsinnerAuthentication': operationData["wfEapTlsInnerAuthType"],
-                            'eapfastusePAC': operationData["wfEncEapFastUsePac"],
-                            'eapfastprovisionPAC': operationData["wfEncEapFastProvisionPac"],
-                            'eapfastprovisionPACAnonymously': operationData["wfEncEapFastProvisionPacAnon"],
-                            'eapsimnumberOfRANDs': operationData[""]
+                    "operation": {
+                        "ssid": operationData["wfSsid"],
+                        "hiddenNetwork": operationData["wfHiddenNetwork"],
+                        "autoJoin": operationData["wfAutoJoin"],
+                        "proxyType": operationData["wfProxyType"],
+                        "encryptionType": operationData["wfEncryptionType"],
+                        "domainName": operationData["wfDomainName"],
+                        "serviceProviderRoamingEnabled": operationData["wfSpRomainEnabled"],
+                        "displayedOperatorName": operationData["wfDisplayedOperatorName"],
+                        "roamingConsortiumOIs": operationData[""],
+                        "password": operationData["wfEncPassword"],
+                        "clientConfiguration": {
+                            "username": operationData["wfEncEapUsername"],
+                            "acceptEAPTypes": operationData[""],
+                            "userPassword": operationData["wfEncEapUserPassword"],
+                            "oneTimePassword": operationData["wfEncEapOneTimePassword"],
+                            "payloadCertificateAnchorUUID": operationData[""],
+                            "outerIdentity": operationData["wfEncEapOuterIdentity"],
+                            "tlstrustedServerNames": operationData[""],
+                            "tlsallowTrustExceptions": operationData["wfEncEapTlsAllowTrustExceptions"],
+                            "tlscertificateIsRequired": operationData["wfEncEapTlsCertIsRequired"],
+                            "ttlsinnerAuthentication": operationData["wfEapTlsInnerAuthType"],
+                            "eapfastusePAC": operationData["wfEncEapFastUsePac"],
+                            "eapfastprovisionPAC": operationData["wfEncEapFastProvisionPac"],
+                            "eapfastprovisionPACAnonymously": operationData["wfEncEapFastProvisionPacAnon"],
+                            "eapsimnumberOfRANDs": operationData[""]
                         },
-                        'payloadCertificateUUID': operationData["wfEncPayloadCertUuid"],
-                        'proxyServer': operationData["wfProxyServer"],
-                        'proxyPort': operationData["wfProxyPort"],
-                        'proxyUsername': operationData["wfProxyUsername"],
-                        'proxyPassword': operationData["wfProxyPassword"],
-                        'proxyPACURL': operationData["wfProxyPacUrl"],
-                        'proxyPACFallbackAllowed': operationData["wfProxyAllowPacFallback"],
-                        'nairealmNames': operationData[""],
-                        'mccandMNCs': operationData[""]
+                        "payloadCertificateUUID": operationData["wfEncPayloadCertUuid"],
+                        "proxyServer": operationData["wfProxyServer"],
+                        "proxyPort": operationData["wfProxyPort"],
+                        "proxyUsername": operationData["wfProxyUsername"],
+                        "proxyPassword": operationData["wfProxyPassword"],
+                        "proxyPACURL": operationData["wfProxyPacUrl"],
+                        "proxyPACFallbackAllowed": operationData["wfProxyAllowPacFallback"],
+                        "nairealmNames": operationData[""],
+                        "mccandMNCs": operationData[""]
                     }
                 };
                 break;
             case "CONTACTS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'accountDescription': operationData["accountDescription"],
-                        'accountHostname': operationData["accountHostname"],
-                        'accountPort': operationData["accountPort"],
-                        'principalURL': operationData["principalURL"],
-                        'accountUsername': operationData["accountUsername"],
-                        'accountPassword': operationData["accountPassword"],
-                        'useSSL': operationData["useSSL"]
+                    "operation": {
+                        "accountDescription": operationData["accountDescription"],
+                        "accountHostname": operationData["accountHostname"],
+                        "accountPort": operationData["accountPort"],
+                        "principalURL": operationData["principalURL"],
+                        "accountUsername": operationData["accountUsername"],
+                        "accountPassword": operationData["accountPassword"],
+                        "useSSL": operationData["useSSL"]
                     }
                 };
                 break;
             case "CALENDAR":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'accountDescription': operationData["calAccountDescription"],
-                        'hostName': operationData["calAccountHostname"],
-                        'port': operationData["calAccountPort"],
-                        'principalURL': operationData["calPrincipalURL"],
-                        'username': operationData["calAccountUsername"],
-                        'password': operationData["calAccountPassword"],
-                        'useSSL': operationData["calUseSSL"]
+                    "operation": {
+                        "accountDescription": operationData["calAccountDescription"],
+                        "hostName": operationData["calAccountHostname"],
+                        "port": operationData["calAccountPort"],
+                        "principalURL": operationData["calPrincipalURL"],
+                        "username": operationData["calAccountUsername"],
+                        "password": operationData["calAccountPassword"],
+                        "useSSL": operationData["calUseSSL"]
                     }
                 };
                 break;
             case "SUBSCRIBED_CALENDARS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'accountDescription': operationData["csDescription"],
-                        'hostName': operationData["csURL"],
-                        'username': operationData["csUsername"],
-                        'password': operationData["csPassword"],
-                        'useSSL': operationData["csUseSSL"]
+                    "operation": {
+                        "accountDescription": operationData["csDescription"],
+                        "hostName": operationData["csURL"],
+                        "username": operationData["csUsername"],
+                        "password": operationData["csPassword"],
+                        "useSSL": operationData["csUseSSL"]
                     }
                 };
                 break;
             case "SCEP_SETTINGS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'scepURL': operationData["scepURL"],
-                        'scepName': operationData["scepName"],
-                        'scepSubject': operationData["scepSubject"],
-                        'scepSubjectAlternativeNameType': operationData["scepSubjectAlternativeNameType"],
-                        'scepSubjectAlternativeNameValue': operationData["scepSubjectAlternativeNameValue"],
-                        'scepNTprincipalName': operationData["scepNTprincipalName"],
-                        'scepRetries': operationData["scepRetries"],
-                        'scepRetryDelay': operationData["scepRetryDelay"],
-                        'scepChallenge': operationData["scepChallenge"],
-                        'scepKeySize': operationData["scepKeySize"],
-                        'scepUsedAsDS': operationData["scepUsedAsDS"],
-                        'scepUseForKE': operationData["scepUseForKE"],
-                        'scepFingerprint': operationData["scepFingerprint"]
+                    "operation": {
+                        "scepURL": operationData["scepURL"],
+                        "scepName": operationData["scepName"],
+                        "scepSubject": operationData["scepSubject"],
+                        "scepSubjectAlternativeNameType": operationData["scepSubjectAlternativeNameType"],
+                        "scepSubjectAlternativeNameValue": operationData["scepSubjectAlternativeNameValue"],
+                        "scepNTprincipalName": operationData["scepNTprincipalName"],
+                        "scepRetries": operationData["scepRetries"],
+                        "scepRetryDelay": operationData["scepRetryDelay"],
+                        "scepChallenge": operationData["scepChallenge"],
+                        "scepKeySize": operationData["scepKeySize"],
+                        "scepUsedAsDS": operationData["scepUsedAsDS"],
+                        "scepUseForKE": operationData["scepUseForKE"],
+                        "scepFingerprint": operationData["scepFingerprint"]
                     }
                 };
                 break;
             case "APN_SETTINGS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'apn': operationData["apnAccessPointName"],
-                        'username': operationData["apnAccessPointUsername"],
-                        'password': operationData["apnAccessPointPassword"],
-                        'proxyServer': operationData["apnProxyServer"],
-                        'proxyPort': operationData["apnProxyPort"]
+                    "operation": {
+                        "apn": operationData["apnAccessPointName"],
+                        "username": operationData["apnAccessPointUsername"],
+                        "password": operationData["apnAccessPointPassword"],
+                        "proxyServer": operationData["apnProxyServer"],
+                        "proxyPort": operationData["apnProxyPort"]
                     }
                 };
                 break;
             case "WEB_CLIPS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'label': operationData["wcLabel"],
-                        'url': operationData["wcURL"],
-                        'icon': "",
-                        'isRemovable': operationData["wcRemovable"],
-                        'isPrecomposed': operationData["wcPrecomposedIcon"],
-                        'isFullScreen': operationData["wcFullScreen"]
+                    "operation": {
+                        "label": operationData["wcLabel"],
+                        "url": operationData["wcURL"],
+                        "icon": operationData[""],
+                        "isRemovable": operationData["wcRemovable"],
+                        "isPrecomposed": operationData["wcPrecomposedIcon"],
+                        "isFullScreen": operationData["wcFullScreen"]
                     }
                 };
                 break;
             case "EMAIL_SETTINGS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
-                    'operation': {
-                        'emAccountDescription': operationData["emAccountDescription"],
-                        'emAccountType': operationData["emAccountType"],
-                        'emUserDisplayName': operationData["emAddress"],
-                        'wcPrecomposedIcon': operationData["emAllowMovingMessages"],
-                        'emAllowAddressSyncing': operationData["emAllowAddressSyncing"],
-                        'emUseInMail': operationData["emUseInMail"],
-                        'emEnableMime': operationData["emEnableMime"]
+                    "operation": {
+                        "emAccountDescription": operationData["emAccountDescription"],
+                        "emAccountType": operationData["emAccountType"],
+                        "emUserDisplayName": operationData["emAddress"],
+                        "wcPrecomposedIcon": operationData["emAllowMovingMessages"],
+                        "emAllowAddressSyncing": operationData["emAllowAddressSyncing"],
+                        "emUseInMail": operationData["emUseInMail"],
+                        "emEnableMime": operationData["emEnableMime"]
                     }
                 };
                 break;
             default:
                 // If the operation is neither of above, it is a command operation
-                operationType = "command";
+                operationType = OperationType["COMMAND"];
                 // Operation payload of a command operation is simply an array of device IDs
                 payload = deviceList;
                 break;
@@ -228,7 +228,7 @@ var operationModule = function () {
         var operationType;
         switch (operationName) {
             case "CAMERA":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "enabled" : operationData["enableCamera"]
@@ -236,7 +236,7 @@ var operationModule = function () {
                 };
                 break;
             case "CHANGE_LOCK_CODE":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "lockCode" : operationData["lockCode"]
@@ -244,7 +244,7 @@ var operationModule = function () {
                 };
                 break;
             case "ENCRYPT_STORAGE":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "encrypted" : operationData["enableEncryption"]
@@ -252,7 +252,7 @@ var operationModule = function () {
                 };
                 break;
             case "NOTIFICATION":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "message" : operationData["message"]
@@ -260,7 +260,7 @@ var operationModule = function () {
                 };
                 break;
             case "WEBCLIP":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "identity": operationData["url"],
@@ -269,7 +269,7 @@ var operationModule = function () {
                 };
                 break;
             case "INSTALL_APPLICATION":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "appIdentifier": operationData["packageName"],
@@ -279,7 +279,7 @@ var operationModule = function () {
                 };
                 break;
             case "UNINSTALL_APPLICATION":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "appIdentifier": operationData["packageName"]
@@ -287,7 +287,7 @@ var operationModule = function () {
                 };
                 break;
             case "BLACKLIST_APPLICATIONS":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "appIdentifier": operationData["packageNames"]
@@ -295,7 +295,7 @@ var operationModule = function () {
                 };
                 break;
             case "PASSCODE_POLICY":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "allowSimple": operationData["allowSimple"],
@@ -309,7 +309,7 @@ var operationModule = function () {
                 };
                 break;
             case "WIFI":
-                operationType = OperationType.PROFILE;
+                operationType = OperationType["PROFILE"];
                 payload = {
                     "operation": {
                         "ssid": operationData["ssid"],
@@ -319,7 +319,7 @@ var operationModule = function () {
                 break;
             default:
                 // If the operation is neither of above, it is a command operation
-                operationType = OperationType.COMMAND;
+                operationType = OperationType["COMMAND"];
                 // Operation payload of a command operation is simply an array of device IDs
                 payload = deviceList;
                 break;
@@ -458,10 +458,10 @@ var operationModule = function () {
             }
         );
         switch (deviceType) {
-            case PlatformType.ANDROID:
+            case PlatformType["ANDROID"]:
                 payload = privateMethods.generateAndroidOperationPayload(operationCode, operationData, deviceList);
                 break;
-            case PlatformType.IOS:
+            case PlatformType["IOS"]:
                 payload = privateMethods.generateIOSOperationPayload(operationCode, operationData, deviceList);
                 break;
             default:
