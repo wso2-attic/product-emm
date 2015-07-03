@@ -145,14 +145,14 @@ public class DeviceMgtService {
         deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
         boolean result;
         try {
-            AndroidAPIUtils.getApplicationManagerService()
-                    .updateApplicationListInstallInDevice(deviceIdentifier, applications);
+            AndroidAPIUtils.getDeviceManagementService()
+                    .updateInstalledApplicationListOfDevice(deviceIdentifier, applications);
 
             Response.status(Response.Status.ACCEPTED);
             responseMessage.setResponseMessage("Device information has modified successfully.");
 
             return responseMessage;
-        } catch (ApplicationManagementException e) {
+        } catch (DeviceManagementException e) {
             String msg = "Error occurred while modifying the application list.";
             log.error(msg, e);
             throw new AndroidAgentException(msg, e);

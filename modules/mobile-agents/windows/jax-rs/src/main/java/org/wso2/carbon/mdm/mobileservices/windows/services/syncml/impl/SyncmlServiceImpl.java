@@ -165,8 +165,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 						generateDevice(DeviceManagementConstants.MobileDeviceTypes.
 						MOBILE_DEVICE_TYPE_WINDOWS, devID, osVersion, imsi, imei, devMan, devMod);
 					try {
-						SyncmlUtils.getDeviceManagementService()
-						                     .enrollDevice(generatedDevice);
+						SyncmlUtils.getDeviceManagementService().enrollDevice(generatedDevice);
 					} catch (DeviceManagementException e) {
 						String msg = "Exception while getting Device Management Service.";
 						log.error(msg, e);
