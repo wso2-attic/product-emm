@@ -27,6 +27,7 @@ import org.wso2.mdm.agent.beans.Device;
 import org.wso2.mdm.agent.factory.DeviceStateFactory;
 import org.wso2.mdm.agent.interfaces.DeviceState;
 import org.wso2.mdm.agent.utils.Constants;
+import org.wso2.mdm.agent.utils.Preference;
 
 import android.content.Context;
 import android.util.Log;
@@ -113,6 +114,7 @@ public class BuildDeviceInfoPayload {
 		DeviceState phoneState = DeviceStateFactory.getDeviceState(context.getApplicationContext(),
 				deviceInfo.getSdkVersion());
 		GPSTracker gps = new GPSTracker(context.getApplicationContext());
+        String registrationId = Preference.getString(context.getApplicationContext(), Constants.REG_ID);
 
 		device = new Device();
 
@@ -191,6 +193,13 @@ public class BuildDeviceInfoPayload {
 		property.setName(Constants.Device.MEMORY_INFO_EXTERNAL_AVAILABLE);
 		property.setValue(String.valueOf(phoneState.getAvailableExternalMemorySize()));
 		properties.add(property);
+
+		if (registrationId != null) {
+			property = new Device.Property();
+			property.setName(Constants.Device.GCM_TOKEN);
+			property.setValue(registrationId);
+			properties.add(property);
+		}
 
 		property = new Device.Property();
 		property.setName(Constants.Device.NETWORK_OPERATOR);

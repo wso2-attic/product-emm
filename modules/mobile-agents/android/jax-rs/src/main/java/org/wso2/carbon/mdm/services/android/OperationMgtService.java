@@ -822,8 +822,7 @@ public class OperationMgtService {
         }
     }
 
-    public void updateOperations(String deviceId,
-            List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
+    public void updateOperations(String deviceId, List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
             throws OperationManagementException {
 
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {

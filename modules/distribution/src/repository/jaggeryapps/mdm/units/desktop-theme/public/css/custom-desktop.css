@@ -215,7 +215,7 @@ a.ast-type-item:hover {
 }
 
 .wr-btn-grp {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .wr-btn-grp .wr-btn {
@@ -736,7 +736,7 @@ span.ico-sort-desc {
 /* login page styles */
 
 .wr-login {
-    padding-top:50px;
+    padding-top:100px;
 }
 
 /* form styles */
@@ -1449,7 +1449,7 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-form {
-    margin: 30px 0;
+    margin: 20px 0;
 }
 
 .wr-form button {
@@ -1490,7 +1490,7 @@ a.wr-side-panel-toggle-btn.selected {
     opacity: 0;
 }
 .wr-input-control.switch .helper {
-    padding-left: 60px;
+    padding-left: 45px;
     position: relative;
 }
 
@@ -1825,6 +1825,7 @@ a.wr-side-panel-toggle-btn.selected {
 
 .footer a {
     text-decoration: none;
+    color: #fff;
 }
 
 .footer .fw {
@@ -1995,13 +1996,9 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-hidden-operations-content .panel-body {
-    margin-right: 5px;
-    margin-bottom: 5px;
-    margin-left: 5px;
-    border-right: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
-    border-left: 1px solid #e8e8e8;
-    padding: 20px;
+    margin: 5px;
+    /*border: 1px solid #e8e8e8;*/
+    padding: 20px 20px 30px;
     background: #ffffff;
 }
 
@@ -2017,10 +2014,17 @@ a.wr-side-panel-toggle-btn.selected {
     margin-left: 5px;
     margin-top: 5px;
     margin-right: 5px;
-    border: 1px solid #e8e8e8;
-    padding: 5px;
+    /*border: 1px solid #e8e8e8;*/
+    padding: 20px;
     background: #ffffff;
     color: #555;
+}
+
+.wr-hidden-operations-content .panel-title-description {
+    padding-right: 20px;
+    background: #ffffff;
+    color: #555;
+    line-height: 140%;
 }
 
 .wr-hidden-operations-content .panel-title a {
@@ -2417,10 +2421,6 @@ a.cu-btn-inner.inverse:hover {
  * multi-view
  */
 
-.multi-view {
-    margin: 40px 0;
-}
-
 .multi-view .nav ul {
     list-style: none;
     padding: 0;
@@ -2534,14 +2534,25 @@ a.cu-btn-inner.inverse:hover {
     font-size: 22px;
 }
 
-.multi-view .content .panel-heading .panel-title a {
-    padding: 5px 5px 1px 10px;
+a.multi-view {
+    padding-left: 5px;
+    color: #9F9F9F;
+    text-decoration: none;
     float: right;
-    font-size: 18px;
+    font-size: 15px;
 }
 
-.multi-view .content .panel-heading .panel-title a:hover {
-    background: #e4e4e4;
+a.multi-view.disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+a:hover.multi-view.add.enabled {
+    color: #A7E43A;
+}
+
+a:hover.multi-view.remove.enabled {
+    color: #F4A6B0;
 }
 
 .multi-view .content .panel-heading .panel-title .wr-input-control.switch {
@@ -2564,5 +2575,15 @@ a.cu-btn-inner.inverse:hover {
 
 .multi-view .content .panel-heading .panel-title .wr-input-control.switch input[type="checkbox"]:checked + .helper + .text:after {
     content: "Enabled";
+}
+
+ul.listing, ul.listing li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.listing li.grouped-input ul.disabled {
+    opacity: 0.3;
 }
 
