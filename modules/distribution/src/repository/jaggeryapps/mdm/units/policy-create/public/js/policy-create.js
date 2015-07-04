@@ -20,11 +20,12 @@ var validateStep = {};
 var stepForwardFrom = {};
 var stepBackFrom = {};
 var policy = {};
-var configuredFeatures = [];
+var configuredOperations = [];
 
-var PlatformType = {
-    ANDROID: "android",
-    IOS: "ios"
+// Constants to define platform types available
+var platformTypeConstants = {
+    "ANDROID": "android",
+    "IOS": "ios"
 };
 
 stepForwardFrom["policy-platform"] = function (actionButton) {
@@ -77,15 +78,15 @@ validateStep["policy-profile"] = function () {
     var validationStatus;
 
     // starting validation process and updating validationStatus
-    if (policy.platform == PlatformType["ANDROID"]) {
-        if (configuredFeatures.length == 0) {
+    if (policy["platform"] == platformTypeConstants["ANDROID"]) {
+        if (configuredOperations.length == 0) {
             validationStatus = {
                 "error": true,
                 "mainErrorMsg": "You cannot continue. Zero configured features."
             };
             validationStatusArray.push(validationStatus);
         } else {
-            if ($.inArray("PASSCODE_POLICY", configuredFeatures) != -1) {
+            if ($.inArray("PASSCODE_POLICY", configuredOperations) != -1) {
                 // if PASSCODE_POLICY is configured
                 var maxPasscodeAgeInDays = $("input#maxPINAgeInDays").val();
                 var passcodeHistory = $("input#pinHistory").val();
@@ -159,7 +160,7 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
-            if ($.inArray("CAMERA", configuredFeatures) != -1) {
+            if ($.inArray("CAMERA", configuredOperations) != -1) {
                 // if CAMERA is configured
                 validationStatus = {
                     "error": false,
@@ -167,7 +168,7 @@ validateStep["policy-profile"] = function () {
                 };
                 validationStatusArray.push(validationStatus);
             }
-            if ($.inArray("ENCRYPT_STORAGE", configuredFeatures) != -1) {
+            if ($.inArray("ENCRYPT_STORAGE", configuredOperations) != -1) {
                 // if ENCRYPT_STORAGE is configured
                 validationStatus = {
                     "error": false,
@@ -175,7 +176,7 @@ validateStep["policy-profile"] = function () {
                 };
                 validationStatusArray.push(validationStatus);
             }
-            if ($.inArray("WIFI", configuredFeatures) != -1) {
+            if ($.inArray("WIFI", configuredOperations) != -1) {
                 // if WIFI is configured
                 var ssid = $("input#ssid").val();
                 if (!ssid) {
@@ -201,15 +202,15 @@ validateStep["policy-profile"] = function () {
                 }
             }
         }
-    } else if (policy.platform == PlatformType["IOS"]) {
-        if (configuredFeatures.length == 0) {
+    } else if (policy["platform"] == platformTypeConstants["IOS"]) {
+        if (configuredOperations.length == 0) {
             validationStatus = {
                 "error": true,
                 "mainErrorMsg": "You cannot continue. Zero configured features."
             };
             validationStatusArray.push(validationStatus);
         } else {
-            if ($.inArray("PASSCODE_POLICY", configuredFeatures) != -1) {
+            if ($.inArray("PASSCODE_POLICY", configuredOperations) != -1) {
                 // if PASSCODE_POLICY is configured
                 maxPasscodeAgeInDays = $("input#maxPINAgeInDays").val();
                 passcodeHistory = $("input#pinHistory").val();
@@ -283,7 +284,7 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
-            if ($.inArray("WIFI_SETTINGS", configuredFeatures) != -1) {
+            if ($.inArray("WIFI_SETTINGS", configuredOperations) != -1) {
                 // if WIFI is configured
                 ssid = $("input#ssid").val();
                 if (!ssid) {
@@ -308,7 +309,7 @@ validateStep["policy-profile"] = function () {
                     validationStatusArray.push(validationStatus);
                 }
             }
-            if ($.inArray("CONTACTS", configuredFeatures) != -1) {
+            if ($.inArray("CONTACTS", configuredOperations) != -1) {
                 /* Validating hostname of the CardDAV server */
                 var accountHostname = $("input#accountHostname").val();
                 if (!accountHostname) {
@@ -364,7 +365,7 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
-            if ($.inArray("CALENDAR", configuredFeatures) != -1) {
+            if ($.inArray("CALENDAR", configuredOperations) != -1) {
                 /* Validating hostname of the CardDAV server */
                 var calAccountHostname = $("input#calAccountHostname").val();
                 if (!calAccountHostname) {
@@ -425,7 +426,7 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
-            if ($.inArray("SUBSCRIBED_CALENDARS", configuredFeatures) != -1) {
+            if ($.inArray("SUBSCRIBED_CALENDARS", configuredOperations) != -1) {
                 /* Validating hostname of the CardDAV server */
                 var csURL = $("input#csURL").val();
                 if (!csURL) {
@@ -450,7 +451,7 @@ validateStep["policy-profile"] = function () {
                     validationStatusArray.push(validationStatus);
                 }
             }
-            if ($.inArray("APN_SETTINGS", configuredFeatures) != -1) {
+            if ($.inArray("APN_SETTINGS", configuredOperations) != -1) {
                 /* Validating Access Point Name */
                 var apnAccessPointName = $("input#apnAccessPointName").val();
                 if (!apnAccessPointName) {
@@ -468,7 +469,7 @@ validateStep["policy-profile"] = function () {
                     validationStatusArray.push(validationStatus);
                 }
             }
-            if ($.inArray("WEB_CLIPS", configuredFeatures) != -1) {
+            if ($.inArray("WEB_CLIPS", configuredOperations) != -1) {
                 /* Validating hostname of the CardDAV server */
                 var wcLabel = $("input#wcLabel").val();
                 if (!wcLabel) {
@@ -509,7 +510,7 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
-            if ($.inArray("SCEP_SETTINGS", configuredFeatures) != -1) {
+            if ($.inArray("SCEP_SETTINGS", configuredOperations) != -1) {
                 /* Validating hostname of the CardDAV server */
                 var scepURL = $("input#scepURL").val();
                 if (!scepURL) {
@@ -534,7 +535,7 @@ validateStep["policy-profile"] = function () {
                     validationStatusArray.push(validationStatus);
                 }
             }
-            if ($.inArray("EMAIL_SETTINGS", configuredFeatures) != -1) {
+            if ($.inArray("EMAIL_SETTINGS", configuredOperations) != -1) {
                 /* Validating Access Point Name */
                 var emAccountDescription = $("input#emAccountDescription").val();
                 if (!emAccountDescription) {
@@ -603,14 +604,14 @@ validateStep["policy-profile"] = function () {
 };
 
 stepForwardFrom["policy-profile"] = function () {
-    policy["profile"] = operationModule.generateProfile(policy["platform"], configuredFeatures);
+    policy["profile"] = operationModule.generateProfile(policy["platform"], configuredOperations);
     // updating next-page wizard title with selected platform
     $("#policy-criteria-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
 };
 
 stepBackFrom["policy-profile"] = function () {
-    // reinitialize configuredFeatures
-    configuredFeatures = [];
+    // reinitialize configuredOperations
+    configuredOperations = [];
     // clearing already-loaded platform specific hidden-operations html content from the relevant div
     // so that, the wrong content would not be shown at the first glance, in case
     // the user selects a different platform
@@ -798,18 +799,18 @@ $(document).ready(function () {
         var operationDataWrapper = $(this).data("target");
         // prevents event bubbling by figuring out what element it's being called from.
         if (event.target.tagName == "INPUT") {
-            var zeroConfiguredFeaturesErrorMsg = "#policy-profile-main-error-msg";
+            var zeroConfiguredOperationsErrorMsg = "#policy-profile-main-error-msg";
             if (!$(this).hasClass("collapsed")) {
-                configuredFeatures.push(operationCode);
+                configuredOperations.push(operationCode);
                 // when a feature is enabled, if "zero-configured-features" msg is available, hide that.
-                if (!$(zeroConfiguredFeaturesErrorMsg).hasClass("hidden")) {
-                    $(zeroConfiguredFeaturesErrorMsg).addClass("hidden");
+                if (!$(zeroConfiguredOperationsErrorMsg).hasClass("hidden")) {
+                    $(zeroConfiguredOperationsErrorMsg).addClass("hidden");
                 }
             } else {
                 //splicing the array if operation is present.
-                var index = $.inArray(operationCode, configuredFeatures);
+                var index = $.inArray(operationCode, configuredOperations);
                 if (index != -1) {
-                    configuredFeatures.splice(index, 1);
+                    configuredOperations.splice(index, 1);
                 }
                 // when a feature is disabled, clearing all its current error or success states
                 var subErrorMsgWrapper = "#" + operation + "-feature-error-msg";

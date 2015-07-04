@@ -20,18 +20,24 @@ var operationModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
-    /* Enum to define operation types available */
-    var OperationType = {
-        PROFILE: "profile",
-        CONFIG: "config",
-        COMMAND: "command"
+    // Constants to define platform types available
+    var platformTypeConstants = {
+        "ANDROID": "android",
+        "IOS": "ios"
+    };
+
+    // Constants to define operation types available
+    var operationTypeConstants = {
+        "PROFILE": "profile",
+        "CONFIG": "config",
+        "COMMAND": "command"
     };
 
     if (Object.freeze) {
-        Object.freeze(OperationType);
+        Object.freeze(operationTypeConstants);
     }
 
-    publicMethods.getIOSServiceEndpoint = function (operationName) {
+    publicMethods.getIOSServiceEndpoint = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "lock",
             "ALARM": "alarm",
@@ -45,15 +51,15 @@ var operationModule = function () {
             "REMOVE_APPLICATION": "removeapplication",
             "ENTERPRISE_WIPE": "enterprisewipe"
         };
-        return "/ios/operation/" + featureMap[operationName];
+        return "/ios/operation/" + featureMap[operationCode];
     };
 
-    privateMethods.generateIOSOperationPayload = function (operationName, operationData, deviceList) {
+    privateMethods.generateIOSOperationPayload = function (operationCode, operationData, deviceList) {
         var payload;
         var operationType;
-        switch (operationName) {
+        switch (operationCode) {
             case "PASSCODE_POLICY":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "forcePIN": operationData["forcePIN"],
@@ -70,7 +76,7 @@ var operationModule = function () {
                 };
                 break;
             case "WIFI_SETTINGS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "ssid": operationData["wfSsid"],
@@ -112,7 +118,7 @@ var operationModule = function () {
                 };
                 break;
             case "CONTACTS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "accountDescription": operationData["accountDescription"],
@@ -126,7 +132,7 @@ var operationModule = function () {
                 };
                 break;
             case "CALENDAR":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "accountDescription": operationData["calAccountDescription"],
@@ -140,7 +146,7 @@ var operationModule = function () {
                 };
                 break;
             case "SUBSCRIBED_CALENDARS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "accountDescription": operationData["csDescription"],
@@ -152,7 +158,7 @@ var operationModule = function () {
                 };
                 break;
             case "SCEP_SETTINGS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "scepURL": operationData["scepURL"],
@@ -172,7 +178,7 @@ var operationModule = function () {
                 };
                 break;
             case "APN_SETTINGS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "apn": operationData["apnAccessPointName"],
@@ -184,7 +190,7 @@ var operationModule = function () {
                 };
                 break;
             case "WEB_CLIPS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "label": operationData["wcLabel"],
@@ -197,7 +203,7 @@ var operationModule = function () {
                 };
                 break;
             case "EMAIL_SETTINGS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "emAccountDescription": operationData["emAccountDescription"],
@@ -212,23 +218,24 @@ var operationModule = function () {
                 break;
             default:
                 // If the operation is neither of above, it is a command operation
-                operationType = OperationType["COMMAND"];
+                operationType = operationTypeConstants["COMMAND"];
                 // Operation payload of a command operation is simply an array of device IDs
                 payload = deviceList;
-                break;
         }
-        if (operationType == OperationType.PROFILE && deviceList) {
+
+        if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
             payload["deviceIDs"] = deviceList;
         }
+
         return payload;
     };
 
-    privateMethods.generateAndroidOperationPayload = function (operationName, operationData, deviceList) {
+    privateMethods.generateAndroidOperationPayload = function (operationCode, operationData, deviceList) {
         var payload;
         var operationType;
-        switch (operationName) {
+        switch (operationCode) {
             case "CAMERA":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "enabled" : operationData["enableCamera"]
@@ -236,7 +243,7 @@ var operationModule = function () {
                 };
                 break;
             case "CHANGE_LOCK_CODE":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "lockCode" : operationData["lockCode"]
@@ -244,7 +251,7 @@ var operationModule = function () {
                 };
                 break;
             case "ENCRYPT_STORAGE":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "encrypted" : operationData["enableEncryption"]
@@ -252,7 +259,7 @@ var operationModule = function () {
                 };
                 break;
             case "NOTIFICATION":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "message" : operationData["message"]
@@ -260,7 +267,7 @@ var operationModule = function () {
                 };
                 break;
             case "WEBCLIP":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "identity": operationData["url"],
@@ -269,7 +276,7 @@ var operationModule = function () {
                 };
                 break;
             case "INSTALL_APPLICATION":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "appIdentifier": operationData["packageName"],
@@ -279,7 +286,7 @@ var operationModule = function () {
                 };
                 break;
             case "UNINSTALL_APPLICATION":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "appIdentifier": operationData["packageName"]
@@ -287,7 +294,7 @@ var operationModule = function () {
                 };
                 break;
             case "BLACKLIST_APPLICATIONS":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "appIdentifier": operationData["packageNames"]
@@ -295,7 +302,7 @@ var operationModule = function () {
                 };
                 break;
             case "PASSCODE_POLICY":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "allowSimple": operationData["allowSimple"],
@@ -309,7 +316,7 @@ var operationModule = function () {
                 };
                 break;
             case "WIFI":
-                operationType = OperationType["PROFILE"];
+                operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "ssid": operationData["ssid"],
@@ -319,19 +326,19 @@ var operationModule = function () {
                 break;
             default:
                 // If the operation is neither of above, it is a command operation
-                operationType = OperationType["COMMAND"];
+                operationType = operationTypeConstants["COMMAND"];
                 // Operation payload of a command operation is simply an array of device IDs
                 payload = deviceList;
-                break;
         }
 
-        if (operationType == "profile" && deviceList) {
+        if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
             payload["deviceIDs"] = deviceList;
         }
+
         return payload;
     };
 
-    publicMethods.getAndroidServiceEndpoint = function (operationName) {
+    publicMethods.getAndroidServiceEndpoint = function (operationCode) {
         var featureMap = {
             "WIFI": "wifi",
             "CAMERA": "camera",
@@ -352,15 +359,15 @@ var operationModule = function () {
             "ENTERPRISE_WIPE": "enterprise-wipe",
             "WIPE_DATA": "wipe-data"
         };
-        return "/mdm-android-agent/operation/" + featureMap[operationName];
+        return "/mdm-android-agent/operation/" + featureMap[operationCode];
     };
 
     /**
      * Get the icon for the featureCode
-     * @param featureCode
+     * @param operationCode
      * @returns icon class
      */
-    publicMethods.getAndroidIconForFeature = function (featureCode) {
+    publicMethods.getAndroidIconForFeature = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "fw-lock",
             "DEVICE_LOCATION": "fw-map-location",
@@ -372,56 +379,56 @@ var operationModule = function () {
             "NOTIFICATION": "fw-message",
             "CHANGE_LOCK_CODE": "fw-padlock"
         };
-        return featureMap[featureCode];
+        return featureMap[operationCode];
     };
 
     /**
      * Get the icon for the featureCode
-     * @param featureCode
+     * @param operationCode
      * @returns icon class
      */
-    publicMethods.getIOSIconForFeature = function (featureCode) {
+    publicMethods.getIOSIconForFeature = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "fw-lock",
             "LOCATION": "fw-map-location",
             "ENTERPRISE_WIPE": "fw-clean",
             "ALARM": "fw-dial-up"
         };
-        return featureMap[featureCode];
+        return featureMap[operationCode];
     };
 
-    privateMethods.createTemperatureControllerPayload = function (operationName, operationData, devices) {
+    privateMethods.createTemperatureControllerPayload = function (operationCode, operationData, deviceList) {
         var payload;
         var operationType;
-        if (operationName == "BUZZER") {
-            operationType = "profile";
+        if (operationCode == "BUZZER") {
+            operationType = operationTypeConstants["PROFILE"];
             payload = {
                 "operation": {
                     "enabled" : operationData["enableBuzzer"]
                 }
             };
         } else {
-            operationType = "command";
-            payload = devices;
+            operationType = operationTypeConstants["COMMAND"];
+            payload = deviceList;
         }
-        if (operationType == "profile" && devices) {
-            payload["deviceIDs"] = devices;
+        if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
+            payload["deviceIDs"] = deviceList;
         }
         return payload;
     };
 
-    publicMethods.getTemperatureControllerServiceEndpoint = function (operationName) {
+    publicMethods.getTemperatureControllerServiceEndpoint = function (operationCode) {
         var featureMap = {
             "BUZZER": "buzzer"
         };
-        return "/temp-controller-agent/operations/" + featureMap[operationName];
+        return "/temp-controller-agent/operations/" + featureMap[operationCode];
     };
 
-    publicMethods.getTemperatureControllerIconForFeature = function (featureCode) {
+    publicMethods.getTemperatureControllerIconForFeature = function (operationCode) {
         var featureMap = {
             "BUZZER": "fw-dial-up"
         };
-        return featureMap[featureCode];
+        return featureMap[operationCode];
     };
 
     /**
@@ -436,12 +443,14 @@ var operationModule = function () {
         );
     };
 
-    /*
-     @DeviceType = Device Type of the profile
-     @operationCode = Feature Codes to generate the profile from
-     @DeviceList = Optional device list to include in payload body for operations
+    /**
+     *
+     * @param platformType Platform Type of the profile
+     * @param operationCode Operation Codes to generate the profile from
+     * @param deviceList Optional device list to include in payload body for operations
+     * @returns {*}
      */
-    publicMethods.generatePayload = function (deviceType, operationCode, deviceList) {
+    publicMethods.generatePayload = function (platformType, operationCode, deviceList) {
         var payload;
         var operationData = {};
         $(".operation-data").filterByData("operation-code", operationCode).find(".operationDataKeys").each(
@@ -457,31 +466,30 @@ var operationModule = function () {
                 operationData[key] = value;
             }
         );
-        switch (deviceType) {
-            case PlatformType["ANDROID"]:
+        switch (platformType) {
+            case platformTypeConstants["ANDROID"]:
                 payload = privateMethods.generateAndroidOperationPayload(operationCode, operationData, deviceList);
                 break;
-            case PlatformType["IOS"]:
+            case platformTypeConstants["IOS"]:
                 payload = privateMethods.generateIOSOperationPayload(operationCode, operationData, deviceList);
-                break;
-            default:
-                //handle default case properly
-                payload = privateMethods.generateAndroidOperationPayload(operationCode, operationData, deviceList);
                 break;
         }
         return payload;
     };
 
-    /*
-     @DeviceType = Device Type of the profile
-     @FeatureCodes = Feature Codes to generate the profile from
+    /**
+     * generateProfile method is only used for policy-creation UIs
+     *
+     * @param platformType Platform Type of the profile
+     * @param operationCodes Operation codes to generate the profile from
+     * @returns {{}}
      */
-    publicMethods.generateProfile = function (deviceType, featureCodes) {
+    publicMethods.generateProfile = function (platformType, operationCodes) {
         var generatedProfile = {};
-        for (var i = 0; i < featureCodes.length; ++i) {
-            var featureCode = featureCodes[i];
-            var payload = publicMethods.generatePayload(deviceType, featureCode);
-            generatedProfile[featureCode] = payload["operation"];
+        for (var i = 0; i < operationCodes.length; ++i) {
+            var operationCode = operationCodes[i];
+            var payload = publicMethods.generatePayload(platformType, operationCode, null);
+            generatedProfile[operationCode] = payload["operation"];
         }
         return generatedProfile;
     };
