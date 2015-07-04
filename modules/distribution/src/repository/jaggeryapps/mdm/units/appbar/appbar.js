@@ -58,8 +58,8 @@ function onRequest(context) {
 
     // following context.link value comes here based on the value passed at the point
     // where units are attached to a page zone.
-    // eg: {{unit "appbar" link="users" title="User Management"}}
-    context["currentActions"] = links[context["link"]];
+    // eg: {{unit "appbar" pageLink="users" title="User Management"}}
+    context["currentActions"] = links[context["pageLink"]];
 
     return context;
 }
