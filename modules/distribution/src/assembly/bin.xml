@@ -616,7 +616,6 @@
         </file>
 
         <!-- Copying H2 database related files corresponding to default Device management repository schema -->
-
         <file>
             <source>
                 target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2DM_DB.h2.db
@@ -624,14 +623,26 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/database</outputDirectory>
             <destName>WSO2DM_DB.h2.db</destName>
             <fileMode>644</fileMode>
-        </file>
-
-        
+        </file>        
         <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/carbon.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
         </file>
+
+	<!-- Copying identity-mgt.properties -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/identity-mgt.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+            <filtered>true</filtered>
+        </file>
+
+	<!-- Copying email-admin-config.xml --> 
+        <!--file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/email/email-admin-config.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/email</outputDirectory>
+            <filtered>true</filtered>
+        </file-->
 
         <!--email broker config-->
         <file>

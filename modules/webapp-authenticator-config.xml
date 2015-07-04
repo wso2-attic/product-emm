@@ -1,0 +1,8 @@
+<WebappAuthenticatorConfig>
+	<Authenticators>
+		<Authenticator>
+			<Name>OAuth</Name>
+			<ClassName>org.wso2.carbon.webapp.authenticator.framework.authenticator.OAuthAuthenticator</ClassName>
+		</Authenticator>
+	</Authenticators>
+</WebappAuthenticatorConfig>
