@@ -166,8 +166,7 @@ public class MobileDevice {
 	public List<Device> getDevicesByName(@PathParam("name") String deviceName,
 				@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 
-		List<Device> devices;
-		int tenantId = MDMAPIUtils.getTenantId(tenantDomain);
+		List<org.wso2.carbon.device.mgt.common.Device> devices;
 		try {
 			devices = MDMAPIUtils.getDeviceManagementService().getDevicesByName(deviceName);
 		} catch (DeviceManagementException e) {

@@ -163,6 +163,7 @@
             <groupId>commons-httpclient.wso2</groupId>
             <artifactId>commons-httpclient</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

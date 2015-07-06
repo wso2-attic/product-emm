@@ -828,7 +828,7 @@ public class OperationMgtService {
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
             AndroidAPIUtils.updateOperation(deviceId ,operation);
             if (log.isDebugEnabled()) {
-                log.debug("Updating operation '" + operation + "'");
+                log.debug("Updating operation '" + operation.toString()+ "'");
             }
         }
     }
