@@ -42,9 +42,9 @@ import java.util.List;
 @WebService
 @Produces({ "application/json", "application/xml" })
 @Consumes({ "application/json", "application/xml" })
-public class DeviceMgtService {
+public class DeviceManagementService {
 
-    private static Log log = LogFactory.getLog(DeviceMgtService.class);
+    private static Log log = LogFactory.getLog(DeviceManagementService.class);
 
     /**
      * Get all devices.Returns list of Android devices registered in MDM.
@@ -145,14 +145,13 @@ public class DeviceMgtService {
         deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
         boolean result;
         try {
-            AndroidAPIUtils.getDeviceManagementService()
+            AndroidAPIUtils.getApplicationManagerService()
                     .updateInstalledApplicationListOfDevice(deviceIdentifier, applications);
-
             Response.status(Response.Status.ACCEPTED);
             responseMessage.setResponseMessage("Device information has modified successfully.");
 
             return responseMessage;
-        } catch (DeviceManagementException e) {
+        } catch (ApplicationManagementException e) {
             String msg = "Error occurred while modifying the application list.";
             log.error(msg, e);
             throw new AndroidAgentException(msg, e);

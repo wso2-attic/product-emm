@@ -60,7 +60,7 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="deviceMgtServiceBean" class="org.wso2.carbon.mdm.services.android.DeviceMgtService"/>
+    <bean id="deviceMgtServiceBean" class="org.wso2.carbon.mdm.services.android.DeviceManagementService"/>
     <bean id="enrollmentServiceBean" class="org.wso2.carbon.mdm.services.android.EnrollmentService"/>
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.services.android.OperationMgtService"/>
     <bean id="policyServiceBean" class="org.wso2.carbon.mdm.services.android.PolicyMgtService"/>
