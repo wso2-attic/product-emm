@@ -880,10 +880,10 @@ public class OperationMgtService {
             List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
             throws OperationManagementException {
 
-        for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operationResponse : operations) {
-            AndroidAPIUtils.updateOperation(deviceId ,operationResponse.getId(), operationResponse.getStatus());
+        for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
+            AndroidAPIUtils.updateOperation(deviceId ,operation);
             if (log.isDebugEnabled()) {
-                log.debug("Updating operation '" + operationResponse.getCode() + "'");
+                log.debug("Updating operation '" + operation.toString()+ "'");
             }
         }
     }

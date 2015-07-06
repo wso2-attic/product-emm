@@ -54,7 +54,7 @@ public class User {
         DeviceManagementProviderService dmService;
         try {
             dmService = MDMAPIUtils.getDeviceManagementService(tenantDomain);
-            return dmService.getDeviceListOfUser(username);
+            return dmService.getDevicesOfUser(username);
         } catch (DeviceManagementException e) {
             String errorMsg = "Device management error";
             log.error(errorMsg, e);

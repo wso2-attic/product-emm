@@ -719,11 +719,13 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
+            <!--
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
                 <version>${jackson.annotation.version}</version>
             </dependency>
+            -->
         </dependencies>
     </dependencyManagement>
 

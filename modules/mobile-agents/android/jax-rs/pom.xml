@@ -167,5 +167,12 @@
             <groupId>commons-httpclient.wso2</groupId>
             <artifactId>commons-httpclient</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.notnoop.apns</groupId>
+            <artifactId>apns</artifactId>
+            <version>0.2.3</version>
+        </dependency>
+
     </dependencies>
 </project>
