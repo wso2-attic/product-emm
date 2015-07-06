@@ -22,16 +22,16 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.device.mgt.user.common.Role;
-import org.wso2.carbon.device.mgt.user.common.UserManagementException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.user.api.UserStoreException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Arrays;
 import java.util.List;
 
 public class User {
@@ -63,15 +63,12 @@ public class User {
     }
 
     @GET
-    public List<org.wso2.carbon.device.mgt.user.common.User> getAllUsers() throws MDMAPIException {
-        String msg;
-        List<org.wso2.carbon.device.mgt.user.common.User> users;
-
+    public List<String> getAllUsers() throws MDMAPIException {
         try {
-            users = MDMAPIUtils.getUserManagementService().getUsersForTenant(-1234);
-            return users;
-        } catch (UserManagementException e) {
-            msg = "User management service error.";
+            String[] users = MDMAPIUtils.getUserStoreManager().listUsers("", -1);
+            return Arrays.asList(users);
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the list of users";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -79,34 +76,27 @@ public class User {
 
     @GET
     @Path("{type}/{id}")
-    public List<Role> getUserRoles() throws MDMAPIException {
-        String msg;
-        List<Role> roles;
+    public List<String> getUserRoles() throws MDMAPIException {
         try {
-            roles = MDMAPIUtils.getUserManagementService().getRolesForTenant(-1234);
-            return roles;
-        } catch (UserManagementException e) {
-            msg = "User management service error.";
-            log.error(msg, e);
-            throw new MDMAPIException(msg, e);
+            String[] roles = MDMAPIUtils.getUserStoreManager().getRoleNames();
+            return Arrays.asList(roles);
+        } catch (UserStoreException e) {
+            throw new MDMAPIException("Error occurred while retrieving list of roles created within the current " +
+                    "tenant", e);
         }
     }
 
     @GET
     @Path("count/{tenantDomain}")
     public int getUserCount(@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
-        int userCount = 0;
-        String msg;
-        List<org.wso2.carbon.device.mgt.user.common.User> users;
-        int tenantId = MDMAPIUtils.getTenantId(tenantDomain);
         try {
-            users = MDMAPIUtils.getUserManagementService().getUsersForTenant(tenantId);
-            if (users != null) {
-                userCount = users.size();
+            String[] users = MDMAPIUtils.getUserStoreManager().listUsers("", -1);
+            if (users == null) {
+                return 0;
             }
-            return userCount;
-        } catch (UserManagementException e) {
-            msg = "Error occurred while retrieving users count.";
+            return users.length;
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the list of users that exist within the current tenant";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }

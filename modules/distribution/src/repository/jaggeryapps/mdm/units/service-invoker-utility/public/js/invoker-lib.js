@@ -60,7 +60,7 @@ var invokerUtil = function () {
             });
         }
         if (flagAuth){
-            if (accessToken){
+            if (!accessToken){
                 $.ajax({
                     url: "/mdm/token",
                     type: "GET",
@@ -68,6 +68,8 @@ var invokerUtil = function () {
                         execute();
                     }
                 }).fail(errorCallback);
+            } else{
+                execute();
             }
         }else {
             execute();

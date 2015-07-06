@@ -18,13 +18,8 @@
 
 package org.wso2.carbon.mdm.beans;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonRawValue;
-import org.json.JSONObject;
-
+import com.google.gson.Gson;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class ProfileFeature implements Serializable {
@@ -68,8 +63,10 @@ public class ProfileFeature implements Serializable {
         this.deviceTypeId = deviceTypeId;
     }
 
-    @JsonIgnore
+
     public String getPayLoad() {
+        Gson gson = new Gson();
+        this.payLoad =  gson.toJson(content);
         return payLoad;
     }
 
@@ -77,16 +74,12 @@ public class ProfileFeature implements Serializable {
         this.payLoad = payLoad;
     }
 
-    @JsonRawValue
+
     public Object getContent() {
         return content;
     }
 
     public void setContent(Object content) {
         this.content = content;
-        LinkedHashMap<String,String> contentMap = (LinkedHashMap)content;
-        JSONObject  jsonObject = new JSONObject(contentMap);
-        this.payLoad =  jsonObject.toString();
     }
-
 }

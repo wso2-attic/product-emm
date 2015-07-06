@@ -136,10 +136,6 @@
             <artifactId>org.wso2.carbon.logging</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-jaxrs</artifactId>
-        </dependency>
 
         <!--CDM Dependencies-->
         <dependency>
@@ -169,10 +165,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.notnoop.apns</groupId>
-            <artifactId>apns</artifactId>
-            <version>0.2.3</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
-
     </dependencies>
 </project>

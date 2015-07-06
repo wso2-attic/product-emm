@@ -78,6 +78,7 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
+    <!--
     <jaxrs:server id="authenticationService" address="/authentication">
         <jaxrs:serviceBeans>
             <ref bean="authenticationServiceBean"/>
@@ -87,15 +88,17 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
-
+-->
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.api.Operation"/>
     <bean id="deviceServiceBean" class="org.wso2.carbon.mdm.api.MobileDevice"/>
     <bean id="userServiceBean" class="org.wso2.carbon.mdm.api.User"/>
     <bean id="featureServiceBean" class="org.wso2.carbon.mdm.api.Feature"/>
+    <!--
     <bean id="authenticationServiceBean" class="org.wso2.carbon.mdm.api.Authentication"/>
+    -->
     <bean id="policyServiceBean" class="org.wso2.carbon.mdm.api.Policy"/>
     <bean id="profileServiceBean" class="org.wso2.carbon.mdm.api.Profile"/>
-    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+    <bean id="jsonProvider" class="org.wso2.mdm.common.GsonMessageBodyHandler"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.api.common.ErrorHandler"/>
 
 </beans>

@@ -337,12 +337,6 @@ public class OperationMgtService {
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
         }
     }
 
@@ -490,12 +484,6 @@ public class OperationMgtService {
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
         }
     }
 
@@ -533,12 +521,6 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
             message.setResponseMessage(errorMessage);
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
@@ -585,12 +567,6 @@ public class OperationMgtService {
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
         }
     }
 
@@ -633,12 +609,6 @@ public class OperationMgtService {
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
         }
     }
 
@@ -677,12 +647,6 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
             message.setResponseMessage(errorMessage);
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
@@ -771,12 +735,6 @@ public class OperationMgtService {
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
         }
     }
 
@@ -815,12 +773,6 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
             message.setResponseMessage(errorMessage);
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
@@ -867,17 +819,10 @@ public class OperationMgtService {
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } catch (OperationConfigurationException e) {
-            String errorMessage = "Issue in setting up payload in operation";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
         }
     }
 
-    private void updateOperations(String deviceId,
-            List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
+    public void updateOperations(String deviceId, List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
             throws OperationManagementException {
 
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {

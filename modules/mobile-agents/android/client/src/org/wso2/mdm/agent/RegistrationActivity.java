@@ -35,7 +35,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +51,16 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	private AlertDialog.Builder alertDialog;
 	private BuildDeviceInfoPayload deviceInfoBuilder;
 	private Resources resources;
+	private String deviceIdentifier;
+    private String TAG = RegistrationActivity.class.getSimpleName();
+	private DialogInterface.OnClickListener registrationFailedOKBtnClickListerner =
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0,
+                                    int arg1) {
+                    loadAuthenticationErrorActivity();
+                }
+            };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +70,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		deviceInfoBuilder = new BuildDeviceInfoPayload(context);
 		resources = context.getResources();
 		DeviceInfo deviceInfo = new DeviceInfo(context);
-		String deviceIdentifier = deviceInfo.getMACAddress();
+		deviceIdentifier = deviceInfo.getMACAddress();
 		Preference.putString(context, resources.getString(R.string.shared_pref_regId), deviceIdentifier);
 		registerDevice();
 	}
@@ -195,6 +207,38 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		} else {
 			displayConnectionError();
 		}
+	}
+
+	/**
+     * This will start the GCM flow by registering the device with Google and sending the
+     * registration ID to MDM. This is done in a Async task as a network call may be done, and
+     * it should be done out side the UI thread. After retrieving the registration Id, it is send
+     * to the MDM server so that it can send notifications to the device.
+     */
+	private void registerGCM() {
+		new AsyncTask<Void, Void, String>() {
+			GCMRegistrationManager registrationManager = new GCMRegistrationManager(RegistrationActivity.this,
+			                                                                        Constants.GCM_PROJECT_NUMBER);
+
+			@Override
+			protected String doInBackground(Void... params) {
+				return registrationManager.registerWithGoogle();
+			}
+
+			@Override
+			protected void onPostExecute(String regId) {
+				Preference.putString(context, Constants.REG_ID, regId);
+				if (regId != null) {
+					try {
+						registrationManager.sendRegistrationId();
+					} catch (AndroidAgentException e) {
+						Log.e(TAG, "Error while sending registration Id");
+					}
+				} else {
+					CommonUtils.clearAppData(getApplicationContext());
+				}
+			}
+		}.execute();
 	}
 
 	/**

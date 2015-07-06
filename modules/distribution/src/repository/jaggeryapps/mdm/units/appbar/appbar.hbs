@@ -7,22 +7,26 @@
                     <span class="fw-stack">
                         <i class="fw fw-tiles fw-stack-1-5x"></i>
                     </span>
-                </a><a class="cu-btn page-title" href='javascript:location.reload();'>
-                        <span class="fw-stack"></span>
-                        {{title}}
-                </a>{{#each currentActions}}<a href="{{url}}" class="cu-btn">
+                </a><a href="javascript:location.reload();" class="cu-btn page-title">
+                    <span class="fw-stack"></span>
+                    {{pageTitle}}
+                </a>
+                {{#each currentActions}}
+                    <a href="{{url}}" class="cu-btn">
                         <span class="fw-stack">
                             <i class="fw fw-ring fw-stack-2x"></i>
                             <i class="fw {{icon}} fw-stack-1x"></i>
                         </span>
                         {{title}}
                     </a>
-                {{/each}}{{#if enableBack}}<a href="javascript:history.go(-1)" class="cu-btn">
-                    <span class="fw-stack">
-                        <i class="fw fw-ring fw-stack-2x"></i>
-                        <i class="fw fw-left-arrow fw-stack-1x"></i>
-                    </span>
-                        Go Back
+                {{/each}}
+                {{#if enableBack}}
+                    <a href="javascript:history.go(-1)" class="cu-btn">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-left-arrow fw-stack-1x"></i>
+                        </span>
+                        {{backLinkText}}
                     </a>
                 {{/if}}
                 <a href="javascript:toggleNotificationbar()" class="cu-btn wr-notification-toggle-btn">
@@ -41,7 +45,10 @@
         <ul>
             <!--Below area is used to add navigational links from other units-->
             {{defineZone "common-navigation"}}
-            <li><a href="/mdm"><i class="fw fw-application"></i>MDM Dashboard</a></li>
+
+            {{#if permissions.VIEW_DASHBOARD}}
+                <li><a href="/mdm"><i class="fw fw-dashboard"></i>EMM Dashboard</a></li>
+            {{/if}}
             {{#if permissions.LIST_DEVICES}}
                 <li><a href="/mdm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
             {{/if}}

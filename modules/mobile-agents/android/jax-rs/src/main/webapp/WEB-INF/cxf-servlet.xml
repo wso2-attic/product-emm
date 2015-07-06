@@ -64,7 +64,7 @@
     <bean id="enrollmentServiceBean" class="org.wso2.carbon.mdm.services.android.EnrollmentService"/>
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.services.android.OperationMgtService"/>
     <bean id="policyServiceBean" class="org.wso2.carbon.mdm.services.android.PolicyMgtService"/>
-    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+    <bean id="jsonProvider" class="org.wso2.carbon.mdm.services.android.common.GsonMessageBodyHandler"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.services.android.common.ErrorHandler"/>
 </beans>
 

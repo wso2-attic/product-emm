@@ -15,88 +15,47 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.mdm.agent;
 
-import java.util.Locale;
-
-import org.wso2.mdm.agent.R;
-import org.wso2.mdm.agent.services.MessageProcessor;
-import org.wso2.mdm.agent.utils.Constants;
-import org.wso2.mdm.agent.utils.Preference;
-
-import android.content.Context;
+import android.app.IntentService;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gcm.GCMBaseIntentService;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.wso2.mdm.agent.services.BuildDeviceInfoPayload;
+import org.wso2.mdm.agent.services.MessageProcessor;
+import org.wso2.mdm.agent.utils.Constants;
 
 /**
  * IntentService responsible for handling GCM messages.
  */
-public class GCMIntentService extends GCMBaseIntentService {
-	private static final String MESSAGE_MODE = "GCM";
+public class GCMIntentService extends IntentService {
+	private MessageProcessor messageProcessor;
+	private static final String TAG = GCMIntentService.class.getName();
 
-	private static final String TAG = "GCMIntentService";
-
-	public GCMIntentService() {
-		super(Constants.SENDER_ID);
+	/**
+	 * Creates an IntentService. Invoked by your subclass's constructor.
+	 * 
+	 * @param name Used to name the worker thread, important only for debugging.
+	 */
+	public GCMIntentService(String name) {
+		super(name);
 	}
 
 	@Override
-	protected void onRegistered(Context context, String registrationId) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.i(TAG, "Device registered." + registrationId);
-		}
-
-		Preference.putString(context, getResources().getString(R.string.shared_pref_regId),
-		                     registrationId);
-	}
-
-	@Override
-	protected void onUnregistered(Context context, String registrationId) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.i(TAG, "Device unregistered.");
-		}
-	}
-
-	@Override
-	protected void onMessage(Context context, Intent intent) {
-		String mode =
-				Preference.getString(context,
-						context.getResources()
-								.getString(R.string.shared_pref_message_mode)
-				);
-
-		if (mode.trim().toUpperCase(Locale.getDefault()).equals(MESSAGE_MODE)) {
-			MessageProcessor msg = new MessageProcessor(context);
-			try {
-				msg.getMessages();
-			} catch (AndroidAgentException e) {
-				Log.e(TAG, "Failed to perform operation." + e);
+	protected void onHandleIntent(Intent intent) {
+		// Retrieve data extras from push notification
+		Bundle extras = intent.getExtras();
+		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+		String messageType = gcm.getMessageType(intent);
+		if (extras != null && messageType != null && messageType.equals(Constants.messageTypeGCM)) {
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "Message Type: " + messageType + ", Message: " + extras.toString());
 			}
 		}
-	}
-
-	@Override
-	protected void onDeletedMessages(Context context, int total) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.i(TAG, "Received deleted messages notification.");
-		}
-	}
-
-	@Override
-	public void onError(Context context, String errorId) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.i(TAG, "Received error." + errorId);
-		}
-	}
-
-	@Override
-	protected boolean onRecoverableError(Context context, String errorId) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.i(TAG, "Received recoverable error." + errorId);
-		}
-
-		return super.onRecoverableError(context, errorId);
+		GCMBroadcastReceiver.completeWakefulIntent(intent);
 	}
 }

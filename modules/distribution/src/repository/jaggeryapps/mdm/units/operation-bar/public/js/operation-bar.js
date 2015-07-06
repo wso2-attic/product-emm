@@ -225,7 +225,7 @@ function loadOperationBar(deviceType){
                 if (deviceType == "android"){
                     var iconName = operationModule.getAndroidIconForFeature(current.code);
                 } else if (deviceType == "ios"){
-                    var iconName = operationModule.getiOSIconForFeature(current.code);
+                    var iconName = operationModule.getIOSIconForFeature(current.code);
                 } else if (deviceType == "TemperatureController"){
                     var iconName = operationModule.getTemperatureControllerIconForFeature(current.code);
                 }
@@ -283,7 +283,7 @@ function runOperation(operationName) {
     };
     if(list["ios"]){
         var payload = operationModule.generatePayload("ios", operationName, list["ios"]);
-        var serviceEndPoint = operationModule.getiOSServiceEndpoint(operationName);
+        var serviceEndPoint = operationModule.getIOSServiceEndpoint(operationName);
 
     }
     if(list["android"]){

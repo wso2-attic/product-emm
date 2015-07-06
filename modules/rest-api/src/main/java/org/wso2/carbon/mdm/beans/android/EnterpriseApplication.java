@@ -16,9 +16,8 @@
  */
 package org.wso2.carbon.mdm.beans.android;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.google.gson.Gson;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
-
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -56,11 +55,7 @@ public class EnterpriseApplication implements Serializable {
 	}
 
 	public String toJSON() throws MDMAPIException {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(this);
-		} catch (IOException e) {
-			throw new MDMAPIException("Error generating JSON representation", e);
-		}
+        Gson gson = new Gson();
+        return gson.toJson(this);
 	}
 }

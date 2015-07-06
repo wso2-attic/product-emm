@@ -15,13 +15,7 @@
 */
 package org.wso2.carbon.mdm.services.android.bean;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.wso2.carbon.mdm.services.android.exception.OperationConfigurationException;
-
-import java.io.IOException;
-
+import com.google.gson.Gson;
 /*
 * This abstract class is used for extending generic functions with regard to operation.
 */
@@ -32,16 +26,8 @@ public abstract class Operation {
 	* 
 	* @return json formatted String.
 	*/
-	public String toJSON() throws OperationConfigurationException {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(this);
-		} catch (JsonMappingException e) {
-			throw new OperationConfigurationException("Error generating JSON representation", e);
-		} catch (JsonGenerationException e) {
-			throw new OperationConfigurationException("Error generating JSON representation", e);
-		} catch (IOException e) {
-			throw new OperationConfigurationException("Error generating JSON representation", e);
-		}
-	}
+    public String toJSON() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
 }

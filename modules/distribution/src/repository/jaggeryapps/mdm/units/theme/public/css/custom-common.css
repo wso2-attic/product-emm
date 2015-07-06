@@ -262,17 +262,21 @@ header {
 /* sticky footer styles */
 .footer {
 	height: 40px;
-	background-color: #fff;
+	background-color: #222;
 	padding-top:5px;
-	color:#444;
+	color:#fff;
 	font-weight: 500;
 	padding-left:20px;
 	font-size:12px;
 	letter-spacing: 1px;
     position:absolute;
+    width: 100%;
     bottom: 0;
-    margin-right: -5px;
-    margin-left: -5px;
+}
+
+.footer p {
+    padding-top: 5px;
+    margin: 0;
 }
 
 /* misc */
@@ -300,7 +304,7 @@ br.c-both {
 }
 
 .wr-input-control .cus-col-50 input {
-	width:65%;
+	width:100%;
 }
 
 .wr-input-control .cus-col-70 input {
@@ -317,9 +321,7 @@ br.c-both {
 
 /* wizard */
 .wr-wizard {
-    border-bottom:1px solid #f0f0f0;
-    padding-bottom:20px;
-    margin-bottom:20px;
+
 }
 
 .itm-wiz-current .wiz-no {

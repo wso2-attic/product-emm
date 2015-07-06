@@ -2,7 +2,7 @@
     <div class="container col-md-12 col-lg-3 col-centered wr-content wr-login col-centered">
 
         <p class="page-sub-title">Login</p>
-        <p>Enter your Mobile Device Manager credentials to login.</p>
+        <p>Enter your Enterprise Mobility Manager credentials to login.</p>
         <hr />
 
         <!-- validation -->
@@ -10,17 +10,18 @@
                 <p>Login failed. Check your credentials and try again.</p>
         </span>
         <form method="POST" class="form-login-box" action="{{loginPath}}">
-            <label class="wr-input-label">Username</label>
-            <div class="wr-input-control">
-                <input name="username" type="text" value="" placeholder="input text"/>
-            </div>
 
-            <label class="wr-input-label">Password</label>
             <div class="wr-input-control">
-                <input name="password" type="password" value="" placeholder="input text"/>
+                <label class="wr-input-label">Username *</label>
+                <input name="username" class="form-control" type="text" value="" placeholder="[ Required field ]"/>
             </div>
 
             <div class="wr-input-control">
+                <label class="wr-input-label">Password *</label>
+                <input name="password" class="form-control" type="password" value="" placeholder="[ Required field ]"/>
+            </div>
+
+            <div class="wr-input-control wr-btn-grp">
                 <button class="wr-btn" onclick="document.location.href='home.html';">&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;</button>
             </div>
         </form>

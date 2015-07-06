@@ -21,24 +21,16 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+
 /**
  * Authentication related REST-API implementation.
  */
+@Produces({ "application/json", "application/xml" })
+@Consumes({ "application/json", "application/xml" })
 public class Authentication {
-    private static Log log = LogFactory.getLog(Authentication.class);
 
-//	@GET
-//	@Produces({ MediaType.APPLICATION_JSON })
-//	@Path("credentials")
-//	public Credential auth() throws MDMAPIException {
-//		AppManagerConnector appManager;
-//		try {
-//			appManager = MDMAPIUtils.getAppManagementService();
-//			return appManager.getClientCredentials();
-//		} catch (AppManagerConnectorException e) {
-//			String errorMsg = "Device management error";
-//			log.error(errorMsg, e);
-//			throw new MDMAPIException(errorMsg, e);
-//		}
-//	}
+    private static Log log = LogFactory.getLog(Authentication.class);
 }
+
