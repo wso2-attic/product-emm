@@ -147,7 +147,7 @@ public class DeviceManagementService {
         boolean result;
         try {
             AndroidAPIUtils.getApplicationManagerService()
-                    .updateInstalledApplicationListOfDevice(deviceIdentifier, applications);
+                    .updateApplicationListInstalledInDevice(deviceIdentifier, applications);
             Response.status(Response.Status.ACCEPTED);
             responseMessage.setResponseMessage("Device information has modified successfully.");
 
