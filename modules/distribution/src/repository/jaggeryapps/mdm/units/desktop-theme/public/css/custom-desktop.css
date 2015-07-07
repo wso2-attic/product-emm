@@ -2543,7 +2543,7 @@ a.multi-view {
 }
 
 a.multi-view.disabled {
-    opacity: 0.3;
+    opacity: 0.5;
     cursor: default;
 }
 
@@ -2583,7 +2583,7 @@ ul.listing, ul.listing li {
     padding: 0;
 }
 
-ul.listing li.grouped-input ul.disabled {
-    opacity: 0.3;
+ul.listing li.grouped-input ul.grouped-child-input.disabled {
+    opacity: 0.5;
 }
 
