@@ -860,21 +860,7 @@ $(document).ready(function () {
                             // if this checkbox is the parent input of a grouped-input
                             if ($(this).hasClass("parent-input")) {
                                 var groupedInput = $(this).parent().parent().parent();
-                                if ($(this).is(":checked")) {
-                                    $(".child-input", groupedInput).each(function () {
-                                        $(this).prop('disabled', false);
-                                    });
-                                    if ($("ul", groupedInput).hasClass("disabled")) {
-                                        $("ul", groupedInput).removeClass("disabled");
-                                    }
-                                } else {
-                                    $(".child-input", groupedInput).each(function () {
-                                        $(this).prop('disabled', true);
-                                    });
-                                    if (!$("ul", groupedInput).hasClass("disabled")) {
-                                        $("ul", groupedInput).addClass("disabled");
-                                    }
-                                }
+                                updateGroupedInputVisibility(groupedInput);
                             }
                         }
                     }
@@ -882,7 +868,8 @@ $(document).ready(function () {
                 // reinitializing select fields
                 $(operationDataWrapper + " select").each(
                     function () {
-                        $("option:first", this).prop("selected", "selected");
+                        var defaultOption = $(this).data("default");
+                        $("option:eq("+ defaultOption +")", this).prop("selected", "selected");
                     }
                 );
             }

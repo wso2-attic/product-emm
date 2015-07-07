@@ -162,7 +162,7 @@
                             </span>
                         </label>
                         <!--<input id="minLength" type="text" class="form-control operationDataKeys" data-key="minLength" placeholder="Enter minimum passcode length">-->
-                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength">
+                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -192,7 +192,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars">
+                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -232,7 +232,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="maxAutoLock" class="form-control operationDataKeys" data-key="maxAutoLock">
+                        <select id="maxAutoLock" class="form-control operationDataKeys" data-key="maxAutoLock" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -251,7 +251,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="gracePeriod" class="form-control operationDataKeys" data-key="gracePeriod">
+                        <select id="gracePeriod" class="form-control operationDataKeys" data-key="gracePeriod" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -273,7 +273,7 @@
                             </span>
                         </label>
                         <!--<input type="text" class="form-control operationDataKeys" id="maxFailedAttempts" data-key="maxFailedAttempts" placeholder="Enter maximum number of failed attempts">-->
-                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts">
+                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -415,7 +415,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" onchange="showProxyConfiguration(this)">
+                            <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" data-default="0" onchange="showProxyConfiguration(this)">
                                 <option value="None" selected="selected">
                                     None
                                 </option>
@@ -500,7 +500,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" onchange="showEncryptionPolicyConfiguration(this)">
+                            <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" data-default="0" onchange="showEncryptionPolicyConfiguration(this)">
                                 <option value="None" selected="selected">None</option>
                                 <option value="WEP">WEP</option>
                                 <option value="WPA">WPA</option>
@@ -648,11 +648,11 @@
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <select id="wifi-eap-tls-inner-auth-type" class="form-control operationDataKeys" data-key="wifiEAPTLSInnerAuthType">
-                                        <option value="MSCHAPv2" selected="selected">MSCHAPv2</option>
+                                    <select id="wifi-eap-tls-inner-auth-type" class="form-control operationDataKeys" data-key="wifiEAPTLSInnerAuthType" data-default="3">
                                         <option value="PAP">PAP</option>
                                         <option value="CHAP">CHAP</option>
                                         <option value="MSCHAP">MSCHAP</option>
+                                        <option value="MSCHAPv2" selected="selected">MSCHAPv2</option>
                                     </select>
                                 </div>
 
@@ -719,9 +719,9 @@
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <select id="wifi-eap-sim-no-of-rands" class="form-control operationDataKeys" data-key="wifiEAPSIMNoOfRands">
-                                        <option value="3" selected="selected">3</option>
+                                    <select id="wifi-eap-sim-no-of-rands" class="form-control operationDataKeys" data-key="wifiEAPSIMNoOfRands" data-default="1">
                                         <option value="2">2</option>
+                                        <option value="3" selected="selected">3</option>
                                     </select>
                                 </div>
 
@@ -1059,7 +1059,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="scepSubjectAlternativeNameType" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameType">
+                        <select id="scepSubjectAlternativeNameType" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameType" data-default="0">
                             <option value="None" selected="selected">
                                 None
                             </option>
@@ -1126,7 +1126,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="scepKeySize" class="form-control operationDataKeys" data-key="scepKeySize">
+                        <select id="scepKeySize" class="form-control operationDataKeys" data-key="scepKeySize" data-default="0">
                             <option value="1024" selected="selected">1024</option>
                             <option value="2048">2048</option>
                         </select>
@@ -1352,7 +1352,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="emAccountType" class="form-control operationDataKeys" data-key="emAccountType">
+                        <select id="emAccountType" class="form-control operationDataKeys" data-key="emAccountType" data-default="0">
                             <option value="IMAP" selected="selected">IMAP</option>
                             <option value="POP">POP</option>
                         </select>
@@ -2140,7 +2140,7 @@
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <select id="safariAcceptCookies" class="form-control child-input operationDataKeys" data-key="safariAcceptCookies">
+                                            <select id="safariAcceptCookies" class="form-control child-input operationDataKeys" data-key="safariAcceptCookies" data-default="2">
                                                 <option value="0">Never</option>
                                                 <option value="1">From visited sites only</option>
                                                 <option value="2" selected="selected">Always</option>
