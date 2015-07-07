@@ -869,7 +869,7 @@ $(document).ready(function () {
                 $(operationDataWrapper + " select").each(
                     function () {
                         var defaultOption = $(this).data("default");
-                        $("option:eq("+ defaultOption +")", this).prop("selected", "selected");
+                        $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
                     }
                 );
             }
