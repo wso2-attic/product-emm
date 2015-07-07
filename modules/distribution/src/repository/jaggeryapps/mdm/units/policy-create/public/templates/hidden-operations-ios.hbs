@@ -348,11 +348,12 @@
 
                         <div class="wr-input-control">
                             <label class="wr-input-label" for="wifi-domain-name">
-                                Domain Name <br>
-                                ( For Wi-Fi Hotspot 2.0 negotiation )
+                                Domain Name
                                 <span class="helper" title="Domain Name used for Wi-Fi Hotspot 2.0 negotiation. This field can be provided instead of SSID. Available in iOS 7.0 and later.">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
+                                <br>
+                                ( For Wi-Fi Hotspot 2.0 negotiation )
                             </label>
                             <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" placeholder="[ Required field if no SSID is given ]">
                         </div>
@@ -530,13 +531,74 @@
                                 <br>
 
                                 <div class="wr-input-control">
+                                    <label class="wr-input-label" for="wifi-accepted-eap-types">
+                                        Accepted EAP Types
+                                        <span class="helper" title="Authentication protocols supported on target network.">
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                        <br>
+                                        <br>
+                                    </label>
+                                    <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-boxes" data-key="wifiAcceptedEAPTypes">
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="13"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;TLS
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="17"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;LEAP
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="18"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;EAP-SIM
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="21"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;TTLS
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="23"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;EAP-AKA
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="25"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;PEAP
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="43"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;EAP-FAST
+                                                </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="wr-input-control">
                                     <label class="wr-input-label" for="wifi-eap-username">
                                         Username
                                         <span class="helper" title="Unless you enter a user name, this property won't appear in an imported configuration. Users can enter this information by themselves when they authenticate.">
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" placeholder="[ Optional field ]">
+                                    <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" placeholder="[ Optional field ]" />
                                 </div>
 
                                 <div class="wr-input-control">
@@ -546,7 +608,7 @@
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <input id="wifi-eap-password" type="password" class="form-control operationDataKeys" data-key="wifiEAPPassword" placeholder="[ Optional field ]">
+                                    <input id="wifi-eap-password" type="password" class="form-control operationDataKeys" data-key="wifiEAPPassword" placeholder="[ Optional field ]" />
                                 </div>
 
                                 <div class="wr-input-control">
@@ -596,13 +658,14 @@
 
                                 <div class="wr-input-control">
                                     <label class="wr-input-label" for="wifi-eap-outer-identity">
-                                        Outer Identity <br>
-                                        ( Should be 1-30 characters long. Only relevant to TTLS, PEAP and EAP-FAST. )
+                                        Outer Identity
                                         <span class="helper" title="This allows the user to hide his or her identity. The user's actual name appears only inside the encrypted tunnel. For example, it could be set to 'anonymous' or 'anon', or 'anon@my-company.net'. It can increase security because an attacker can't see the authenticating user's name in the clear.">
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
+                                        <br>
+                                        ( Should be 1-30 characters long. Only relevant to TTLS, PEAP and EAP-FAST )
                                     </label>
-                                    <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" placeholder="[ Optional field ]">
+                                    <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" placeholder="[ Optional field ]" />
                                 </div>
 
                                 EAP-Fast Support :
@@ -711,7 +774,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" placeholder="[ My CardDAV Account ]">
+                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" placeholder="[ My CardDAV Account ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -734,7 +797,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" placeholder="[ Optional ]">
+                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" placeholder="[ Optional ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -744,7 +807,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" placeholder="[ Set On Device ]">
+                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" placeholder="[ Set On Device ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -754,7 +817,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountPassword" type="password" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]">
+                        <input id="accountPassword" type="password" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]" />
                     </div>
 
                     <div class="wr-input-control">
