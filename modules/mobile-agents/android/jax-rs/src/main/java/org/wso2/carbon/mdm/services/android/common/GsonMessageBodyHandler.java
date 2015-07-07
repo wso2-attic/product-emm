@@ -61,6 +61,7 @@ public class GsonMessageBodyHandler implements MessageBodyWriter<Object>, Messag
             throws IOException, WebApplicationException {
 
         InputStreamReader reader = new InputStreamReader(entityStream, "UTF-8");
+        
         try {
             return getGson().fromJson(reader, type);
         } finally {
