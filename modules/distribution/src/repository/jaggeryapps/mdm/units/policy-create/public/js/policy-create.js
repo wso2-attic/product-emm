@@ -974,17 +974,17 @@ $(document).ready(function () {
 var showProxyConfiguration = function (controller) {
     var proxyType = $(controller).find("option:selected").val();
     if (proxyType == "Manual") {
-        $(".manual-proxy-config").slideDown();
+        $(".manual-proxy-setup").slideDown();
     } else {
-        $(".manual-proxy-config").slideUp();
+        $(".manual-proxy-setup").slideUp();
     }
 };
 
 var showEncryptionPolicyConfiguration = function (controller) {
     var proxyType = $(controller).find("option:selected").val();
     if (proxyType != "None") {
-        $(".enc-policy-config").slideDown();
+        $(".advanced-security-config").slideDown();
     } else {
-        $(".enc-policy-config").slideUp();
+        $(".advanced-security-config").slideUp();
     }
 };
