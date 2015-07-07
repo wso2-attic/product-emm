@@ -62,7 +62,7 @@ public class GsonMessageBodyHandler implements MessageBodyWriter<Object>, Messag
 
         InputStreamReader reader = new InputStreamReader(entityStream, "UTF-8");
         try {
-            return gson.fromJson(reader, type);
+            return getGson().fromJson(reader, type);
         } finally {
             reader.close();
         }
