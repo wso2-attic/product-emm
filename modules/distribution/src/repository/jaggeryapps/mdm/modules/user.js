@@ -27,7 +27,6 @@ var userModule = function () {
     var dataConfig = require("/config/mdm-props.js").config();
     var utility = require("/modules/utility.js").utility;
 
-    //var userManagementService = utility.getUserManagementService();
     /* Initializing user manager */
     var carbon = require('carbon');
     var tenantId = carbon.server.tenantId();
@@ -86,7 +85,6 @@ var userModule = function () {
         var url = carbon.server.address('https') + "/admin/services";
         var server = new carbon.server.Server(url);
         var userManager = new carbon.user.UserManager(server, tenantId);
-
         try {
             if (userManager.userExists(username)) {
                 if (log.isDebugEnabled()) {
@@ -210,15 +208,26 @@ var userModule = function () {
 
         var emailTo = [];
         var user = userManager.getUser(username);
-        emailTo[0] = user.getEmail();
+        emailTo[0] = privateMethods.getEmail(username, userManager);
         var emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setMailTo(emailTo);
-        //emailMessageProperties.setFirstName(user.getFirstName());
-        emailMessageProperties.setFirstName(userManager.getClaim(username, "http://wso2.org/claims/givenname", null));
+        emailMessageProperties.setFirstName(privateMethods.getFirstName(username, userManager));
         emailMessageProperties.setUserName(username);
         emailMessageProperties.setPassword(password);
         emailMessageProperties.setEnrolmentUrl(enrollmentURL);
         deviceManagementService.sendRegistrationEmail(emailMessageProperties);
+    };
+
+    privateMethods.getEmail = function(username, userManager) {
+        return userManager.getClaim(username, "http://wso2.org/claims/emailaddress", null)
+    };
+
+    privateMethods.getFirstName = function(username, userManager) {
+        return userManager.getClaim(username, "http://wso2.org/claims/givenname", null)
+    };
+
+    privateMethods.getLastName = function(username, userManager) {
+        return userManager.getClaim(username, "http://wso2.org/claims/lastname", null)
     };
 
     publicMethods.addPermissions = function (permissionList, path, init) {
@@ -252,7 +261,6 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        //var user = userManagementService.getUser(username, carbonUser.tenantId);
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
         var user = userManager.getUser(username);
         var emailProperties = new EmailMessageProperties();
@@ -260,7 +268,7 @@ var userModule = function () {
         emailTo[0] = user.getEmail();
         emailProperties.setMailTo(emailTo);
         //emailProperties.setFirstName(user.getFirstName());
-        emailProperties.setFirstName(userManager.getClaim(username, "http://wso2.org/claims/givenname", null));
+        emailProperties.setFirstName(privateMethods.getFirstName(username, userManager));
         emailProperties.setEnrolmentUrl(enrollmentURL);
         deviceManagementService.sendEnrolmentInvitation(emailProperties);
     };
@@ -268,28 +276,20 @@ var userModule = function () {
     publicMethods.getUsers = function () {
         var users = [];
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var userInfo = require("/modules/user-info.js");
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
         var userList = userManager.listUsers("");
-        var i, userObj;
-        for (i = 0; i < userList.length; i++) {
+        for (var i = 0; i < userList.length; i++) {
             var username = userList[i];
-            userObj = userManager.getUser(username);
+            var email = privateMethods.getEmail(username, userManager);
+            var firstName = privateMethods.getFirstName(username, userManager);
+            var lastName = privateMethods.getLastName(username, userManager);
 
-            var email = userManager.getClaim(username, "http://wso2.org/claims/emailaddress", null);
-            var firstName = userManager.getClaim(username, "http://wso2.org/claims/givenname", null);
-            var lastName = userManager.getClaim(username, "http://wso2.org/claims/lastname", null);
-            var user = {
-                "username" : username,
-                "email" : email,
-                "name" : firstName + " " + lastName
-            };
-            if(userObj.username == "admin"){
-                userObj.name = "admin";
-            }
-            users.push(userObj);
+            var userInfoObj = new userInfo.UserInfo(username, firstName, lastName, email);
+            users.push(userInfoObj);
         }
         return users;
     };
