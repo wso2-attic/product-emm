@@ -28,6 +28,28 @@ var platformTypeConstants = {
     "IOS": "ios"
 };
 
+/**
+ * Method to update the visibility of grouped input.
+ * @param domElement HTML grouped-input element with class name "grouped-input"
+ */
+var updateGroupedInputVisibility = function (domElement) {
+    if ($(".parent-input:first", domElement).is(":checked")) {
+        if ($(".grouped-child-input:first", domElement).hasClass("disabled")) {
+            $(".grouped-child-input:first", domElement).removeClass("disabled");
+        }
+        $(".child-input", domElement).each(function () {
+            $(this).prop('disabled', false);
+        });
+    } else {
+        if (!$(".grouped-child-input:first", domElement).hasClass("disabled")) {
+            $(".grouped-child-input:first", domElement).addClass("disabled");
+        }
+        $(".child-input", domElement).each(function () {
+            $(this).prop('disabled', true);
+        });
+    }
+};
+
 stepForwardFrom["policy-platform"] = function (actionButton) {
     policy["platform"] = $(actionButton).data("platform");
     policy["platformId"] = $(actionButton).data("platform-id");
@@ -44,6 +66,9 @@ stepForwardFrom["policy-platform"] = function (actionButton) {
             $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
                 var content = template();
                 $(".wr-advance-operations").html(content);
+                $(".wr-advance-operations li.grouped-input").each(function () {
+                    updateGroupedInputVisibility(this);
+                });
             });
         },
         250 // time delayed for the execution of above function, 250 milliseconds
@@ -889,21 +914,7 @@ $(document).ready(function () {
 
     // enabling or disabling grouped-input based on the status of a parent check-box
     $(advanceOperations).on("click", ".grouped-input", function () {
-        if ($(".parent-input", this).is(":checked")) {
-            if ($("ul", this).hasClass("disabled")) {
-                $("ul", this).removeClass("disabled");
-            }
-            $(".child-input", this).each(function () {
-                $(this).prop('disabled', false);
-            });
-        } else {
-            if (!$("ul", this).hasClass("disabled")) {
-                $("ul", this).addClass("disabled");
-            }
-            $(".child-input", this).each(function () {
-                $(this).prop('disabled', true);
-            });
-        }
+        updateGroupedInputVisibility(this);
     });
 
     $(".wizard-stepper").click(function () {
