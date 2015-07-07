@@ -209,6 +209,7 @@ var userModule = function () {
         //var user = userManagementService.getUser(username, carbonUser.tenantId);
 
         var emailTo = [];
+        var user = userManager.getUser(username);
         emailTo[0] = user.getEmail();
         var emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setMailTo(emailTo);
@@ -253,7 +254,7 @@ var userModule = function () {
         }
         //var user = userManagementService.getUser(username, carbonUser.tenantId);
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
-
+        var user = userManager.getUser(username);
         var emailProperties = new EmailMessageProperties();
         var emailTo = [];
         emailTo[0] = user.getEmail();
