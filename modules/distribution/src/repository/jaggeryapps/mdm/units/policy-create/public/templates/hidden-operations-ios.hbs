@@ -614,60 +614,66 @@
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
                                                 <input id="wifi-eap-fast-use-pac" type="checkbox" class="parent-input form-control operationDataKeys" data-key="wifiEAPFastUsePAC" data-default="false" />
-                                            <span class="helper" title="If checked, the device will use an existing PAC. Otherwise, the server must present its identity using a certificate.">
-                                                &nbsp;&nbsp;&nbsp;Use existing PAC for EAP-FAST
-                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                            </span>
+                                                <span class="helper" title="If checked, the device will use an existing PAC. Otherwise, the server must present its identity using a certificate.">
+                                                    &nbsp;&nbsp;&nbsp;Use existing PAC for EAP-FAST
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
                                             </label>
                                         </div>
-                                        <ul>
-                                            <li>
+                                        <ul class="grouped-child-input">
+                                            <li class="grouped-input">
                                                 <div class="wr-input-control">
                                                     <label class="wr-input-control checkbox">
-                                                        <input id="wifi-eap-fast-provision-pac" type="checkbox" class="child-input form-control operationDataKeys" data-key="wifiEAPFastProvisionPAC" data-default="false" />
-                                                    <span class="helper" title="Used only if above is enabled. If checked, allows PAC provisioning. This particular attribute must be enabled for EAP-FAST PAC usage to succeed, because there is no other way to provision a PAC.">
-                                                        &nbsp;&nbsp;&nbsp;Allow PAC Provisioning
-                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                    </span>
+                                                        <input id="wifi-eap-fast-provision-pac" type="checkbox" class="parent-input child-input form-control operationDataKeys" data-key="wifiEAPFastProvisionPAC" data-default="false" />
+                                                        <span class="helper" title="Used only if above is enabled. If checked, allows PAC provisioning. This particular attribute must be enabled for EAP-FAST PAC usage to succeed, because there is no other way to provision a PAC.">
+                                                            &nbsp;&nbsp;&nbsp;Allow PAC Provisioning
+                                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                        </span>
                                                     </label>
                                                 </div>
+                                                <ul class="grouped-child-input">
+                                                    <li>
+                                                        <div class="wr-input-control">
+                                                            <label class="wr-input-control checkbox">
+                                                                <input id="wifi-eap-fast-provision-pac-anonymously" type="checkbox" class="child-input form-control operationDataKeys" data-key="wifiEAPFastProvisionPACAnonymously" data-default="false" />
+                                                                <span class="helper" title="Used only if above is enabled. If checked, provisions the device anonymously. Note that there are known man-in-the-middle attacks for anonymous provisioning.">
+                                                                    &nbsp;&nbsp;&nbsp;Allow Anonymous PAC Provisioning
+                                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             </li>
                                         </ul>
                                     </li>
                                 </ul>
 
-
                                 <div class="wr-input-control">
-                                    <label class="wr-input-control checkbox">
-                                        <input id="wfEncEapFastProvisionPacAnon" type="checkbox" class="form-control operationDataKeys" data-key="wfEncEapFastProvisionPacAnon"/>
-                                <span class="helper" title="If enabled, provisions the device anonymously. Note that there are known man-in-the-middle attacks for anonymous provisioning">
-                                    Allow Anonymous PAC Provisioning
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
+                                    <label class="wr-input-label" for="wifi-eap-sim-no-of-rands">
+                                        Number of expected RANDs for EAP-SIM
+                                        <span class="helper" title="Valid values are 2 and 3. Default is 3">
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
                                     </label>
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wfEncEapSimNoOfRands">
-                                        Number of expected RANDs for EAPSIM
-                                <span class="helper" title="Valid values are 2 and 3. Defaults to 3">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                                    </label>
-                                    <input id="wfEncEapSimNoOfRands" type="text" class="form-control operationDataKeys" data-key="wfEncEapSimNoOfRands" placeholder="[ Optional ]">
+                                    <select id="wifi-eap-sim-no-of-rands" class="form-control operationDataKeys" data-key="wifiEAPSIMNoOfRands">
+                                        <option value="3" selected="selected">3</option>
+                                        <option value="2">2</option>
+                                    </select>
                                 </div>
 
                             </div>
 
                             <div class="wr-input-control">
-                                <label class="wr-input-label" for="wfEncPayloadCertUuid">
-                                    Payload Certificate UUID
-                                <span class="helper" title="Operator name being displayed">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
+                                <label class="wr-input-label" for="wifi-payload-cert-uuid">
+                                    Certificate Payload UUID
+                                    <span class="helper" title="UUID of the certificate payload to use for the identity credential. As with VPN configurations, it is possible to associate a certificate identity configuration with a Wi-Fi configuration. This is useful when defining credentials for a secure enterprise network.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
                                 </label>
-                                <input id="wfEncPayloadCertUuid" type="text" class="form-control operationDataKeys" data-key="wfEncPayloadCertUuid" placeholder="[ Optional ]">
+                                <input id="wifi-payload-cert-uuid" type="text" class="form-control operationDataKeys" data-key="wifiPayloadCertUUID" placeholder="[ Optional field ]" />
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -1448,7 +1454,7 @@
                                         </span>
                                     </label>
                                 </div>
-                                <ul>
+                                <ul class="grouped-child-input">
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
@@ -2018,7 +2024,7 @@
                                         </span>
                                     </label>
                                 </div>
-                                <ul>
+                                <ul class="grouped-child-input">
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
