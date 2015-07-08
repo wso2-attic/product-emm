@@ -798,10 +798,17 @@ var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
             slideDownVotes++;
         }
     }
+    var paneSelector = "#" + paneID;
     if (slideDownVotes > 0) {
-        $("#" + paneID).slideDown();
+        if (!$(paneSelector).hasClass("expanded-pane")) {
+            $(paneSelector).addClass("expanded-pane");
+        }
+        $(paneSelector).slideDown();
     } else {
-        $("#" + paneID).slideUp();
+        if ($(paneSelector).hasClass("expanded-pane")) {
+            $(paneSelector).removeClass("expanded-pane");
+        }
+        $(paneSelector).slideUp();
     }
 };
 // End of HTML embedded invoke methods
@@ -894,6 +901,15 @@ $(document).ready(function () {
                     function () {
                         var defaultOption = $(this).data("default");
                         $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
+                    }
+                );
+                // collapsing expanded-panes (upon the selection of html-select-options) if any
+                $(operationDataWrapper + " .expanded-pane").each(
+                    function () {
+                        if ($(this).hasClass("expanded-pane")) {
+                            $(this).removeClass("expanded-pane");
+                        }
+                        $(this).slideUp();
                     }
                 );
             }
