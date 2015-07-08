@@ -25,7 +25,6 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.wso2.mdm.agent.services.BuildDeviceInfoPayload;
 import org.wso2.mdm.agent.services.MessageProcessor;
 import org.wso2.mdm.agent.utils.Constants;
 
@@ -38,11 +37,10 @@ public class GCMIntentService extends IntentService {
 
 	/**
 	 * Creates an IntentService. Invoked by your subclass's constructor.
-	 * 
-	 * @param name Used to name the worker thread, important only for debugging.
+	 *
 	 */
-	public GCMIntentService(String name) {
-		super(name);
+	public GCMIntentService() {
+		super(GCMIntentService.class.getName());
 	}
 
 	@Override
@@ -51,7 +49,7 @@ public class GCMIntentService extends IntentService {
 		Bundle extras = intent.getExtras();
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 		String messageType = gcm.getMessageType(intent);
-		if (extras != null && messageType != null && messageType.equals(Constants.messageTypeGCM)) {
+		if (extras != null && messageType != null && messageType.equals(Constants.MESSAGE_TYPE_GCM)) {
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "Message Type: " + messageType + ", Message: " + extras.toString());
 			}

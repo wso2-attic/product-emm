@@ -67,7 +67,9 @@ public class Constants {
 	public static final String ENABLED= "enabled";
 	public static final String LOCAL = "LOCAL";
 	public static final String LOG_FILE = "wso2log.txt";
-    public static final String messageTypeGCM = "gcm";
+    public static final String MESSAGE_TYPE_GCM = "gcm";
+	public static final String OWNERSHIP_BYOD = "BYOD";
+	public static final String OWNERSHIP_COPE = "COPE";
 
 	/**
 	 * Request codes.
