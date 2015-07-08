@@ -39,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -149,9 +150,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				}
 
 				if (radioBYOD.isChecked()) {
-					deviceType = getResources().getString(R.string.device_enroll_type_byod);
+					deviceType = Constants.OWNERSHIP_BYOD;
 				} else {
-					deviceType = getResources().getString(R.string.device_enroll_type_cope);
+					deviceType = Constants.OWNERSHIP_COPE;
 				}
 				
 				showAuthenticationDialog();			
@@ -276,6 +277,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 			} else if (status.trim().equals(Constants.AUTHENTICATION_FAILED)) {
 				showAuthenticationError();
+				CommonUtils.clearAppData(context);
 			} else if (status.trim().equals(Constants.INTERNAL_SERVER_ERROR)) {
 				showInternalServerErrorMessage();
 
@@ -332,10 +334,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				}
 
 			} else {
-				loadPincodeAcitvity();
+				loadNextActivity();
 			}
 		} else {
-			loadPincodeAcitvity();
+			loadNextActivity();
 		}
 
 	}
@@ -498,6 +500,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		startActivity(intent);
 	}
 
+	private void loadRegistrationActivity() {
+		Intent intent = new Intent(AuthenticationActivity.this, RegistrationActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(getResources().getString(R.string.intent_extra_username), usernameVal);
+		startActivity(intent);
+	}
+
 	private void cancelEntry() {
 
 		Preference.putString(context, getResources().getString(R.string.shared_pref_policy),
@@ -649,5 +658,14 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
                               R.string.button_ok),
                       null);
 
+	}
+
+	private void loadNextActivity() {
+		if (getResources().getString(R.string.device_enroll_type_byod).
+				equalsIgnoreCase(deviceType)) {
+			loadPincodeAcitvity();
+		} else {
+			loadRegistrationActivity();
+		}
 	}
 }

@@ -774,6 +774,7 @@ var savePolicy = function (policy) {
     );
 };
 
+// Start of HTML embedded invoke methods
 var showAdvanceOperation = function (operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
@@ -781,6 +782,36 @@ var showAdvanceOperation = function (operation, button) {
     $(hiddenOperation + '[data-operation="' + operation + '"]').show();
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 };
+
+/**
+ * Method to slide down a provided pane upon provided value set.
+ *
+ * @param selectElement Select HTML Element to consider
+ * @param paneID HTML ID of div element to slide down
+ * @param valueSet Applicable Value Set
+ */
+var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
+    var selectedValueOnChange = $(selectElement).find("option:selected").val();
+    var i, slideDownVotes = 0;
+    for (i = 0; i < valueSet.length; i++) {
+        if (selectedValueOnChange == valueSet[i]) {
+            slideDownVotes++;
+        }
+    }
+    var paneSelector = "#" + paneID;
+    if (slideDownVotes > 0) {
+        if (!$(paneSelector).hasClass("expanded")) {
+            $(paneSelector).addClass("expanded");
+        }
+        $(paneSelector).slideDown();
+    } else {
+        if ($(paneSelector).hasClass("expanded")) {
+            $(paneSelector).removeClass("expanded");
+        }
+        $(paneSelector).slideUp();
+    }
+};
+// End of HTML embedded invoke methods
 
 $(document).ready(function () {
 
@@ -865,11 +896,20 @@ $(document).ready(function () {
                         }
                     }
                 );
-                // reinitializing select fields
+                // reinitializing select fields into the defaults
                 $(operationDataWrapper + " select").each(
                     function () {
                         var defaultOption = $(this).data("default");
                         $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
+                    }
+                );
+                // collapsing expanded-panes (upon the selection of html-select-options) if any
+                $(operationDataWrapper + " .expanded").each(
+                    function () {
+                        if ($(this).hasClass("expanded")) {
+                            $(this).removeClass("expanded");
+                        }
+                        $(this).slideUp();
                     }
                 );
             }
@@ -968,21 +1008,3 @@ $(document).ready(function () {
         }
     });
 });
-
-var showProxyConfiguration = function (controller) {
-    var proxyType = $(controller).find("option:selected").val();
-    if (proxyType == "Manual") {
-        $(".manual-proxy-setup").slideDown();
-    } else {
-        $(".manual-proxy-setup").slideUp();
-    }
-};
-
-var showEncryptionPolicyConfiguration = function (controller) {
-    var proxyType = $(controller).find("option:selected").val();
-    if (proxyType != "None") {
-        $(".advanced-security-config").slideDown();
-    } else {
-        $(".advanced-security-config").slideUp();
-    }
-};

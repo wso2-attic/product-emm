@@ -62,14 +62,15 @@ public class BuildDeviceInfoPayload {
 	 */
 	public void build(String type, String owner) {
 		device = new Device();
-
+		Device.EnrolmentInfo info = new Device.EnrolmentInfo();
 		//setting up basic details of the device
-		device.setOwner(owner);
+		info.setOwner(owner);
 		device.setDeviceIdentifier(deviceInfo.getMACAddress());
 		device.setDescription(deviceInfo.getDeviceName());
 		device.setName(deviceInfo.getDeviceName());
-		device.setOwnership(type);
-
+		info.setOwnership(type.equals(Constants.OWNERSHIP_BYOD)?Device.EnrolmentInfo.OwnerShip.BYOD
+				: Device.EnrolmentInfo.OwnerShip.COPE);
+		device.setEnrolmentInfo(info);
 		//adding extra properties
 		List<Device.Property> properties = new ArrayList<>();
 		Device.Property property = new Device.Property();

@@ -53,14 +53,6 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	private Resources resources;
 	private String deviceIdentifier;
     private String TAG = RegistrationActivity.class.getSimpleName();
-	private DialogInterface.OnClickListener registrationFailedOKBtnClickListerner =
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0,
-                                    int arg1) {
-                    loadAuthenticationErrorActivity();
-                }
-            };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
