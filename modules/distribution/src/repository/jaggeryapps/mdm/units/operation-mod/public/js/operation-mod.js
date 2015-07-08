@@ -458,10 +458,19 @@ var operationModule = function () {
                 var operationDataObj = $(this);
                 var key = operationDataObj.data("key");
                 var value = operationDataObj.val();
-                if (operationDataObj.is(':checkbox')) {
+                if (operationDataObj.is(":checkbox")) {
                     value = operationDataObj.is(":checked");
-                } else if (operationDataObj.is('select')) {
+                } else if (operationDataObj.is("select")) {
                     value = operationDataObj.find("option:selected").attr("value");
+                } else if (operationDataObj.hasClass("grouped-array-input")) {
+                    value = [];
+                    if (operationDataObj.hasClass("valued-check-boxes")) {
+                        $(".child-input", this).each(function () {
+                            if ($(this).is(":checked")) {
+                                value.push($(this).data("value"));
+                            }
+                        });
+                    }
                 }
                 operationData[key] = value;
             }
