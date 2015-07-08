@@ -39,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -149,9 +150,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				}
 
 				if (radioBYOD.isChecked()) {
-					deviceType = getResources().getString(R.string.device_enroll_type_byod);
+					deviceType = Constants.OWNERSHIP_BYOD;
 				} else {
-					deviceType = getResources().getString(R.string.device_enroll_type_cope);
+					deviceType = Constants.OWNERSHIP_COPE;
 				}
 				
 				showAuthenticationDialog();			

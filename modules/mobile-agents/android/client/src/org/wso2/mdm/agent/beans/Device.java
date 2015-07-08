@@ -37,10 +37,17 @@ public class Device {
 
 	private String description;
 	private String name;
-	private String ownership;
 	private String deviceIdentifier;
-	private String owner;
 	private List<Property> properties;
+	private EnrolmentInfo enrolmentInfo;
+
+	public EnrolmentInfo getEnrolmentInfo() {
+		return enrolmentInfo;
+	}
+
+	public void setEnrolmentInfo(EnrolmentInfo enrolmentInfo) {
+		this.enrolmentInfo = enrolmentInfo;
+	}
 
 	public String getDescription() {
 		return description;
@@ -58,28 +65,12 @@ public class Device {
 		this.name = name;
 	}
 
-	public String getOwnership() {
-		return ownership;
-	}
-
-	public void setOwnership(String ownership) {
-		this.ownership = ownership;
-	}
-
 	public String getDeviceIdentifier() {
 		return deviceIdentifier;
 	}
 
 	public void setDeviceIdentifier(String deviceIdentifier) {
 		this.deviceIdentifier = deviceIdentifier;
-	}
-
-	public String getOwner() {
-		return owner;
-	}
-
-	public void setOwner(String owner) {
-		this.owner = owner;
 	}
 
 	public List<Property> getProperties() {
@@ -128,4 +119,30 @@ public class Device {
 			this.value = value;
 		}
 	}
+
+	public static class EnrolmentInfo {
+		private OwnerShip ownership;
+		private java.lang.String owner;
+
+		public enum OwnerShip {
+			BYOD, COPE
+		}
+
+		public OwnerShip getOwnership() {
+			return ownership;
+		}
+
+		public void setOwnership(OwnerShip ownership) {
+			this.ownership = ownership;
+		}
+
+		public String getOwner() {
+			return owner;
+		}
+
+		public void setOwner(String owner) {
+			this.owner = owner;
+		}
+	}
+
 }
