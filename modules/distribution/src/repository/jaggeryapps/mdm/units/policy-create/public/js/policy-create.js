@@ -774,6 +774,7 @@ var savePolicy = function (policy) {
     );
 };
 
+// Start of HTML embedded invoke methods
 var showAdvanceOperation = function (operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
@@ -781,6 +782,22 @@ var showAdvanceOperation = function (operation, button) {
     $(hiddenOperation + '[data-operation="' + operation + '"]').show();
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 };
+
+var slideDownPaneAgainstValue = function (selectElement, paneID, valueSet) {
+    var selectedValueOnChange = $(selectElement).find("option:selected").val();
+    var i, slideDownVotes = 0;
+    for (i = 0; i < valueSet.length; i++) {
+        if (selectedValueOnChange == valueSet[i]) {
+            slideDownVotes++;
+        }
+    }
+    if (slideDownVotes > 0) {
+        $("#" + paneID).slideDown();
+    } else {
+        $("#" + paneID).slideUp();
+    }
+};
+// End of HTML embedded invoke methods
 
 $(document).ready(function () {
 
@@ -865,7 +882,7 @@ $(document).ready(function () {
                         }
                     }
                 );
-                // reinitializing select fields
+                // reinitializing select fields into the defaults
                 $(operationDataWrapper + " select").each(
                     function () {
                         var defaultOption = $(this).data("default");
@@ -968,21 +985,3 @@ $(document).ready(function () {
         }
     });
 });
-
-var showProxyConfiguration = function (controller) {
-    var proxyType = $(controller).find("option:selected").val();
-    if (proxyType == "Manual") {
-        $(".manual-proxy-setup").slideDown();
-    } else {
-        $(".manual-proxy-setup").slideUp();
-    }
-};
-
-var showEncryptionPolicyConfiguration = function (controller) {
-    var proxyType = $(controller).find("option:selected").val();
-    if (proxyType != "None") {
-        $(".advanced-security-config").slideDown();
-    } else {
-        $(".advanced-security-config").slideUp();
-    }
-};

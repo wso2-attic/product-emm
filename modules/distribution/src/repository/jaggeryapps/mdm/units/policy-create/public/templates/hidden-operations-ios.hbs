@@ -415,7 +415,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" data-default="0" onchange="showProxyConfiguration(this)">
+                            <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" data-default="0" onchange="slideDownPaneAgainstValue(this, 'manual-proxy-setup', ['Manual'])">
                                 <option value="None" selected="selected">
                                     None
                                 </option>
@@ -424,7 +424,7 @@
                             </select>
                         </div>
 
-                        <div class="manual-proxy-setup" style="display:none;">
+                        <div id="manual-proxy-setup" style="display:none;">
 
                             For Manual Proxy Setup :
                             <br>
@@ -500,7 +500,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" data-default="0" onchange="showEncryptionPolicyConfiguration(this)">
+                            <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" data-default="0" onchange="slideDownPaneAgainstValue(this, 'advanced-security-config', ['WEP', 'WPA', 'Any'])">
                                 <option value="None" selected="selected">None</option>
                                 <option value="WEP">WEP</option>
                                 <option value="WPA">WPA</option>
@@ -508,7 +508,7 @@
                             </select>
                         </div>
 
-                        <div class="advanced-security-config" style="display:none;">
+                        <div id="advanced-security-config" style="display:none;">
 
                             For WEP, WPA or ANY Encryption Security Type :
                             <br>
