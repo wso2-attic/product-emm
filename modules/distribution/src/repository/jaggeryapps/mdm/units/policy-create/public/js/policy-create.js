@@ -783,7 +783,14 @@ var showAdvanceOperation = function (operation, button) {
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 };
 
-var slideDownPaneAgainstValue = function (selectElement, paneID, valueSet) {
+/**
+ * Method to slide down a provided pane upon provided value set.
+ *
+ * @param selectElement Select HTML Element to consider
+ * @param paneID HTML ID of div element to slide down
+ * @param valueSet Applicable Value Set
+ */
+var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
     var selectedValueOnChange = $(selectElement).find("option:selected").val();
     var i, slideDownVotes = 0;
     for (i = 0; i < valueSet.length; i++) {
