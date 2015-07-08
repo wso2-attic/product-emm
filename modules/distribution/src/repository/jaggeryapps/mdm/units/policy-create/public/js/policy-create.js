@@ -813,6 +813,38 @@ var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
 };
 // End of HTML embedded invoke methods
 
+
+// Start of functions related to grid-input-view
+
+/**
+ * Method to set count id to cloned elements.
+ * @param {object} addFormContainer
+ */
+function setId(addFormContainer) {
+    $(addFormContainer).find("[data-add-form-clone]").each(function (i) {
+        $(this).attr("id", $(this).attr("data-add-form-clone").slice(1) + "-" + (i + 1));
+        if ($(this).find(".index").length > 0) {
+            $(this).find(".index").html(i + 1);
+        }
+    });
+}
+
+/**
+ * Method to set count id to cloned elements.
+ * @param {object} addFormContainer
+ */
+function showHideHelpText(addFormContainer) {
+    var helpText = "[data-help-text=add-form]";
+    if($(addFormContainer).find("[data-add-form-clone]").length > 0) {
+        $(addFormContainer).find(helpText).hide();
+    } else {
+        $(addFormContainer).find(helpText).show();
+    }
+}
+
+// End of functions related to grid-input-view
+
+
 $(document).ready(function () {
 
     // Adding initial state of wizard-steps.
@@ -942,6 +974,33 @@ $(document).ready(function () {
     // enabling or disabling grouped-input based on the status of a parent check-box
     $(advanceOperations).on("click", ".grouped-input", function () {
         updateGroupedInputVisibility(this);
+    });
+
+    // add form button click function
+    $(advanceOperations).on("click", "[data-click-event=add-form]", function (e) {
+        e.preventDefault();
+
+        var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
+
+        var clonedForm = $("[data-add-form=" + $(this).attr("href") + "]").clone().
+            find("[data-add-form-element=clone]").attr("data-add-form-clone", $(this).attr("href"));
+
+        // remove form button click function
+        $(clonedForm).find("[data-click-event=remove-form]").bind("click", function () {
+            e.preventDefault();
+            $(this).closest("[data-add-form-element=clone]").remove();
+            setId(addFormContainer);
+            showHideHelpText(addFormContainer);
+        });
+
+        $(addFormContainer).append(clonedForm);
+        setId(addFormContainer);
+        showHideHelpText(addFormContainer);
+
+        // focus + scroll to newly added form
+        $("body").animate({
+            scrollTop: $(addFormContainer).find("[data-add-form-clone]").last().offset().top
+        }, 400);
     });
 
     $(".wizard-stepper").click(function () {

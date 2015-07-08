@@ -282,6 +282,7 @@ a.ctrl-filter-category:hover {
 
 .panel-title table, .panel-body table {
 	width:100%;
+    border: 1px solid #c8c8c8;
 }
 
 .panel-title a {
