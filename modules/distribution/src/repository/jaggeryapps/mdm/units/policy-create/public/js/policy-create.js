@@ -800,13 +800,13 @@ var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
     }
     var paneSelector = "#" + paneID;
     if (slideDownVotes > 0) {
-        if (!$(paneSelector).hasClass("expanded-pane")) {
-            $(paneSelector).addClass("expanded-pane");
+        if (!$(paneSelector).hasClass("expanded")) {
+            $(paneSelector).addClass("expanded");
         }
         $(paneSelector).slideDown();
     } else {
-        if ($(paneSelector).hasClass("expanded-pane")) {
-            $(paneSelector).removeClass("expanded-pane");
+        if ($(paneSelector).hasClass("expanded")) {
+            $(paneSelector).removeClass("expanded");
         }
         $(paneSelector).slideUp();
     }
@@ -904,10 +904,10 @@ $(document).ready(function () {
                     }
                 );
                 // collapsing expanded-panes (upon the selection of html-select-options) if any
-                $(operationDataWrapper + " .expanded-pane").each(
+                $(operationDataWrapper + " .expanded").each(
                     function () {
-                        if ($(this).hasClass("expanded-pane")) {
-                            $(this).removeClass("expanded-pane");
+                        if ($(this).hasClass("expanded")) {
+                            $(this).removeClass("expanded");
                         }
                         $(this).slideUp();
                     }
