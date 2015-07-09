@@ -1,0 +1,38 @@
+{{#each devices}}
+    {{deviceMap this}}
+    <div class="ctrl-wr-asset" data-deviceid="{{deviceIdentifier}}" data-type="{{type}}">
+        <div class="itm-select">
+            <label class="wr-input-control checkbox">
+                <input type="checkbox" />
+                <span class="helper"></span>
+            </label>
+        </div>
+
+        <div class="itm-ast">
+            <a href="device/{{type}}/{{deviceIdentifier}}">
+                <div class="ast-img"><img src="{{../imageLocation}}{{type}}.png" /></div>
+                <div class="ast-desc">
+                    <div class="ast-title">
+                        <h3 class="ast-name">Device {{name}}</h3>
+                        <span class="ast-auth">Platform: {{type}}</span>
+                        <span class="ast-auth">Owner: {{owner}}</span>
+                    </div>
+                    <div class="ast-model">
+                        <span class="ast-ver">{{properties.osVersion}}</span>
+                        <span class="ast-published">{{properties.vendor}} {{model}}</span>
+                    </div>
+
+                </div>
+                <br class="c-both" />
+            </a>
+            {{#equal type "TemperatureController"}}
+                {{#equal status "INACTIVE"}}
+                    <a href="#" class="wr-btn claim-btn" data-deviceid="{{deviceIdentifier}}">Claim</a>
+                {{/equal}}
+            {{/equal}}
+        </div>
+    </div>
+
+{{/each}}
+
+<br class="c-both"/>

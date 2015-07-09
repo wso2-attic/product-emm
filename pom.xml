@@ -36,6 +36,7 @@
     </parent>
 
     <modules>
+	<module>modules/apps/mdm</module>
         <module>modules/mobile-agents</module>
         <module>modules/tools</module>
         <module>modules/rest-api</module>
