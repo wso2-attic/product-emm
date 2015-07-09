@@ -464,11 +464,15 @@ var operationModule = function () {
                     value = operationDataObj.find("option:selected").attr("value");
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
                     value = [];
-                    if (operationDataObj.hasClass("valued-check-boxes")) {
+                    if (operationDataObj.hasClass("valued-check-box-array")) {
                         $(".child-input", this).each(function () {
                             if ($(this).is(":checked")) {
                                 value.push($(this).data("value"));
                             }
+                        });
+                    } else if (operationDataObj.hasClass("one-column-text-field-array")) {
+                        $(".child-input", this).each(function () {
+                            value.push($(this).val());
                         });
                     }
                 }

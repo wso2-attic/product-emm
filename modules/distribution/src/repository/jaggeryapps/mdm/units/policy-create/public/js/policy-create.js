@@ -985,6 +985,9 @@ $(document).ready(function () {
         var clonedForm = $("[data-add-form=" + $(this).attr("href") + "]").clone().
             find("[data-add-form-element=clone]").attr("data-add-form-clone", $(this).attr("href"));
 
+        // adding class .child-input to capture text-input-array-values
+        $("input", clonedForm).addClass("child-input");
+
         // remove form button click function
         $(clonedForm).find("[data-click-event=remove-form]").bind("click", function () {
             e.preventDefault();

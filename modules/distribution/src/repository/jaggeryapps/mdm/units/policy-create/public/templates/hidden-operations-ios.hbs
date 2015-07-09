@@ -539,7 +539,7 @@
                                         <br>
                                         <br>
                                     </label>
-                                    <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-boxes" data-key="wifiAcceptedEAPTypes">
+                                    <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-box-array" data-key="wifiAcceptedEAPTypes">
                                         <label class="wr-input-control checkbox">
                                             <input type="checkbox" class="form-control child-input" data-default="false" data-value="13"/>
                                                 <span class="helper" title="">
@@ -742,7 +742,7 @@
                         <div class="wr-input-control">
                             <label class="wr-input-label" for="wifi-roaming-consortium-ois">
                                 Roaming Consortium OIs
-                                <span class="helper" title="Array of Roaming Consortium Organization Identifiers used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
+                                <span class="helper" title="Roaming Consortium Organization Identifiers used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                                 <br>
@@ -754,7 +754,7 @@
                                     Add Roaming Consortium OI
                                 </a>
                             </label>
-                            <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input text-fields-with-one-column" data-key="wifiRoamingConsortiumOIs">
+                            <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiRoamingConsortiumOIs">
                                 <table class="table table-responsive table-striped">
                                     <thead>
                                         <tr>
@@ -774,11 +774,15 @@
                                 <table class="template hidden">
                                     <tbody data-add-form="#wifi-roaming-consortium-ois-grid">
                                         <tr data-add-form-element="clone">
-                                            <td data-title="No:"><span class="index"></span></td>
-                                            <td data-title="Code"><input type="text" class="form-control grid-input-text"></td>
+                                            <td data-title="No :">
+                                                <span class="index"></span>
+                                            </td>
+                                            <td data-title="Roaming Consortium OI">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires alphanumeric with letters ABCDEF upto 10 characters ]" />
+                                            </td>
                                             <td>
                                                 <span class="list-group-item-actions">
-                                                    <a href="#wifi-roaming-consortium-ois-grid" data-click-event="remove-form" class="grid-input-remove">
+                                                    <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-remove" data-click-event="remove-form">
                                                         <span class="fw-stack">
                                                             <i class="fw fw-ring fw-stack-2x"></i>
                                                             <i class="fw fw-delete fw-stack-1x"></i>
@@ -792,6 +796,131 @@
                                 </table>
                             </div>
                         </div>
+
+                        <br>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wifi-nai-realm-names">
+                                Network Access Identifier ( NAI ) Realm Names
+                                <span class="helper" title="List of Network Access Identifier Realm names used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                <br>
+                                <a href="#wifi-nai-realm-names-grid" class="grid-input-add" data-click-event="add-form">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                    </span>
+                                    Add NAI Realm Name
+                                </a>
+                            </label>
+                            <div id="wifi-nai-realm-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiNAIRealmNames">
+                                <table class="table table-responsive table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No :</th>
+                                            <th>NAI Realm Name</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-add-form-container="#wifi-nai-realm-names-grid">
+                                        <tr data-help-text="add-form">
+                                            <td colspan="3">
+                                                No entries added yet .
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="template hidden">
+                                    <tbody data-add-form="#wifi-nai-realm-names-grid">
+                                        <tr data-add-form-element="clone">
+                                            <td data-title="No :">
+                                                <span class="index"></span>
+                                            </td>
+                                            <td data-title="NAI Realm Name">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires unique name ]" />
+                                            </td>
+                                            <td>
+                                                <span class="list-group-item-actions">
+                                                    <a href="#wifi-nai-realm-names-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                        <span class="fw-stack">
+                                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                                            <i class="fw fw-delete fw-stack-1x"></i>
+                                                        </span>
+                                                        Remove
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wifi-mcc-and-mncs">
+                                Mobile Country Code ( MCC ) / Mobile Network Code ( MNC ) pairs
+                                <span class="helper" title="List of Mobile Country Code (MCC)/Mobile Network Code (MNC) pairs used for Wi-Fi Hotspot 2.0 negotiation. Each string must contain exactly six digits. Available in iOS 7.0 and later. This feature is not supported in OS X.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                <br>
+                                <a href="#wifi-mcc-and-mncs-grid" class="grid-input-add" data-click-event="add-form">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                    </span>
+                                    Add MCC/MNC
+                                </a>
+                            </label>
+                            <div id="wifi-mcc-and-mncs" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="wifiMCCAndMNCs">
+                                <table class="table table-responsive table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No :</th>
+                                            <th>MCC</th>
+                                            <th>MNC</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-add-form-container="#wifi-mcc-and-mncs-grid">
+                                        <tr data-help-text="add-form">
+                                            <td colspan="4">
+                                                No entries added yet .
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="template hidden">
+                                    <tbody data-add-form="#wifi-mcc-and-mncs-grid">
+                                        <tr data-add-form-element="clone">
+                                            <td data-title="No :">
+                                                <span class="index"></span>
+                                            </td>
+                                            <td data-title="MCC">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                            </td>
+                                            <td data-title="MNC">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                            </td>
+                                            <td>
+                                                <span class="list-group-item-actions">
+                                                    <a href="#wifi-mcc-and-mncs-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                        <span class="fw-stack">
+                                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                                            <i class="fw fw-delete fw-stack-1x"></i>
+                                                        </span>
+                                                        Remove
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
