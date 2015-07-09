@@ -2555,6 +2555,37 @@ a:hover.multi-view.remove.enabled {
     color: #F4A6B0;
 }
 
+a.grid-input-add {
+    padding-top: 10px;
+    padding-bottom: 8px;
+    color: #9F9F9F;
+    text-decoration: none;
+    float: left;
+    font-size: 15px;
+}
+
+a:hover.grid-input-add {
+    color: #A7E43A;
+}
+
+a.grid-input-remove {
+    padding-top: 4px;
+    padding-right: 10px;
+    color: #9F9F9F;
+    text-decoration: none;
+    float: right;
+    font-size: 15px;
+    display: inline-block;
+}
+
+a:hover.grid-input-remove {
+    color: #F4A6B0;
+}
+
+input.grid-input-text {
+    border: 1px solid #DDDDDD;
+}
+
 .multi-view .content .panel-heading .panel-title .wr-input-control.switch {
     float: right;
     margin-top: 10px;

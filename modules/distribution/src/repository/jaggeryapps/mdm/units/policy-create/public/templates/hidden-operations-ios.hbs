@@ -738,6 +738,60 @@
                             </div>
 
                         </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wifi-roaming-consortium-ois">
+                                Roaming Consortium OIs
+                                <span class="helper" title="Array of Roaming Consortium Organization Identifiers used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                <br>
+                                <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-add" data-click-event="add-form">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                    </span>
+                                    Add Roaming Consortium OI
+                                </a>
+                            </label>
+                            <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input text-fields-with-one-column" data-key="wifiRoamingConsortiumOIs">
+                                <table class="table table-responsive table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No :</th>
+                                            <th>Roaming Consortium OI</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-add-form-container="#wifi-roaming-consortium-ois-grid">
+                                        <tr data-help-text="add-form">
+                                            <td colspan="3">
+                                                No entries added yet .
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="template hidden">
+                                    <tbody data-add-form="#wifi-roaming-consortium-ois-grid">
+                                        <tr data-add-form-element="clone">
+                                            <td data-title="No:"><span class="index"></span></td>
+                                            <td data-title="Code"><input type="text" class="form-control grid-input-text"></td>
+                                            <td>
+                                                <span class="list-group-item-actions">
+                                                    <a href="#wifi-roaming-consortium-ois-grid" data-click-event="remove-form" class="grid-input-remove">
+                                                        <span class="fw-stack">
+                                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                                            <i class="fw fw-delete fw-stack-1x"></i>
+                                                        </span>
+                                                        Remove
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

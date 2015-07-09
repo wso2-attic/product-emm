@@ -282,6 +282,7 @@ a.ctrl-filter-category:hover {
 
 .panel-title table, .panel-body table {
 	width:100%;
+    border: 1px solid #c8c8c8;
 }
 
 .panel-title a {
@@ -309,15 +310,8 @@ a.ctrl-filter-category:hover {
 
 /* input */
 .form-control {
-	display: block;
-	width: 100%;
-	height: 34px;
-	padding: 6px 12px;
-	font-size: 14px;
-	line-height: 1.42857143;
-	color: #555;
+    width: 100%;
 	background-color: #fff;
-	background-image: none;
 	border: 1px solid #999;
 	border-radius: 0;
 	-webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, .075);
@@ -437,6 +431,7 @@ a.ctrl-filter-category:hover {
 	background-image: none;
 	border: 1px solid transparent;
 	border-radius: 0;
+	transition: background 0.2s;
 }
 
 .col-centered {
@@ -446,6 +441,15 @@ a.ctrl-filter-category:hover {
 
 b, strong {
     font-weight: 500;
+}
+
+.form-horizontal .control-label {
+	font-weight: 500;
+}
+
+.form-horizontal .control-value {
+	padding-top: 7px;
+	margin-bottom: 0;
 }
 
 .panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
@@ -478,6 +482,16 @@ b, strong {
 .row.no-gutter [class*='col-']:not(:first-child), .row.no-gutter [class*='col-']:not(:last-child) {
     padding-right:0;
     padding-left:0;
+}
+
+.table tr.row.no-gutter > td {
+	border-top: none;
+	padding: 0;
+}
+
+.table thead th {
+    font-weight: 200;
+    text-transform: none;
 }
 
 select.select2 {
@@ -539,4 +553,13 @@ select.select2 {
 
 .select2-dropdown {
     z-index: 10000;
+}
+
+.ui-autocomplete {
+	max-height: 400px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+* html .ui-autocomplete {
+	height: 400px;
 }
