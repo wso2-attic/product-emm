@@ -539,7 +539,7 @@
                                         <br>
                                         <br>
                                     </label>
-                                    <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-boxes" data-key="wifiAcceptedEAPTypes">
+                                    <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-box-array" data-key="wifiAcceptedEAPTypes">
                                         <label class="wr-input-control checkbox">
                                             <input type="checkbox" class="form-control child-input" data-default="false" data-value="13"/>
                                                 <span class="helper" title="">
@@ -754,7 +754,7 @@
                                     Add Roaming Consortium OI
                                 </a>
                             </label>
-                            <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input text-fields-with-one-column" data-key="wifiRoamingConsortiumOIs">
+                            <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiRoamingConsortiumOIs">
                                 <table class="table table-responsive table-striped">
                                     <thead>
                                         <tr>
@@ -774,8 +774,12 @@
                                 <table class="template hidden">
                                     <tbody data-add-form="#wifi-roaming-consortium-ois-grid">
                                         <tr data-add-form-element="clone">
-                                            <td data-title="No:"><span class="index"></span></td>
-                                            <td data-title="Code"><input type="text" class="form-control grid-input-text"></td>
+                                            <td data-title="No :">
+                                                <span class="index"></span>
+                                            </td>
+                                            <td data-title="Roaming Consortium OI">
+                                                <input type="text" class="form-control grid-input-text">
+                                            </td>
                                             <td>
                                                 <span class="list-group-item-actions">
                                                     <a href="#wifi-roaming-consortium-ois-grid" data-click-event="remove-form" class="grid-input-remove">
