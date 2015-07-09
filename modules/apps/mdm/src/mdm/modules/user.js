@@ -265,7 +265,7 @@ var userModule = function () {
         var user = userManager.getUser(username);
         var emailProperties = new EmailMessageProperties();
         var emailTo = [];
-        emailTo[0] = user.getEmail();
+        emailTo[0] = privateMethods.getEmail(username, userManager);
         emailProperties.setMailTo(emailTo);
         //emailProperties.setFirstName(user.getFirstName());
         emailProperties.setFirstName(privateMethods.getFirstName(username, userManager));
