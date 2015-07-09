@@ -31,7 +31,7 @@
     <artifactId>mdm-admin</artifactId>
     <packaging>war</packaging>
     <version>2.0.0-SNAPSHOT</version>
-    <name>WSO2 MDM REST API</name>
+    <name>WSO2 MDM - Mobile Device Management Admin Services</name>
     <url>http://maven.apache.org</url>
 
     <build>
