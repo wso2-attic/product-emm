@@ -774,6 +774,7 @@ var savePolicy = function (policy) {
     );
 };
 
+// Start of HTML embedded invoke methods
 var showAdvanceOperation = function (operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
@@ -781,6 +782,68 @@ var showAdvanceOperation = function (operation, button) {
     $(hiddenOperation + '[data-operation="' + operation + '"]').show();
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 };
+
+/**
+ * Method to slide down a provided pane upon provided value set.
+ *
+ * @param selectElement Select HTML Element to consider
+ * @param paneID HTML ID of div element to slide down
+ * @param valueSet Applicable Value Set
+ */
+var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
+    var selectedValueOnChange = $(selectElement).find("option:selected").val();
+    var i, slideDownVotes = 0;
+    for (i = 0; i < valueSet.length; i++) {
+        if (selectedValueOnChange == valueSet[i]) {
+            slideDownVotes++;
+        }
+    }
+    var paneSelector = "#" + paneID;
+    if (slideDownVotes > 0) {
+        if (!$(paneSelector).hasClass("expanded")) {
+            $(paneSelector).addClass("expanded");
+        }
+        $(paneSelector).slideDown();
+    } else {
+        if ($(paneSelector).hasClass("expanded")) {
+            $(paneSelector).removeClass("expanded");
+        }
+        $(paneSelector).slideUp();
+    }
+};
+// End of HTML embedded invoke methods
+
+
+// Start of functions related to grid-input-view
+
+/**
+ * Method to set count id to cloned elements.
+ * @param {object} addFormContainer
+ */
+function setId(addFormContainer) {
+    $(addFormContainer).find("[data-add-form-clone]").each(function (i) {
+        $(this).attr("id", $(this).attr("data-add-form-clone").slice(1) + "-" + (i + 1));
+        if ($(this).find(".index").length > 0) {
+            $(this).find(".index").html(i + 1);
+        }
+    });
+}
+
+/**
+ * Method to set count id to cloned elements.
+ * @param {object} addFormContainer
+ */
+function showHideHelpText(addFormContainer) {
+    var helpText = "[data-help-text=add-form]";
+    if($(addFormContainer).find("[data-add-form-clone]").length > 0) {
+        $(addFormContainer).find(helpText).hide();
+    } else {
+        $(addFormContainer).find(helpText).show();
+    }
+}
+
+// End of functions related to grid-input-view
+
 
 $(document).ready(function () {
 
@@ -860,29 +923,25 @@ $(document).ready(function () {
                             // if this checkbox is the parent input of a grouped-input
                             if ($(this).hasClass("parent-input")) {
                                 var groupedInput = $(this).parent().parent().parent();
-                                if ($(this).is(":checked")) {
-                                    $(".child-input", groupedInput).each(function () {
-                                        $(this).prop('disabled', false);
-                                    });
-                                    if ($("ul", groupedInput).hasClass("disabled")) {
-                                        $("ul", groupedInput).removeClass("disabled");
-                                    }
-                                } else {
-                                    $(".child-input", groupedInput).each(function () {
-                                        $(this).prop('disabled', true);
-                                    });
-                                    if (!$("ul", groupedInput).hasClass("disabled")) {
-                                        $("ul", groupedInput).addClass("disabled");
-                                    }
-                                }
+                                updateGroupedInputVisibility(groupedInput);
                             }
                         }
                     }
                 );
-                // reinitializing select fields
+                // reinitializing select fields into the defaults
                 $(operationDataWrapper + " select").each(
                     function () {
-                        $("option:first", this).prop("selected", "selected");
+                        var defaultOption = $(this).data("default");
+                        $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
+                    }
+                );
+                // collapsing expanded-panes (upon the selection of html-select-options) if any
+                $(operationDataWrapper + " .expanded").each(
+                    function () {
+                        if ($(this).hasClass("expanded")) {
+                            $(this).removeClass("expanded");
+                        }
+                        $(this).slideUp();
                     }
                 );
             }
@@ -915,6 +974,33 @@ $(document).ready(function () {
     // enabling or disabling grouped-input based on the status of a parent check-box
     $(advanceOperations).on("click", ".grouped-input", function () {
         updateGroupedInputVisibility(this);
+    });
+
+    // add form button click function
+    $(advanceOperations).on("click", "[data-click-event=add-form]", function (e) {
+        e.preventDefault();
+
+        var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
+
+        var clonedForm = $("[data-add-form=" + $(this).attr("href") + "]").clone().
+            find("[data-add-form-element=clone]").attr("data-add-form-clone", $(this).attr("href"));
+
+        // remove form button click function
+        $(clonedForm).find("[data-click-event=remove-form]").bind("click", function () {
+            e.preventDefault();
+            $(this).closest("[data-add-form-element=clone]").remove();
+            setId(addFormContainer);
+            showHideHelpText(addFormContainer);
+        });
+
+        $(addFormContainer).append(clonedForm);
+        setId(addFormContainer);
+        showHideHelpText(addFormContainer);
+
+        // focus + scroll to newly added form
+        $("body").animate({
+            scrollTop: $(addFormContainer).find("[data-add-form-clone]").last().offset().top
+        }, 400);
     });
 
     $(".wizard-stepper").click(function () {
@@ -981,21 +1067,3 @@ $(document).ready(function () {
         }
     });
 });
-
-var showProxyConfiguration = function (controller) {
-    var proxyType = $(controller).find("option:selected").val();
-    if (proxyType == "Manual") {
-        $(".manual-proxy-setup").slideDown();
-    } else {
-        $(".manual-proxy-setup").slideUp();
-    }
-};
-
-var showEncryptionPolicyConfiguration = function (controller) {
-    var proxyType = $(controller).find("option:selected").val();
-    if (proxyType != "None") {
-        $(".advanced-security-config").slideDown();
-    } else {
-        $(".advanced-security-config").slideUp();
-    }
-};

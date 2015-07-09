@@ -195,10 +195,15 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			getSupportMenuInflater().inflate(R.menu.sherlock_menu_debug, menu);
-		} else {
-			getSupportMenuInflater().inflate(R.menu.sherlock_menu, menu);
+		String deviceType =  Preference.getString(context, getResources().
+				getString(R.string.shared_pref_reg_type));
+		if (deviceType != null && !deviceType.isEmpty()) {
+			if (getResources().getString(R.string.device_enroll_type_byod).
+					equalsIgnoreCase(deviceType)) {
+				getSupportMenuInflater().inflate(R.menu.sherlock_menu_byod, menu);
+			} else {
+				getSupportMenuInflater().inflate(R.menu.sherlock_menu_cope, menu);
+			}
 		}
 		return true;
 	}
