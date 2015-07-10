@@ -621,6 +621,128 @@
                                     </label>
                                 </div>
 
+                                <br>
+
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label" for="wifi-payload-certificate-anchor-uuid">
+                                        Certificate Payload Anchor UUIDs
+                                        <span class="helper" title="Identifies the certificates to be trusted for this authentication. Each entry must contain the UUID of a certificate payload. Use this key to prevent the device from asking the user if the listed certificates are trusted.">
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                        <br>
+                                        <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-add" data-click-event="add-form">
+                                            <span class="icon fw-stack">
+                                                <i class="fw fw-add fw-stack-1x"></i>
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                            </span>
+                                            Add Certificate Payload Anchor UUID
+                                        </a>
+                                    </label>
+                                    <div id="wifi-payload-certificate-anchor-uuid" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiPayloadCertificateAnchorUUID">
+                                        <table class="table table-responsive table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>No :</th>
+                                                    <th>Certificate Payload Anchor UUID</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-add-form-container="#wifi-payload-certificate-anchor-uuid-grid">
+                                                <tr data-help-text="add-form">
+                                                    <td colspan="3">
+                                                        No entries added yet .
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="template hidden">
+                                            <tbody data-add-form="#wifi-payload-certificate-anchor-uuid-grid">
+                                                <tr data-add-form-element="clone">
+                                                    <td data-title="No :">
+                                                        <span class="index"></span>
+                                                    </td>
+                                                    <td data-title="Certificate Payload Anchor UUID">
+                                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Payload UUID ]" />
+                                                    </td>
+                                                    <td>
+                                                        <span class="list-group-item-actions">
+                                                            <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                                <span class="fw-stack">
+                                                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                                                    <i class="fw fw-delete fw-stack-1x"></i>
+                                                                </span>
+                                                                Remove
+                                                            </a>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label" for="wifi-tls-trusted-server-names">
+                                        TLS Trusted Server Certificate Names
+                                        <span class="helper" title="This is the list of server certificate common names that will be accepted. You can use wildcards to specify the name, such as wpa.*.example.com. If a server presents a certificate that isn't in this list, it won't be trusted. Used alone or in combination with TLSTrustedCertificates, the property allows someone to carefully craft which certificates to trust for the given network, and avoid dynamically trusted certificates.">
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                        <br>
+                                        <a href="#wifi-tls-trusted-server-names-grid" class="grid-input-add" data-click-event="add-form">
+                                            <span class="icon fw-stack">
+                                                <i class="fw fw-add fw-stack-1x"></i>
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                            </span>
+                                            Add TLS Trusted Server Certificate Name
+                                        </a>
+                                    </label>
+                                    <div id="wifi-tls-trusted-server-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiTLSTrustedServerNames">
+                                        <table class="table table-responsive table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>No :</th>
+                                                    <th>TLS Trusted Server Certificate Name</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-add-form-container="#wifi-tls-trusted-server-names-grid">
+                                                <tr data-help-text="add-form">
+                                                    <td colspan="3">
+                                                        No entries added yet .
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="template hidden">
+                                            <tbody data-add-form="#wifi-tls-trusted-server-names-grid">
+                                                <tr data-add-form-element="clone">
+                                                    <td data-title="No :">
+                                                        <span class="index"></span>
+                                                    </td>
+                                                    <td data-title="TLS Trusted Server Certificate Name">
+                                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Common Name ]" />
+                                                    </td>
+                                                    <td>
+                                                        <span class="list-group-item-actions">
+                                                            <a href="#wifi-tls-trusted-server-names-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                                <span class="fw-stack">
+                                                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                                                    <i class="fw fw-delete fw-stack-1x"></i>
+                                                                </span>
+                                                                Remove
+                                                            </a>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <br>
+
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="wifi-eap-tls-allow-trust-exceptions" type="checkbox" class="form-control operationDataKeys" data-key="wifiEAPTLSAllowTrustExceptions" data-default="true" checked="checked"/>
