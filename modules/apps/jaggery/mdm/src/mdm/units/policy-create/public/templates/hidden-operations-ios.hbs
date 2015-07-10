@@ -14,7 +14,7 @@
             </span>
             Restrictions
             <span id="restrictions-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span class="restrictions-error status-icon hidden"><i class="fw fw-error"></i></span>
+            <span id="restrictions-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('wifi', this)">
             <span class="wr-hidden-operations-icon fw-stack">
@@ -105,7 +105,7 @@
                 <div class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Passcode Policy
-                        <label id="passcode-policy-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#passCodePolicy">
+                        <label id="passcode-policy-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#passcode-policy">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -118,7 +118,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="passCodePolicy" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="passCodePolicy">
+                <div id="passcode-policy" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="passcode-policy">
 
                     <div id="passcode-policy-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
@@ -126,7 +126,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="forcePIN" type="checkbox" class="form-control operationDataKeys" data-key="forcePIN" checked="checked" />
+                            <input id="passcode-policy-force-pin" type="checkbox" class="form-control operationDataKeys" data-key="passcodePolicyForcePIN" checked="checked" />
                             <span class="helper" title="Determines whether the user is forced to set a passcode.">
                                 &nbsp;&nbsp;&nbsp;Force Passcode
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -136,7 +136,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="allowSimple" type="checkbox" class="form-control operationDataKeys" data-key="allowSimple" checked="checked" />
+                            <input id="passcode-policy-allow-simple" type="checkbox" class="form-control operationDataKeys" data-key="passcodePolicyAllowSimple" checked="checked" />
                             <span class="helper" title="Permit the use of repeating, ascending and descending character sequences">
                                 &nbsp;&nbsp;&nbsp;Allow simple value
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -146,7 +146,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="requireAlphanumeric" type="checkbox" class="form-control operationDataKeys" data-key="requireAlphanumeric" checked="checked" />
+                            <input id="passcode-policy-require-alphanumeric" type="checkbox" class="form-control operationDataKeys" data-key="passcodePolicyRequireAlphanumeric" checked="checked" />
                             <span class="helper" title="Require passcode to contain both letters and numbers">
                                 &nbsp;&nbsp;&nbsp;Require alphanumeric value
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -155,14 +155,14 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="minLength">
+                        <label class="wr-input-label" for="passcode-policy-min-length">
                             Minimum passcode length
                             <span class="helper" title="Minimum number of characters allowed in a passcode">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
                         <!--<input id="minLength" type="text" class="form-control operationDataKeys" data-key="minLength" placeholder="Enter minimum passcode length">-->
-                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength" data-default="0">
+                        <select id="passcode-policy-min-length" class="form-control operationDataKeys" data-key="passcodePolicyMinLength" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -186,13 +186,13 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="minComplexChars">
+                        <label class="wr-input-label" for="passcode-policy-min-complex-chars">
                             Minimum number of complex characters
                             <span class="helper" title="Minimum number of complex or non-alphanumeric characters allowed in a passcode">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars" data-default="0">
+                        <select id="passcode-policy-min-complex-chars" class="form-control operationDataKeys" data-key="passcodePolicyMinComplexChars" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -204,35 +204,35 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxPINAgeInDays">
+                        <label class="wr-input-label" for="passcode-policy-max-pin-age-in-days">
                             Maximum passcode age in days <br>
                             ( Should be in between 1-to-730 days or none )
                             <span class="helper" title="Number of days after which a passcode must be changed">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="maxPINAgeInDays" type="text" class="form-control operationDataKeys" data-key="maxPINAgeInDays" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-max-pin-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPINAgeInDays" placeholder="[ Requires Number Input ]" />
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="pinHistory">
+                        <label class="wr-input-label" for="passcode-policy-pin-history">
                             Passcode history <br>
                             ( Should be in between 1-to-50 passcodes or none )
                             <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="pinHistory" type="text" class="form-control operationDataKeys" data-key="pinHistory" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-pin-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPINHistory" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxAutoLock">
+                        <label class="wr-input-label" for="passcode-policy-max-auto-lock">
                             Auto Lock Time in minutes
                             <span class="helper" title="A device will be automatically locked when this time period elapses">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="maxAutoLock" class="form-control operationDataKeys" data-key="maxAutoLock" data-default="0">
+                        <select id="passcode-policy-max-auto-lock" class="form-control operationDataKeys" data-key="passcodePolicyMaxAutoLock" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -245,13 +245,13 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="gracePeriod">
+                        <label class="wr-input-label" for="passcode-policy-grace-period">
                             Grace period in minutes for device lock
                             <span class="helper" title="Amount of time the device will be locked without prompting for passcode on unlock">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="gracePeriod" class="form-control operationDataKeys" data-key="gracePeriod" data-default="0">
+                        <select id="passcode-policy-grace-period" class="form-control operationDataKeys" data-key="passcodePolicyGracePeriod" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -266,14 +266,14 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxFailedAttempts">
+                        <label class="wr-input-label" for="passcode-policy-max-failed-attempts">
                             Maximum number of failed attempts
                             <span class="helper" title="Maximum number of passcode entry attempts allowed before all data on a device will be erased">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
                         <!--<input type="text" class="form-control operationDataKeys" id="maxFailedAttempts" data-key="maxFailedAttempts" placeholder="Enter maximum number of failed attempts">-->
-                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts" data-default="0">
+                        <select id="passcode-policy-max-failed-attempts" class="form-control operationDataKeys" data-key="passcodePolicyMaxFailedAttempts" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -1725,13 +1725,12 @@
                     </h2>
                 </div>
                 <div id="restrictions" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="restrictions">
+
                     <div id="restrictions-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
-                    Un-check following checkboxes in case you need to restrict any of the following.
-                    <br>
-                    <br>
-                    Device Functionality :
+
+                    Restrictions on Device Functionality :
                     <hr>
                     <div id="restrictions-device-functionality">
                         <ul class="listing">
@@ -2334,7 +2333,7 @@
                         </ul>
                     </div>
                     <br>
-                    Applications :
+                    Restrictions on Applications :
                     <hr>
                     <div id="restrictions-applications">
                         <ul class="listing">
@@ -2496,6 +2495,7 @@
                                                 <i class="fw fw-add fw-stack-1x"></i>
                                                 <i class="fw fw-ring fw-stack-2x"></i>
                                             </span>
+                                            &nbsp;
                                             Add Application Bundle ID
                                         </a>
                                     </label>

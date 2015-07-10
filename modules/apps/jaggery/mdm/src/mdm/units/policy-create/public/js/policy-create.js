@@ -101,6 +101,7 @@ var inputIsValidAgainstRegExp = function (regExp, input) {
 validateStep["policy-profile"] = function () {
     var validationStatusArray = [];
     var validationStatus;
+    var operationName;
 
     // starting validation process and updating validationStatus
     if (policy["platform"] == platformTypeConstants["ANDROID"]) {
@@ -113,6 +114,8 @@ validateStep["policy-profile"] = function () {
         } else {
             if ($.inArray("PASSCODE_POLICY", configuredOperations) != -1) {
                 // if PASSCODE_POLICY is configured
+                operationName = "passcode-policy";
+                // getting input values to be validated
                 var maxPasscodeAgeInDays = $("input#maxPINAgeInDays").val();
                 var passcodeHistory = $("input#pinHistory").val();
                 // initializing continueToCheckNextInput to true
@@ -125,7 +128,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Provided passcode age is not a number. Please check.",
-                            "erroneousFeature": "passcode-policy"
+                            "erroneousFeature": operationName
                         };
                         validationStatusArray.push(validationStatus);
                     } else {
@@ -136,7 +139,7 @@ validateStep["policy-profile"] = function () {
                                 "error": true,
                                 "subErrorMsg":
                                     "Provided passcode age is not with in the range of 1-to-730. Please check.",
-                                "erroneousFeature": "passcode-policy"
+                                "erroneousFeature": operationName
                             };
                             validationStatusArray.push(validationStatus);
                         } else {
@@ -154,7 +157,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Provided passcode history is not a number. Please check.",
-                                "erroneousFeature": "passcode-policy"
+                                "erroneousFeature": operationName
                             };
                             validationStatusArray.push(validationStatus);
                         } else if ($.isNumeric(passcodeHistory)) {
@@ -165,13 +168,13 @@ validateStep["policy-profile"] = function () {
                                     "subErrorMsg":
                                         "Provided passcode history is not with in the range" +
                                         " of 1-to-50. Please check.",
-                                    "erroneousFeature": "passcode-policy"
+                                    "erroneousFeature": operationName
                                 };
                                 validationStatusArray.push(validationStatus);
                             } else {
                                 validationStatus = {
                                     "error": false,
-                                    "okFeature": "passcode-policy"
+                                    "okFeature": operationName
                                 };
                                 validationStatusArray.push(validationStatus);
                             }
@@ -179,7 +182,7 @@ validateStep["policy-profile"] = function () {
                     } else {
                         validationStatus = {
                             "error": false,
-                            "okFeature": "passcode-policy"
+                            "okFeature": operationName
                         };
                         validationStatusArray.push(validationStatus);
                     }
@@ -187,41 +190,44 @@ validateStep["policy-profile"] = function () {
             }
             if ($.inArray("CAMERA", configuredOperations) != -1) {
                 // if CAMERA is configured
+                operationName = "camera";
                 validationStatus = {
                     "error": false,
-                    "okFeature": "camera"
+                    "okFeature": operationName
                 };
                 validationStatusArray.push(validationStatus);
             }
             if ($.inArray("ENCRYPT_STORAGE", configuredOperations) != -1) {
                 // if ENCRYPT_STORAGE is configured
+                operationName = "encrypt-storage";
                 validationStatus = {
                     "error": false,
-                    "okFeature": "encrypt-storage"
+                    "okFeature": operationName
                 };
                 validationStatusArray.push(validationStatus);
             }
             if ($.inArray("WIFI", configuredOperations) != -1) {
                 // if WIFI is configured
+                operationName = "wifi";
                 var ssid = $("input#ssid").val();
                 if (!ssid) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "WIFI SSID is not given. You cannot proceed.",
-                        "erroneousFeature": "wifi"
+                        "erroneousFeature": operationName
                     };
                     validationStatusArray.push(validationStatus);
                 } else if (!inputIsValidAgainstLength(ssid, 1, 30)) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "WIFI SSID exceeds maximum allowed length. Please check.",
-                        "erroneousFeature": "wifi"
+                        "erroneousFeature": operationName
                     };
                     validationStatusArray.push(validationStatus);
                 } else {
                     validationStatus = {
                         "error": false,
-                        "okFeature": "wifi"
+                        "okFeature": operationName
                     };
                     validationStatusArray.push(validationStatus);
                 }
@@ -237,8 +243,9 @@ validateStep["policy-profile"] = function () {
         } else {
             if ($.inArray("PASSCODE_POLICY", configuredOperations) != -1) {
                 // if PASSCODE_POLICY is configured
-                maxPasscodeAgeInDays = $("input#maxPINAgeInDays").val();
-                passcodeHistory = $("input#pinHistory").val();
+                operationName = "passcode-policy";
+                maxPasscodeAgeInDays = $("input#passcode-policy-max-pin-age-in-days").val();
+                passcodeHistory = $("input#passcode-policy-pin-history").val();
                 // initializing continueToCheckNextInput to true
                 continueToCheckNextInput = true;
 
@@ -249,7 +256,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Provided passcode age is not a number. Please check.",
-                            "erroneousFeature": "passcode-policy"
+                            "erroneousFeature": operationName
                         };
                         validationStatusArray.push(validationStatus);
                     } else {
@@ -260,7 +267,7 @@ validateStep["policy-profile"] = function () {
                                 "error": true,
                                 "subErrorMsg":
                                     "Provided passcode age is not with in the range of 1-to-730. Please check.",
-                                "erroneousFeature": "passcode-policy"
+                                "erroneousFeature": operationName
                             };
                             validationStatusArray.push(validationStatus);
                         } else {
@@ -278,7 +285,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Provided passcode history is not a number. Please check.",
-                                "erroneousFeature": "passcode-policy"
+                                "erroneousFeature": operationName
                             };
                             validationStatusArray.push(validationStatus);
                         } else if ($.isNumeric(passcodeHistory)) {
@@ -289,13 +296,13 @@ validateStep["policy-profile"] = function () {
                                     "subErrorMsg":
                                         "Provided passcode history is not with in the range" +
                                         " of 1-to-50. Please check.",
-                                    "erroneousFeature": "passcode-policy"
+                                    "erroneousFeature": operationName
                                 };
                                 validationStatusArray.push(validationStatus);
                             } else {
                                 validationStatus = {
                                     "error": false,
-                                    "okFeature": "passcode-policy"
+                                    "okFeature": operationName
                                 };
                                 validationStatusArray.push(validationStatus);
                             }
@@ -303,10 +310,45 @@ validateStep["policy-profile"] = function () {
                     } else {
                         validationStatus = {
                             "error": false,
-                            "okFeature": "passcode-policy"
+                            "okFeature": operationName
                         };
                         validationStatusArray.push(validationStatus);
                     }
+                }
+            }
+            if ($.inArray("RESTRICTION", configuredOperations) != -1) {
+                // if RESTRICTION is configured
+                operationName = "restrictions";
+                var childInput;
+                var gridChildInputs = "div#restrictions-autonomous-single-app-mode-permitted-app-ids .child-input";
+                if ($(gridChildInputs).length > 0) {
+                    var emptyChildInputCount = 0;
+                    $(gridChildInputs).each(function () {
+                        childInput = $(this).val();
+                        if (!childInput) {
+                            emptyChildInputCount++;
+                        }
+                    });
+                    if (emptyChildInputCount > 0) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "One or more permitted application entries in Autonomous Single App Mode are empty. Please check.",
+                            "erroneousFeature": operationName
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else {
+                        validationStatus = {
+                            "error": false,
+                            "okFeature": operationName
+                        };
+                        validationStatusArray.push(validationStatus);
+                    }
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operationName
+                    };
+                    validationStatusArray.push(validationStatus);
                 }
             }
             if ($.inArray("WIFI_SETTINGS", configuredOperations) != -1) {
