@@ -1731,14 +1731,14 @@
                     Un-check following checkboxes in case you need to restrict any of the following.
                     <br>
                     <br>
-                    Device Functionality
+                    Device Functionality :
                     <hr>
-                    <div id="device-functionality">
+                    <div id="restrictions-device-functionality">
                         <ul class="listing">
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowCamera" type="checkbox" class="operationDataKeys" data-key="allowCamera"data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-camera" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowCamera" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable Usage of phone camera in the device">
                                             &nbsp;&nbsp;&nbsp;Allow use of camera
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1749,7 +1749,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowChat" type="checkbox" class="operationDataKeys" data-key="allowChat" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-Chat" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowChat" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable use of Messages app with supervised devices. Available in iOS 6.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow Chat
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1760,7 +1760,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowScreenShot" type="checkbox" class="operationDataKeys" data-key="allowScreenShot" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-screen-shot" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowScreenShot" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow taking screenshots in the device">
                                             &nbsp;&nbsp;&nbsp;Allow screenshots
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1771,7 +1771,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAirDrop" type="checkbox" class="operationDataKeys" data-key="allowAirDrop" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-air-drop" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAirDrop" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow AirDrop feature in the device. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow AirDrop ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1782,7 +1782,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowVoiceDialing" type="checkbox" class="operationDataKeys" data-key="allowVoiceDialing" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-voice-dialing" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowVoiceDialing" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow voice dialing feature in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow voice dialing while device is locked
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1793,7 +1793,7 @@
                             <li class="grouped-input">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAssistant" type="checkbox" class="parent-input operationDataKeys" data-key="allowAssistant" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-assistant" type="checkbox" class="parent-input operationDataKeys" data-key="restrictionsAllowAssistant" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable Siri as assistant in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow Siri
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1804,7 +1804,7 @@
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
-                                                <input id="allowAssistantWhileLocked" type="checkbox" class="child-input operationDataKeys" data-key="allowAssistantWhileLocked" data-default="true" checked="checked" />
+                                                <input id="restrictions-allow-assistant-while-locked" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsAllowAssistantWhileLocked" data-default="true" checked="checked" />
                                                 <span class="helper" title="Having this checked would allow Siri as assistant while device is locked. Available only in iOS 5.1 and later.">
                                                     &nbsp;&nbsp;&nbsp;Allow Siri while device is locked
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1815,7 +1815,7 @@
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
-                                                <input id="forceAssistantProfanityFilter" type="checkbox" class="child-input operationDataKeys" data-key="forceAssistantProfanityFilter" data-default="true" checked="checked" />
+                                                <input id="restrictions-force-assistant-profanity-filter" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsForceAssistantProfanityFilter" data-default="true" checked="checked" />
                                                 <span class="helper" title="Having this checked would force use of Siri profanity filter.">
                                                     &nbsp;&nbsp;&nbsp;Force use of Siri profanity filter
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1826,7 +1826,7 @@
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
-                                                <input id="allowAssistantUserGeneratedContent" type="checkbox" class="child-input operationDataKeys" data-key="allowAssistantUserGeneratedContent" data-default="true" checked="checked" />
+                                                <input id="restrictions-allow-assistant-user-generated-content" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsAllowAssistantUserGeneratedContent" data-default="true" checked="checked" />
                                                 <span class="helper" title="Having this checked would allow Siri to query user-generated content from web in the device. Available in iOS 7 and later.">
                                                     &nbsp;&nbsp;&nbsp;Allow Siri to query user-generated content from web ( Supervised only )
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1839,7 +1839,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAccountModification" type="checkbox" class="operationDataKeys" data-key="allowAccountModification" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-account-modification" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAccountModification" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow modifying account settings in the device. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow modifying account settings ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1850,7 +1850,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAppCellularDataModification" type="checkbox" class="operationDataKeys" data-key="allowAppCellularDataModification" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-app-cellular-data-modification" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAppCellularDataModification" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow changes to cellular data usage for apps in the device. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow modifying cellular data app settings ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1861,7 +1861,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowBookstore" type="checkbox" class="operationDataKeys" data-key="allowBookstore" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-bookstore" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowBookstore" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable iBookStore in the device. Available in iOS 6.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Enable iBookStore ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1872,7 +1872,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowBookstoreErotica" type="checkbox" class="operationDataKeys" data-key="allowBookstoreErotica" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-bookstore-erotica" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowBookstoreErotica" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable iBookStore tagged as Erotica in the device. Available in iOS 6.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Enable iBookStore Erotica ( Supervised only prior to iOS 6.1 )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1883,7 +1883,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAppInstallation" type="checkbox" class="operationDataKeys" data-key="allowAppInstallation" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-app-installation" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAppInstallation" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow installing apps in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow installing apps
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1894,7 +1894,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAppRemoval" type="checkbox" class="operationDataKeys" data-key="allowAppRemoval" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-app-removal" type="checkbox" class="operationDataKeys" data-key="restrictions-allow-app-removal" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow removal of apps in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow removing apps
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1905,7 +1905,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowInAppPurchases" type="checkbox" class="operationDataKeys" data-key="allowInAppPurchases" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-in-app-purchases" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowInAppPurchases" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow in-app purchase in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow in-app purchase
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1916,7 +1916,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="forceITunesStorePasswordEntry" type="checkbox" class="operationDataKeys" data-key="forceITunesStorePasswordEntry" data-default="true" checked="checked" />
+                                        <input id="restrictions-force-itunes-store-password-entry" type="checkbox" class="operationDataKeys" data-key="restrictionsForceITunesStorePasswordEntry" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would force iTunes store password in the device.">
                                             &nbsp;&nbsp;&nbsp;Require iTunes store password for all purchases
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1927,7 +1927,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowCloudBackup" type="checkbox" class="operationDataKeys" data-key="allowCloudBackup" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-cloud-backup" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowCloudBackup" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable iCloud backup in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow iCloud backup
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1938,7 +1938,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowCloudDocumentSync" type="checkbox" class="operationDataKeys" data-key="allowCloudDocumentSync" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-cloud-document-sync" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowCloudDocumentSync" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable syncing iCloud documents and data in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow iCloud documents and data
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1949,7 +1949,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowCloudKeychainSync" type="checkbox" class="operationDataKeys" data-key="allowCloudKeychainSync" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-cloud-keychain-sync" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowCloudKeychainSync" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would enable syncing iCloud keychain in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow iCloud keychain
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1960,7 +1960,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowManagedAppsCloudSync" type="checkbox" class="operationDataKeys" data-key="allowManagedAppsCloudSync" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-managed-apps-cloud-sync" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowManagedAppsCloudSync" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow managed apps in the device to store data in iCloud.">
                                             &nbsp;&nbsp;&nbsp;Allow managed apps to store data in iCloud
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1971,7 +1971,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowEnterpriseBookBackup" type="checkbox" class="operationDataKeys" data-key="allowEnterpriseBookBackup" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-enterprise-book-backup" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowEnterpriseBookBackup" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow backup of enterprise books in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow backup of enterprise books
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1982,7 +1982,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowEnterpriseBookMetadataSync" type="checkbox" class="operationDataKeys" data-key="allowEnterpriseBookMetadataSync" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-enterprise-book-metadata-sync" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowEnterpriseBookMetadataSync" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, Enterprise books notes and highlights will not be synced.">
                                             &nbsp;&nbsp;&nbsp;Allow enterprise books data sync
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1993,7 +1993,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowDiagnosticSubmission" type="checkbox" class="operationDataKeys" data-key="allowDiagnosticSubmission" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-diagnostic-submission" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowDiagnosticSubmission" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would automatically submit diagnostic reports to Apple.">
                                             &nbsp;&nbsp;&nbsp;Allow diagnostic submission
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2004,7 +2004,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowExplicitContent" type="checkbox" class="operationDataKeys" data-key="allowExplicitContent" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-explicit-content" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowExplicitContent" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would hide explicit music or video content purchased from the iTunes Store. Explicit content is marked as such by content providers, such as record labels, when sold through the iTunes Store.">
                                             &nbsp;&nbsp;&nbsp;Allow explicit content
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2015,7 +2015,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowFindMyFriendsModification" type="checkbox" class="operationDataKeys" data-key="allowFindMyFriendsModification" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-find-my-friends-modification" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowFindMyFriendsModification" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, changes to Find My Friends are disabled.">
                                             &nbsp;&nbsp;&nbsp;Allow Find My Friends modification
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2026,7 +2026,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowFingerprintForUnlock" type="checkbox" class="operationDataKeys" data-key="allowFingerprintForUnlock" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-fingerprint-for-unlock" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowFingerprintForUnlock" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would prevent Touch ID from unlocking a device.">
                                             &nbsp;&nbsp;&nbsp;Allow fingerprint for unlock
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2037,7 +2037,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowGlobalBackgroundFetchWhenRoaming" type="checkbox" class="operationDataKeys" data-key="allowGlobalBackgroundFetchWhenRoaming" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-global-background-fetch-when-roaming" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowGlobalBackgroundFetchWhenRoaming" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would disable global background fetch activity when an iOS phone is roaming.">
                                             &nbsp;&nbsp;&nbsp;Allow global background fetch when roaming
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2048,7 +2048,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowLockScreenControlCenter" type="checkbox" class="operationDataKeys" data-key="allowLockScreenControlCenter" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-lock-screen-control-center" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowLockScreenControlCenter" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would prevent Control Center from appearing on the Lock screen. Available in iOS 7 and later.">
                                             &nbsp;&nbsp;&nbsp;Show Control Center in lock screen
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2059,7 +2059,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowLockScreenNotificationsView" type="checkbox" class="operationDataKeys" data-key="allowLockScreenNotificationsView" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-lock-screen-notifications-view" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowLockScreenNotificationsView" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would disable Notifications view in Notification Center on the lock screen. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Show Notifications Center in lock screen
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2070,7 +2070,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowLockScreenTodayView" type="checkbox" class="operationDataKeys" data-key="allowLockScreenTodayView" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-lock-screen-today-view" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowLockScreenTodayView" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would disable Today view in Notification Center on the lock screen. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Show Today view in lock screen
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2081,7 +2081,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowHostPairing" type="checkbox" class="operationDataKeys" data-key="allowHostPairing" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-host-pairing" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowHostPairing" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would disable host pairing with the exception of the supervision host. If no supervision host certificate has been configured, all pairing is disabled. Host pairing lets the administrator control which devices an iOS 7 device can pair with. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow Host Pairing ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2092,7 +2092,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowOpenFromManagedToUnmanaged" type="checkbox" class="operationDataKeys" data-key="allowOpenFromManagedToUnmanaged" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-open-from-managed-to-unmanaged" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowOpenFromManagedToUnmanaged" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, documents in managed apps and accounts only open in other managed apps and accounts. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow documents from managed sources in unmanaged destinations
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2103,7 +2103,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowOpenFromUnmanagedToManaged" type="checkbox" class="operationDataKeys" data-key="allowOpenFromUnmanagedToManaged" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-open-from-unmanaged-to-managed" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowOpenFromUnmanagedToManaged" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, documents in unmanaged apps and accounts will only open in other unmanaged apps and accounts. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow documents from unmanaged sources in managed destinations
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2114,7 +2114,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowOTAPKIUpdates" type="checkbox" class="operationDataKeys" data-key="allowOTAPKIUpdates" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-ota-pki-updates" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowOTAPKIUpdates" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, over-the-air PKI updates are disabled. Setting this restriction to false does not disable CRL and OCSP checks. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow over-the-air PKI updates
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2125,7 +2125,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowPassbookWhileLocked" type="checkbox" class="operationDataKeys" data-key="allowPassbookWhileLocked" data-default="true" checked="checked" />
+                                        <input id="restrictionsAllowPassbookWhileLocked" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowPassbookWhileLocked" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, Passbook notifications will not be shown on the lock screen. Available only in iOS 6.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Show Passbook notifications in lock screen
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2136,7 +2136,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowPhotoStream" type="checkbox" class="operationDataKeys" data-key="allowPhotoStream" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-photo-stream" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowPhotoStream" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, Photo Stream is disabled. Available only in iOS 5.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow Photo Stream
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2147,7 +2147,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowSharedStream" type="checkbox" class="operationDataKeys" data-key="allowSharedStream" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-shared-stream" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowSharedStream" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, Shared Photo Stream will be disabled. Available only in iOS 6.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow Shared Photo Stream
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2158,7 +2158,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowUIConfigurationProfileInstallation" type="checkbox" class="operationDataKeys" data-key="allowUIConfigurationProfileInstallation" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-ui-configuration-profile-installation" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowUIConfigurationProfileInstallation" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, the user is prohibited from installing configuration profiles and certificates interactively. Available only in iOS 6.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow user prompted profile installation
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2169,7 +2169,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowUntrustedTLSPrompt" type="checkbox" class="operationDataKeys" data-key="allowUntrustedTLSPrompt" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-untrusted-tls-prompt" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowUntrustedTLSPrompt" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, automatically rejects untrusted HTTPS certificates without prompting the user. Available only in iOS 5.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow untrusted TLS prompt
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2180,7 +2180,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowVideoConferencing" type="checkbox" class="operationDataKeys" data-key="allowVideoConferencing" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-video-conferencing" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowVideoConferencing" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, video conferencing is disabled.">
                                             &nbsp;&nbsp;&nbsp;Allow video conferencing
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2191,7 +2191,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowVoiceDialing" type="checkbox" class="operationDataKeys" data-key="allowVoiceDialing" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-voice-dialing" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowVoiceDialing" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, voice dialing is disabled.">
                                             &nbsp;&nbsp;&nbsp;Allow voice dialing
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2202,7 +2202,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="forceEncryptedBackup" type="checkbox" class="operationDataKeys" data-key="forceEncryptedBackup" data-default="true" checked="checked" />
+                                        <input id="restrictions-force-encrypted-backup" type="checkbox" class="operationDataKeys" data-key="restrictionsForceEncryptedBackup" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would force encrypting all backups.">
                                             &nbsp;&nbsp;&nbsp;Force encrypting all backups
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2213,7 +2213,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="forceLimitAdTracking" type="checkbox" class="operationDataKeys" data-key="forceLimitAdTracking" data-default="false" />
+                                        <input id="restrictions-force-limit-ad-tracking" type="checkbox" class="operationDataKeys" data-key="restrictionsForceLimitAdTracking" data-default="false" />
                                         <span class="helper" title="Having this checked would limit ad tracking. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Limit ad tracking
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2224,7 +2224,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="forceAirPlayOutgoingRequestsPairingPassword" type="checkbox" class="operationDataKeys" data-key="forceAirPlayOutgoingRequestsPairingPassword" data-default="false" />
+                                        <input id="restrictions-force-airplay-outgoing-requests-pairing-password" type="checkbox" class="operationDataKeys" data-key="restrictionsForceAirPlayOutgoingRequestsPairingPassword" data-default="false" />
                                         <span class="helper" title="Having this checked would force all devices receiving AirPlay requests from this device to use a pairing password. Available only in iOS 7.1 and later.">
                                             &nbsp;&nbsp;&nbsp;Force a pairing password for Airplay outgoing requests
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2235,7 +2235,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="forceAirPlayIncomingRequestsPairingPassword" type="checkbox" class="operationDataKeys" data-key="forceAirPlayIncomingRequestsPairingPassword" data-default="false" />
+                                        <input id="restrictions-force-airplay-incoming-requests-pairing-password" type="checkbox" class="operationDataKeys" data-key="restrictionsForceAirPlayIncomingRequestsPairingPassword" data-default="false" />
                                         <span class="helper" title="Having this checked would force all devices sending AirPlay requests to this device to use a pairing password. Available only in Apple TV 6.1 and later.">
                                             &nbsp;&nbsp;&nbsp;Force a pairing password for Airplay incoming requests
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2246,7 +2246,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowEraseContentAndSettings" type="checkbox" class="operationDataKeys" data-key="allowEraseContentAndSettings" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-erase-content-and-settings" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowEraseContentAndSettings" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, “Erase All Content And Settings” option in the Reset UI is disabled.">
                                             &nbsp;&nbsp;&nbsp;Allow Erase All Content And Settings ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2257,7 +2257,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowSpotlightInternetResults" type="checkbox" class="operationDataKeys" data-key="allowSpotlightInternetResults" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-spotlight-internet-results" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowSpotlightInternetResults" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, Spotlight will not return Internet search results.">
                                             &nbsp;&nbsp;&nbsp;Allow Spotlight Internet results ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2268,7 +2268,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowEnablingRestrictions" type="checkbox" class="operationDataKeys" data-key="allowEnablingRestrictions" data-default="true" checked="checked" />
+                                        <input id="restrictionsAllowEnablingRestrictions" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowEnablingRestrictions" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, “Enable Restrictions” option in the Restrictions UI in Settings is disabled.">
                                             &nbsp;&nbsp;&nbsp;Allow Enable Restrictions option ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2279,7 +2279,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowActivityContinuation" type="checkbox" class="operationDataKeys" data-key="allowActivityContinuation" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-activity-continuation" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowActivityContinuation" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, Activity Continuation will be disabled.">
                                             &nbsp;&nbsp;&nbsp;Allow Activity Continuation
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2290,7 +2290,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowDefinitionLookup" type="checkbox" class="operationDataKeys" data-key="allowDefinitionLookup" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-definition-lookup" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowDefinitionLookup" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, definition lookup is disabled.">
                                             &nbsp;&nbsp;&nbsp;Allow definition lookup
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2301,7 +2301,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowPredictiveKeyboard" type="checkbox" class="operationDataKeys" data-key="allowPredictiveKeyboard" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-predictive-keyboard" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowPredictiveKeyboard" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, predictive keyboards are disabled. Available in iOS 8.1.3 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow predictive keyboard ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2312,7 +2312,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAutoCorrection" type="checkbox" class="operationDataKeys" data-key="allowAutoCorrection" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-auto-correction" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAutoCorrection" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, keyboard auto-correction is disabled. Available in iOS 8.1.3 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow keyboard auto-correction ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2323,7 +2323,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowSpellCheck" type="checkbox" class="operationDataKeys" data-key="allowSpellCheck" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-spell-check" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowSpellCheck" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, keyboard spell-check is disabled. Available in iOS 8.1.3 and later.">
                                             &nbsp;&nbsp;&nbsp;Allow keyboard spell-check ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2334,14 +2334,14 @@
                         </ul>
                     </div>
                     <br>
-                    Applications
+                    Applications :
                     <hr>
-                    <div id="applications">
+                    <div id="restrictions-applications">
                         <ul class="listing">
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowiTunes" type="checkbox" class="operationDataKeys" data-key="allowiTunes" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-itunes" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowITunes" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow use of iTunes store in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow use of iTunes Store
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2352,7 +2352,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowPodcasts" type="checkbox" class="operationDataKeys" data-key="allowPodcasts" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-podcasts" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowPodcasts" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow use of Podcasts in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow use of Podcasts ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2363,7 +2363,7 @@
                             <li class="grouped-input">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowSafari" type="checkbox" class="parent-input operationDataKeys" data-key="allowSafari" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-safari" type="checkbox" class="parent-input operationDataKeys" data-key="restrictionsAllowSafari" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow use of Safari in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow Safari
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2374,7 +2374,7 @@
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
-                                                <input id="safariAllowAutoFill" type="checkbox" class="child-input operationDataKeys" data-key="safariAllowAutoFill" data-default="true" checked="checked" />
+                                                <input id="restrictions-safari-allow-auto-fill" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsSafariAllowAutoFill" data-default="true" checked="checked" />
                                                 <span class="helper" title="Having this checked would enable Safari AutoFill feature in the device.">
                                                     &nbsp;&nbsp;&nbsp;Enable AutoFill
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2385,7 +2385,7 @@
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
-                                                <input id="safariForceFraudWarning" type="checkbox" class="child-input operationDataKeys" data-key="safariForceFraudWarning" data-default="false" />
+                                                <input id="restrictions-safari-force-fraud-warning" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsSafariForceFraudWarning" data-default="false" />
                                                 <span class="helper" title="Having this checked would force Safari Fraud warning feature in the device.">
                                                     &nbsp;&nbsp;&nbsp;Force Fraud warning
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2396,7 +2396,7 @@
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
-                                                <input id="safariAllowJavaScript" type="checkbox" class="child-input operationDataKeys" data-key="safariAllowJavaScript" data-default="true" checked="checked" />
+                                                <input id="restrictions-safari-allow-javaScript" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsSafariAllowJavaScript" data-default="true" checked="checked" />
                                                 <span class="helper" title="Having this checked would enable Javascript on Safari in the device.">
                                                     &nbsp;&nbsp;&nbsp;Enable Javascript
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2407,7 +2407,7 @@
                                     <li>
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
-                                                <input id="safariAllowPopups" type="checkbox" class="child-input operationDataKeys" data-key="safariAllowPopups" data-default="true" checked="checked" />
+                                                <input id="restrictions-safari-allow-popups" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsSafariAllowPopups" data-default="true" checked="checked" />
                                                 <span class="helper" title="Having this checked would enable Pop-ups on Safari in the device.">
                                                     &nbsp;&nbsp;&nbsp;Enable Pop-ups
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2417,13 +2417,13 @@
                                     </li>
                                     <li>
                                         <div class="wr-input-control">
-                                            <label class="wr-input-label" for="safariAcceptCookies">
+                                            <label class="wr-input-label" for="restrictions-safari-accept-cookies">
                                                 Accept cookies
                                                 <span class="helper" title="Determines conditions under which the device will accept cookies.">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <select id="safariAcceptCookies" class="form-control child-input operationDataKeys" data-key="safariAcceptCookies" data-default="2">
+                                            <select id="restrictions-safari-accept-cookies" class="form-control child-input operationDataKeys" data-key="restrictionsSafariAcceptCookies" data-default="2">
                                                 <option value="0">Never</option>
                                                 <option value="1">From visited sites only</option>
                                                 <option value="2" selected="selected">Always</option>
@@ -2435,7 +2435,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowYouTube" type="checkbox" class="operationDataKeys" data-key="allowYouTube" data-default="true" checked="checked" />
+                                        <input id="restrictionsAllowYouTube" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowYouTube" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, YouTube application is disabled and its icon is removed from the Home screen. This key is ignored in iOS 6 and later because the YouTube app is not provided.">
                                             &nbsp;&nbsp;&nbsp;Allow YouTube
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2446,7 +2446,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowGameCenter" type="checkbox" class="operationDataKeys" data-key="allowGameCenter" data-default="true" checked="checked" />
+                                        <input id="restrictionsAllowGameCenter" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowGameCenter" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow use of Game Center in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow use of Game Center ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2457,7 +2457,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowMultiplayerGaming" type="checkbox" class="operationDataKeys" data-key="allowMultiplayerGaming" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-multiplayer-gaming" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowMultiplayerGaming" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow multiplayer gaming in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow multiplayer gaming
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2468,7 +2468,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="allowAddingGameCenterFriends" type="checkbox" class="operationDataKeys" data-key="allowAddingGameCenterFriends" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-adding-game-center-friends" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAddingGameCenterFriends" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow adding Game Center friends in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow adding Game Center friends
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2478,6 +2478,73 @@
                             </li>
                         </ul>
                     </div>
+                    <br>
+                    Other Restrictions :
+                    <hr>
+                    <div id="restrictions-other">
+                        <ul class="listing">
+                            <li>
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label" for="restrictions-autonomous-single-app-mode-permitted-app-ids">
+                                        Permitted Applications in Autonomous Single App Mode
+                                        <span class="helper" title="Supervised only. If present, allows apps identified by the bundle IDs listed to autonomously enter Single App Mode. Available only in iOS 7.0 and later.">
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                        <br>
+                                        <a href="#restrictions-autonomous-single-app-mode-permitted-app-ids-grid" class="grid-input-add" data-click-event="add-form">
+                                            <span class="icon fw-stack">
+                                                <i class="fw fw-add fw-stack-1x"></i>
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                            </span>
+                                            Add Application Bundle ID
+                                        </a>
+                                    </label>
+                                    <div id="restrictions-autonomous-single-app-mode-permitted-app-ids" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="restrictionsAutonomousSingleAppModePermittedAppIDs">
+                                        <table class="table table-responsive table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>No :</th>
+                                                    <th>Application Bundle ID</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-add-form-container="#restrictions-autonomous-single-app-mode-permitted-app-ids-grid">
+                                                <tr data-help-text="add-form">
+                                                    <td colspan="3">
+                                                        No entries added yet .
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="template hidden">
+                                            <tbody data-add-form="#restrictions-autonomous-single-app-mode-permitted-app-ids-grid">
+                                                <tr data-add-form-element="clone">
+                                                    <td data-title="No :">
+                                                        <span class="index"></span>
+                                                    </td>
+                                                    <td data-title="Application Bundle ID">
+                                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires an Application Bundle ID ]" />
+                                                    </td>
+                                                    <td>
+                                                        <span class="list-group-item-actions">
+                                                            <a href="#restrictions-autonomous-single-app-mode-permitted-app-ids-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                                <span class="fw-stack">
+                                                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                                                    <i class="fw fw-delete fw-stack-1x"></i>
+                                                                </span>
+                                                                Remove
+                                                            </a>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>
