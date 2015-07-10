@@ -73,7 +73,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.basedir}</outputDirectory>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>client/build/outputs/apk</directory>
