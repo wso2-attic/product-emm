@@ -485,6 +485,7 @@ var operationModule = function () {
                                 // append first part of the string
                                 stringPair += $(this).val();
                             } else {
+                                // append second part of the string
                                 stringPair += $(this).val();
                                 value.push(stringPair);
                             }
