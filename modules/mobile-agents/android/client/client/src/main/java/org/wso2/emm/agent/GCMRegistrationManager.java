@@ -162,7 +162,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
 			String status = result.get(Constants.STATUS_KEY);
-			if (status != null && !Constants.REQUEST_SUCCESSFUL.equals(status)) {
+			if (status != null && !Constants.Status.SUCCESSFUL.equals(status)) {
 				CommonUtils.clearAppData(getContext());
 				displayConnectionError();
 			}

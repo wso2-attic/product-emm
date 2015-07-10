@@ -19,12 +19,17 @@ package org.wso2.emm.agent;
 
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.RegistrationProfile;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.beans.CredentialInfo;
 import org.wso2.emm.agent.proxy.interfaces.APIAccessCallBack;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.proxy.IdentityProxy;
+import org.wso2.emm.agent.services.DynamicClientManager;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -38,9 +43,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -71,9 +76,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private String usernameVal;
 	private String passwordVal;
 	private ProgressDialog progressDialog;
+
 	private static final String MIME_TYPE = "text/html";
 	private static final String ENCODING_METHOD = "utf-8";
 	private static final int DEFAILT_REPEAT_COUNT = 0;
+
+	private DeviceInfo deviceInfo;
+	private static final String TAG = AuthenticationActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +90,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		setContentView(R.layout.activity_authentication);
 		getSupportActionBar().setDisplayShowCustomEnabled(true);
 		getSupportActionBar().setCustomView(R.layout.custom_sherlock_bar);
-		getSupportActionBar().setTitle(R.string.empty_app_title);
+		getSupportActionBar().setTitle(Constants.EMPTY_STRING);
 
 		context = this;
-		deviceType = getResources().getString(R.string.device_enroll_type_byod);
+		deviceInfo = new DeviceInfo(context);
+		deviceType = Constants.OWNERSHIP_BYOD;
 		etDomain = (EditText) findViewById(R.id.etDomain);
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
@@ -194,17 +204,62 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Start authentication process.
 	 */
 	private void startAuthentication() {
-		Preference.putString(context, getResources().getString(R.string.shared_pref_reg_type),
-		                     deviceType);
+		Preference.putString(context, Constants.DEVICE_TYPE,
+				deviceType);
+
 		// Check network connection availability before calling the API.
 		if (CommonUtils.isNetworkAvailable(context)) {
-			initializeIDPLib(getResources().getString(R.string.client_id),
-			                 getResources().getString(R.string.client_secret));
+
+			String clientId = Preference.getString(context, Constants.CLIENT_ID);
+			String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
+			String clientName;
+
 			progressDialog =
 					ProgressDialog.show(context,
-					                    getResources().getString(R.string.dialog_authenticate),
-					                    getResources().getString(R.string.dialog_message_please_wait),
-					                    true);
+							getResources().getString(R.string.dialog_authenticate),
+							getResources().getString(R.string.dialog_message_please_wait),
+							true);
+
+			if (clientId == null || clientSecret == null) {
+				try {
+					String clientCredentials = getClientCredentials();
+					if (clientCredentials != null) {
+						try {
+							JSONObject payload = new JSONObject(clientCredentials);
+							clientId = payload.getString(Constants.CLIENT_ID);
+							clientSecret = payload.getString(Constants.CLIENT_SECRET);
+							clientName = payload.getString(Constants.CLIENT_NAME);
+
+							if (clientName != null && !clientName.isEmpty()) {
+								Preference.putString(context, Constants.CLIENT_NAME, clientName);
+							}
+							if (clientId != null && !clientId.isEmpty() &&
+									clientSecret != null && !clientSecret.isEmpty()) {
+								initializeIDPLib(clientId, clientSecret);
+							}
+						} catch (JSONException e) {
+							String msg = "error occurred while parsing client credential payload";
+							Log.e(TAG, msg + e);
+							showInternalServerErrorMessage();
+						}
+					} else {
+						String msg = "error occurred while retrieving client credentials";
+						Log.e(TAG, msg);
+						showInternalServerErrorMessage();
+					}
+				} catch (AndroidAgentException e) {
+					String msg = "error occurred while retrieving client credentials";
+					Log.e(TAG, msg + e);
+					showInternalServerErrorMessage();
+				}
+			} else {
+				initializeIDPLib(clientId, clientSecret);
+			}
+			// This is needed when it is required to run without
+			// dynamic client authentication
+			//
+			//initializeIDPLib(clientId, clientSecret);
+
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(context);
@@ -222,10 +277,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private void initializeIDPLib(String clientKey, String clientSecret) {
 		
 		String serverIP =
-				Preference.getString(AuthenticationActivity.this,
-				                     context.getResources()
-				                            .getString(R.string.shared_pref_ip)
-				);
+				Preference.getString(AuthenticationActivity.this, Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(serverIP);
 		String serverURL = utils.getServerURL() + Constants.OAUTH_ENDPOINT;
@@ -240,10 +292,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			username = etUsername.getText().toString().trim();
 		}
 
-		Preference.putString(context, context.getResources()
-				                            .getString(R.string.shared_pref_client_id), clientKey);
-		Preference.putString(context, context.getResources()
-	                            .getString(R.string.shared_pref_client_secret), clientSecret);
+		Preference.putString(context, Constants.CLIENT_ID, clientKey);
+		Preference.putString(context, Constants.CLIENT_SECRET, clientSecret);
 		
 		CredentialInfo info = new CredentialInfo();
 		info.setClientID(clientKey);
@@ -257,16 +307,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 	@Override
 	public void onAPIAccessReceive(String status) {
-		if (status != null) {
-			if (status.trim().equals(Constants.REQUEST_SUCCESSFUL)) {
-				String androidId = Secure.getString(context.getContentResolver(), 
-				Secure.ANDROID_ID);
-				Preference.putString(context,
-				                     getResources().getString(R.string.shared_pref_username),
-				                     username);
-				Preference.putString(context,
-				                     getResources().getString(R.string.shared_pref_regId),
-				                     androidId);
+        if (status != null) {
+			if (status.trim().equals(Constants.Status.SUCCESSFUL)) {
+
+				Preference.putString(context, Constants.USERNAME, username);
 
 				// Check network connection availability before calling the API.
 				CommonDialogUtils.stopProgressDialog(progressDialog);
@@ -277,10 +321,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					CommonDialogUtils.showNetworkUnavailableMessage(AuthenticationActivity.this);
 				}
 
-			} else if (status.trim().equals(Constants.AUTHENTICATION_FAILED)) {
+			} else if (status.trim().equals(Constants.Status.AUTHENTICATION_FAILED)) {
 				showAuthenticationError();
 				CommonUtils.clearAppData(context);
-			} else if (status.trim().equals(Constants.INTERNAL_SERVER_ERROR)) {
+			} else if (status.trim().equals(Constants.Status.INTERNAL_SERVER_ERROR)) {
 				showInternalServerErrorMessage();
 
 			} else {
@@ -302,10 +346,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				Preference.getString(context,
 				                     getResources().getString(R.string.shared_pref_isagreed));
 		String type =
-				Preference.getString(context,
-				                     getResources().getString(R.string.shared_pref_reg_type));
+				Preference.getString(context, Constants.DEVICE_TYPE);
 
-		if (type.trim().equals(getResources().getString(R.string.device_enroll_type_byod))) {
+		if (Constants.OWNERSHIP_BYOD.equals(type.trim())) {
 			if (licenseAgreedResponse == null) {
 
 				OnCancelListener cancelListener = new OnCancelListener() {
@@ -320,7 +363,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				};
 
 				progressDialog =
-						CommonDialogUtils.showPrgressDialog(context, 
+						CommonDialogUtils.showPrgressDialog(context,
 						                                    getResources().getString(
 								                                    R.string.dialog_license_agreement),
 						                                    getResources().getString(
@@ -349,16 +392,14 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 */
 	private void getLicenseFromServer() {
 		String ipSaved =
-				Preference.getString(context.getApplicationContext(),
-				                     context.getResources()
-				                            .getString(R.string.shared_pref_ip)
-				);
+				Preference.getString(context.getApplicationContext(),Constants.IP);
+
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
-		CommonUtils.callSecuredAPI(AuthenticationActivity.this, utils.getAPIServerURL() +
-		                                                        Constants.LICENSE_ENDPOINT,
-		                           HTTP_METHODS.GET, null, AuthenticationActivity.this,
-		                           Constants.LICENSE_REQUEST_CODE
+		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
+				utils.getAPIServerURL() + Constants.LICENSE_ENDPOINT,
+				HTTP_METHODS.GET, null, AuthenticationActivity.this,
+				Constants.LICENSE_REQUEST_CODE
 		);
 	}
 
@@ -379,9 +420,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		CommonDialogUtils.stopProgressDialog(progressDialog);
 
 		if (result != null) {
-			responseStatus = result.get(Constants.STATUS_KEY);
-			if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
-				String licenseAgreement = result.get(Constants.RESPONSE);
+			responseStatus = result.get(Constants.STATUS);
+			if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+                String licenseAgreement = result.get(Constants.RESPONSE);
 
 				if (licenseAgreement != null) {
 					Preference.putString(context,
@@ -394,7 +435,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 							getResources().getString(R.string.error_enrollment_failed));
 				}
 
-			} else if (Constants.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
+			} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 				showInternalServerErrorMessage();
 			} else {
 				showEnrollementFailedErrorMessage();
@@ -414,11 +455,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		messageBuilder.append(getResources().getString(R.string.dialog_init_end));
 		AlertDialog.Builder alertDialog =
 				CommonDialogUtils.getAlertDialogWithTwoButtonAndTitle(context,
-                                      getResources().getString(R.string.dialog_init_device_type),
-                                      messageBuilder.toString(),
-                                      getResources().getString(R.string.yes),
-                                      getResources().getString(R.string.no),
-                                      dialogClickListener, dialogClickListener);
+						getResources().getString(R.string.dialog_init_device_type),
+						messageBuilder.toString(),
+						getResources().getString(R.string.yes),
+						getResources().getString(R.string.no),
+						dialogClickListener, dialogClickListener);
 		alertDialog.show();
 	}
 
@@ -428,12 +469,12 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		builder.setTitle(title);
 		builder.setCancelable(true);
 		builder.setPositiveButton(getResources().getString(R.string.button_ok),
-		                          new DialogInterface.OnClickListener() {
-			                          public void onClick(DialogInterface dialog, int id) {
-				                          cancelEntry();
-				                          dialog.dismiss();
-			                          }
-		                          }
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						cancelEntry();
+						dialog.dismiss();
+					}
+				}
 		);
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -462,10 +503,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			@Override
 			public void onClick(View v) {
 				Preference.putString(context,
-				                     getResources().getString(R.string.shared_pref_isagreed),
-				                     getResources().getString(R.string.shared_pref_reg_success));
+						getResources().getString(R.string.shared_pref_isagreed),
+						getResources().getString(R.string.shared_pref_reg_success));
 				dialog.dismiss();
-				loadPincodeAcitvity();
+				//load the next intent based on ownership type
+				loadNextActivity();
 			}
 		});
 
@@ -482,10 +524,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			@Override
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_SEARCH &&
-				    event.getRepeatCount() == DEFAILT_REPEAT_COUNT) {
+						event.getRepeatCount() == DEFAILT_REPEAT_COUNT) {
 					return true;
 				} else if (keyCode == KeyEvent.KEYCODE_BACK &&
-				           event.getRepeatCount() == DEFAILT_REPEAT_COUNT) {
+						event.getRepeatCount() == DEFAILT_REPEAT_COUNT) {
 					return true;
 				}
 				return false;
@@ -498,14 +540,14 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private void loadPincodeAcitvity() {
 		Intent intent = new Intent(AuthenticationActivity.this, PinCodeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra(getResources().getString(R.string.intent_extra_username), usernameVal);
+		intent.putExtra(Constants.USERNAME, usernameVal);
 		startActivity(intent);
 	}
 
 	private void loadRegistrationActivity() {
 		Intent intent = new Intent(AuthenticationActivity.this, RegistrationActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra(getResources().getString(R.string.intent_extra_username), usernameVal);
+		intent.putExtra(Constants.USERNAME, usernameVal);
 		startActivity(intent);
 	}
 
@@ -562,8 +604,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.ip_setting:
-				Preference.putString(context, getResources().getString(R.string.shared_pref_ip),
-				                     getResources().getString(R.string.shared_pref_default_string));
+				Preference.putString(context, Constants.IP,Constants.EMPTY_STRING);
 
 				Intent intentIP = new Intent(AuthenticationActivity.this, ServerDetails.class);
 				intentIP.putExtra(getResources().getString(R.string.intent_extra_from_activity),
@@ -662,9 +703,36 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 	}
 
+	/**
+	 * This method is used to retrieve consumer-key and consumer-secret.
+	 *
+	 * @return JSON formatted string.
+	 * @throws AndroidAgentException
+	 */
+	private String getClientCredentials() throws AndroidAgentException {
+		String ipSaved =
+				Preference.getString(context.getApplicationContext(), Constants.IP);
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(ipSaved);
+
+		RegistrationProfile profile = new RegistrationProfile();
+		profile.setCallbackUrl(Constants.EMPTY_STRING);
+		profile.setClientName(deviceInfo.getMACAddress());
+		profile.setGrantType(Constants.GRANT_TYPE);
+		profile.setOwner(usernameVal);
+		profile.setTokenScope(Constants.TOKEN_SCOPE
+		);
+
+		DynamicClientManager dynamicClientManager = new DynamicClientManager();
+		return dynamicClientManager.registerClient(profile, utils);
+	}
+
+	/**
+	 * This method is used to bypass the intents based on the
+	 * ownership type.
+	 */
 	private void loadNextActivity() {
-		if (getResources().getString(R.string.device_enroll_type_byod).
-				equalsIgnoreCase(deviceType)) {
+		if (Constants.OWNERSHIP_BYOD.equalsIgnoreCase(deviceType)) {
 			loadPincodeAcitvity();
 		} else {
 			loadRegistrationActivity();

@@ -45,6 +45,8 @@ public class Constants {
 	public static final String UNREGISTER_ENDPOINT =  REGISTER_ENDPOINT;
 	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
+	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-manager/register";
+	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 	public static final String EULA_TITLE = "POLICY AGREEMENT";
@@ -70,6 +72,13 @@ public class Constants {
     public static final String MESSAGE_TYPE_GCM = "gcm";
 	public static final String OWNERSHIP_BYOD = "BYOD";
 	public static final String OWNERSHIP_COPE = "COPE";
+	public static final String DEVICE_TYPE = "deviceType";
+	public static final String CLIENT_ID = "clientId";
+	public static final String CLIENT_SECRET = "clientSecret";
+	public static final String CLIENT_NAME = "clientName";
+	public static final String IP = "ip";
+	public static final String GRANT_TYPE = "password";
+	public static final String TOKEN_SCOPE = "production";
 
 	/**
 	 * Request codes.
@@ -82,6 +91,7 @@ public class Constants {
 	public static final int NOTIFICATION_REQUEST_CODE = 306;
 	public static final int DEVICE_INFO_REQUEST_CODE = 307;
 	public static final int GCM_REGISTRATION_ID_SEND_CODE = 308;
+	public static final int POLICY_REQUEST_CODE = 309;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -111,13 +121,16 @@ public class Constants {
 	/**
 	 * Status codes
 	 */
-	public static final String REQUEST_SUCCESSFUL = "200";
-	public static final String REGISTERATION_SUCCESSFUL = "201";
-	public static final String REQUEST_FAILED = "500";
-	public static final String AUTHENTICATION_FAILED = "400";
-	public static final String UNAUTHORIZED_ACCESS = "401";
-	public static final String NOT_FOUND = "404";
-	public static final String INTERNAL_SERVER_ERROR = "500";
+	public final class Status {
+		private Status(){
+			throw new AssertionError();
+		}
+		public static final String SUCCESSFUL = "200";
+		public static final String ACCEPT = "202";
+		public static final String AUTHENTICATION_FAILED = "400";
+		public static final String INTERNAL_SERVER_ERROR = "500";
+	}
+
 
 	/**
 	 * Operation IDs

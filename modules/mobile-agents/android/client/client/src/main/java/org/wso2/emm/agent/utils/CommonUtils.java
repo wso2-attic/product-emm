@@ -59,16 +59,8 @@ public class CommonUtils {
 			apiUtilities.setRequestParams(requestParams);
 		}
 		APIController apiController;
-		String clientKey =
-				Preference.getString(context,
-						context.getResources()
-								.getString(R.string.shared_pref_client_id)
-				);
-		String clientSecret =
-				Preference.getString(context,
-						context.getResources()
-								.getString(R.string.shared_pref_client_secret)
-				);
+		String clientKey = Preference.getString(context, Constants.CLIENT_ID);
+		String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
 		if (clientKey!=null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
 			apiController = new APIController(clientKey, clientSecret);
 			apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
@@ -112,6 +104,8 @@ public class CommonUtils {
 				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(resources.getString(R.string.shared_pref_device_active),
 				resources.getString(R.string.shared_pref_reg_fail));
+		editor.putString(Constants.CLIENT_ID, null);
+		editor.putString(Constants.CLIENT_SECRET, null);
 		editor.commit();
 
 		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);

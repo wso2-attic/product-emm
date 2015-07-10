@@ -187,17 +187,21 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		CommonDialogUtils.stopProgressDialog(progressDialog);
-		String responseStatus;
-		if (result != null) {
-			responseStatus = result.get(Constants.STATUS_KEY);
+		if (Constants.REGISTER_REQUEST_CODE == requestCode) {
+			String responseStatus;
+			if (result != null) {
+				responseStatus = result.get(Constants.STATUS);
 
-			if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
-				loadAlreadyRegisteredActivity();
+				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+					getEffectivePolicy();
+				} else {
+					displayInternalServerError();
+				}
 			} else {
-				displayInternalServerError();
+				displayConnectionError();
 			}
-		} else {
-			displayConnectionError();
+		} else if (Constants.POLICY_REQUEST_CODE == requestCode) {
+			loadAlreadyRegisteredActivity();
 		}
 	}
 
@@ -242,6 +246,30 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		                RegistrationActivity.class.getSimpleName());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
+	}
+
+	/**
+	 *  This method is used to invoke getEffectivePolicy in the backend
+	 */
+	private void getEffectivePolicy() {
+		if (CommonUtils.isNetworkAvailable(context)) {
+			String ipSaved =
+					Preference.getString(context.getApplicationContext(), Constants.IP);
+
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(ipSaved);
+
+			CommonUtils.callSecuredAPI(RegistrationActivity.this,
+					utils.getAPIServerURL() + Constants.POLICY_ENDPOINT + deviceIdentifier,
+					HTTP_METHODS.GET,
+					null,
+					RegistrationActivity.this,
+					Constants.POLICY_REQUEST_CODE);
+
+		} else {
+			CommonDialogUtils.stopProgressDialog(progressDialog);
+			CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
+		}
 	}
 
 }
