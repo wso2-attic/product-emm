@@ -312,737 +312,715 @@
                     </h2>
                 </div>
                 <div id="wifi" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="wifi">
-                    <div class="cloneable">
-                        <a href="#" class="multi-view add disabled">
-                            <span class="icon fw-stack">
-                                <i class="fw fw-add fw-stack-1x"></i>
-                                <i class="fw fw-ring fw-stack-2x"></i>
+                    <div id="wifi-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-ssid">
+                            Service Set Identifier (SSID)
+                            <span class="helper" title="Identification of the wireless network to connect">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
-                        </a>
-                        <a href="#" class="multi-view remove disabled">
-                            <span class="icon fw-stack">
-                                <i class="fw fw-minus fw-stack-1x"></i>
-                                <i class="fw fw-ring fw-stack-2x"></i>
+                        </label>
+                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSsid" placeholder="[ Required field if no domain name is given ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-domain-name">
+                            Domain Name
+                            <span class="helper" title="Domain Name used for Wi-Fi Hotspot 2.0 negotiation. This field can be provided instead of SSID. Available in iOS 7.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
-                        </a>
-                        <span class="fw-stack">
-                            <i class="fw fw-settings fw-stack-2x"></i>
-                        </span>
-                        &nbsp;&nbsp;
-                        Wi-Fi Setting :
+                            <br>
+                            ( For Wi-Fi Hotspot 2.0 negotiation )
+                        </label>
+                        <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" placeholder="[ Required field if no SSID is given ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wifi-hidden-network" type="checkbox" class="form-control operationDataKeys" data-key="wifiHiddenNetwork" data-default="false" />
+                            <span class="helper" title="Enable this if target network is not open or broadcasting">
+                                &nbsp;&nbsp;&nbsp;Hidden Network
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wifi-is-hot-spot" type="checkbox" class="form-control operationDataKeys" data-key="wifiIsHotSpot" data-default="false" />
+                            <span class="helper" title="If checked, the network is treated as a hotspot. Available in iOS 7.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Hot Spot
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wifi-service-provider-roaming-enabled" type="checkbox" class="form-control operationDataKeys" data-key="wifiServiceProviderRoamingEnabled" data-default="false" />
+                            <span class="helper" title="Indicates if connecting to roaming service providers is allowed. Available in iOS 7.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Enable Service Provider Roaming
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wifi-auto-join" type="checkbox" class="form-control operationDataKeys" data-key="wifiAutoJoin" data-default="true" checked="checked" />
+                            <span class="helper" title="If unchecked, user has to tap the network name to join it. Available in iOS 5.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Auto Join
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-displayed-operator-name">
+                            Displayed Operator Name
+                            <span class="helper" title="Operator name to display. Available in iOS 7.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-proxy-type">
+                            Proxy Setup
+                            <span class="helper" title="Configures type of proxy setup to be used with this network. Available in iOS 5.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'manual-proxy-setup', ['Manual'])">
+                            <option value="None" selected="selected">
+                                None
+                            </option>
+                            <option value="Manual">Manual</option>
+                            <option value="Auto">Automatic</option>
+                        </select>
+                    </div>
+
+                    <div id="manual-proxy-setup" class="slidable-pane" style="display:none;">
+
+                        For Manual Proxy Setup :
                         <br>
                         <br>
-                        <div id="wifi-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                            <i class="icon fw fw-error"></i><span></span>
-                        </div>
 
                         <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-ssid">
-                                Service Set Identifier (SSID)
-                                <span class="helper" title="Identification of the wireless network to connect">
+                            <label class="wr-input-label" for="wifi-proxy-server">
+                                Proxy Server <br>
+                                ( Server URL or IP Address )
+                                <span class="helper" title="Proxy server URL or network IP address">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSsid" placeholder="[ Required field if no domain name is given ]">
+                            <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" placeholder="[ Required field ]" />
                         </div>
 
                         <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-domain-name">
-                                Domain Name
-                                <span class="helper" title="Domain Name used for Wi-Fi Hotspot 2.0 negotiation. This field can be provided instead of SSID. Available in iOS 7.0 and later.">
+                            <label class="wr-input-label" for="wifi-proxy-port">
+                                Proxy Server Port
+                                <span class="helper" title="Proxy server port">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
-                                <br>
-                                ( For Wi-Fi Hotspot 2.0 negotiation )
                             </label>
-                            <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" placeholder="[ Required field if no SSID is given ]">
+                            <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" placeholder="[ Required field which requires Number Input ]" />
                         </div>
 
                         <div class="wr-input-control">
-                            <label class="wr-input-control checkbox">
-                                <input id="wifi-hidden-network" type="checkbox" class="form-control operationDataKeys" data-key="wifiHiddenNetwork" data-default="false" />
-                                <span class="helper" title="Enable this if target network is not open or broadcasting">
-                                    &nbsp;&nbsp;&nbsp;Hidden Network
+                            <label class="wr-input-label" for="wifi-proxy-username">
+                                Proxy Username
+                                <span class="helper" title="Username used to authenticate to the proxy server">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
+                            <input id="wifi-proxy-username" type="text" class="form-control operationDataKeys" data-key="wifiProxyUsername" placeholder="[ Optional field ]" />
                         </div>
 
                         <div class="wr-input-control">
-                            <label class="wr-input-control checkbox">
-                                <input id="wifi-is-hot-spot" type="checkbox" class="form-control operationDataKeys" data-key="wifiIsHotSpot" data-default="false" />
-                                <span class="helper" title="If checked, the network is treated as a hotspot. Available in iOS 7.0 and later.">
-                                    &nbsp;&nbsp;&nbsp;Hot Spot
+                            <label class="wr-input-label" for="wifi-proxy-password">
+                                Proxy Password
+                                <span class="helper" title="Password used to authenticate to the proxy server">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
+                            <input id="wifi-proxy-password" type="password" class="form-control operationDataKeys" data-key="wifiProxyPassword" placeholder="[ Optional field ]" />
                         </div>
 
                         <div class="wr-input-control">
-                            <label class="wr-input-control checkbox">
-                                <input id="wifi-service-provider-roaming-enabled" type="checkbox" class="form-control operationDataKeys" data-key="wifiServiceProviderRoamingEnabled" data-default="false" />
-                                <span class="helper" title="Indicates if connecting to roaming service providers is allowed. Available in iOS 7.0 and later.">
-                                    &nbsp;&nbsp;&nbsp;Enable Service Provider Roaming
+                            <label class="wr-input-label" for="wifi-proxy-pac-url">
+                                Proxy PAC URL
+                                <span class="helper" title="URL of the PAC file that defines the proxy configuration">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
+                            <input id="wifi-proxy-pac-url" type="text" class="form-control operationDataKeys" data-key="wifiProxyPACURL" placeholder="[ Optional field ]">
                         </div>
 
                         <div class="wr-input-control">
                             <label class="wr-input-control checkbox">
-                                <input id="wifi-auto-join" type="checkbox" class="form-control operationDataKeys" data-key="wifiAutoJoin" data-default="true" checked="checked" />
-                                <span class="helper" title="If unchecked, user has to tap the network name to join it. Available in iOS 5.0 and later.">
-                                    &nbsp;&nbsp;&nbsp;Auto Join
+                                <input id="wifi-proxy-pac-fallback-allowed" type="checkbox" class="form-control operationDataKeys" data-key="wifiProxyPACFallbackAllowed" data-default="true" checked="checked"/>
+                                <span class="helper" title="If unchecked, prevents a device from connecting directly to the destination if the PAC file is unreachable. Available in iOS 7 and later.">
+                                    &nbsp;&nbsp;&nbsp;Allow Proxy PAC Fallback
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
                         </div>
 
-                        <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-displayed-operator-name">
-                                Displayed Operator Name
-                                <span class="helper" title="Operator name to display. Available in iOS 7.0 and later.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                            </label>
-                            <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" placeholder="[ Optional field ]">
-                        </div>
+                    </div>
 
-                        <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-proxy-type">
-                                Proxy Setup
-                                <span class="helper" title="Configures type of proxy setup to be used with this network. Available in iOS 5.0 and later.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                            </label>
-                            <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'manual-proxy-setup', ['Manual'])">
-                                <option value="None" selected="selected">
-                                    None
-                                </option>
-                                <option value="Manual">Manual</option>
-                                <option value="Auto">Automatic</option>
-                            </select>
-                        </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-encryption-type">
+                            Encryption Security Type
+                            <span class="helper" title="Wireless network encryption to use when connecting. Available in iOS 4.0 and later. The None value is available in iOS 5.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'advanced-security-config', ['WEP', 'WPA', 'Any'])">
+                            <option value="None" selected="selected">None</option>
+                            <option value="WEP">WEP</option>
+                            <option value="WPA">WPA</option>
+                            <option value="Any">ANY</option>
+                        </select>
+                    </div>
 
-                        <div id="manual-proxy-setup" class="slidable-pane" style="display:none;">
+                    <div id="advanced-security-config" class="slidable-pane" style="display:none;">
 
-                            For Manual Proxy Setup :
+                    For WEP, WPA or ANY Encryption Security Type :
+                    <br>
+                    <br>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-password">
+                            Wi-Fi Password
+                            <span class="helper" title="Password used for encryption security. Absence of a password does not prevent a network from being added to the list of known networks. The user is eventually prompted to provide the password when connecting to that network.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wifi-password" type="password" class="form-control operationDataKeys" data-key="wifiPassword" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="eap-client-config">
+
+                    EAP Client Configuration ( Optional ) :
+                    <br>
+                    <br>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-accepted-eap-types">
+                            Accepted EAP Types
+                            <span class="helper" title="Authentication protocols supported on target network.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
                             <br>
                             <br>
+                        </label>
+                        <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-box-array" data-key="wifiAcceptedEAPTypes">
+                            <label class="wr-input-control checkbox">
+                                <input type="checkbox" class="form-control child-input" data-default="false" data-value="13"/>
+                                <span class="helper" title="">
+                                    &nbsp;&nbsp;&nbsp;TLS
+                                </span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;
+                            <label class="wr-input-control checkbox">
+                                <input type="checkbox" class="form-control child-input" data-default="false" data-value="17"/>
+                                <span class="helper" title="">
+                                    &nbsp;&nbsp;&nbsp;LEAP
+                                </span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;
+                            <label class="wr-input-control checkbox">
+                                <input type="checkbox" class="form-control child-input" data-default="false" data-value="18"/>
+                                <span class="helper" title="">
+                                    &nbsp;&nbsp;&nbsp;EAP-SIM
+                                </span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;
+                            <label class="wr-input-control checkbox">
+                                <input type="checkbox" class="form-control child-input" data-default="false" data-value="21"/>
+                                <span class="helper" title="">
+                                    &nbsp;&nbsp;&nbsp;TTLS
+                                </span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;
+                            <label class="wr-input-control checkbox">
+                                <input type="checkbox" class="form-control child-input" data-default="false" data-value="23"/>
+                                <span class="helper" title="">
+                                    &nbsp;&nbsp;&nbsp;EAP-AKA
+                                </span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;
+                            <label class="wr-input-control checkbox">
+                                <input type="checkbox" class="form-control child-input" data-default="false" data-value="25"/>
+                                <span class="helper" title="">
+                                    &nbsp;&nbsp;&nbsp;PEAP
+                                </span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;
+                            <label class="wr-input-control checkbox">
+                                <input type="checkbox" class="form-control child-input" data-default="false" data-value="43"/>
+                                <span class="helper" title="">
+                                    &nbsp;&nbsp;&nbsp;EAP-FAST
+                                </span>
+                            </label>
+                        </div>
+                    </div>
 
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="wifi-proxy-server">
-                                    Proxy Server <br>
-                                    ( Server URL or IP Address )
-                                    <span class="helper" title="Proxy server URL or network IP address">
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </span>
-                                </label>
-                                <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" placeholder="[ Required field ]" />
-                            </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-eap-username">
+                            Username
+                            <span class="helper" title="Unless you enter a user name, this property won't appear in an imported configuration. Users can enter this information by themselves when they authenticate.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" placeholder="[ Optional field ]" />
+                    </div>
 
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="wifi-proxy-port">
-                                    Proxy Server Port
-                                    <span class="helper" title="Proxy server port">
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </span>
-                                </label>
-                                <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" placeholder="[ Required field which requires Number Input ]" />
-                            </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-eap-password">
+                            Password
+                            <span class="helper" title="If not provided, the user will be prompted during login.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wifi-eap-password" type="password" class="form-control operationDataKeys" data-key="wifiEAPPassword" placeholder="[ Optional field ]" />
+                    </div>
 
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="wifi-proxy-username">
-                                    Proxy Username
-                                    <span class="helper" title="Username used to authenticate to the proxy server">
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </span>
-                                </label>
-                                <input id="wifi-proxy-username" type="text" class="form-control operationDataKeys" data-key="wifiProxyUsername" placeholder="[ Optional field ]" />
-                            </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wifi-eap-one-time-password" type="checkbox" class="form-control operationDataKeys" data-key="wifiEAPOneTimePassword" data-default="false" />
+                            <span class="helper" title="If checked, the user will be prompted for a password each time they connect to the network.">
+                                &nbsp;&nbsp;&nbsp;One Time Password
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
 
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="wifi-proxy-password">
-                                    Proxy Password
-                                    <span class="helper" title="Password used to authenticate to the proxy server">
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </span>
-                                </label>
-                                <input id="wifi-proxy-password" type="password" class="form-control operationDataKeys" data-key="wifiProxyPassword" placeholder="[ Optional field ]" />
-                            </div>
+                    <br>
 
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="wifi-proxy-pac-url">
-                                    Proxy PAC URL
-                                    <span class="helper" title="URL of the PAC file that defines the proxy configuration">
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </span>
-                                </label>
-                                <input id="wifi-proxy-pac-url" type="text" class="form-control operationDataKeys" data-key="wifiProxyPACURL" placeholder="[ Optional field ]">
-                            </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-payload-certificate-anchor-uuid">
+                            Certificate Payload Anchor UUIDs
+                            <span class="helper" title="Identifies the certificates to be trusted for this authentication. Each entry must contain the UUID of a certificate payload. Use this key to prevent the device from asking the user if the listed certificates are trusted.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                Add Certificate Payload Anchor UUID
+                            </a>
+                        </label>
+                        <div id="wifi-payload-certificate-anchor-uuid" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiPayloadCertificateAnchorUUID">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>Certificate Payload Anchor UUID</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#wifi-payload-certificate-anchor-uuid-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="3">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#wifi-payload-certificate-anchor-uuid-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="Certificate Payload Anchor UUID">
+                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Payload UUID ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
+                    <br>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-tls-trusted-server-names">
+                            TLS Trusted Server Certificate Names
+                            <span class="helper" title="This is the list of server certificate common names that will be accepted. You can use wildcards to specify the name, such as wpa.*.example.com. If a server presents a certificate that isn't in this list, it won't be trusted. Used alone or in combination with TLSTrustedCertificates, the property allows someone to carefully craft which certificates to trust for the given network, and avoid dynamically trusted certificates.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#wifi-tls-trusted-server-names-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                Add TLS Trusted Server Certificate Name
+                            </a>
+                        </label>
+                        <div id="wifi-tls-trusted-server-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiTLSTrustedServerNames">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>TLS Trusted Server Certificate Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#wifi-tls-trusted-server-names-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="3">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#wifi-tls-trusted-server-names-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="TLS Trusted Server Certificate Name">
+                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Common Name ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#wifi-tls-trusted-server-names-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wifi-eap-tls-allow-trust-exceptions" type="checkbox" class="form-control operationDataKeys" data-key="wifiEAPTLSAllowTrustExceptions" data-default="true" checked="checked"/>
+                            <span class="helper" title="Allows / disallows a dynamic trust decision by the user. The dynamic trust is the certificate dialogue that appears when a certificate isn't trusted. If this is unchecked, the authentication fails if the certificate isn't already trusted.">
+                                &nbsp;&nbsp;&nbsp;Allow TLS Trust Exceptions
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wifi-eap-tls-cert-is-required" type="checkbox" class="form-control operationDataKeys" data-key="wifiEAPTLSCertIsRequired" data-default="true" checked="checked"/>
+                            <span class="helper" title="If checked, allows for two-factor authentication for EAP-TTLS, PEAP or EAP-FAST. If unchecked, allows for zero factor authentication for EAP-TLS. By default this is enabled for EAP-TLS and disabled for other EAP types. Available in iOS 7.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Require TLS Certificate
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-eap-tls-inner-auth-type">
+                            TTLS Inner Authentication Type
+                            <span class="helper" title="This is the inner authentication used by the TTLS module.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="wifi-eap-tls-inner-auth-type" class="form-control operationDataKeys" data-key="wifiEAPTLSInnerAuthType" data-default="3">
+                            <option value="PAP">PAP</option>
+                            <option value="CHAP">CHAP</option>
+                            <option value="MSCHAP">MSCHAP</option>
+                            <option value="MSCHAPv2" selected="selected">MSCHAPv2</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-eap-outer-identity">
+                            Outer Identity
+                            <span class="helper" title="This allows the user to hide his or her identity. The user's actual name appears only inside the encrypted tunnel. For example, it could be set to 'anonymous' or 'anon', or 'anon@my-company.net'. It can increase security because an attacker can't see the authenticating user's name in the clear.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            ( Should be 1-30 characters long. Only relevant to TTLS, PEAP and EAP-FAST )
+                        </label>
+                        <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" placeholder="[ Optional field ]" />
+                    </div>
+
+                    EAP-Fast Support :
+                    <br>
+                    <br>
+
+                    <ul class="listing">
+                        <li class="grouped-input">
                             <div class="wr-input-control">
                                 <label class="wr-input-control checkbox">
-                                    <input id="wifi-proxy-pac-fallback-allowed" type="checkbox" class="form-control operationDataKeys" data-key="wifiProxyPACFallbackAllowed" data-default="true" checked="checked"/>
-                                    <span class="helper" title="If unchecked, prevents a device from connecting directly to the destination if the PAC file is unreachable. Available in iOS 7 and later.">
-                                        &nbsp;&nbsp;&nbsp;Allow Proxy PAC Fallback
+                                    <input id="wifi-eap-fast-use-pac" type="checkbox" class="parent-input form-control operationDataKeys" data-key="wifiEAPFastUsePAC" data-default="false" />
+                                    <span class="helper" title="If checked, the device will use an existing PAC. Otherwise, the server must present its identity using a certificate.">
+                                        &nbsp;&nbsp;&nbsp;Use existing PAC for EAP-FAST
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </span>
                                 </label>
                             </div>
-
-                        </div>
-
-                        <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-encryption-type">
-                                Encryption Security Type
-                                <span class="helper" title="Wireless network encryption to use when connecting. Available in iOS 4.0 and later. The None value is available in iOS 5.0 and later.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                            </label>
-                            <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'advanced-security-config', ['WEP', 'WPA', 'Any'])">
-                                <option value="None" selected="selected">None</option>
-                                <option value="WEP">WEP</option>
-                                <option value="WPA">WPA</option>
-                                <option value="Any">ANY</option>
-                            </select>
-                        </div>
-
-                        <div id="advanced-security-config" class="slidable-pane" style="display:none;">
-
-                            For WEP, WPA or ANY Encryption Security Type :
-                            <br>
-                            <br>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="wifi-password">
-                                    Wi-Fi Password
-                                    <span class="helper" title="Password used for encryption security. Absence of a password does not prevent a network from being added to the list of known networks. The user is eventually prompted to provide the password when connecting to that network.">
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </span>
-                                </label>
-                                <input id="wifi-password" type="password" class="form-control operationDataKeys" data-key="wifiPassword" placeholder="[ Optional field ]">
-                            </div>
-
-                            <div class="eap-client-config">
-
-                                EAP Client Configuration ( Optional ) :
-                                <br>
-                                <br>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-accepted-eap-types">
-                                        Accepted EAP Types
-                                        <span class="helper" title="Authentication protocols supported on target network.">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                        <br>
-                                        <br>
-                                    </label>
-                                    <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-box-array" data-key="wifiAcceptedEAPTypes">
+                            <ul class="grouped-child-input">
+                                <li class="grouped-input">
+                                    <div class="wr-input-control">
                                         <label class="wr-input-control checkbox">
-                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="13"/>
-                                                <span class="helper" title="">
-                                                    &nbsp;&nbsp;&nbsp;TLS
-                                                </span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <label class="wr-input-control checkbox">
-                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="17"/>
-                                                <span class="helper" title="">
-                                                    &nbsp;&nbsp;&nbsp;LEAP
-                                                </span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <label class="wr-input-control checkbox">
-                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="18"/>
-                                                <span class="helper" title="">
-                                                    &nbsp;&nbsp;&nbsp;EAP-SIM
-                                                </span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <label class="wr-input-control checkbox">
-                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="21"/>
-                                                <span class="helper" title="">
-                                                    &nbsp;&nbsp;&nbsp;TTLS
-                                                </span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <label class="wr-input-control checkbox">
-                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="23"/>
-                                                <span class="helper" title="">
-                                                    &nbsp;&nbsp;&nbsp;EAP-AKA
-                                                </span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <label class="wr-input-control checkbox">
-                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="25"/>
-                                                <span class="helper" title="">
-                                                    &nbsp;&nbsp;&nbsp;PEAP
-                                                </span>
-                                        </label>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <label class="wr-input-control checkbox">
-                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="43"/>
-                                                <span class="helper" title="">
-                                                    &nbsp;&nbsp;&nbsp;EAP-FAST
-                                                </span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-eap-username">
-                                        Username
-                                        <span class="helper" title="Unless you enter a user name, this property won't appear in an imported configuration. Users can enter this information by themselves when they authenticate.">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                    </label>
-                                    <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" placeholder="[ Optional field ]" />
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-eap-password">
-                                        Password
-                                        <span class="helper" title="If not provided, the user will be prompted during login.">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                    </label>
-                                    <input id="wifi-eap-password" type="password" class="form-control operationDataKeys" data-key="wifiEAPPassword" placeholder="[ Optional field ]" />
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-control checkbox">
-                                        <input id="wifi-eap-one-time-password" type="checkbox" class="form-control operationDataKeys" data-key="wifiEAPOneTimePassword" data-default="false" />
-                                        <span class="helper" title="If checked, the user will be prompted for a password each time they connect to the network.">
-                                            &nbsp;&nbsp;&nbsp;One Time Password
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                    </label>
-                                </div>
-
-                                <br>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-payload-certificate-anchor-uuid">
-                                        Certificate Payload Anchor UUIDs
-                                        <span class="helper" title="Identifies the certificates to be trusted for this authentication. Each entry must contain the UUID of a certificate payload. Use this key to prevent the device from asking the user if the listed certificates are trusted.">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                        <br>
-                                        <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-add" data-click-event="add-form">
-                                            <span class="icon fw-stack">
-                                                <i class="fw fw-add fw-stack-1x"></i>
-                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                            <input id="wifi-eap-fast-provision-pac" type="checkbox" class="parent-input child-input form-control operationDataKeys" data-key="wifiEAPFastProvisionPAC" data-default="false" />
+                                            <span class="helper" title="Used only if above is enabled. If checked, allows PAC provisioning. This particular attribute must be enabled for EAP-FAST PAC usage to succeed, because there is no other way to provision a PAC.">
+                                                &nbsp;&nbsp;&nbsp;Allow PAC Provisioning
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                             </span>
-                                            Add Certificate Payload Anchor UUID
-                                        </a>
-                                    </label>
-                                    <div id="wifi-payload-certificate-anchor-uuid" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiPayloadCertificateAnchorUUID">
-                                        <table class="table table-responsive table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>No :</th>
-                                                    <th>Certificate Payload Anchor UUID</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody data-add-form-container="#wifi-payload-certificate-anchor-uuid-grid">
-                                                <tr data-help-text="add-form">
-                                                    <td colspan="3">
-                                                        No entries added yet .
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <table class="template hidden">
-                                            <tbody data-add-form="#wifi-payload-certificate-anchor-uuid-grid">
-                                                <tr data-add-form-element="clone">
-                                                    <td data-title="No :">
-                                                        <span class="index"></span>
-                                                    </td>
-                                                    <td data-title="Certificate Payload Anchor UUID">
-                                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Payload UUID ]" />
-                                                    </td>
-                                                    <td>
-                                                        <span class="list-group-item-actions">
-                                                            <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                                <span class="fw-stack">
-                                                                    <i class="fw fw-ring fw-stack-2x"></i>
-                                                                    <i class="fw fw-delete fw-stack-1x"></i>
-                                                                </span>
-                                                                Remove
-                                                            </a>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        </label>
                                     </div>
-                                </div>
+                                    <ul class="grouped-child-input">
+                                        <li>
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-control checkbox">
+                                                    <input id="wifi-eap-fast-provision-pac-anonymously" type="checkbox" class="child-input form-control operationDataKeys" data-key="wifiEAPFastProvisionPACAnonymously" data-default="false" />
+                                                    <span class="helper" title="Used only if above is enabled. If checked, provisions the device anonymously. Note that there are known man-in-the-middle attacks for anonymous provisioning.">
+                                                        &nbsp;&nbsp;&nbsp;Allow Anonymous PAC Provisioning
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
 
-                                <br>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-eap-sim-no-of-rands">
+                            Number of expected RANDs for EAP-SIM
+                            <span class="helper" title="Valid values are 2 and 3. Default is 3">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="wifi-eap-sim-no-of-rands" class="form-control operationDataKeys" data-key="wifiEAPSIMNoOfRands" data-default="1">
+                            <option value="2">2</option>
+                            <option value="3" selected="selected">3</option>
+                        </select>
+                    </div>
 
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-tls-trusted-server-names">
-                                        TLS Trusted Server Certificate Names
-                                        <span class="helper" title="This is the list of server certificate common names that will be accepted. You can use wildcards to specify the name, such as wpa.*.example.com. If a server presents a certificate that isn't in this list, it won't be trusted. Used alone or in combination with TLSTrustedCertificates, the property allows someone to carefully craft which certificates to trust for the given network, and avoid dynamically trusted certificates.">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                        <br>
-                                        <a href="#wifi-tls-trusted-server-names-grid" class="grid-input-add" data-click-event="add-form">
-                                            <span class="icon fw-stack">
-                                                <i class="fw fw-add fw-stack-1x"></i>
-                                                <i class="fw fw-ring fw-stack-2x"></i>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-payload-cert-uuid">
+                            Certificate Payload UUID
+                            <span class="helper" title="UUID of the certificate payload to use for the identity credential. As with VPN configurations, it is possible to associate a certificate identity configuration with a Wi-Fi configuration. This is useful when defining credentials for a secure enterprise network.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="wifi-payload-cert-uuid" type="text" class="form-control operationDataKeys" data-key="wifiPayloadCertUUID" placeholder="[ Optional field ]" />
+                    </div>
+
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-roaming-consortium-ois">
+                            Roaming Consortium OIs
+                            <span class="helper" title="Roaming Consortium Organization Identifiers used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                Add Roaming Consortium OI
+                            </a>
+                        </label>
+                        <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiRoamingConsortiumOIs">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                <tr>
+                                    <th>No :</th>
+                                    <th>Roaming Consortium OI</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody data-add-form-container="#wifi-roaming-consortium-ois-grid">
+                                <tr data-help-text="add-form">
+                                    <td colspan="3">
+                                        No entries added yet .
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#wifi-roaming-consortium-ois-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="Roaming Consortium OI">
+                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires alphanumeric with letters ABCDEF upto 10 characters ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
                                             </span>
-                                            Add TLS Trusted Server Certificate Name
-                                        </a>
-                                    </label>
-                                    <div id="wifi-tls-trusted-server-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiTLSTrustedServerNames">
-                                        <table class="table table-responsive table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>No :</th>
-                                                    <th>TLS Trusted Server Certificate Name</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody data-add-form-container="#wifi-tls-trusted-server-names-grid">
-                                                <tr data-help-text="add-form">
-                                                    <td colspan="3">
-                                                        No entries added yet .
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <table class="template hidden">
-                                            <tbody data-add-form="#wifi-tls-trusted-server-names-grid">
-                                                <tr data-add-form-element="clone">
-                                                    <td data-title="No :">
-                                                        <span class="index"></span>
-                                                    </td>
-                                                    <td data-title="TLS Trusted Server Certificate Name">
-                                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Common Name ]" />
-                                                    </td>
-                                                    <td>
-                                                        <span class="list-group-item-actions">
-                                                            <a href="#wifi-tls-trusted-server-names-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                                <span class="fw-stack">
-                                                                    <i class="fw fw-ring fw-stack-2x"></i>
-                                                                    <i class="fw fw-delete fw-stack-1x"></i>
-                                                                </span>
-                                                                Remove
-                                                            </a>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <br>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-control checkbox">
-                                        <input id="wifi-eap-tls-allow-trust-exceptions" type="checkbox" class="form-control operationDataKeys" data-key="wifiEAPTLSAllowTrustExceptions" data-default="true" checked="checked"/>
-                                        <span class="helper" title="Allows / disallows a dynamic trust decision by the user. The dynamic trust is the certificate dialogue that appears when a certificate isn't trusted. If this is unchecked, the authentication fails if the certificate isn't already trusted.">
-                                            &nbsp;&nbsp;&nbsp;Allow TLS Trust Exceptions
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                    </label>
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-control checkbox">
-                                        <input id="wifi-eap-tls-cert-is-required" type="checkbox" class="form-control operationDataKeys" data-key="wifiEAPTLSCertIsRequired" data-default="true" checked="checked"/>
-                                        <span class="helper" title="If checked, allows for two-factor authentication for EAP-TTLS, PEAP or EAP-FAST. If unchecked, allows for zero factor authentication for EAP-TLS. By default this is enabled for EAP-TLS and disabled for other EAP types. Available in iOS 7.0 and later.">
-                                            &nbsp;&nbsp;&nbsp;Require TLS Certificate
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                    </label>
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-eap-tls-inner-auth-type">
-                                        TTLS Inner Authentication Type
-                                        <span class="helper" title="This is the inner authentication used by the TTLS module.">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                    </label>
-                                    <select id="wifi-eap-tls-inner-auth-type" class="form-control operationDataKeys" data-key="wifiEAPTLSInnerAuthType" data-default="3">
-                                        <option value="PAP">PAP</option>
-                                        <option value="CHAP">CHAP</option>
-                                        <option value="MSCHAP">MSCHAP</option>
-                                        <option value="MSCHAPv2" selected="selected">MSCHAPv2</option>
-                                    </select>
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-eap-outer-identity">
-                                        Outer Identity
-                                        <span class="helper" title="This allows the user to hide his or her identity. The user's actual name appears only inside the encrypted tunnel. For example, it could be set to 'anonymous' or 'anon', or 'anon@my-company.net'. It can increase security because an attacker can't see the authenticating user's name in the clear.">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                        <br>
-                                        ( Should be 1-30 characters long. Only relevant to TTLS, PEAP and EAP-FAST )
-                                    </label>
-                                    <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" placeholder="[ Optional field ]" />
-                                </div>
-
-                                EAP-Fast Support :
-                                <br>
-                                <br>
-
-                                <ul class="listing">
-                                    <li class="grouped-input">
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-control checkbox">
-                                                <input id="wifi-eap-fast-use-pac" type="checkbox" class="parent-input form-control operationDataKeys" data-key="wifiEAPFastUsePAC" data-default="false" />
-                                                <span class="helper" title="If checked, the device will use an existing PAC. Otherwise, the server must present its identity using a certificate.">
-                                                    &nbsp;&nbsp;&nbsp;Use existing PAC for EAP-FAST
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                        </div>
-                                        <ul class="grouped-child-input">
-                                            <li class="grouped-input">
-                                                <div class="wr-input-control">
-                                                    <label class="wr-input-control checkbox">
-                                                        <input id="wifi-eap-fast-provision-pac" type="checkbox" class="parent-input child-input form-control operationDataKeys" data-key="wifiEAPFastProvisionPAC" data-default="false" />
-                                                        <span class="helper" title="Used only if above is enabled. If checked, allows PAC provisioning. This particular attribute must be enabled for EAP-FAST PAC usage to succeed, because there is no other way to provision a PAC.">
-                                                            &nbsp;&nbsp;&nbsp;Allow PAC Provisioning
-                                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <ul class="grouped-child-input">
-                                                    <li>
-                                                        <div class="wr-input-control">
-                                                            <label class="wr-input-control checkbox">
-                                                                <input id="wifi-eap-fast-provision-pac-anonymously" type="checkbox" class="child-input form-control operationDataKeys" data-key="wifiEAPFastProvisionPACAnonymously" data-default="false" />
-                                                                <span class="helper" title="Used only if above is enabled. If checked, provisions the device anonymously. Note that there are known man-in-the-middle attacks for anonymous provisioning.">
-                                                                    &nbsp;&nbsp;&nbsp;Allow Anonymous PAC Provisioning
-                                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="wifi-eap-sim-no-of-rands">
-                                        Number of expected RANDs for EAP-SIM
-                                        <span class="helper" title="Valid values are 2 and 3. Default is 3">
-                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                        </span>
-                                    </label>
-                                    <select id="wifi-eap-sim-no-of-rands" class="form-control operationDataKeys" data-key="wifiEAPSIMNoOfRands" data-default="1">
-                                        <option value="2">2</option>
-                                        <option value="3" selected="selected">3</option>
-                                    </select>
-                                </div>
-
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="wifi-payload-cert-uuid">
-                                    Certificate Payload UUID
-                                    <span class="helper" title="UUID of the certificate payload to use for the identity credential. As with VPN configurations, it is possible to associate a certificate identity configuration with a Wi-Fi configuration. This is useful when defining credentials for a secure enterprise network.">
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                    </span>
-                                </label>
-                                <input id="wifi-payload-cert-uuid" type="text" class="form-control operationDataKeys" data-key="wifiPayloadCertUUID" placeholder="[ Optional field ]" />
-                            </div>
-
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
 
-                        <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-roaming-consortium-ois">
-                                Roaming Consortium OIs
-                                <span class="helper" title="Roaming Consortium Organization Identifiers used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    <br>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-nai-realm-names">
+                            Network Access Identifier ( NAI ) Realm Names
+                            <span class="helper" title="List of Network Access Identifier Realm names used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#wifi-nai-realm-names-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
                                 </span>
-                                <br>
-                                <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-add" data-click-event="add-form">
-                                    <span class="icon fw-stack">
-                                        <i class="fw fw-add fw-stack-1x"></i>
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                    </span>
-                                    Add Roaming Consortium OI
-                                </a>
-                            </label>
-                            <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiRoamingConsortiumOIs">
-                                <table class="table table-responsive table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>No :</th>
-                                            <th>Roaming Consortium OI</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-add-form-container="#wifi-roaming-consortium-ois-grid">
-                                        <tr data-help-text="add-form">
-                                            <td colspan="3">
-                                                No entries added yet .
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table class="template hidden">
-                                    <tbody data-add-form="#wifi-roaming-consortium-ois-grid">
-                                        <tr data-add-form-element="clone">
-                                            <td data-title="No :">
-                                                <span class="index"></span>
-                                            </td>
-                                            <td data-title="Roaming Consortium OI">
-                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires alphanumeric with letters ABCDEF upto 10 characters ]" />
-                                            </td>
-                                            <td>
-                                                <span class="list-group-item-actions">
-                                                    <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                        <span class="fw-stack">
-                                                            <i class="fw fw-ring fw-stack-2x"></i>
-                                                            <i class="fw fw-delete fw-stack-1x"></i>
-                                                        </span>
-                                                        Remove
-                                                    </a>
+                                Add NAI Realm Name
+                            </a>
+                        </label>
+                        <div id="wifi-nai-realm-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiNAIRealmNames">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>NAI Realm Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#wifi-nai-realm-names-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="3">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#wifi-nai-realm-names-grid">
+                                <tr data-add-form-element="clone">
+                                    <td data-title="No :">
+                                        <span class="index"></span>
+                                    </td>
+                                    <td data-title="NAI Realm Name">
+                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires unique name ]" />
+                                    </td>
+                                    <td>
+                                        <span class="list-group-item-actions">
+                                            <a href="#wifi-nai-realm-names-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                <span class="fw-stack">
+                                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                                    <i class="fw fw-delete fw-stack-1x"></i>
                                                 </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                                Remove
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
 
-                        <br>
+                    <br>
 
-                        <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-nai-realm-names">
-                                Network Access Identifier ( NAI ) Realm Names
-                                <span class="helper" title="List of Network Access Identifier Realm names used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-mcc-and-mncs">
+                            Mobile Country Code ( MCC ) / Mobile Network Code ( MNC ) Configuration
+                            <span class="helper" title="List of Mobile Country Code (MCC)/Mobile Network Code (MNC) pairs used for Wi-Fi Hotspot 2.0 negotiation. Each string must contain exactly six digits. Available in iOS 7.0 and later. This feature is not supported in OS X.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#wifi-mcc-and-mncs-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
                                 </span>
-                                <br>
-                                <a href="#wifi-nai-realm-names-grid" class="grid-input-add" data-click-event="add-form">
-                                    <span class="icon fw-stack">
-                                        <i class="fw fw-add fw-stack-1x"></i>
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                    </span>
-                                    Add NAI Realm Name
-                                </a>
-                            </label>
-                            <div id="wifi-nai-realm-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiNAIRealmNames">
-                                <table class="table table-responsive table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>No :</th>
-                                            <th>NAI Realm Name</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-add-form-container="#wifi-nai-realm-names-grid">
-                                        <tr data-help-text="add-form">
-                                            <td colspan="3">
-                                                No entries added yet .
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table class="template hidden">
-                                    <tbody data-add-form="#wifi-nai-realm-names-grid">
-                                        <tr data-add-form-element="clone">
-                                            <td data-title="No :">
-                                                <span class="index"></span>
-                                            </td>
-                                            <td data-title="NAI Realm Name">
-                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires unique name ]" />
-                                            </td>
-                                            <td>
-                                                <span class="list-group-item-actions">
-                                                    <a href="#wifi-nai-realm-names-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                        <span class="fw-stack">
-                                                            <i class="fw fw-ring fw-stack-2x"></i>
-                                                            <i class="fw fw-delete fw-stack-1x"></i>
-                                                        </span>
-                                                        Remove
-                                                    </a>
+                                Add MCC/MNC Pair
+                            </a>
+                        </label>
+                        <div id="wifi-mcc-and-mncs" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="wifiMCCAndMNCs">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                <tr>
+                                    <th>No :</th>
+                                    <th>Mobile Country Code ( MCC )</th>
+                                    <th>Mobile Network Code ( MNC )</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody data-add-form-container="#wifi-mcc-and-mncs-grid">
+                                <tr data-help-text="add-form">
+                                    <td colspan="4">
+                                        No entries added yet .
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#wifi-mcc-and-mncs-grid">
+                                <tr data-add-form-element="clone">
+                                    <td data-title="No :">
+                                        <span class="index"></span>
+                                    </td>
+                                    <td data-title="Mobile Country Code ( MCC )">
+                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                    </td>
+                                    <td data-title="Mobile Network Code ( MNC )">
+                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                    </td>
+                                    <td>
+                                        <span class="list-group-item-actions">
+                                            <a href="#wifi-mcc-and-mncs-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                <span class="fw-stack">
+                                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                                    <i class="fw fw-delete fw-stack-1x"></i>
                                                 </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                                Remove
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-
-                        <br>
-
-                        <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-mcc-and-mncs">
-                                Mobile Country Code ( MCC ) / Mobile Network Code ( MNC ) Configuration
-                                <span class="helper" title="List of Mobile Country Code (MCC)/Mobile Network Code (MNC) pairs used for Wi-Fi Hotspot 2.0 negotiation. Each string must contain exactly six digits. Available in iOS 7.0 and later. This feature is not supported in OS X.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                                <br>
-                                <a href="#wifi-mcc-and-mncs-grid" class="grid-input-add" data-click-event="add-form">
-                                    <span class="icon fw-stack">
-                                        <i class="fw fw-add fw-stack-1x"></i>
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                    </span>
-                                    Add MCC/MNC Pair
-                                </a>
-                            </label>
-                            <div id="wifi-mcc-and-mncs" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="wifiMCCAndMNCs">
-                                <table class="table table-responsive table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>No :</th>
-                                            <th>Mobile Country Code ( MCC )</th>
-                                            <th>Mobile Network Code ( MNC )</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-add-form-container="#wifi-mcc-and-mncs-grid">
-                                        <tr data-help-text="add-form">
-                                            <td colspan="4">
-                                                No entries added yet .
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table class="template hidden">
-                                    <tbody data-add-form="#wifi-mcc-and-mncs-grid">
-                                        <tr data-add-form-element="clone">
-                                            <td data-title="No :">
-                                                <span class="index"></span>
-                                            </td>
-                                            <td data-title="Mobile Country Code ( MCC )">
-                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
-                                            </td>
-                                            <td data-title="Mobile Network Code ( MNC )">
-                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
-                                            </td>
-                                            <td>
-                                                <span class="list-group-item-actions">
-                                                    <a href="#wifi-mcc-and-mncs-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                        <span class="fw-stack">
-                                                            <i class="fw fw-ring fw-stack-2x"></i>
-                                                            <i class="fw fw-delete fw-stack-1x"></i>
-                                                        </span>
-                                                        Remove
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
