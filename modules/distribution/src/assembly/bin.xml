@@ -318,6 +318,13 @@
 
     <files>
         <file>
+            <source>../mobile-agents/android/client/target/client-release-unsigned.apk</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/mdm/units/asset-download-agent/public/asset
+            </outputDirectory>
+            <destName>android-agent.apk</destName>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
             <source>../mobile-agents/android/jax-rs/target/mdm-android-agent.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
