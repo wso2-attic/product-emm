@@ -458,10 +458,39 @@ var operationModule = function () {
                 var operationDataObj = $(this);
                 var key = operationDataObj.data("key");
                 var value = operationDataObj.val();
-                if (operationDataObj.is(':checkbox')) {
+                if (operationDataObj.is(":checkbox")) {
                     value = operationDataObj.is(":checked");
-                } else if (operationDataObj.is('select')) {
+                } else if (operationDataObj.is("select")) {
                     value = operationDataObj.find("option:selected").attr("value");
+                } else if (operationDataObj.hasClass("grouped-array-input")) {
+                    value = [];
+                    if (operationDataObj.hasClass("valued-check-box-array")) {
+                        $(".child-input", this).each(function () {
+                            if ($(this).is(":checked")) {
+                                value.push($(this).data("value"));
+                            }
+                        });
+                    } else if (operationDataObj.hasClass("one-column-text-field-array")) {
+                        $(".child-input", this).each(function () {
+                            value.push($(this).val());
+                        });
+                    } else if (operationDataObj.hasClass("two-column-text-field-array")) {
+                        var inputCount = 0;
+                        var stringPair;
+                        $(".child-input", this).each(function () {
+                            inputCount++;
+                            if (inputCount % 2 == 1) {
+                                // initialize stringPair value
+                                stringPair = "";
+                                // append first part of the string
+                                stringPair += $(this).val();
+                            } else {
+                                // append second part of the string
+                                stringPair += $(this).val();
+                                value.push(stringPair);
+                            }
+                        });
+                    }
                 }
                 operationData[key] = value;
             }

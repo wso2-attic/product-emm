@@ -162,7 +162,7 @@
                             </span>
                         </label>
                         <!--<input id="minLength" type="text" class="form-control operationDataKeys" data-key="minLength" placeholder="Enter minimum passcode length">-->
-                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength">
+                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -192,7 +192,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars">
+                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -232,7 +232,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="maxAutoLock" class="form-control operationDataKeys" data-key="maxAutoLock">
+                        <select id="maxAutoLock" class="form-control operationDataKeys" data-key="maxAutoLock" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -251,7 +251,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="gracePeriod" class="form-control operationDataKeys" data-key="gracePeriod">
+                        <select id="gracePeriod" class="form-control operationDataKeys" data-key="gracePeriod" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -273,7 +273,7 @@
                             </span>
                         </label>
                         <!--<input type="text" class="form-control operationDataKeys" id="maxFailedAttempts" data-key="maxFailedAttempts" placeholder="Enter maximum number of failed attempts">-->
-                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts">
+                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -348,11 +348,12 @@
 
                         <div class="wr-input-control">
                             <label class="wr-input-label" for="wifi-domain-name">
-                                Domain Name <br>
-                                ( For Wi-Fi Hotspot 2.0 negotiation )
+                                Domain Name
                                 <span class="helper" title="Domain Name used for Wi-Fi Hotspot 2.0 negotiation. This field can be provided instead of SSID. Available in iOS 7.0 and later.">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
+                                <br>
+                                ( For Wi-Fi Hotspot 2.0 negotiation )
                             </label>
                             <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" placeholder="[ Required field if no SSID is given ]">
                         </div>
@@ -414,7 +415,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" onchange="showProxyConfiguration(this)">
+                            <select id="wifi-proxy-type" class="form-control operationDataKeys" data-key="wifiProxyType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'manual-proxy-setup', ['Manual'])">
                                 <option value="None" selected="selected">
                                     None
                                 </option>
@@ -423,7 +424,7 @@
                             </select>
                         </div>
 
-                        <div class="manual-proxy-setup" style="display:none;">
+                        <div id="manual-proxy-setup" class="slidable-pane" style="display:none;">
 
                             For Manual Proxy Setup :
                             <br>
@@ -499,7 +500,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" onchange="showEncryptionPolicyConfiguration(this)">
+                            <select id="wifi-encryption-type" class="form-control operationDataKeys" data-key="wifiEncryptionType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'advanced-security-config', ['WEP', 'WPA', 'Any'])">
                                 <option value="None" selected="selected">None</option>
                                 <option value="WEP">WEP</option>
                                 <option value="WPA">WPA</option>
@@ -507,7 +508,7 @@
                             </select>
                         </div>
 
-                        <div class="advanced-security-config" style="display:none;">
+                        <div id="advanced-security-config" class="slidable-pane" style="display:none;">
 
                             For WEP, WPA or ANY Encryption Security Type :
                             <br>
@@ -530,13 +531,74 @@
                                 <br>
 
                                 <div class="wr-input-control">
+                                    <label class="wr-input-label" for="wifi-accepted-eap-types">
+                                        Accepted EAP Types
+                                        <span class="helper" title="Authentication protocols supported on target network.">
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                        <br>
+                                        <br>
+                                    </label>
+                                    <div id="wifi-accepted-eap-types" class="operationDataKeys grouped-array-input valued-check-box-array" data-key="wifiAcceptedEAPTypes">
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="13"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;TLS
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="17"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;LEAP
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="18"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;EAP-SIM
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="21"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;TTLS
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="23"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;EAP-AKA
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="25"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;PEAP
+                                                </span>
+                                        </label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="wr-input-control checkbox">
+                                            <input type="checkbox" class="form-control child-input" data-default="false" data-value="43"/>
+                                                <span class="helper" title="">
+                                                    &nbsp;&nbsp;&nbsp;EAP-FAST
+                                                </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="wr-input-control">
                                     <label class="wr-input-label" for="wifi-eap-username">
                                         Username
                                         <span class="helper" title="Unless you enter a user name, this property won't appear in an imported configuration. Users can enter this information by themselves when they authenticate.">
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" placeholder="[ Optional field ]">
+                                    <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" placeholder="[ Optional field ]" />
                                 </div>
 
                                 <div class="wr-input-control">
@@ -546,7 +608,7 @@
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <input id="wifi-eap-password" type="password" class="form-control operationDataKeys" data-key="wifiEAPPassword" placeholder="[ Optional field ]">
+                                    <input id="wifi-eap-password" type="password" class="form-control operationDataKeys" data-key="wifiEAPPassword" placeholder="[ Optional field ]" />
                                 </div>
 
                                 <div class="wr-input-control">
@@ -586,23 +648,24 @@
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <select id="wifi-eap-tls-inner-auth-type" class="form-control operationDataKeys" data-key="wifiEAPTLSInnerAuthType">
-                                        <option value="MSCHAPv2" selected="selected">MSCHAPv2</option>
+                                    <select id="wifi-eap-tls-inner-auth-type" class="form-control operationDataKeys" data-key="wifiEAPTLSInnerAuthType" data-default="3">
                                         <option value="PAP">PAP</option>
                                         <option value="CHAP">CHAP</option>
                                         <option value="MSCHAP">MSCHAP</option>
+                                        <option value="MSCHAPv2" selected="selected">MSCHAPv2</option>
                                     </select>
                                 </div>
 
                                 <div class="wr-input-control">
                                     <label class="wr-input-label" for="wifi-eap-outer-identity">
-                                        Outer Identity <br>
-                                        ( Should be 1-30 characters long. Only relevant to TTLS, PEAP and EAP-FAST. )
+                                        Outer Identity
                                         <span class="helper" title="This allows the user to hide his or her identity. The user's actual name appears only inside the encrypted tunnel. For example, it could be set to 'anonymous' or 'anon', or 'anon@my-company.net'. It can increase security because an attacker can't see the authenticating user's name in the clear.">
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
+                                        <br>
+                                        ( Should be 1-30 characters long. Only relevant to TTLS, PEAP and EAP-FAST )
                                     </label>
-                                    <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" placeholder="[ Optional field ]">
+                                    <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" placeholder="[ Optional field ]" />
                                 </div>
 
                                 EAP-Fast Support :
@@ -656,9 +719,9 @@
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
-                                    <select id="wifi-eap-sim-no-of-rands" class="form-control operationDataKeys" data-key="wifiEAPSIMNoOfRands">
-                                        <option value="3" selected="selected">3</option>
+                                    <select id="wifi-eap-sim-no-of-rands" class="form-control operationDataKeys" data-key="wifiEAPSIMNoOfRands" data-default="1">
                                         <option value="2">2</option>
+                                        <option value="3" selected="selected">3</option>
                                     </select>
                                 </div>
 
@@ -675,6 +738,189 @@
                             </div>
 
                         </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wifi-roaming-consortium-ois">
+                                Roaming Consortium OIs
+                                <span class="helper" title="Roaming Consortium Organization Identifiers used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                <br>
+                                <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-add" data-click-event="add-form">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                    </span>
+                                    Add Roaming Consortium OI
+                                </a>
+                            </label>
+                            <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiRoamingConsortiumOIs">
+                                <table class="table table-responsive table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No :</th>
+                                            <th>Roaming Consortium OI</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-add-form-container="#wifi-roaming-consortium-ois-grid">
+                                        <tr data-help-text="add-form">
+                                            <td colspan="3">
+                                                No entries added yet .
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="template hidden">
+                                    <tbody data-add-form="#wifi-roaming-consortium-ois-grid">
+                                        <tr data-add-form-element="clone">
+                                            <td data-title="No :">
+                                                <span class="index"></span>
+                                            </td>
+                                            <td data-title="Roaming Consortium OI">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires alphanumeric with letters ABCDEF upto 10 characters ]" />
+                                            </td>
+                                            <td>
+                                                <span class="list-group-item-actions">
+                                                    <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                        <span class="fw-stack">
+                                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                                            <i class="fw fw-delete fw-stack-1x"></i>
+                                                        </span>
+                                                        Remove
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wifi-nai-realm-names">
+                                Network Access Identifier ( NAI ) Realm Names
+                                <span class="helper" title="List of Network Access Identifier Realm names used for Wi-Fi Hotspot 2.0 negotiation. Available in iOS 7.0 and later.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                <br>
+                                <a href="#wifi-nai-realm-names-grid" class="grid-input-add" data-click-event="add-form">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                    </span>
+                                    Add NAI Realm Name
+                                </a>
+                            </label>
+                            <div id="wifi-nai-realm-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiNAIRealmNames">
+                                <table class="table table-responsive table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No :</th>
+                                            <th>NAI Realm Name</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-add-form-container="#wifi-nai-realm-names-grid">
+                                        <tr data-help-text="add-form">
+                                            <td colspan="3">
+                                                No entries added yet .
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="template hidden">
+                                    <tbody data-add-form="#wifi-nai-realm-names-grid">
+                                        <tr data-add-form-element="clone">
+                                            <td data-title="No :">
+                                                <span class="index"></span>
+                                            </td>
+                                            <td data-title="NAI Realm Name">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires unique name ]" />
+                                            </td>
+                                            <td>
+                                                <span class="list-group-item-actions">
+                                                    <a href="#wifi-nai-realm-names-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                        <span class="fw-stack">
+                                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                                            <i class="fw fw-delete fw-stack-1x"></i>
+                                                        </span>
+                                                        Remove
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wifi-mcc-and-mncs">
+                                Mobile Country Code ( MCC ) / Mobile Network Code ( MNC ) pairs
+                                <span class="helper" title="List of Mobile Country Code (MCC)/Mobile Network Code (MNC) pairs used for Wi-Fi Hotspot 2.0 negotiation. Each string must contain exactly six digits. Available in iOS 7.0 and later. This feature is not supported in OS X.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                <br>
+                                <a href="#wifi-mcc-and-mncs-grid" class="grid-input-add" data-click-event="add-form">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                    </span>
+                                    Add MCC/MNC Pair
+                                </a>
+                            </label>
+                            <div id="wifi-mcc-and-mncs" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="wifiMCCAndMNCs">
+                                <table class="table table-responsive table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No :</th>
+                                            <th>Mobile Country Code ( MCC )</th>
+                                            <th>Mobile Network Code ( MNC )</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-add-form-container="#wifi-mcc-and-mncs-grid">
+                                        <tr data-help-text="add-form">
+                                            <td colspan="4">
+                                                No entries added yet .
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="template hidden">
+                                    <tbody data-add-form="#wifi-mcc-and-mncs-grid">
+                                        <tr data-add-form-element="clone">
+                                            <td data-title="No :">
+                                                <span class="index"></span>
+                                            </td>
+                                            <td data-title="Mobile Country Code ( MCC )">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                            </td>
+                                            <td data-title="Mobile Network Code ( MNC )">
+                                                <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                            </td>
+                                            <td>
+                                                <span class="list-group-item-actions">
+                                                    <a href="#wifi-mcc-and-mncs-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                        <span class="fw-stack">
+                                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                                            <i class="fw fw-delete fw-stack-1x"></i>
+                                                        </span>
+                                                        Remove
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -711,7 +957,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" placeholder="[ My CardDAV Account ]">
+                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" placeholder="[ My CardDAV Account ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -734,7 +980,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" placeholder="[ Optional ]">
+                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" placeholder="[ Optional ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -744,7 +990,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" placeholder="[ Set On Device ]">
+                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" placeholder="[ Set On Device ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -754,7 +1000,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountPassword" type="password" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]">
+                        <input id="accountPassword" type="password" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -996,7 +1242,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="scepSubjectAlternativeNameType" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameType">
+                        <select id="scepSubjectAlternativeNameType" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameType" data-default="0">
                             <option value="None" selected="selected">
                                 None
                             </option>
@@ -1063,7 +1309,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="scepKeySize" class="form-control operationDataKeys" data-key="scepKeySize">
+                        <select id="scepKeySize" class="form-control operationDataKeys" data-key="scepKeySize" data-default="0">
                             <option value="1024" selected="selected">1024</option>
                             <option value="2048">2048</option>
                         </select>
@@ -1289,7 +1535,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="emAccountType" class="form-control operationDataKeys" data-key="emAccountType">
+                        <select id="emAccountType" class="form-control operationDataKeys" data-key="emAccountType" data-default="0">
                             <option value="IMAP" selected="selected">IMAP</option>
                             <option value="POP">POP</option>
                         </select>
@@ -2077,7 +2323,7 @@
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <select id="safariAcceptCookies" class="form-control child-input operationDataKeys" data-key="safariAcceptCookies">
+                                            <select id="safariAcceptCookies" class="form-control child-input operationDataKeys" data-key="safariAcceptCookies" data-default="2">
                                                 <option value="0">Never</option>
                                                 <option value="1">From visited sites only</option>
                                                 <option value="2" selected="selected">Always</option>
