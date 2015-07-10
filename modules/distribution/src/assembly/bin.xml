@@ -255,13 +255,6 @@
             </includes>
         </fileSet>
 
-        <!-- Copying MDM Jaggery app -->
-        <fileSet>
-            <directory>src/repository/jaggeryapps/</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps
-            </outputDirectory>
-            <fileMode>755</fileMode>
-        </fileSet>
         <!-- Copying Authentication Endpoint webapp -->
         <fileSet>
             <directory>
@@ -337,7 +330,7 @@
             <fileMode>755</fileMode>
         </file>
         <file>
-            <source>../rest-api/target/mdm-admin.war</source>
+            <source>../apps/jax-rs/mdm-admin/target/mdm-admin.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -656,6 +649,13 @@
             <source>src/repository/conf/etc/launch.ini</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/
             </outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+	<!-- Copying MDM jaggery app -->
+	<file>
+            <source>../apps/jaggery/mdm/target/mdm.zip</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>

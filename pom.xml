@@ -36,9 +36,10 @@
     </parent>
 
     <modules>
+	<module>modules/apps/jaggery/mdm</module>
+	<module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/tools</module>
-        <module>modules/rest-api</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
         <module>modules/integration</module>
