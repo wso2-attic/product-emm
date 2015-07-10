@@ -418,7 +418,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		if (result != null) {
 			responseStatus = result.get(Constants.STATUS);
 			if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-                String licenseAgreement = result.get(Constants.RESPONSE);
+                		String licenseAgreement = result.get(Constants.RESPONSE);
 
 				if (licenseAgreement != null) {
 					Preference.putString(context,
