@@ -474,6 +474,21 @@ var operationModule = function () {
                         $(".child-input", this).each(function () {
                             value.push($(this).val());
                         });
+                    } else if (operationDataObj.hasClass("two-column-text-field-array")) {
+                        var inputCount = 0;
+                        var stringPair;
+                        $(".child-input", this).each(function () {
+                            inputCount++;
+                            if (inputCount % 2 == 1) {
+                                // initialize stringPair value
+                                stringPair = "";
+                                // append first part of the string
+                                stringPair += $(this).val();
+                            } else {
+                                stringPair += $(this).val();
+                                value.push(stringPair);
+                            }
+                        });
                     }
                 }
                 operationData[key] = value;
