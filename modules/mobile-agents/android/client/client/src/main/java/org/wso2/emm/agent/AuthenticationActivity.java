@@ -255,10 +255,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			} else {
 				initializeIDPLib(clientId, clientSecret);
 			}
-			// This is needed when it is required to run without
-			// dynamic client authentication
-			//
-			//initializeIDPLib(clientId, clientSecret);
 
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
