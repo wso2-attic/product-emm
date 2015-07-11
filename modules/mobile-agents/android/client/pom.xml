@@ -73,7 +73,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <outputDirectory>../../../apps/jaggery/mdm/src/mdm/units/asset-download-agent/public/asset</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>client/build/outputs/apk</directory>
