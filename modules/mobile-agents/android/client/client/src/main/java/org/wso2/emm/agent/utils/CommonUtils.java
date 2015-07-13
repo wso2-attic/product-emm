@@ -131,6 +131,12 @@ public class CommonUtils {
 		return info.isConnected();
 	}
 
+	/**
+	 * Convert given object to json formatted string.
+	 * @param obj Object to be converted.
+	 * @return Json formatted string.
+	 * @throws AndroidAgentException
+	 */
 	public static String toJSON (Object obj) throws AndroidAgentException {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -151,7 +157,7 @@ public class CommonUtils {
 	}
 
 	/**
-	 * This method is used to initiate the oauth client app unregister process
+	 * This method is used to initiate the oauth client app unregister process.
 	 *
 	 * @param context Application context
 	 * @throws AndroidAgentException
