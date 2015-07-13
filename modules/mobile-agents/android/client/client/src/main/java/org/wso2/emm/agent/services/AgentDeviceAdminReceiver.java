@@ -82,6 +82,8 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 		if (regId != null && !regId.isEmpty()) {
 			startUnRegistration(context);
+		} else {
+			Log.e(TAG, "Registration ID is already null");
 		}
 
 	}
@@ -104,10 +106,10 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 				HTTP_METHODS.DELETE,
 				null, AgentDeviceAdminReceiver.this,
 				Constants.UNREGISTER_REQUEST_CODE);
-		try{
-			this.unRegisterClientApp(context);
+		try {
+			CommonUtils.unRegisterClientApp(context);
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform unregistration of client app." + e);
+			Log.e(TAG, "Error occurred while removing Oauth application. " + e);
 		}
 		CommonUtils.clearAppData(context);
 	}
@@ -142,31 +144,4 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 			Log.d(TAG, "Unregistered." + arg0.toString());
 		}
 	}
-
-	/**
-	 * This method is used to initiate the oauth client app unregister process
-	 *
-	 * @param context Application context
-	 * @throws AndroidAgentException
-	 */
-	private void unRegisterClientApp(Context context) throws AndroidAgentException {
-
-		String applicationName = Preference.getString(context, Constants.CLIENT_NAME);
-		String consumerKey = Preference.getString(context, Constants.CLIENT_ID);
-		String userId = Preference.getString(context, Constants.USERNAME);
-
-		UnregisterProfile profile = new UnregisterProfile();
-		profile.setApplicationName(applicationName);
-		profile.setConsumerKey(consumerKey);
-		profile.setUserId(userId);
-
-		String serverIP = Preference.getString(context, Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(serverIP);
-
-		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		dynamicClientManager.unregisterClient(profile,utils);
-
-	}
-
 }

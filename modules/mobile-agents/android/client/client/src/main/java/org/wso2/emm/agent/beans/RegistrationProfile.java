@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.utils.CommonUtils;
 
 import java.io.IOException;
 
@@ -82,21 +83,6 @@ public class RegistrationProfile {
     }
 
     public String toJSON() throws AndroidAgentException {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this);
-        } catch (JsonMappingException e) {
-            String errorMessage = "Error occurred while mapping class to json.";
-            Log.e(TAG, errorMessage);
-            throw new AndroidAgentException(errorMessage, e);
-        } catch (JsonGenerationException e) {
-            String errorMessage = "Error occurred while generating json.";
-            Log.e(TAG, errorMessage);
-            throw new AndroidAgentException(errorMessage, e);
-        } catch (IOException e) {
-            String errorMessage = "Error occurred while reading the stream.";
-            Log.e(TAG, errorMessage);
-            throw new AndroidAgentException(errorMessage, e);
-        }
+        return CommonUtils.toJSON(this);
     }
 }

@@ -79,7 +79,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		setContentView(R.layout.activity_already_registered);
 		getSupportActionBar().setDisplayShowCustomEnabled(true);
 		getSupportActionBar().setCustomView(R.layout.custom_sherlock_bar);
-		getSupportActionBar().setTitle(R.string.empty_app_title);
+		getSupportActionBar().setTitle(Constants.EMPTY_STRING);
 
 		devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 		cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
@@ -116,10 +116,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-		if (devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
-			LocalNotification.startPolling(context);
-			isPollingStarted = true;
-		}
 	}
 
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -204,8 +200,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		String deviceType = Preference.getString(context, getResources().
 				getString(R.string.shared_pref_reg_type));
 		if (deviceType != null && !deviceType.isEmpty()) {
-			if (getResources().getString(R.string.device_enroll_type_byod).
-					equalsIgnoreCase(deviceType)) {
+			if (Constants.OWNERSHIP_BYOD.equalsIgnoreCase(deviceType)) {
 				getSupportMenuInflater().inflate(R.menu.sherlock_menu_byod, menu);
 			} else {
 				getSupportMenuInflater().inflate(R.menu.sherlock_menu_cope, menu);
@@ -262,11 +257,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 			if (CommonUtils.isNetworkAvailable(context)) {
 
-				String serverIP =
-						Preference.getString(AlreadyRegisteredActivity.this,
-								context.getResources()
-										.getString(R.string.shared_pref_ip)
-						);
+				String serverIP = Preference.getString(context, Constants.IP);
 				regId = Preference.getString(context, resources.
 						getString(R.string.shared_pref_regId));
 				if (regId != null) {
@@ -282,15 +273,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 								null, AlreadyRegisteredActivity.this,
 								Constants.IS_REGISTERED_REQUEST_CODE);
 					}
-				} else {
-					showUnregisterDialog();
 				}
 			} else {
 				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
-			}
-		} else {
-			if (devicePolicyManager.isAdminActive(cdmDeviceAdmin) && !isPollingStarted) {
-				LocalNotification.startPolling(context);
 			}
 		}
 	}
@@ -331,7 +316,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
 				if (responseStatus != null && Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					clearAppData();
 					initiateUnregistration();
 				} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
@@ -350,9 +334,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					if (devicePolicyManager.isAdminActive(cdmDeviceAdmin) && !isPollingStarted) {
-						LocalNotification.startPolling(context);
-					}
+					Log.d(TAG, "Device has already enrolled");
 				} else {
 					initiateUnregistration();
 				}
@@ -380,15 +362,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister.setText(R.string.register_button_text);
 		btnUnregister.setTag(TAG_BTN_RE_REGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-		LocalNotification.stopPolling(context);
-		try {
-			unRegisterClientApp(context);
-		} catch (AndroidAgentException e) {
-			String msg = "Error occured while unregistering Oauth client app";
-			Log.e(TAG, msg + "." + e);
-			loadAuthenticationErrorActivity();
-		}
-		CommonUtils.clearAppData(context);
+		CommonUtils.disableAdmin(context);
 	}
 
 	/**
@@ -433,8 +407,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Load server details activity.
 	 */
 	private void loadServerDetailsActivity() {
-		Preference.putString(context, resources.getString(R.string.shared_pref_ip),
-				resources.getString(R.string.shared_pref_default_string));
+		Preference.putString(context, Constants.IP, Constants.EMPTY_STRING);
 		Intent intent = new Intent(
 				AlreadyRegisteredActivity.this,
 				ServerDetails.class);
@@ -477,29 +450,4 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 	}
 
-	/**
-	 * This method is used to initiate the oauth client app unregister process
-	 *
-	 * @param context Application context
-	 * @throws AndroidAgentException
-	 */
-	private void unRegisterClientApp(Context context) throws AndroidAgentException {
-
-		String applicationName = Preference.getString(context, Constants.CLIENT_NAME);
-		String consumerKey = Preference.getString(context, Constants.CLIENT_ID);
-		String userId = Preference.getString(context, Constants.USERNAME);
-
-		UnregisterProfile profile = new UnregisterProfile();
-		profile.setApplicationName(applicationName);
-		profile.setConsumerKey(consumerKey);
-		profile.setUserId(userId);
-
-		String serverIP = Preference.getString(context, Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(serverIP);
-
-		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		dynamicClientManager.unregisterClient(profile, utils);
-
-	}
 }

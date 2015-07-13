@@ -720,8 +720,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		profile.setClientName(deviceInfo.getMACAddress());
 		profile.setGrantType(Constants.GRANT_TYPE);
 		profile.setOwner(usernameVal);
-		profile.setTokenScope(Constants.TOKEN_SCOPE
-		);
+		profile.setTokenScope(Constants.TOKEN_SCOPE);
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
 		return dynamicClientManager.registerClient(profile, utils);
