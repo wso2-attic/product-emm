@@ -102,10 +102,10 @@
         <!-- Passcode policy -->
         <div class="wr-hidden-operation" data-operation="passcode-policy" style="display: block">
             <div class="panel panel-default operation-data" data-operation="passcode-policy" data-operation-code="PASSCODE_POLICY">
-                <div class="panel-heading" role="tab">
+                <div id="passcode-policy-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Passcode Policy
-                        <label id="passcode-policy-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#passcode-policy">
+                        <label id="passcode-policy-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#passcode-policy-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -118,7 +118,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="passcode-policy" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="passcode-policy">
+                <div id="passcode-policy-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="passcode-policy-body">
 
                     <div id="passcode-policy-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
@@ -161,7 +161,6 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input id="minLength" type="text" class="form-control operationDataKeys" data-key="minLength" placeholder="Enter minimum passcode length">-->
                         <select id="passcode-policy-min-length" class="form-control operationDataKeys" data-key="passcodePolicyMinLength" data-default="0">
                             <option value="" selected="selected">
                                 None
@@ -204,25 +203,25 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="passcode-policy-max-pin-age-in-days">
+                        <label class="wr-input-label" for="passcode-policy-max-passcode-age-in-days">
                             Maximum passcode age in days <br>
                             ( Should be in between 1-to-730 days or none )
                             <span class="helper" title="Number of days after which a passcode must be changed">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-max-pin-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPINAgeInDays" placeholder="[ Requires Number Input ]" />
+                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" placeholder="[ Requires Number Input ]" />
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="passcode-policy-pin-history">
+                        <label class="wr-input-label" for="passcode-policy-passcode-history">
                             Passcode history <br>
                             ( Should be in between 1-to-50 passcodes or none )
                             <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-pin-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPINHistory" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -292,13 +291,13 @@
         </div>
         <!-- End of Passcode policy -->
 
-        <!-- Wifi Settings -->
+        <!-- Wifi -->
         <div class="wr-hidden-operation" data-operation="wifi">
             <div class="panel panel-default operation-data" data-operation="wifi" data-operation-code="WIFI">
-                <div class="panel-heading" role="tab">
+                <div id="wifi-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Wifi Settings
-                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#wifi">
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#wifi-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -311,7 +310,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="wifi" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="wifi">
+                <div id="wifi-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="wifi-body">
                     <div id="wifi-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
@@ -323,7 +322,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSsid" placeholder="[ Required field if no domain name is given ]">
+                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" placeholder="[ Required field if no domain name is given ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1030,7 +1029,7 @@
                 </div>
             </div>
         </div>
-        <!-- End of Wifi Settings -->
+        <!-- End of Wifi -->
 
         <!-- Contacts -->
         <div class="wr-hidden-operation" data-operation="contacts">
@@ -1713,10 +1712,10 @@
         <!-- Restrictions -->
         <div class="wr-hidden-operation" data-operation="restrictions">
             <div class="panel panel-default operation-data" data-operation="restrictions" data-operation-code="RESTRICTION">
-                <div class="panel-heading" role="tab">
+                <div id="restrictions-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Restrictions
-                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#restrictions">
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#restrictions-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -1729,7 +1728,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="restrictions" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="restrictions">
+                <div id="restrictions-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="restrictions-body">
 
                     <div id="restrictions-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
@@ -1898,7 +1897,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="restrictions-allow-app-removal" type="checkbox" class="operationDataKeys" data-key="restrictions-allow-app-removal" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-app-removal" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAppRemoval" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow removal of apps in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow removing apps
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2439,7 +2438,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="restrictionsAllowYouTube" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowYouTube" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-youtube" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowYouTube" data-default="true" checked="checked" />
                                         <span class="helper" title="When unchecked, YouTube application is disabled and its icon is removed from the Home screen. This key is ignored in iOS 6 and later because the YouTube app is not provided.">
                                             &nbsp;&nbsp;&nbsp;Allow YouTube
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -2450,7 +2449,7 @@
                             <li>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
-                                        <input id="restrictionsAllowGameCenter" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowGameCenter" data-default="true" checked="checked" />
+                                        <input id="restrictions-allow-game-center" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowGameCenter" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this checked would allow use of Game Center in the device.">
                                             &nbsp;&nbsp;&nbsp;Allow use of Game Center ( Supervised only )
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>

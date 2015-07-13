@@ -62,58 +62,132 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "forcePIN": operationData["forcePIN"],
-                        "allowSimple": operationData["allowSimple"],
-                        "requireAlphanumeric": operationData["requireAlphanumeric"],
-                        "minLength": operationData["minLength"],
-                        "minComplexChars": operationData["minComplexChars"],
-                        "maxPINAgeInDays": operationData["maxPINAgeInDays"],
-                        "pinHistory": operationData["pinHistory"],
-                        "maxInactivity": operationData["maxAutoLock"],
-                        "maxGracePeriod": operationData["gracePeriod"],
-                        "maxFailedAttempts": operationData["maxFailedAttempts"]
+                        "forcePIN": operationData["passcodePolicyForcePIN"],
+                        "allowSimple": operationData["passcodePolicyAllowSimple"],
+                        "requireAlphanumeric": operationData["passcodePolicyRequireAlphanumeric"],
+                        "minLength": operationData["passcodePolicyMinLength"],
+                        "minComplexChars": operationData["passcodePolicyMinComplexChars"],
+                        "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
+                        "pinHistory": operationData["passcodePolicyPasscodeHistory"],
+                        "maxInactivity": operationData["passcodePolicyMaxAutoLock"],
+                        "maxGracePeriod": operationData["passcodePolicyGracePeriod"],
+                        "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
                     }
                 };
                 break;
-            case "WIFI_SETTINGS":
+            case "WIFI":
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "ssid": operationData["wfSsid"],
-                        "hiddenNetwork": operationData["wfHiddenNetwork"],
-                        "autoJoin": operationData["wfAutoJoin"],
-                        "proxyType": operationData["wfProxyType"],
-                        "encryptionType": operationData["wfEncryptionType"],
-                        "domainName": operationData["wfDomainName"],
-                        "serviceProviderRoamingEnabled": operationData["wfSpRomainEnabled"],
-                        "displayedOperatorName": operationData["wfDisplayedOperatorName"],
-                        "roamingConsortiumOIs": operationData[""],
-                        "password": operationData["wfEncPassword"],
+                        "ssid": operationData["wifiSSID"],
+                        "hiddenNetwork": operationData["wifiHiddenNetwork"],
+                        "autoJoin": operationData["wifiAutoJoin"],
+                        "proxyType": operationData["wifiProxyType"],
+                        "encryptionType": operationData["wifiEncryptionType"],
+                        "hotspot": operationData["wifiIsHotSpot"],
+                        "domainName": operationData["wifiDomainName"],
+                        "serviceProviderRoamingEnabled": operationData["wifiServiceProviderRoamingEnabled"],
+                        "displayedOperatorName": operationData["wifiDisplayedOperatorName"],
+                        "roamingConsortiumOIs": operationData["wifiRoamingConsortiumOIs"],
+                        "password": operationData["wifiPassword"],
                         "clientConfiguration": {
-                            "username": operationData["wfEncEapUsername"],
-                            "acceptEAPTypes": operationData[""],
-                            "userPassword": operationData["wfEncEapUserPassword"],
-                            "oneTimePassword": operationData["wfEncEapOneTimePassword"],
-                            "payloadCertificateAnchorUUID": operationData[""],
-                            "outerIdentity": operationData["wfEncEapOuterIdentity"],
-                            "tlstrustedServerNames": operationData[""],
-                            "tlsallowTrustExceptions": operationData["wfEncEapTlsAllowTrustExceptions"],
-                            "tlscertificateIsRequired": operationData["wfEncEapTlsCertIsRequired"],
-                            "ttlsinnerAuthentication": operationData["wfEapTlsInnerAuthType"],
-                            "eapfastusePAC": operationData["wfEncEapFastUsePac"],
-                            "eapfastprovisionPAC": operationData["wfEncEapFastProvisionPac"],
-                            "eapfastprovisionPACAnonymously": operationData["wfEncEapFastProvisionPacAnon"],
-                            "eapsimnumberOfRANDs": operationData[""]
+                            "username": operationData["wifiEAPUsername"],
+                            "acceptEAPTypes": operationData["wifiAcceptedEAPTypes"],
+                            "userPassword": operationData["wifiEAPPassword"],
+                            "oneTimePassword": operationData["wifiEAPOneTimePassword"],
+                            "payloadCertificateAnchorUUID": operationData["wifiPayloadCertificateAnchorUUID"],
+                            "outerIdentity": operationData["wifiEAPOuterIdentity"],
+                            "tlstrustedServerNames": operationData["wifiTLSTrustedServerNames"],
+                            "tlsallowTrustExceptions": operationData["wifiEAPTLSAllowTrustExceptions"],
+                            "tlscertificateIsRequired": operationData["wifiEAPTLSCertIsRequired"],
+                            "ttlsinnerAuthentication": operationData["wifiEAPTLSInnerAuthType"],
+                            "eapfastusePAC": operationData["wifiEAPFastUsePAC"],
+                            "eapfastprovisionPAC": operationData["wifiEAPFastProvisionPAC"],
+                            "eapfastprovisionPACAnonymously": operationData["wifiEAPFastProvisionPACAnonymously"],
+                            "eapsimnumberOfRANDs": operationData["wifiEAPSIMNoOfRands"]
                         },
-                        "payloadCertificateUUID": operationData["wfEncPayloadCertUuid"],
-                        "proxyServer": operationData["wfProxyServer"],
-                        "proxyPort": operationData["wfProxyPort"],
-                        "proxyUsername": operationData["wfProxyUsername"],
-                        "proxyPassword": operationData["wfProxyPassword"],
-                        "proxyPACURL": operationData["wfProxyPacUrl"],
-                        "proxyPACFallbackAllowed": operationData["wfProxyAllowPacFallback"],
-                        "nairealmNames": operationData[""],
-                        "mccandMNCs": operationData[""]
+                        "payloadCertificateUUID": operationData["wifiPayloadCertUUID"],
+                        "proxyServer": operationData["wifiProxyServer"],
+                        "proxyPort": operationData["wifiProxyPort"],
+                        "proxyUsername": operationData["wifiProxyUsername"],
+                        "proxyPassword": operationData["wifiProxyPassword"],
+                        "proxyPACURL": operationData["wifiProxyPACURL"],
+                        "proxyPACFallbackAllowed": operationData["wifiProxyPACFallbackAllowed"],
+                        "nairealmNames": operationData["wifiNAIRealmNames"],
+                        "mccandMNCs": operationData["wifiMCCAndMNCs"]
+                    }
+                };
+                break;
+            case "RESTRICTION":
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "allowAccountModification": operationData["restrictionsAllowAccountModification"],
+                        "allowAddingGameCenterFriends": operationData["restrictionsAllowAddingGameCenterFriends"],
+                        "allowAirDrop": operationData["restrictionsAllowAirDrop"],
+                        "allowAppCellularDataModification": operationData["restrictionsAllowAppCellularDataModification"],
+                        "allowAppInstallation": operationData["restrictionsAllowAppInstallation"],
+                        "allowAppRemoval": operationData["restrictionsAllowAppRemoval"],
+                        "allowAssistant": operationData["restrictionsAllowAssistant"],
+                        "allowAssistantUserGeneratedContent": operationData["restrictionsAllowAssistantUserGeneratedContent"],
+                        "allowAssistantWhileLocked": operationData["restrictionsAllowAssistantWhileLocked"],
+                        "allowBookstore": operationData["restrictionsAllowBookstore"],
+                        "allowBookstoreErotica": operationData["restrictionsAllowBookstoreErotica"],
+                        "allowCamera": operationData["restrictionsAllowCamera"],
+                        "allowChat": operationData["restrictionsAllowChat"],
+                        "allowCloudBackup": operationData["restrictionsAllowCloudBackup"],
+                        "allowCloudDocumentSync": operationData["restrictionsAllowCloudDocumentSync"],
+                        "allowCloudKeychainSync": operationData["restrictionsAllowCloudKeychainSync"],
+                        "allowDiagnosticSubmission": operationData["restrictionsAllowDiagnosticSubmission"],
+                        "allowExplicitContent": operationData["restrictionsAllowExplicitContent"],
+                        "allowFindMyFriendsModification": operationData["restrictionsAllowFindMyFriendsModification"],
+                        "allowFingerprintForUnlock": operationData["restrictionsAllowFingerprintForUnlock"],
+                        "allowGameCenter": operationData["restrictionsAllowGameCenter"],
+                        "allowGlobalBackgroundFetchWhenRoaming": operationData["restrictionsAllowGlobalBackgroundFetchWhenRoaming"],
+                        "allowInAppPurchases": operationData["restrictionsAllowInAppPurchases"],
+                        "allowLockScreenControlCenter": operationData["restrictionsAllowLockScreenControlCenter"],
+                        "allowHostPairing": operationData["restrictionsAllowHostPairing"],
+                        "allowLockScreenNotificationsView": operationData["restrictionsAllowLockScreenNotificationsView"],
+                        "allowLockScreenTodayView": operationData["restrictionsAllowLockScreenTodayView"],
+                        "allowMultiplayerGaming": operationData["restrictionsAllowMultiplayerGaming"],
+                        "allowOpenFromManagedToUnmanaged": operationData["restrictionsAllowOpenFromManagedToUnmanaged"],
+                        "allowOpenFromUnmanagedToManaged": operationData["restrictionsAllowOpenFromUnmanagedToManaged"],
+                        "allowOTAPKIUpdates": operationData["restrictionsAllowOTAPKIUpdates"],
+                        "allowPassbookWhileLocked": operationData["restrictionsAllowPassbookWhileLocked"],
+                        "allowPhotoStream": operationData["restrictionsAllowPhotoStream"],
+                        "allowSafari": operationData["restrictionsAllowSafari"],
+                        "safariAllowAutoFill": operationData["restrictionsSafariAllowAutoFill"],
+                        "safariForceFraudWarning": operationData["restrictionsSafariForceFraudWarning"],
+                        "safariAllowJavaScript": operationData["restrictionsSafariAllowJavaScript"],
+                        "safariAllowPopups": operationData["restrictionsSafariAllowPopups"],
+                        "allowScreenShot": operationData["restrictionsAllowScreenShot"],
+                        "allowSharedStream": operationData["restrictionsAllowSharedStream"],
+                        "allowUIConfigurationProfileInstallation": operationData["restrictionsAllowUIConfigurationProfileInstallation"],
+                        "allowUntrustedTLSPrompt": operationData["restrictionsAllowUntrustedTLSPrompt"],
+                        "allowVideoConferencing": operationData["restrictionsAllowVideoConferencing"],
+                        "allowVoiceDialing": operationData["restrictionsAllowVoiceDialing"],
+                        "allowYouTube": operationData["restrictionsAllowYouTube"],
+                        "allowiTunes": operationData["restrictionsAllowITunes"],
+                        "forceAssistantProfanityFilter": operationData["restrictionsForceAssistantProfanityFilter"],
+                        "forceEncryptedBackup": operationData["restrictionsForceEncryptedBackup"],
+                        "forceITunesStorePasswordEntry": operationData["restrictionsForceITunesStorePasswordEntry"],
+                        "forceLimitAdTracking": operationData["restrictionsForceLimitAdTracking"],
+                        "forceAirPlayOutgoingRequestsPairingPassword": operationData["restrictionsForceAirPlayOutgoingRequestsPairingPassword"],
+                        "forceAirPlayIncomingRequestsPairingPassword": operationData["restrictionsForceAirPlayIncomingRequestsPairingPassword"],
+                        "allowManagedAppsCloudSync": operationData["restrictionsAllowManagedAppsCloudSync"],
+                        "allowEraseContentAndSettings": operationData["restrictionsAllowEraseContentAndSettings"],
+                        "allowSpotlightInternetResults": operationData["restrictionsAllowSpotlightInternetResults"],
+                        "allowEnablingRestrictions": operationData["restrictionsAllowEnablingRestrictions"],
+                        "allowActivityContinuation": operationData["restrictionsAllowActivityContinuation"],
+                        "allowEnterpriseBookBackup": operationData["restrictionsAllowEnterpriseBookBackup"],
+                        "allowEnterpriseBookMetadataSync": operationData["restrictionsAllowEnterpriseBookMetadataSync"],
+                        "allowPodcasts": operationData["restrictionsAllowPodcasts"],
+                        "allowDefinitionLookup": operationData["restrictionsAllowDefinitionLookup"],
+                        "allowPredictiveKeyboard": operationData["restrictionsAllowPredictiveKeyboard"],
+                        "allowAutoCorrection": operationData["restrictionsAllowAutoCorrection"],
+                        "allowSpellCheck": operationData["restrictionsAllowSpellCheck"],
+                        "safariAcceptCookies": operationData["restrictionsSafariAcceptCookies"],
+                        "autonomousSingleAppModePermittedAppIDs": operationData["restrictionsAutonomousSingleAppModePermittedAppIDs"]
                     }
                 };
                 break;
@@ -238,7 +312,7 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "enabled" : operationData["enableCamera"]
+                        "enabled" : operationData["cameraEnabled"]
                     }
                 };
                 break;
@@ -254,7 +328,7 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "encrypted" : operationData["enableEncryption"]
+                        "encrypted" : operationData["encryptStorageEnabled"]
                     }
                 };
                 break;
@@ -305,13 +379,13 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "allowSimple": operationData["allowSimple"],
-                        "requireAlphanumeric": operationData["requireAlphanumeric"],
-                        "minLength": operationData["minLength"],
-                        "minComplexChars": operationData["minComplexChars"],
-                        "maxPINAgeInDays": operationData["maxPINAgeInDays"],
-                        "pinHistory": operationData["pinHistory"],
-                        "maxFailedAttempts": operationData["maxFailedAttempts"]
+                        "allowSimple": operationData["passcodePolicyAllowSimple"],
+                        "requireAlphanumeric": operationData["passcodePolicyRequireAlphanumeric"],
+                        "minLength": operationData["passcodePolicyMinLength"],
+                        "minComplexChars": operationData["passcodePolicyMinComplexChars"],
+                        "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
+                        "pinHistory": operationData["passcodePolicyPasscodeHistory"],
+                        "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
                     }
                 };
                 break;
@@ -319,8 +393,8 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "ssid": operationData["ssid"],
-                        "password": operationData["password"]
+                        "ssid": operationData["wifiSSID"],
+                        "password": operationData["wifiPassword"]
                     }
                 };
                 break;

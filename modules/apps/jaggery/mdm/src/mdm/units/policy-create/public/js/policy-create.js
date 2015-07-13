@@ -28,6 +28,7 @@ var platformTypeConstants = {
     "IOS": "ios"
 };
 
+// Constants to define Android Operation Constants
 var androidOperationConstants = {
     "PASSCODE_POLICY_OPERATION": "passcode-policy",
     "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
@@ -39,6 +40,7 @@ var androidOperationConstants = {
     "WIFI_OPERATION_CODE": "WIFI"
 };
 
+// Constants to define iOS Operation Constants
 var iosOperationConstants = {
     "PASSCODE_POLICY_OPERATION": "passcode-policy",
     "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
@@ -98,10 +100,10 @@ stepForwardFrom["policy-platform"] = function (actionButton) {
 /**
  * Checks if provided number is valid against a range.
  *
- * @param numberInput
- * @param min
- * @param max
- * @returns {boolean}
+ * @param numberInput Number Input
+ * @param min Minimum Limit
+ * @param max Maximum Limit
+ * @returns {boolean} Returns true if input is within the specified range
  */
 var inputIsValidAgainstRange = function (numberInput, min, max) {
     return (numberInput == min || (numberInput > min && numberInput < max) || numberInput == max);
@@ -139,14 +141,14 @@ validateStep["policy-profile"] = function () {
                 // if PASSCODE_POLICY is configured
                 operation = androidOperationConstants["PASSCODE_POLICY_OPERATION"];
                 // getting input values to be validated
-                var maxPasscodeAgeInDays = $("input#maxPINAgeInDays").val();
-                var passcodeHistory = $("input#pinHistory").val();
+                var passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
+                var passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
                 // initializing continueToCheckNextInput to true
                 var continueToCheckNextInput = true;
 
-                // validating first input: maxPasscodeAgeInDays
-                if (maxPasscodeAgeInDays) {
-                    if (!$.isNumeric(maxPasscodeAgeInDays)) {
+                // validating first input: passcodePolicyMaxPasscodeAgeInDays
+                if (passcodePolicyMaxPasscodeAgeInDays) {
+                    if (!$.isNumeric(passcodePolicyMaxPasscodeAgeInDays)) {
                         continueToCheckNextInput = false;
                         validationStatus = {
                             "error": true,
@@ -154,8 +156,8 @@ validateStep["policy-profile"] = function () {
                             "erroneousFeature": operation
                         };
                     } else {
-                        maxPasscodeAgeInDays = parseInt(maxPasscodeAgeInDays);
-                        if (!inputIsValidAgainstRange(maxPasscodeAgeInDays, 1, 730)) {
+                        passcodePolicyMaxPasscodeAgeInDays = parseInt(passcodePolicyMaxPasscodeAgeInDays);
+                        if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
                             continueToCheckNextInput = false;
                             validationStatus = {
                                 "error": true,
@@ -171,18 +173,18 @@ validateStep["policy-profile"] = function () {
                     continueToCheckNextInput = true;
                 }
 
-                // validating second and last input: passcodeHistory
+                // validating second and last input: passcodePolicyPasscodeHistory
                 if (continueToCheckNextInput) {
-                    if (passcodeHistory) {
-                        if (!$.isNumeric(passcodeHistory)) {
+                    if (passcodePolicyPasscodeHistory) {
+                        if (!$.isNumeric(passcodePolicyPasscodeHistory)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Provided passcode history is not a number. Please check.",
                                 "erroneousFeature": operation
                             };
-                        } else if ($.isNumeric(passcodeHistory)) {
-                            passcodeHistory = parseInt(passcodeHistory);
-                            if (!inputIsValidAgainstRange(passcodeHistory, 1, 50)) {
+                        } else if ($.isNumeric(passcodePolicyPasscodeHistory)) {
+                            passcodePolicyPasscodeHistory = parseInt(passcodePolicyPasscodeHistory);
+                            if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
                                 validationStatus = {
                                     "error": true,
                                     "subErrorMsg":
@@ -232,15 +234,16 @@ validateStep["policy-profile"] = function () {
             if ($.inArray(androidOperationConstants["WIFI_OPERATION_CODE"], configuredOperations) != -1) {
                 // if WIFI is configured
                 operation = androidOperationConstants["WIFI_OPERATION"];
-                var ssid = $("input#ssid").val();
+                // getting input values to be validated
+                var wifiSSID = $("input#wifi-ssid").val();
                 // updating validationStatus
-                if (!ssid) {
+                if (!wifiSSID) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "WIFI SSID is not given. You cannot proceed.",
                         "erroneousFeature": operation
                     };
-                } else if (!inputIsValidAgainstLength(ssid, 1, 30)) {
+                } else if (!inputIsValidAgainstLength(wifiSSID, 1, 30)) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "WIFI SSID exceeds maximum allowed length. Please check.",
@@ -269,15 +272,15 @@ validateStep["policy-profile"] = function () {
             if ($.inArray(iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"], configuredOperations) != -1) {
                 // if PASSCODE_POLICY is configured
                 operation = iosOperationConstants["PASSCODE_POLICY_OPERATION"];
-                // getting values of inputs to be validated
-                maxPasscodeAgeInDays = $("input#passcode-policy-max-pin-age-in-days").val();
-                passcodeHistory = $("input#passcode-policy-pin-history").val();
+                // getting input values to be validated
+                passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
+                passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
                 // initializing continueToCheckNextInput to true
                 continueToCheckNextInput = true;
 
-                // validating first input: maxPasscodeAgeInDays
-                if (maxPasscodeAgeInDays) {
-                    if (!$.isNumeric(maxPasscodeAgeInDays)) {
+                // validating first input: passcodePolicyMaxPasscodeAgeInDays
+                if (passcodePolicyMaxPasscodeAgeInDays) {
+                    if (!$.isNumeric(passcodePolicyMaxPasscodeAgeInDays)) {
                         continueToCheckNextInput = false;
                         validationStatus = {
                             "error": true,
@@ -285,8 +288,8 @@ validateStep["policy-profile"] = function () {
                             "erroneousFeature": operation
                         };
                     } else {
-                        maxPasscodeAgeInDays = parseInt(maxPasscodeAgeInDays);
-                        if (!inputIsValidAgainstRange(maxPasscodeAgeInDays, 1, 730)) {
+                        passcodePolicyMaxPasscodeAgeInDays = parseInt(passcodePolicyMaxPasscodeAgeInDays);
+                        if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
                             continueToCheckNextInput = false;
                             validationStatus = {
                                 "error": true,
@@ -302,18 +305,18 @@ validateStep["policy-profile"] = function () {
                     continueToCheckNextInput = true;
                 }
 
-                // validating second and last input: passcodeHistory
+                // validating second and last input: passcodePolicyPasscodeHistory
                 if (continueToCheckNextInput) {
-                    if (passcodeHistory) {
-                        if (!$.isNumeric(passcodeHistory)) {
+                    if (passcodePolicyPasscodeHistory) {
+                        if (!$.isNumeric(passcodePolicyPasscodeHistory)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Provided passcode history is not a number. Please check.",
                                 "erroneousFeature": operation
                             };
-                        } else if ($.isNumeric(passcodeHistory)) {
-                            passcodeHistory = parseInt(passcodeHistory);
-                            if (!inputIsValidAgainstRange(passcodeHistory, 1, 50)) {
+                        } else if ($.isNumeric(passcodePolicyPasscodeHistory)) {
+                            passcodePolicyPasscodeHistory = parseInt(passcodePolicyPasscodeHistory);
+                            if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
                                 validationStatus = {
                                     "error": true,
                                     "subErrorMsg":

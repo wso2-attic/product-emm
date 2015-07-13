@@ -56,10 +56,10 @@
         <!-- passcode-policy -->
         <div class="wr-hidden-operation" data-operation="passcode-policy" style="display: block">
             <div class="panel panel-default operation-data" data-operation="passcode-policy" data-operation-code="PASSCODE_POLICY">
-                <div class="panel-heading" role="tab">
+                <div id="passcode-policy-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Passcode Policy
-                        <label id="passcode-policy-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#passCodePolicy">
+                        <label id="passcode-policy-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#passcode-policy-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -72,7 +72,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="passCodePolicy" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="passCodePolicy">
+                <div id="passcode-policy-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="passcode-policy-body">
 
                     <div id="passcode-policy-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
@@ -80,7 +80,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="allowSimple" type="checkbox" class="form-control operationDataKeys" data-key="allowSimple" checked="checked" />
+                            <input id="passcode-policy-allow-simple" type="checkbox" class="form-control operationDataKeys" data-key="passcodePolicyAllowSimple" checked="checked" />
                             <span class="helper" title="Permit the use of repeating, ascending and descending character sequences">
                                 &nbsp;&nbsp;&nbsp;Allow simple value
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -90,7 +90,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="requireAlphanumeric" type="checkbox" class="form-control operationDataKeys" data-key="requireAlphanumeric" checked="checked" />
+                            <input id="passcode-policy-require-alphanumeric" type="checkbox" class="form-control operationDataKeys" data-key="passcodePolicyRequireAlphanumeric" checked="checked" />
                             <span class="helper" title="Require passcode to contain both letters and numbers">
                                 &nbsp;&nbsp;&nbsp;Require alphanumeric value
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -99,14 +99,13 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="minLength">
+                        <label class="wr-input-label" for="passcode-policy-min-length">
                             Minimum passcode length
                             <span class="helper" title="Minimum number of characters allowed in a passcode">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input id="minLength" type="text" class="form-control operationDataKeys" data-key="minLength" placeholder="Enter minimum passcode length">-->
-                        <select id="minLength" class="form-control operationDataKeys" data-key="minLength" data-default="0">
+                        <select id="passcode-policy-min-length" class="form-control operationDataKeys" data-key="passcodePolicyMinLength" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -129,14 +128,13 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="minComplexChars">
+                        <label class="wr-input-label" for="passcode-policy-min-complex-chars">
                             Minimum number of complex characters
                             <span class="helper" title="Minimum number of complex or non-alphanumeric characters allowed in a passcode">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input id="minComplexChars" type="text" class="form-control operationDataKeys" data-key="minComplexChars" placeholder="Enter minimum number of complex characters">-->
-                        <select id="minComplexChars" class="form-control operationDataKeys" data-key="minComplexChars" data-default="0">
+                        <select id="passcode-policy-min-complex-chars" class="form-control operationDataKeys" data-key="passcodePolicyMinComplexChars" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -149,36 +147,37 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxPINAgeInDays">
-                            Maximum passcode age in days <br>
-                            ( Should be in between 1-to-730 days or none )
+                        <label class="wr-input-label" for="passcode-policy-max-passcode-age-in-days">
+                            Maximum passcode age in days
                             <span class="helper" title="Number of days after which a passcode must be changed">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
+                            <br>
+                            ( Should be in between 1-to-730 days or none )
                         </label>
-                        <input id="maxPINAgeInDays" type="text" class="form-control operationDataKeys" data-key="maxPINAgeInDays" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="pinHistory">
-                            Passcode history <br>
-                            ( Should be in between 1-to-50 passcodes or none )
+                        <label class="wr-input-label" for="passcode-policy-passcode-history">
+                            Passcode history
                             <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
+                            <br>
+                            ( Should be in between 1-to-50 passcodes or none )
                         </label>
-                        <input id="pinHistory" type="text" class="form-control operationDataKeys" data-key="pinHistory" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="maxFailedAttempts">
+                        <label class="wr-input-label" for="passcodePolicyMaxFailedAttempts">
                             Maximum number of failed attempts
                             <span class="helper" title="Maximum number of passcode entry attempts allowed before all data on a device will be erased">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input type="text" class="form-control operationDataKeys" id="maxFailedAttempts" data-key="maxFailedAttempts" placeholder="Enter maximum number of failed attempts">-->
-                        <select id="maxFailedAttempts" class="form-control operationDataKeys" data-key="maxFailedAttempts" data-default="0">
+                        <select id="passcode-policy-max-failed-attempts" class="form-control operationDataKeys" data-key="passcodePolicyMaxFailedAttempts" data-default="0">
                             <option value="" selected="selected">
                                 None
                             </option>
@@ -197,13 +196,13 @@
         </div>
         <!-- /passcode-policy -->
 
-        <!-- Restrictions -->
+        <!-- camera -->
         <div class="wr-hidden-operation" data-operation="camera">
             <div class="panel panel-default operation-data" data-operation="camera" data-operation-code="CAMERA">
-                <div class="panel-heading" role="tab">
+                <div id="camera-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Restrictions on Camera
-                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#cameraDisable">
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#camera-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -216,7 +215,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="cameraDisable" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="cameraDisable">
+                <div id="camera-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="camera-body">
                     <div id="camera-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
@@ -225,8 +224,8 @@
                     <br>
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="enableCamera" type="checkbox" class="operationDataKeys" data-key="enableCamera" checked="checked" />
-                            <span class="helper" title="Having this checked would enable Usage of phone camera in the device">
+                            <input id="camera-enabled" type="checkbox" class="operationDataKeys" data-key="cameraEnabled" checked="checked" />
+                            <span class="helper" title="Having this checked would enable Usage of phone camera in the device.">
                                 &nbsp;&nbsp;&nbsp;Allow use of camera
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
@@ -236,15 +235,15 @@
                 </div>
             </div>
         </div>
-        <!-- /Restrictions -->
+        <!-- /camera -->
 
         <!-- encrypt-storage -->
         <div class="wr-hidden-operation" data-operation="encrypt-storage">
             <div class="panel panel-default operation-data" data-operation="encrypt-storage" data-operation-code="ENCRYPT_STORAGE">
-                <div class="panel-heading" role="tab">
+                <div id="encrypt-storage-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Encryption Settings
-                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#enableEncryptionTab">
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#encrypt-storage-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -257,7 +256,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="enableEncryptionTab" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="enableEncryptionTab">
+                <div id="encrypt-storage-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="encrypt-storage-body">
                     <div id="encrypt-storage-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
@@ -266,7 +265,7 @@
                     <br>
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="enableEncryption" type="checkbox" class="operationDataKeys" data-key="enableEncryption" checked="checked" />
+                            <input id="encrypt-storage-enabled" type="checkbox" class="operationDataKeys" data-key="encryptStorageEnabled" checked="checked" />
                             <span class="helper" title="Having this checked would enable Storage-encryption in the device">
                                 &nbsp;&nbsp;&nbsp;Enable storage-encryption
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -282,10 +281,10 @@
         <!-- wi-fi -->
         <div class="wr-hidden-operation" data-operation="wifi">
             <div class="panel panel-default operation-data" data-operation="wifi" data-operation-code="WIFI">
-                <div class="panel-heading" role="tab">
+                <div id="wifi-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Wi-Fi Settings
-                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#wifi">
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#wifi-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -298,7 +297,7 @@
                         </div>
                     </h2>
                 </div>
-                <div id="wifi" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="wifi">
+                <div id="wifi-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="wifi-body">
                     <!--<div class="cloneable">-->
                         <!--<a href="#" class="multi-view add enabled">-->
                             <!--<span class="icon fw-stack">-->
@@ -322,19 +321,24 @@
                             <i class="icon fw fw-error"></i><span></span>
                         </div>
                         <div class="wr-input-control">
-                            <label class="wr-input-label" title="Identification of the wireless network to be configured">
-                                Service Set Identifier (SSID) * <br>
+                            <label class="wr-input-label" for="wifi-ssid">
+                                Service Set Identifier (SSID) *
+                                <span class="helper" title="Identification of the wireless network to be configured.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                <br>
                                 ( should be 1-to-30 characters long )
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </label>
-                            <input id="ssid" type="text" class="form-control operationDataKeys" data-key="ssid" placeholder="[ Required field ]"/>
+                            <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" placeholder="[ Required field ]"/>
                         </div>
                         <div class="wr-input-control">
-                            <label class="wr-input-label" title="Password for the wireless network">
+                            <label class="wr-input-label" for="wifi-password">
                                 Password
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                <span class="helper" title="Password for the wireless network.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
                             </label>
-                            <input id="password" type="password" class="form-control operationDataKeys" data-key="password" placeholder="[ Optional field ]"/>
+                            <input id="wifi-password" type="password" class="form-control operationDataKeys" data-key="wifiPassword" placeholder="[ Optional field ]"/>
                         </div>
                     <!--</div>-->
                 </div>
