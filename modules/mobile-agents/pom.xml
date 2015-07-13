@@ -33,7 +33,6 @@
     <modules>
         <module>windows/jax-rs</module>
         <module>android/jax-rs</module>
-        <module>android/client</module>
     </modules>
 
 </project>
