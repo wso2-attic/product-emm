@@ -20,11 +20,8 @@ package org.wso2.emm.agent;
 import java.util.Map;
 
 import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.beans.UnregisterProfile;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.services.DynamicClientManager;
-import org.wso2.emm.agent.services.LocalNotification;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.Constants;

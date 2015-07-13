@@ -17,16 +17,8 @@
 
 package org.wso2.emm.agent.beans;
 
-import android.util.Log;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.utils.CommonUtils;
-
-import java.io.IOException;
 
 /**
  * This class represents the data that are required to register
