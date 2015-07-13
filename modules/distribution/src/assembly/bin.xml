@@ -1,3 +1,26 @@
+<!DOCTYPE assembly [
+        <!ELEMENT assembly (id|formats|includeBaseDirectory|fileSets|dependencySets|files)*>
+        <!ELEMENT id (#PCDATA)>
+        <!ELEMENT formats (format)*>
+        <!ELEMENT format (#PCDATA)>
+        <!ELEMENT includeBaseDirectory (#PCDATA)>
+        <!ELEMENT fileSets (fileSet)*>
+        <!ELEMENT fileSet (directory|outputDirectory|excludes|includes|fileMode|filtered)*>
+        <!ELEMENT directory (#PCDATA)>
+        <!ELEMENT outputDirectory (#PCDATA)>
+        <!ELEMENT excludes (exclude)*>
+        <!ELEMENT exclude (#PCDATA)>
+        <!ELEMENT includes (include)*>
+        <!ELEMENT include (#PCDATA)>
+        <!ELEMENT fileMode (#PCDATA)>
+        <!ELEMENT filtered (#PCDATA)>
+        <!ELEMENT dependencySets (dependencySet)*>
+        <!ELEMENT dependencySet (outputDirectory|includes)*>
+        <!ELEMENT files (file)*>
+        <!ELEMENT file (source|outputDirectory|fileMode|filtered|destName)*>
+        <!ELEMENT source (#PCDATA)>
+        <!ELEMENT destName (#PCDATA)>
+        ]>
 <assembly>
     <id>bin</id>
     <formats>
@@ -138,6 +161,7 @@
                 <include>**/trusted-idp-config.xml</include>
             </includes>
         </fileSet>
+
        <!-- <fileSet>
             <directory>
                 src/repository/conf/identity/
@@ -480,6 +504,7 @@
             <fileMode>644</fileMode>
         </file>
 
+
        <!-- <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/api-manager.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
@@ -502,6 +527,15 @@
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!-- nTask Component -->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
             <fileMode>644</fileMode>
         </file>
 
