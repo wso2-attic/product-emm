@@ -138,9 +138,9 @@ public class DynamicClientManager {
 
     /**
      * This class is used to send requests to backend.
-     * The reason to use this private class because function which is already
-     * available for sending requests is a secured with token. Therefore in order
-     * to get credentials to get the token for secure communication, this can be used.
+     * The reason to use this private class because the function which is already
+     * available for sending requests is secured with token. Therefor this async task can be used 
+     * to send requests without tokens.
      */
     private class SendRequest extends AsyncTask<EndPointInfo, Void, Map<String, String>> {
         @Override

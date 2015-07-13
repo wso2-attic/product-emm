@@ -260,6 +260,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				String serverIP = Preference.getString(context, Constants.IP);
 				regId = Preference.getString(context, resources.
 						getString(R.string.shared_pref_regId));
+
 				if (regId != null) {
 					if (regId.isEmpty() && isUnregisterBtnClicked) {
 						initiateUnregistration();
