@@ -164,16 +164,16 @@ public class DeviceManagementService {
     public String getLicense() throws AndroidAgentException {
         String msg;
         License license;
-		try {
-            license =
-					AndroidAPIUtils.getLicenseManagerService().getLicense(
-									DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
-									DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
-		} catch (LicenseManagementException e) {
-			msg = "Error occurred while retrieving the license configured for Android device enrolment";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
-		}
+	try {
+        	license =
+			AndroidAPIUtils.getLicenseManagerService().getLicense(
+				DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
+				DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
+	} catch (LicenseManagementException e) {
+		msg = "Error occurred while retrieving the license configured for Android device enrolment";
+		log.error(msg, e);
+		throw new AndroidAgentException(msg, e);
+	}
         return (license == null) ? null : license.toString();
     }
 

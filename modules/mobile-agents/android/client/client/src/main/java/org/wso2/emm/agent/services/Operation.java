@@ -1038,7 +1038,7 @@ public class Operation implements APIResultCallBack {
 		if (requestCode == Constants.DEVICE_INFO_REQUEST_CODE) {
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-				if (Constants.REQUEST_SUCCESSFUL.equals(responseStatus)) {
+				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
 					response = result.get(Constants.RESPONSE);
 					if (response != null && !response.isEmpty()) {
 						if (Constants.DEBUG_MODE_ENABLED) {

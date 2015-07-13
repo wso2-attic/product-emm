@@ -17,12 +17,16 @@
  */
 package org.wso2.emm.agent.utils;
 
+import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.beans.UnregisterProfile;
 import org.wso2.emm.agent.proxy.APIController;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.DynamicClientManager;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -32,6 +36,13 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 
 /**
  * This class represents all the common functions used throughout the application.
@@ -59,16 +70,8 @@ public class CommonUtils {
 			apiUtilities.setRequestParams(requestParams);
 		}
 		APIController apiController;
-		String clientKey =
-				Preference.getString(context,
-						context.getResources()
-								.getString(R.string.shared_pref_client_id)
-				);
-		String clientSecret =
-				Preference.getString(context,
-						context.getResources()
-								.getString(R.string.shared_pref_client_secret)
-				);
+		String clientKey = Preference.getString(context, Constants.CLIENT_ID);
+		String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
 		if (clientKey!=null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
 			apiController = new APIController(clientKey, clientSecret);
 			apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
@@ -82,13 +85,8 @@ public class CommonUtils {
 	 * @param context - Application context.
 	 */
 	public static void clearAppData(Context context) {
-		DevicePolicyManager devicePolicyManager;
-		ComponentName demoDeviceAdmin;
-		Resources resources = context.getResources();
 
-		devicePolicyManager =
-				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
+		Resources resources = context.getResources();
 		SharedPreferences mainPref =
 				context.getSharedPreferences(context.getResources()
 								.getString(R.string.shared_pref_package),
@@ -112,9 +110,10 @@ public class CommonUtils {
 				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(resources.getString(R.string.shared_pref_device_active),
 				resources.getString(R.string.shared_pref_reg_fail));
+		editor.putString(Constants.CLIENT_ID, null);
+		editor.putString(Constants.CLIENT_SECRET, null);
 		editor.commit();
 
-		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);
 	}
 
 	/**
@@ -132,4 +131,67 @@ public class CommonUtils {
 		return info.isConnected();
 	}
 
+	/**
+	 * Convert given object to json formatted string.
+	 * @param obj Object to be converted.
+	 * @return Json formatted string.
+	 * @throws AndroidAgentException
+	 */
+	public static String toJSON (Object obj) throws AndroidAgentException {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(obj);
+		} catch (JsonMappingException e) {
+			String errorMessage = "Error occurred while mapping class to json.";
+			Log.e(TAG, errorMessage);
+			throw new AndroidAgentException(errorMessage, e);
+		} catch (JsonGenerationException e) {
+			String errorMessage = "Error occurred while generating json.";
+			Log.e(TAG, errorMessage);
+			throw new AndroidAgentException(errorMessage, e);
+		} catch (IOException e) {
+			String errorMessage = "Error occurred while reading the stream.";
+			Log.e(TAG, errorMessage);
+			throw new AndroidAgentException(errorMessage, e);
+		}
+	}
+
+	/**
+	 * This method is used to initiate the oauth client app unregister process.
+	 *
+	 * @param context Application context
+	 * @throws AndroidAgentException
+	 */
+	public static void unRegisterClientApp(Context context) throws AndroidAgentException {
+
+		String applicationName = Preference.getString(context, Constants.CLIENT_NAME);
+		String consumerKey = Preference.getString(context, Constants.CLIENT_ID);
+		String userId = Preference.getString(context, Constants.USERNAME);
+
+		UnregisterProfile profile = new UnregisterProfile();
+		profile.setApplicationName(applicationName);
+		profile.setConsumerKey(consumerKey);
+		profile.setUserId(userId);
+
+		String serverIP = Preference.getString(context, Constants.IP);
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(serverIP);
+
+		DynamicClientManager dynamicClientManager = new DynamicClientManager();
+		dynamicClientManager.unregisterClient(profile,utils);
+
+	}
+
+	/**
+	 * Disable admin privileges.
+	 * @param context - Application context.
+	 */
+	public static void disableAdmin(Context context) {
+		DevicePolicyManager devicePolicyManager;
+		ComponentName demoDeviceAdmin;
+		devicePolicyManager =
+				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
+		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);
+	}
 }

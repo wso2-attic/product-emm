@@ -81,6 +81,8 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 		if (regId != null && !regId.isEmpty()) {
 			startUnRegistration(context);
+		} else {
+			Log.e(TAG, "Registration ID is already null");
 		}
 
 	}
@@ -93,12 +95,8 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		String regId = Preference.getString(context, context
 				.getResources().getString(R.string.shared_pref_regId));
 		LocalNotification.stopPolling(context);
-		String serverIP =
-				Preference.getString(context,
-						context.getResources()
-								.getString(R.string.shared_pref_ip)
-				);
 
+		String serverIP = Preference.getString(context, Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(serverIP);
 
@@ -107,6 +105,11 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 				HTTP_METHODS.DELETE,
 				null, AgentDeviceAdminReceiver.this,
 				Constants.UNREGISTER_REQUEST_CODE);
+		try {
+			CommonUtils.unRegisterClientApp(context);
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Error occurred while removing Oauth application. " + e);
+		}
 		CommonUtils.clearAppData(context);
 	}
 
@@ -140,5 +143,4 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 			Log.d(TAG, "Unregistered." + arg0.toString());
 		}
 	}
-
 }
