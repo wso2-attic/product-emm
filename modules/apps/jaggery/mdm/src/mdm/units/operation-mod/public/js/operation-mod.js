@@ -95,7 +95,7 @@ var operationModule = function () {
                             "acceptEAPTypes": operationData["wifiAcceptedEAPTypes"],
                             "userPassword": operationData["wifiEAPPassword"],
                             "oneTimePassword": operationData["wifiEAPOneTimePassword"],
-                            "payloadCertificateAnchorUUID": operationData["wifiPayloadCertificateAnchorUUID"],
+                            "payloadCertificateAnchorUUID": operationData["wifiPayloadCertificateAnchorUUIDs"],
                             "outerIdentity": operationData["wifiEAPOuterIdentity"],
                             "tlstrustedServerNames": operationData["wifiTLSTrustedServerNames"],
                             "tlsallowTrustExceptions": operationData["wifiEAPTLSAllowTrustExceptions"],

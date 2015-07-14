@@ -143,38 +143,38 @@ validateStep["policy-profile"] = function () {
                 // getting input values to be validated
                 var passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
                 var passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
-                // initializing continueToCheckNextInput to true
-                var continueToCheckNextInput = true;
+                // initializing continueToCheckNextInputs to true
+                var continueToCheckNextInputs = true;
 
                 // validating first input: passcodePolicyMaxPasscodeAgeInDays
                 if (passcodePolicyMaxPasscodeAgeInDays) {
                     if (!$.isNumeric(passcodePolicyMaxPasscodeAgeInDays)) {
-                        continueToCheckNextInput = false;
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Provided passcode age is not a number. Please check.",
                             "erroneousFeature": operation
                         };
+                        continueToCheckNextInputs = false;
                     } else {
                         passcodePolicyMaxPasscodeAgeInDays = parseInt(passcodePolicyMaxPasscodeAgeInDays);
                         if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
-                            continueToCheckNextInput = false;
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg":
                                     "Provided passcode age is not with in the range of 1-to-730. Please check.",
                                 "erroneousFeature": operation
                             };
+                            continueToCheckNextInputs = false;
                         } else {
-                            continueToCheckNextInput = true;
+                            continueToCheckNextInputs = true;
                         }
                     }
                 } else {
-                    continueToCheckNextInput = true;
+                    continueToCheckNextInputs = true;
                 }
 
                 // validating second and last input: passcodePolicyPasscodeHistory
-                if (continueToCheckNextInput) {
+                if (continueToCheckNextInputs) {
                     if (passcodePolicyPasscodeHistory) {
                         if (!$.isNumeric(passcodePolicyPasscodeHistory)) {
                             validationStatus = {
@@ -275,38 +275,38 @@ validateStep["policy-profile"] = function () {
                 // getting input values to be validated
                 passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
                 passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
-                // initializing continueToCheckNextInput to true
-                continueToCheckNextInput = true;
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
 
                 // validating first input: passcodePolicyMaxPasscodeAgeInDays
                 if (passcodePolicyMaxPasscodeAgeInDays) {
                     if (!$.isNumeric(passcodePolicyMaxPasscodeAgeInDays)) {
-                        continueToCheckNextInput = false;
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Provided passcode age is not a number. Please check.",
                             "erroneousFeature": operation
                         };
+                        continueToCheckNextInputs = false;
                     } else {
                         passcodePolicyMaxPasscodeAgeInDays = parseInt(passcodePolicyMaxPasscodeAgeInDays);
                         if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
-                            continueToCheckNextInput = false;
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg":
                                     "Provided passcode age is not with in the range of 1-to-730. Please check.",
                                 "erroneousFeature": operation
                             };
+                            continueToCheckNextInputs = false;
                         } else {
-                            continueToCheckNextInput = true;
+                            continueToCheckNextInputs = true;
                         }
                     }
                 } else {
-                    continueToCheckNextInput = true;
+                    continueToCheckNextInputs = true;
                 }
 
                 // validating second and last input: passcodePolicyPasscodeHistory
-                if (continueToCheckNextInput) {
+                if (continueToCheckNextInputs) {
                     if (passcodePolicyPasscodeHistory) {
                         if (!$.isNumeric(passcodePolicyPasscodeHistory)) {
                             validationStatus = {
@@ -344,12 +344,13 @@ validateStep["policy-profile"] = function () {
             if ($.inArray(iosOperationConstants["RESTRICTIONS_OPERATION_CODE"], configuredOperations) != -1) {
                 // if RESTRICTION is configured
                 operation = iosOperationConstants["RESTRICTIONS_OPERATION"];
-                var childInput;
+                // getting input values to be validated
                 var gridChildInputs = "div#restrictions-autonomous-single-app-mode-permitted-app-ids .child-input";
                 if ($(gridChildInputs).length > 0) {
                     var emptyChildInputCount = 0;
                     var outOfMaxAllowedLengthCount = 0;
                     // looping through each child input
+                    var childInput;
                     $(gridChildInputs).each(function () {
                         childInput = $(this).val();
                         if (!childInput) {
@@ -396,25 +397,303 @@ validateStep["policy-profile"] = function () {
             if ($.inArray(iosOperationConstants["WIFI_OPERATION_CODE"], configuredOperations) != -1) {
                 // if WIFI is configured
                 operation = iosOperationConstants["WIFI_OPERATION"];
-                ssid = $("input#ssid").val();
-                if (!ssid) {
+                // getting input values to be validated
+                wifiSSID = $("input#wifi-ssid").val();
+                var wifiDomainName = $("input#wifi-domain-name").val();
+                var wifiDisplayedOperatorName = $("input#wifi-displayed-operator-name").val();
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                if (!wifiSSID && !wifiDomainName) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "WIFI SSID is not given. You cannot proceed.",
+                        "subErrorMsg": "Both Wi-Fi SSID and Wi-Fi Domain Name are not given. You cannot proceed.",
                         "erroneousFeature": operation
                     };
-                } else if (!inputIsValidAgainstLength(ssid, 1, 30)) {
+                    continueToCheckNextInputs = false;
+                } else if (wifiSSID && !inputIsValidAgainstLength(wifiSSID, 1, 100)) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "WIFI SSID exceeds maximum allowed length. Please check.",
+                        "subErrorMsg": "Wi-Fi SSID exceeds maximum allowed length. Please check.",
                         "erroneousFeature": operation
                     };
-                } else {
+                    continueToCheckNextInputs = false;
+                } else if (wifiDomainName && !inputIsValidAgainstLength(wifiDomainName, 1, 100)) {
                     validationStatus = {
-                        "error": false,
-                        "okFeature": operation
+                        "error": true,
+                        "subErrorMsg": "Wi-Fi Domain name exceeds maximum allowed length. Please check.",
+                        "erroneousFeature": operation
                     };
+                    continueToCheckNextInputs = false;
                 }
+
+                if (continueToCheckNextInputs) {
+                    if (wifiDisplayedOperatorName &&
+                        !inputIsValidAgainstLength(wifiDisplayedOperatorName, 1, 100)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Wi-Fi Displayed Operator Name " +
+                                "exceeds maximum allowed length. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    // getting proxy-setup value
+                    var wifiProxyType = $("select#wifi-proxy-type").find("option:selected").attr("value");
+                    if (wifiProxyType == "Manual") {
+                        // adds up additional fields to be validated
+                        var wifiProxyServer = $("input#wifi-proxy-server").val();
+                        var wifiProxyPort = $("input#wifi-proxy-port").val();
+                        var wifiProxyUsername = $("input#wifi-proxy-username").val();
+                        var wifiProxyPassword = $("input#wifi-proxy-password").val();
+                        var wifiProxyPACURL = $("input#wifi-proxy-pac-url").val();
+                        if (!wifiProxyServer) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy Server is required. You cannot proceed.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (!inputIsValidAgainstLength(wifiProxyServer, 1, 100)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy Server value exceeds maximum allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (!wifiProxyPort) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy Port is required. You cannot proceed.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (wifiProxyPort && !$.isNumeric(wifiProxyPort)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy Port requires a number input. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (wifiProxyPort && $.isNumeric(wifiProxyPort)
+                            && !inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy Port is not within the range " +
+                                    "of valid port numbers. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (wifiProxyUsername && !inputIsValidAgainstLength(wifiProxyUsername, 1, 100)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy Username exceeds maximum allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (wifiProxyPassword && !inputIsValidAgainstLength(wifiProxyPassword, 1, 100)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy Password exceeds maximum allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (wifiProxyPACURL && !inputIsValidAgainstLength(wifiProxyPACURL, 1, 100)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Proxy PAC URL exceeds maximum allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    // getting encryption-type value
+                    var wifiEncryptionType = $("select#wifi-encryption-type").find("option:selected").attr("value");
+                    if (wifiEncryptionType != "None") {
+                        var wifiPassword = $("input#wifi-password").val();
+                        var wifiEAPUsername = $("input#wifi-eap-username").val();
+                        var wifiEAPPassword = $("input#wifi-eap-password").val();
+                        var wifiPayloadCertificateAnchorUUIDGridChildInputs =
+                            "div#wifi-payload-certificate-anchor-uuid .child-input";
+                        var wifiTLSTrustedServerNamesGridChildInputs =
+                            "div#wifi-tls-trusted-server-names .child-input";
+                        var wifiEAPOuterIdentity = $("input#wifi-eap-outer-identity").val();
+                        var wifiPayloadCertUUID = $("input#wifi-payload-cert-uuid").val();
+
+                        if (wifiPassword && !inputIsValidAgainstLength(wifiPassword, 1, 100)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Wi-Fi Password exceeds maximum allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+
+                        if (continueToCheckNextInputs) {
+                            if (wifiEAPUsername && !inputIsValidAgainstLength(wifiEAPUsername, 1, 100)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Wi-Fi EAP Username exceeds maximum allowed length. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+
+                        if (continueToCheckNextInputs) {
+                            if (wifiEAPPassword && !inputIsValidAgainstLength(wifiEAPPassword, 1, 100)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Wi-Fi EAP Password exceeds maximum allowed length. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+
+                        if (continueToCheckNextInputs) {
+                            if ($(wifiPayloadCertificateAnchorUUIDGridChildInputs).length > 0) {
+                                emptyChildInputCount = 0;
+                                outOfMaxAllowedLengthCount = 0;
+                                // looping through each child input
+                                $(wifiPayloadCertificateAnchorUUIDGridChildInputs).each(function () {
+                                    childInput = $(this).val();
+                                    if (!childInput) {
+                                        // if child input field is empty
+                                        emptyChildInputCount++;
+                                    } else if (!inputIsValidAgainstLength(childInput, 1, 100)) {
+                                        outOfMaxAllowedLengthCount++;
+                                    }
+                                });
+                                // updating validationStatus
+                                if (emptyChildInputCount > 0) {
+                                    // if empty child inputs are present
+                                    validationStatus = {
+                                        "error": true,
+                                        "subErrorMsg": "One or more Payload Certificate " +
+                                            "Anchor UUIDs are empty. Please check.",
+                                        "erroneousFeature": operation
+                                    };
+                                    continueToCheckNextInputs = false;
+                                } else if (outOfMaxAllowedLengthCount > 0) {
+                                    // if outOfMaxAllowedLength input is present
+                                    validationStatus = {
+                                        "error": true,
+                                        "subErrorMsg": "One or more Payload Certificate Anchor UUIDs " +
+                                            "exceed maximum allowed length. Please check.",
+                                        "erroneousFeature": operation
+                                    };
+                                    continueToCheckNextInputs = false;
+                                }
+                            }
+                        }
+
+                        if (continueToCheckNextInputs) {
+                            if ($(wifiTLSTrustedServerNamesGridChildInputs).length > 0) {
+                                emptyChildInputCount = 0;
+                                outOfMaxAllowedLengthCount = 0;
+                                // looping through each child input
+                                $(wifiTLSTrustedServerNamesGridChildInputs).each(function () {
+                                    childInput = $(this).val();
+                                    if (!childInput) {
+                                        // if child input field is empty
+                                        emptyChildInputCount++;
+                                    } else if (!inputIsValidAgainstLength(childInput, 1, 100)) {
+                                        outOfMaxAllowedLengthCount++;
+                                    }
+                                });
+                                // updating validationStatus
+                                if (emptyChildInputCount > 0) {
+                                    // if empty child inputs are present
+                                    validationStatus = {
+                                        "error": true,
+                                        "subErrorMsg": "One or more TLS Trusted Server Names are empty. Please check.",
+                                        "erroneousFeature": operation
+                                    };
+                                    continueToCheckNextInputs = false;
+                                } else if (outOfMaxAllowedLengthCount > 0) {
+                                    // if outOfMaxAllowedLength input is present
+                                    validationStatus = {
+                                        "error": true,
+                                        "subErrorMsg": "One or more TLS Trusted Server Names " +
+                                            "exceed maximum allowed length. Please check.",
+                                        "erroneousFeature": operation
+                                    };
+                                    continueToCheckNextInputs = false;
+                                }
+                            }
+                        }
+
+                        if (continueToCheckNextInputs) {
+                            if (wifiEAPOuterIdentity && !inputIsValidAgainstLength(wifiEAPOuterIdentity, 1, 100)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Wi-Fi EAP Outer Identity " +
+                                        "exceeds maximum allowed length. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+
+                        if (continueToCheckNextInputs) {
+                            if (wifiPayloadCertUUID &&
+                                !inputIsValidAgainstLength(wifiPayloadCertUUID, 1, 100)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Wi-Fi Payload Certificate UUID " +
+                                        "exceeds maximum allowed length. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    var wifiRoamingConsortiumOIsGridChildInputs = "div#wifi-roaming-consortium-ois .child-input";
+                    if ($(wifiRoamingConsortiumOIsGridChildInputs).length > 0) {
+                        emptyChildInputCount = 0;
+                        outOfMaxAllowedLengthCount = 0;
+                        // looping through each child input
+                        $(wifiRoamingConsortiumOIsGridChildInputs).each(function () {
+                            childInput = $(this).val();
+                            if (!childInput) {
+                                // if child input field is empty
+                                emptyChildInputCount++;
+                            } else if (!inputIsValidAgainstLength(childInput, 1, 10)) {
+                                outOfMaxAllowedLengthCount++;
+                            }
+                        });
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more Roaming Consortium OIs are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (outOfMaxAllowedLengthCount > 0) {
+                            // if outOfMaxAllowedLength input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more Roaming Consortium OIs " +
+                                    "exceed maximum allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
@@ -428,7 +707,7 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": "contacts"
                     };
                     validationStatusArray.push(validationStatus);
-                    continueToCheckNextInput = false;
+                    continueToCheckNextInputs = false;
                 } else if (!inputIsValidAgainstRegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, accountHostname)) {
                     validationStatus = {
                         "error": true,
@@ -436,12 +715,12 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": "contacts"
                     };
                     validationStatusArray.push(validationStatus);
-                    continueToCheckNextInput = false;
+                    continueToCheckNextInputs = false;
                 } else {
-                    continueToCheckNextInput = true;
+                    continueToCheckNextInputs = true;
                 }
 
-                if (continueToCheckNextInput) {
+                if (continueToCheckNextInputs) {
                     /* Validating port of the CardDAV server */
                     var accountPort = $("input#accountPort").val();
                     if (!accountPort) {
@@ -484,7 +763,7 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": "calendar"
                     };
                     validationStatusArray.push(validationStatus);
-                    continueToCheckNextInput = false;
+                    continueToCheckNextInputs = false;
                 } else if (!inputIsValidAgainstRegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, calAccountHostname)) {
                     validationStatus = {
                         "error": true,
@@ -492,17 +771,17 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": "calendar"
                     };
                     validationStatusArray.push(validationStatus);
-                    continueToCheckNextInput = false;
+                    continueToCheckNextInputs = false;
                 } else {
                     validationStatus = {
                         "error": false,
                         "okFeature": "calendar"
                     };
                     validationStatusArray.push(validationStatus);
-                    continueToCheckNextInput = true;
+                    continueToCheckNextInputs = true;
                 }
 
-                if (continueToCheckNextInput) {
+                if (continueToCheckNextInputs) {
                     /* Validating port of the CardDAV server */
                     var calAccountPort = $("input#calAccountPort").val();
                     if (!calAccountPort) {
@@ -588,12 +867,12 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": "web-clips"
                     };
                     validationStatusArray.push(validationStatus);
-                    continueToCheckNextInput = false;
+                    continueToCheckNextInputs = false;
                 } else {
-                    continueToCheckNextInput = true;
+                    continueToCheckNextInputs = true;
                 }
 
-                if (continueToCheckNextInput) {
+                if (continueToCheckNextInputs) {
                     /* Validating hostname of the CardDAV server */
                     var wcURL = $("input#wcURL").val();
                     if (!wcURL) {

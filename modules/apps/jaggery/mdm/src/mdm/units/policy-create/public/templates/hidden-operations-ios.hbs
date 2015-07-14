@@ -603,13 +603,13 @@
                     <br>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="wifi-payload-certificate-anchor-uuid">
+                        <label class="wr-input-label" for="wifi-payload-certificate-anchor-uuids">
                             Certificate Payload Anchor UUIDs
                             <span class="helper" title="Identifies the certificates to be trusted for this authentication. Each entry must contain the UUID of a certificate payload. Use this key to prevent the device from asking the user if the listed certificates are trusted.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                             <br>
-                            <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-add" data-click-event="add-form">
+                            <a href="#wifi-payload-certificate-anchor-uuids-grid" class="grid-input-add" data-click-event="add-form">
                                 <span class="icon fw-stack">
                                     <i class="fw fw-add fw-stack-1x"></i>
                                     <i class="fw fw-ring fw-stack-2x"></i>
@@ -618,7 +618,7 @@
                                 Add Certificate Payload Anchor UUID
                             </a>
                         </label>
-                        <div id="wifi-payload-certificate-anchor-uuid" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiPayloadCertificateAnchorUUID">
+                        <div id="wifi-payload-certificate-anchor-uuids" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiPayloadCertificateAnchorUUIDs">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -627,7 +627,7 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody data-add-form-container="#wifi-payload-certificate-anchor-uuid-grid">
+                                <tbody data-add-form-container="#wifi-payload-certificate-anchor-uuids-grid">
                                     <tr data-help-text="add-form">
                                         <td colspan="3">
                                             No entries added yet .
@@ -636,7 +636,7 @@
                                 </tbody>
                             </table>
                             <table class="template hidden">
-                                <tbody data-add-form="#wifi-payload-certificate-anchor-uuid-grid">
+                                <tbody data-add-form="#wifi-payload-certificate-anchor-uuids-grid">
                                     <tr data-add-form-element="clone">
                                         <td data-title="No :">
                                             <span class="index"></span>
@@ -646,7 +646,7 @@
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
-                                                <a href="#wifi-payload-certificate-anchor-uuid-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                <a href="#wifi-payload-certificate-anchor-uuids-grid" class="grid-input-remove" data-click-event="remove-form">
                                                     <span class="fw-stack">
                                                         <i class="fw fw-ring fw-stack-2x"></i>
                                                         <i class="fw fw-delete fw-stack-1x"></i>
@@ -882,7 +882,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Roaming Consortium OI">
-                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires alphanumeric with letters ABCDEF upto 10 characters ]" />
+                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires 6 or 10 hexadecimal characters ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
