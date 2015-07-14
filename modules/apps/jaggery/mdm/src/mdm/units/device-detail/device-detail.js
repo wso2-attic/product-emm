@@ -8,7 +8,6 @@ function onRequest(context) {
         var deviceId = matchedElements.deviceId;
         var deviceModule = require("/modules/device.js").deviceModule;
         var device = deviceModule.viewDevice(deviceType, deviceId);
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>device: " + stringify(device));
         if (device){
             var viewModel = {};
             var deviceInfo = device.properties.DEVICE_INFO;
