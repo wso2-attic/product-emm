@@ -1534,7 +1534,9 @@ $(document).ready(function () {
                 // reinitializing input fields into the defaults
                 $(operationDataWrapper + " input").each(
                     function () {
-                        if ($(this).is("input:text") || $(this).is("input:password")) {
+                        if ($(this).is("input:text")) {
+                            $(this).val($(this).data("default"));
+                        } else if ($(this).is("input:password")) {
                             $(this).val("");
                         } else if ($(this).is("input:checkbox")) {
                             $(this).prop("checked", $(this).data("default"));
