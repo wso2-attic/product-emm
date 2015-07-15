@@ -478,8 +478,8 @@ validateStep["policy-profile"] = function () {
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                        } else if (wifiProxyPort && $.isNumeric(wifiProxyPort)
-                            && !inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
+                        } else if (wifiProxyPort && $.isNumeric(wifiProxyPort) &&
+                            !inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Wi-Fi Proxy Port is not within the range " +
@@ -519,10 +519,6 @@ validateStep["policy-profile"] = function () {
                         var wifiPassword = $("input#wifi-password").val();
                         var wifiEAPUsername = $("input#wifi-eap-username").val();
                         var wifiEAPPassword = $("input#wifi-eap-password").val();
-                        var wifiPayloadCertificateAnchorUUIDGridChildInputs =
-                            "div#wifi-payload-certificate-anchor-uuid .child-input";
-                        var wifiTLSTrustedServerNamesGridChildInputs =
-                            "div#wifi-tls-trusted-server-names .child-input";
                         var wifiEAPOuterIdentity = $("input#wifi-eap-outer-identity").val();
                         var wifiPayloadCertUUID = $("input#wifi-payload-cert-uuid").val();
 
@@ -558,12 +554,17 @@ validateStep["policy-profile"] = function () {
                         }
 
                         if (continueToCheckNextInputs) {
-                            if ($(wifiPayloadCertificateAnchorUUIDGridChildInputs).length > 0) {
+                            var wifiPayloadCertificateAnchorUUIDsGridChildInputs =
+                                "div#wifi-payload-certificate-anchor-uuids .child-input";
+                            if ($(wifiPayloadCertificateAnchorUUIDsGridChildInputs).length > 0) {
                                 emptyChildInputCount = 0;
                                 outOfMaxAllowedLengthCount = 0;
+                                var childInputArray = [];
+                                var duplicatesExist = false;
                                 // looping through each child input
-                                $(wifiPayloadCertificateAnchorUUIDGridChildInputs).each(function () {
+                                $(wifiPayloadCertificateAnchorUUIDsGridChildInputs).each(function () {
                                     childInput = $(this).val();
+                                    childInputArray.push(childInput);
                                     if (!childInput) {
                                         // if child input field is empty
                                         emptyChildInputCount++;
@@ -571,6 +572,24 @@ validateStep["policy-profile"] = function () {
                                         outOfMaxAllowedLengthCount++;
                                     }
                                 });
+                                // checking for duplicates
+                                var initialChildInputArrayLength = childInputArray.length;
+                                if (initialChildInputArrayLength > 1) {
+                                    var m, poppedChildInput;
+                                    for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                        poppedChildInput = childInputArray.pop();
+                                        var n;
+                                        for (n = 0; n < childInputArray.length; n++) {
+                                            if (poppedChildInput == childInputArray[n]) {
+                                                duplicatesExist = true;
+                                                break;
+                                            }
+                                        }
+                                        if (duplicatesExist) {
+                                            break;
+                                        }
+                                    }
+                                }
                                 // updating validationStatus
                                 if (emptyChildInputCount > 0) {
                                     // if empty child inputs are present
@@ -590,17 +609,30 @@ validateStep["policy-profile"] = function () {
                                         "erroneousFeature": operation
                                     };
                                     continueToCheckNextInputs = false;
+                                } else if (duplicatesExist) {
+                                    validationStatus = {
+                                        "error": true,
+                                        "subErrorMsg": "Duplicate values exist " +
+                                            "with Payload Certificate Anchor UUIDs. Please check.",
+                                        "erroneousFeature": operation
+                                    };
+                                    continueToCheckNextInputs = false;
                                 }
                             }
                         }
 
                         if (continueToCheckNextInputs) {
+                            var wifiTLSTrustedServerNamesGridChildInputs =
+                                "div#wifi-tls-trusted-server-names .child-input";
                             if ($(wifiTLSTrustedServerNamesGridChildInputs).length > 0) {
                                 emptyChildInputCount = 0;
                                 outOfMaxAllowedLengthCount = 0;
+                                childInputArray = [];
+                                duplicatesExist = false;
                                 // looping through each child input
                                 $(wifiTLSTrustedServerNamesGridChildInputs).each(function () {
                                     childInput = $(this).val();
+                                    childInputArray.push(childInput);
                                     if (!childInput) {
                                         // if child input field is empty
                                         emptyChildInputCount++;
@@ -608,6 +640,22 @@ validateStep["policy-profile"] = function () {
                                         outOfMaxAllowedLengthCount++;
                                     }
                                 });
+                                // checking for duplicates
+                                initialChildInputArrayLength = childInputArray.length;
+                                if (initialChildInputArrayLength > 1) {
+                                    for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                        poppedChildInput = childInputArray.pop();
+                                        for (n = 0; n < childInputArray.length; n++) {
+                                            if (poppedChildInput == childInputArray[n]) {
+                                                duplicatesExist = true;
+                                                break;
+                                            }
+                                        }
+                                        if (duplicatesExist) {
+                                            break;
+                                        }
+                                    }
+                                }
                                 // updating validationStatus
                                 if (emptyChildInputCount > 0) {
                                     // if empty child inputs are present
@@ -623,6 +671,14 @@ validateStep["policy-profile"] = function () {
                                         "error": true,
                                         "subErrorMsg": "One or more TLS Trusted Server Names " +
                                             "exceed maximum allowed length. Please check.",
+                                        "erroneousFeature": operation
+                                    };
+                                    continueToCheckNextInputs = false;
+                                } else if (duplicatesExist) {
+                                    validationStatus = {
+                                        "error": true,
+                                        "subErrorMsg": "Duplicate values exist " +
+                                            "with TLS Trusted Server Names. Please check.",
                                         "erroneousFeature": operation
                                     };
                                     continueToCheckNextInputs = false;
@@ -661,17 +717,40 @@ validateStep["policy-profile"] = function () {
                     var wifiRoamingConsortiumOIsGridChildInputs = "div#wifi-roaming-consortium-ois .child-input";
                     if ($(wifiRoamingConsortiumOIsGridChildInputs).length > 0) {
                         emptyChildInputCount = 0;
-                        outOfMaxAllowedLengthCount = 0;
+                        var outOfAllowedLengthCount = 0;
+                        var invalidAgainstRegExCount = 0;
+                        childInputArray = [];
+                        duplicatesExist = false;
                         // looping through each child input
                         $(wifiRoamingConsortiumOIsGridChildInputs).each(function () {
                             childInput = $(this).val();
+                            childInputArray.push(childInput);
                             if (!childInput) {
                                 // if child input field is empty
                                 emptyChildInputCount++;
-                            } else if (!inputIsValidAgainstLength(childInput, 1, 10)) {
-                                outOfMaxAllowedLengthCount++;
+                            } else if (!inputIsValidAgainstLength(childInput, 6, 6) &&
+                                !inputIsValidAgainstLength(childInput, 10, 10)) {
+                                outOfAllowedLengthCount++;
+                            } else if (!inputIsValidAgainstRegExp(/^[a-fA-F0-9]+$/, childInput)) {
+                                invalidAgainstRegExCount++;
                             }
                         });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
                         // updating validationStatus
                         if (emptyChildInputCount > 0) {
                             // if empty child inputs are present
@@ -681,17 +760,193 @@ validateStep["policy-profile"] = function () {
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                        } else if (outOfMaxAllowedLengthCount > 0) {
+                        } else if (outOfAllowedLengthCount > 0) {
                             // if outOfMaxAllowedLength input is present
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more Roaming Consortium OIs " +
-                                    "exceed maximum allowed length. Please check.",
+                                    "are out of allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (invalidAgainstRegExCount > 0) {
+                            // if invalid inputs in terms of hexadecimal format are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more Roaming Consortium OIs " +
+                                    "contain non-hexadecimal characters. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with Roaming Consortium OIs. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
                         }
                     }
+                }
+
+                if (continueToCheckNextInputs) {
+                    var wifiNAIRealmNamesGridChildInputs = "div#wifi-nai-realm-names .child-input";
+                    if ($(wifiNAIRealmNamesGridChildInputs).length > 0) {
+                        emptyChildInputCount = 0;
+                        outOfMaxAllowedLengthCount = 0;
+                        childInputArray = [];
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(wifiNAIRealmNamesGridChildInputs).each(function () {
+                            childInput = $(this).val();
+                            childInputArray.push(childInput);
+                            if (!childInput) {
+                                // if child input field is empty
+                                emptyChildInputCount++;
+                            } else if (!inputIsValidAgainstLength(childInput, 1, 100)) {
+                                outOfMaxAllowedLengthCount++;
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more NAI Realm Names are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (outOfMaxAllowedLengthCount > 0) {
+                            // if outOfMaxAllowedLength input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more NAI Realm Names " +
+                                    "exceed maximum allowed length. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with NAI Realm Names. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    var wifiMCCAndMNCsGridChildInputs = "div#wifi-mcc-and-mncs .child-input";
+                    if ($(wifiMCCAndMNCsGridChildInputs).length > 0) {
+                        var childInputCount = 0;
+                        var stringPair;
+                        emptyChildInputCount = 0;
+                        outOfAllowedLengthCount = 0;
+                        var notNumericInputCount = 0;
+                        childInputArray = [];
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(wifiMCCAndMNCsGridChildInputs).each(function () {
+                            childInput = $(this).val();
+                            // pushing each string pair to childInputArray
+                            childInputCount++;
+                            if (childInputCount % 2 == 1) {
+                                // initialize stringPair value
+                                stringPair = "";
+                                // append first part of the string
+                                stringPair += childInput;
+                            } else {
+                                // append second part of the string
+                                stringPair += childInput;
+                                childInputArray.push(stringPair);
+                            }
+                            // updating emptyChildInputCount & outOfAllowedLengthCount
+                            if (!childInput) {
+                                // if child input field is empty
+                                emptyChildInputCount++;
+                            } else if (!$.isNumeric(childInput)) {
+                                notNumericInputCount++;
+                            } else if (!inputIsValidAgainstLength(childInput, 3, 3)) {
+                                outOfAllowedLengthCount++;
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more MCC/MNC pairs are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (notNumericInputCount > 0) {
+                            // if notNumeric input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more MCC/MNC pairs are not numeric. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (outOfAllowedLengthCount > 0) {
+                            // if outOfAllowedLength input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more MCC/MNC pairs " +
+                                    "exceed allowed length of 3 digits. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with MCC/MNC pairs. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
                 }
 
                 // updating validationStatusArray with validationStatus
@@ -1279,7 +1534,9 @@ $(document).ready(function () {
                 // reinitializing input fields into the defaults
                 $(operationDataWrapper + " input").each(
                     function () {
-                        if ($(this).is("input:text") || $(this).is("input:password")) {
+                        if ($(this).is("input:text")) {
+                            $(this).val($(this).data("default"));
+                        } else if ($(this).is("input:password")) {
                             $(this).val("");
                         } else if ($(this).is("input:checkbox")) {
                             $(this).prop("checked", $(this).data("default"));

@@ -24,13 +24,21 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('contacts', this)">
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('calendar', this)">
             <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-contact fw-stack-2x"></i>
+                <i class="fw fw-calendar fw-stack-2x"></i>
             </span>
-            Contacts
-            <span id="contacts-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="contacts-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+            Calendar
+            <span id="calendar-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="calendar-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('calendar-subscription', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-subscribed-calendar fw-stack-2x"></i>
+            </span>
+            Calendar Subscription
+            <span id="calendar-subscription-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="calendar-subscription-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('scep-settings', this)">
             <span class="wr-hidden-operations-icon fw-stack">
@@ -64,22 +72,6 @@
             <span id="ldap-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="ldap-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('calendar', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-calendar fw-stack-2x"></i>
-            </span>
-            Calendar
-            <span id="calendar-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="calendar-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('subscribed-calendars', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-subscribed-calendar fw-stack-2x"></i>
-            </span>
-            Subscribed Calendars
-            <span id="subscribed-calendars-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="subscribed-calendars-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('airplay', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-airplay fw-stack-2x"></i>
@@ -96,6 +88,14 @@
             <span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('contacts', this)">-->
+            <!--<span class="wr-hidden-operations-icon fw-stack">-->
+                <!--<i class="fw fw-contact fw-stack-2x"></i>-->
+            <!--</span>-->
+            <!--Contacts-->
+            <!--<span id="contacts-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
+            <!--<span id="contacts-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
+        <!--</a>-->
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -210,7 +210,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" placeholder="[ Requires Number Input ]" />
+                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" data-default="" placeholder="[ Requires Number Input ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -221,7 +221,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" data-default="" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -271,7 +271,6 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <!--<input type="text" class="form-control operationDataKeys" id="maxFailedAttempts" data-key="maxFailedAttempts" placeholder="Enter maximum number of failed attempts">-->
                         <select id="passcode-policy-max-failed-attempts" class="form-control operationDataKeys" data-key="passcodePolicyMaxFailedAttempts" data-default="0">
                             <option value="" selected="selected">
                                 None
@@ -322,7 +321,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" placeholder="[ Required field if no domain name is given ]">
+                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" data-default="" placeholder="[ Required field if no domain name is given ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -334,7 +333,7 @@
                             <br>
                             ( For Wi-Fi Hotspot 2.0 negotiation )
                         </label>
-                        <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" placeholder="[ Required field if no SSID is given ]">
+                        <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" data-default="" placeholder="[ Required field if no SSID is given ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -384,7 +383,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" placeholder="[ Optional field ]">
+                        <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -417,7 +416,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" placeholder="[ Required field ]" />
+                            <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" data-default="" placeholder="[ Required field ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -427,7 +426,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" placeholder="[ Required field which requires Number Input ]" />
+                            <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" data-default="" placeholder="[ Required field which requires Number Input ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -437,7 +436,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-username" type="text" class="form-control operationDataKeys" data-key="wifiProxyUsername" placeholder="[ Optional field ]" />
+                            <input id="wifi-proxy-username" type="text" class="form-control operationDataKeys" data-key="wifiProxyUsername" data-default="" placeholder="[ Optional field ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -447,7 +446,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-password" type="password" class="form-control operationDataKeys" data-key="wifiProxyPassword" placeholder="[ Optional field ]" />
+                            <input id="wifi-proxy-password" type="password" class="form-control operationDataKeys" data-key="wifiProxyPassword" data-default="" placeholder="[ Optional field ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -457,7 +456,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-pac-url" type="text" class="form-control operationDataKeys" data-key="wifiProxyPACURL" placeholder="[ Optional field ]">
+                            <input id="wifi-proxy-pac-url" type="text" class="form-control operationDataKeys" data-key="wifiProxyPACURL" data-default="" placeholder="[ Optional field ]">
                         </div>
 
                         <div class="wr-input-control">
@@ -577,7 +576,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" placeholder="[ Optional field ]" />
+                        <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -642,7 +641,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Certificate Payload Anchor UUID">
-                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Payload UUID ]" />
+                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires a Certificate Payload UUID ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -703,7 +702,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="TLS Trusted Server Certificate Name">
-                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires a Certificate Common Name ]" />
+                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires a Certificate Common Name ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -766,9 +765,9 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                             <br>
-                            ( Should be 1-30 characters long. Only relevant to TTLS, PEAP and EAP-FAST )
+                            ( Only relevant to TTLS, PEAP and EAP-FAST )
                         </label>
-                        <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" placeholder="[ Optional field ]" />
+                        <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     EAP-Fast Support :
@@ -837,7 +836,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-payload-cert-uuid" type="text" class="form-control operationDataKeys" data-key="wifiPayloadCertUUID" placeholder="[ Optional field ]" />
+                        <input id="wifi-payload-cert-uuid" type="text" class="form-control operationDataKeys" data-key="wifiPayloadCertUUID" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     </div>
@@ -882,7 +881,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Roaming Consortium OI">
-                                            <input type="text" class="form-control grid-input-text" placeholder="[ Requires 6 or 10 hexadecimal characters ]" />
+                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires 6 or 10 hexadecimal characters ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -943,7 +942,7 @@
                                         <span class="index"></span>
                                     </td>
                                     <td data-title="NAI Realm Name">
-                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires unique name ]" />
+                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires unique name ]" />
                                     </td>
                                     <td>
                                         <span class="list-group-item-actions">
@@ -1005,10 +1004,10 @@
                                         <span class="index"></span>
                                     </td>
                                     <td data-title="Mobile Country Code ( MCC )">
-                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires 3-digit-input ]" />
                                     </td>
                                     <td data-title="Mobile Network Code ( MNC )">
-                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires 3-digit-input ]" />
+                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires 3-digit-input ]" />
                                     </td>
                                     <td>
                                         <span class="list-group-item-actions">
@@ -1061,7 +1060,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" placeholder="[ My CardDAV Account ]" />
+                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" data-default="" placeholder="[ My CardDAV Account ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1072,8 +1071,8 @@
                             </span>
                         </label>
                         <div class="clearfix">
-                            <div class="col-md-7"><input id="accountHostname" type="text" class="form-control operationDataKeys" data-key="accountHostname" placeholder="[ Required ]"> : </div>
-                            <div class="col-md-5"><input id="accountPort" type="text" class="form-control operationDataKeys" data-key="accountPort" placeholder="[ 8843 ]"></div>
+                            <div class="col-md-7"><input id="accountHostname" type="text" class="form-control operationDataKeys" data-key="accountHostname" data-default="" placeholder="[ Required ]"> : </div>
+                            <div class="col-md-5"><input id="accountPort" type="text" class="form-control operationDataKeys" data-key="accountPort" data-default="" placeholder="[ 8843 ]"></div>
                         </div>
                     </div>
 
@@ -1084,7 +1083,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" placeholder="[ Optional ]" />
+                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" data-default="" placeholder="[ Optional ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1094,7 +1093,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" placeholder="[ Set On Device ]" />
+                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" data-default="" placeholder="[ Set On Device ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1121,170 +1120,185 @@
         </div>
         <!-- End of Contacts -->
 
-        <!-- Calendar -->
+        <!-- Calendar (calDAV) -->
         <div class="wr-hidden-operation" data-operation="calendar">
-            <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="CALENDAR">
-                <div class="panel-heading" role="tab">
+            <div class="panel panel-default operation-data" data-operation="calendar" data-operation-code="CALDAV">
+                <div id="calendar-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Calendar
-                        <label id="calendar-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#calendar">
+                        <label id="calendar-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#calendar-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
                         </label>
                         <hr>
                         <div class="panel-title-description">
-                            Use this section to define settings for connecting to CalDAV servers
+                            This configuration can be used to define settings for connecting to CalDAV servers.
+                            Once this configuration profile is installed on an iOS device,
+                            corresponding users will not be able to modify these settings on their devices.
                         </div>
                     </h2>
                 </div>
-                <div id="calendar" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="calendar">
+                <div id="calendar-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="calendar-body">
 
                     <div id="calendar-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="calAccountDescription">
+                        <label class="wr-input-label" for="calendar-account-description">
                             Account Description
-                            <span class="helper" title="The display name of the account (e.g. Company CalDAV Account)">
+                            <span class="helper" title="Display name of the account (e.g. Company CalDAV Account )">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calAccountDescription" type="text" class="form-control operationDataKeys" data-key="calAccountDescription" placeholder="[ My CalDAV Account ]">
+                        <input id="calendar-account-description" type="text" class="form-control operationDataKeys" data-key="calendarAccountDescription" data-default="Company CalDAV Account" value="Company CalDAV Account" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="calAccountHostname">
-                            Account Hostname and Port
-                            <span class="helper" title="The CalDave hostname or IP address and port number">
+                        <label class="wr-input-label" for="calendar-account-hostname">
+                            Account Hostname
+                            <span class="helper" title="CalDAV account hostname or IP address is required here.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calAccountHostname" type="text" class="form-control operationDataKeys" data-key="calAccountHostname" placeholder="[ Required ]"> :
-                        <input id="calAccountPort" type="text" class="form-control operationDataKeys" data-key="calAccountPort" placeholder="[ 8843 ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="calPrincipalURL">
-                            Principal URL
-                            <span class="helper" title="The principal URL for the CalDAV account">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="calPrincipalURL" type="text" class="form-control operationDataKeys" data-key="calPrincipalURL" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="calAccountUsername">
-                            Account Username
-                            <span class="helper" title="The CalDAV username">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="calAccountUsername" type="text" class="form-control operationDataKeys" data-key="calAccountUsername" placeholder="[ Set On Device ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="calAccountPassword">
-                            Account Password
-                            <span class="helper" title="The CalDav password">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="calAccountPassword" type="password" class="form-control operationDataKeys" data-key="calAccountPassword" placeholder="[ Optional ]">
+                        <input id="calendar-account-hostname" type="text" class="form-control operationDataKeys" data-key="calendarAccountHostname" data-default="" placeholder="[ Required field ]" />
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="calUseSSL" type="checkbox" class="form-control operationDataKeys" data-key="calUseSSL" checked="checked" />
-                            <span class="helper" title="Enable Secure Socket Layer communication with CalDAV server">
-                                Use SSL
+                            <input id="calendar-use-ssl" type="checkbox" class="form-control operationDataKeys" data-key="calendarUseSSL" checked="checked" />
+                            <span class="helper" title="Having this checked, would enable Secure Socket Layer communication with CalDAV server.">
+                                &nbsp;&nbsp;&nbsp;Use Secure Socket Layer ( SSL )
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
                     </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendar-account-port">
+                            Account Port
+                            <span class="helper" title="CalDAV account host port number is required here.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendar-account-port" type="text" class="form-control operationDataKeys" data-key="calendarAccountPort" data-default="" placeholder="[ Required Field which requires Number Input ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendar-principal-url">
+                            Principal URL
+                            <span class="helper" title="Principal URL for the CalDAV account.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendar-principal-url" type="text" class="form-control operationDataKeys" data-key="calendarPrincipalURL" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendar-account-username">
+                            Account Username
+                            <span class="helper" title="CalDAV account username is required for devices being prepared or supervised.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendar-account-username" type="text" class="form-control operationDataKeys" data-key="calendarAccountUsername" data-default="" placeholder="[ Set On Device ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendar-account-password">
+                            Account Password
+                            <span class="helper" title="Password for CalDAV account.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendar-account-password" type="password" class="form-control operationDataKeys" data-key="calendarAccountPassword" placeholder="[ Optional field ]">
+                    </div>
+
                 </div>
             </div>
         </div>
-        <!-- End of Calendar -->
+        <!-- End of Calendar (calDAV) -->
 
-        <!-- Subscribed Calendars -->
-        <div class="wr-hidden-operation" data-operation="subscribed-calendars">
-            <div class="panel panel-default operation-data" data-operation="subscribed-calendars" data-operation-code="SUBSCRIBED_CALENDARS">
-                <div class="panel-heading" role="tab">
+        <!-- Calendar subscription -->
+        <div class="wr-hidden-operation" data-operation="calendar-subscription">
+            <div class="panel panel-default operation-data" data-operation="calendar-subscription" data-operation-code="CALENDAR_SUBSCRIPTION">
+                <div id="calendar-subscription-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        Subscribed Calendars
-                        <label id="subscribed-calendars-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#subscribedCalendars">
+                        Calendar Subscription
+                        <label id="subscribed-calendars-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#calendar-subscription-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
                         </label>
                         <hr>
                         <div class="panel-title-description">
-                            Use this section to define settings for connecting to CalDAV servers
+                            This configuration can be used to define settings for calendar subscriptions.
+                            Once this configuration profile is installed on an iOS device,
+                            corresponding users will not be able to modify these settings on their devices.
                         </div>
                     </h2>
                 </div>
-                <div id="subscribedCalendars" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="subscribedCalendars">
+                <div id="calendar-subscription-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="calendar-subscription-body">
 
-                    <div id="subscribed-calendars-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                    <div id="calendar-subscription-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="csDescription">
+                        <label class="wr-input-label" for="calendar-subscription-description">
                             Description
-                            <span class="helper" title="The description of the calendar subscription">
+                            <span class="helper" title="Description of the calendar subscription.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="csDescription" type="text" class="form-control operationDataKeys" data-key="csDescription" placeholder="[ My Subscribed Calendar ]">
+                        <input id="calendar-subscription-description" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionDescription" data-default="Subscribed Calendar" value="Subscribed Calendar" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="csURL">
-                            URL
-                            <span class="helper" title="The URL of the calendar file">
+                        <label class="wr-input-label" for="calendar-subscription-hostname">
+                            Account Hostname URL
+                            <span class="helper" title="URL of the calendar file is required here.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="csURL" type="text" class="form-control operationDataKeys" data-key="csURL" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="csUsername">
-                            Username
-                            <span class="helper" title="Username for this subscription">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="csUsername" type="text" class="form-control operationDataKeys" data-key="csUsername" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="csPassword">
-                            Password
-                            <span class="helper" title="Password for this subscription">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="csPassword" type="password" class="form-control operationDataKeys" data-key="csPassword" placeholder="[ Optional ]">
+                        <input id="calendar-subscription-hostname" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionHostname" data-default="" placeholder="[ Required field ]" />
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="csUseSSL" type="checkbox" class="form-control operationDataKeys" data-key="csUseSSL" checked="checked" />
-                            <span class="helper" title="Enable Secure Socket Layer communication">
-                                Use SSL
+                            <input id="calendar-subscription-use-ssl" type="checkbox" class="form-control operationDataKeys" data-key="calendarSubscriptionUseSSL" checked="checked" />
+                            <span class="helper" title="Having this checked, would enable Secure Socket Layer communication.">
+                                &nbsp;&nbsp;&nbsp;Use Secure Socket Layer ( SSL )
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
                     </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendar-subscription-username">
+                            Username
+                            <span class="helper" title="Username for this calendar subscription.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendar-subscription-username" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionUsername" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="calendar-subscription-password">
+                            Password
+                            <span class="helper" title="Password for this calendar subscription.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="calendar-subscription-password" type="password" class="form-control operationDataKeys" data-key="calendarSubscriptionPassword" placeholder="[ Optional field ]">
+                    </div>
+
                 </div>
             </div>
         </div>
-        <!-- End of Subscribed Calendars -->
+        <!-- End of Calendar subscription -->
 
         <!-- SCEP Settings -->
         <div class="wr-hidden-operation" data-operation="scep-settings">
@@ -1316,7 +1330,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepURL" type="text" class="form-control operationDataKeys" data-key="scepURL" placeholder="[ Required ]">
+                        <input id="scepURL" type="text" class="form-control operationDataKeys" data-key="scepURL" data-default="" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1326,7 +1340,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepName" type="text" class="form-control operationDataKeys" data-key="scepName" placeholder="[ Optional ]">
+                        <input id="scepName" type="text" class="form-control operationDataKeys" data-key="scepName" data-default="" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1336,7 +1350,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepSubject" type="text" class="form-control operationDataKeys" data-key="scepSubject" placeholder="[ Optional ] Ex. O=Company Name, CN=Foo">
+                        <input id="scepSubject" type="text" class="form-control operationDataKeys" data-key="scepSubject" data-default="" placeholder="[ Optional ] Ex. O=Company Name, CN=Foo">
                     </div>
 
                     <div class="wr-input-control">
@@ -1363,7 +1377,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepSubjectAlternativeNameValue" type="text" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameValue" placeholder="">
+                        <input id="scepSubjectAlternativeNameValue" type="text" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameValue" data-default="" placeholder="">
                     </div>
 
                     <div class="wr-input-control">
@@ -1373,7 +1387,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepNTprincipalName" type="text" class="form-control operationDataKeys" data-key="scepNTprincipalName" placeholder="[ Optional ]">
+                        <input id="scepNTprincipalName" type="text" class="form-control operationDataKeys" data-key="scepNTprincipalName" data-default="" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1383,7 +1397,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepRetries" type="text" class="form-control operationDataKeys" data-key="scepRetries" placeholder="[ Valid numeric value is required ]">
+                        <input id="scepRetries" type="text" class="form-control operationDataKeys" data-key="scepRetries" data-default="" placeholder="[ Valid numeric value is required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1393,7 +1407,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepRetryDelay" type="text" class="form-control operationDataKeys" data-key="scepRetryDelay" placeholder="[ Valid numeric value is required ]">
+                        <input id="scepRetryDelay" type="text" class="form-control operationDataKeys" data-key="scepRetryDelay" data-default="" placeholder="[ Valid numeric value is required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1403,7 +1417,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepChallenge" type="text" class="form-control operationDataKeys" data-key="scepChallenge" placeholder="[ Optional ]">
+                        <input id="scepChallenge" type="text" class="form-control operationDataKeys" data-key="scepChallenge" data-default="" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1446,7 +1460,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="scepFingerprint" type="text" class="form-control operationDataKeys" data-key="scepFingerprint" placeholder="">
+                        <input id="scepFingerprint" type="text" class="form-control operationDataKeys" data-key="scepFingerprint" data-default="" placeholder="">
                     </div>
                 </div>
             </div>
@@ -1484,7 +1498,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnAccessPointName" type="text" class="form-control operationDataKeys" data-key="apnAccessPointName" placeholder="[ Required ]">
+                        <input id="apnAccessPointName" type="text" class="form-control operationDataKeys" data-key="apnAccessPointName" data-default="" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1494,7 +1508,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnAccessPointUsername" type="text" class="form-control operationDataKeys" data-key="apnAccessPointUsername" placeholder="[ Set On Device ]">
+                        <input id="apnAccessPointUsername" type="text" class="form-control operationDataKeys" data-key="apnAccessPointUsername" data-default="" placeholder="[ Set On Device ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1514,8 +1528,8 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnProxyServer" type="text" class="form-control operationDataKeys" data-key="apnProxyServer" placeholder="[ Optional ]"> :
-                        <input id="apnProxyPort" type="text" class="form-control operationDataKeys" data-key="apnProxyPort" placeholder="">
+                        <input id="apnProxyServer" type="text" class="form-control operationDataKeys" data-key="apnProxyServer" data-default="" placeholder="[ Optional ]"> :
+                        <input id="apnProxyPort" type="text" class="form-control operationDataKeys" data-key="apnProxyPort" data-default="" placeholder="">
                     </div>
                 </div>
             </div>
@@ -1552,7 +1566,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wcLabel" type="text" class="form-control operationDataKeys" data-key="wcLabel" placeholder="[ Required ]">
+                        <input id="wcLabel" type="text" class="form-control operationDataKeys" data-key="wcLabel" data-default="" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1562,7 +1576,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wcURL" type="text" class="form-control operationDataKeys" data-key="wcURL" placeholder="[ Required ]">
+                        <input id="wcURL" type="text" class="form-control operationDataKeys" data-key="wcURL" data-default="" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1629,7 +1643,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="emAccountDescription" type="text" class="form-control operationDataKeys" data-key="emAccountDescription" placeholder="[ Required ]">
+                        <input id="emAccountDescription" type="text" class="form-control operationDataKeys" data-key="emAccountDescription" data-default="" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1652,7 +1666,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="emUserDisplayName" type="text" class="form-control operationDataKeys" data-key="emUserDisplayName" placeholder="[ Optional ]">
+                        <input id="emUserDisplayName" type="text" class="form-control operationDataKeys" data-key="emUserDisplayName" data-default="" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1662,7 +1676,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="emAddress" type="text" class="form-control operationDataKeys" data-key="emAddress" placeholder="[ Set On Device ]">
+                        <input id="emAddress" type="text" class="form-control operationDataKeys" data-key="emAddress" data-default="" placeholder="[ Set On Device ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -2065,7 +2079,7 @@
                                         <input id="restrictions-allow-lock-screen-notifications-view" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowLockScreenNotificationsView" data-default="true" checked="checked" />
                                         <span class="helper" title="Having this unchecked would disable Notifications view in Notification Center on the lock screen. Available only in iOS 7.0 and later.">
                                             &nbsp;&nbsp;&nbsp;Show Notifications Center in lock screen
-                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                         </span>
                                     </label>
                                 </div>
@@ -2527,7 +2541,7 @@
                                                         <span class="index"></span>
                                                     </td>
                                                     <td data-title="Application Bundle ID">
-                                                        <input type="text" class="form-control grid-input-text" placeholder="[ Requires an Application Bundle ID ]" />
+                                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires an Application Bundle ID ]" />
                                                     </td>
                                                     <td>
                                                         <span class="list-group-item-actions">
