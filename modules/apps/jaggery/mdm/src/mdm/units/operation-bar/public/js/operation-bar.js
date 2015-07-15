@@ -100,8 +100,8 @@ function operationSelect(selection){
     if (deviceIdList == 0){
         $(modalPopupContent).html($('#errorOperations').html());
     }else {
-        $(modalPopupContent).html($(operations + ' .operation[data-operation='+selection+']').html());
-        $(modalPopupContent).data("operation", selection);
+        $(modalPopupContent).html($(operations + ' .operation[data-operation-code='+selection+']').html());
+        $(modalPopupContent).data("operation-code", selection);
     }
     showPopup();
 }
@@ -153,8 +153,8 @@ function toggleMoreOperationsHeight(){
 function showAdvanceOperation(operation, button){
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
-    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
-    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
+    $(hiddenOperation + '[data-operation-code="' + operation + '"]').show();
+    $(hiddenOperation + '[data-operation-code="' + operation + '"]').siblings().hide();
 }
 
 /*
