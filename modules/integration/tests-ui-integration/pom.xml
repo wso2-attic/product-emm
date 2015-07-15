@@ -252,6 +252,12 @@
         <dependency>
             <groupId>org.wso2.mdm</groupId>
             <artifactId>org.wso2.carbon.mdm.integration.ui.pages</artifactId>
+            <exclusions>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+            </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>

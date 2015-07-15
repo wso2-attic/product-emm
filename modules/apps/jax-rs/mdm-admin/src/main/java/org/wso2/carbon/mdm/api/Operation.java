@@ -73,14 +73,11 @@ public class Operation {
         Message responseMsg = new Message();
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            boolean status = dmService.addOperation(operationContext.getOperation(),
+            int  operationId = dmService.addOperation(operationContext.getOperation(),
                     operationContext.getDevices());
-            if (status) {
+            if (operationId>0) {
                 Response.status(HttpStatus.SC_CREATED);
                 responseMsg.setResponseMessage("Operation has added successfully.");
-            } else {
-                Response.status(HttpStatus.SC_OK);
-                responseMsg.setResponseMessage("Failure in adding the Operation.");
             }
             return responseMsg;
         } catch (OperationManagementException e) {

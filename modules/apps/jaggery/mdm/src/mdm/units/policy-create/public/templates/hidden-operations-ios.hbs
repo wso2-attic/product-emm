@@ -24,6 +24,14 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('ldap', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-ldap fw-stack-2x"></i>
+            </span>
+            LDAP Settings
+            <span id="ldap-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="ldap-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('calendar', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-calendar fw-stack-2x"></i>
@@ -48,14 +56,6 @@
             <span id="scep-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="scep-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('web-clips', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-webclip fw-stack-2x"></i>
-            </span>
-            Web Clips
-            <span id="web-clips-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="web-clips-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('email-settings', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-invitation fw-stack-2x"></i>
@@ -63,14 +63,6 @@
             Email Settings
             <span id="email-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="email-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('ldap', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-ldap fw-stack-2x"></i>
-            </span>
-            LDAP Settings
-            <span id="ldap-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="ldap-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('airplay', this)">
             <span class="wr-hidden-operations-icon fw-stack">
@@ -95,6 +87,14 @@
             <!--Contacts-->
             <!--<span id="contacts-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
             <!--<span id="contacts-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
+        <!--</a>-->
+        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('web-clips', this)">-->
+            <!--<span class="wr-hidden-operations-icon fw-stack">-->
+                <!--<i class="fw fw-webclip fw-stack-2x"></i>-->
+            <!--</span>-->
+            <!--Web Clips-->
+            <!--<span id="web-clips-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
+            <!--<span id="web-clips-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
         <!--</a>-->
     </div>
 
@@ -1119,6 +1119,159 @@
             </div>
         </div>
         <!-- End of Contacts -->
+
+        <!-- LDAP -->
+        <div class="wr-hidden-operation" data-operation="ldap">
+            <div class="panel panel-default operation-data" data-operation="ldap" data-operation-code="LDAP">
+                <div id="ldap-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        LDAP Settings
+                        <label id="ldap-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#ldap-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            This configuration can be used to define settings for connecting to LDAP servers.
+                            Once this configuration profile is installed on an iOS device,
+                            corresponding users will not be able to modify these settings on their devices.
+                        </div>
+                    </h2>
+                </div>
+                <div id="ldap-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="ldap-body">
+
+                    <div id="ldap-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="ldap-account-description">
+                            Account Description
+                            <span class="helper" title="Display name of the account ( e.g. Company LDAP Account ).">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="ldap-account-description" type="text" class="form-control operationDataKeys" data-key="ldapAccountDescription" data-default="Company LDAP Account" value="Company LDAP Account" placeholder="[ Optional field ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="ldap-account-hostname">
+                            Account Hostname
+                            <span class="helper" title="LDAP hostname or IP address is required here.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="ldap-account-hostname" type="text" class="form-control operationDataKeys" data-key="ldapAccountHostname" data-default="" placeholder="[ Required field ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="ldap-use-ssl" type="checkbox" class="form-control operationDataKeys" data-key="ldapUseSSL" checked="checked" />
+                            <span class="helper" title="Having this checked, would enable Secure Socket Layer communication.">
+                                &nbsp;&nbsp;&nbsp;Use Secure Socket Layer ( SSL )
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="ldap-account-username">
+                            Account Username
+                            <span class="helper" title="Username for this LDAP account.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="ldap-account-username" type="text" class="form-control operationDataKeys" data-key="ldapAccountUsername" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="ldap-account-password">
+                            Account Password
+                            <span class="helper" title="Password for this LDAP account.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="ldap-account-password" type="password" class="form-control operationDataKeys" data-key="ldapAccountPassword" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="ldap-search-settings">
+                            Search Settings
+                            <span class="helper" title="Search settings for this LDAP server. Can have many of these for one account. Should have at least one for the account to be useful.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#ldap-search-settings-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Search Setting
+                            </a>
+                        </label>
+                        <div id="ldap-search-settings" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="ldapSearchSettings">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>Description</th>
+                                        <th>Search Base</th>
+                                        <th>Scope</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#ldap-search-settings-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="5">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#ldap-search-settings-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="Description">
+                                            <input type="text" class="form-control grid-input-text" data-default="LDAP Search" value="LDAP Search" placeholder="[ Optional Field ]" />
+                                        </td>
+                                        <td data-title="Search Base">
+                                            <select class="form-control grid-input-select" data-default="0">
+                                                <option value="LDAPSearchSettingScopeBase" selected="selected">
+                                                    Base
+                                                </option>
+                                                <option value="LDAPSearchSettingScopeOneLevel">OneLevel</option>
+                                                <option value="LDAPSearchSettingScopeSubtree">Subtree</option>
+                                            </select>
+                                        </td>
+                                        <td data-title="Scope">
+                                            <input type="text" class="form-control grid-input-text" data-default="ou=department, o=company" value="ou=department, o=company" placeholder="[ Requires path to the node where a search should start. ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#ldap-search-settings-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End of LDAP -->
 
         <!-- Calendar (calDAV) -->
         <div class="wr-hidden-operation" data-operation="calendar">
