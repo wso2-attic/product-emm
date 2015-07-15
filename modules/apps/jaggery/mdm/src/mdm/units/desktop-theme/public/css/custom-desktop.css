@@ -2586,6 +2586,10 @@ input.grid-input-text {
     border: 1px solid #DDDDDD;
 }
 
+select.grid-input-select {
+    border: 1px solid #DDDDDD;
+}
+
 .multi-view .content .panel-heading .panel-title .wr-input-control.switch {
     float: right;
     margin-top: 10px;
