@@ -24,6 +24,22 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('email', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-invitation fw-stack-2x"></i>
+            </span>
+            Email Settings
+            <span id="email-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="email-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('airplay', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-airplay fw-stack-2x"></i>
+            </span>
+            AirPlay Settings
+            <span id="airplay-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="airplay-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('ldap', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-ldap fw-stack-2x"></i>
@@ -48,53 +64,13 @@
             <span id="calendar-subscription-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="calendar-subscription-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('scep-settings', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-scep fw-stack-2x"></i>
-            </span>
-            SCEP
-            <span id="scep-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="scep-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('email-settings', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-invitation fw-stack-2x"></i>
-            </span>
-            Email Settings
-            <span id="email-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="email-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('airplay', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-airplay fw-stack-2x"></i>
-            </span>
-            AirPlay Settings
-            <span id="airplay-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="airplay-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-settings fw-stack-2x"></i>
-            </span>
-            Access Point Name
-            <span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('contacts', this)">-->
+        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">-->
             <!--<span class="wr-hidden-operations-icon fw-stack">-->
-                <!--<i class="fw fw-contact fw-stack-2x"></i>-->
+                <!--<i class="fw fw-settings fw-stack-2x"></i>-->
             <!--</span>-->
-            <!--Contacts-->
-            <!--<span id="contacts-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
-            <!--<span id="contacts-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
-        <!--</a>-->
-        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('web-clips', this)">-->
-            <!--<span class="wr-hidden-operations-icon fw-stack">-->
-                <!--<i class="fw fw-webclip fw-stack-2x"></i>-->
-            <!--</span>-->
-            <!--Web Clips-->
-            <!--<span id="web-clips-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
-            <!--<span id="web-clips-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
+            <!--Access Point Name-->
+            <!--<span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
+            <!--<span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
         <!--</a>-->
     </div>
 
@@ -1030,95 +1006,159 @@
         </div>
         <!-- End of Wifi -->
 
-        <!-- Contacts -->
-        <div class="wr-hidden-operation" data-operation="contacts">
-            <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="CONTACTS">
-                <div class="panel-heading" role="tab">
+        <!-- AirPlay -->
+        <div class="wr-hidden-operation" data-operation="airplay">
+            <div class="panel panel-default operation-data" data-operation="airplay" data-operation-code="AIR_PLAY">
+                <div id="airplay-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        Contacts
-                        <label id="contacts-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#contacts">
+                        AirPlay Settings
+                        <label id="airplay-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#airplay-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
                         </label>
                         <hr>
                         <div class="panel-title-description">
-                            Use this section to define settings for connecting to CardDAV servers
+                            This configuration can be used to define settings for connecting to AirPlay destinations.
+                            Once this configuration profile is installed on an iOS device,
+                            corresponding users will not be able to modify these settings on their devices.
                         </div>
                     </h2>
                 </div>
-                <div id="contacts" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="contacts">
+                <div id="airplay-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="airplay-body">
 
-                    <div id="contacts-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                    <div id="airplay-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountDescription">
-                            Account Description
-                            <span class="helper" title="The display name of the account (e.g. Company CardDAV Account)">
+                        <label class="wr-input-label" for="airplay-credentials">
+                            AirPlay Credentials
+                            <span class="helper" title="If present, sets passwords for known AirPlay destinations.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
+                            <br>
+                            <a href="#airplay-credentials-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Credential
+                            </a>
                         </label>
-                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" data-default="" placeholder="[ My CardDAV Account ]" />
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountHostname">
-                            Account Hostname and Port
-                            <span class="helper" title="The CardDAV hostname or IP address and port number">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <div class="clearfix">
-                            <div class="col-md-7"><input id="accountHostname" type="text" class="form-control operationDataKeys" data-key="accountHostname" data-default="" placeholder="[ Required ]"> : </div>
-                            <div class="col-md-5"><input id="accountPort" type="text" class="form-control operationDataKeys" data-key="accountPort" data-default="" placeholder="[ 8843 ]"></div>
+                        <div id="airplay-credentials" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="airplayCredentials">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>Device Name</th>
+                                        <th>Password</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#airplay-credentials-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="4">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#airplay-credentials-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="Device Name">
+                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires name of the AirPlay destination ]" />
+                                        </td>
+                                        <td data-title="Password">
+                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires password for the AirPlay destination ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#airplay-credentials-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="principalURL">
-                            Principal URL
-                            <span class="helper" title="The principal URL for the CardDAV account">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" data-default="" placeholder="[ Optional ]" />
-                    </div>
+                    <br>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountUsername">
-                            Account Username
-                            <span class="helper" title="The CardDav username">
+                        <label class="wr-input-label" for="airplay-destinations">
+                            AirPlay Destinations Whitelist
+                            <span class="helper" title="Supervised only (ignored otherwise). If present, only AirPlay destinations present in this list are available to the device.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
+                            <br>
+                            <a href="#airplay-destinations-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Destination
+                            </a>
                         </label>
-                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" data-default="" placeholder="[ Set On Device ]" />
+                        <div id="airplay-destinations" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="airplayDestinations">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>Destination</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#airplay-destinations-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="3">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#airplay-destinations-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="Destination">
+                                            <input type="text" class="form-control grid-input-text" data-default="00:00:00:00:00:00" value="00:00:00:00:00:00" placeholder="[ Requires Device ID of the AirPlay destination ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#airplay-destinations-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountPassword">
-                            Account Password
-                            <span class="helper" title="The CardDAV password">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="accountPassword" type="password" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]" />
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="useSSL" type="checkbox" class="form-control operationDataKeys" data-key="useSSL" checked="checked" />
-                            <span class="helper" title="Enable Secure Socket Layer communication with CardDAV server">
-                                Use SSL
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
                 </div>
             </div>
         </div>
-        <!-- End of Contacts -->
+        <!-- End of AirPlay -->
 
         <!-- LDAP -->
         <div class="wr-hidden-operation" data-operation="ldap">
@@ -1211,7 +1251,7 @@
                                 Add Search Setting
                             </a>
                         </label>
-                        <div id="ldap-search-settings" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="ldapSearchSettings">
+                        <div id="ldap-search-settings" class="operationDataKeys grouped-array-input three-column-text-field-array" data-key="ldapSearchSettings">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -1453,173 +1493,6 @@
         </div>
         <!-- End of Calendar subscription -->
 
-        <!-- SCEP Settings -->
-        <div class="wr-hidden-operation" data-operation="scep-settings">
-            <div class="panel panel-default operation-data" data-operation="scep-settings" data-operation-code="SCEP_SETTINGS">
-                <div class="panel-heading" role="tab">
-                    <h2 class="sub-title panel-title">
-                        SCEP Settings
-                        <label id="scep-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#scepSettings">
-                            <input type="checkbox" />
-                            <span class="helper"></span>
-                            <span class="text"></span>
-                        </label>
-                        <hr>
-                        <div class="panel-title-description">
-                            Use this section to define settings for obtaining certificates from SCEP servers
-                        </div>
-                    </h2>
-                </div>
-                <div id="scepSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="scepSettings">
-
-                    <div id="scep-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                        <i class="icon fw fw-error"></i><span></span>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepURL">
-                            URL
-                            <span class="helper" title="The base URL for the SCEP server">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepURL" type="text" class="form-control operationDataKeys" data-key="scepURL" data-default="" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepName">
-                            Name
-                            <span class="helper" title="The name of the instance: CA-IDENT">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepName" type="text" class="form-control operationDataKeys" data-key="scepName" data-default="" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepSubject">
-                            Subject
-                            <span class="helper" title="The name of the instance: CA-IDENT">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepSubject" type="text" class="form-control operationDataKeys" data-key="scepSubject" data-default="" placeholder="[ Optional ] Ex. O=Company Name, CN=Foo">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepSubjectAlternativeNameType">
-                            Subject Alternative Name Type
-                            <span class="helper" title="The type of a subject alternative name">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <select id="scepSubjectAlternativeNameType" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameType" data-default="0">
-                            <option value="None" selected="selected">
-                                None
-                            </option>
-                            <option value="RFC 822 Name">RFC 822 Name</option>
-                            <option value="DNS Name">DNS Name</option>
-                            <option value="Uniform Resource Identifier">Uniform Resource Identifier</option>
-                        </select>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepSubjectAlternativeNameValue">
-                            Subject Alternative Name Value
-                            <span class="helper" title="The value of a subject alternative name">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepSubjectAlternativeNameValue" type="text" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameValue" data-default="" placeholder="">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepNTprincipalName">
-                            NT Principal Name
-                            <span class="helper" title="A NT principal name for use in the certificate request">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepNTprincipalName" type="text" class="form-control operationDataKeys" data-key="scepNTprincipalName" data-default="" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepRetries">
-                            Retries
-                            <span class="helper" title="The number of times to poll the SCEP server for a signed certificate before giving up">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepRetries" type="text" class="form-control operationDataKeys" data-key="scepRetries" data-default="" placeholder="[ Valid numeric value is required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepRetryDelay">
-                            Retry Delay
-                            <span class="helper" title="The number of seconds to wait between poll attempts">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepRetryDelay" type="text" class="form-control operationDataKeys" data-key="scepRetryDelay" data-default="" placeholder="[ Valid numeric value is required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepChallenge">
-                            Retry Delay
-                            <span class="helper" title="Used as the pre-shared key for automatic enrollment">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepChallenge" type="text" class="form-control operationDataKeys" data-key="scepChallenge" data-default="" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepKeySize">
-                            Key Size
-                            <span class="helper" title="Key size in bits">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <select id="scepKeySize" class="form-control operationDataKeys" data-key="scepKeySize" data-default="0">
-                            <option value="1024" selected="selected">1024</option>
-                            <option value="2048">2048</option>
-                        </select>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="scepUsedAsDS" type="checkbox" class="form-control operationDataKeys" data-key="scepUsedAsDS" checked="unchecked" />
-                            <span class="helper" title="Indicates if this needs to be used as the Digital Signature">
-                                Use as digital signature
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="scepUseForKE" type="checkbox" class="form-control operationDataKeys" data-key="scepUseForKE" checked="unchecked" />
-                            <span class="helper" title="Indicates if this needs to be used for Key Encipherment">
-                                Use for key encipherment
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepFingerprint">
-                            Fingerprint
-                            <span class="helper" title="Enter hex string to be used as a fingerprint or use button to create fingerprint from certificate">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepFingerprint" type="text" class="form-control operationDataKeys" data-key="scepFingerprint" data-default="" placeholder="">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of SCEP Configurations -->
-
         <!-- APN -->
         <div class="wr-hidden-operation" data-operation="apn">
             <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="APN_SETTINGS">
@@ -1689,90 +1562,13 @@
         </div>
         <!-- End of APN -->
 
-        <!-- Web Clips -->
-        <div class="wr-hidden-operation" data-operation="web-clips">
-            <div class="panel panel-default operation-data" data-operation="subscribed_calendar" data-operation-code="WEB_CLIPS">
-                <div class="panel-heading" role="tab">
-                    <h2 class="sub-title panel-title">
-                        Web Clips
-                        <label id="web-clips-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#webClips">
-                            <input type="checkbox" />
-                            <span class="helper"></span>
-                            <span class="text"></span>
-                        </label>
-                        <hr>
-                        <div class="panel-title-description">
-                            Use this section to configure Web Clips
-                        </div>
-                    </h2>
-                </div>
-                <div id="webClips" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="webClips">
-
-                    <div id="web-clips-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                        <i class="icon fw fw-error"></i><span></span>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="wcLabel">
-                            Label
-                            <span class="helper" title="The name to display for the Web Clip">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="wcLabel" type="text" class="form-control operationDataKeys" data-key="wcLabel" data-default="" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="wcURL">
-                            URL
-                            <span class="helper" title="The URL to be displayed when opening the Web Clip">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="wcURL" type="text" class="form-control operationDataKeys" data-key="wcURL" data-default="" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="wcRemovable" type="checkbox" class="form-control operationDataKeys" data-key="wcRemovable" checked="checked" />
-                            <span class="helper" title="Enable removal of the Web Clip">
-                                Removable
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="wcPrecomposedIcon" type="checkbox" class="form-control operationDataKeys" data-key="wcPrecomposedIcon"/>
-                            <span class="helper" title="The icon will be displayed with no added visual effects">
-                                Pre-composed Icon
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="wcFullScreen" type="checkbox" class="form-control operationDataKeys" data-key="wcFullScreen"/>
-                            <span class="helper" title="Displays the Web Clip as a full screen application">
-                                Full Screen
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of Web Clips -->
-
-        <!-- Email Settings -->
-        <div class="wr-hidden-operation" data-operation="email-settings">
-            <div class="panel panel-default operation-data" data-operation="email-settings" data-operation-code="EMAIL_SETTINGS">
-                <div class="panel-heading" role="tab">
+        <!-- Email -->
+        <div class="wr-hidden-operation" data-operation="email">
+            <div class="panel panel-default operation-data" data-operation="email" data-operation-code="EMAIL">
+                <div id="email-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Email Settings
-                        <label id="email-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#emailSettings">
+                        <label id="email-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#email-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
@@ -1783,9 +1579,9 @@
                         </div>
                     </h2>
                 </div>
-                <div id="emailSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="emailSettings">
+                <div id="email-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="email-body">
 
-                    <div id="email-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                    <div id="email-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
 
@@ -1874,7 +1670,7 @@
                 </div>
             </div>
         </div>
-        <!-- End of Email Settings -->
+        <!-- End of Email -->
 
         <!-- Restrictions -->
         <div class="wr-hidden-operation" data-operation="restrictions">
