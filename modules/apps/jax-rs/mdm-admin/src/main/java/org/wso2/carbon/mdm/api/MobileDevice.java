@@ -135,17 +135,8 @@ public class MobileDevice {
 	@GET
 	@Path("count")
 	public int getDeviceCount() throws MDMAPIException {
-
-		int deviceCount = 0;
-		List<Device> devices;
 		try {
-			devices = MDMAPIUtils.getDeviceManagementService().getAllDevices();
-			if (devices == null) {
-				Response.status(Response.Status.NOT_FOUND);
-			} else {
-				deviceCount = devices.size();
-			}
-			return deviceCount;
+			return MDMAPIUtils.getDeviceManagementService().getDeviceCount();
 		} catch (DeviceManagementException e) {
 			String msg = "Error occurred while fetching the device count.";
 			log.error(msg, e);

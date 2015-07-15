@@ -54,9 +54,9 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_NAME] =
                 privateMethods.validateAndReturn(device.getName());
             deviceObject[constants.DEVICE_OWNERSHIP] =
-                privateMethods.validateAndReturn(device.getOwnership());
+                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
             deviceObject[constants.DEVICE_OWNER] =
-                privateMethods.validateAndReturn(device.getOwner());
+                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwner());
             deviceObject[constants.DEVICE_TYPE] =
                 privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
@@ -92,9 +92,9 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_NAME] =
                 privateMethods.validateAndReturn(device.getName());
             deviceObject[constants.DEVICE_OWNERSHIP] =
-                privateMethods.validateAndReturn(device.getOwnership());
+                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
             deviceObject[constants.DEVICE_OWNER] =
-                privateMethods.validateAndReturn(device.getOwner());
+                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwner());
             deviceObject[constants.DEVICE_TYPE] =
                 privateMethods.validateAndReturn(device.getType());
             deviceObject[constants.DEVICE_PROPERTIES] = {};
@@ -191,8 +191,8 @@ deviceModule = function () {
             var deviceObject = {};
             deviceObject[constants.DEVICE_IDENTIFIER] = device.getDeviceIdentifier();
             deviceObject[constants.DEVICE_NAME] = privateMethods.validateAndReturn(device.getName());
-            deviceObject[constants.DEVICE_OWNERSHIP] = privateMethods.validateAndReturn(device.getOwnership());
-            deviceObject[constants.DEVICE_OWNER] = device.getOwner();
+            deviceObject[constants.DEVICE_OWNERSHIP] = privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
+            deviceObject[constants.DEVICE_OWNER] = device.getEnrolmentInfo().getOwner();
             deviceObject[constants.DEVICE_TYPE] = device.getType();
             if (device.getType() == constants.PLATFORM_IOS) {
                 properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
