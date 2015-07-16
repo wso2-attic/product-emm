@@ -47,7 +47,17 @@ var iosOperationConstants = {
     "RESTRICTIONS_OPERATION": "restrictions",
     "RESTRICTIONS_OPERATION_CODE": "RESTRICTION",
     "WIFI_OPERATION": "wifi",
-    "WIFI_OPERATION_CODE": "WIFI"
+    "WIFI_OPERATION_CODE": "WIFI",
+    "EMAIL_OPERATION": "email",
+    "EMAIL_OPERATION_CODE": "EMAIL",
+    "AIRPLAY_OPERATION": "airplay",
+    "AIRPLAY_OPERATION_CODE": "AIRPLAY",
+    "LDAP_OPERATION": "ldap",
+    "LDAP_OPERATION_CODE": "LDAP",
+    "CALENDAR_OPERATION": "calendar",
+    "CALENDAR_OPERATION_CODE": "CALDAV",
+    "CALENDAR_SUBSCRIPTION_OPERATION": "calendar-subscription",
+    "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION"
 };
 
 /**
@@ -407,14 +417,14 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": operation
                     };
                     continueToCheckNextInputs = false;
-                } else if (!inputIsValidAgainstLength(wifiSSID, 1, 100)) {
+                } else if (wifiSSID && !inputIsValidAgainstLength(wifiSSID, 1, 100)) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "Wi-Fi SSID exceeds maximum allowed length. Please check.",
                         "erroneousFeature": operation
                     };
                     continueToCheckNextInputs = false;
-                } else if (!inputIsValidAgainstLength(wifiDomainName, 1, 100)) {
+                } else if (wifiDomainName && !inputIsValidAgainstLength(wifiDomainName, 1, 100)) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "Wi-Fi Domain name exceeds maximum allowed length. Please check.",
@@ -466,14 +476,14 @@ validateStep["policy-profile"] = function () {
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                        } else if (wifiProxyPort && !$.isNumeric(wifiProxyPort)) {
+                        } else if (!$.isNumeric(wifiProxyPort)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Wi-Fi Proxy Port requires a number input. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                        } else if (wifiProxyPort && $.isNumeric(wifiProxyPort) && !inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
+                        } else if (!inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Wi-Fi Proxy Port is not within the range " +
@@ -721,7 +731,8 @@ validateStep["policy-profile"] = function () {
                             if (!childInput) {
                                 // if child input field is empty
                                 emptyChildInputCount++;
-                            } else if (!inputIsValidAgainstLength(childInput, 6, 6) && !inputIsValidAgainstLength(childInput, 10, 10)) {
+                            } else if (!inputIsValidAgainstLength(childInput, 6, 6) &&
+                                !inputIsValidAgainstLength(childInput, 10, 10)) {
                                 outOfAllowedLengthCount++;
                             } else if (!inputIsValidAgainstRegExp(/^[a-fA-F0-9]+$/, childInput)) {
                                 invalidAgainstRegExCount++;
@@ -1637,7 +1648,7 @@ $(document).ready(function () {
             find("[data-add-form-element=clone]").attr("data-add-form-clone", $(this).attr("href"));
 
         // adding class .child-input to capture text-input-array-values
-        $("input", clonedForm).addClass("child-input");
+        $("input, select", clonedForm).addClass("child-input");
 
         // remove form button click function
         $(clonedForm).find("[data-click-event=remove-form]").bind("click", function () {

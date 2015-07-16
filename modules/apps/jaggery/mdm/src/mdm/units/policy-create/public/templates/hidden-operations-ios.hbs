@@ -593,7 +593,7 @@
                                 Add Certificate Payload Anchor UUID
                             </a>
                         </label>
-                        <div id="wifi-payload-certificate-anchor-uuids" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiPayloadCertificateAnchorUUIDs">
+                        <div id="wifi-payload-certificate-anchor-uuids" class="operationDataKeys grouped-array-input one-column-input-array" data-key="wifiPayloadCertificateAnchorUUIDs">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -654,7 +654,7 @@
                                 Add TLS Trusted Server Certificate Name
                             </a>
                         </label>
-                        <div id="wifi-tls-trusted-server-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiTLSTrustedServerNames">
+                        <div id="wifi-tls-trusted-server-names" class="operationDataKeys grouped-array-input one-column-input-array" data-key="wifiTLSTrustedServerNames">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -833,7 +833,7 @@
                                 Add Roaming Consortium OI
                             </a>
                         </label>
-                        <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiRoamingConsortiumOIs">
+                        <div id="wifi-roaming-consortium-ois" class="operationDataKeys grouped-array-input one-column-input-array" data-key="wifiRoamingConsortiumOIs">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                 <tr>
@@ -894,7 +894,7 @@
                                 Add NAI Realm Name
                             </a>
                         </label>
-                        <div id="wifi-nai-realm-names" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="wifiNAIRealmNames">
+                        <div id="wifi-nai-realm-names" class="operationDataKeys grouped-array-input one-column-input-array" data-key="wifiNAIRealmNames">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -955,7 +955,7 @@
                                 Add MCC/MNC Pair
                             </a>
                         </label>
-                        <div id="wifi-mcc-and-mncs" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="wifiMCCAndMNCs">
+                        <div id="wifi-mcc-and-mncs" class="operationDataKeys grouped-array-input two-column-joined-input-array" data-key="wifiMCCAndMNCs">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                 <tr>
@@ -1307,7 +1307,7 @@
 
         <!-- AirPlay -->
         <div class="wr-hidden-operation" data-operation="airplay">
-            <div class="panel panel-default operation-data" data-operation="airplay" data-operation-code="AIR_PLAY">
+            <div class="panel panel-default operation-data" data-operation="airplay" data-operation-code="AIRPLAY">
                 <div id="airplay-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         AirPlay Settings
@@ -1346,7 +1346,7 @@
                                 Add Credential
                             </a>
                         </label>
-                        <div id="airplay-credentials" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="airplayCredentials">
+                        <div id="airplay-credentials" class="operationDataKeys grouped-array-input two-column-key-value-pair-array" data-key="airplayCredentials">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -1371,10 +1371,10 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Device Name">
-                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Require name of the AirPlay destination ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="deviceName" data-default="" placeholder="[ Requires AirPlay destination name ]" />
                                         </td>
                                         <td data-title="Password">
-                                            <input type="password" class="form-control grid-input-text" data-default="" placeholder="[ Optional password for the AirPlay destination ]" />
+                                            <input type="password" class="form-control grid-input-text" data-child-key="password" data-default="" placeholder="[ Optional field. Requires AirPlay destination password ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -1411,7 +1411,7 @@
                                 Add Destination
                             </a>
                         </label>
-                        <div id="airplay-destinations" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="airplayDestinations">
+                        <div id="airplay-destinations" class="operationDataKeys grouped-array-input one-column-input-array" data-key="airplayDestinations">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -2655,7 +2655,7 @@
                                             Add Application Bundle ID
                                         </a>
                                     </label>
-                                    <div id="restrictions-autonomous-single-app-mode-permitted-app-ids" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="restrictionsAutonomousSingleAppModePermittedAppIDs">
+                                    <div id="restrictions-autonomous-single-app-mode-permitted-app-ids" class="operationDataKeys grouped-array-input one-column-input-array" data-key="restrictionsAutonomousSingleAppModePermittedAppIDs">
                                         <table class="table table-responsive table-striped">
                                             <thead>
                                                 <tr>
