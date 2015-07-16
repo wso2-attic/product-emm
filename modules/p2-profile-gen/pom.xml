@@ -113,6 +113,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.webapp.authenticator.framework.server.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.oauth.extensions.server.feature:${carbon.device.mgt.version}
+                                </featureArtifactDef>
                                 <!-- End of Device Management Features -->
 
                                 <!-- Mobile Device Management Features -->
@@ -256,15 +259,15 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.claim.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
-                             <!--   <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.iwa.ui.feature:${carbon.identity.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.xacml.server.feature:${carbon.identity.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.notification.mgt.server.feature:${carbon.identity.version}
-                                </featureArtifactDef>-->
+                                <!--   <featureArtifactDef>
+                                       org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.iwa.ui.feature:${carbon.identity.version}
+                                   </featureArtifactDef>
+                                   <featureArtifactDef>
+                                       org.wso2.carbon.identity:org.wso2.carbon.identity.xacml.server.feature:${carbon.identity.version}
+                                   </featureArtifactDef>
+                                   <featureArtifactDef>
+                                       org.wso2.carbon.identity:org.wso2.carbon.identity.notification.mgt.server.feature:${carbon.identity.version}
+                                   </featureArtifactDef>-->
                                 <!-- End of Identity Features -->
 
                                 <!-- Registry Features -->
@@ -345,6 +348,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.webapp.authenticator.framework.server.feature.group</id>
+                                    <version>${carbon.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.oauth.extensions.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <!-- End of Device Management Features -->
@@ -484,11 +491,15 @@
                                 </feature>
                                 <!-- SSO Features -->
                                 <feature>
-                                    <id>org.wso2.carbon.identity.application.authenticator.basicauth.server.feature.group</id>
+                                    <id>
+                                        org.wso2.carbon.identity.application.authenticator.basicauth.server.feature.group
+                                    </id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.identity.application.authentication.framework.server.feature.group</id>
+                                    <id>
+                                        org.wso2.carbon.identity.application.authentication.framework.server.feature.group
+                                    </id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
                                 <feature>
@@ -524,18 +535,18 @@
                                     <id>org.wso2.carbon.claim.mgt.feature.group</id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
-                         <!--       <feature>
-                                    <id>org.wso2.carbon.identity.authenticator.iwa.ui.feature.group</id>
-                                    <version>${carbon.identity.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.identity.xacml.server.feature.group</id>
-                                    <version>${carbon.identity.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.identity.notification.mgt.server.feature.group</id>
-                                    <version>${carbon.identity.version}</version>
-                                </feature>-->
+                                <!--       <feature>
+                                           <id>org.wso2.carbon.identity.authenticator.iwa.ui.feature.group</id>
+                                           <version>${carbon.identity.version}</version>
+                                       </feature>
+                                       <feature>
+                                           <id>org.wso2.carbon.identity.xacml.server.feature.group</id>
+                                           <version>${carbon.identity.version}</version>
+                                       </feature>
+                                       <feature>
+                                           <id>org.wso2.carbon.identity.notification.mgt.server.feature.group</id>
+                                           <version>${carbon.identity.version}</version>
+                                       </feature>-->
                                 <!-- End of Identity Features -->
 
                                 <!-- Registry Features -->
