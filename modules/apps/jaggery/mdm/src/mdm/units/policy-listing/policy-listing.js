@@ -1,5 +1,5 @@
 function onRequest(context) {
-    //var log = new Log("policy-listing.js");
+    // var log = new Log("policy-listing.js");
     var policyModule = require("/modules/policy.js").policyModule;
     var policies = policyModule.getPolicies();
     context.saveNewPrioritiesButtonEnabled = false;
@@ -12,6 +12,7 @@ function onRequest(context) {
         context.policyCountStatusMsg = "Drag & Move to re-order Policy Priority.";
         context.saveNewPrioritiesButtonEnabled = true;
     }
+
     context.policies = policies;
     return context;
 }

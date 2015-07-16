@@ -276,7 +276,7 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "EMAIL_SETTINGS":
+            case "EMAIL":
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -287,6 +287,54 @@ var operationModule = function () {
                         "emAllowAddressSyncing": operationData["emAllowAddressSyncing"],
                         "emUseInMail": operationData["emUseInMail"],
                         "emEnableMime": operationData["emEnableMime"]
+                    }
+                };
+                break;
+            case "AIR_PLAY":
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "airPlayDestinations": operationData["airplayDestinations"],
+                        "airPlayCredentials": operationData["airplayCredentials"]
+                    }
+                };
+                break;
+            case "LDAP":
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "accountDescription": operationData["ldapAccountDescription"],
+                        "accountHostName": operationData["ldapAccountHostname"],
+                        "accountUseSSL": operationData["ldapUseSSL"],
+                        "accountUsername": operationData["ldapAccountUsername"],
+                        "accountPassword": operationData["ldapAccountPassword"],
+                        "ldapSearchSettings": operationData["ldapSearchSettings"]
+                    }
+                };
+                break;
+            case "CALDAV":
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "accountDescription": operationData["calendarAccountDescription"],
+                        "hostName": operationData["calendarAccountHostname"],
+                        "username": operationData["calendarAccountUsername"],
+                        "password": operationData["calendarAccountPassword"],
+                        "useSSL": operationData["calendarUseSSL"],
+                        "port": operationData["calendarAccountPort"],
+                        "principalURL": operationData["calendarPrincipalURL"]
+                    }
+                };
+                break;
+            case "CALENDAR_SUBSCRIPTION":
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "accountDescription": operationData["calendarSubscriptionDescription"],
+                        "hostName": operationData["calendarSubscriptionHostname"],
+                        "username": operationData["calendarSubscriptionUsername"],
+                        "password": operationData["calendarSubscriptionPassword"],
+                        "useSSL": operationData["calendarSubscriptionUseSSL"]
                     }
                 };
                 break;

@@ -24,6 +24,22 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('email', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-invitation fw-stack-2x"></i>
+            </span>
+            Email Settings
+            <span id="email-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="email-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('airplay', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-airplay fw-stack-2x"></i>
+            </span>
+            AirPlay Settings
+            <span id="airplay-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="airplay-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('ldap', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-ldap fw-stack-2x"></i>
@@ -48,53 +64,13 @@
             <span id="calendar-subscription-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="calendar-subscription-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('scep-settings', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-scep fw-stack-2x"></i>
-            </span>
-            SCEP
-            <span id="scep-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="scep-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('email-settings', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-invitation fw-stack-2x"></i>
-            </span>
-            Email Settings
-            <span id="email-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="email-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('airplay', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-airplay fw-stack-2x"></i>
-            </span>
-            AirPlay Settings
-            <span id="airplay-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="airplay-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">
-            <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-settings fw-stack-2x"></i>
-            </span>
-            Access Point Name
-            <span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
-        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('contacts', this)">-->
+        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">-->
             <!--<span class="wr-hidden-operations-icon fw-stack">-->
-                <!--<i class="fw fw-contact fw-stack-2x"></i>-->
+                <!--<i class="fw fw-settings fw-stack-2x"></i>-->
             <!--</span>-->
-            <!--Contacts-->
-            <!--<span id="contacts-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
-            <!--<span id="contacts-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
-        <!--</a>-->
-        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('web-clips', this)">-->
-            <!--<span class="wr-hidden-operations-icon fw-stack">-->
-                <!--<i class="fw fw-webclip fw-stack-2x"></i>-->
-            <!--</span>-->
-            <!--Web Clips-->
-            <!--<span id="web-clips-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
-            <!--<span id="web-clips-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
+            <!--Access Point Name-->
+            <!--<span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
+            <!--<span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
         <!--</a>-->
     </div>
 
@@ -1030,95 +1006,458 @@
         </div>
         <!-- End of Wifi -->
 
-        <!-- Contacts -->
-        <div class="wr-hidden-operation" data-operation="contacts">
-            <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="CONTACTS">
-                <div class="panel-heading" role="tab">
+        <!-- Email -->
+        <div class="wr-hidden-operation" data-operation="email">
+            <div class="panel panel-default operation-data" data-operation="email" data-operation-code="EMAIL">
+                <div id="email-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        Contacts
-                        <label id="contacts-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#contacts">
+                        Email Settings
+                        <label id="email-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#email-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
                         </label>
                         <hr>
                         <div class="panel-title-description">
-                            Use this section to define settings for connecting to CardDAV servers
+                            These configurations can be used to define settings for connecting
+                            to your POP or IMAP email accounts.
+                            Once this configuration profile is installed on an iOS device,
+                            corresponding users will not be able to modify these settings on their devices.
                         </div>
                     </h2>
                 </div>
-                <div id="contacts" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="contacts">
+                <div id="email-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="email-body">
 
-                    <div id="contacts-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                    <div id="email-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountDescription">
+                        <label class="wr-input-label" for="email-account-description">
                             Account Description
-                            <span class="helper" title="The display name of the account (e.g. Company CardDAV Account)">
+                            <span class="helper" title="Display name of the account. ( e.g. Company Mail Account )">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountDescription" type="text" class="form-control operationDataKeys" data-key="accountDescription" data-default="" placeholder="[ My CardDAV Account ]" />
+                        <input id="email-account-description" type="text" class="form-control operationDataKeys" data-key="emailAccountDescription" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountHostname">
-                            Account Hostname and Port
-                            <span class="helper" title="The CardDAV hostname or IP address and port number">
+                        <label class="wr-input-label" for="email-account-type">
+                            Account Type
+                            <span class="helper" title="Protocol for accessing the email account.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <div class="clearfix">
-                            <div class="col-md-7"><input id="accountHostname" type="text" class="form-control operationDataKeys" data-key="accountHostname" data-default="" placeholder="[ Required ]"> : </div>
-                            <div class="col-md-5"><input id="accountPort" type="text" class="form-control operationDataKeys" data-key="accountPort" data-default="" placeholder="[ 8843 ]"></div>
+                        <select id="email-account-type" class="form-control operationDataKeys" data-key="emailAccountType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'imap-account-type', ['EmailTypeIMAP'])">
+                            <option value="EmailTypeIMAP" selected="selected">IMAP</option>
+                            <option value="EmailTypePOP">POP</option>
+                        </select>
+                    </div>
+
+                    <div id="imap-account-type" class="slidable-pane">
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="email-incoming-mail-server-imap-path-prefix">
+                                Path Prefix
+                            </label>
+                            <input id="email-incoming-mail-server-imap-path-prefix" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerIMAPPathPrefix" data-default="" placeholder="[ Optional field ]" />
                         </div>
+
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="principalURL">
-                            Principal URL
-                            <span class="helper" title="The principal URL for the CardDAV account">
+                        <label class="wr-input-label" for="email-account-name">
+                            Email Account Name
+                            <span class="helper" title="Display name of the user. This is the user name in sent messages, etc.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="principalURL" type="text" class="form-control operationDataKeys" data-key="principalURL" data-default="" placeholder="[ Optional ]" />
+                        <input id="email-account-name" type="text" class="form-control operationDataKeys" data-key="emailAccountName" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountUsername">
-                            Account Username
-                            <span class="helper" title="The CardDav username">
+                        <label class="wr-input-label" for="email-address">
+                            Email Address
+                            <span class="helper" title="Address of the account. Designates the full email address for the account. If not present in the payload, the device prompts for this string during profile installation.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="accountUsername" type="text" class="form-control operationDataKeys" data-key="accountUsername" data-default="" placeholder="[ Set On Device ]" />
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="accountPassword">
-                            Account Password
-                            <span class="helper" title="The CardDAV password">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="accountPassword" type="password" class="form-control operationDataKeys" data-key="accountPassword" placeholder="[ Optional ]" />
+                        <input id="email-address" type="text" class="form-control operationDataKeys" data-key="emailAddress" data-default="" placeholder="[ Optional field. Set On Device ]" />
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="useSSL" type="checkbox" class="form-control operationDataKeys" data-key="useSSL" checked="checked" />
-                            <span class="helper" title="Enable Secure Socket Layer communication with CardDAV server">
-                                Use SSL
+                            <input id="email-prevent-move" type="checkbox" class="form-control operationDataKeys" data-key="emailPreventMove" data-default="false" />
+                            <span class="helper" title="When checked, messages may not be moved out of this email account into another account. Also prevents forwarding or replying from a different account than the message was originated from. Available only in iOS 5.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Prevent Move
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
                     </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="email-prevent-app-sheet" type="checkbox" class="form-control operationDataKeys" data-key="emailPreventAppSheet" data-default="false" />
+                            <span class="helper" title="When checked, this account is not available for sending mail in third-party applications. Available only in iOS 5.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Prevent App Sheet
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="email-smime-enabled" type="checkbox" class="form-control operationDataKeys" data-key="emailSMIMEEnabled" data-default="false" />
+                            <span class="helper" title="When checked, this account supports S/MIME. Available only in iOS 5.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Enable S/MIME
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-smime-signing-certificate-uuid">
+                            S/MIME Signing Certificate UUID
+                            <span class="helper" title="Payload UUID of the identity certificate used to sign messages sent from this account. Available only in iOS 5.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-smime-signing-certificate-uuid" type="text" class="form-control operationDataKeys" data-key="emailSMIMESigningCertificateUUID" data-default="" placeholder="[ Optional field ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-smime-encryption-certificate-uuid">
+                            S/MIME Encryption Certificate UUID
+                            <span class="helper" title="PayloadUUID of the identity certificate used to decrypt messages coming into this account. Available only in iOS 5.0 and later.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-smime-encryption-certificate-uuid" type="text" class="form-control operationDataKeys" data-key="emailSMIMEEncryptionCertificateUUID" data-default="" placeholder="[ Optional field ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="email-smime-enable-per-message-switch" type="checkbox" class="form-control operationDataKeys" data-key="emailSMIMEEnablePerMessageSwitch" data-default="false" />
+                            <span class="helper" title="When checked, enable per-message signing and encryption switch.">
+                                &nbsp;&nbsp;&nbsp;Enable Per-Message Signing and Encryption Switch
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="email-disable-mail-recent-syncing" type="checkbox" class="form-control operationDataKeys" data-key="emailDisableMailRecentSyncing" data-default="false" />
+                            <span class="helper" title="When checked, this account is excluded from recent address syncing. Available only in iOS 6.0 and later.">
+                                &nbsp;&nbsp;&nbsp;Allow Recent Address syncing
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <br>
+                    Incoming Mail Settings :
+                    <hr>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-incoming-mail-server-hostname">
+                            Incoming Mail Server Hostname
+                            <span class="helper" title="Designates the incoming mail server host name ( or IP address ).">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-incoming-mail-server-hostname" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerHostname" data-default="" placeholder="[ Required field ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="email-incoming-use-ssl" type="checkbox" class="form-control operationDataKeys" data-key="emailIncomingUseSSL" data-default="true" checked="checked" />
+                            <span class="helper" title="Designates whether the incoming mail server uses SSL for authentication.">
+                                &nbsp;&nbsp;&nbsp;Use Secure Socket Layer ( SSL )
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-incoming-mail-server-port-number">
+                            Incoming Mail Server Port Number
+                            <span class="helper" title="Designates the incoming mail server port number. If no port number is specified, the default port for a given protocol is used.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-incoming-mail-server-port-number" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerPortNumber" data-default="" placeholder="[ Required field which requires a number input ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-incoming-mail-server-authentication">
+                            Incoming Mail Server Authentication Type
+                            <span class="helper" title="Designates the authentication scheme for incoming mail.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="email-incoming-mail-server-authentication" class="form-control operationDataKeys" data-key="emailIncomingMailServerAuthentication" data-default="0">
+                            <option value="EmailAuthNone" selected="selected">None</option>
+                            <option value="EmailAuthPassword">Password</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-incoming-mail-server-username">
+                            Incoming Mail Server Username
+                            <span class="helper" title="Designates the user name for the email account, usually the same as the email address up to the @ character. If not present in the payload, and the account is set up to require authentication for incoming email, the device will prompt for this string during profile installation.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-incoming-mail-server-username" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerUsername" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-incoming-mail-server-password">
+                            Incoming Mail Server Password
+                            <span class="helper" title="Password for the Incoming Mail Server. Use only with encrypted profiles.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-incoming-mail-server-password" type="password" class="form-control operationDataKeys" data-key="emailIncomingMailServerPassword" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
+                    <br>
+                    Outgoing Mail Settings :
+                    <hr>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-outgoing-mail-server-hostname">
+                            Outgoing Mail Server Hostname
+                            <span class="helper" title="Designates the outgoing mail server host name ( or IP address ).">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-outgoing-mail-server-hostname" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerHostname" data-default="" placeholder="[ Required field ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="email-outgoing-use-ssl" type="checkbox" class="form-control operationDataKeys" data-key="emailOutgoingUseSSL" data-default="true" checked="checked" />
+                            <span class="helper" title="Designates whether the outgoing mail server uses SSL for authentication.">
+                                &nbsp;&nbsp;&nbsp;Use Secure Socket Layer ( SSL )
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-outgoing-mail-server-port-number">
+                            Outgoing Mail Server Port Number
+                            <span class="helper" title="Designates the outgoing mail server port number. If no port number is specified, the default port for a given protocol is used.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-outgoing-mail-server-port-number" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerPortNumber" data-default="" placeholder="[ Required field which requires a number input ]" />
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-outgoing-mail-server-authentication">
+                            Outgoing Mail Server Authentication Type
+                            <span class="helper" title="Designates the authentication scheme for outgoing mail.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="email-outgoing-mail-server-authentication" class="form-control operationDataKeys" data-key="emailOutgoingMailServerAuthentication" data-default="0">
+                            <option value="EmailAuthNone" selected="selected">None</option>
+                            <option value="EmailAuthPassword">Password</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-outgoing-mail-server-username">
+                            Outgoing Mail Server Username
+                            <span class="helper" title="Designates the user name for the email account, usually the same as the email address up to the @ character. If not present in the payload, and the account is set up to require authentication for outgoing email, the device will prompt for this string during profile installation.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-outgoing-mail-server-username" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerUsername" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="email-outgoing-password-same-as-incoming-password" type="checkbox" class="form-control operationDataKeys" data-key="emailOutgoingPasswordSameAsIncomingPassword" data-default="false" />
+                            <span class="helper" title="When checked, the user will be prompted for the password only once and it will be used for both outgoing and incoming mail.">
+                                &nbsp;&nbsp;&nbsp;Outgoing password same as incoming
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="email-outgoing-mail-server-password">
+                            Outgoing Mail Server Password
+                            <span class="helper" title="Password for the Outgoing Mail Server. Use only with encrypted profiles.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="email-outgoing-mail-server-password" type="password" class="form-control operationDataKeys" data-key="emailOutgoingMailServerPassword" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
                 </div>
             </div>
         </div>
-        <!-- End of Contacts -->
+        <!-- End of Email -->
+
+        <!-- AirPlay -->
+        <div class="wr-hidden-operation" data-operation="airplay">
+            <div class="panel panel-default operation-data" data-operation="airplay" data-operation-code="AIR_PLAY">
+                <div id="airplay-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        AirPlay Settings
+                        <label id="airplay-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#airplay-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            This configuration can be used to define settings for connecting to AirPlay destinations.
+                            Once this configuration profile is installed on an iOS device,
+                            corresponding users will not be able to modify these settings on their devices.
+                        </div>
+                    </h2>
+                </div>
+                <div id="airplay-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="airplay-body">
+
+                    <div id="airplay-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="airplay-credentials">
+                            AirPlay Credentials
+                            <span class="helper" title="If present, sets passwords for known AirPlay destinations.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#airplay-credentials-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Credential
+                            </a>
+                        </label>
+                        <div id="airplay-credentials" class="operationDataKeys grouped-array-input two-column-text-field-array" data-key="airplayCredentials">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>Device Name</th>
+                                        <th>Password</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#airplay-credentials-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="4">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#airplay-credentials-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="Device Name">
+                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Require name of the AirPlay destination ]" />
+                                        </td>
+                                        <td data-title="Password">
+                                            <input type="password" class="form-control grid-input-text" data-default="" placeholder="[ Optional password for the AirPlay destination ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#airplay-credentials-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="airplay-destinations">
+                            AirPlay Destinations Whitelist
+                            <span class="helper" title="Supervised only (ignored otherwise). If present, only AirPlay destinations present in this list are available to the device.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#airplay-destinations-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Destination
+                            </a>
+                        </label>
+                        <div id="airplay-destinations" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="airplayDestinations">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No :</th>
+                                        <th>Destination</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#airplay-destinations-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="3">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#airplay-destinations-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No :">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="Destination">
+                                            <input type="text" class="form-control grid-input-text" data-default="00:00:00:00:00:00" value="00:00:00:00:00:00" placeholder="[ Requires Device ID of the AirPlay destination ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#airplay-destinations-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                    Remove
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End of AirPlay -->
 
         <!-- LDAP -->
         <div class="wr-hidden-operation" data-operation="ldap">
@@ -1167,7 +1506,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-control checkbox">
-                            <input id="ldap-use-ssl" type="checkbox" class="form-control operationDataKeys" data-key="ldapUseSSL" checked="checked" />
+                            <input id="ldap-use-ssl" type="checkbox" class="form-control operationDataKeys" data-key="ldapUseSSL" data-default="true" checked="checked" />
                             <span class="helper" title="Having this checked, would enable Secure Socket Layer communication.">
                                 &nbsp;&nbsp;&nbsp;Use Secure Socket Layer ( SSL )
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1211,7 +1550,7 @@
                                 Add Search Setting
                             </a>
                         </label>
-                        <div id="ldap-search-settings" class="operationDataKeys grouped-array-input one-column-text-field-array" data-key="ldapSearchSettings">
+                        <div id="ldap-search-settings" class="operationDataKeys grouped-array-input three-column-text-field-array" data-key="ldapSearchSettings">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -1453,173 +1792,6 @@
         </div>
         <!-- End of Calendar subscription -->
 
-        <!-- SCEP Settings -->
-        <div class="wr-hidden-operation" data-operation="scep-settings">
-            <div class="panel panel-default operation-data" data-operation="scep-settings" data-operation-code="SCEP_SETTINGS">
-                <div class="panel-heading" role="tab">
-                    <h2 class="sub-title panel-title">
-                        SCEP Settings
-                        <label id="scep-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#scepSettings">
-                            <input type="checkbox" />
-                            <span class="helper"></span>
-                            <span class="text"></span>
-                        </label>
-                        <hr>
-                        <div class="panel-title-description">
-                            Use this section to define settings for obtaining certificates from SCEP servers
-                        </div>
-                    </h2>
-                </div>
-                <div id="scepSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="scepSettings">
-
-                    <div id="scep-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                        <i class="icon fw fw-error"></i><span></span>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepURL">
-                            URL
-                            <span class="helper" title="The base URL for the SCEP server">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepURL" type="text" class="form-control operationDataKeys" data-key="scepURL" data-default="" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepName">
-                            Name
-                            <span class="helper" title="The name of the instance: CA-IDENT">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepName" type="text" class="form-control operationDataKeys" data-key="scepName" data-default="" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepSubject">
-                            Subject
-                            <span class="helper" title="The name of the instance: CA-IDENT">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepSubject" type="text" class="form-control operationDataKeys" data-key="scepSubject" data-default="" placeholder="[ Optional ] Ex. O=Company Name, CN=Foo">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepSubjectAlternativeNameType">
-                            Subject Alternative Name Type
-                            <span class="helper" title="The type of a subject alternative name">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <select id="scepSubjectAlternativeNameType" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameType" data-default="0">
-                            <option value="None" selected="selected">
-                                None
-                            </option>
-                            <option value="RFC 822 Name">RFC 822 Name</option>
-                            <option value="DNS Name">DNS Name</option>
-                            <option value="Uniform Resource Identifier">Uniform Resource Identifier</option>
-                        </select>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepSubjectAlternativeNameValue">
-                            Subject Alternative Name Value
-                            <span class="helper" title="The value of a subject alternative name">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepSubjectAlternativeNameValue" type="text" class="form-control operationDataKeys" data-key="scepSubjectAlternativeNameValue" data-default="" placeholder="">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepNTprincipalName">
-                            NT Principal Name
-                            <span class="helper" title="A NT principal name for use in the certificate request">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepNTprincipalName" type="text" class="form-control operationDataKeys" data-key="scepNTprincipalName" data-default="" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepRetries">
-                            Retries
-                            <span class="helper" title="The number of times to poll the SCEP server for a signed certificate before giving up">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepRetries" type="text" class="form-control operationDataKeys" data-key="scepRetries" data-default="" placeholder="[ Valid numeric value is required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepRetryDelay">
-                            Retry Delay
-                            <span class="helper" title="The number of seconds to wait between poll attempts">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepRetryDelay" type="text" class="form-control operationDataKeys" data-key="scepRetryDelay" data-default="" placeholder="[ Valid numeric value is required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepChallenge">
-                            Retry Delay
-                            <span class="helper" title="Used as the pre-shared key for automatic enrollment">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepChallenge" type="text" class="form-control operationDataKeys" data-key="scepChallenge" data-default="" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepKeySize">
-                            Key Size
-                            <span class="helper" title="Key size in bits">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <select id="scepKeySize" class="form-control operationDataKeys" data-key="scepKeySize" data-default="0">
-                            <option value="1024" selected="selected">1024</option>
-                            <option value="2048">2048</option>
-                        </select>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="scepUsedAsDS" type="checkbox" class="form-control operationDataKeys" data-key="scepUsedAsDS" checked="unchecked" />
-                            <span class="helper" title="Indicates if this needs to be used as the Digital Signature">
-                                Use as digital signature
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="scepUseForKE" type="checkbox" class="form-control operationDataKeys" data-key="scepUseForKE" checked="unchecked" />
-                            <span class="helper" title="Indicates if this needs to be used for Key Encipherment">
-                                Use for key encipherment
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="scepFingerprint">
-                            Fingerprint
-                            <span class="helper" title="Enter hex string to be used as a fingerprint or use button to create fingerprint from certificate">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="scepFingerprint" type="text" class="form-control operationDataKeys" data-key="scepFingerprint" data-default="" placeholder="">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of SCEP Configurations -->
-
         <!-- APN -->
         <div class="wr-hidden-operation" data-operation="apn">
             <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="APN_SETTINGS">
@@ -1633,7 +1805,7 @@
                         </label>
                         <hr>
                         <div class="panel-title-description">
-                            Use this section to specify advanced settings, such as a carrier Access Point Name (APN). (These settings should
+                            This configuration can be used to specify advanced settings, such as a carrier Access Point Name (APN). (These settings should
                             be managed only by trained professionals)
                         </div>
                     </h2>
@@ -1688,193 +1860,6 @@
             </div>
         </div>
         <!-- End of APN -->
-
-        <!-- Web Clips -->
-        <div class="wr-hidden-operation" data-operation="web-clips">
-            <div class="panel panel-default operation-data" data-operation="subscribed_calendar" data-operation-code="WEB_CLIPS">
-                <div class="panel-heading" role="tab">
-                    <h2 class="sub-title panel-title">
-                        Web Clips
-                        <label id="web-clips-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#webClips">
-                            <input type="checkbox" />
-                            <span class="helper"></span>
-                            <span class="text"></span>
-                        </label>
-                        <hr>
-                        <div class="panel-title-description">
-                            Use this section to configure Web Clips
-                        </div>
-                    </h2>
-                </div>
-                <div id="webClips" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="webClips">
-
-                    <div id="web-clips-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                        <i class="icon fw fw-error"></i><span></span>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="wcLabel">
-                            Label
-                            <span class="helper" title="The name to display for the Web Clip">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="wcLabel" type="text" class="form-control operationDataKeys" data-key="wcLabel" data-default="" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="wcURL">
-                            URL
-                            <span class="helper" title="The URL to be displayed when opening the Web Clip">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="wcURL" type="text" class="form-control operationDataKeys" data-key="wcURL" data-default="" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="wcRemovable" type="checkbox" class="form-control operationDataKeys" data-key="wcRemovable" checked="checked" />
-                            <span class="helper" title="Enable removal of the Web Clip">
-                                Removable
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="wcPrecomposedIcon" type="checkbox" class="form-control operationDataKeys" data-key="wcPrecomposedIcon"/>
-                            <span class="helper" title="The icon will be displayed with no added visual effects">
-                                Pre-composed Icon
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="wcFullScreen" type="checkbox" class="form-control operationDataKeys" data-key="wcFullScreen"/>
-                            <span class="helper" title="Displays the Web Clip as a full screen application">
-                                Full Screen
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of Web Clips -->
-
-        <!-- Email Settings -->
-        <div class="wr-hidden-operation" data-operation="email-settings">
-            <div class="panel panel-default operation-data" data-operation="email-settings" data-operation-code="EMAIL_SETTINGS">
-                <div class="panel-heading" role="tab">
-                    <h2 class="sub-title panel-title">
-                        Email Settings
-                        <label id="email-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#emailSettings">
-                            <input type="checkbox" />
-                            <span class="helper"></span>
-                            <span class="text"></span>
-                        </label>
-                        <hr>
-                        <div class="panel-title-description">
-                            Use this section to define settings for connecting to your IMAL or POP email accounts
-                        </div>
-                    </h2>
-                </div>
-                <div id="emailSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="emailSettings">
-
-                    <div id="email-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                        <i class="icon fw fw-error"></i><span></span>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="emAccountDescription">
-                            Account Description
-                            <span class="helper" title="The display name of the account (e.g. Company Mail Account)">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="emAccountDescription" type="text" class="form-control operationDataKeys" data-key="emAccountDescription" data-default="" placeholder="[ Required ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="emAccountType">
-                            Account Type
-                            <span class="helper" title="The protocol for accessing the email account">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <select id="emAccountType" class="form-control operationDataKeys" data-key="emAccountType" data-default="0">
-                            <option value="IMAP" selected="selected">IMAP</option>
-                            <option value="POP">POP</option>
-                        </select>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="emUserDisplayName">
-                            User Display Name
-                            <span class="helper" title="The display name of the user (e.g. 'John Appleseed')">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="emUserDisplayName" type="text" class="form-control operationDataKeys" data-key="emUserDisplayName" data-default="" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="emAddress">
-                            Email Address
-                            <span class="helper" title="The address of the account (e.g. 'john@example.com')">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="emAddress" type="text" class="form-control operationDataKeys" data-key="emAddress" data-default="" placeholder="[ Set On Device ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="emAllowMovingMessages" type="checkbox" class="form-control operationDataKeys" data-key="emAllowMovingMessages" checked="checked" />
-                            <span class="helper" title="Messages can be moved from this account to another">
-                                Allow user to move messages from this account
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="emAllowAddressSyncing" type="checkbox" class="form-control operationDataKeys" data-key="emAllowAddressSyncing" checked="checked" />
-                            <span class="helper" title="Include this account in recent address syncing">
-                                Allow recent address syncing
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="emUseInMail" type="checkbox" class="form-control operationDataKeys" data-key="emUseInMail" checked="unchecked" />
-                            <span class="helper" title="Send outgoing mails from this account only from Mail app">
-                                Use only in Mail
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-control checkbox">
-                            <input id="emEnableMime" type="checkbox" class="form-control operationDataKeys" data-key="emEnableMime" checked="unchecked" />
-                            <span class="helper" title="Support S/MIME for this account">
-                                Enable S/MIME
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of Email Settings -->
 
         <!-- Restrictions -->
         <div class="wr-hidden-operation" data-operation="restrictions">

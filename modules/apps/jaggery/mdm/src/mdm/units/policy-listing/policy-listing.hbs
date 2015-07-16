@@ -12,7 +12,14 @@
                                 <div class="col-lg-3 clearfix">
                                     <span class="wr-sortable-icon"><i class="fw fw-sort"></i></span>
                                     <span class="wr-sort-index"><i>{{priorityId}}</i></span>
-                                    <span class="wr-list-icon"><i class=" fw fw-android"></i></span>
+                                    <span class="wr-list-icon">
+                                        {{#equal platform "android"}}
+                                            <i class=" fw fw-android"></i>
+                                        {{/equal}}
+                                        {{#equal platform "ios"}}
+                                            <i class=" fw fw-apple"></i>
+                                        {{/equal}}
+                                    </span>
                                     <span class="wr-list-desc">
                                         <h3 class="wr-list-name">{{name}}</h3>
                                         <span class="wr-list-username">{{platform}}</span>
