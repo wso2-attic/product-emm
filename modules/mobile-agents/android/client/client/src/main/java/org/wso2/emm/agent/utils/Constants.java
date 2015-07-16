@@ -26,7 +26,7 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
-    public static final String GCM_PROJECT_NUMBER = "487975211959";
+    public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
     public static final String REG_ID = "reg_id";
 
 	public static final String SERVER_PORT = "9763";

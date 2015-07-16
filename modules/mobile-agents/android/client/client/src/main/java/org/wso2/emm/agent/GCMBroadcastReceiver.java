@@ -23,11 +23,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
+import com.google.android.gms.gcm.GcmReceiver;
 
 /**
  * This is to receive GCM broadcast messages from Google server.
  */
-public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
+public class GCMBroadcastReceiver extends GcmReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		ComponentName componentName = new ComponentName(context.getPackageName(), GCMIntentService.class.getName());
