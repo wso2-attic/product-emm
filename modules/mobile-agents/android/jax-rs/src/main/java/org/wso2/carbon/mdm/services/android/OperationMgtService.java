@@ -822,6 +822,49 @@ public class OperationMgtService {
         }
     }
 
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("disenroll")
+	public Response setDisenrollment(@HeaderParam("Accept") String acceptHeader,
+			DisenrollmentBeanWrapper disenrollmentBeanWrapper) {
+
+		if (log.isDebugEnabled()) {
+			log.debug("Invoking Android device disenrollment operation");
+		}
+
+		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+		Message message = new Message();
+
+		try {
+			Disenrollment disenrollment = disenrollmentBeanWrapper.getOperation();
+
+			if (disenrollment == null) {
+				throw new OperationManagementException("Disenrollment bean is empty");
+			}
+
+			CommandOperation operation = new CommandOperation();
+			operation.setCode(AndroidConstants.OperationCodes.DISENROLL);
+			operation.setType(Operation.Type.COMMAND);
+			operation.setEnabled(disenrollment.isEnabled());
+
+			return AndroidAPIUtils.getOperationResponse(disenrollmentBeanWrapper.getDeviceIDs(), operation,
+					message, responseMediaType);
+
+		} catch (OperationManagementException e) {
+			String errorMessage = "Issue in retrieving operation management service instance";
+			message.setResponseMessage(errorMessage);
+			message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+			log.error(errorMessage, e);
+			throw new AndroidOperationException(message, responseMediaType);
+		} catch (DeviceManagementException e) {
+			String errorMessage = "Issue in retrieving device management service instance";
+			message.setResponseMessage(errorMessage);
+			message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+			log.error(errorMessage, e);
+			throw new AndroidOperationException(message, responseMediaType);
+		}
+	}
+
     public void updateOperations(String deviceId, List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
             throws OperationManagementException {
 

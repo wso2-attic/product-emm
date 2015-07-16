@@ -83,6 +83,7 @@ public final class AndroidConstants {
 		public static final String DEVICE_RING = "DEVICE_RING";
 		public static final String NOTIFICATION = "NOTIFICATION";
 		public static final String WEBCLIP = "WEBCLIP";
+		public static final String DISENROLL = "DISENROLL";
 	}
 
 	public final class StatusCodes{
