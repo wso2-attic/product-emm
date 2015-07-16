@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -47,7 +48,7 @@ public class MobileDevice {
      */
     @GET
     public List<Device> getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
-                                      @QueryParam("role") String role) throws MDMAPIException {
+                                      @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status) throws MDMAPIException {
         List<Device> devices;
         try {
             DeviceManagementProviderService service = MDMAPIUtils.getDeviceManagementService();
@@ -58,7 +59,9 @@ public class MobileDevice {
                 allDevices = service.getDevicesOfUser(user);
             } else if (role != null){
                 allDevices = service.getAllDevicesOfRole(role);
-            } else {
+            } else if (status != null) {
+				allDevices = service.getDevicesByStatus(status);
+			} else {
                 allDevices = service.getAllDevices();
             }
             return allDevices;
