@@ -51,7 +51,7 @@ var iosOperationConstants = {
     "EMAIL_OPERATION": "email",
     "EMAIL_OPERATION_CODE": "EMAIL",
     "AIRPLAY_OPERATION": "airplay",
-    "AIRPLAY_OPERATION_CODE": "AIRPLAY",
+    "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
     "LDAP_OPERATION": "ldap",
     "LDAP_OPERATION_CODE": "LDAP",
     "CALENDAR_OPERATION": "calendar",

@@ -49,7 +49,7 @@ var operationModule = function () {
         "RESTRICTIONS_OPERATION_CODE": "RESTRICTION",
         "WIFI_OPERATION_CODE": "WIFI",
         "EMAIL_OPERATION_CODE": "EMAIL",
-        "AIRPLAY_OPERATION_CODE": "AIRPLAY",
+        "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
         "LDAP_OPERATION_CODE": "LDAP",
         "CALENDAR_OPERATION_CODE": "CALDAV",
         "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION"
@@ -496,7 +496,8 @@ var operationModule = function () {
                 var operationDataObj = $(this);
                 var key = operationDataObj.data("key");
                 var value;
-                if (operationDataObj.is(":text") || operationDataObj.is(":password")) {
+                if (operationDataObj.is(":text") || operationDataObj.is("textarea") ||
+                    operationDataObj.is(":password")) {
                     value = operationDataObj.val();
                 } else if (operationDataObj.is(":checkbox")) {
                     value = operationDataObj.is(":checked");
@@ -529,7 +530,7 @@ var operationModule = function () {
                     } else if (operationDataObj.hasClass("two-column-key-value-pair-array")) {
                         var inputCount = 0;
                         var childInputKey;
-                        var keyValuePair = {};
+                        var keyValuePairJson;
                         $(".child-input", this).each(function () {
                             childInput = $(this);
                             childInputKey = childInput.data("child-key");
@@ -540,9 +541,17 @@ var operationModule = function () {
                             } else if (childInput.is("select")) {
                                 childInputValue = childInput.find("option:selected").attr("value");
                             }
-                            // update key-value-pair
-                            // keyValuePair[childInputKey]
-
+                            inputCount++;
+                            if (inputCount % 2 == 1) {
+                                // initialize keyValuePairJson value
+                                keyValuePairJson = {};
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                            } else {
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                                value.push(keyValuePairJson);
+                            }
                         });
                     } else if (operationDataObj.hasClass("two-column-joined-input-array")) {
                         inputCount = 0;
@@ -566,6 +575,33 @@ var operationModule = function () {
                                 // append second part of the string
                                 stringPair += childInputValue;
                                 value.push(stringPair);
+                            }
+                        });
+                    } else if (operationDataObj.hasClass("three-column-key-value-pair-array")) {
+                        inputCount = 0;
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            childInputKey = childInput.data("child-key");
+                            if (childInput.is(":text") || childInput.is(":password")) {
+                                childInputValue = childInput.val();
+                            } else if (childInput.is(":checkbox")) {
+                                childInputValue = childInput.is(":checked");
+                            } else if (childInput.is("select")) {
+                                childInputValue = childInput.find("option:selected").attr("value");
+                            }
+                            inputCount++;
+                            if (inputCount % 3 == 1) {
+                                // initialize keyValuePairJson value
+                                keyValuePairJson = {};
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                            } else if (inputCount % 3 == 2) {
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                            } else {
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                                value.push(keyValuePairJson);
                             }
                         });
                     }

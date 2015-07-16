@@ -1307,7 +1307,7 @@
 
         <!-- AirPlay -->
         <div class="wr-hidden-operation" data-operation="airplay">
-            <div class="panel panel-default operation-data" data-operation="airplay" data-operation-code="AIRPLAY">
+            <div class="panel panel-default operation-data" data-operation="airplay" data-operation-code="AIR_PLAY">
                 <div id="airplay-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         AirPlay Settings
@@ -1550,7 +1550,7 @@
                                 Add Search Setting
                             </a>
                         </label>
-                        <div id="ldap-search-settings" class="operationDataKeys grouped-array-input three-column-text-field-array" data-key="ldapSearchSettings">
+                        <div id="ldap-search-settings" class="operationDataKeys grouped-array-input three-column-key-value-pair-array" data-key="ldapSearchSettings">
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
@@ -1576,10 +1576,10 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Description">
-                                            <input type="text" class="form-control grid-input-text" data-default="LDAP Search" value="LDAP Search" placeholder="[ Optional Field ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingDescription" data-default="LDAP Search" value="LDAP Search" placeholder="[ Optional Field ]" />
                                         </td>
                                         <td data-title="Search Base">
-                                            <select class="form-control grid-input-select" data-default="0">
+                                            <select class="form-control grid-input-select" data-child-key="searchSettingSearchBase" data-default="0">
                                                 <option value="LDAPSearchSettingScopeBase" selected="selected">
                                                     Base
                                                 </option>
@@ -1588,7 +1588,7 @@
                                             </select>
                                         </td>
                                         <td data-title="Scope">
-                                            <input type="text" class="form-control grid-input-text" data-default="ou=department, o=company" value="ou=department, o=company" placeholder="[ Requires path to the node where a search should start. ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingScope" data-default="ou=department, o=company" value="ou=department, o=company" placeholder="[ Requires path to the node where a search should start. ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
