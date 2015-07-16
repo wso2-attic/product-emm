@@ -165,6 +165,7 @@ public class Constants {
 		public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
 		public static final String POLICY_MONITOR = "POLICY_MONITOR";
 		public static final String POLICY_REVOKE = "POLICY_REVOKE";
+		public static final String DISENROLL = "DISENROLL";
 	}
 
 	/**

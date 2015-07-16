@@ -168,6 +168,9 @@ public class Operation implements APIResultCallBack {
 			case Constants.Operation.BLACKLIST_APPLICATIONS:
 				blacklistApps(operation);
 				break;
+			case Constants.Operation.DISENROLL:
+				disenrollDevice(operation);
+				break;
 			default:
 				Log.e(TAG, "Invalid operation code received");
 				break;
@@ -1014,6 +1017,13 @@ public class Operation implements APIResultCallBack {
 			resultBuilder.build(operation);
 			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
+	}
+
+	public void disenrollDevice(org.wso2.emm.agent.beans.Operation operation) {
+		boolean status = operation.isEnabled();
+		if (status) {
+			CommonUtils.disableAdmin(context);
+		} 
 	}
 
 	/**
