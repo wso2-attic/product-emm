@@ -33,9 +33,27 @@ var operationModule = function () {
         "COMMAND": "command"
     };
 
-    if (Object.freeze) {
-        Object.freeze(operationTypeConstants);
-    }
+    // Constants to define Android Operation Constants
+    var androidOperationConstants = {
+        "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
+        "CAMERA_OPERATION_CODE": "CAMERA",
+        "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
+        "WIFI_OPERATION_CODE": "WIFI",
+        "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
+        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE"
+    };
+
+    // Constants to define iOS Operation Constants
+    var iosOperationConstants = {
+        "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
+        "RESTRICTIONS_OPERATION_CODE": "RESTRICTION",
+        "WIFI_OPERATION_CODE": "WIFI",
+        "EMAIL_OPERATION_CODE": "EMAIL",
+        "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
+        "LDAP_OPERATION_CODE": "LDAP",
+        "CALENDAR_OPERATION_CODE": "CALDAV",
+        "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION"
+    };
 
     publicMethods.getIOSServiceEndpoint = function (operationCode) {
         var featureMap = {
@@ -58,7 +76,7 @@ var operationModule = function () {
         var payload;
         var operationType;
         switch (operationCode) {
-            case "PASSCODE_POLICY":
+            case iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -75,7 +93,7 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "WIFI":
+            case iosOperationConstants["WIFI_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -118,7 +136,7 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "RESTRICTION":
+            case iosOperationConstants["RESTRICTIONS_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -191,102 +209,83 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "CONTACTS":
+            case iosOperationConstants["EMAIL_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "accountDescription": operationData["accountDescription"],
-                        "accountHostname": operationData["accountHostname"],
-                        "accountPort": operationData["accountPort"],
-                        "principalURL": operationData["principalURL"],
-                        "accountUsername": operationData["accountUsername"],
-                        "accountPassword": operationData["accountPassword"],
-                        "useSSL": operationData["useSSL"]
+                        "emailAccountDescription": operationData["emailAccountDescription"],
+                        "emailAccountName": operationData["emailAccountName"],
+                        "emailAccountType": operationData["emailAccountType"],
+                        "emailAddress": operationData["emailAddress"],
+                        "incomingMailServerAuthentication": operationData["emailIncomingMailServerAuthentication"],
+                        "incomingMailServerHostName": operationData["emailIncomingMailServerHostname"],
+                        "incomingMailServerPortNumber": operationData["emailIncomingMailServerPortNumber"],
+                        "incomingMailServerUseSSL": operationData["emailIncomingUseSSL"],
+                        "incomingMailServerUsername": operationData["emailIncomingMailServerUsername"],
+                        "incomingPassword": operationData["emailIncomingMailServerPassword"],
+                        "outgoingPassword": operationData["emailOutgoingMailServerPassword"],
+                        "outgoingPasswordSameAsIncomingPassword": operationData["emailOutgoingPasswordSameAsIncomingPassword"],
+                        "outgoingMailServerAuthentication": operationData["emailOutgoingMailServerAuthentication"],
+                        "outgoingMailServerHostName": operationData["emailOutgoingMailServerHostname"],
+                        "outgoingMailServerPortNumber": operationData["emailOutgoingMailServerPortNumber"],
+                        "outgoingMailServerUseSSL": operationData["emailOutgoingUseSSL"],
+                        "outgoingMailServerUsername": operationData["emailOutgoingMailServerUsername"],
+                        "preventMove": operationData["emailPreventMove"],
+                        "preventAppSheet": operationData["emailPreventAppSheet"],
+                        "disableMailRecentSyncing": operationData["emailDisableMailRecentSyncing"],
+                        "incomingMailServerIMAPPathPrefix": operationData["emailIncomingMailServerIMAPPathPrefix"],
+                        "smimeenabled": operationData["emailSMIMEEnabled"],
+                        "smimesigningCertificateUUID": operationData["emailSMIMESigningCertificateUUID"],
+                        "smimeencryptionCertificateUUID": operationData["emailSMIMEEncryptionCertificateUUID"],
+                        "smimeenablePerMessageSwitch": operationData["emailSMIMEEnablePerMessageSwitch"]
                     }
                 };
                 break;
-            case "CALENDAR":
+            case iosOperationConstants["AIRPLAY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "accountDescription": operationData["calAccountDescription"],
-                        "hostName": operationData["calAccountHostname"],
-                        "port": operationData["calAccountPort"],
-                        "principalURL": operationData["calPrincipalURL"],
-                        "username": operationData["calAccountUsername"],
-                        "password": operationData["calAccountPassword"],
-                        "useSSL": operationData["calUseSSL"]
+                        "airPlayDestinations": operationData["airplayDestinations"],
+                        "airPlayCredentials": operationData["airplayCredentials"]
                     }
                 };
                 break;
-            case "SUBSCRIBED_CALENDARS":
+            case iosOperationConstants["LDAP_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "accountDescription": operationData["csDescription"],
-                        "hostName": operationData["csURL"],
-                        "username": operationData["csUsername"],
-                        "password": operationData["csPassword"],
-                        "useSSL": operationData["csUseSSL"]
+                        "accountDescription": operationData["ldapAccountDescription"],
+                        "accountHostName": operationData["ldapAccountHostname"],
+                        "accountUseSSL": operationData["ldapUseSSL"],
+                        "accountUsername": operationData["ldapAccountUsername"],
+                        "accountPassword": operationData["ldapAccountPassword"],
+                        "ldapSearchSettings": operationData["ldapSearchSettings"]
                     }
                 };
                 break;
-            case "SCEP_SETTINGS":
+            case iosOperationConstants["CALENDAR_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "scepURL": operationData["scepURL"],
-                        "scepName": operationData["scepName"],
-                        "scepSubject": operationData["scepSubject"],
-                        "scepSubjectAlternativeNameType": operationData["scepSubjectAlternativeNameType"],
-                        "scepSubjectAlternativeNameValue": operationData["scepSubjectAlternativeNameValue"],
-                        "scepNTprincipalName": operationData["scepNTprincipalName"],
-                        "scepRetries": operationData["scepRetries"],
-                        "scepRetryDelay": operationData["scepRetryDelay"],
-                        "scepChallenge": operationData["scepChallenge"],
-                        "scepKeySize": operationData["scepKeySize"],
-                        "scepUsedAsDS": operationData["scepUsedAsDS"],
-                        "scepUseForKE": operationData["scepUseForKE"],
-                        "scepFingerprint": operationData["scepFingerprint"]
+                        "accountDescription": operationData["calendarAccountDescription"],
+                        "hostName": operationData["calendarAccountHostname"],
+                        "username": operationData["calendarAccountUsername"],
+                        "password": operationData["calendarAccountPassword"],
+                        "useSSL": operationData["calendarUseSSL"],
+                        "port": operationData["calendarAccountPort"],
+                        "principalURL": operationData["calendarPrincipalURL"]
                     }
                 };
                 break;
-            case "APN_SETTINGS":
+            case iosOperationConstants["CALENDAR_SUBSCRIPTION_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "apn": operationData["apnAccessPointName"],
-                        "username": operationData["apnAccessPointUsername"],
-                        "password": operationData["apnAccessPointPassword"],
-                        "proxyServer": operationData["apnProxyServer"],
-                        "proxyPort": operationData["apnProxyPort"]
-                    }
-                };
-                break;
-            case "WEB_CLIPS":
-                operationType = operationTypeConstants["PROFILE"];
-                payload = {
-                    "operation": {
-                        "label": operationData["wcLabel"],
-                        "url": operationData["wcURL"],
-                        "icon": operationData[""],
-                        "isRemovable": operationData["wcRemovable"],
-                        "isPrecomposed": operationData["wcPrecomposedIcon"],
-                        "isFullScreen": operationData["wcFullScreen"]
-                    }
-                };
-                break;
-            case "EMAIL_SETTINGS":
-                operationType = operationTypeConstants["PROFILE"];
-                payload = {
-                    "operation": {
-                        "emAccountDescription": operationData["emAccountDescription"],
-                        "emAccountType": operationData["emAccountType"],
-                        "emUserDisplayName": operationData["emAddress"],
-                        "wcPrecomposedIcon": operationData["emAllowMovingMessages"],
-                        "emAllowAddressSyncing": operationData["emAllowAddressSyncing"],
-                        "emUseInMail": operationData["emUseInMail"],
-                        "emEnableMime": operationData["emEnableMime"]
+                        "accountDescription": operationData["calendarSubscriptionDescription"],
+                        "hostName": operationData["calendarSubscriptionHostname"],
+                        "username": operationData["calendarSubscriptionUsername"],
+                        "password": operationData["calendarSubscriptionPassword"],
+                        "useSSL": operationData["calendarSubscriptionUseSSL"]
                     }
                 };
                 break;
@@ -308,7 +307,7 @@ var operationModule = function () {
         var payload;
         var operationType;
         switch (operationCode) {
-            case "CAMERA":
+            case androidOperationConstants["CAMERA_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -316,7 +315,7 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "CHANGE_LOCK_CODE":
+            case androidOperationConstants["CHANGE_LOCK_CODE_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -324,7 +323,7 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "ENCRYPT_STORAGE":
+            case androidOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -332,7 +331,7 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "NOTIFICATION":
+            case androidOperationConstants["NOTIFICATION_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -340,42 +339,16 @@ var operationModule = function () {
                     }
                 };
                 break;
-            case "WEBCLIP":
+            case androidOperationConstants["WIFI_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "identity": operationData["url"],
-                        "title": operationData["title"]
+                        "ssid": operationData["wifiSSID"],
+                        "password": operationData["wifiPassword"]
                     }
                 };
                 break;
-            case "INSTALL_APPLICATION":
-                operationType = operationTypeConstants["PROFILE"];
-                payload = {
-                    "operation": {
-                        "appIdentifier": operationData["packageName"],
-                        "type": operationData["type"],
-                        "url": operationData["url"]
-                    }
-                };
-                break;
-            case "UNINSTALL_APPLICATION":
-                operationType = operationTypeConstants["PROFILE"];
-                payload = {
-                    "operation": {
-                        "appIdentifier": operationData["packageName"]
-                    }
-                };
-                break;
-            case "BLACKLIST_APPLICATIONS":
-                operationType = operationTypeConstants["PROFILE"];
-                payload = {
-                    "operation": {
-                        "appIdentifier": operationData["packageNames"]
-                    }
-                };
-                break;
-            case "PASSCODE_POLICY":
+            case androidOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
@@ -386,15 +359,6 @@ var operationModule = function () {
                         "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                         "pinHistory": operationData["passcodePolicyPasscodeHistory"],
                         "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
-                    }
-                };
-                break;
-            case "WIFI":
-                operationType = operationTypeConstants["PROFILE"];
-                payload = {
-                    "operation": {
-                        "ssid": operationData["wifiSSID"],
-                        "password": operationData["wifiPassword"]
                     }
                 };
                 break;
@@ -531,37 +495,113 @@ var operationModule = function () {
             function () {
                 var operationDataObj = $(this);
                 var key = operationDataObj.data("key");
-                var value = operationDataObj.val();
-                if (operationDataObj.is(":checkbox")) {
+                var value;
+                if (operationDataObj.is(":text") || operationDataObj.is("textarea") ||
+                    operationDataObj.is(":password")) {
+                    value = operationDataObj.val();
+                } else if (operationDataObj.is(":checkbox")) {
                     value = operationDataObj.is(":checked");
                 } else if (operationDataObj.is("select")) {
                     value = operationDataObj.find("option:selected").attr("value");
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
                     value = [];
-                    if (operationDataObj.hasClass("valued-check-box-array")) {
+                    var childInput;
+                    var childInputValue;
+                    if (operationDataObj.hasClass("one-column-input-array")) {
                         $(".child-input", this).each(function () {
-                            if ($(this).is(":checked")) {
-                                value.push($(this).data("value"));
+                            childInput = $(this);
+                            if (childInput.is(":text") || childInput.is(":password")) {
+                                childInputValue = childInput.val();
+                            } else if (childInput.is(":checkbox")) {
+                                childInputValue = childInput.is(":checked");
+                            } else if (childInput.is("select")) {
+                                childInputValue = childInput.find("option:selected").attr("value");
+                            }
+                            value.push(childInputValue);
+                        });
+                    } else if (operationDataObj.hasClass("valued-check-box-array")) {
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            if (childInput.is(":checked")) {
+                                childInputValue = childInput.data("value");
+                                value.push(childInputValue);
                             }
                         });
-                    } else if (operationDataObj.hasClass("one-column-text-field-array")) {
-                        $(".child-input", this).each(function () {
-                            value.push($(this).val());
-                        });
-                    } else if (operationDataObj.hasClass("two-column-text-field-array")) {
+                    } else if (operationDataObj.hasClass("two-column-key-value-pair-array")) {
                         var inputCount = 0;
+                        var childInputKey;
+                        var keyValuePairJson;
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            childInputKey = childInput.data("child-key");
+                            if (childInput.is(":text") || childInput.is(":password")) {
+                                childInputValue = childInput.val();
+                            } else if (childInput.is(":checkbox")) {
+                                childInputValue = childInput.is(":checked");
+                            } else if (childInput.is("select")) {
+                                childInputValue = childInput.find("option:selected").attr("value");
+                            }
+                            inputCount++;
+                            if (inputCount % 2 == 1) {
+                                // initialize keyValuePairJson value
+                                keyValuePairJson = {};
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                            } else {
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                                value.push(keyValuePairJson);
+                            }
+                        });
+                    } else if (operationDataObj.hasClass("two-column-joined-input-array")) {
+                        inputCount = 0;
                         var stringPair;
                         $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            if (childInput.is(":text") || childInput.is(":password")) {
+                                childInputValue = childInput.val();
+                            } else if (childInput.is(":checkbox")) {
+                                childInputValue = childInput.is(":checked");
+                            } else if (childInput.is("select")) {
+                                childInputValue = childInput.find("option:selected").attr("value");
+                            }
                             inputCount++;
                             if (inputCount % 2 == 1) {
                                 // initialize stringPair value
                                 stringPair = "";
                                 // append first part of the string
-                                stringPair += $(this).val();
+                                stringPair += childInputValue;
                             } else {
                                 // append second part of the string
-                                stringPair += $(this).val();
+                                stringPair += childInputValue;
                                 value.push(stringPair);
+                            }
+                        });
+                    } else if (operationDataObj.hasClass("three-column-key-value-pair-array")) {
+                        inputCount = 0;
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            childInputKey = childInput.data("child-key");
+                            if (childInput.is(":text") || childInput.is(":password")) {
+                                childInputValue = childInput.val();
+                            } else if (childInput.is(":checkbox")) {
+                                childInputValue = childInput.is(":checked");
+                            } else if (childInput.is("select")) {
+                                childInputValue = childInput.find("option:selected").attr("value");
+                            }
+                            inputCount++;
+                            if (inputCount % 3 == 1) {
+                                // initialize keyValuePairJson value
+                                keyValuePairJson = {};
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                            } else if (inputCount % 3 == 2) {
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                            } else {
+                                // set key-value-pair
+                                keyValuePairJson[childInputKey] = childInputValue;
+                                value.push(keyValuePairJson);
                             }
                         });
                     }

@@ -1767,7 +1767,7 @@ a.wr-side-panel-toggle-btn.selected {
     color: #fff;
     font-size: 28px;
     text-align: center;
-    padding-top: 3px;
+    padding-top: 0;
 }
 
 .wr-list-group .wr-sort-index {
@@ -2583,6 +2583,10 @@ a:hover.grid-input-remove {
 }
 
 input.grid-input-text {
+    border: 1px solid #DDDDDD;
+}
+
+select.grid-input-select {
     border: 1px solid #DDDDDD;
 }
 

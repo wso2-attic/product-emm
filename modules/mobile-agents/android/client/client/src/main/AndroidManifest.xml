@@ -68,6 +68,7 @@
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -103,7 +104,13 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="org.wso2.emm.agent.GCMIntentService" />
+        <service
+                android:name="org.wso2.emm.agent.GCMIntentService"
+                android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name="org.wso2.emm.agent.AlreadyRegisteredActivity"

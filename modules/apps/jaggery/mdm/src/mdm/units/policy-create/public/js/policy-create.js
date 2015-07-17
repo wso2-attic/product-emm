@@ -47,7 +47,17 @@ var iosOperationConstants = {
     "RESTRICTIONS_OPERATION": "restrictions",
     "RESTRICTIONS_OPERATION_CODE": "RESTRICTION",
     "WIFI_OPERATION": "wifi",
-    "WIFI_OPERATION_CODE": "WIFI"
+    "WIFI_OPERATION_CODE": "WIFI",
+    "EMAIL_OPERATION": "email",
+    "EMAIL_OPERATION_CODE": "EMAIL",
+    "AIRPLAY_OPERATION": "airplay",
+    "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
+    "LDAP_OPERATION": "ldap",
+    "LDAP_OPERATION_CODE": "LDAP",
+    "CALENDAR_OPERATION": "calendar",
+    "CALENDAR_OPERATION_CODE": "CALDAV",
+    "CALENDAR_SUBSCRIPTION_OPERATION": "calendar-subscription",
+    "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION"
 };
 
 /**
@@ -160,8 +170,7 @@ validateStep["policy-profile"] = function () {
                         if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
                             validationStatus = {
                                 "error": true,
-                                "subErrorMsg":
-                                    "Provided passcode age is not with in the range of 1-to-730. Please check.",
+                                "subErrorMsg": "Provided passcode age is not with in the range of 1-to-730. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -187,8 +196,7 @@ validateStep["policy-profile"] = function () {
                             if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
                                 validationStatus = {
                                     "error": true,
-                                    "subErrorMsg":
-                                        "Provided passcode history is not with in the range" +
+                                    "subErrorMsg": "Provided passcode history is not with in the range" +
                                         " of 1-to-50. Please check.",
                                     "erroneousFeature": operation
                                 };
@@ -292,8 +300,7 @@ validateStep["policy-profile"] = function () {
                         if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
                             validationStatus = {
                                 "error": true,
-                                "subErrorMsg":
-                                    "Provided passcode age is not with in the range of 1-to-730. Please check.",
+                                "subErrorMsg": "Provided passcode age is not with in the range of 1-to-730. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -319,8 +326,7 @@ validateStep["policy-profile"] = function () {
                             if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
                                 validationStatus = {
                                     "error": true,
-                                    "subErrorMsg":
-                                        "Provided passcode history is not with in the range" +
+                                    "subErrorMsg": "Provided passcode history is not with in the range" +
                                         " of 1-to-50. Please check.",
                                     "erroneousFeature": operation
                                 };
@@ -428,8 +434,7 @@ validateStep["policy-profile"] = function () {
                 }
 
                 if (continueToCheckNextInputs) {
-                    if (wifiDisplayedOperatorName &&
-                        !inputIsValidAgainstLength(wifiDisplayedOperatorName, 1, 100)) {
+                    if (wifiDisplayedOperatorName && !inputIsValidAgainstLength(wifiDisplayedOperatorName, 1, 100)) {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Wi-Fi Displayed Operator Name " +
@@ -471,15 +476,14 @@ validateStep["policy-profile"] = function () {
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                        } else if (wifiProxyPort && !$.isNumeric(wifiProxyPort)) {
+                        } else if (!$.isNumeric(wifiProxyPort)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Wi-Fi Proxy Port requires a number input. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                        } else if (wifiProxyPort && $.isNumeric(wifiProxyPort) &&
-                            !inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
+                        } else if (!inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Wi-Fi Proxy Port is not within the range " +
@@ -699,8 +703,7 @@ validateStep["policy-profile"] = function () {
                         }
 
                         if (continueToCheckNextInputs) {
-                            if (wifiPayloadCertUUID &&
-                                !inputIsValidAgainstLength(wifiPayloadCertUUID, 1, 100)) {
+                            if (wifiPayloadCertUUID && !inputIsValidAgainstLength(wifiPayloadCertUUID, 1, 100)) {
                                 validationStatus = {
                                     "error": true,
                                     "subErrorMsg": "Wi-Fi Payload Certificate UUID " +
@@ -1008,9 +1011,9 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
-            if ($.inArray("CALENDAR", configuredOperations) != -1) {
+            if ($.inArray("CALDAV", configuredOperations) != -1) {
                 /* Validating hostname of the CardDAV server */
-                var calAccountHostname = $("input#calAccountHostname").val();
+                var calAccountHostname = $("input#calendar-account-hostname").val();
                 if (!calAccountHostname) {
                     validationStatus = {
                         "error": true,
@@ -1019,6 +1022,13 @@ validateStep["policy-profile"] = function () {
                     };
                     validationStatusArray.push(validationStatus);
                     continueToCheckNextInputs = false;
+                } else if (!inputIsValidAgainstLength(calAccountHostname, 1, 100)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Configured hostname exceeded its maximum allowed length (100). Please provide a valid hostname",
+                        "erroneousFeature": "calendar"
+                    };
+                    validationStatusArray.push(validationStatus);
                 } else if (!inputIsValidAgainstRegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, calAccountHostname)) {
                     validationStatus = {
                         "error": true,
@@ -1027,18 +1037,11 @@ validateStep["policy-profile"] = function () {
                     };
                     validationStatusArray.push(validationStatus);
                     continueToCheckNextInputs = false;
-                } else {
-                    validationStatus = {
-                        "error": false,
-                        "okFeature": "calendar"
-                    };
-                    validationStatusArray.push(validationStatus);
-                    continueToCheckNextInputs = true;
                 }
 
                 if (continueToCheckNextInputs) {
                     /* Validating port of the CardDAV server */
-                    var calAccountPort = $("input#calAccountPort").val();
+                    var calAccountPort = $("input#calendar-account-port").val();
                     if (!calAccountPort) {
                         validationStatus = {
                             "error": true,
@@ -1046,17 +1049,17 @@ validateStep["policy-profile"] = function () {
                             "erroneousFeature": "calendar"
                         };
                         validationStatusArray.push(validationStatus);
-                    } else if (!inputIsValidAgainstLength(accountPort, 1, 6)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Port provided is invalid and outside the allowed range. Please provide a valid port number to proceed",
-                            "erroneousFeature": "calendar"
-                        };
-                        validationStatusArray.push(validationStatus);
-                    } else if (!$.isNumeric(calAccountPort)) {
+                    } else if (!inputIsValidAgainstLength(calAccountPort, 1, 100) && !$.isNumeric(calAccountPort)) {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Port provided is not a valid number. Please provide a valid port number to proceed",
+                            "erroneousFeature": "calendar"
+                        };
+                        validationStatusArray.push(validationStatus);
+                    } else if (!inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Port provided is invalid and outside the allowed range. Please provide a valid port number to proceed",
                             "erroneousFeature": "calendar"
                         };
                         validationStatusArray.push(validationStatus);
@@ -1069,14 +1072,21 @@ validateStep["policy-profile"] = function () {
                     }
                 }
             }
-            if ($.inArray("SUBSCRIBED_CALENDARS", configuredOperations) != -1) {
+            if ($.inArray("CALENDAR_SUBSCRIPTION", configuredOperations) != -1) {
                 /* Validating hostname of the CardDAV server */
-                var csURL = $("input#csURL").val();
+                var csURL = $("input#calendar-subscription-hostname").val();
                 if (!csURL) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "URL of the calendar file is not provided. Please provide a valid URL to proceed.",
                         "erroneousFeature": "subscribed-calendars"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else if (!inputIsValidAgainstLength(csURL, 1, 100)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Configured URL exceeded its maximum allowed length (100). Please provide a valid URL",
+                        "erroneousFeature": "calendar"
                     };
                     validationStatusArray.push(validationStatus);
                 } else if (!inputIsValidAgainstRegExp(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/, csURL)) {
@@ -1196,6 +1206,38 @@ validateStep["policy-profile"] = function () {
                     validationStatusArray.push(validationStatus);
                 }
             }
+            if ($.inArray("LDAP", configuredOperations) != -1) {
+                /* Validating Access Point Name */
+                var ldapAccHostName = $("input#ldap-account-hostname").val();
+                if (!ldapAccHostName) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Hostname of the target LDAP server is not provided. Please provide a valid hostname to proceed.",
+                        "erroneousFeature": "calendar"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else if (!inputIsValidAgainstLength(ldapAccHostName, 1, 100)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Configured hostname exceeded its maximum allowed length (100). Please provide a valid hostname",
+                        "erroneousFeature": "calendar"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else if (!inputIsValidAgainstRegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, ldapAccHostName)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Hostname provided is invalid. Please provide a valid hostname to proceed",
+                        "erroneousFeature": "calendar"
+                    };
+                    validationStatusArray.push(validationStatus);
+                } else {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": "ldap"
+                    };
+                    validationStatusArray.push(validationStatus);
+                }
+            }
         }
     }
     // ending validation process
@@ -1267,15 +1309,15 @@ stepBackFrom["policy-profile"] = function () {
             "Loading Platform Features . . ." +
             "<br>" +
             "<br>" +
-        "</div>"
+            "</div>"
     );
 };
 
 stepForwardFrom["policy-criteria"] = function () {
     $("input[type='radio'].select-users-radio").each(function () {
-        if ( $(this).is(':radio')) {
+        if ($(this).is(':radio')) {
             if ($(this).is(":checked")) {
-                if($(this).attr("id") == "users-radio-btn") {
+                if ($(this).attr("id") == "users-radio-btn") {
                     policy["selectedUsers"] = $("#users-input").val();
                 } else if ($(this).attr("id") == "user-roles-radio-btn") {
                     policy["selectedUserRoles"] = $("#user-roles-input").val();
@@ -1453,7 +1495,7 @@ function setId(addFormContainer) {
  */
 function showHideHelpText(addFormContainer) {
     var helpText = "[data-help-text=add-form]";
-    if($(addFormContainer).find("[data-add-form-clone]").length > 0) {
+    if ($(addFormContainer).find("[data-add-form-clone]").length > 0) {
         $(addFormContainer).find(helpText).hide();
     } else {
         $(addFormContainer).find(helpText).show();
@@ -1490,12 +1532,12 @@ $(document).ready(function () {
     $("#users-input, #user-roles-input").select2({
         "tags": true
     }).on("select2:select", function (e) {
-        if (e.params.data.id == "ANY") {
-            $(this).val("ANY").trigger("change");
-        } else {
-            $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
-        }
-    });
+            if (e.params.data.id == "ANY") {
+                $(this).val("ANY").trigger("change");
+            } else {
+                $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
+            }
+        });
 
     // Maintains an array of configured features of the profile
     var advanceOperations = ".wr-advance-operations";
@@ -1606,7 +1648,7 @@ $(document).ready(function () {
             find("[data-add-form-element=clone]").attr("data-add-form-clone", $(this).attr("href"));
 
         // adding class .child-input to capture text-input-array-values
-        $("input", clonedForm).addClass("child-input");
+        $("input, select", clonedForm).addClass("child-input");
 
         // remove form button click function
         $(clonedForm).find("[data-click-event=remove-form]").bind("click", function () {

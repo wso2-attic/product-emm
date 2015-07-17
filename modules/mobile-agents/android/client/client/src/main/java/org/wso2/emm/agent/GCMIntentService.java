@@ -17,43 +17,32 @@
  */
 
 package org.wso2.emm.agent;
-
-import android.app.IntentService;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import android.util.Log;
+import com.google.android.gms.gcm.GcmListenerService;
 
 import org.wso2.emm.agent.services.MessageProcessor;
-import org.wso2.emm.agent.utils.Constants;
 
 /**
  * IntentService responsible for handling GCM messages.
  */
-public class GCMIntentService extends IntentService {
-	private MessageProcessor messageProcessor;
+public class GCMIntentService extends GcmListenerService {
+
 	private static final String TAG = GCMIntentService.class.getName();
 
 	/**
-	 * Creates an IntentService. Invoked by your subclass's constructor.
-	 *
+	 * This method gets called when a GCM message is received. We use GCM as the device wake up
+	 * method. Once the Agent receives a GCM notification, Agent polls the server for pending operations.
 	 */
-	public GCMIntentService() {
-		super(GCMIntentService.class.getName());
+	@Override
+	public void onMessageReceived(String from, Bundle data) {
+		MessageProcessor messageProcessor = new MessageProcessor(this.getApplicationContext());
+		try {
+			messageProcessor.getMessages();
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Failed to perform operation." + e);
+		}
 	}
 
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		// Retrieve data extras from push notification
-		Bundle extras = intent.getExtras();
-		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-		String messageType = gcm.getMessageType(intent);
-		if (extras != null && messageType != null && messageType.equals(Constants.MESSAGE_TYPE_GCM)) {
-			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Message Type: " + messageType + ", Message: " + extras.toString());
-			}
-		}
-		GCMBroadcastReceiver.completeWakefulIntent(intent);
-	}
 }
