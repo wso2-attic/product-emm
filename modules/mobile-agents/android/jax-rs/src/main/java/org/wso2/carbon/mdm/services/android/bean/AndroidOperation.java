@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 /*
 * This abstract class is used for extending generic functions with regard to operation.
 */
-public abstract class Operation {
+public abstract class AndroidOperation {
 
 	/*
 	* This method is used to convert operation object to a json format.

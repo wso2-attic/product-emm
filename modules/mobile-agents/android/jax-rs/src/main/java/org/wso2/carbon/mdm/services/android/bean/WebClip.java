@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of setting up webclip.
  */
-public class WebClip extends Operation implements Serializable {
+public class WebClip extends AndroidOperation implements Serializable {
 
 	private String identity;
 	private String title;

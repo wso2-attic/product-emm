@@ -25,13 +25,19 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.api.mgt.ApplicationManagementProviderService;
+import org.wso2.carbon.device.mgt.core.dto.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
+import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
+import org.wso2.carbon.device.mgt.core.operation.mgt.PolicyOperation;
+import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.*;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -150,5 +156,21 @@ public class AndroidAPIUtils {
         List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
         operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
         return operations;
+    }
+
+    public static OperationWrapper convertOperation(Operation operation) {
+
+        OperationWrapper operationWrapper = new OperationWrapper();
+        operationWrapper.setProperties(operation.getProperties());
+        operationWrapper.setEnabled(operation.isEnabled());
+        operationWrapper.setId(operation.getId());
+        operationWrapper.setStatus(OperationWrapper.Status.valueOf(operation.getStatus().toString()));
+        operationWrapper.setCode(operation.getCode());
+        operationWrapper.setCreatedTimeStamp(operation.getCreatedTimeStamp());
+        operationWrapper.setReceivedTimeStamp(operation.getReceivedTimeStamp());
+        operationWrapper.setType(OperationWrapper.Type.valueOf(operation.getType().toString()));
+        operationWrapper.setObjOpResponse(operation.getOperationResponse());
+        operationWrapper.setObjPayLoad(operation.getPayLoad());
+        return operationWrapper;
     }
 }

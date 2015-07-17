@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of camera operation.
  */
-public class Camera extends Operation implements Serializable {
+public class Camera extends AndroidOperation implements Serializable {
 
 	private boolean enabled;
 

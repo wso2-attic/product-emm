@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of sending notification operation.
  */
-public class Notification extends Operation implements Serializable {
+public class Notification extends AndroidOperation implements Serializable {
 
 	private String message;
 

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * This class represents the blacklist applications information.
  */
-public class BlacklistApplications extends Operation implements Serializable {
+public class BlacklistApplications extends AndroidOperation implements Serializable {
 
 	private List<String> appIdentifiers;
 

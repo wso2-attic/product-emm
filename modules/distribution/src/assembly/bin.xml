@@ -690,7 +690,7 @@
 	    <file>
             <source>../apps/jaggery/mdm/target/mdm.zip</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/</outputDirectory>
-            <filtered>true</filtered>
+            <filtered>false</filtered>
             <fileMode>644</fileMode>
         </file>
 

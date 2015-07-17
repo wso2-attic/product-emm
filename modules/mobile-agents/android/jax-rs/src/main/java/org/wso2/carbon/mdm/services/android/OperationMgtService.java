@@ -29,7 +29,6 @@ import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.mdm.services.android.bean.*;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.*;
 import org.wso2.carbon.mdm.services.android.exception.AndroidOperationException;
-import org.wso2.carbon.mdm.services.android.exception.OperationConfigurationException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidConstants;
 import org.wso2.carbon.mdm.services.android.util.Message;
@@ -37,6 +36,7 @@ import org.wso2.carbon.mdm.services.android.util.Message;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,15 +49,16 @@ public class OperationMgtService {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
+    public OperationWrapper getPendingOperations
             (@HeaderParam("Accept") String acceptHeader, @PathParam("id") String id,
-                    List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> resultOperations) {
+                    List<? extends Operation> resultOperations) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android pending operations:" + id);
         }
         Message message = new Message();
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        OperationWrapper operationWrapper = null;
 
         try {
             if (resultOperations != null) {
@@ -70,9 +71,13 @@ public class OperationMgtService {
 
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
         List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-
+        List<OperationWrapper> operationWrappers = new ArrayList<OperationWrapper>();
         try {
             operations = AndroidAPIUtils.getPendingOperations(deviceIdentifier);
+            for(Operation operation:operations){
+                operationWrapper = AndroidAPIUtils.convertOperation(operation);
+                operationWrappers.add(operationWrapper);
+            }
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message.setResponseMessage(errorMessage);
@@ -81,7 +86,7 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         }
 
-        return operations;
+        return operationWrapper;
     }
 
     @POST

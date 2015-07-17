@@ -25,7 +25,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of configuring wifi operation.
  */
-public class Wifi extends Operation implements Serializable {
+public class Wifi extends AndroidOperation implements Serializable {
 
 	private String ssid;
 	private String password;

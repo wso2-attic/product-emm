@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of install application operation.
  */
-public class InstallApplication extends Operation implements Serializable {
+public class InstallApplication extends AndroidOperation implements Serializable {
 
 	private String appIdentifier;
 	private String type;

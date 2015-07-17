@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of uninstall application operation.
  */
-public class UninstallApplication extends Operation implements Serializable {
+public class UninstallApplication extends AndroidOperation implements Serializable {
 
 	private String appIdentifier;
 	private String type;

@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of encrypt operation.
  */
-public class Encrypt extends Operation implements Serializable {
+public class Encrypt extends AndroidOperation implements Serializable {
 
 	private boolean encrypted;
 

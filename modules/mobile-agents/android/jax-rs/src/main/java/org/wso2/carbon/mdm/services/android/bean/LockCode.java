@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of changing lock code operation.
  */
-public class LockCode extends Operation implements Serializable {
+public class LockCode extends AndroidOperation implements Serializable {
 
 	private String lockCode;
 

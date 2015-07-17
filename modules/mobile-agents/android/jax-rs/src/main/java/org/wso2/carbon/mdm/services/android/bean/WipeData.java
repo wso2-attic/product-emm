@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of wipedata operation.
  */
-public class WipeData extends Operation implements Serializable {
+public class WipeData extends AndroidOperation implements Serializable {
 
 	private String pin;
 
