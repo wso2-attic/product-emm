@@ -17,7 +17,7 @@ package org.wso2.carbon.mdm.services.android.bean;
 
 import java.io.Serializable;
 
-public class Disenrollment extends Operation implements Serializable {
+public class Disenrollment extends AndroidOperation implements Serializable {
 
 	private boolean enabled;
 
