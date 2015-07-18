@@ -345,25 +345,57 @@ validateStep["policy-profile"] = function () {
                 continueToCheckNextInputs = true;
 
                 // getting input values to be validated
-                var gridChildInputs = "div#restrictions-autonomous-single-app-mode-permitted-app-ids .child-input";
-                if ($(gridChildInputs).length > 0) {
-                    var emptyChildInputCount = 0;
-                    // looping through each child input
+                var restrictionsAutonomousSingleAppModePermittedAppIDsGridChildInputs =
+                    "div#restrictions-autonomous-single-app-mode-permitted-app-ids .child-input";
+                if ($(restrictionsAutonomousSingleAppModePermittedAppIDsGridChildInputs).length > 0) {
                     var childInput;
-                    $(gridChildInputs).each(function () {
+                    var childInputArray = [];
+                    var emptyChildInputCount = 0;
+                    var duplicatesExist = false;
+                    // looping through each child input
+                    $(restrictionsAutonomousSingleAppModePermittedAppIDsGridChildInputs).each(function () {
                         childInput = $(this).val();
+                        childInputArray.push(childInput);
                         if (!childInput) {
                             // if child input field is empty
                             emptyChildInputCount++;
                         }
                     });
+                    if (emptyChildInputCount == 0) {
+                        // checking for duplicates
+                        var initialChildInputArrayLength = childInputArray.length;
+                        if (initialChildInputArrayLength > 1) {
+                            var m, poppedChildInput;
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                var n;
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     // updating validationStatus
                     if (emptyChildInputCount > 0) {
                         // if empty child inputs are present
                         validationStatus = {
                             "error": true,
-                            "subErrorMsg": "One or more permitted App ID entries in Autonomous " +
-                                "Single App Mode are empty. Please check.",
+                            "subErrorMsg": "One or more permitted App ID entries in " +
+                                "Autonomous Single App Mode are empty. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (duplicatesExist) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Duplicate values exist with permitted App ID entries in " +
+                                "Autonomous Single App Mode. Please check.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
@@ -453,8 +485,8 @@ validateStep["policy-profile"] = function () {
                             "div#wifi-payload-certificate-anchor-uuids .child-input";
                         if ($(wifiPayloadCertificateAnchorUUIDsGridChildInputs).length > 0) {
                             emptyChildInputCount = 0;
-                            var childInputArray = [];
-                            var duplicatesExist = false;
+                            childInputArray = [];
+                            duplicatesExist = false;
                             // looping through each child input
                             $(wifiPayloadCertificateAnchorUUIDsGridChildInputs).each(function () {
                                 childInput = $(this).val();
@@ -464,21 +496,21 @@ validateStep["policy-profile"] = function () {
                                     emptyChildInputCount++;
                                 }
                             });
-                            // checking for duplicates
-                            var initialChildInputArrayLength = childInputArray.length;
-                            if (initialChildInputArrayLength > 1) {
-                                var m, poppedChildInput;
-                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                    poppedChildInput = childInputArray.pop();
-                                    var n;
-                                    for (n = 0; n < childInputArray.length; n++) {
-                                        if (poppedChildInput == childInputArray[n]) {
-                                            duplicatesExist = true;
+                            if (emptyChildInputCount == 0) {
+                                // checking for duplicates
+                                initialChildInputArrayLength = childInputArray.length;
+                                if (initialChildInputArrayLength > 1) {
+                                    for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                        poppedChildInput = childInputArray.pop();
+                                        for (n = 0; n < childInputArray.length; n++) {
+                                            if (poppedChildInput == childInputArray[n]) {
+                                                duplicatesExist = true;
+                                                break;
+                                            }
+                                        }
+                                        if (duplicatesExist) {
                                             break;
                                         }
-                                    }
-                                    if (duplicatesExist) {
-                                        break;
                                     }
                                 }
                             }
@@ -519,19 +551,21 @@ validateStep["policy-profile"] = function () {
                                         emptyChildInputCount++;
                                     }
                                 });
-                                // checking for duplicates
-                                initialChildInputArrayLength = childInputArray.length;
-                                if (initialChildInputArrayLength > 1) {
-                                    for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                        poppedChildInput = childInputArray.pop();
-                                        for (n = 0; n < childInputArray.length; n++) {
-                                            if (poppedChildInput == childInputArray[n]) {
-                                                duplicatesExist = true;
+                                if (emptyChildInputCount == 0) {
+                                    // checking for duplicates
+                                    initialChildInputArrayLength = childInputArray.length;
+                                    if (initialChildInputArrayLength > 1) {
+                                        for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                            poppedChildInput = childInputArray.pop();
+                                            for (n = 0; n < childInputArray.length; n++) {
+                                                if (poppedChildInput == childInputArray[n]) {
+                                                    duplicatesExist = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (duplicatesExist) {
                                                 break;
                                             }
-                                        }
-                                        if (duplicatesExist) {
-                                            break;
                                         }
                                     }
                                 }
@@ -580,19 +614,21 @@ validateStep["policy-profile"] = function () {
                                 invalidAgainstRegExCount++;
                             }
                         });
-                        // checking for duplicates
-                        initialChildInputArrayLength = childInputArray.length;
-                        if (initialChildInputArrayLength > 1) {
-                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                poppedChildInput = childInputArray.pop();
-                                for (n = 0; n < childInputArray.length; n++) {
-                                    if (poppedChildInput == childInputArray[n]) {
-                                        duplicatesExist = true;
+                        if (emptyChildInputCount == 0) {
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (duplicatesExist) {
                                         break;
                                     }
-                                }
-                                if (duplicatesExist) {
-                                    break;
                                 }
                             }
                         }
@@ -649,19 +685,21 @@ validateStep["policy-profile"] = function () {
                                 emptyChildInputCount++;
                             }
                         });
-                        // checking for duplicates
-                        initialChildInputArrayLength = childInputArray.length;
-                        if (initialChildInputArrayLength > 1) {
-                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                poppedChildInput = childInputArray.pop();
-                                for (n = 0; n < childInputArray.length; n++) {
-                                    if (poppedChildInput == childInputArray[n]) {
-                                        duplicatesExist = true;
+                        if (emptyChildInputCount == 0) {
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (duplicatesExist) {
                                         break;
                                     }
-                                }
-                                if (duplicatesExist) {
-                                    break;
                                 }
                             }
                         }
@@ -720,19 +758,21 @@ validateStep["policy-profile"] = function () {
                                 outOfAllowedLengthCount++;
                             }
                         });
-                        // checking for duplicates
-                        initialChildInputArrayLength = childInputArray.length;
-                        if (initialChildInputArrayLength > 1) {
-                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                poppedChildInput = childInputArray.pop();
-                                for (n = 0; n < childInputArray.length; n++) {
-                                    if (poppedChildInput == childInputArray[n]) {
-                                        duplicatesExist = true;
+                        if (emptyChildInputCount == 0) {
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (duplicatesExist) {
                                         break;
                                     }
-                                }
-                                if (duplicatesExist) {
-                                    break;
                                 }
                             }
                         }
@@ -758,7 +798,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more MCC/MNC pairs " +
-                                    "do not fulfill accepted length of 6 digits. Please check.",
+                                    "do not fulfill the accepted length of 6 digits. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -791,7 +831,8 @@ validateStep["policy-profile"] = function () {
                 if (!emAccountDescription) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "Display name of the account is not provided. Please provide a valid name to proceed.",
+                        "subErrorMsg": "Display name of the account is not provided. " +
+                            "Please provide a valid name to proceed.",
                         "erroneousFeature": "email-settings"
                     };
                     validationStatusArray.push(validationStatus);
@@ -802,6 +843,166 @@ validateStep["policy-profile"] = function () {
                     };
                     validationStatusArray.push(validationStatus);
                 }
+            }
+            // Validating AIRPLAY
+            if ($.inArray(iosOperationConstants["AIRPLAY_OPERATION_CODE"], configuredOperations) != -1) {
+                // if AIRPLAY is configured
+                operation = iosOperationConstants["AIRPLAY_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var airplayCredentialsGridChildInputs = "div#airplay-credentials .child-input";
+                var airplayDestinationsGridChildInputs = "div#airplay-destinations .child-input";
+                if ($(airplayCredentialsGridChildInputs).length == 0 &&
+                    $(airplayDestinationsGridChildInputs).length == 0) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "AirPlay settings have zero configurations attached. Please check.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(airplayCredentialsGridChildInputs).length > 0) {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(airplayCredentialsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 2 == 1) {
+                                // if child input is of first column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        if (emptyChildInputCount == 0) {
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (duplicatesExist) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more Device Names of " +
+                                    "AirPlay Credentials are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                    "Device Names of AirPlay Credentials. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(airplayDestinationsGridChildInputs).length > 0) {
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        invalidAgainstRegExCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(airplayDestinationsGridChildInputs).each(function () {
+                            childInput = $(this).val();
+                            childInputArray.push(childInput);
+                            // updating emptyChildInputCount
+                            if (!childInput) {
+                                // if child input field is empty
+                                emptyChildInputCount++;
+                            } else if (!inputIsValidAgainstRegExp(
+                                /([a-z|A-Z|0-9][a-z|A-Z|0-9][:]){5}([a-z|A-Z|0-9][a-z|A-Z|0-9])$/, childInput)) {
+                                // if child input field is invalid against RegEx
+                                invalidAgainstRegExCount++
+                            }
+                        });
+                        if (emptyChildInputCount == 0) {
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (duplicatesExist) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more AirPlay Destination fields are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (invalidAgainstRegExCount > 0) {
+                            // if invalidAgainstRegEx inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more AirPlay Destination fields " +
+                                    "do not fulfill expected format. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with AirPlay Destinations. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
             }
             // Validating LDAP
             if ($.inArray(iosOperationConstants["LDAP_OPERATION_CODE"], configuredOperations) != -1) {
@@ -823,7 +1024,67 @@ validateStep["policy-profile"] = function () {
                 if (continueToCheckNextInputs) {
                     var ldapSearchSettingsGridChildInputs = "div#ldap-search-settings .child-input";
                     if ($(ldapSearchSettingsGridChildInputs).length > 0) {
-
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(ldapSearchSettingsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 3 == 2) {
+                                // if child input is of second column
+                                childInput = $(this).find("option:selected").attr("value");
+                                stringPair = "";
+                                stringPair += (childInput + " ");
+                            } else if (childInputCount % 3 == 0) {
+                                // if child input is of third column
+                                childInput = $(this).val();
+                                stringPair += childInput;
+                                childInputArray.push(stringPair);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        if (emptyChildInputCount == 0) {
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (duplicatesExist) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more Search Setting Scope fields are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                    "Search Setting Search Base and Scope pairs. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
                     }
                 }
 
