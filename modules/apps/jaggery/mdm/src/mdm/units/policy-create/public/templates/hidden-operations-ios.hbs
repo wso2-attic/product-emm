@@ -186,7 +186,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" data-default="" placeholder="[ Requires Number Input ]" />
+                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" maxlength="3" data-default="" placeholder="[ Requires Number Input ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -197,7 +197,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" data-default="" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" maxlength="2" data-default="" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -297,7 +297,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" data-default="" placeholder="[ Required field if no domain name is given ]">
+                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" maxlength="100" data-default="" placeholder="[ Required field if no domain name is given ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -309,7 +309,7 @@
                             <br>
                             ( For Wi-Fi Hotspot 2.0 negotiation )
                         </label>
-                        <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" data-default="" placeholder="[ Required field if no SSID is given ]">
+                        <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" maxlength="100" data-default="" placeholder="[ Required field if no SSID is given ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -359,7 +359,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" data-default="" placeholder="[ Optional field ]">
+                        <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -392,7 +392,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" data-default="" placeholder="[ Required field ]" />
+                            <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" maxlength="100" data-default="" placeholder="[ Required field ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -402,7 +402,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" data-default="" placeholder="[ Required field which requires Number Input ]" />
+                            <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" maxlength="5" data-default="" placeholder="[ Required field which requires Number Input ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -412,7 +412,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-username" type="text" class="form-control operationDataKeys" data-key="wifiProxyUsername" data-default="" placeholder="[ Optional field ]" />
+                            <input id="wifi-proxy-username" type="text" class="form-control operationDataKeys" data-key="wifiProxyUsername" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -422,7 +422,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-password" type="password" class="form-control operationDataKeys" data-key="wifiProxyPassword" data-default="" placeholder="[ Optional field ]" />
+                            <input id="wifi-proxy-password" type="text" class="form-control operationDataKeys" data-key="wifiProxyPassword" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                         </div>
 
                         <div class="wr-input-control">
@@ -432,7 +432,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-pac-url" type="text" class="form-control operationDataKeys" data-key="wifiProxyPACURL" data-default="" placeholder="[ Optional field ]">
+                            <input id="wifi-proxy-pac-url" type="text" class="form-control operationDataKeys" data-key="wifiProxyPACURL" maxlength="100" data-default="" placeholder="[ Optional field ]">
                         </div>
 
                         <div class="wr-input-control">
@@ -475,7 +475,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-password" type="password" class="form-control operationDataKeys" data-key="wifiPassword" placeholder="[ Optional field ]">
+                        <input id="wifi-password" type="text" class="form-control operationDataKeys" data-key="wifiPassword" maxlength="100" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="eap-client-config">
@@ -552,7 +552,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" data-default="" placeholder="[ Optional field ]" />
+                        <input id="wifi-eap-username" type="text" class="form-control operationDataKeys" data-key="wifiEAPUsername" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -562,7 +562,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-eap-password" type="password" class="form-control operationDataKeys" data-key="wifiEAPPassword" placeholder="[ Optional field ]" />
+                        <input id="wifi-eap-password" type="text" class="form-control operationDataKeys" data-key="wifiEAPPassword" maxlength="100" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -617,7 +617,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Certificate Payload Anchor UUID">
-                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires a Certificate Payload UUID ]" />
+                                            <input type="text" class="form-control grid-input-text" maxlength="100" data-default="" placeholder="[ Requires a Certificate Payload UUID ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -678,7 +678,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="TLS Trusted Server Certificate Name">
-                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires a Certificate Common Name ]" />
+                                            <input type="text" class="form-control grid-input-text" maxlength="100" data-default="" placeholder="[ Requires a Certificate Common Name ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -743,7 +743,7 @@
                             <br>
                             ( Only relevant to TTLS, PEAP and EAP-FAST )
                         </label>
-                        <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" data-default="" placeholder="[ Optional field ]" />
+                        <input id="wifi-eap-outer-identity" type="text" class="form-control operationDataKeys" data-key="wifiEAPOuterIdentity" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     EAP-Fast Support :
@@ -812,7 +812,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-payload-cert-uuid" type="text" class="form-control operationDataKeys" data-key="wifiPayloadCertUUID" data-default="" placeholder="[ Optional field ]" />
+                        <input id="wifi-payload-cert-uuid" type="text" class="form-control operationDataKeys" data-key="wifiPayloadCertUUID" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     </div>
@@ -857,7 +857,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Roaming Consortium OI">
-                                            <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires 6 or 10 hexadecimal characters ]" />
+                                            <input type="text" class="form-control grid-input-text" maxlength="10" data-default="" placeholder="[ Requires 6 or 10 hexadecimal characters ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -918,7 +918,7 @@
                                         <span class="index"></span>
                                     </td>
                                     <td data-title="NAI Realm Name">
-                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires unique name ]" />
+                                        <input type="text" class="form-control grid-input-text" maxlength="100" data-default="" placeholder="[ Requires unique name ]" />
                                     </td>
                                     <td>
                                         <span class="list-group-item-actions">
@@ -980,10 +980,10 @@
                                         <span class="index"></span>
                                     </td>
                                     <td data-title="Mobile Country Code ( MCC )">
-                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires 3-digit-input ]" />
+                                        <input type="text" class="form-control grid-input-text" maxlength="3" data-default="" placeholder="[ Requires 3-digit-input ]" />
                                     </td>
                                     <td data-title="Mobile Network Code ( MNC )">
-                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires 3-digit-input ]" />
+                                        <input type="text" class="form-control grid-input-text" maxlength="3" data-default="" placeholder="[ Requires 3-digit-input ]" />
                                     </td>
                                     <td>
                                         <span class="list-group-item-actions">
@@ -1039,7 +1039,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-account-description" type="text" class="form-control operationDataKeys" data-key="emailAccountDescription" data-default="" placeholder="[ Optional field ]" />
+                        <input id="email-account-description" type="text" class="form-control operationDataKeys" data-key="emailAccountDescription" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1061,7 +1061,7 @@
                             <label class="wr-input-label" for="email-incoming-mail-server-imap-path-prefix">
                                 Path Prefix
                             </label>
-                            <input id="email-incoming-mail-server-imap-path-prefix" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerIMAPPathPrefix" data-default="" placeholder="[ Optional field ]" />
+                            <input id="email-incoming-mail-server-imap-path-prefix" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerIMAPPathPrefix" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                         </div>
 
                     </div>
@@ -1073,7 +1073,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-account-name" type="text" class="form-control operationDataKeys" data-key="emailAccountName" data-default="" placeholder="[ Optional field ]" />
+                        <input id="email-account-name" type="text" class="form-control operationDataKeys" data-key="emailAccountName" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1083,7 +1083,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-address" type="text" class="form-control operationDataKeys" data-key="emailAddress" data-default="" placeholder="[ Optional field. Set On Device ]" />
+                        <input id="email-address" type="text" class="form-control operationDataKeys" data-key="emailAddress" maxlength="100" data-default="" placeholder="[ Optional field. Set On Device ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1123,7 +1123,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-smime-signing-certificate-uuid" type="text" class="form-control operationDataKeys" data-key="emailSMIMESigningCertificateUUID" data-default="" placeholder="[ Optional field ]" />
+                        <input id="email-smime-signing-certificate-uuid" type="text" class="form-control operationDataKeys" data-key="emailSMIMESigningCertificateUUID" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1133,7 +1133,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-smime-encryption-certificate-uuid" type="text" class="form-control operationDataKeys" data-key="emailSMIMEEncryptionCertificateUUID" data-default="" placeholder="[ Optional field ]" />
+                        <input id="email-smime-encryption-certificate-uuid" type="text" class="form-control operationDataKeys" data-key="emailSMIMEEncryptionCertificateUUID" maxlength="100" data-default="" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1167,7 +1167,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-incoming-mail-server-hostname" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerHostname" data-default="" placeholder="[ Required field ]" />
+                        <input id="email-incoming-mail-server-hostname" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerHostname" maxlength="100" data-default="" placeholder="[ Required field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1187,7 +1187,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-incoming-mail-server-port-number" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerPortNumber" data-default="" placeholder="[ Required field which requires a number input ]" />
+                        <input id="email-incoming-mail-server-port-number" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerPortNumber" maxlength="5" data-default="" placeholder="[ Required field which requires a number input ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1210,7 +1210,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-incoming-mail-server-username" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerUsername" data-default="" placeholder="[ Optional field ]">
+                        <input id="email-incoming-mail-server-username" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerUsername" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1220,7 +1220,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-incoming-mail-server-password" type="password" class="form-control operationDataKeys" data-key="emailIncomingMailServerPassword" data-default="" placeholder="[ Optional field ]">
+                        <input id="email-incoming-mail-server-password" type="text" class="form-control operationDataKeys" data-key="emailIncomingMailServerPassword" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <br>
@@ -1234,7 +1234,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-outgoing-mail-server-hostname" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerHostname" data-default="" placeholder="[ Required field ]" />
+                        <input id="email-outgoing-mail-server-hostname" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerHostname" maxlength="100" data-default="" placeholder="[ Required field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1254,7 +1254,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-outgoing-mail-server-port-number" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerPortNumber" data-default="" placeholder="[ Required field which requires a number input ]" />
+                        <input id="email-outgoing-mail-server-port-number" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerPortNumber" maxlength="5" data-default="" placeholder="[ Required field which requires a number input ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1277,7 +1277,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-outgoing-mail-server-username" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerUsername" data-default="" placeholder="[ Optional field ]">
+                        <input id="email-outgoing-mail-server-username" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerUsername" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1297,7 +1297,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="email-outgoing-mail-server-password" type="password" class="form-control operationDataKeys" data-key="emailOutgoingMailServerPassword" data-default="" placeholder="[ Optional field ]">
+                        <input id="email-outgoing-mail-server-password" type="text" class="form-control operationDataKeys" data-key="emailOutgoingMailServerPassword" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                 </div>
@@ -1371,10 +1371,10 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Device Name">
-                                            <input type="text" class="form-control grid-input-text" data-child-key="deviceName" data-default="" placeholder="[ Requires AirPlay destination name ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="deviceName" maxlength="100" data-default="" placeholder="[ Requires AirPlay destination name ]" />
                                         </td>
                                         <td data-title="Password">
-                                            <input type="password" class="form-control grid-input-text" data-child-key="password" data-default="" placeholder="[ Optional field. Requires AirPlay destination password ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="password" maxlength="100" data-default="" placeholder="[ Optional field. Requires AirPlay destination password ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -1435,7 +1435,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Destination">
-                                            <input type="text" class="form-control grid-input-text" data-default="00:00:00:00:00:00" value="00:00:00:00:00:00" placeholder="[ Requires Device ID of the AirPlay destination ]" />
+                                            <input type="text" class="form-control grid-input-text" maxlength="17" data-default="00:00:00:00:00:00" value="00:00:00:00:00:00" placeholder="[ Requires Device ID of the AirPlay destination ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -1491,7 +1491,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="ldap-account-description" type="text" class="form-control operationDataKeys" data-key="ldapAccountDescription" data-default="Company LDAP Account" value="Company LDAP Account" placeholder="[ Optional field ]" />
+                        <input id="ldap-account-description" type="text" class="form-control operationDataKeys" data-key="ldapAccountDescription" maxlength="100" data-default="Company LDAP Account" value="Company LDAP Account" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1501,7 +1501,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="ldap-account-hostname" type="text" class="form-control operationDataKeys" data-key="ldapAccountHostname" data-default="" placeholder="[ Required field ]" />
+                        <input id="ldap-account-hostname" type="text" class="form-control operationDataKeys" data-key="ldapAccountHostname" maxlength="100" data-default="" placeholder="[ Required field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1521,7 +1521,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="ldap-account-username" type="text" class="form-control operationDataKeys" data-key="ldapAccountUsername" data-default="" placeholder="[ Optional field ]">
+                        <input id="ldap-account-username" type="text" class="form-control operationDataKeys" data-key="ldapAccountUsername" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1531,7 +1531,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="ldap-account-password" type="password" class="form-control operationDataKeys" data-key="ldapAccountPassword" placeholder="[ Optional field ]">
+                        <input id="ldap-account-password" type="text" class="form-control operationDataKeys" data-key="ldapAccountPassword" maxlength="100" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1576,7 +1576,7 @@
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Description">
-                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingDescription" data-default="LDAP Search" value="LDAP Search" placeholder="[ Optional Field ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingDescription" maxlength="100" data-default="LDAP Search" value="LDAP Search" placeholder="[ Optional Field ]" />
                                         </td>
                                         <td data-title="Search Base">
                                             <select class="form-control grid-input-select" data-child-key="searchSettingSearchBase" data-default="0">
@@ -1588,7 +1588,7 @@
                                             </select>
                                         </td>
                                         <td data-title="Scope">
-                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingScope" data-default="ou=department, o=company" value="ou=department, o=company" placeholder="[ Requires path to the node where a search should start. ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingScope" maxlength="100" data-default="ou=department, o=company" value="ou=department, o=company" placeholder="[ Requires path to the node where a search should start. ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
@@ -1644,7 +1644,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-account-description" type="text" class="form-control operationDataKeys" data-key="calendarAccountDescription" data-default="Company CalDAV Account" value="Company CalDAV Account" placeholder="[ Optional field ]" />
+                        <input id="calendar-account-description" type="text" class="form-control operationDataKeys" data-key="calendarAccountDescription" maxlength="100" data-default="Company CalDAV Account" value="Company CalDAV Account" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1654,7 +1654,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-account-hostname" type="text" class="form-control operationDataKeys" data-key="calendarAccountHostname" data-default="" placeholder="[ Required field ]" />
+                        <input id="calendar-account-hostname" type="text" class="form-control operationDataKeys" data-key="calendarAccountHostname" maxlength="100" data-default="" placeholder="[ Required field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1674,7 +1674,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-account-port" type="text" class="form-control operationDataKeys" data-key="calendarAccountPort" data-default="" placeholder="[ Required Field which requires Number Input ]" />
+                        <input id="calendar-account-port" type="text" class="form-control operationDataKeys" data-key="calendarAccountPort" maxlength="5" data-default="" placeholder="[ Required Field which requires Number Input ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1684,7 +1684,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-principal-url" type="text" class="form-control operationDataKeys" data-key="calendarPrincipalURL" data-default="" placeholder="[ Optional field ]">
+                        <input id="calendar-principal-url" type="text" class="form-control operationDataKeys" data-key="calendarPrincipalURL" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1694,7 +1694,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-account-username" type="text" class="form-control operationDataKeys" data-key="calendarAccountUsername" data-default="" placeholder="[ Set On Device ]">
+                        <input id="calendar-account-username" type="text" class="form-control operationDataKeys" data-key="calendarAccountUsername" maxlength="100" data-default="" placeholder="[ Optional field. Set On Device ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1704,7 +1704,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-account-password" type="password" class="form-control operationDataKeys" data-key="calendarAccountPassword" placeholder="[ Optional field ]">
+                        <input id="calendar-account-password" type="text" class="form-control operationDataKeys" data-key="calendarAccountPassword" maxlength="100" placeholder="[ Optional field ]">
                     </div>
 
                 </div>
@@ -1744,7 +1744,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-subscription-description" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionDescription" data-default="Subscribed Calendar" value="Subscribed Calendar" placeholder="[ Optional field ]" />
+                        <input id="calendar-subscription-description" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionDescription" maxlength="100" data-default="Subscribed Calendar" value="Company Subscribed Calendar" placeholder="[ Optional field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1754,7 +1754,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-subscription-hostname" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionHostname" data-default="" placeholder="[ Required field ]" />
+                        <input id="calendar-subscription-hostname" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionHostname" maxlength="100" data-default="" placeholder="[ Required field ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1774,7 +1774,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-subscription-username" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionUsername" data-default="" placeholder="[ Optional field ]">
+                        <input id="calendar-subscription-username" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionUsername" maxlength="100" data-default="" placeholder="[ Optional field ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1784,7 +1784,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-subscription-password" type="password" class="form-control operationDataKeys" data-key="calendarSubscriptionPassword" placeholder="[ Optional field ]">
+                        <input id="calendar-subscription-password" type="text" class="form-control operationDataKeys" data-key="calendarSubscriptionPassword" maxlength="100" placeholder="[ Optional field ]">
                     </div>
 
                 </div>
@@ -1823,7 +1823,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnAccessPointName" type="text" class="form-control operationDataKeys" data-key="apnAccessPointName" data-default="" placeholder="[ Required ]">
+                        <input id="apnAccessPointName" type="text" class="form-control operationDataKeys" data-key="apnAccessPointName" maxlength="100" data-default="" placeholder="[ Required ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1833,7 +1833,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnAccessPointUsername" type="text" class="form-control operationDataKeys" data-key="apnAccessPointUsername" data-default="" placeholder="[ Set On Device ]">
+                        <input id="apnAccessPointUsername" type="text" class="form-control operationDataKeys" data-key="apnAccessPointUsername" maxlength="100" data-default="" placeholder="[ Set On Device ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1843,7 +1843,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnAccessPointPassword" type="password" class="form-control operationDataKeys" data-key="apnAccessPointPassword" placeholder="[ Optional ]">
+                        <input id="apnAccessPointPassword" type="text" class="form-control operationDataKeys" data-key="apnAccessPointPassword" maxlength="100" placeholder="[ Optional ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -1853,8 +1853,8 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="apnProxyServer" type="text" class="form-control operationDataKeys" data-key="apnProxyServer" data-default="" placeholder="[ Optional ]"> :
-                        <input id="apnProxyPort" type="text" class="form-control operationDataKeys" data-key="apnProxyPort" data-default="" placeholder="">
+                        <input id="apnProxyServer" type="text" class="form-control operationDataKeys" data-key="apnProxyServer" maxlength="100" data-default="" placeholder="[ Optional ]"> :
+                        <input id="apnProxyPort" type="text" class="form-control operationDataKeys" data-key="apnProxyPort" maxlength="5" data-default="" placeholder="">
                     </div>
                 </div>
             </div>
@@ -2679,7 +2679,7 @@
                                                         <span class="index"></span>
                                                     </td>
                                                     <td data-title="Application Bundle ID">
-                                                        <input type="text" class="form-control grid-input-text" data-default="" placeholder="[ Requires an Application Bundle ID ]" />
+                                                        <input type="text" class="form-control grid-input-text" maxlength="100" data-default="" placeholder="[ Requires an Application Bundle ID ]" />
                                                     </td>
                                                     <td>
                                                         <span class="list-group-item-actions">
