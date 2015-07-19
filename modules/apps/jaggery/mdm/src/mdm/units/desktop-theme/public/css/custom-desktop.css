@@ -1545,7 +1545,7 @@ a.wr-side-panel-toggle-btn.selected {
 .wr-input-control.switch input[type="checkbox"]:not(:checked) + .helper:after {
     left: 0 !important;
     background: #eaeaea;
-    border: 1px #CBCBCB solid;
+    border: 1px #d5d5d5 solid;
 }
 
 .wr-input-control.switch input[type="checkbox"]:not(:checked) + .helper:before {
