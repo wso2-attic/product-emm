@@ -1480,27 +1480,27 @@ var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
  * Method to set count id to cloned elements.
  * @param {object} addFormContainer
  */
-function setId(addFormContainer) {
+var setId = function (addFormContainer) {
     $(addFormContainer).find("[data-add-form-clone]").each(function (i) {
         $(this).attr("id", $(this).attr("data-add-form-clone").slice(1) + "-" + (i + 1));
         if ($(this).find(".index").length > 0) {
             $(this).find(".index").html(i + 1);
         }
     });
-}
+};
 
 /**
  * Method to set count id to cloned elements.
  * @param {object} addFormContainer
  */
-function showHideHelpText(addFormContainer) {
+var showHideHelpText = function (addFormContainer) {
     var helpText = "[data-help-text=add-form]";
     if ($(addFormContainer).find("[data-add-form-clone]").length > 0) {
         $(addFormContainer).find(helpText).hide();
     } else {
         $(addFormContainer).find(helpText).show();
     }
-}
+};
 
 // End of functions related to grid-input-view
 
@@ -1606,6 +1606,19 @@ $(document).ready(function () {
                         $(this).slideUp();
                     }
                 );
+                // removing all entries of grid-input elements if exist
+                $(operationDataWrapper + " .grouped-array-input").each(
+                    function () {
+                        var gridInputs = $(this).find("[data-add-form-clone]");
+                        if (gridInputs.length > 0) {
+                            gridInputs.remove();
+                        }
+                        var helpTexts = $(this).find("[data-help-text=add-form]");
+                        if (helpTexts.length > 0) {
+                            helpTexts.show();
+                        }
+                    }
+                );
             }
         }
     });
@@ -1638,34 +1651,27 @@ $(document).ready(function () {
         updateGroupedInputVisibility(this);
     });
 
-    // add form button click function
-    $(advanceOperations).on("click", "[data-click-event=add-form]", function (e) {
-        e.preventDefault();
-
+    // add form entry click function for grid inputs
+    $(advanceOperations).on("click", "[data-click-event=add-form]", function () {
         var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
-
         var clonedForm = $("[data-add-form=" + $(this).attr("href") + "]").clone().
             find("[data-add-form-element=clone]").attr("data-add-form-clone", $(this).attr("href"));
 
         // adding class .child-input to capture text-input-array-values
         $("input, select", clonedForm).addClass("child-input");
 
-        // remove form button click function
-        $(clonedForm).find("[data-click-event=remove-form]").bind("click", function () {
-            e.preventDefault();
-            $(this).closest("[data-add-form-element=clone]").remove();
-            setId(addFormContainer);
-            showHideHelpText(addFormContainer);
-        });
-
         $(addFormContainer).append(clonedForm);
         setId(addFormContainer);
         showHideHelpText(addFormContainer);
+    });
 
-        // focus + scroll to newly added form
-        $("body").animate({
-            scrollTop: $(addFormContainer).find("[data-add-form-clone]").last().offset().top
-        }, 400);
+    // remove form entry click function for grid inputs
+    $(advanceOperations).on("click", "[data-click-event=remove-form]", function () {
+        var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
+
+        $(this).closest("[data-add-form-element=clone]").remove();
+        setId(addFormContainer);
+        showHideHelpText(addFormContainer);
     });
 
     $(".wizard-stepper").click(function () {
