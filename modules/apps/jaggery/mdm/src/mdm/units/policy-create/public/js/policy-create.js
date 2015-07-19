@@ -361,24 +361,20 @@ validateStep["policy-profile"] = function () {
                             emptyChildInputCount++;
                         }
                     });
-                    if (emptyChildInputCount == 0) {
-                        // checking for duplicates
-                        var initialChildInputArrayLength = childInputArray.length;
-                        if (initialChildInputArrayLength > 1) {
-                            var m, poppedChildInput;
-                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                poppedChildInput = childInputArray.pop();
-                                var n;
-                                for (n = 0; n < childInputArray.length; n++) {
-                                    if (poppedChildInput == childInputArray[n]) {
-                                        duplicatesExist = true;
-                                        break;
-                                    }
-                                }
-                                if (duplicatesExist) {
+                    // checking for duplicates
+                    var initialChildInputArrayLength = childInputArray.length;
+                    if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                        var m, poppedChildInput;
+                        for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                            poppedChildInput = childInputArray.pop();
+                            var n;
+                            for (n = 0; n < childInputArray.length; n++) {
+                                if (poppedChildInput == childInputArray[n]) {
+                                    duplicatesExist = true;
                                     break;
                                 }
                             }
+                            if (duplicatesExist) { break; }
                         }
                     }
                     // updating validationStatus
@@ -496,22 +492,18 @@ validateStep["policy-profile"] = function () {
                                     emptyChildInputCount++;
                                 }
                             });
-                            if (emptyChildInputCount == 0) {
-                                // checking for duplicates
-                                initialChildInputArrayLength = childInputArray.length;
-                                if (initialChildInputArrayLength > 1) {
-                                    for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                        poppedChildInput = childInputArray.pop();
-                                        for (n = 0; n < childInputArray.length; n++) {
-                                            if (poppedChildInput == childInputArray[n]) {
-                                                duplicatesExist = true;
-                                                break;
-                                            }
-                                        }
-                                        if (duplicatesExist) {
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
                                             break;
                                         }
                                     }
+                                    if (duplicatesExist) { break; }
                                 }
                             }
                             // updating validationStatus
@@ -551,22 +543,18 @@ validateStep["policy-profile"] = function () {
                                         emptyChildInputCount++;
                                     }
                                 });
-                                if (emptyChildInputCount == 0) {
-                                    // checking for duplicates
-                                    initialChildInputArrayLength = childInputArray.length;
-                                    if (initialChildInputArrayLength > 1) {
-                                        for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                            poppedChildInput = childInputArray.pop();
-                                            for (n = 0; n < childInputArray.length; n++) {
-                                                if (poppedChildInput == childInputArray[n]) {
-                                                    duplicatesExist = true;
-                                                    break;
-                                                }
-                                            }
-                                            if (duplicatesExist) {
+                                // checking for duplicates
+                                initialChildInputArrayLength = childInputArray.length;
+                                if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                                    for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                        poppedChildInput = childInputArray.pop();
+                                        for (n = 0; n < childInputArray.length; n++) {
+                                            if (poppedChildInput == childInputArray[n]) {
+                                                duplicatesExist = true;
                                                 break;
                                             }
                                         }
+                                        if (duplicatesExist) { break; }
                                     }
                                 }
                                 // updating validationStatus
@@ -614,22 +602,18 @@ validateStep["policy-profile"] = function () {
                                 invalidAgainstRegExCount++;
                             }
                         });
-                        if (emptyChildInputCount == 0) {
-                            // checking for duplicates
-                            initialChildInputArrayLength = childInputArray.length;
-                            if (initialChildInputArrayLength > 1) {
-                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                    poppedChildInput = childInputArray.pop();
-                                    for (n = 0; n < childInputArray.length; n++) {
-                                        if (poppedChildInput == childInputArray[n]) {
-                                            duplicatesExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (duplicatesExist) {
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
                                         break;
                                     }
                                 }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -685,22 +669,18 @@ validateStep["policy-profile"] = function () {
                                 emptyChildInputCount++;
                             }
                         });
-                        if (emptyChildInputCount == 0) {
-                            // checking for duplicates
-                            initialChildInputArrayLength = childInputArray.length;
-                            if (initialChildInputArrayLength > 1) {
-                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                    poppedChildInput = childInputArray.pop();
-                                    for (n = 0; n < childInputArray.length; n++) {
-                                        if (poppedChildInput == childInputArray[n]) {
-                                            duplicatesExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (duplicatesExist) {
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
                                         break;
                                     }
                                 }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -758,22 +738,18 @@ validateStep["policy-profile"] = function () {
                                 outOfAllowedLengthCount++;
                             }
                         });
-                        if (emptyChildInputCount == 0) {
-                            // checking for duplicates
-                            initialChildInputArrayLength = childInputArray.length;
-                            if (initialChildInputArrayLength > 1) {
-                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                    poppedChildInput = childInputArray.pop();
-                                    for (n = 0; n < childInputArray.length; n++) {
-                                        if (poppedChildInput == childInputArray[n]) {
-                                            duplicatesExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (duplicatesExist) {
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
                                         break;
                                     }
                                 }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -825,24 +801,113 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
-            if ($.inArray("EMAIL_SETTINGS", configuredOperations) != -1) {
-                /* Validating Access Point Name */
-                var emAccountDescription = $("input#emAccountDescription").val();
-                if (!emAccountDescription) {
+            // Validating EMAIL
+            if ($.inArray(iosOperationConstants["EMAIL_OPERATION_CODE"], configuredOperations) != -1) {
+                // if EMAIL is configured
+                operation = iosOperationConstants["EMAIL_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var emailAddress = $("input#email-address").val();
+                if (emailAddress &&
+                    !inputIsValidAgainstRegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, emailAddress)) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "Display name of the account is not provided. " +
-                            "Please provide a valid name to proceed.",
-                        "erroneousFeature": "email-settings"
+                        "subErrorMsg": "Email Address is not valid. Please check.",
+                        "erroneousFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
-                } else {
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    var emailIncomingMailServerHostname = $("input#email-incoming-mail-server-hostname").val();
+                    if (!emailIncomingMailServerHostname) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Incoming Mail Server Hostname is empty. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    var emailIncomingMailServerPort = $("input#email-incoming-mail-server-port").val();
+                    if (!emailIncomingMailServerPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Incoming Mail Server Port is empty. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!$.isNumeric(emailIncomingMailServerPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Incoming Mail Server Port requires a number input. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(emailIncomingMailServerPort, 0, 65535)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Incoming Mail Server Port is not within the range " +
+                                "of valid port numbers. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    var emailOutgoingMailServerHostname = $("input#email-outgoing-mail-server-hostname").val();
+                    if (!emailOutgoingMailServerHostname) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Hostname is empty. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    var emailOutgoingMailServerPort = $("input#email-outgoing-mail-server-port").val();
+                    if (!emailOutgoingMailServerPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Port is empty. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!$.isNumeric(emailOutgoingMailServerPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Port requires a number input. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(emailOutgoingMailServerPort, 0, 65535)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Port is not within the range " +
+                                "of valid port numbers. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
                     validationStatus = {
                         "error": false,
-                        "okFeature": "email-settings"
+                        "okFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
                 }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
             }
             // Validating AIRPLAY
             if ($.inArray(iosOperationConstants["AIRPLAY_OPERATION_CODE"], configuredOperations) != -1) {
@@ -883,22 +948,18 @@ validateStep["policy-profile"] = function () {
                                 }
                             }
                         });
-                        if (emptyChildInputCount == 0) {
-                            // checking for duplicates
-                            initialChildInputArrayLength = childInputArray.length;
-                            if (initialChildInputArrayLength > 1) {
-                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                    poppedChildInput = childInputArray.pop();
-                                    for (n = 0; n < childInputArray.length; n++) {
-                                        if (poppedChildInput == childInputArray[n]) {
-                                            duplicatesExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (duplicatesExist) {
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
                                         break;
                                     }
                                 }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -944,22 +1005,18 @@ validateStep["policy-profile"] = function () {
                                 invalidAgainstRegExCount++
                             }
                         });
-                        if (emptyChildInputCount == 0) {
-                            // checking for duplicates
-                            initialChildInputArrayLength = childInputArray.length;
-                            if (initialChildInputArrayLength > 1) {
-                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                    poppedChildInput = childInputArray.pop();
-                                    for (n = 0; n < childInputArray.length; n++) {
-                                        if (poppedChildInput == childInputArray[n]) {
-                                            duplicatesExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (duplicatesExist) {
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
                                         break;
                                     }
                                 }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -1048,22 +1105,18 @@ validateStep["policy-profile"] = function () {
                                 }
                             }
                         });
-                        if (emptyChildInputCount == 0) {
-                            // checking for duplicates
-                            initialChildInputArrayLength = childInputArray.length;
-                            if (initialChildInputArrayLength > 1) {
-                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                    poppedChildInput = childInputArray.pop();
-                                    for (n = 0; n < childInputArray.length; n++) {
-                                        if (poppedChildInput == childInputArray[n]) {
-                                            duplicatesExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (duplicatesExist) {
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
                                         break;
                                     }
                                 }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
