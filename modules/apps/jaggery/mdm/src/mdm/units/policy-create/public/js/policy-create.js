@@ -1242,6 +1242,175 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+            // Validating APN
+            if ($.inArray(iosOperationConstants["APN_OPERATION_CODE"], configuredOperations) != -1) {
+                // if APN is configured
+                operation = iosOperationConstants["APN_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var apnConfigurationsGridChildInputs = "div#apn-configurations .child-input";
+                if ($(apnConfigurationsGridChildInputs).length == 0) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "APN Settings have zero configurations attached. Please check.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                } else if ($(apnConfigurationsGridChildInputs).length > 0) {
+                    childInputCount = 0;
+                    childInputArray = [];
+                    // checking empty APN field count
+                    emptyChildInputCount = 0;
+                    duplicatesExist = false;
+                    // looping through each child input
+                    $(apnConfigurationsGridChildInputs).each(function () {
+                        childInputCount++;
+                        if (childInputCount % 5 == 1) {
+                            // if child input is of first column
+                            childInput = $(this).val();
+                            childInputArray.push(childInput);
+                            // updating emptyChildInputCount
+                            if (!childInput) {
+                                // if child input field is empty
+                                emptyChildInputCount++;
+                            }
+                        }
+                    });
+                    // checking for duplicates
+                    initialChildInputArrayLength = childInputArray.length;
+                    if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                        for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                            poppedChildInput = childInputArray.pop();
+                            for (n = 0; n < childInputArray.length; n++) {
+                                if (poppedChildInput == childInputArray[n]) {
+                                    duplicatesExist = true;
+                                    break;
+                                }
+                            }
+                            if (duplicatesExist) { break; }
+                        }
+                    }
+                    // updating validationStatus
+                    if (emptyChildInputCount > 0) {
+                        // if empty child inputs are present
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "One or more APN fields of Configurations are empty. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (duplicatesExist) {
+                        // if duplicate input is present
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Duplicate values exist with " +
+                                "APN fields of Configurations. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+            // Validating CELLULAR
+            if ($.inArray(iosOperationConstants["CELLULAR_OPERATION_CODE"], configuredOperations) != -1) {
+                // if CELLULAR is configured
+                operation = iosOperationConstants["CELLULAR_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var cellularAttachAPNName = $("input#cellular-attach-apn-name").val();
+                if (!cellularAttachAPNName) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Cellular Configuration Name is empty. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    var cellularAPNConfigurationsGridChildInputs = "div#cellular-apn-configurations .child-input";
+                    if ($(cellularAPNConfigurationsGridChildInputs).length > 0) {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        // checking empty APN field count
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(cellularAPNConfigurationsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 6 == 1) {
+                                // if child input is of first column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) { break; }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more APN fields of APN Configurations are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                    "APN fields of APN Configurations. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
         }
     }
     // ending validation process
