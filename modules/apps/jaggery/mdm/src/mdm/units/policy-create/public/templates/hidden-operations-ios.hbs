@@ -64,14 +64,30 @@
             <span id="calendar-subscription-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="calendar-subscription-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">-->
-            <!--<span class="wr-hidden-operations-icon fw-stack">-->
-                <!--<i class="fw fw-settings fw-stack-2x"></i>-->
-            <!--</span>-->
-            <!--Access Point Name-->
-            <!--<span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>-->
-            <!--<span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>-->
-        <!--</a>-->
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-service-provider fw-stack-2x"></i>
+            </span>
+            Access Point Names
+            <span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('cellular', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-service-provider fw-stack-2x"></i>
+            </span>
+            Cellular Network Settings
+            <span id="cellular-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="cellular-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('vpn', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-vpn2 fw-stack-2x"></i>
+            </span>
+            Virtual Private Network
+            <span id="vpn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="vpn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -597,7 +613,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No :</th>
+                                        <th>No:</th>
                                         <th>Certificate Payload Anchor UUID</th>
                                         <th></th>
                                     </tr>
@@ -613,7 +629,7 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#wifi-payload-certificate-anchor-uuids-grid">
                                     <tr data-add-form-element="clone">
-                                        <td data-title="No :">
+                                        <td data-title="No:">
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Certificate Payload Anchor UUID">
@@ -622,11 +638,10 @@
                                         <td>
                                             <span class="list-group-item-actions">
                                                 <a href="#wifi-payload-certificate-anchor-uuids-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                    <span class="fw-stack">
+                                                    <span class="fw-stack helper" title="Remove Entry">
                                                         <i class="fw fw-ring fw-stack-2x"></i>
                                                         <i class="fw fw-delete fw-stack-1x"></i>
                                                     </span>
-                                                    Remove
                                                 </a>
                                             </span>
                                         </td>
@@ -658,7 +673,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No :</th>
+                                        <th>No:</th>
                                         <th>TLS Trusted Server Certificate Name</th>
                                         <th></th>
                                     </tr>
@@ -674,7 +689,7 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#wifi-tls-trusted-server-names-grid">
                                     <tr data-add-form-element="clone">
-                                        <td data-title="No :">
+                                        <td data-title="No:">
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="TLS Trusted Server Certificate Name">
@@ -683,11 +698,10 @@
                                         <td>
                                             <span class="list-group-item-actions">
                                                 <a href="#wifi-tls-trusted-server-names-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                    <span class="fw-stack">
+                                                    <span class="fw-stack helper" title="Remove Entry">
                                                         <i class="fw fw-ring fw-stack-2x"></i>
                                                         <i class="fw fw-delete fw-stack-1x"></i>
                                                     </span>
-                                                    Remove
                                                 </a>
                                             </span>
                                         </td>
@@ -837,7 +851,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                 <tr>
-                                    <th>No :</th>
+                                    <th>No:</th>
                                     <th>Roaming Consortium OI</th>
                                     <th></th>
                                 </tr>
@@ -853,7 +867,7 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#wifi-roaming-consortium-ois-grid">
                                     <tr data-add-form-element="clone">
-                                        <td data-title="No :">
+                                        <td data-title="No:">
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Roaming Consortium OI">
@@ -862,11 +876,10 @@
                                         <td>
                                             <span class="list-group-item-actions">
                                                 <a href="#wifi-roaming-consortium-ois-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                    <span class="fw-stack">
+                                                    <span class="fw-stack helper" title="Remove Entry">
                                                         <i class="fw fw-ring fw-stack-2x"></i>
                                                         <i class="fw fw-delete fw-stack-1x"></i>
                                                     </span>
-                                                    Remove
                                                 </a>
                                             </span>
                                         </td>
@@ -898,7 +911,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No :</th>
+                                        <th>No:</th>
                                         <th>NAI Realm Name</th>
                                         <th></th>
                                     </tr>
@@ -914,7 +927,7 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#wifi-nai-realm-names-grid">
                                 <tr data-add-form-element="clone">
-                                    <td data-title="No :">
+                                    <td data-title="No:">
                                         <span class="index"></span>
                                     </td>
                                     <td data-title="NAI Realm Name">
@@ -923,11 +936,10 @@
                                     <td>
                                         <span class="list-group-item-actions">
                                             <a href="#wifi-nai-realm-names-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                <span class="fw-stack">
+                                                <span class="fw-stack helper" title="Remove Entry">
                                                     <i class="fw fw-ring fw-stack-2x"></i>
                                                     <i class="fw fw-delete fw-stack-1x"></i>
                                                 </span>
-                                                Remove
                                             </a>
                                         </span>
                                     </td>
@@ -959,7 +971,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                 <tr>
-                                    <th>No :</th>
+                                    <th>No:</th>
                                     <th>Mobile Country Code ( MCC )</th>
                                     <th>Mobile Network Code ( MNC )</th>
                                     <th></th>
@@ -976,7 +988,7 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#wifi-mcc-and-mncs-grid">
                                 <tr data-add-form-element="clone">
-                                    <td data-title="No :">
+                                    <td data-title="No:">
                                         <span class="index"></span>
                                     </td>
                                     <td data-title="Mobile Country Code ( MCC )">
@@ -988,11 +1000,10 @@
                                     <td>
                                         <span class="list-group-item-actions">
                                             <a href="#wifi-mcc-and-mncs-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                <span class="fw-stack">
+                                                <span class="fw-stack helper" title="Remove Entry">
                                                     <i class="fw fw-ring fw-stack-2x"></i>
                                                     <i class="fw fw-delete fw-stack-1x"></i>
                                                 </span>
-                                                Remove
                                             </a>
                                         </span>
                                     </td>
@@ -1350,7 +1361,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No :</th>
+                                        <th>No:</th>
                                         <th>Device Name</th>
                                         <th>Password</th>
                                         <th></th>
@@ -1367,23 +1378,22 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#airplay-credentials-grid">
                                     <tr data-add-form-element="clone">
-                                        <td data-title="No :">
+                                        <td data-title="No:">
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Device Name">
                                             <input type="text" class="form-control grid-input-text" data-child-key="deviceName" maxlength="100" data-default="" placeholder="[ Requires AirPlay destination name ]" />
                                         </td>
                                         <td data-title="Password">
-                                            <input type="text" class="form-control grid-input-text" data-child-key="password" maxlength="100" data-default="" placeholder="[ Optional field. Requires AirPlay destination password ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="password" maxlength="100" data-default="" placeholder="[ Optional ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
                                                 <a href="#airplay-credentials-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                    <span class="fw-stack">
+                                                    <span class="fw-stack helper" title="Remove Entry">
                                                         <i class="fw fw-ring fw-stack-2x"></i>
                                                         <i class="fw fw-delete fw-stack-1x"></i>
                                                     </span>
-                                                    Remove
                                                 </a>
                                             </span>
                                         </td>
@@ -1415,7 +1425,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No :</th>
+                                        <th>No:</th>
                                         <th>Destination</th>
                                         <th></th>
                                     </tr>
@@ -1431,20 +1441,19 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#airplay-destinations-grid">
                                     <tr data-add-form-element="clone">
-                                        <td data-title="No :">
+                                        <td data-title="No:">
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Destination">
-                                            <input type="text" class="form-control grid-input-text" maxlength="17" data-default="00:00:00:00:00:00" value="00:00:00:00:00:00" placeholder="[ Requires Device ID of the AirPlay destination ]" />
+                                            <input type="text" class="form-control grid-input-text" maxlength="17" data-default="00:00:00:00:00:00" value="00:00:00:00:00:00" placeholder="[ Requires Device ID of AirPlay destination ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
                                                 <a href="#airplay-destinations-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                    <span class="fw-stack">
+                                                    <span class="fw-stack helper" title="Remove Entry">
                                                         <i class="fw fw-ring fw-stack-2x"></i>
                                                         <i class="fw fw-delete fw-stack-1x"></i>
                                                     </span>
-                                                    Remove
                                                 </a>
                                             </span>
                                         </td>
@@ -1554,7 +1563,7 @@
                             <table class="table table-responsive table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No :</th>
+                                        <th>No:</th>
                                         <th>Description</th>
                                         <th>Search Base</th>
                                         <th>Scope</th>
@@ -1572,11 +1581,11 @@
                             <table class="template hidden">
                                 <tbody data-add-form="#ldap-search-settings-grid">
                                     <tr data-add-form-element="clone">
-                                        <td data-title="No :">
+                                        <td data-title="No:">
                                             <span class="index"></span>
                                         </td>
                                         <td data-title="Description">
-                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingDescription" maxlength="100" data-default="LDAP Search" value="LDAP Search" placeholder="[ Optional Field ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingDescription" maxlength="100" data-default="LDAP Search" value="LDAP Search" placeholder="[ Optional field ]" />
                                         </td>
                                         <td data-title="Search Base">
                                             <select class="form-control grid-input-select" data-child-key="searchSettingSearchBase" data-default="0">
@@ -1588,16 +1597,15 @@
                                             </select>
                                         </td>
                                         <td data-title="Scope">
-                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingScope" maxlength="100" data-default="ou=department, o=company" value="ou=department, o=company" placeholder="[ Requires path to the node where a search should start. ]" />
+                                            <input type="text" class="form-control grid-input-text" data-child-key="searchSettingScope" maxlength="100" data-default="ou=department, o=company" value="ou=department, o=company" placeholder="[ Requires path to node where a search should start. ]" />
                                         </td>
                                         <td>
                                             <span class="list-group-item-actions">
                                                 <a href="#ldap-search-settings-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                    <span class="fw-stack">
+                                                    <span class="fw-stack helper" title="Remove Entry">
                                                         <i class="fw fw-ring fw-stack-2x"></i>
                                                         <i class="fw fw-delete fw-stack-1x"></i>
                                                     </span>
-                                                    Remove
                                                 </a>
                                             </span>
                                         </td>
@@ -1674,7 +1682,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="calendar-account-port" type="text" class="form-control operationDataKeys" data-key="calendarAccountPort" maxlength="5" data-default="" placeholder="[ Required Field which requires Number Input ]" />
+                        <input id="calendar-account-port" type="text" class="form-control operationDataKeys" data-key="calendarAccountPort" maxlength="5" data-default="" placeholder="[ Required field which requires Number Input ]" />
                     </div>
 
                     <div class="wr-input-control">
@@ -1794,72 +1802,262 @@
 
         <!-- APN -->
         <div class="wr-hidden-operation" data-operation="apn">
-            <div class="panel panel-default operation-data" data-operation="contacts" data-operation-code="APN_SETTINGS">
-                <div class="panel-heading" role="tab">
+            <div class="panel panel-default operation-data" data-operation="apn" data-operation-code="APN">
+                <div id="apn-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        APN
-                        <label id="apn-settings-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#apnSettings">
+                        Access Point Names ( APN )
+                        <label id="apn-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#apn-body">
                             <input type="checkbox" />
                             <span class="helper"></span>
                             <span class="text"></span>
                         </label>
                         <hr>
                         <div class="panel-title-description">
-                            This configuration can be used to specify advanced settings, such as a carrier Access Point Name (APN). (These settings should
-                            be managed only by trained professionals)
+                            These configurations can be used to specify Access Point Names ( APN ).
+                            Once this configuration profile is installed on an iOS device, corresponding users will not
+                            be able to modify these settings on their devices.
                         </div>
                     </h2>
                 </div>
-                <div id="apnSettings" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="apnSettings">
+                <div id="apn-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="apn-body">
 
-                    <div id="apn-settings-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                    <div id="apn-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="apnAccessPointName">
-                            Access Point Name (APN)
-                            <span class="helper" title="The name of the carrier (GPRS) access point">
+                        <label class="wr-input-label" for="apn-configurations">
+                            APN Configurations
+                            <span class="helper" title="Can contain an arbitrary number of entries, each describing an APN configuration.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
+                            <br>
+                            <a href="#apn-configurations-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add APN Configuration
+                            </a>
                         </label>
-                        <input id="apnAccessPointName" type="text" class="form-control operationDataKeys" data-key="apnAccessPointName" maxlength="100" data-default="" placeholder="[ Required ]">
+                        <div id="apn-configurations" class="operationDataKeys grouped-array-input five-column-key-value-pair-array" data-key="apnConfigurations">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No:</th>
+                                        <th>APN</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                        <th>Proxy</th>
+                                        <th>Port</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#apn-configurations-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="7">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#apn-configurations-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No:">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="APN">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="apn" maxlength="100" data-default="" placeholder="[ Required ]" />
+                                        </td>
+                                        <td data-title="Username">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="username" maxlength="100" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td data-title="Password">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="password" maxlength="100" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td data-title="Proxy">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="proxyServer" maxlength="100" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td data-title="Port">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="proxyPort" maxlength="5" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#apn-configurations-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack helper" title="Remove Entry">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="apnAccessPointUsername">
-                            Access Point Username
-                            <span class="helper" title="The username to connect to the access point">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="apnAccessPointUsername" type="text" class="form-control operationDataKeys" data-key="apnAccessPointUsername" maxlength="100" data-default="" placeholder="[ Set On Device ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="apnAccessPointPassword">
-                            Access Point Password
-                            <span class="helper" title="The password to connect to the access point">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="apnAccessPointPassword" type="text" class="form-control operationDataKeys" data-key="apnAccessPointPassword" maxlength="100" placeholder="[ Optional ]">
-                    </div>
-
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="apnProxyServer">
-                            Proxy Server and Port
-                            <span class="helper" title="Hostname or IP address, and port number for the proxy server">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="apnProxyServer" type="text" class="form-control operationDataKeys" data-key="apnProxyServer" maxlength="100" data-default="" placeholder="[ Optional ]"> :
-                        <input id="apnProxyPort" type="text" class="form-control operationDataKeys" data-key="apnProxyPort" maxlength="5" data-default="" placeholder="">
-                    </div>
                 </div>
             </div>
         </div>
         <!-- End of APN -->
+
+        <!-- Cellular Network Settings -->
+        <div class="wr-hidden-operation" data-operation="cellular">
+            <div class="panel panel-default operation-data" data-operation="cellular" data-operation-code="CELLULAR">
+                <div id="cellular-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Cellular Network Settings
+                        <label id="cellular-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#cellular-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            These configurations can be used to specify Cellular Network Settings on an iOS device.
+                            Cellular settings cannot be installed if an APN setting is already installed and
+                            upon successful installation, corresponding users will not be able to modify these
+                            settings on their devices.
+                        </div>
+                    </h2>
+                </div>
+                <div id="cellular-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="cellular-body">
+
+                    <div id="cellular-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="cellular-attach-apn-name">
+                            Cellular Configuration Name
+                            <span class="helper" title="Name for this configuration.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="cellular-attach-apn-name" type="text" class="form-control operationDataKeys" data-key="cellularAttachAPNName" maxlength="100" data-default="" placeholder="[ Required field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="cellular-authentication-type">
+                            Authentication Type
+                            <span class="helper" title="Cellular Settings Authentication Type.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="cellular-authentication-type" class="form-control operationDataKeys" data-key="cellularAuthenticationType" data-default="0">
+                            <option value="PAP" selected="selected">PAP</option>
+                            <option value="CHAP">CHAP</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="cellular-username">
+                            Username
+                            <span class="helper" title="Username used for authentication.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="cellular-username" type="text" class="form-control operationDataKeys" data-key="cellularUsername" maxlength="100" data-default="" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="cellular-password">
+                            Password
+                            <span class="helper" title="Password used for authentication.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="cellular-password" type="text" class="form-control operationDataKeys" data-key="cellularPassword" maxlength="100" placeholder="[ Optional field ]">
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="cellular-apn-configurations">
+                            APN Configurations
+                            <span class="helper" title="Can contain an arbitrary number of entries, each describing an APN configuration.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#cellular-apn-configurations-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add APN Configuration
+                            </a>
+                        </label>
+                        <div id="cellular-apn-configurations" class="operationDataKeys grouped-array-input six-column-key-value-pair-array" data-key="cellularAPNConfigurations">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No:</th>
+                                        <th>APN</th>
+                                        <th>Auth.Type</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                        <th>Proxy</th>
+                                        <th>Port</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-add-form-container="#cellular-apn-configurations-grid">
+                                    <tr data-help-text="add-form">
+                                        <td colspan="8">
+                                            No entries added yet .
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#cellular-apn-configurations-grid">
+                                    <tr data-add-form-element="clone">
+                                        <td data-title="No:">
+                                            <span class="index"></span>
+                                        </td>
+                                        <td data-title="APN">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="configurationName" maxlength="100" data-default="" placeholder="[ Required ]" />
+                                        </td>
+                                        <td data-title="Auth.Type">
+                                            <select class="form-control grid-input-select" data-child-key="authenticationType" data-default="0">
+                                                <option value="PAP" selected="selected">PAP</option>
+                                                <option value="CHAP">CHAP</option>
+                                            </select>
+                                        </td>
+                                        <td data-title="Username">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="username" maxlength="100" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td data-title="Password">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="password" maxlength="100" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td data-title="Proxy">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="proxyServer" maxlength="100" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td data-title="Port">
+                                            <input type="text" class="form-control grid-input-text" data-child-key="proxyPort" maxlength="5" data-default="" placeholder="[ Optional ]" />
+                                        </td>
+                                        <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#cellular-apn-configurations-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack helper" title="Remove Entry">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End of Cellular Network Settings -->
 
         <!-- Restrictions -->
         <div class="wr-hidden-operation" data-operation="restrictions">
@@ -2659,7 +2857,7 @@
                                         <table class="table table-responsive table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>No :</th>
+                                                    <th>No:</th>
                                                     <th>Application Bundle ID</th>
                                                     <th></th>
                                                 </tr>
@@ -2675,7 +2873,7 @@
                                         <table class="template hidden">
                                             <tbody data-add-form="#restrictions-autonomous-single-app-mode-permitted-app-ids-grid">
                                                 <tr data-add-form-element="clone">
-                                                    <td data-title="No :">
+                                                    <td data-title="No:">
                                                         <span class="index"></span>
                                                     </td>
                                                     <td data-title="Application Bundle ID">
@@ -2684,11 +2882,10 @@
                                                     <td>
                                                         <span class="list-group-item-actions">
                                                             <a href="#restrictions-autonomous-single-app-mode-permitted-app-ids-grid" class="grid-input-remove" data-click-event="remove-form">
-                                                                <span class="fw-stack">
+                                                                <span class="fw-stack helper" title="Remove Entry">
                                                                     <i class="fw fw-ring fw-stack-2x"></i>
                                                                     <i class="fw fw-delete fw-stack-1x"></i>
                                                                 </span>
-                                                                Remove
                                                             </a>
                                                         </span>
                                                     </td>
