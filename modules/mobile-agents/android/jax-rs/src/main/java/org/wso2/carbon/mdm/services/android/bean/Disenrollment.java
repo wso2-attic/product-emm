@@ -15,6 +15,7 @@
 */
 package org.wso2.carbon.mdm.services.android.bean;
 
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import java.io.Serializable;
 
 public class Disenrollment extends Operation implements Serializable {

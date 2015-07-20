@@ -158,19 +158,4 @@ public class AndroidAPIUtils {
         return operations;
     }
 
-    public static OperationWrapper convertOperation(Operation operation) {
-
-        OperationWrapper operationWrapper = new OperationWrapper();
-        operationWrapper.setProperties(operation.getProperties());
-        operationWrapper.setEnabled(operation.isEnabled());
-        operationWrapper.setId(operation.getId());
-        operationWrapper.setStatus(OperationWrapper.Status.valueOf(operation.getStatus().toString()));
-        operationWrapper.setCode(operation.getCode());
-        operationWrapper.setCreatedTimeStamp(operation.getCreatedTimeStamp());
-        operationWrapper.setReceivedTimeStamp(operation.getReceivedTimeStamp());
-        operationWrapper.setType(OperationWrapper.Type.valueOf(operation.getType().toString()));
-        operationWrapper.setObjOpResponse(operation.getOperationResponse());
-        operationWrapper.setObjPayLoad(operation.getPayLoad());
-        return operationWrapper;
-    }
 }

@@ -29,6 +29,7 @@ import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**

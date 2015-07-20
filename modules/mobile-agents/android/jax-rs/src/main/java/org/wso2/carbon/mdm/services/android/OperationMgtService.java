@@ -20,10 +20,13 @@ package org.wso2.carbon.mdm.services.android;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.dto.operation.mgt.PolicyOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.mdm.services.android.bean.*;
@@ -32,6 +35,9 @@ import org.wso2.carbon.mdm.services.android.exception.AndroidOperationException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidConstants;
 import org.wso2.carbon.mdm.services.android.util.Message;
+import org.wso2.carbon.policy.mgt.common.Profile;
+import org.wso2.carbon.policy.mgt.common.ProfileFeature;
+import org.wso2.carbon.policy.mgt.core.internal.PolicyManagementDataHolder;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -49,7 +55,7 @@ public class OperationMgtService {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public OperationWrapper getPendingOperations
+    public List<Operation> getPendingOperations
             (@HeaderParam("Accept") String acceptHeader, @PathParam("id") String id,
                     List<? extends Operation> resultOperations) {
 
@@ -58,7 +64,6 @@ public class OperationMgtService {
         }
         Message message = new Message();
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
-        OperationWrapper operationWrapper = null;
 
         try {
             if (resultOperations != null) {
@@ -71,12 +76,11 @@ public class OperationMgtService {
 
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
         List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-        List<OperationWrapper> operationWrappers = new ArrayList<OperationWrapper>();
+        List<Operation> pendingOperations = new ArrayList<Operation>();
         try {
             operations = AndroidAPIUtils.getPendingOperations(deviceIdentifier);
             for(Operation operation:operations){
-                operationWrapper = AndroidAPIUtils.convertOperation(operation);
-                operationWrappers.add(operationWrapper);
+                pendingOperations.add(operation);
             }
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
@@ -86,7 +90,7 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         }
 
-        return operationWrapper;
+        return pendingOperations;
     }
 
     @POST
@@ -880,4 +884,37 @@ public class OperationMgtService {
             }
         }
     }
+
+/*    @GET
+    @Path("dummyPolicy")
+    public void getDummyPolicy()  {
+
+
+        ArrayList<ProfileOperation> profileOperationList = new ArrayList<ProfileOperation>();
+
+       // for (ProfileFeature feature : effectiveFeatures) {
+            ProfileOperation profileOperation = new ProfileOperation();
+
+            profileOperation.setCode("CAMERA");
+            profileOperation.setEnabled(true);
+            profileOperation.setStatus(Operation.Status.PENDING);
+            profileOperation.setType(Operation.Type.PROFILE);
+            profileOperation.setPayLoad("Enabled:true");
+            profileOperationList.add(profileOperation);
+
+
+        ProfileOperation profileOperation1 = new ProfileOperation();
+
+        profileOperation1.setCode("WIFI");
+        profileOperation1.setEnabled(true);
+        profileOperation1.setStatus(Operation.Status.PENDING);
+        profileOperation1.setType(Operation.Type.PROFILE);
+        profileOperation1.setPayLoad("Enabled:true");
+        profileOperationList.add(profileOperation1);
+    //    }
+        policyOperation.setProfileOperations(profileOperationList);
+        policyOperation.setPayLoad(policyOperation.getProfileOperations());
+
+
+    }*/
 }
