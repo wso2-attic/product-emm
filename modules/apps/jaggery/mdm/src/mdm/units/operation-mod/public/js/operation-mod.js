@@ -531,33 +531,6 @@ var operationModule = function () {
                                 value.push(childInputValue);
                             }
                         });
-                    } else if (operationDataObj.hasClass("two-column-key-value-pair-array")) {
-                        var inputCount = 0;
-                        var childInputKey;
-                        var keyValuePairJson;
-                        $(".child-input", this).each(function () {
-                            childInput = $(this);
-                            childInputKey = childInput.data("child-key");
-                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
-                                childInputValue = childInput.val();
-                            } else if (childInput.is(":checkbox")) {
-                                childInputValue = childInput.is(":checked");
-                            } else if (childInput.is("select")) {
-                                childInputValue = childInput.find("option:selected").attr("value");
-                            }
-                            inputCount++;
-                            if (inputCount % 2 == 1) {
-                                // initialize keyValuePairJson value
-                                keyValuePairJson = {};
-                                // set key-value-pair
-                                keyValuePairJson[childInputKey] = childInputValue;
-                            } else {
-                                // set key-value-pair
-                                keyValuePairJson[childInputKey] = childInputValue;
-                                // push to value
-                                value.push(keyValuePairJson);
-                            }
-                        });
                     } else if (operationDataObj.hasClass("two-column-joined-input-array")) {
                         inputCount = 0;
                         var stringPair;
@@ -583,8 +556,11 @@ var operationModule = function () {
                                 value.push(stringPair);
                             }
                         });
-                    } else if (operationDataObj.hasClass("three-column-key-value-pair-array")) {
-                        inputCount = 0;
+                    } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
+                        var columnCount = operationDataObj.data("column-count");
+                        var inputCount = 0;
+                        var childInputKey;
+                        var keyValuePairJson;
                         $(".child-input", this).each(function () {
                             childInput = $(this);
                             childInputKey = childInput.data("child-key");
@@ -596,12 +572,12 @@ var operationModule = function () {
                                 childInputValue = childInput.find("option:selected").attr("value");
                             }
                             inputCount++;
-                            if (inputCount % 3 == 1) {
+                            if ((inputCount % columnCount) == 1) {
                                 // initialize keyValuePairJson value
                                 keyValuePairJson = {};
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
-                            } else if (inputCount % 3 == 2) {
+                            } else if ((inputCount % columnCount) >= 2) {
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
                             } else {
