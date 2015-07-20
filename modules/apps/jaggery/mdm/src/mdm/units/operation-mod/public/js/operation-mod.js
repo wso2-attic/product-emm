@@ -52,7 +52,9 @@ var operationModule = function () {
         "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
         "LDAP_OPERATION_CODE": "LDAP",
         "CALENDAR_OPERATION_CODE": "CALDAV",
-        "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION"
+        "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION",
+        "APN_OPERATION_CODE": "APN",
+        "CELLULAR_OPERATION_CODE": "CELLULAR"
     };
 
     publicMethods.getIOSServiceEndpoint = function (operationCode) {
@@ -286,6 +288,26 @@ var operationModule = function () {
                         "username": operationData["calendarSubscriptionUsername"],
                         "password": operationData["calendarSubscriptionPassword"],
                         "useSSL": operationData["calendarSubscriptionUseSSL"]
+                    }
+                };
+                break;
+            case iosOperationConstants["APN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "apnConfigurations": operationData["apnConfigurations"]
+                    }
+                };
+                break;
+            case iosOperationConstants["CELLULAR_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "attachAPNName": operationData["cellularAttachAPNName"],
+                        "authenticationType": operationData["cellularAuthenticationType"],
+                        "username": operationData["cellularUsername"],
+                        "password": operationData["cellularPassword"],
+                        "apnConfigurations": operationData["cellularAPNConfigurations"]
                     }
                 };
                 break;
