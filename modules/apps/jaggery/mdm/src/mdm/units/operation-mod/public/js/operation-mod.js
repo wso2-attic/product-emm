@@ -531,9 +531,10 @@ var operationModule = function () {
                                 value.push(childInputValue);
                             }
                         });
-                    } else if (operationDataObj.hasClass("two-column-joined-input-array")) {
-                        inputCount = 0;
-                        var stringPair;
+                    } else if (operationDataObj.hasClass("multi-column-joined-input-array")) {
+                        var columnCount = operationDataObj.data("column-count");
+                        var inputCount = 0;
+                        var joinedInput;
                         $(".child-input", this).each(function () {
                             childInput = $(this);
                             if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
@@ -544,21 +545,24 @@ var operationModule = function () {
                                 childInputValue = childInput.find("option:selected").attr("value");
                             }
                             inputCount++;
-                            if (inputCount % 2 == 1) {
-                                // initialize stringPair value
-                                stringPair = "";
-                                // append first part of the string
-                                stringPair += childInputValue;
+                            if (inputCount % columnCount == 1) {
+                                // initialize joinedInput value
+                                joinedInput = "";
+                                // append childInputValue to joinedInput
+                                joinedInput += childInputValue;
+                            } else if ((inputCount % columnCount) >= 2) {
+                                // append childInputValue to joinedInput
+                                joinedInput += childInputValue;
                             } else {
-                                // append second part of the string
-                                stringPair += childInputValue;
+                                // append childInputValue to joinedInput
+                                joinedInput += childInputValue;
                                 // push to value
-                                value.push(stringPair);
+                                value.push(joinedInput);
                             }
                         });
                     } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
-                        var columnCount = operationDataObj.data("column-count");
-                        var inputCount = 0;
+                        columnCount = operationDataObj.data("column-count");
+                        inputCount = 0;
                         var childInputKey;
                         var keyValuePairJson;
                         $(".child-input", this).each(function () {
