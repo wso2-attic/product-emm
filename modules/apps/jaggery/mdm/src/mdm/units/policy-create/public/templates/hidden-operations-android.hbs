@@ -155,7 +155,7 @@
                             <br>
                             ( Should be in between 1-to-730 days or none )
                         </label>
-                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" maxlength="3" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -167,7 +167,7 @@
                             <br>
                             ( Should be in between 1-to-50 passcodes or none )
                         </label>
-                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" maxlength="2" placeholder="[ Requires Number Input ]">
                     </div>
 
                     <div class="wr-input-control">
@@ -329,7 +329,7 @@
                                 <br>
                                 ( should be 1-to-30 characters long )
                             </label>
-                            <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" placeholder="[ Required field ]"/>
+                            <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" maxlength="100" placeholder="[ Required field ]"/>
                         </div>
                         <div class="wr-input-control">
                             <label class="wr-input-label" for="wifi-password">
@@ -338,7 +338,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-password" type="password" class="form-control operationDataKeys" data-key="wifiPassword" placeholder="[ Optional field ]"/>
+                            <input id="wifi-password" type="text" class="form-control operationDataKeys" data-key="wifiPassword" maxlength="100" placeholder="[ Optional field ]"/>
                         </div>
                     <!--</div>-->
                 </div>

@@ -219,7 +219,7 @@ var operationModule = function () {
                         "emailAddress": operationData["emailAddress"],
                         "incomingMailServerAuthentication": operationData["emailIncomingMailServerAuthentication"],
                         "incomingMailServerHostName": operationData["emailIncomingMailServerHostname"],
-                        "incomingMailServerPortNumber": operationData["emailIncomingMailServerPortNumber"],
+                        "incomingMailServerPortNumber": operationData["emailIncomingMailServerPort"],
                         "incomingMailServerUseSSL": operationData["emailIncomingUseSSL"],
                         "incomingMailServerUsername": operationData["emailIncomingMailServerUsername"],
                         "incomingPassword": operationData["emailIncomingMailServerPassword"],
@@ -227,7 +227,7 @@ var operationModule = function () {
                         "outgoingPasswordSameAsIncomingPassword": operationData["emailOutgoingPasswordSameAsIncomingPassword"],
                         "outgoingMailServerAuthentication": operationData["emailOutgoingMailServerAuthentication"],
                         "outgoingMailServerHostName": operationData["emailOutgoingMailServerHostname"],
-                        "outgoingMailServerPortNumber": operationData["emailOutgoingMailServerPortNumber"],
+                        "outgoingMailServerPortNumber": operationData["emailOutgoingMailServerPort"],
                         "outgoingMailServerUseSSL": operationData["emailOutgoingUseSSL"],
                         "outgoingMailServerUsername": operationData["emailOutgoingMailServerUsername"],
                         "preventMove": operationData["emailPreventMove"],
@@ -491,6 +491,7 @@ var operationModule = function () {
     publicMethods.generatePayload = function (platformType, operationCode, deviceList) {
         var payload;
         var operationData = {};
+        // capturing form input data designated by .operationDataKeys
         $(".operation-data").filterByData("operation-code", operationCode).find(".operationDataKeys").each(
             function () {
                 var operationDataObj = $(this);
@@ -510,20 +511,23 @@ var operationModule = function () {
                     if (operationDataObj.hasClass("one-column-input-array")) {
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            if (childInput.is(":text") || childInput.is(":password")) {
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
                                 childInputValue = childInput.val();
                             } else if (childInput.is(":checkbox")) {
                                 childInputValue = childInput.is(":checked");
                             } else if (childInput.is("select")) {
                                 childInputValue = childInput.find("option:selected").attr("value");
                             }
+                            // push to value
                             value.push(childInputValue);
                         });
                     } else if (operationDataObj.hasClass("valued-check-box-array")) {
                         $(".child-input", this).each(function () {
                             childInput = $(this);
                             if (childInput.is(":checked")) {
+                                // get associated value with check-box
                                 childInputValue = childInput.data("value");
+                                // push to value
                                 value.push(childInputValue);
                             }
                         });
@@ -534,7 +538,7 @@ var operationModule = function () {
                         $(".child-input", this).each(function () {
                             childInput = $(this);
                             childInputKey = childInput.data("child-key");
-                            if (childInput.is(":text") || childInput.is(":password")) {
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
                                 childInputValue = childInput.val();
                             } else if (childInput.is(":checkbox")) {
                                 childInputValue = childInput.is(":checked");
@@ -550,6 +554,7 @@ var operationModule = function () {
                             } else {
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
+                                // push to value
                                 value.push(keyValuePairJson);
                             }
                         });
@@ -558,7 +563,7 @@ var operationModule = function () {
                         var stringPair;
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            if (childInput.is(":text") || childInput.is(":password")) {
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
                                 childInputValue = childInput.val();
                             } else if (childInput.is(":checkbox")) {
                                 childInputValue = childInput.is(":checked");
@@ -574,6 +579,7 @@ var operationModule = function () {
                             } else {
                                 // append second part of the string
                                 stringPair += childInputValue;
+                                // push to value
                                 value.push(stringPair);
                             }
                         });
@@ -582,7 +588,7 @@ var operationModule = function () {
                         $(".child-input", this).each(function () {
                             childInput = $(this);
                             childInputKey = childInput.data("child-key");
-                            if (childInput.is(":text") || childInput.is(":password")) {
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
                                 childInputValue = childInput.val();
                             } else if (childInput.is(":checkbox")) {
                                 childInputValue = childInput.is(":checked");
@@ -601,6 +607,7 @@ var operationModule = function () {
                             } else {
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
+                                // push to value
                                 value.push(keyValuePairJson);
                             }
                         });

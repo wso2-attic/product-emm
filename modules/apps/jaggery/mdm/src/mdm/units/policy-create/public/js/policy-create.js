@@ -147,16 +147,15 @@ validateStep["policy-profile"] = function () {
             validationStatusArray.push(validationStatus);
         } else {
             // validating each and every configured Operation
+            // Validating PASSCODE_POLICY
             if ($.inArray(androidOperationConstants["PASSCODE_POLICY_OPERATION_CODE"], configuredOperations) != -1) {
                 // if PASSCODE_POLICY is configured
                 operation = androidOperationConstants["PASSCODE_POLICY_OPERATION"];
-                // getting input values to be validated
-                var passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
-                var passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
                 // initializing continueToCheckNextInputs to true
                 var continueToCheckNextInputs = true;
 
                 // validating first input: passcodePolicyMaxPasscodeAgeInDays
+                var passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
                 if (passcodePolicyMaxPasscodeAgeInDays) {
                     if (!$.isNumeric(passcodePolicyMaxPasscodeAgeInDays)) {
                         validationStatus = {
@@ -165,25 +164,20 @@ validateStep["policy-profile"] = function () {
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
-                    } else {
-                        passcodePolicyMaxPasscodeAgeInDays = parseInt(passcodePolicyMaxPasscodeAgeInDays);
-                        if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Provided passcode age is not with in the range of 1-to-730. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else {
-                            continueToCheckNextInputs = true;
-                        }
+                    } else if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Provided passcode age is not " +
+                                "with in the range of 1-to-730. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
                     }
-                } else {
-                    continueToCheckNextInputs = true;
                 }
 
                 // validating second and last input: passcodePolicyPasscodeHistory
                 if (continueToCheckNextInputs) {
+                    var passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
                     if (passcodePolicyPasscodeHistory) {
                         if (!$.isNumeric(passcodePolicyPasscodeHistory)) {
                             validationStatus = {
@@ -191,32 +185,32 @@ validateStep["policy-profile"] = function () {
                                 "subErrorMsg": "Provided passcode history is not a number. Please check.",
                                 "erroneousFeature": operation
                             };
-                        } else if ($.isNumeric(passcodePolicyPasscodeHistory)) {
-                            passcodePolicyPasscodeHistory = parseInt(passcodePolicyPasscodeHistory);
-                            if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
-                                validationStatus = {
-                                    "error": true,
-                                    "subErrorMsg": "Provided passcode history is not with in the range" +
-                                        " of 1-to-50. Please check.",
-                                    "erroneousFeature": operation
-                                };
-                            } else {
-                                validationStatus = {
-                                    "error": false,
-                                    "okFeature": operation
-                                };
-                            }
+                            continueToCheckNextInputs = false;
+                        } else if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Provided passcode history is not " +
+                                    "with in the range of 1-to-50. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
                         }
-                    } else {
-                        validationStatus = {
-                            "error": false,
-                            "okFeature": operation
-                        };
                     }
                 }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+            // Validating CAMERA
             if ($.inArray(androidOperationConstants["CAMERA_OPERATION_CODE"], configuredOperations) != -1) {
                 // if CAMERA is configured
                 operation = androidOperationConstants["CAMERA_OPERATION"];
@@ -228,6 +222,7 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+            // Validating ENCRYPT_STORAGE
             if ($.inArray(androidOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"], configuredOperations) != -1) {
                 // if ENCRYPT_STORAGE is configured
                 operation = androidOperationConstants["ENCRYPT_STORAGE_OPERATION"];
@@ -239,30 +234,32 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+            // Validating WIFI
             if ($.inArray(androidOperationConstants["WIFI_OPERATION_CODE"], configuredOperations) != -1) {
                 // if WIFI is configured
                 operation = androidOperationConstants["WIFI_OPERATION"];
-                // getting input values to be validated
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
                 var wifiSSID = $("input#wifi-ssid").val();
-                // updating validationStatus
                 if (!wifiSSID) {
                     validationStatus = {
                         "error": true,
                         "subErrorMsg": "WIFI SSID is not given. You cannot proceed.",
                         "erroneousFeature": operation
                     };
-                } else if (!inputIsValidAgainstLength(wifiSSID, 1, 30)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "WIFI SSID exceeds maximum allowed length. Please check.",
-                        "erroneousFeature": operation
-                    };
-                } else {
+                    continueToCheckNextInputs = false;
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
                     validationStatus = {
                         "error": false,
                         "okFeature": operation
                     };
                 }
+
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
@@ -277,16 +274,16 @@ validateStep["policy-profile"] = function () {
             // updating validationStatusArray with validationStatus
             validationStatusArray.push(validationStatus);
         } else {
+            // validating each and every configured Operation
+            // Validating PASSCODE_POLICY
             if ($.inArray(iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"], configuredOperations) != -1) {
                 // if PASSCODE_POLICY is configured
                 operation = iosOperationConstants["PASSCODE_POLICY_OPERATION"];
-                // getting input values to be validated
-                passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
-                passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
                 // initializing continueToCheckNextInputs to true
                 continueToCheckNextInputs = true;
 
                 // validating first input: passcodePolicyMaxPasscodeAgeInDays
+                passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
                 if (passcodePolicyMaxPasscodeAgeInDays) {
                     if (!$.isNumeric(passcodePolicyMaxPasscodeAgeInDays)) {
                         validationStatus = {
@@ -295,25 +292,19 @@ validateStep["policy-profile"] = function () {
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
-                    } else {
-                        passcodePolicyMaxPasscodeAgeInDays = parseInt(passcodePolicyMaxPasscodeAgeInDays);
-                        if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Provided passcode age is not with in the range of 1-to-730. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else {
-                            continueToCheckNextInputs = true;
-                        }
+                    } else if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Provided passcode age is not with in the range of 1-to-730. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
                     }
-                } else {
-                    continueToCheckNextInputs = true;
                 }
 
                 // validating second and last input: passcodePolicyPasscodeHistory
                 if (continueToCheckNextInputs) {
+                    passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
                     if (passcodePolicyPasscodeHistory) {
                         if (!$.isNumeric(passcodePolicyPasscodeHistory)) {
                             validationStatus = {
@@ -321,95 +312,114 @@ validateStep["policy-profile"] = function () {
                                 "subErrorMsg": "Provided passcode history is not a number. Please check.",
                                 "erroneousFeature": operation
                             };
-                        } else if ($.isNumeric(passcodePolicyPasscodeHistory)) {
-                            passcodePolicyPasscodeHistory = parseInt(passcodePolicyPasscodeHistory);
-                            if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
-                                validationStatus = {
-                                    "error": true,
-                                    "subErrorMsg": "Provided passcode history is not with in the range" +
-                                        " of 1-to-50. Please check.",
-                                    "erroneousFeature": operation
-                                };
-                            } else {
-                                validationStatus = {
-                                    "error": false,
-                                    "okFeature": operation
-                                };
-                            }
+                            continueToCheckNextInputs = false;
+                        } else if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Provided passcode history is not " +
+                                    "with in the range of 1-to-50. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
                         }
-                    } else {
-                        validationStatus = {
-                            "error": false,
-                            "okFeature": operation
-                        };
                     }
                 }
-                // updating validationStatusArray with validationStatus
-                validationStatusArray.push(validationStatus);
-            }
-            if ($.inArray(iosOperationConstants["RESTRICTIONS_OPERATION_CODE"], configuredOperations) != -1) {
-                // if RESTRICTION is configured
-                operation = iosOperationConstants["RESTRICTIONS_OPERATION"];
-                // getting input values to be validated
-                var gridChildInputs = "div#restrictions-autonomous-single-app-mode-permitted-app-ids .child-input";
-                if ($(gridChildInputs).length > 0) {
-                    var emptyChildInputCount = 0;
-                    var outOfMaxAllowedLengthCount = 0;
-                    // looping through each child input
-                    var childInput;
-                    $(gridChildInputs).each(function () {
-                        childInput = $(this).val();
-                        if (!childInput) {
-                            // if child input field is empty
-                            emptyChildInputCount++;
-                        } else if (!inputIsValidAgainstLength(childInput, 1, 100)) {
-                            outOfMaxAllowedLengthCount++;
-                        }
-                    });
-                    // updating validationStatus
-                    if (emptyChildInputCount > 0) {
-                        // if empty child inputs are present
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "One or more permitted App ID entries in Autonomous " +
-                                "Single App Mode are empty. Please check.",
-                            "erroneousFeature": operation
-                        };
-                    } else if (outOfMaxAllowedLengthCount > 0) {
-                        // if outOfMaxAllowedLength input is present
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "One or more permitted App ID entries in Autonomous Single App Mode " +
-                                "exceed maximum allowed length. Please check.",
-                            "erroneousFeature": operation
-                        };
-                    } else {
-                        // if all child inputs have valid value
-                        validationStatus = {
-                            "error": false,
-                            "okFeature": operation
-                        };
-                    }
-                } else {
-                    // updating validationStatus
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
                     validationStatus = {
                         "error": false,
                         "okFeature": operation
                     };
                 }
+
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
-            if ($.inArray(iosOperationConstants["WIFI_OPERATION_CODE"], configuredOperations) != -1) {
-                // if WIFI is configured
-                operation = iosOperationConstants["WIFI_OPERATION"];
-                // getting input values to be validated
-                wifiSSID = $("input#wifi-ssid").val();
-                var wifiDomainName = $("input#wifi-domain-name").val();
-                var wifiDisplayedOperatorName = $("input#wifi-displayed-operator-name").val();
+            // Validating RESTRICTIONS
+            if ($.inArray(iosOperationConstants["RESTRICTIONS_OPERATION_CODE"], configuredOperations) != -1) {
+                // if RESTRICTION is configured
+                operation = iosOperationConstants["RESTRICTIONS_OPERATION"];
                 // initializing continueToCheckNextInputs to true
                 continueToCheckNextInputs = true;
 
+                // getting input values to be validated
+                var restrictionsAutonomousSingleAppModePermittedAppIDsGridChildInputs =
+                    "div#restrictions-autonomous-single-app-mode-permitted-app-ids .child-input";
+                if ($(restrictionsAutonomousSingleAppModePermittedAppIDsGridChildInputs).length > 0) {
+                    var childInput;
+                    var childInputArray = [];
+                    var emptyChildInputCount = 0;
+                    var duplicatesExist = false;
+                    // looping through each child input
+                    $(restrictionsAutonomousSingleAppModePermittedAppIDsGridChildInputs).each(function () {
+                        childInput = $(this).val();
+                        childInputArray.push(childInput);
+                        if (!childInput) {
+                            // if child input field is empty
+                            emptyChildInputCount++;
+                        }
+                    });
+                    // checking for duplicates
+                    var initialChildInputArrayLength = childInputArray.length;
+                    if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                        var m, poppedChildInput;
+                        for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                            poppedChildInput = childInputArray.pop();
+                            var n;
+                            for (n = 0; n < childInputArray.length; n++) {
+                                if (poppedChildInput == childInputArray[n]) {
+                                    duplicatesExist = true;
+                                    break;
+                                }
+                            }
+                            if (duplicatesExist) { break; }
+                        }
+                    }
+                    // updating validationStatus
+                    if (emptyChildInputCount > 0) {
+                        // if empty child inputs are present
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "One or more permitted App ID entries in " +
+                                "Autonomous Single App Mode are empty. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (duplicatesExist) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Duplicate values exist with permitted App ID entries in " +
+                                "Autonomous Single App Mode. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+            // Validating WIFI
+            if ($.inArray(iosOperationConstants["WIFI_OPERATION_CODE"], configuredOperations) != -1) {
+                // if WIFI is configured
+                operation = iosOperationConstants["WIFI_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                // getting input values to be validated
+                wifiSSID = $("input#wifi-ssid").val();
+                var wifiDomainName = $("input#wifi-domain-name").val();
                 if (!wifiSSID && !wifiDomainName) {
                     validationStatus = {
                         "error": true,
@@ -417,32 +427,6 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": operation
                     };
                     continueToCheckNextInputs = false;
-                } else if (wifiSSID && !inputIsValidAgainstLength(wifiSSID, 1, 100)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Wi-Fi SSID exceeds maximum allowed length. Please check.",
-                        "erroneousFeature": operation
-                    };
-                    continueToCheckNextInputs = false;
-                } else if (wifiDomainName && !inputIsValidAgainstLength(wifiDomainName, 1, 100)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Wi-Fi Domain name exceeds maximum allowed length. Please check.",
-                        "erroneousFeature": operation
-                    };
-                    continueToCheckNextInputs = false;
-                }
-
-                if (continueToCheckNextInputs) {
-                    if (wifiDisplayedOperatorName && !inputIsValidAgainstLength(wifiDisplayedOperatorName, 1, 100)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Wi-Fi Displayed Operator Name " +
-                                "exceeds maximum allowed length. Please check.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
-                    }
                 }
 
                 if (continueToCheckNextInputs) {
@@ -451,10 +435,6 @@ validateStep["policy-profile"] = function () {
                     if (wifiProxyType == "Manual") {
                         // adds up additional fields to be validated
                         var wifiProxyServer = $("input#wifi-proxy-server").val();
-                        var wifiProxyPort = $("input#wifi-proxy-port").val();
-                        var wifiProxyUsername = $("input#wifi-proxy-username").val();
-                        var wifiProxyPassword = $("input#wifi-proxy-password").val();
-                        var wifiProxyPACURL = $("input#wifi-proxy-pac-url").val();
                         if (!wifiProxyServer) {
                             validationStatus = {
                                 "error": true,
@@ -462,56 +442,33 @@ validateStep["policy-profile"] = function () {
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                        } else if (!inputIsValidAgainstLength(wifiProxyServer, 1, 100)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Proxy Server value exceeds maximum allowed length. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else if (!wifiProxyPort) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Proxy Port is required. You cannot proceed.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else if (!$.isNumeric(wifiProxyPort)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Proxy Port requires a number input. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else if (!inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Proxy Port is not within the range " +
-                                    "of valid port numbers. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else if (wifiProxyUsername && !inputIsValidAgainstLength(wifiProxyUsername, 1, 100)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Proxy Username exceeds maximum allowed length. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else if (wifiProxyPassword && !inputIsValidAgainstLength(wifiProxyPassword, 1, 100)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Proxy Password exceeds maximum allowed length. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else if (wifiProxyPACURL && !inputIsValidAgainstLength(wifiProxyPACURL, 1, 100)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Proxy PAC URL exceeds maximum allowed length. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
+                        }
+
+                        if (continueToCheckNextInputs) {
+                            var wifiProxyPort = $("input#wifi-proxy-port").val();
+                            if (!wifiProxyPort) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Wi-Fi Proxy Port is required. You cannot proceed.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            } else if (!$.isNumeric(wifiProxyPort)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Wi-Fi Proxy Port requires a number input. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            } else if (!inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Wi-Fi Proxy Port is not within the range " +
+                                        "of valid port numbers. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
                         }
                     }
                 }
@@ -520,108 +477,53 @@ validateStep["policy-profile"] = function () {
                     // getting encryption-type value
                     var wifiEncryptionType = $("select#wifi-encryption-type").find("option:selected").attr("value");
                     if (wifiEncryptionType != "None") {
-                        var wifiPassword = $("input#wifi-password").val();
-                        var wifiEAPUsername = $("input#wifi-eap-username").val();
-                        var wifiEAPPassword = $("input#wifi-eap-password").val();
-                        var wifiEAPOuterIdentity = $("input#wifi-eap-outer-identity").val();
-                        var wifiPayloadCertUUID = $("input#wifi-payload-cert-uuid").val();
-
-                        if (wifiPassword && !inputIsValidAgainstLength(wifiPassword, 1, 100)) {
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "Wi-Fi Password exceeds maximum allowed length. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        }
-
-                        if (continueToCheckNextInputs) {
-                            if (wifiEAPUsername && !inputIsValidAgainstLength(wifiEAPUsername, 1, 100)) {
-                                validationStatus = {
-                                    "error": true,
-                                    "subErrorMsg": "Wi-Fi EAP Username exceeds maximum allowed length. Please check.",
-                                    "erroneousFeature": operation
-                                };
-                                continueToCheckNextInputs = false;
-                            }
-                        }
-
-                        if (continueToCheckNextInputs) {
-                            if (wifiEAPPassword && !inputIsValidAgainstLength(wifiEAPPassword, 1, 100)) {
-                                validationStatus = {
-                                    "error": true,
-                                    "subErrorMsg": "Wi-Fi EAP Password exceeds maximum allowed length. Please check.",
-                                    "erroneousFeature": operation
-                                };
-                                continueToCheckNextInputs = false;
-                            }
-                        }
-
-                        if (continueToCheckNextInputs) {
-                            var wifiPayloadCertificateAnchorUUIDsGridChildInputs =
-                                "div#wifi-payload-certificate-anchor-uuids .child-input";
-                            if ($(wifiPayloadCertificateAnchorUUIDsGridChildInputs).length > 0) {
-                                emptyChildInputCount = 0;
-                                outOfMaxAllowedLengthCount = 0;
-                                var childInputArray = [];
-                                var duplicatesExist = false;
-                                // looping through each child input
-                                $(wifiPayloadCertificateAnchorUUIDsGridChildInputs).each(function () {
-                                    childInput = $(this).val();
-                                    childInputArray.push(childInput);
-                                    if (!childInput) {
-                                        // if child input field is empty
-                                        emptyChildInputCount++;
-                                    } else if (!inputIsValidAgainstLength(childInput, 1, 100)) {
-                                        outOfMaxAllowedLengthCount++;
-                                    }
-                                });
-                                // checking for duplicates
-                                var initialChildInputArrayLength = childInputArray.length;
-                                if (initialChildInputArrayLength > 1) {
-                                    var m, poppedChildInput;
-                                    for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
-                                        poppedChildInput = childInputArray.pop();
-                                        var n;
-                                        for (n = 0; n < childInputArray.length; n++) {
-                                            if (poppedChildInput == childInputArray[n]) {
-                                                duplicatesExist = true;
-                                                break;
-                                            }
-                                        }
-                                        if (duplicatesExist) {
+                        var wifiPayloadCertificateAnchorUUIDsGridChildInputs =
+                            "div#wifi-payload-certificate-anchor-uuids .child-input";
+                        if ($(wifiPayloadCertificateAnchorUUIDsGridChildInputs).length > 0) {
+                            emptyChildInputCount = 0;
+                            childInputArray = [];
+                            duplicatesExist = false;
+                            // looping through each child input
+                            $(wifiPayloadCertificateAnchorUUIDsGridChildInputs).each(function () {
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            });
+                            // checking for duplicates
+                            initialChildInputArrayLength = childInputArray.length;
+                            if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                                for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                    poppedChildInput = childInputArray.pop();
+                                    for (n = 0; n < childInputArray.length; n++) {
+                                        if (poppedChildInput == childInputArray[n]) {
+                                            duplicatesExist = true;
                                             break;
                                         }
                                     }
+                                    if (duplicatesExist) { break; }
                                 }
-                                // updating validationStatus
-                                if (emptyChildInputCount > 0) {
-                                    // if empty child inputs are present
-                                    validationStatus = {
-                                        "error": true,
-                                        "subErrorMsg": "One or more Payload Certificate " +
-                                            "Anchor UUIDs are empty. Please check.",
-                                        "erroneousFeature": operation
-                                    };
-                                    continueToCheckNextInputs = false;
-                                } else if (outOfMaxAllowedLengthCount > 0) {
-                                    // if outOfMaxAllowedLength input is present
-                                    validationStatus = {
-                                        "error": true,
-                                        "subErrorMsg": "One or more Payload Certificate Anchor UUIDs " +
-                                            "exceed maximum allowed length. Please check.",
-                                        "erroneousFeature": operation
-                                    };
-                                    continueToCheckNextInputs = false;
-                                } else if (duplicatesExist) {
-                                    validationStatus = {
-                                        "error": true,
-                                        "subErrorMsg": "Duplicate values exist " +
-                                            "with Payload Certificate Anchor UUIDs. Please check.",
-                                        "erroneousFeature": operation
-                                    };
-                                    continueToCheckNextInputs = false;
-                                }
+                            }
+                            // updating validationStatus
+                            if (emptyChildInputCount > 0) {
+                                // if empty child inputs are present
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "One or more Payload Certificate " +
+                                        "Anchor UUIDs are empty. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            } else if (duplicatesExist) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Duplicate values exist " +
+                                        "with Payload Certificate Anchor UUIDs. Please check.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
                             }
                         }
 
@@ -630,7 +532,6 @@ validateStep["policy-profile"] = function () {
                                 "div#wifi-tls-trusted-server-names .child-input";
                             if ($(wifiTLSTrustedServerNamesGridChildInputs).length > 0) {
                                 emptyChildInputCount = 0;
-                                outOfMaxAllowedLengthCount = 0;
                                 childInputArray = [];
                                 duplicatesExist = false;
                                 // looping through each child input
@@ -640,13 +541,11 @@ validateStep["policy-profile"] = function () {
                                     if (!childInput) {
                                         // if child input field is empty
                                         emptyChildInputCount++;
-                                    } else if (!inputIsValidAgainstLength(childInput, 1, 100)) {
-                                        outOfMaxAllowedLengthCount++;
                                     }
                                 });
                                 // checking for duplicates
                                 initialChildInputArrayLength = childInputArray.length;
-                                if (initialChildInputArrayLength > 1) {
+                                if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
                                     for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
                                         poppedChildInput = childInputArray.pop();
                                         for (n = 0; n < childInputArray.length; n++) {
@@ -655,9 +554,7 @@ validateStep["policy-profile"] = function () {
                                                 break;
                                             }
                                         }
-                                        if (duplicatesExist) {
-                                            break;
-                                        }
+                                        if (duplicatesExist) { break; }
                                     }
                                 }
                                 // updating validationStatus
@@ -666,15 +563,6 @@ validateStep["policy-profile"] = function () {
                                     validationStatus = {
                                         "error": true,
                                         "subErrorMsg": "One or more TLS Trusted Server Names are empty. Please check.",
-                                        "erroneousFeature": operation
-                                    };
-                                    continueToCheckNextInputs = false;
-                                } else if (outOfMaxAllowedLengthCount > 0) {
-                                    // if outOfMaxAllowedLength input is present
-                                    validationStatus = {
-                                        "error": true,
-                                        "subErrorMsg": "One or more TLS Trusted Server Names " +
-                                            "exceed maximum allowed length. Please check.",
                                         "erroneousFeature": operation
                                     };
                                     continueToCheckNextInputs = false;
@@ -687,30 +575,6 @@ validateStep["policy-profile"] = function () {
                                     };
                                     continueToCheckNextInputs = false;
                                 }
-                            }
-                        }
-
-                        if (continueToCheckNextInputs) {
-                            if (wifiEAPOuterIdentity && !inputIsValidAgainstLength(wifiEAPOuterIdentity, 1, 100)) {
-                                validationStatus = {
-                                    "error": true,
-                                    "subErrorMsg": "Wi-Fi EAP Outer Identity " +
-                                        "exceeds maximum allowed length. Please check.",
-                                    "erroneousFeature": operation
-                                };
-                                continueToCheckNextInputs = false;
-                            }
-                        }
-
-                        if (continueToCheckNextInputs) {
-                            if (wifiPayloadCertUUID && !inputIsValidAgainstLength(wifiPayloadCertUUID, 1, 100)) {
-                                validationStatus = {
-                                    "error": true,
-                                    "subErrorMsg": "Wi-Fi Payload Certificate UUID " +
-                                        "exceeds maximum allowed length. Please check.",
-                                    "erroneousFeature": operation
-                                };
-                                continueToCheckNextInputs = false;
                             }
                         }
                     }
@@ -740,7 +604,7 @@ validateStep["policy-profile"] = function () {
                         });
                         // checking for duplicates
                         initialChildInputArrayLength = childInputArray.length;
-                        if (initialChildInputArrayLength > 1) {
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
                             for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
                                 poppedChildInput = childInputArray.pop();
                                 for (n = 0; n < childInputArray.length; n++) {
@@ -749,9 +613,7 @@ validateStep["policy-profile"] = function () {
                                         break;
                                     }
                                 }
-                                if (duplicatesExist) {
-                                    break;
-                                }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -796,7 +658,6 @@ validateStep["policy-profile"] = function () {
                     var wifiNAIRealmNamesGridChildInputs = "div#wifi-nai-realm-names .child-input";
                     if ($(wifiNAIRealmNamesGridChildInputs).length > 0) {
                         emptyChildInputCount = 0;
-                        outOfMaxAllowedLengthCount = 0;
                         childInputArray = [];
                         duplicatesExist = false;
                         // looping through each child input
@@ -806,13 +667,11 @@ validateStep["policy-profile"] = function () {
                             if (!childInput) {
                                 // if child input field is empty
                                 emptyChildInputCount++;
-                            } else if (!inputIsValidAgainstLength(childInput, 1, 100)) {
-                                outOfMaxAllowedLengthCount++;
                             }
                         });
                         // checking for duplicates
                         initialChildInputArrayLength = childInputArray.length;
-                        if (initialChildInputArrayLength > 1) {
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
                             for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
                                 poppedChildInput = childInputArray.pop();
                                 for (n = 0; n < childInputArray.length; n++) {
@@ -821,9 +680,7 @@ validateStep["policy-profile"] = function () {
                                         break;
                                     }
                                 }
-                                if (duplicatesExist) {
-                                    break;
-                                }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -832,15 +689,6 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more NAI Realm Names are empty. Please check.",
-                                "erroneousFeature": operation
-                            };
-                            continueToCheckNextInputs = false;
-                        } else if (outOfMaxAllowedLengthCount > 0) {
-                            // if outOfMaxAllowedLength input is present
-                            validationStatus = {
-                                "error": true,
-                                "subErrorMsg": "One or more NAI Realm Names " +
-                                    "exceed maximum allowed length. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -892,7 +740,7 @@ validateStep["policy-profile"] = function () {
                         });
                         // checking for duplicates
                         initialChildInputArrayLength = childInputArray.length;
-                        if (initialChildInputArrayLength > 1) {
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
                             for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
                                 poppedChildInput = childInputArray.pop();
                                 for (n = 0; n < childInputArray.length; n++) {
@@ -901,9 +749,7 @@ validateStep["policy-profile"] = function () {
                                         break;
                                     }
                                 }
-                                if (duplicatesExist) {
-                                    break;
-                                }
+                                if (duplicatesExist) { break; }
                             }
                         }
                         // updating validationStatus
@@ -928,7 +774,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more MCC/MNC pairs " +
-                                    "exceed allowed length of 3 digits. Please check.",
+                                    "do not fulfill the accepted length of 6 digits. Please check.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -955,288 +801,442 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
-            if ($.inArray("CONTACTS", configuredOperations) != -1) {
-                /* Validating hostname of the CardDAV server */
-                var accountHostname = $("input#accountHostname").val();
-                if (!accountHostname) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Hostname of the target CardDAV server is not provided. Please provide a valid hostname to proceed.",
-                        "erroneousFeature": "contacts"
-                    };
-                    validationStatusArray.push(validationStatus);
-                    continueToCheckNextInputs = false;
-                } else if (!inputIsValidAgainstRegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, accountHostname)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Hostname provided is invalid. Please provide a valid hostname to proceed",
-                        "erroneousFeature": "contacts"
-                    };
-                    validationStatusArray.push(validationStatus);
-                    continueToCheckNextInputs = false;
-                } else {
-                    continueToCheckNextInputs = true;
-                }
+            // Validating EMAIL
+            if ($.inArray(iosOperationConstants["EMAIL_OPERATION_CODE"], configuredOperations) != -1) {
+                // if EMAIL is configured
+                operation = iosOperationConstants["EMAIL_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
 
-                if (continueToCheckNextInputs) {
-                    /* Validating port of the CardDAV server */
-                    var accountPort = $("input#accountPort").val();
-                    if (!accountPort) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Port of the target CardDAV server is not provided. Please provide a valid port number to proceed.",
-                            "erroneousFeature": "contacts"
-                        };
-                        validationStatusArray.push(validationStatus);
-                    } else if (!inputIsValidAgainstLength(accountPort, 1, 6)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Port provided is invalid and outside the allowed range. Please provide a valid port number to proceed",
-                            "erroneousFeature": "contacts"
-                        };
-                        validationStatusArray.push(validationStatus);
-                    } else if (!$.isNumeric(accountPort)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Port provided is not a valid number. Please provide a valid port number to proceed",
-                            "erroneousFeature": "contacts"
-                        };
-                        validationStatusArray.push(validationStatus);
-                    } else {
-                        validationStatus = {
-                            "error": false,
-                            "okFeature": "contacts"
-                        };
-                        validationStatusArray.push(validationStatus);
-                    }
-                }
-            }
-            if ($.inArray("CALDAV", configuredOperations) != -1) {
-                /* Validating hostname of the CardDAV server */
-                var calAccountHostname = $("input#calendar-account-hostname").val();
-                if (!calAccountHostname) {
+                var emailAddress = $("input#email-address").val();
+                if (emailAddress &&
+                    !inputIsValidAgainstRegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, emailAddress)) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "Hostname of the target CalDAV server is not provided. Please provide a valid hostname to proceed.",
-                        "erroneousFeature": "calendar"
+                        "subErrorMsg": "Email Address is not valid. Please check.",
+                        "erroneousFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
-                    continueToCheckNextInputs = false;
-                } else if (!inputIsValidAgainstLength(calAccountHostname, 1, 100)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Configured hostname exceeded its maximum allowed length (100). Please provide a valid hostname",
-                        "erroneousFeature": "calendar"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else if (!inputIsValidAgainstRegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, calAccountHostname)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Hostname provided is invalid. Please provide a valid hostname to proceed",
-                        "erroneousFeature": "calendar"
-                    };
-                    validationStatusArray.push(validationStatus);
                     continueToCheckNextInputs = false;
                 }
 
                 if (continueToCheckNextInputs) {
-                    /* Validating port of the CardDAV server */
-                    var calAccountPort = $("input#calendar-account-port").val();
-                    if (!calAccountPort) {
+                    var emailIncomingMailServerHostname = $("input#email-incoming-mail-server-hostname").val();
+                    if (!emailIncomingMailServerHostname) {
                         validationStatus = {
                             "error": true,
-                            "subErrorMsg": "Port of the target CalDAV server is not provided. Please provide a valid port number to proceed.",
-                            "erroneousFeature": "calendar"
+                            "subErrorMsg": "Incoming Mail Server Hostname is empty. You cannot proceed.",
+                            "erroneousFeature": operation
                         };
-                        validationStatusArray.push(validationStatus);
-                    } else if (!inputIsValidAgainstLength(calAccountPort, 1, 100) && !$.isNumeric(calAccountPort)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Port provided is not a valid number. Please provide a valid port number to proceed",
-                            "erroneousFeature": "calendar"
-                        };
-                        validationStatusArray.push(validationStatus);
-                    } else if (!inputIsValidAgainstRange(wifiProxyPort, 0, 65535)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Port provided is invalid and outside the allowed range. Please provide a valid port number to proceed",
-                            "erroneousFeature": "calendar"
-                        };
-                        validationStatusArray.push(validationStatus);
-                    } else {
-                        validationStatus = {
-                            "error": false,
-                            "okFeature": "calendar"
-                        };
-                        validationStatusArray.push(validationStatus);
+                        continueToCheckNextInputs = false;
                     }
-                }
-            }
-            if ($.inArray("CALENDAR_SUBSCRIPTION", configuredOperations) != -1) {
-                /* Validating hostname of the CardDAV server */
-                var csURL = $("input#calendar-subscription-hostname").val();
-                if (!csURL) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "URL of the calendar file is not provided. Please provide a valid URL to proceed.",
-                        "erroneousFeature": "subscribed-calendars"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else if (!inputIsValidAgainstLength(csURL, 1, 100)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Configured URL exceeded its maximum allowed length (100). Please provide a valid URL",
-                        "erroneousFeature": "calendar"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else if (!inputIsValidAgainstRegExp(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/, csURL)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "URL of the calendar file provided is invalid. Please provide a valid URL to proceed.",
-                        "erroneousFeature": "subscribed-calendars"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else {
-                    validationStatus = {
-                        "error": false,
-                        "okFeature": "subscribed-calendars"
-                    };
-                    validationStatusArray.push(validationStatus);
-                }
-            }
-            if ($.inArray("APN_SETTINGS", configuredOperations) != -1) {
-                /* Validating Access Point Name */
-                var apnAccessPointName = $("input#apnAccessPointName").val();
-                if (!apnAccessPointName) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Name of the carrier (GPRS) access point is not provided. Please provide a valid name to proceed.",
-                        "erroneousFeature": "apn-settings"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else {
-                    validationStatus = {
-                        "error": false,
-                        "okFeature": "apn-settings"
-                    };
-                    validationStatusArray.push(validationStatus);
-                }
-            }
-            if ($.inArray("WEB_CLIPS", configuredOperations) != -1) {
-                /* Validating hostname of the CardDAV server */
-                var wcLabel = $("input#wcLabel").val();
-                if (!wcLabel) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "The name to display for the Web Clip is not provided. Please provide a valid name to proceed.",
-                        "erroneousFeature": "web-clips"
-                    };
-                    validationStatusArray.push(validationStatus);
-                    continueToCheckNextInputs = false;
-                } else {
-                    continueToCheckNextInputs = true;
                 }
 
                 if (continueToCheckNextInputs) {
-                    /* Validating hostname of the CardDAV server */
-                    var wcURL = $("input#wcURL").val();
-                    if (!wcURL) {
+                    var emailIncomingMailServerPort = $("input#email-incoming-mail-server-port").val();
+                    if (!emailIncomingMailServerPort) {
                         validationStatus = {
                             "error": true,
-                            "subErrorMsg": "URL to be displayed when opening the Web Clip is not provided. Please provide a valid URL to proceed.",
-                            "erroneousFeature": "web-clips"
+                            "subErrorMsg": "Incoming Mail Server Port is empty. You cannot proceed.",
+                            "erroneousFeature": operation
                         };
-                        validationStatusArray.push(validationStatus);
-                    } else if (!inputIsValidAgainstRegExp(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/, wcURL)) {
+                        continueToCheckNextInputs = false;
+                    } else if (!$.isNumeric(emailIncomingMailServerPort)) {
                         validationStatus = {
                             "error": true,
-                            "subErrorMsg": "URL to be displayed when opening the Web Clip provided is invalid. Please provide a valid URL to proceed.",
-                            "erroneousFeature": "web-clips"
+                            "subErrorMsg": "Incoming Mail Server Port requires a number input. Please check.",
+                            "erroneousFeature": operation
                         };
-                        validationStatusArray.push(validationStatus);
-                    } else {
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(emailIncomingMailServerPort, 0, 65535)) {
                         validationStatus = {
-                            "error": false,
-                            "okFeature": "web-clips"
+                            "error": true,
+                            "subErrorMsg": "Incoming Mail Server Port is not within the range " +
+                                "of valid port numbers. Please check.",
+                            "erroneousFeature": operation
                         };
-                        validationStatusArray.push(validationStatus);
+                        continueToCheckNextInputs = false;
                     }
                 }
-            }
-            if ($.inArray("SCEP_SETTINGS", configuredOperations) != -1) {
-                /* Validating hostname of the CardDAV server */
-                var scepURL = $("input#scepURL").val();
-                if (!scepURL) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "URL of the SCEP base server is not provided. Please provide a valid URL to proceed.",
-                        "erroneousFeature": "scep-settings"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else if (!inputIsValidAgainstRegExp(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/, scepURL)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "URL of the SCEP base server provided is invalid. Please provide a valid URL to proceed.",
-                        "erroneousFeature": "scep-settings"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else {
+
+                if (continueToCheckNextInputs) {
+                    var emailOutgoingMailServerHostname = $("input#email-outgoing-mail-server-hostname").val();
+                    if (!emailOutgoingMailServerHostname) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Hostname is empty. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    var emailOutgoingMailServerPort = $("input#email-outgoing-mail-server-port").val();
+                    if (!emailOutgoingMailServerPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Port is empty. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!$.isNumeric(emailOutgoingMailServerPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Port requires a number input. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(emailOutgoingMailServerPort, 0, 65535)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Outgoing Mail Server Port is not within the range " +
+                                "of valid port numbers. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
                     validationStatus = {
                         "error": false,
-                        "okFeature": "scep-settings"
+                        "okFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
                 }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
             }
-            if ($.inArray("EMAIL_SETTINGS", configuredOperations) != -1) {
-                /* Validating Access Point Name */
-                var emAccountDescription = $("input#emAccountDescription").val();
-                if (!emAccountDescription) {
+            // Validating AIRPLAY
+            if ($.inArray(iosOperationConstants["AIRPLAY_OPERATION_CODE"], configuredOperations) != -1) {
+                // if AIRPLAY is configured
+                operation = iosOperationConstants["AIRPLAY_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var airplayCredentialsGridChildInputs = "div#airplay-credentials .child-input";
+                var airplayDestinationsGridChildInputs = "div#airplay-destinations .child-input";
+                if ($(airplayCredentialsGridChildInputs).length == 0 &&
+                    $(airplayDestinationsGridChildInputs).length == 0) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "Display name of the account is not provided. Please provide a valid name to proceed.",
-                        "erroneousFeature": "email-settings"
+                        "subErrorMsg": "AirPlay settings have zero configurations attached. Please check.",
+                        "erroneousFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
-                } else {
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(airplayCredentialsGridChildInputs).length > 0) {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(airplayCredentialsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 2 == 1) {
+                                // if child input is of first column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) { break; }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more Device Names of " +
+                                    "AirPlay Credentials are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                    "Device Names of AirPlay Credentials. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(airplayDestinationsGridChildInputs).length > 0) {
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        invalidAgainstRegExCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(airplayDestinationsGridChildInputs).each(function () {
+                            childInput = $(this).val();
+                            childInputArray.push(childInput);
+                            // updating emptyChildInputCount
+                            if (!childInput) {
+                                // if child input field is empty
+                                emptyChildInputCount++;
+                            } else if (!inputIsValidAgainstRegExp(
+                                /([a-z|A-Z|0-9][a-z|A-Z|0-9][:]){5}([a-z|A-Z|0-9][a-z|A-Z|0-9])$/, childInput)) {
+                                // if child input field is invalid against RegEx
+                                invalidAgainstRegExCount++
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) { break; }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more AirPlay Destination fields are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (invalidAgainstRegExCount > 0) {
+                            // if invalidAgainstRegEx inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more AirPlay Destination fields " +
+                                    "do not fulfill expected format. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with AirPlay Destinations. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
                     validationStatus = {
                         "error": false,
-                        "okFeature": "email-settings"
+                        "okFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
                 }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
             }
-            if ($.inArray("LDAP", configuredOperations) != -1) {
-                /* Validating Access Point Name */
-                var ldapAccHostName = $("input#ldap-account-hostname").val();
-                if (!ldapAccHostName) {
+            // Validating LDAP
+            if ($.inArray(iosOperationConstants["LDAP_OPERATION_CODE"], configuredOperations) != -1) {
+                // if LDAP is configured
+                operation = iosOperationConstants["LDAP_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var ldapAccountHostname = $("input#ldap-account-hostname").val();
+                if (!ldapAccountHostname) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "Hostname of the target LDAP server is not provided. Please provide a valid hostname to proceed.",
-                        "erroneousFeature": "calendar"
+                        "subErrorMsg": "LDAP Account Hostname URL is empty. You cannot proceed.",
+                        "erroneousFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
-                } else if (!inputIsValidAgainstLength(ldapAccHostName, 1, 100)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Configured hostname exceeded its maximum allowed length (100). Please provide a valid hostname",
-                        "erroneousFeature": "calendar"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else if (!inputIsValidAgainstRegExp(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/, ldapAccHostName)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Hostname provided is invalid. Please provide a valid hostname to proceed",
-                        "erroneousFeature": "calendar"
-                    };
-                    validationStatusArray.push(validationStatus);
-                } else {
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    var ldapSearchSettingsGridChildInputs = "div#ldap-search-settings .child-input";
+                    if ($(ldapSearchSettingsGridChildInputs).length > 0) {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(ldapSearchSettingsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 3 == 2) {
+                                // if child input is of second column
+                                childInput = $(this).find("option:selected").attr("value");
+                                stringPair = "";
+                                stringPair += (childInput + " ");
+                            } else if (childInputCount % 3 == 0) {
+                                // if child input is of third column
+                                childInput = $(this).val();
+                                stringPair += childInput;
+                                childInputArray.push(stringPair);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) { break; }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more Search Setting Scope fields are empty. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                    "Search Setting Search Base and Scope pairs. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
                     validationStatus = {
                         "error": false,
-                        "okFeature": "ldap"
+                        "okFeature": operation
                     };
-                    validationStatusArray.push(validationStatus);
                 }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+            // Validating CALENDAR
+            if ($.inArray(iosOperationConstants["CALENDAR_OPERATION_CODE"], configuredOperations) != -1) {
+                // if CALENDAR is configured
+                operation = iosOperationConstants["CALENDAR_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var calendarAccountHostname = $("input#calendar-account-hostname").val();
+                if (!calendarAccountHostname) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Account Hostname URL is empty. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    var calendarAccountPort = $("input#calendar-account-port").val();
+                    if (!calendarAccountPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Account Port is empty. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!$.isNumeric(calendarAccountPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Account Port requires a number input. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(calendarAccountPort, 0, 65535)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Account Port is not within the range " +
+                                "of valid port numbers. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+            // Validating CALENDAR_SUBSCRIPTION
+            if ($.inArray(iosOperationConstants["CALENDAR_SUBSCRIPTION_OPERATION_CODE"], configuredOperations) != -1) {
+                // if CALENDAR_SUBSCRIPTION is configured
+                operation = iosOperationConstants["CALENDAR_SUBSCRIPTION_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var calendarSubscriptionHostname = $("input#calendar-subscription-hostname").val();
+                if (!calendarSubscriptionHostname) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Account Hostname URL is empty. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
             }
         }
     }
@@ -1480,27 +1480,27 @@ var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
  * Method to set count id to cloned elements.
  * @param {object} addFormContainer
  */
-function setId(addFormContainer) {
+var setId = function (addFormContainer) {
     $(addFormContainer).find("[data-add-form-clone]").each(function (i) {
         $(this).attr("id", $(this).attr("data-add-form-clone").slice(1) + "-" + (i + 1));
         if ($(this).find(".index").length > 0) {
             $(this).find(".index").html(i + 1);
         }
     });
-}
+};
 
 /**
  * Method to set count id to cloned elements.
  * @param {object} addFormContainer
  */
-function showHideHelpText(addFormContainer) {
+var showHideHelpText = function (addFormContainer) {
     var helpText = "[data-help-text=add-form]";
     if ($(addFormContainer).find("[data-add-form-clone]").length > 0) {
         $(addFormContainer).find(helpText).hide();
     } else {
         $(addFormContainer).find(helpText).show();
     }
-}
+};
 
 // End of functions related to grid-input-view
 
@@ -1606,6 +1606,19 @@ $(document).ready(function () {
                         $(this).slideUp();
                     }
                 );
+                // removing all entries of grid-input elements if exist
+                $(operationDataWrapper + " .grouped-array-input").each(
+                    function () {
+                        var gridInputs = $(this).find("[data-add-form-clone]");
+                        if (gridInputs.length > 0) {
+                            gridInputs.remove();
+                        }
+                        var helpTexts = $(this).find("[data-help-text=add-form]");
+                        if (helpTexts.length > 0) {
+                            helpTexts.show();
+                        }
+                    }
+                );
             }
         }
     });
@@ -1638,34 +1651,27 @@ $(document).ready(function () {
         updateGroupedInputVisibility(this);
     });
 
-    // add form button click function
-    $(advanceOperations).on("click", "[data-click-event=add-form]", function (e) {
-        e.preventDefault();
-
+    // add form entry click function for grid inputs
+    $(advanceOperations).on("click", "[data-click-event=add-form]", function () {
         var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
-
         var clonedForm = $("[data-add-form=" + $(this).attr("href") + "]").clone().
             find("[data-add-form-element=clone]").attr("data-add-form-clone", $(this).attr("href"));
 
         // adding class .child-input to capture text-input-array-values
         $("input, select", clonedForm).addClass("child-input");
 
-        // remove form button click function
-        $(clonedForm).find("[data-click-event=remove-form]").bind("click", function () {
-            e.preventDefault();
-            $(this).closest("[data-add-form-element=clone]").remove();
-            setId(addFormContainer);
-            showHideHelpText(addFormContainer);
-        });
-
         $(addFormContainer).append(clonedForm);
         setId(addFormContainer);
         showHideHelpText(addFormContainer);
+    });
 
-        // focus + scroll to newly added form
-        $("body").animate({
-            scrollTop: $(addFormContainer).find("[data-add-form-clone]").last().offset().top
-        }, 400);
+    // remove form entry click function for grid inputs
+    $(advanceOperations).on("click", "[data-click-event=remove-form]", function () {
+        var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
+
+        $(this).closest("[data-add-form-element=clone]").remove();
+        setId(addFormContainer);
+        showHideHelpText(addFormContainer);
     });
 
     $(".wizard-stepper").click(function () {
