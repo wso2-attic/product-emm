@@ -7,28 +7,29 @@
                     <span class="fw-stack">
                         <i class="fw fw-tiles fw-stack-1-5x"></i>
                     </span>
-                </a><a href="javascript:location.reload();" class="cu-btn page-title">
+                </a><!--
+             --><a href="javascript:location.reload();" class="cu-btn page-title">
                     <span class="fw-stack"></span>
                     {{pageTitle}}
-                </a>
-                {{#if enableBack}}
-                    <a href="javascript:history.back()" class="cu-btn">
+                </a><!--
+             -->{{#if enableBack}}<!--
+                 --><a href="javascript:history.back()" class="cu-btn">
                         <span class="fw-stack">
                             <i class="fw fw-ring fw-stack-2x"></i>
                             <i class="fw fw-left-arrow fw-stack-1x"></i>
                         </span>
                         Go Back
-                    </a>
-                {{/if}}
-                {{#each currentActions}}
-                    <a href="{{url}}" class="cu-btn">
+                    </a><!--
+             -->{{/if}}<!--
+             -->{{#each currentActions}}<!--
+                 --><a href="{{url}}" class="cu-btn">
                         <span class="fw-stack">
                             <i class="fw fw-ring fw-stack-2x"></i>
                             <i class="fw {{icon}} fw-stack-1x"></i>
                         </span>
                         {{title}}
-                    </a>
-                {{/each}}
+                    </a><!--
+             -->{{/each}}
                 <a href="javascript:toggleNotificationbar()" class="cu-btn wr-notification-toggle-btn">
                     <span class="fw-stack-md">
                         <i class="fw fw-bell fw-stack-1-5x"></i>

@@ -437,7 +437,7 @@ var operationModule = function () {
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
-            "CHANGE_LOCK_CODE": "fw-padlock"
+            "CHANGE_LOCK_CODE": "fw-security"
         };
         return featureMap[operationCode];
     };
