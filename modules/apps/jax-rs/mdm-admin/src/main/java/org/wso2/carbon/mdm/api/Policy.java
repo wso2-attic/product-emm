@@ -29,7 +29,9 @@ import org.wso2.carbon.mdm.beans.PolicyWrapper;
 import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
+import org.wso2.carbon.policy.mgt.common.PolicyMonitoringTaskException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+import org.wso2.carbon.policy.mgt.core.task.TaskScheduleService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -114,6 +116,24 @@ public class Policy {
 			policyCount = pap.getPolicyCount();
 			return policyCount;
 		} catch (PolicyManagementException e) {
+			String error = "Policy Management related exception";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		}
+	}
+
+	@GET
+	@Path("task/{mf}")
+	public int taskService(@PathParam("mf") int monitoringFrequency) throws MDMAPIException {
+		int policyCount = 0;
+		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+		try {
+			TaskScheduleService taskScheduleService  = policyManagementService.getTaskScheduleService();
+
+			taskScheduleService.startTask(monitoringFrequency);
+			return policyCount;
+
+		} catch (PolicyMonitoringTaskException e) {
 			String error = "Policy Management related exception";
 			log.error(error, e);
 			throw new MDMAPIException(error, e);
