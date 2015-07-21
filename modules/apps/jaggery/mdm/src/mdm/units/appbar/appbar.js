@@ -23,25 +23,13 @@ function onRequest(context) {
     context["permissions"] = uiPermissions;
 
     var links = {
-        "users": [],
-        "policies": [],
+        "user-mgt": [],
+        "policy-mgt": [],
         "device-mgt": []
     };
 
-    var backToDashboardLink = {
-        "title": "Back to Dashboard",
-        "icon": "fw-left-arrow",
-        "url": "/mdm"
-    };
-
-    if (uiPermissions["VIEW_DASHBOARD"]) {
-        links["users"].push(backToDashboardLink);
-        links["policies"].push(backToDashboardLink);
-        links["device-mgt"].push(backToDashboardLink);
-    }
-
     if (uiPermissions["ADD_USER"]) {
-        links["users"].push({
+        links["user-mgt"].push({
             "title": "Add User",
             "icon": "fw-add",
             "url": "/mdm/users/add-user"
@@ -49,7 +37,7 @@ function onRequest(context) {
     }
 
     if (uiPermissions["ADD_POLICY"]) {
-        links["policies"].push({
+        links["policy-mgt"].push({
             "title": "Add Policy",
             "icon": "fw-add",
             "url": "/mdm/policies/add-policy"

@@ -100,6 +100,7 @@ a.ast-type-item:hover {
 .wr-action-btn-bar .page-title {
     background-color: #526A84;
     margin: 0;
+    font-weight: 400;
 }
 
 .wr-action-btn-bar .page-title .fw-stack {
@@ -493,7 +494,7 @@ a.filter-item:hover {
 a.cu-btn, a.cu-btn-inner {
 	color:#fff;
 	text-decoration: none;
-	font-weight:100;
+	font-weight:400;
 	display: inline-block;
 	text-transform: uppercase;
     height: 53px;
@@ -1374,14 +1375,14 @@ a.wr-side-panel-toggle-btn.selected {
 
 .tile-name {
     font-size:16px;
-    font-weight: 100;
+    font-weight: 400;
     text-transform: uppercase;
 }
 
 .tile-stats {
     width:75%;
     float:right;
-    font-size:27px;
+    font-size:25px;
     font-weight: 400;
     text-align: right;
 }
