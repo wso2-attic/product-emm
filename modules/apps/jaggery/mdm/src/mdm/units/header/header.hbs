@@ -1,5 +1,4 @@
 {{#zone "header"}}
-
     <!-- header -->
     <header>
         <div class="row wr-global-header">
@@ -11,10 +10,11 @@
                     <div class="wr-auth pull-right">
                         <a href="#" data-toggle="dropdown">
                             <div class="auth-img">
-                                {{user.username}}
                                 <span class="fw-stack-md fw-lg">
                                     <i class="fw fw-user fw-stack-1-5x"></i>
                                 </span>
+                                &nbsp;
+                                <b>{{user.username}}</b>
                             </div>
                         </a>
                         <div class="dropdown-menu">
@@ -29,5 +29,4 @@
         </div>
     </header>
     <!-- /header -->
-
 {{/zone}}
