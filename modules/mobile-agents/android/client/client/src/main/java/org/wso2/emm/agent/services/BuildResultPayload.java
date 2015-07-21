@@ -38,7 +38,9 @@ public class BuildResultPayload {
 	 * @param operation
 	 */
 	public void build(org.wso2.emm.agent.beans.Operation operation) {
-		operationResponses.add(operation);
+		if (operation.getId() > 0) {
+			operationResponses.add(operation);
+		}
 	}
 
 	/**
