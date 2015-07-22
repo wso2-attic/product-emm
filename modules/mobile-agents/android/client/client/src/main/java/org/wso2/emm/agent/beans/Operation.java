@@ -33,6 +33,7 @@ public class Operation implements Serializable {
 
 	private String code;
 	private String type;
+	private String complianceType;
 	private int id;
 	private String status;
 	private String receivedTimeStamp;
@@ -66,6 +67,10 @@ public class Operation implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public String getComplianceType() { return complianceType; }
+
+	public void setComplianceType(String complianceType) { this.complianceType = complianceType; }
 
 	public String getStatus() {
 		return status;

@@ -33,6 +33,7 @@ import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.GPSTracker;
 import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
@@ -161,6 +162,9 @@ public class Operation implements APIResultCallBack {
 				break;
 			case Constants.Operation.POLICY_BUNDLE:
 				setPolicyBundle(operation);
+				break;
+			case Constants.Operation.POLICY_MONITOR:
+				monitorPolicy(operation);
 				break;
 			case Constants.Operation.ENTERPRISE_WIPE:
 				enterpriseWipe(operation);
@@ -866,10 +870,15 @@ public class Operation implements APIResultCallBack {
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
 		try {
+			if(payload != null){
+				Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), payload);
+			}
+
 			List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
 					payload,
 					mapper.getTypeFactory().constructCollectionType(List.class,
 							org.wso2.emm.agent.beans.Operation.class));
+
 			for (org.wso2.emm.agent.beans.Operation op : operations) {
 				op = operationsMapper.getOperation(op);
 				this.doTask(op);
@@ -879,6 +888,45 @@ public class Operation implements APIResultCallBack {
 
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "Policy applied");
+			}
+		} catch (IOException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			String msg = "Error occurred while parsing stream." + e.getMessage();
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
+		}
+	}
+
+	/**
+	 * Monitor currently enforced policy for compliance.
+	 *
+	 * @param operation - Operation object.
+	 */
+	public void monitorPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+		String payload = Preference.getString(context, resources.getString(R.string.shared_pref_policy_applied));
+
+		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+		PolicyComplianceChecker policyChecker = new PolicyComplianceChecker(context);
+		ArrayList<ComplianceFeature> result = new ArrayList<>();
+
+		try {
+			if(payload != null) {
+				List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
+						payload,
+						mapper.getTypeFactory().constructCollectionType(List.class,
+						                                                org.wso2.emm.agent.beans.Operation.class));
+				for (org.wso2.emm.agent.beans.Operation op : operations) {
+					op = operationsMapper.getOperation(op);
+					result.add(policyChecker.checkPolicyState(op));
+				}
+				operation.setStatus(resources.getString(R.string.operation_value_completed));
+				operation.setPayLoad(result);
+				resultBuilder.build(operation);
 			}
 		} catch (IOException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));

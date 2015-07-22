@@ -208,6 +208,10 @@
     <string name="error_internal_server">Server is unavailable. Please contact administrator.</string>
     <string name="error_ownership">You do not have permission to change PIN since ownership of the device is COPE.</string>
     <string name="error_invalid_server_address">Invalid server Address. Please try again.</string>
+    <string name="error_encrypt_policy">\nYour device should be encrypted according to the policy, please enable device encryption through device settings\n</string>
+    <string name="error_app_install_policy">\nFollowing apps must be installed on your device, please install them. \n</string>
+    <string name="error_app_uninstall_policy">\nFollowing apps are blacklisted by your MDM Admin, please remove them. \n</string>
+    <string name="error_wifi_policy">\nYou are not using company WIFI account, please change your WIFI configuration \n</string>
 
     <!-- DIALOG TITLES AND MESSAGES -->
     <string name="dialog_authenticate">Authenticating</string>
