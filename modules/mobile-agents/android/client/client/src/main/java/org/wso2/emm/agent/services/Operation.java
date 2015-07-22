@@ -166,6 +166,9 @@ public class Operation implements APIResultCallBack {
 			case Constants.Operation.POLICY_MONITOR:
 				monitorPolicy(operation);
 				break;
+			case Constants.Operation.POLICY_REVOKE:
+				revokePolicy(operation);
+				break;
 			case Constants.Operation.ENTERPRISE_WIPE:
 				enterpriseWipe(operation);
 				break;
@@ -938,16 +941,28 @@ public class Operation implements APIResultCallBack {
 	}
 
 	/**
+	 * Revoke currently enforced policy.
+	 *
+	 * @param operation - Operation object.
+	 */
+	public void revokePolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+		CommonUtils.revokePolicy(context);
+		operation.setStatus(resources.getString(R.string.operation_value_completed));
+		resultBuilder.build(operation);
+	}
+
+	/**
 	 * Enterprise wipe the device.
 	 *
 	 * @param operation - Operation object.
 	 */
-	public void enterpriseWipe(org.wso2.emm.agent.beans.Operation operation) {
+	public void enterpriseWipe(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 
 		CommonUtils.clearAppData(context);
+
 		Intent intent = new Intent(context, ServerDetails.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

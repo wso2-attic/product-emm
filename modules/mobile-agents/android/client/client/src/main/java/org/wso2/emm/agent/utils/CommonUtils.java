@@ -17,6 +17,8 @@
  */
 package org.wso2.emm.agent.utils;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
@@ -41,8 +43,12 @@ import android.util.Log;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.wso2.emm.agent.services.Operation;
+import org.wso2.emm.agent.services.PolicyOperationsMapper;
+import org.wso2.emm.agent.services.PolicyRevokeHandler;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * This class represents all the common functions used throughout the application.
@@ -84,8 +90,8 @@ public class CommonUtils {
 	 * Clear application data.
 	 * @param context - Application context.
 	 */
-	public static void clearAppData(Context context) {
-
+	public static void clearAppData(Context context) throws AndroidAgentException {
+		revokePolicy(context);
 		Resources resources = context.getResources();
 		SharedPreferences mainPref =
 				context.getSharedPreferences(context.getResources()
@@ -105,7 +111,7 @@ public class CommonUtils {
 		editor.putString(context.getResources().getString(R.string.shared_pref_ip),
 				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
-				resources.getString(R.string.shared_pref_default_string));
+                resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_eula),
 				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(resources.getString(R.string.shared_pref_device_active),
@@ -193,5 +199,40 @@ public class CommonUtils {
 				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);
+	}
+
+	/**
+	 * Revoke currently enforced policy.
+	 * @param context - Application context.
+	 */
+	public static void revokePolicy(Context context) throws AndroidAgentException {
+		Resources resources = context.getResources();
+		String payload = Preference.getString(context, resources.getString(R.string.shared_pref_policy_applied));
+
+		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+		PolicyRevokeHandler revokeHandler = new PolicyRevokeHandler(context);
+
+		try {
+			if(payload != null) {
+				List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
+						payload,
+						mapper.getTypeFactory().constructCollectionType(List.class,
+						                                                org.wso2.emm.agent.beans.Operation.class));
+				for (org.wso2.emm.agent.beans.Operation op : operations) {
+					op = operationsMapper.getOperation(op);
+					revokeHandler.revokeExistingPolicy(op);
+				}
+
+				Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), null);
+			}
+		} catch (IOException e) {
+			String msg = "Error occurred while parsing stream." + e.getMessage();
+			Log.e(TAG, msg);
+			throw new AndroidAgentException(msg, e);
+		}
 	}
 }

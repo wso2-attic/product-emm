@@ -96,7 +96,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 
 				} catch (IOException ex) {
 					Log.e(TAG, "Error while registering with GCM. " + ex);
-					CommonUtils.clearAppData(getContext());
+					clearData(getContext());
 					displayConnectionError();
 				}
 			}
@@ -107,6 +107,19 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		}
 		return registrationId;
 	}
+
+	/**
+	 * Revoke currently enforced policy.
+	 * @param context - Application context.
+	 */
+	public void clearData(Context context){
+		try {
+			CommonUtils.clearAppData(context);
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Failed to clear app data." + e);
+		}
+	}
+
 
 	/**
 	 * This is used to send the registration Id to MDM server so that the server
@@ -163,7 +176,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
 			String status = result.get(Constants.STATUS_KEY);
 			if (status != null && !Constants.Status.SUCCESSFUL.equals(status)) {
-				CommonUtils.clearAppData(getContext());
+				clearData(getContext());
 				displayConnectionError();
 			}
 		}

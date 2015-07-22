@@ -290,16 +290,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		alertDialog.show();
 	}
 
-	/**
-	 * Clears application data and displays unregister success message.
-	 */
-	private void clearAppData() {
-		CommonUtils.clearAppData(context);
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(TAG, "App data cleared");
-		}
-	}
-
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 

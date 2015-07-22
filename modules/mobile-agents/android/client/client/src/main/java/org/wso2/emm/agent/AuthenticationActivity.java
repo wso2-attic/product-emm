@@ -319,7 +319,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 			} else if (status.trim().equals(Constants.Status.AUTHENTICATION_FAILED)) {
 				showAuthenticationError();
-				CommonUtils.clearAppData(context);
+				try {
+					CommonUtils.clearAppData(context);
+				} catch (AndroidAgentException e) {
+					Log.e(TAG, "Failed to clear app data." + e);
+				}
 			} else if (status.trim().equals(Constants.Status.INTERNAL_SERVER_ERROR)) {
 				showInternalServerErrorMessage();
 
