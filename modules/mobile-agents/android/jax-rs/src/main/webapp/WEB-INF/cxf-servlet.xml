@@ -59,11 +59,21 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
+    <jaxrs:server id="configurationService" address="/configuration">
+        <jaxrs:serviceBeans>
+            <ref bean="configurationServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
 
     <bean id="deviceMgtServiceBean" class="org.wso2.carbon.mdm.services.android.DeviceManagementService"/>
     <bean id="enrollmentServiceBean" class="org.wso2.carbon.mdm.services.android.EnrollmentService"/>
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.services.android.OperationMgtService"/>
     <bean id="policyServiceBean" class="org.wso2.carbon.mdm.services.android.PolicyMgtService"/>
+    <bean id="configurationServiceBean" class="org.wso2.carbon.mdm.services.android.ConfigurationMgtService"/>
     <bean id="jsonProvider" class="org.wso2.carbon.mdm.services.android.common.GsonMessageBodyHandler"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.services.android.common.ErrorHandler"/>
 </beans>
