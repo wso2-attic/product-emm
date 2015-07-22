@@ -101,16 +101,16 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		utils.setServerIP(serverIP);
 
 		CommonUtils.callSecuredAPI(context,
-				utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
-				HTTP_METHODS.DELETE,
-				null, AgentDeviceAdminReceiver.this,
-				Constants.UNREGISTER_REQUEST_CODE);
+		                           utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+		                           HTTP_METHODS.DELETE,
+		                           null, AgentDeviceAdminReceiver.this,
+		                           Constants.UNREGISTER_REQUEST_CODE);
 		try {
 			CommonUtils.unRegisterClientApp(context);
+			CommonUtils.clearAppData(context);
 		} catch (AndroidAgentException e) {
 			Log.e(TAG, "Error occurred while removing Oauth application. " + e);
 		}
-		CommonUtils.clearAppData(context);
 	}
 
 	@Override

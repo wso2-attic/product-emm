@@ -231,7 +231,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 						Log.e(TAG, "Error while sending registration Id");
 					}
 				} else {
-					CommonUtils.clearAppData(getApplicationContext());
+					try {
+						CommonUtils.clearAppData(context);
+					} catch (AndroidAgentException e) {
+						Log.e(TAG, "Failed to clear app data." + e);
+					}
 				}
 			}
 		}.execute();
