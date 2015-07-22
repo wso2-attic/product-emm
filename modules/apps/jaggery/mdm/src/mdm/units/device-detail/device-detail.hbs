@@ -2,27 +2,23 @@
     {{#defineZone "device-detail-top"}}
         <div class="row wr-device-board">
             <div class="col-lg-12 wr-secondary-bar">
-                    <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
-                        Device {{device.name}}
-                        <span class="lbl-device">
-                    ({{device.viewModel.vendor}} {{device.viewModel.model}})
-                </span>
-                    </label>
+                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
+                    Device {{device.name}}
+                    <span class="lbl-device">
+                        ( {{device.viewModel.vendor}} {{device.viewModel.model}} )
+                    </span>
+                </label>
             </div>
         </div>
     {{/defineZone}}
 
     <div class="wr-device-list row">
-        <div class="wr-hidden-operations wr-advance-operations">
-
-        </div>
+        <!--<div class="wr-hidden-operations wr-advance-operations"></div>-->
         <div class="col-md-12 wr-page-content">
             {{unit "operation-bar" deviceType=device.type}}
             <div class="row">
                 <div class="col-md-12 wr-stats-board">
-
                     <!-- content -->
-
                     <div class="col-lg-2 ast-desc-image">
                         <div class="row">
                             <div class="col-lg-12 col-sm-4">
@@ -30,16 +26,29 @@
                             </div>
                             <div class="col-lg-12 col-sm-4 ast-desc">
                                 {{#defineZone "device-detail-properties"}}
-                                    <div class="ast-device-desc"><b>Device:</b> {{device.viewModel.vendor}} {{device.properties.model}}</div>
-                                    <div class="ast-device-desc"><b>Model:</b>  {{device.viewModel.model}}</div>
-                                    <div class="ast-device-desc"><b>IMEI:</b>  {{device.viewModel.imei}}</div>
-                                    {{#if device.viewModel.udid}}<div class="ast-device-desc"><b>UDID:</b>  {{device.viewModel.udid}}</div>{{/if}}
-                                    {{#if device.viewModel.phoneNumber}}<div class="ast-device-desc"><b>Phone Number:</b>  {{device.viewModel.phoneNumber}}</div>{{/if}}
+                                    <div class="ast-device-desc">
+                                        <b>Device:</b> {{device.viewModel.vendor}} {{device.properties.model}}
+                                    </div>
+                                    <div class="ast-device-desc">
+                                        <b>Model:</b>  {{device.viewModel.model}}
+                                    </div>
+                                    <div class="ast-device-desc">
+                                        <b>IMEI:</b>  {{device.viewModel.imei}}
+                                    </div>
+                                    {{#if device.viewModel.udid}}
+                                        <div class="ast-device-desc">
+                                            <b>UDID:</b>  {{device.viewModel.udid}}
+                                        </div>
+                                    {{/if}}
+                                    {{#if device.viewModel.phoneNumber}}
+                                        <div class="ast-device-desc">
+                                            <b>Phone Number:</b>  {{device.viewModel.phoneNumber}}
+                                        </div>
+                                    {{/if}}
                                 {{/defineZone}}
                             </div>
                         </div>
                     </div>
-
                     <div class="col-lg-10 tiles">
                         {{#defineZone "device-detail-properties"}}
                             <!-- device summary -->
@@ -56,7 +65,6 @@
                                             </div>
                                         </div>
                                     {{/if}}
-
                                     {{#if device.viewModel.DeviceCapacity}}
                                         <div class="col-lg-4">
                                             <div class="wr-stats-board-tile">
@@ -91,10 +99,8 @@
                                         </div>
                                     {{/if}}
                                 </div>
-
                             </div>
                             <!-- /device summary -->
-
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                 {{#if viewModel.location}}
                                     <!-- device location -->
