@@ -52,6 +52,9 @@
                 <exclude>**/WSO2DM_DB.h2.db</exclude>
                 <exclude>**/conf/axis2/axis2_client.xml</exclude>
                 <exclude>**/conf/etc/launch.ini</exclude>
+		<exclude>**/lib/httpmime*</exclude>
+		<exclude>**/lib/encoder*</exclude>
+		<exclude>**/plugins/jaxb*</exclude>	
             </excludes>
         </fileSet>
 
