@@ -58,8 +58,11 @@ var body = "body";
  * set popup maximum height function.
  */
 function setPopupMaxHeight() {
-    $(modalPopupContent).css("max-height", ($(body).height() - ($(body).height()/100 * 30)));
-    $(modalPopupContainer).css("margin-top", (-($(modalPopupContainer).height()/2)));
+    var maxHeight = "max-height";
+    var marginTop = "margin-top";
+    var body = "body";
+    $(modalPopupContent).css(maxHeight, ($(body).height() - ($(body).height()/100 * 30)));
+    $(modalPopupContainer).css(marginTop, (-($(modalPopupContainer).height()/2)));
 }
 
 /*

@@ -114,6 +114,13 @@ a.ast-type-item:hover {
     margin: 0;
 }
 
+.page-sub-title.device-view {
+    font-weight: 300;
+    text-transform: none;
+    font-size: 24px;
+    margin: 0;
+}
+
 .page-sub-title-desc {
     font-weight: 300;
 }
