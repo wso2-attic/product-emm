@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 /* sorting function */
 var sortUpdateBtn = "#sortUpdateBtn";
 var sortedIDs;
@@ -60,100 +78,96 @@ function hidePopup() {
     $(modalPopup).hide();
 }
 
-/**
- * Click functions related to
- * Policy Listing
- */
+$(document).ready(function () {
+    sortElements();
 
-$(sortUpdateBtn).click(function () {
-    $(sortUpdateBtn).prop("disabled", true);
+    // Click functions related to Policy Listing
+    $(sortUpdateBtn).click(function () {
+        $(sortUpdateBtn).prop("disabled", true);
 
-    var newPolicyPriorityList = [];
-    var policy;
-    var i;
-    for (i = 0; i < sortedIDs.length; i++) {
-        policy = {};
-        policy.id = parseInt(sortedIDs[i]);
-        policy.priority = i+1;
-        newPolicyPriorityList.push(policy);
-    }
-
-    var updatePolicyAPI = "/mdm/api/policies/update";
-
-    $.ajax({
-        type : "POST",
-        url : updatePolicyAPI,
-        contentType : "application/json",
-        data : JSON.stringify(newPolicyPriorityList),
-        success : function () {
-            $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
-            showPopup();
-            $("a#save-policy-priorities-success-link").click(function () {
-                hidePopup();
-            });
-        },
-        error : function () {
-            $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
-            showPopup();
-            $("a#save-policy-priorities-error-link").click(function () {
-                hidePopup();
-            });
+        var newPolicyPriorityList = [];
+        var policy;
+        var i;
+        for (i = 0; i < sortedIDs.length; i++) {
+            policy = {};
+            policy.id = parseInt(sortedIDs[i]);
+            policy.priority = i+1;
+            newPolicyPriorityList.push(policy);
         }
-    });
-});
 
-$(".policy-remove-link").click(function () {
-    var policyId = $(this).data("id");
-    var deletePolicyAPI = "/mdm/api/policies/" + policyId + "/delete";
+        var updatePolicyAPI = "/mdm/api/policies/update";
 
-    $(modalPopupContent).html($('#remove-policy-modal-content').html());
-    showPopup();
-
-    $("a#remove-policy-yes-link").click(function () {
         $.ajax({
-            type : "GET",
-            url : deletePolicyAPI,
-            success : function (data) {
-                if (data == 200) {
-                    $("#" + policyId).remove();
-                    sortElements();
-                    var newPolicyListCount = $(".policy-list > span").length;
-                    if (newPolicyListCount == 1) {
-                        $(saveNewPrioritiesButton).addClass("hide");
-                        $("#policy-count-status-msg").text("Add more policies to set-up a priority order.");
-                    } else if (newPolicyListCount == 0) {
-                        $("#policy-count-status-msg").text("No Policies to show currently.");
-                    }
-                    $(modalPopupContent).html($('#remove-policy-200-content').html());
-                    $("a#remove-policy-200-link").click(function () {
-                        hidePopup();
-                    });
-                } else if (data == 409) {
-                    $(modalPopupContent).html($('#remove-policy-409-content').html());
-                    $("a#remove-policy-409-link").click(function () {
-                        hidePopup();
-                    });
-                } else if (data == 500) {
-                    $(modalPopupContent).html($('#remove-policy-500-content').html());
-                    $("a#remove-policy-500-link").click(function () {
-                        hidePopup();
-                    });
-                }
+            type : "POST",
+            url : updatePolicyAPI,
+            contentType : "application/json",
+            data : JSON.stringify(newPolicyPriorityList),
+            success : function () {
+                $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
+                showPopup();
+                $("a#save-policy-priorities-success-link").click(function () {
+                    hidePopup();
+                });
             },
             error : function () {
-                $(modalPopupContent).html($('#remove-policy-unexpected-error-content').html());
-                $("a#remove-policy-unexpected-error-link").click(function () {
+                $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
+                showPopup();
+                $("a#save-policy-priorities-error-link").click(function () {
                     hidePopup();
                 });
             }
         });
     });
 
-    $("a#remove-policy-cancel-link").click(function () {
-        hidePopup();
-    });
-});
+    $(".policy-remove-link").click(function () {
+        var policyId = $(this).data("id");
+        var deletePolicyAPI = "/mdm/api/policies/" + policyId + "/delete";
 
-$(document).ready(function () {
-    sortElements();
+        $(modalPopupContent).html($('#remove-policy-modal-content').html());
+        showPopup();
+
+        $("a#remove-policy-yes-link").click(function () {
+            $.ajax({
+                type : "GET",
+                url : deletePolicyAPI,
+                success : function (data) {
+                    if (data == 200) {
+                        $("#" + policyId).remove();
+                        sortElements();
+                        var newPolicyListCount = $(".policy-list > span").length;
+                        if (newPolicyListCount == 1) {
+                            $(saveNewPrioritiesButton).addClass("hide");
+                            $("#policy-count-status-msg").text("Add more policies to set-up a priority order.");
+                        } else if (newPolicyListCount == 0) {
+                            $("#policy-count-status-msg").text("No Policies to show currently.");
+                        }
+                        $(modalPopupContent).html($('#remove-policy-200-content').html());
+                        $("a#remove-policy-200-link").click(function () {
+                            hidePopup();
+                        });
+                    } else if (data == 409) {
+                        $(modalPopupContent).html($('#remove-policy-409-content').html());
+                        $("a#remove-policy-409-link").click(function () {
+                            hidePopup();
+                        });
+                    } else if (data == 500) {
+                        $(modalPopupContent).html($('#remove-policy-500-content').html());
+                        $("a#remove-policy-500-link").click(function () {
+                            hidePopup();
+                        });
+                    }
+                },
+                error : function () {
+                    $(modalPopupContent).html($('#remove-policy-unexpected-error-content').html());
+                    $("a#remove-policy-unexpected-error-link").click(function () {
+                        hidePopup();
+                    });
+                }
+            });
+        });
+
+        $("a#remove-policy-cancel-link").click(function () {
+            hidePopup();
+        });
+    });
 });
