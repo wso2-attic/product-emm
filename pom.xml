@@ -352,17 +352,6 @@
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.user.common</artifactId>
-                <version>${carbon.device.mgt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
-                <version>${carbon.device.mgt.version}</version>
-            </dependency>
-
             <!--MDM dependencies-->
             <dependency>
                 <groupId>org.wso2.carbon.mdm</groupId>
@@ -695,12 +684,12 @@
                 <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.tomcat.wso2</groupId>
+                <groupId>org.wso2.tomcat</groupId>
                 <artifactId>tomcat-servlet-api</artifactId>
                 <version>${orbit.version.tomcat-servlet-api}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.tomcat.wso2</groupId>
+                <groupId>org.wso2.tomcat</groupId>
                 <artifactId>tomcat</artifactId>
                 <version>${orbit.tomcat.version}</version>
             </dependency>
@@ -725,6 +714,12 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${google.gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity</groupId>
+                <artifactId>org.wso2.carbon.identity.oauth.stub</artifactId>
+                <version>${carbon.identity.version}</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -760,8 +755,6 @@
         <!--Orbit versions-->
 
         <orbit.h2.engine.version>1.2.140.wso2v3</orbit.h2.engine.version>
-        <orbit.tomcat.version>7.0.59.wso2v1</orbit.tomcat.version>
-        <orbit.tomcat.jdbc.pooling.version>7.0.34.wso2v2</orbit.tomcat.jdbc.pooling.version>
 
         <!-- MDM android Agent -->
         <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
@@ -801,8 +794,9 @@
         <carbon.api.mgt.version>1.4.0</carbon.api.mgt.version>
 
         <!-- Tomcat -->
-        <orbit.version.tomcat>7.0.52.wso2v5</orbit.version.tomcat>
-        <orbit.version.tomcat-servlet-api>7.0.52.wso2v1</orbit.version.tomcat-servlet-api>
+        <orbit.tomcat.version>7.0.59.wso2v1</orbit.tomcat.version>
+        <orbit.tomcat.jdbc.pooling.version>7.0.34.wso2v2</orbit.tomcat.jdbc.pooling.version>
+        <orbit.version.tomcat-servlet-api>7.0.59.wso2v1</orbit.version.tomcat-servlet-api>
 
         <!-- Third Party Dependencies-->
         <spongycastle.version>1.51.0.0</spongycastle.version>
