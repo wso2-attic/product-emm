@@ -940,7 +940,7 @@ a.btn-operations {
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 60px;
+    padding: 50px 60px 60px 60px;
 }
 
 .modalpopup-content h3 {
@@ -956,8 +956,8 @@ a.btn-operations {
     z-index: 1000002;
     cursor: pointer;
     position: absolute;
-    top: 30px;
-    left: 40px;
+    top: 20px;
+    left: 20px;
     padding: 5px 8px;
     font-size: 18px;
 }
