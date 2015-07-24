@@ -24,77 +24,47 @@ var operations = '.wr-operations',
     modalPopup = '.wr-modalpopup',
     modalPopupContainer = modalPopup + ' .modalpopup-container',
     modalPopupContent = modalPopup + ' .modalpopup-content',
-    deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]',
-    showOperationsBtn = '#showOperationsBtn',
+    // deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]',
+    // showOperationsBtn = '#showOperationsBtn',
     navHeight = $('#nav').height(),
     headerHeight = $('header').height(),
     offset = (headerHeight + navHeight),
-    maxOperationsLimit = 15,
-    hiddenOperation = '.wr-hidden-operations-content > div',
+    // maxOperationsLimit = 15,
+    // hiddenOperation = '.wr-hidden-operations-content > div',
     deviceSelection = '.device-select',
     currentOperationList = [];
 
 /*
- * DOM ready functions.
- */
-$(document).ready(function(){
-    if($(operations + "> a").length > maxOperationsLimit){
-        $(showOperationsBtn).show();
-    }
-    else{
-        $(operations).show();
-    }
-    toggleMoreOperationsHeight();
-    //loadOperationBar("ios");
-    /**
-     * Android App type javascript
-     */
-    $(".wr-modalpopup").on("click", ".appTypesInput", function(){
-        var appType = $(".appTypesInput").val();
-        if (appType == "Public") {
-            $('.appURLInput').prop( "disabled", true );
-        }else if (appType == "Enterprise"){
-            $('.appURLInput').prop( "disabled", false );
-        }
-    }).trigger("change");
-});
-
-/*
 * On window resize functions.
 */
-$(window).resize(function(){
-    toggleMoreOperationsHeight();
-});
+//$(window).resize(function(){
+//    toggleMoreOperationsHeight();
+//});
 
 /*
  * On main div.container resize functions.
  * @required  jquery.resize.js
  */
-$('.container').resize(function(){
-    toggleMoreOperationsHeight();
-});
+//$('.container').resize(function(){
+//    toggleMoreOperationsHeight();
+//});
 
 /*
  * On Show Operations click operation show toggling function.
  */
-function showOperations(){
-    $(operations).toggle('slide');
-}
+//function showOperations(){
+//    $(operations).toggle('slide');
+//}
 
 /*
- * On operation click function.
- * @param selection: Selected operation
+ * set popup maximum height function.
  */
-function operationSelect(selection){
-    var deviceIdList = getSelectedDeviceIds();
-    $(modalPopupContent).addClass("operation-data");
-    if (deviceIdList == 0){
-        $(modalPopupContent).html($('#errorOperations').html());
-    }else {
-        $(modalPopupContent).html($(operations + ' .operation[data-operation-code='+selection+']').html());
-        $(modalPopupContent).data("operation-code", selection);
-    }
-    showPopup();
+function setPopupMaxHeight() {
+    var maxHeight = "max-height";
+    var marginTop = "margin-top";
+    var body = "body";
+    $(modalPopupContent).css(maxHeight, ($(body).height() - ($(body).height()/100 * 30)));
+    $(modalPopupContainer).css(marginTop, (-($(modalPopupContainer).height()/2)));
 }
 
 /*
@@ -109,55 +79,17 @@ function showPopup() {
  * hide popup function.
  */
 function hidePopup() {
-    $(modalPopupContent).html('');
+    $(modalPopupContent).html("");
     $(modalPopupContent).removeClass("operation-data");
     $(modalPopup).hide();
 }
 
 /*
- * set popup maximum height function.
- */
-function setPopupMaxHeight() {
-    var maxHeight = "max-height";
-    var marginTop = "margin-top";
-    var body = "body";
-    $(modalPopupContent).css(maxHeight, ($(body).height() - ($(body).height()/100 * 30)));
-    $(modalPopupContainer).css(marginTop, (-($(modalPopupContainer).height()/2)));
-}
-
-
-/*
- * Function to open hidden device operations list
- */
-function toggleMoreOperations(){
-    $('.wr-hidden-operations, .wr-page-content').toggleClass('toggled');
-    $(showOperationsBtn).toggleClass('selected');
-    //$('.footer').toggleClass('wr-hidden-operations-toggled');
-}
-
-/*
- * Function to fit hidden device operation window height with the screen
- */
-function toggleMoreOperationsHeight(){
-    $('.wr-hidden-operations').css('min-height', $('html').height() - (offset+140));
-}
-
-/*
- * Advance operations sub categories show/hide toggle function
- */
-function showAdvanceOperation(operation, button){
-    $(button).addClass('selected');
-    $(button).siblings().removeClass('selected');
-    $(hiddenOperation + '[data-operation-code="' + operation + '"]').show();
-    $(hiddenOperation + '[data-operation-code="' + operation + '"]').siblings().hide();
-}
-
-/*
  * Function to get selected devices ID's
  */
-function getSelectedDeviceIds(){
+function getSelectedDeviceIds() {
     var deviceIdentifierList = [];
-    $(deviceSelection).each(function(index){
+    $(deviceSelection).each(function (index) {
         var device = $(this);
         var deviceId = device.data('deviceid');
         var deviceType = device.data('type');
@@ -168,61 +100,100 @@ function getSelectedDeviceIds(){
     });
     return deviceIdentifierList;
 }
-function getDevicesByTypes(deviceList){
+
+/*
+ * On operation click function.
+ * @param selection: Selected operation
+ */
+function operationSelect (selection) {
+    var deviceIdList = getSelectedDeviceIds();
+    if (deviceIdList == 0) {
+        $(modalPopupContent).html($("#errorOperations").html());
+    } else {
+        $(modalPopupContent).addClass("operation-data");
+        $(modalPopupContent).html($(operations + " .operation[data-operation-code=" + selection + "]").html());
+        $(modalPopupContent).data("operation-code", selection);
+    }
+    showPopup();
+}
+
+/*
+ * Function to open hidden device operations list
+ */
+//function toggleMoreOperations(){
+//    $('.wr-hidden-operations, .wr-page-content').toggleClass('toggled');
+//    $(showOperationsBtn).toggleClass('selected');
+//    //$('.footer').toggleClass('wr-hidden-operations-toggled');
+//}
+
+/*
+ * Function to fit hidden device operation window height with the screen
+ */
+//function toggleMoreOperationsHeight(){
+//    $('.wr-hidden-operations').css('min-height', $('html').height() - (offset+140));
+//}
+
+/*
+ * Advance operations sub categories show/hide toggle function
+ */
+//function showAdvanceOperation(operation, button){
+//    $(button).addClass('selected');
+//    $(button).siblings().removeClass('selected');
+//    $(hiddenOperation + '[data-operation-code="' + operation + '"]').show();
+//    $(hiddenOperation + '[data-operation-code="' + operation + '"]').siblings().hide();
+//}
+
+function getDevicesByTypes (deviceList) {
     var deviceTypes = {};
-    jQuery.each(deviceList, function(index, item) {
+    $.each(deviceList, function (index, item) {
         deviceTypes[item.type] = [];
-        if(item.type == "android"){
+        if (item.type == "android" || item.type == "ios") {
             deviceTypes[item.type].push(item.id);
         }
-        if(item.type == "ios"){
-            deviceTypes[item.type].push(item.id);
-        }
-        if(item.type == "TemperatureController"){
-            deviceTypes[item.type].push(item.id);
-        }
+//        if(item.type == "TemperatureController"){
+//            deviceTypes[item.type].push(item.id);
+//        }
     });
     return deviceTypes;
 }
+
 function unloadOperationBar(){
     $("#showOperationsBtn").addClass("hidden");
     $(".wr-operations").html("");
 }
 
-function loadOperationBar(deviceType){
+function loadOperationBar (deviceType) {
     var operationBar = $("#operations-bar");
     var operationBarSrc = operationBar.attr("src");
     var platformType = deviceType;
     $.template("operations-bar", operationBarSrc, function (template) {
         var serviceURL = "/mdm-admin/features/" + platformType;
-        if (deviceType == "TemperatureController") {
-            serviceURL = "/mdm-admin/features/android";
-        }
+//        if (deviceType == "TemperatureController") {
+//            serviceURL = "/mdm-admin/features/android";
+//        }
         var successCallback = function (data) {
             var viewModel = {};
-            var iconMap = {};
-            if (deviceType == "TemperatureController") {
-                data = [{
-                    "id": 0,
-                    "code": "BUZZER",
-                    "name": "Buzz",
-                    "description": "Buzz the device",
-                    "deviceType": "TemperatureController",
-                    "metadataEntries": null
-                }];
-                currentOperationList = viewModel.features = data.reduce(function (total, current) {
-                    total[current.code] = current;
-                    return total;
-                }, {});
-            }
-            data = data.filter(function(current){
+            // var iconMap = {};
+//            if (deviceType == "TemperatureController") {
+//                data = [{
+//                    "id": 0,
+//                    "code": "BUZZER",
+//                    "name": "Buzz",
+//                    "description": "Buzz the device",
+//                    "deviceType": "TemperatureController",
+//                    "metadataEntries": null
+//                }];
+//                currentOperationList = viewModel.features = data.reduce(function (total, current) {
+//                    total[current.code] = current;
+//                    return total;
+//                }, {});
+//            }
+            data = data.filter(function (current) {
                 var iconName;
                 if (deviceType == "android"){
-                    var iconName = operationModule.getAndroidIconForFeature(current.code);
+                    iconName = operationModule.getAndroidIconForFeature(current.code);
                 } else if (deviceType == "ios"){
-                    var iconName = operationModule.getIOSIconForFeature(current.code);
-                } else if (deviceType == "TemperatureController"){
-                    var iconName = operationModule.getTemperatureControllerIconForFeature(current.code);
+                    iconName = operationModule.getIOSIconForFeature(current.code);
                 }
                 if (iconName){
                     current.icon = iconName;
@@ -238,57 +209,60 @@ function loadOperationBar(deviceType){
                 console.log(message);
             });
     });
-    var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
-    var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
-    if (hiddenOperationBarSrc){
-        $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
-            var serviceURL = "/mdm-admin/features/" + platformType;
-            var successCallback = function (data) {
-                var viewModel = {};
-                viewModel.features = data.reduce(function (total, current) {
-                    total[current.code] = current;
-                    return total;
-                }, {});
-                currentOperationList = viewModel.features;
-                var content = template(viewModel);
-                $(".wr-hidden-operations").html(content);
-            };
-            invokerUtil.get(serviceURL,
-                successCallback, function(message){
-                    console.log(message);
-                });
-        });
-        $("#showOperationsBtn").removeClass("hidden");
-    }
+    // var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
+    // var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
+//    if (hiddenOperationBarSrc){
+//        $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
+//            var serviceURL = "/mdm-admin/features/" + platformType;
+//            var successCallback = function (data) {
+//                var viewModel = {};
+//                viewModel.features = data.reduce(function (total, current) {
+//                    total[current.code] = current;
+//                    return total;
+//                }, {});
+//                currentOperationList = viewModel.features;
+//                var content = template(viewModel);
+//                $(".wr-hidden-operations").html(content);
+//            };
+//            invokerUtil.get(serviceURL,
+//                successCallback, function(message){
+//                    console.log(message);
+//                });
+//        });
+//        $("#showOperationsBtn").removeClass("hidden");
+//    }
 
 }
 
-function runOperation(operationName) {
+function runOperation (operationName) {
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
 
-    var successCallback = function(message){
+    var notificationBubble = ".wr-notification-bubble";
+    var successCallback = function (message) {
         console.log(message);
-        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
-        'class="wr-notification-operation">' + currentOperationList[operationName].name +
-        '- Operation Successful!</div><hr /></div>');
-        var notificationCount = parseInt($(".wr-notification-bubble").html());
+//        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
+//        'class="wr-notification-operation">' + currentOperationList[operationName].name +
+//        '- Operation Successful!</div><hr /></div>');
+        var notificationCount = parseInt($(notificationBubble).html());
         notificationCount++;
-        $(".wr-notification-bubble").html(notificationCount);
+        $(notificationBubble).html(notificationCount);
     };
-    if(list["ios"]){
-        var payload = operationModule.generatePayload("ios", operationName, list["ios"]);
-        var serviceEndPoint = operationModule.getIOSServiceEndpoint(operationName);
 
+    var payload, serviceEndPoint;
+    if(list["ios"]){
+        payload = operationModule.generatePayload("ios", operationName, list["ios"]);
+        serviceEndPoint = operationModule.getIOSServiceEndpoint(operationName);
     }
     if(list["android"]){
-        var payload = operationModule.generatePayload("android", operationName, list["android"]);
-        var serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
+        payload = operationModule.generatePayload("android", operationName, list["android"]);
+        serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
     }
-    if(list["TemperatureController"]){
-        var payload = operationModule.generatePayload("TemperatureController", operationName, list["TemperatureController"]);
-        var serviceEndPoint = operationModule.getTemperatureControllerServiceEndpoint(operationName);
-    }
+//    if(list["TemperatureController"]){
+//        payload = operationModule.generatePayload("TemperatureController", operationName, list["TemperatureController"]);
+//        serviceEndPoint = operationModule.getTemperatureControllerServiceEndpoint(operationName);
+//    }
+    console.log(payload);
     invokerUtil.post(serviceEndPoint, payload,
         successCallback, function(jqXHR, textStatus, errorThrown){
             console.log(textStatus);
@@ -296,3 +270,29 @@ function runOperation(operationName) {
     $(modalPopupContent).removeData();
     hidePopup();
 }
+
+/*
+ * DOM ready functions.
+ */
+$(document).ready(function(){
+//    if($(operations + "> a").length > maxOperationsLimit){
+//        $(showOperationsBtn).show();
+//    }
+//    else{
+//        $(operations).show();
+//    }
+    $(operations).show();
+    // toggleMoreOperationsHeight();
+    //loadOperationBar("ios");
+    /**
+     * Android App type javascript
+     */
+//    $(".wr-modalpopup").on("click", ".appTypesInput", function(){
+//        var appType = $(".appTypesInput").val();
+//        if (appType == "Public") {
+//            $('.appURLInput').prop( "disabled", true );
+//        }else if (appType == "Enterprise"){
+//            $('.appURLInput').prop( "disabled", false );
+//        }
+//    }).trigger("change");
+});
