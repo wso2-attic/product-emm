@@ -25,19 +25,12 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.api.mgt.ApplicationManagementProviderService;
-import org.wso2.carbon.device.mgt.core.dto.operation.mgt.CommandOperation;
-import org.wso2.carbon.device.mgt.core.license.mgt.LicenseManagementService;
-import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
-import org.wso2.carbon.device.mgt.core.operation.mgt.PolicyOperation;
-import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.mdm.services.android.bean.wrapper.*;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,20 +57,6 @@ public class AndroidAPIUtils {
                 (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
         return dmService;
-    }
-
-    public static LicenseManagementService getLicenseManagerService() {
-
-        //TODO: complete login change super tenent context
-        LicenseManagementService licenseManagementService;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        licenseManagementService =
-                (LicenseManagementService) ctx.getOSGiService(LicenseManagementService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-        return licenseManagementService;
     }
 
     public static MediaType getResponseMediaType(String acceptHeader) {
