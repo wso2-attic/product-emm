@@ -35,34 +35,28 @@
                             <i class="fw fw-ring fw-stack-2x"></i>
                             <i class="fw {{icon}} fw-stack-1x"></i>
                         </span>
+                        {{name}}
+                        <br>
+                    </h3>
+                    <h4>
                         {{#equal code "NOTIFICATION"}}
-                            Compose Message
+                            Type your message below.
+                            <br><br>
+                            <div>
+                                <textarea class="form-control modal-input operationDataKeys" id="message" data-key="message"></textarea>
+                            </div>
+                            <br>
                         {{/equal}}
                         {{#equal code "CHANGE_LOCK_CODE"}}
-                            Change Lockcode
+                            <input type="text" class="form-control modal-input operationDataKeys" id="lockcode" data-key="lockCode" placeholder="Enter Lockcode" />
+                            <br>
                         {{/equal}}
-                        {{#unequal code "NOTIFICATION"}}
-                            Do you want perform "{{name}}" operation on selected device(s)?
-                            <!-- Are you sure you want to perform the below operation on the selected devices ?-->
-                        {{/unequal}}
-                    </h3>
-                    {{#equal code "NOTIFICATION"}}
-                        <h4>
-                            Type your message below to send that to all the selected devices.<br>
-                        </h4>
-                        <div>
-                            <textarea class="form-control operationDataKeys" id="message" data-key="message"></textarea>
-                        </div>
-                    {{/equal}}
-                    {{#equal code "CHANGE_LOCK_CODE"}}
-                        <input type="text" class="form-control operationDataKeys" id="lockcode" data-key="lockCode" placeholder="Enter Lockcode" />
-                    {{/equal}}
-                    {{#equal code "BUZZER"}}
-                        <input type="checkbox" class="form-control operationDataKeys" id="buzzer" data-key="enableBuzzer" />
-                    {{/equal}}
+                        Do you want perform this operation on selected device(s) ?
+                        <br>
+                    </h4>
                     <div class="buttons">
                         <a href="javascript:runOperation('{{code}}')" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="javascript:hidePopup()" class="btn-operations">
