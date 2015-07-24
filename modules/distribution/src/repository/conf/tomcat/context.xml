@@ -45,5 +45,5 @@
 	 'managed-api-isSecured'  - Indicates if the 'Managed API' needs to be exposed over a secured channel.
 	 'managed-api-transports' - Transports through which the 'Managed API' is exposed.
      -->
-    <Listener className="org.wso2.carbon.device.mgt.core.api.mgt.lifecycle.listener.APIPublisherLifecycleListener"/>
+    <Listener className="org.wso2.carbon.apimgt.webapp.publisher.lifecycle.listener.APIPublisherLifecycleListener"/>
 </Context>
