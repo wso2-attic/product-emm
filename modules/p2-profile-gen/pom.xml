@@ -320,6 +320,10 @@
                                     org.apache.axis2.transport:org.apache.axis2.transport.mail.feature:${axis2-transports.wso2.version}
                                 </featureArtifactDef>
 
+                                <!-- Transaction Mgr Feature -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.transaction.manager.feature:${transaction.mgr.feature}
+                                </featureArtifactDef>
 
                             </featureArtifacts>
                         </configuration>
@@ -616,6 +620,12 @@
                                 <feature>
                                     <id>org.apache.axis2.transport.mail.feature.group</id>
                                     <version>${axis2-transports.wso2.version}</version>
+                                </feature>
+
+                                <!--Transaction mgt feature -->
+                                <feature>
+                                    <id>org.wso2.carbon.transaction.manager.feature.group</id>
+                                    <version>${transaction.mgr.feature}</version>
                                 </feature>
                             </features>
                         </configuration>
