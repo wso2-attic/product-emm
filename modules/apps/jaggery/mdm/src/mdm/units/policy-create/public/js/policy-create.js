@@ -1721,7 +1721,7 @@ $(document).ready(function () {
         // prevents event bubbling by figuring out what element it's being called from.
         if (event.target.tagName == "INPUT") {
             var zeroConfiguredOperationsErrorMsg = "#policy-profile-main-error-msg";
-            if (!$(this).hasClass("collapsed")) {
+            if ($("input[type='checkbox']", this).is(":checked")) {
                 configuredOperations.push(operationCode);
                 // when a feature is enabled, if "zero-configured-features" msg is available, hide that.
                 if (!$(zeroConfiguredOperationsErrorMsg).hasClass("hidden")) {
