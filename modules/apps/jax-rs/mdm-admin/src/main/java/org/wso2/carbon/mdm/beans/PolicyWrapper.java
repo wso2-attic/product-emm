@@ -26,14 +26,11 @@ public class PolicyWrapper {
     private int id;
     private Profile profile;
     private String policyName;
-
     private String compliance;
-
     private List<String> roles;
     private String ownershipType;
     private List<Device> devices;
     private List<String> users;
-    //
     private int tenantId;
     private int profileId;
 
