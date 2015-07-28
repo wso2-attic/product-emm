@@ -21,7 +21,6 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
