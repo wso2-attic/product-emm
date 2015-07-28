@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.services.android.util;
 
+import javax.ws.rs.core.MediaType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -45,4 +46,41 @@ public class Message {
         this.responseCode = responseCode;
     }
 
+	private Message.MessageBuilder getBuilder() {
+		return new Message.MessageBuilder();
+	}
+
+	public static Message.MessageBuilder responseCode(String responseCode) {
+		Message message = new Message();
+		return message.getBuilder().responseCode(responseCode);
+	}
+
+	public static Message.MessageBuilder responseMessage(String responseMessage) {
+		Message message = new Message();
+		return message.getBuilder().responseMessage(responseMessage);
+	}
+
+	public class MessageBuilder {
+
+		private String responseCode;
+		private String responseMessage;
+
+
+		public MessageBuilder responseCode(String responseCode) {
+			this.responseCode = responseCode;
+			return this;
+		}
+
+		public MessageBuilder responseMessage(String responseMessage) {
+			this.responseMessage = responseMessage;
+			return this;
+		}
+
+		public Message build() {
+			Message message = new Message();
+			message.setResponseCode(responseCode);
+			message.setResponseMessage(responseMessage);
+			return message;
+		}
+	}
 }
