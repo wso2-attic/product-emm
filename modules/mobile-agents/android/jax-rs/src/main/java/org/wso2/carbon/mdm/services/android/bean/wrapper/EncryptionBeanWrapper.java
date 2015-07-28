@@ -15,23 +15,23 @@
 */
 package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
-import org.wso2.carbon.mdm.services.android.bean.Encrypt;
+import org.wso2.carbon.mdm.services.android.bean.DeviceEncryption;
 
 import java.util.List;
 
 /**
  * This class is used to wrap the Encrypt bean with devices.
  */
-public class EncryptBeanWrapper {
+public class EncryptionBeanWrapper {
 
-	private Encrypt operation;
+	private DeviceEncryption operation;
 	private List<String> deviceIDs;
 
-	public Encrypt getOperation() {
+	public DeviceEncryption getOperation() {
 		return operation;
 	}
 
-	public void setOperation(Encrypt operation) {
+	public void setOperation(DeviceEncryption operation) {
 		this.operation = operation;
 	}
 

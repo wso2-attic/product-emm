@@ -15,17 +15,17 @@
 */
 package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
-import org.wso2.carbon.mdm.services.android.bean.UninstallApplication;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationUninstallation;
 
 import java.util.List;
 
 /**
  * This class is used to wrap the UninstallApplication bean with devices.
  */
-public class UninstallApplicationBeanWrapper {
+public class ApplicationUninstallationBeanWrapper {
 
 	private List<String> deviceIDs;
-	private UninstallApplication operation;
+	private ApplicationUninstallation operation;
 
 	public List<String> getDeviceIDs() {
 		return deviceIDs;
@@ -35,11 +35,11 @@ public class UninstallApplicationBeanWrapper {
 		this.deviceIDs = deviceIDs;
 	}
 
-	public UninstallApplication getOperation() {
+	public ApplicationUninstallation getOperation() {
 		return operation;
 	}
 
-	public void setOperation(UninstallApplication operation) {
+	public void setOperation(ApplicationUninstallation operation) {
 		this.operation = operation;
 	}
 }

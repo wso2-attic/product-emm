@@ -15,17 +15,17 @@
 */
 package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
-import org.wso2.carbon.mdm.services.android.bean.InstallApplication;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationInstallation;
 
 import java.util.List;
 
 /**
  * This class is used to wrap the InstallApplication bean with devices.
  */
-public class InstallApplicationBeanWrapper {
+public class ApplicationInstallationBeanWrapper {
 
 	private List<String> deviceIDs;
-	private InstallApplication operation;
+	private ApplicationInstallation operation;
 
 	public List<String> getDeviceIDs() {
 		return deviceIDs;
@@ -35,11 +35,11 @@ public class InstallApplicationBeanWrapper {
 		this.deviceIDs = deviceIDs;
 	}
 
-	public InstallApplication getOperation() {
+	public ApplicationInstallation getOperation() {
 		return operation;
 	}
 
-	public void setOperation(InstallApplication operation) {
+	public void setOperation(ApplicationInstallation operation) {
 		this.operation = operation;
 	}
 }
