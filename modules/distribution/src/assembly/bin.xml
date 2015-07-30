@@ -54,8 +54,7 @@
                 <exclude>**/conf/etc/launch.ini</exclude>
 		<exclude>**/lib/httpmime*</exclude>
 		<exclude>**/lib/encoder*</exclude>
-		<!--<exclude>**/plugins/jaxb*</exclude>-->
-                <exclude>**/plugins/wadl-core_1.1.3.wso2v2*</exclude>
+		<exclude>**/plugins/jaxb*</exclude>
             </excludes>
         </fileSet>
 
