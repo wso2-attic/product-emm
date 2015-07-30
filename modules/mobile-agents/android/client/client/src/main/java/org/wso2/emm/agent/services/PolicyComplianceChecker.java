@@ -66,6 +66,7 @@ public class PolicyComplianceChecker {
     public ComplianceFeature checkPolicyState(org.wso2.emm.agent.beans.Operation operation)
             throws AndroidAgentException {
 
+        policy = new ComplianceFeature();
         policy.setFeatureCode(operation.getCode());
 
         switch (operation.getCode()) {

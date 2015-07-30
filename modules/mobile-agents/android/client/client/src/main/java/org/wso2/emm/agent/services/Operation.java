@@ -928,7 +928,7 @@ public class Operation implements APIResultCallBack {
 					result.add(policyChecker.checkPolicyState(op));
 				}
 				operation.setStatus(resources.getString(R.string.operation_value_completed));
-				operation.setPayLoad(result);
+				operation.setPayLoad(mapper.writeValueAsString(result));
 				resultBuilder.build(operation);
 			}
 		} catch (IOException e) {
