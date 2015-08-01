@@ -111,6 +111,7 @@ a.ast-type-item:hover {
     font-weight: 300;
     text-transform: uppercase;
     font-size: 24px;
+    color: #555555;
     margin: 0;
 }
 
@@ -513,7 +514,7 @@ a.cu-btn:hover {
 }
 
 a.cu-btn-inner {
-    color: #333;
+    color: #8f8f8f;
     padding: 5px 10px;
     height: 35px;
 }
@@ -1704,7 +1705,7 @@ a.wr-side-panel-toggle-btn.selected {
 
 /* list group styles */
 .wr-list-group {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .wr-list-group .list-group-item {

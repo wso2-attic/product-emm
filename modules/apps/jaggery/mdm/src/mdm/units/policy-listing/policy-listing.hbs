@@ -1,10 +1,16 @@
 {{#zone "main"}}
+    <div class="row wr-device-board">
+        <div class="col-lg-12 wr-secondary-bar">
+            <span class="page-sub-title">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Policy List by priority order
+            </span>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <!-- content -->
             <div class="wr-content">
-                <p class="page-sub-title">Policy List by priority order</p>
-                <p id="policy-count-status-msg" >{{policyCountStatusMsg}}</p>
+                <span id="policy-count-status-msg" >{{policyCountStatusMsg}}</span>
                 <div class="wr-list-group wr-sortable policy-list">
                     {{#each policies}}
                         <span class="list-group-item" id="{{id}}">
