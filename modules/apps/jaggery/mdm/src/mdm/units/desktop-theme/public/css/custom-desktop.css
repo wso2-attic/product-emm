@@ -17,7 +17,7 @@
  */
 
 .wr-content {
-    padding-top: 30px;
+    padding-top: 10px;
 }
 
 .wr-title {
@@ -1332,9 +1332,9 @@ a.wr-side-panel-toggle-btn.selected {
 
 /* stats */
 .wr-stats-board-tile {
-    background: #11375B;
+    background: #393939;
     color: #fff;
-    padding: 10px 15px;
+    padding: 15px;
     height: 110px;
     margin-bottom: 10px;
 }
@@ -1406,10 +1406,12 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .tile-stats-free a {
-    color: #B4C2D0;
+    color: #b2b2b2;
+    font-weight: 500;
     text-decoration: none;
     display: inline-block;
-    padding: 3px 5px 1px;
+    padding-left: 15px;
+    padding-bottom: 5px;
 }
 
 .tile-stats-free a:hover {
@@ -1865,6 +1867,7 @@ a.wr-side-panel-toggle-btn.selected {
 .wr-hidden-nav ul li a {
     color: #fff;
     text-decoration: none;
+    font-weight: 400;
     width: 120px;
     height: 120px;
     padding: 15px;

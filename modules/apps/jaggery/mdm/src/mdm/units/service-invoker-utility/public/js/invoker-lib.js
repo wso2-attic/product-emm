@@ -21,18 +21,18 @@
 var invokerUtil = function () {
     var module = {};
     var flagAuth = false; // A flag to be used to test without oAuth
-    function requestAccessToken(successCallback, errorCallback){
+    function requestAccessToken (successCallback, errorCallback) {
         $.ajax({
             url: "/mdm/token",
             type: "GET",
-            success: function(){
+            success: function () {
                 successCallback
             }
         }).fail(errorCallback);
     }
     function call(method, url, payload, successCallback, errorCallback){
         var accessToken = Cookies.get('accessToken');
-        var execute = function(){
+        var execute = function () {
             var data = {
                 url: url,
                 type: method,
@@ -41,25 +41,24 @@ var invokerUtil = function () {
                 //dataType: "json",
                 success: successCallback
             };
-            if (payload){
+            if (payload) {
                 data.data = JSON.stringify(payload);
             }
-
-            if (flagAuth){
+            if (flagAuth) {
                 accessToken = Cookies.get('accessToken');
                 data.headers = {
                     "Authorization": "Bearer " + accessToken
                 };
             }
-            $.ajax(data).fail(function(jqXHR){
-                if(jqXHR.status == "401"){
+            $.ajax(data).fail(function (jqXHR) {
+                if (jqXHR.status == "401"){
                     window.location.replace("/mdm");
-                }else{
+                } else {
                     errorCallback(jqXHR);
                 }
             });
-        }
-        if (flagAuth){
+        };
+        if (flagAuth) {
             if (!accessToken){
                 $.ajax({
                     url: "/mdm/token",
@@ -71,7 +70,7 @@ var invokerUtil = function () {
             } else{
                 execute();
             }
-        }else {
+        } else {
             execute();
         }
     }
@@ -88,6 +87,6 @@ var invokerUtil = function () {
     module.delete = function(url, successCallback, errorCallback){
         var payload = null;
         call("DELETE", url, payload, successCallback, errorCallback);
-    }
+    };
     return module;
 }();
