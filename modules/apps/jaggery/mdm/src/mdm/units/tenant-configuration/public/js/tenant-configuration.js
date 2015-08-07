@@ -168,8 +168,10 @@ $(document).ready(function () {
 
             configList.push(type);
             configList.push(frequency);
-            configList.push(gcmKey);
-            configList.push(gcmId);
+            if (notifierType == notifierTypeConstants["GCM"]) {
+                configList.push(gcmKey);
+                configList.push(gcmId);
+            }
 
             addConfigFormData.type = platformTypeConstants["ANDROID"];
             addConfigFormData.configuration = configList;
