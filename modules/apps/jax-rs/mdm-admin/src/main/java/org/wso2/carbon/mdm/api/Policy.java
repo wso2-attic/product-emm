@@ -6,12 +6,12 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
@@ -96,7 +96,6 @@ public class Policy {
     @Path("{id}")
     public void deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-        Message responseMsg = new Message();
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
@@ -131,10 +130,8 @@ public class Policy {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         try {
             TaskScheduleService taskScheduleService = policyManagementService.getTaskScheduleService();
-
             taskScheduleService.startTask(monitoringFrequency);
             return policyCount;
-
         } catch (PolicyMonitoringTaskException e) {
             String error = "Policy Management related exception";
             log.error(error, e);
@@ -142,12 +139,10 @@ public class Policy {
         }
     }
 
-
     @GET
     @Path("{type}/{id}")
     public ComplianceData getComplianceDataOfDevice(@PathParam("id") String id, @PathParam("type") String type) throws
             MDMAPIException {
-
         try {
             DeviceIdentifier deviceIdentifier = MDMAPIUtils.convertToDeviceIdentifierObject(id, type);
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
@@ -161,8 +156,5 @@ public class Policy {
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
-
     }
-
-
 }

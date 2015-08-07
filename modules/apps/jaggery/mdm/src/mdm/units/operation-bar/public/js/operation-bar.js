@@ -239,8 +239,8 @@ function runOperation (operationName) {
     var list = getDevicesByTypes(deviceIdList);
 
     var notificationBubble = ".wr-notification-bubble";
-    var successCallback = function (message) {
-        console.log(message);
+    var successCallback = function (data) {
+        console.log(data);
 //        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
 //        'class="wr-notification-operation">' + currentOperationList[operationName].name +
 //        '- Operation Successful!</div><hr /></div>');
