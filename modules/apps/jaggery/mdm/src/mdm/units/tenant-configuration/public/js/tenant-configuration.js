@@ -144,24 +144,24 @@ $(document).ready(function () {
             var configList = new Array();
 
             var type = {
-                "name": "notifierType",
+                "name": configParams["NOTIFIER_TYPE"],
                 "value": notifierType,
                 "contentType": "text"
             };
 
             var frequency = {
-                "name": "notifierFrequency",
+                "name": configParams["NOTIFIER_FREQUENCY"],
                 "value": notifierFrequency,
                 "contentType": "text"
             };
 
             var gcmKey = {
-                "name": "gcmAPIKey",
+                "name": configParams["GCM_API_KEY"],
                 "value": gcmAPIKey,
                 "contentType": "text"
             };
             var gcmId = {
-                "name": "gcmSenderId",
+                "name": configParams["GCM_SENDER_ID"],
                 "value": gcmSenderId,
                 "contentType": "text"
             };
