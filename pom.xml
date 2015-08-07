@@ -40,6 +40,8 @@
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/mdm</module>
         <module>modules/tools</module>
+	    <module>modules/mdm-ui</module>
+        <module>modules/features</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
         <module>modules/integration</module>
