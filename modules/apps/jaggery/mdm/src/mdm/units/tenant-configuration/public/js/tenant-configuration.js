@@ -57,9 +57,17 @@ var configParams = {
     "NOTIFIER_TYPE": "notifierType",
     "NOTIFIER_FREQUENCY": "notifierFrequency",
     "GCM_API_KEY": "gcmAPIKey",
-    "GCM_SENDER_ID": "gcmSenderId"
+    "GCM_SENDER_ID": "gcmSenderId",
+    "CONFIG_EMAIL": "configEmail",
+    "CONFIG_COUNTRY": "configCountry",
+    "CONFIG_STATE": "configState",
+    "CONFIG_LOCALITY": "configLocality",
+    "CONFIG_ORGANIZATION": "configOrganization",
+    "CONFIG_ORGANIZATION_UNIT": "configOrganizationUnit",
+    "MDM_CERT_PASSWORD": "MDMCertPassword",
+    "MDM_CERT_TOPIC_ID": "MDMCertTopicID",
+    "APNS_CERT_PASSWORD": "APNSCertPassword"
 };
-
 
 $(document).ready(function () {
     $("#gcm-inputs").hide();
@@ -198,6 +206,144 @@ $(document).ready(function () {
                 }
             );
         }
+    });
+
+    $("button#save-ios-btn").click(function() {
+
+        var errorMsgWrapper = "#ios-config-error-msg";
+        var errorMsg = "#ios-config-error-msg span";
+
+        var configEmail = $("#ios-config-email").val();
+        var configCountry = $("#ios-config-country").val();
+        var configState = $("#ios-config-state").val();
+        var configLocality = $("#ios-config-locality").val();
+        var configOrganization = $("#ios-config-organization").val();
+        var configOrganizationUnit = $("#ios-config-organization-unit").val();
+        var MDMCertPassword = $("#ios-config-mdm-certificate-password").val();
+        var MDMCertTopicID = $("#ios-config-mdm-certificate-topic-id").val();
+        var APNSCertPassword = $("#ios-config-apns-certificate-password").val();
+
+        if (!configEmail) {
+            $(errorMsg).text("SCEP email is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!configCountry) {
+            $(errorMsg).text("SCEP country is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!configState) {
+            $(errorMsg).text("SCEP state is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!configLocality) {
+            $(errorMsg).text("SCEP locality is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!configOrganization) {
+            $(errorMsg).text("SCEP organization is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!configOrganizationUnit) {
+            $(errorMsg).text("SCEP organization unit is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!MDMCertPassword) {
+            $(errorMsg).text("MDM certificate password is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!MDMCertTopicID) {
+            $(errorMsg).text("MDM certificate topic ID is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!APNSCertPassword) {
+            $(errorMsg).text("APNS certificate password is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        }
+
+        var addConfigFormData = {};
+        var configList = new Array();
+
+        var configEmail = {
+            "name": configParams["CONFIG_EMAIL"],
+            "value": configEmail,
+            "contentType": "text"
+        };
+
+        var configCountry = {
+            "name": configParams["CONFIG_COUNTRY"],
+            "value": configCountry,
+            "contentType": "text"
+        };
+
+        var configState = {
+            "name": configParams["CONFIG_STATE"],
+            "value": configState,
+            "contentType": "text"
+        };
+
+        var configLocality = {
+            "name": configParams["CONFIG_LOCALITY"],
+            "value": configLocality,
+            "contentType": "text"
+        };
+
+        var configOrganization = {
+            "name": configParams["CONFIG_ORGANIZATION"],
+            "value": configOrganization,
+            "contentType": "text"
+        };
+
+        var configOrganizationUnit = {
+            "name": configParams["CONFIG_ORGANIZATION_UNIT"],
+            "value": configOrganizationUnit,
+            "contentType": "text"
+        };
+
+        var MDMCertPassword = {
+            "name": configParams["MDM_CERT_PASSWORD"],
+            "value": MDMCertPassword,
+            "contentType": "text"
+        };
+
+        var MDMCertTopicID = {
+            "name": configParams["MDM_CERT_TOPIC_ID"],
+            "value": MDMCertTopicID,
+            "contentType": "text"
+        };
+
+        var APNSCertPassword = {
+            "name": configParams["APNS_CERT_PASSWORD"],
+            "value": APNSCertPassword,
+            "contentType": "text"
+        };
+
+        configList.push(configEmail);
+        configList.push(configCountry);
+        configList.push(configState);
+        configList.push(configLocality);
+        configList.push(configOrganization);
+        configList.push(configOrganizationUnit);
+        configList.push(MDMCertPassword);
+        configList.push(MDMCertTopicID);
+        configList.push(APNSCertPassword);
+
+        addConfigFormData.type = platformTypeConstants["IOS"];
+        addConfigFormData.configuration = configList;
+
+        var addConfigAPI = "/ios/configuration";
+
+        invokerUtil.post(
+            addConfigAPI,
+            addConfigFormData,
+            function (data) {
+                if (data.responseCode == responseCodes["CREATED"]) {
+                    $("#config-save-form").addClass("hidden");
+                    $("#record-created-msg").removeClass("hidden");
+                } else if (data == 500) {
+                    $(errorMsg).text("Exception occurred at backend.");
+                } else if (data == 400) {
+                    $(errorMsg).text("Configurations cannot be empty.");
+                }
+
+                $(errorMsgWrapper).removeClass("hidden");
+            }, function () {
+                $(errorMsg).text("An unexpected error occurred.");
+                $(errorMsgWrapper).removeClass("hidden");
+            }
+        );
+
     });
 });
 
