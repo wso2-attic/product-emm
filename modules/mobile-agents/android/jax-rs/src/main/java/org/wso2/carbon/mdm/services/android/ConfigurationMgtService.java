@@ -52,7 +52,7 @@ public class ConfigurationMgtService {
 			configuration.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
 			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Android platform configuration succeeded");
+			responseMsg.setResponseMessage("Android platform configuration saved successfully");
 			responseMsg.setResponseCode(Response.Status.CREATED.toString());
 			return responseMsg;
 		} catch (DeviceManagementException e) {
@@ -68,7 +68,7 @@ public class ConfigurationMgtService {
 		try {
 			return AndroidAPIUtils.getDeviceManagementService().getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		} catch (DeviceManagementException e) {
-			msg = "Error occurred while enrollment of the device.";
+			msg = "Error occurred while retrieving the Android tenant configuration";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
 		}

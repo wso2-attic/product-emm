@@ -162,7 +162,8 @@ body {
 }
 
 .wr-content {
-	padding-left:0;
+	padding-left:33px;
+    padding-right:33px;
 }
 
 /* application top level header */

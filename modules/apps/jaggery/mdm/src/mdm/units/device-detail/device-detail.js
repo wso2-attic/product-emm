@@ -1,4 +1,5 @@
 function onRequest(context) {
+    // var log = new Log("device-detail.js");
     var uri = request.getRequestURI();
     var uriMatcher = new URIMatcher(String(uri));
     var isMatched = uriMatcher.match("/{context}/device/{deviceType}/{+deviceId}");
@@ -11,9 +12,8 @@ function onRequest(context) {
         if (device){
             var viewModel = {};
             var deviceInfo = device.properties.DEVICE_INFO;
-            log.info(deviceInfo);
             if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0){
-                deviceInfo = JSON.parse(deviceInfo);
+                deviceInfo = stringify(deviceInfo);
                 if (device.type == "ios"){
                     viewModel.imei = device.properties.IMEI;
                     viewModel.phoneNumber = deviceInfo.PhoneNumber;

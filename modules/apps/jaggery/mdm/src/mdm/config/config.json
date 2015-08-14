@@ -7,7 +7,7 @@
   "device": {
     "ios": {
       "location": "%http.ip%/mdm/public/asset-download-agent/asset/ios-agent.ipa",
-      "bundleid": "org.wso2.carbon.mdm.mobileservices.ios.agent.iOSMDMAgent",
+      "bundleid": "org.wso2.carbon.emm.iOSMDMAgent",
       "version": "1.0",
       "appname": "MDM Agent"
     }

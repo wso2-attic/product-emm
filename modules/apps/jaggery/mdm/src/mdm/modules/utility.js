@@ -70,7 +70,7 @@ utility = function () {
         userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/user", type);
         userModule.addPermissions([{key: "devices/list", name: "List Individual Devices"}], "device-mgt/user", type);
         userModule.addPermissions([{key: "devices/operation", name: "Perform Operation on an Individual Device"}],
-                                         "device-mgt/user", "init");
+                                         "device-mgt/user", type);
     };
 
     return publicMethods;

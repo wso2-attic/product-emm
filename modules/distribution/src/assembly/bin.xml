@@ -54,7 +54,7 @@
                 <exclude>**/conf/etc/launch.ini</exclude>
 		<exclude>**/lib/httpmime*</exclude>
 		<exclude>**/lib/encoder*</exclude>
-		<exclude>**/plugins/jaxb*</exclude>	
+		<exclude>**/plugins/jaxb*</exclude>
             </excludes>
         </fileSet>
 

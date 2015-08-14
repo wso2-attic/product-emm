@@ -163,7 +163,7 @@ public class Constants {
 		public static final String WEBCLIP = "WEBCLIP";
 		public static final String INSTALL_GOOGLE_APP = "INSTALL_GOOGLE_APP";
 		public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
-		public static final String POLICY_MONITOR = "POLICY_MONITOR";
+		public static final String POLICY_MONITOR = "MONITOR";
 		public static final String POLICY_REVOKE = "POLICY_REVOKE";
 		public static final String DISENROLL = "DISENROLL";
 	}

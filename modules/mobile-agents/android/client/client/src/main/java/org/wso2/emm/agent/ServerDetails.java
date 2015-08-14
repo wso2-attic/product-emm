@@ -59,6 +59,7 @@ public class ServerDetails extends Activity {
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
 
 		Response compatibility = state.evaluateCompatibility();
+
 		if (!compatibility.getCode()) {
 			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
 			btnStartRegistration.setVisibility(View.GONE);
