@@ -2,367 +2,370 @@
     <div class="row">
         <div class="col-md-12">
             <!-- content -->
-            <div id="config-save-form" class="wr-content">
-                <p class="page-sub-title">Configurations</p><p></p>
+            <div id="config-save-form" class="container col-centered wr-content">
+                <br>
+                <h1 class="page-sub-title">
+                    Tenant Configurations
+                </h1>
+                <br>
+                General and Platform Specific Server Settings for the Tenant
+                <br>
+                <br>
                 <div class="wr-advance-operations">
-                <div class="row no-gutter">
-                <div class="wr-hidden-operations-nav col-lg-4">
-                    <a href="javascript:void(0)" onclick="showAdvanceOperation('general', this)" class="selected">
-                <span class="wr-hidden-operations-icon fw-stack">
-                    <i class="fw fw-settings fw-stack-2x"></i>
-                </span>
-                        General
-                        <span id="passcode-policy-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-                        <span id="passcode-policy-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-                    </a>
-                    <a href="javascript:void(0)" onclick="showAdvanceOperation('android', this)">
-                <span class="wr-hidden-operations-icon fw-stack">
-                    <i class="fw fw-android fw-stack-2x"></i>
-                </span>
-                        Android
-                        <span id="camera-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-                        <span class="camera-error status-icon hidden"><i class="fw fw-error"></i></span>
-                    </a>
-                    <a href="javascript:void(0)" onclick="showAdvanceOperation('ios', this)">
-                <span class="wr-hidden-operations-icon fw-stack">
-                    <i class="fw fw-apple fw-stack-2x"></i>
-                </span>
-                        iOS
-                        <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-                        <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-                    </a>
-
-                </div>
-
-                <div class="wr-hidden-operations-content col-lg-8">
-                <!-- general -->
-                <div class="wr-hidden-operation" data-operation="general" style="display: block">
-                    <div class="panel panel-default">
-                        <div id="email-config-heading" class="panel-heading" role="tab">
-                            <h2 class="sub-title panel-title">
-                                Email Configurations
-                                <hr>
-                            </h2>
-                        </div>
-                        <div id="email-config-body" class="panel-collapse panel-body" role="tabpanel">
-                            <div id="email-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                <i class="icon fw fw-error"></i><span></span>
-                            </div>
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="email-config-host">
-                                    Host
-                            <span class="helper" title="SMTP Server Host">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="email-config-host" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="email-config-port">
-                                    Port
-                            <span class="helper" title="SMTP Server Port">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="email-config-host" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="email-config-username">
-                                    Username
-                            <span class="helper" title="Email Username">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="email-config-username" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="email-config-password">
-                                    Password
-                            <span class="helper" title="Email Password">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="email-config-password" type="password" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="email-config-sender-email">
-                                    Sender Email Address
-                            <span class="helper" title="Sender Email Address to be appeared on the email">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="email-config-sender-email" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="email-config-template">
-                                    Email Template
-                            <span class="helper" title="Email Template to be used in invitation email">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="email-config-template" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-                            <div class="wr-input-control wr-btn-grp">
-                                <button id="save-general-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- general-->
-
-                <!-- android -->
-                <div class="wr-hidden-operation" data-operation="android">
-                    <div class="panel panel-default">
-                        <div id="android-config-body" class="panel-collapse panel-body" role="tabpanel">
-                            <div id="android-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                <i class="icon fw fw-error"></i><span></span>
-                            </div>
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="android-config-notifier">
-                                    Notifier Type
-                            <span class="helper" title="Notifier type for the agent to contact EMM server">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <select id="android-config-notifier" class="form-control" data-default="0">
-                                    <option value="1">LOCAL</option>
-                                    <option value="2">GCM</option>
-                                </select>
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="android-config-notifier-frequency">
-                                    Notifier Frequency
-                            <span class="helper" title="Notifier frequency for the agent to contact EMM server">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                    <br>
-                                    ( Should be in milliseconds )
-                                </label>
-                                <input id="android-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div id="gcm-inputs">
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="android-config-gcm-api-key">
-                                        API Key
-                                <span class="helper" title="GCM API Key">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    <div class="row no-gutter">
+                        <div class="wr-hidden-operations-nav col-lg-4">
+                            <a href="javascript:void(0)" onclick="showAdvanceOperation('general', this)" class="selected">
+                                <span class="wr-hidden-operations-icon fw-stack">
+                                    <i class="fw fw-settings fw-stack-2x"></i>
                                 </span>
-                                    </label>
-                                    <input id="android-config-gcm-api-key" type="text" class="form-control" placeholder="[ Required Field ]">
-                                </div>
-
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label" for="android-config-gcm-sender-id">
-                                        Sender ID
-                                <span class="helper" title="GCM Sender ID">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                General Configurations
+                            </a>
+                            <a href="javascript:void(0)" onclick="showAdvanceOperation('android', this)">
+                                <span class="wr-hidden-operations-icon fw-stack">
+                                    <i class="fw fw-android fw-stack-2x"></i>
                                 </span>
-                                    </label>
-                                    <input id="android-config-gcm-sender-id" type="text" class="form-control" placeholder="[ Required Field ]">
+                                Android Configurations
+                            </a>
+                            <a href="javascript:void(0)" onclick="showAdvanceOperation('ios', this)">
+                                <span class="wr-hidden-operations-icon fw-stack">
+                                    <i class="fw fw-apple fw-stack-2x"></i>
+                                </span>
+                                iOS Configurations
+                            </a>
+                        </div>
+
+                        <div class="wr-hidden-operations-content col-lg-8">
+                            <!-- general -->
+                            <div class="wr-hidden-operation" data-operation="general" style="display: block">
+                                <div class="panel panel-default">
+                                    <div id="general-config-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            General Configurations
+                                            <hr>
+                                        </h2>
+                                    </div>
+                                    <div id="email-config-body" class="panel-collapse panel-body" role="tabpanel">
+                                        <div id="email-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="email-config-host">
+                                                Host
+                                                <span class="helper" title="SMTP Server Host">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="email-config-host" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="email-config-port">
+                                                Port
+                                                <span class="helper" title="SMTP Server Port">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="email-config-host" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="email-config-username">
+                                                Username
+                                                <span class="helper" title="Email Username">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="email-config-username" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="email-config-password">
+                                                Password
+                                                <span class="helper" title="Email Password">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="email-config-password" type="password" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="email-config-sender-email">
+                                                Sender Email Address
+                                                <span class="helper" title="Sender Email Address to be appeared on the email">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="email-config-sender-email" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="email-config-template">
+                                                Email Template
+                                                <span class="helper" title="Email Template to be used in invitation email">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="email-config-template" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control wr-btn-grp">
+                                            <button id="save-general-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="wr-input-control wr-btn-grp">
-                                <button id="save-android-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                            <!-- general-->
+
+                            <!-- android -->
+                            <div class="wr-hidden-operation" data-operation="android">
+                                <div class="panel panel-default">
+                                    <div id="android-config-body" class="panel-collapse panel-body" role="tabpanel">
+                                        <div id="android-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="android-config-notifier">
+                                                Notifier Type
+                                                <span class="helper" title="Notifier type for the agent to contact EMM server">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <select id="android-config-notifier" class="form-control" data-default="0">
+                                                <option value="1">LOCAL</option>
+                                                <option value="2">GCM</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="android-config-notifier-frequency">
+                                                Notifier Frequency
+                                                <span class="helper" title="Notifier frequency for the agent to contact EMM server">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                                <br>
+                                                ( Should be in milliseconds )
+                                            </label>
+                                            <input id="android-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div id="gcm-inputs">
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-label" for="android-config-gcm-api-key">
+                                                    API Key
+                                                    <span class="helper" title="GCM API Key">
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                    </span>
+                                                </label>
+                                                <input id="android-config-gcm-api-key" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            </div>
+
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-label" for="android-config-gcm-sender-id">
+                                                    Sender ID
+                                                    <span class="helper" title="GCM Sender ID">
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                    </span>
+                                                </label>
+                                                <input id="android-config-gcm-sender-id" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            </div>
+                                        </div>
+
+                                        <div class="wr-input-control wr-btn-grp">
+                                            <button id="save-android-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- /android -->
+
+                            <!-- ios -->
+                            <div class="wr-hidden-operation" data-operation="ios">
+                                <div class="panel panel-default operation-data" data-operation="wifi" data-operation-code="WIFI">
+                                    <div id="ios-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            iOS SCEP Certificate Configurations
+                                            <hr>
+                                        </h2>
+                                    </div>
+                                    <div id="ios-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                        <i class="icon fw fw-error"></i><span></span>
+                                    </div>
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="ios-body">
+                                        <div id="ios-scep-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-email">
+                                                Email
+                                                <span class="helper" title="Email address used">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-email" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-country">
+                                                Country (C)
+                                                <span class="helper" title="Country">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-country" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-state">
+                                                State (ST)
+                                                <span class="helper" title="State">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-state" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-locality">
+                                                Locality (L)
+                                                <span class="helper" title="Locality">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-locality" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-organization">
+                                                Organization (O)
+                                                <span class="helper" title="Organization">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-organization" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-organization-unit">
+                                                Organization Unit (OU)
+                                                <span class="helper" title="Organization Unit">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-organization-unit" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+                                    </div>
+
+                                    <div id="wifi-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            iOS MDM Configurations
+                                            <hr>
+                                        </h2>
+                                    </div>
+
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
+                                        <div id="ios-mdm-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-mdm-certificate">
+                                               MDM Certificate
+                                                <span class="helper" title="Upload MDM Certificate">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-mdm-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-mdm-certificate-password">
+                                                MDM Certificate Password
+                                                <span class="helper" title="MDM Certificate Password">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-mdm-certificate-password" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-mdm-certificate-topic-id">
+                                                MDM Certificate Topic ID
+                                                <span class="helper" title="MDM Certificate Topic ID">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-mdm-certificate-topic-id" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-mdm-mode">
+                                                Mode
+                                                <span class="helper" title="Release mode">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <select id="ios-config-mdm-mode" class="form-control" data-default="0">
+                                                <option value="1">Production</option>
+                                                <option value="2">Developer</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div id="wifi-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            iOS APNS Configurations
+                                            <hr>
+                                        </h2>
+                                    </div>
+
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
+                                        <div id="ios-apns-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-apns-certificate">
+                                                APNS Certificate
+                                                <span class="helper" title="Upload APNS Certificate">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-apns-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-apns-certificate-password">
+                                                APNS Certificate Password
+                                                <span class="helper" title="MDM Certificate Password">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="ios-config-apns-certificate-password" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="ios-config-apns-mode">
+                                                Mode
+                                                <span class="helper" title="Release mode">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <select id="ios-config-apns-mode" class="form-control" data-default="0">
+                                                <option value="1">Production</option>
+                                                <option value="2">Developer</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="wr-input-control wr-btn-grp">
+                                            <button id="save-ios-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /ios -->
                         </div>
                     </div>
                 </div>
-                <!-- /android -->
-
-                <!-- ios -->
-                <div class="wr-hidden-operation" data-operation="ios">
-                    <div class="panel panel-default operation-data" data-operation="wifi" data-operation-code="WIFI">
-                        <div id="ios-heading" class="panel-heading" role="tab">
-                            <h2 class="sub-title panel-title">
-                                iOS SCEP Certificate Configurations
-                                <hr>
-                            </h2>
-                        </div>
-                        <div id="ios-config-error-msg" class="alert alert-danger hidden" role="alert">
-                            <i class="icon fw fw-error"></i><span></span>
-                        </div>
-                        <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="ios-body">
-                            <div id="ios-scep-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                <i class="icon fw fw-error"></i><span></span>
-                            </div>
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-email">
-                                    Email
-                                <span class="helper" title="Email address used">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-email" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-country">
-                                    Country (C)
-                            <span class="helper" title="Country">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-country" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-state">
-                                    State (ST)
-                            <span class="helper" title="State">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-state" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-locality">
-                                    Locality (L)
-                            <span class="helper" title="Locality">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-locality" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-organization">
-                                    Organization (O)
-                            <span class="helper" title="Organization">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-organization" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-organization-unit">
-                                    Organization Unit (OU)
-                            <span class="helper" title="Organization Unit">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-organization-unit" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-                        </div>
-
-                        <div id="wifi-heading" class="panel-heading" role="tab">
-                            <h2 class="sub-title panel-title">
-                                iOS MDM Configurations
-                                <hr>
-                            </h2>
-                        </div>
-
-                        <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
-                            <div id="ios-mdm-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                <i class="icon fw fw-error"></i><span></span>
-                            </div>
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-mdm-certificate">
-                                   MDM Certificate
-                            <span class="helper" title="Upload MDM Certificate">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-mdm-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-mdm-certificate-password">
-                                    MDM Certificate Password
-                            <span class="helper" title="MDM Certificate Password">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-mdm-certificate-password" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-mdm-certificate-topic-id">
-                                    MDM Certificate Topic ID
-                            <span class="helper" title="MDM Certificate Topic ID">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-mdm-certificate-topic-id" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-mdm-mode">
-                                    Mode
-                            <span class="helper" title="Release mode">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <select id="ios-config-mdm-mode" class="form-control" data-default="0">
-                                    <option value="1">Production</option>
-                                    <option value="2">Developer</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div id="wifi-heading" class="panel-heading" role="tab">
-                            <h2 class="sub-title panel-title">
-                                iOS APNS Configurations
-                                <hr>
-                            </h2>
-                        </div>
-
-                        <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
-                            <div id="ios-apns-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                <i class="icon fw fw-error"></i><span></span>
-                            </div>
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-apns-certificate">
-                                    APNS Certificate
-                            <span class="helper" title="Upload APNS Certificate">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-apns-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-apns-certificate-password">
-                                    APNS Certificate Password
-                            <span class="helper" title="MDM Certificate Password">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <input id="ios-config-apns-certificate-password" type="text" class="form-control" placeholder="[ Required Field ]">
-                            </div>
-
-                            <div class="wr-input-control">
-                                <label class="wr-input-label" for="ios-config-apns-mode">
-                                    Mode
-                            <span class="helper" title="Release mode">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                                </label>
-                                <select id="ios-config-apns-mode" class="form-control" data-default="0">
-                                    <option value="1">Production</option>
-                                    <option value="2">Developer</option>
-                                </select>
-                            </div>
-                            <div class="wr-input-control wr-btn-grp">
-                                <button id="save-ios-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- /ios -->
-                </div>
-                </div>
-            </div>
-
             </div>
 
             <div id="record-created-msg" class="container col-centered wr-content hidden">
@@ -379,8 +382,6 @@
             <!-- /content -->
         </div>
     </div>
-
-
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/tenant-configuration.js"></script>
