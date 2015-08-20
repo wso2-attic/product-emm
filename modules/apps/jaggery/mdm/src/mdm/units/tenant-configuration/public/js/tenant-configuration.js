@@ -66,7 +66,9 @@ var configParams = {
     "CONFIG_ORGANIZATION_UNIT": "configOrganizationUnit",
     "MDM_CERT_PASSWORD": "MDMCertPassword",
     "MDM_CERT_TOPIC_ID": "MDMCertTopicID",
-    "APNS_CERT_PASSWORD": "APNSCertPassword"
+    "APNS_CERT_PASSWORD": "APNSCertPassword",
+    "MDM_CERT": "MDMCert",
+    "APNS_CERT": "APNSCert"
 };
 
 $(document).ready(function () {
@@ -208,10 +210,72 @@ $(document).ready(function () {
         }
     });
 
-    $("button#save-ios-btn").click(function() {
+    var errorMsgWrapper = "#ios-config-error-msg";
+    var errorMsg = "#ios-config-error-msg span";
+    var fileTypes = ['pfx'];
+    var notSupportedError = false;
 
-        var errorMsgWrapper = "#ios-config-error-msg";
-        var errorMsg = "#ios-config-error-msg span";
+    var base64MDMCert = "";
+    var fileInputMDMCert = $('#ios-config-mdm-certificate');
+    var invalidFormatMDMCert = false;
+
+    var base64APNSCert = "";
+    var fileInputAPNSCert = $('#ios-config-mdm-certificate');
+    var invalidFormatAPNSCert = false;
+
+    $( fileInputMDMCert).change(function() {
+
+        if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+            $(errorMsg).text("The File APIs are not fully supported in this browser.");
+            $(errorMsgWrapper).removeClass("hidden");
+            notSupportedError = true;
+            return;
+        }
+
+        var file = fileInputMDMCert[0].files[0];
+        var extension = file.name.split('.').pop().toLowerCase(),
+            isSuccess = fileTypes.indexOf(extension) > -1;
+
+        if (isSuccess) {
+            var fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                base64MDMCert = event.target.result;
+            };
+            fileReader.readAsDataURL(file);
+            invalidFormatMDMCert = false;
+        } else {
+            base64MDMCert = "";
+            invalidFormatMDMCert = true;
+        }
+    });
+
+    $( fileInputAPNSCert).change(function() {
+
+        if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+            $(errorMsg).text("The File APIs are not fully supported in this browser.");
+            $(errorMsgWrapper).removeClass("hidden");
+            notSupportedError = true;
+            return;
+        }
+
+        var file = fileInputAPNSCert[0].files[0];
+        var extension = file.name.split('.').pop().toLowerCase(),
+            isSuccess = fileTypes.indexOf(extension) > -1;
+
+        if (isSuccess) {
+            var fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                base64APNSCert = event.target.result;
+            };
+            fileReader.readAsDataURL(file);
+            invalidFormatAPNSCert = false;
+        } else {
+            base64MDMCert = "";
+            invalidFormatAPNSCert = true;
+        }
+    });
+
+    $("button#save-ios-btn").click(function() {
 
         var configEmail = $("#ios-config-email").val();
         var configCountry = $("#ios-config-country").val();
@@ -249,6 +313,21 @@ $(document).ready(function () {
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!APNSCertPassword) {
             $(errorMsg).text("APNS certificate password is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if(notSupportedError) {
+            $(errorMsg).text("The File APIs are not fully supported in this browser.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (invalidFormatMDMCert) {
+            $(errorMsg).text("MDM certificate needs to be in pfx format.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (base64MDMCert == '') {
+            $(errorMsg).text("MDM certificate is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (invalidFormatAPNSCert) {
+            $(errorMsg).text("APNS certificate needs to be in pfx format.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (base64APNSCert == '') {
+            $(errorMsg).text("APNS certificate is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         }
 
@@ -309,6 +388,18 @@ $(document).ready(function () {
             "contentType": "text"
         };
 
+        var paramBase64MDMCert = {
+            "name": configParams["MDM_CERT"],
+            "value": base64MDMCert,
+            "contentType": "text"
+        };
+
+        var paramBase64APNSCert = {
+            "name": configParams["APNS_CERT"],
+            "value": base64APNSCert,
+            "contentType": "text"
+        };
+
         configList.push(configEmail);
         configList.push(configCountry);
         configList.push(configState);
@@ -318,6 +409,8 @@ $(document).ready(function () {
         configList.push(MDMCertPassword);
         configList.push(MDMCertTopicID);
         configList.push(APNSCertPassword);
+        configList.push(paramBase64MDMCert);
+        configList.push(paramBase64APNSCert);
 
         addConfigFormData.type = platformTypeConstants["IOS"];
         addConfigFormData.configuration = configList;
