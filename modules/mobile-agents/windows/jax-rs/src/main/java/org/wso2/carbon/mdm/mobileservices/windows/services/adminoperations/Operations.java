@@ -36,19 +36,19 @@ public interface Operations {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/lock")
+    @Path("/devicelock")
     OperationResponse lock(OperationRequest lock) throws WindowsDeviceEnrolmentException;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/ring")
+    @Path("/devicering")
     OperationResponse ring(OperationRequest ring) throws WindowsDeviceEnrolmentException;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/wipe")
+    @Path("/devicewipe")
     OperationResponse wipe(OperationRequest wipe) throws WindowsDeviceEnrolmentException;
 
     @POST
@@ -56,4 +56,9 @@ public interface Operations {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/wifi")
     OperationResponse wifi(OperationRequest wifi) throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/devicedisenroll")
+    OperationResponse disenroll(OperationRequest disenroll)throws WindowsDeviceEnrolmentException;
 }
