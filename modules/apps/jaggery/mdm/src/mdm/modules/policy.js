@@ -30,6 +30,7 @@ policyModule = function () {
 
     publicMethods.getPolicies = function () {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -79,6 +80,7 @@ policyModule = function () {
 
     publicMethods.getProfiles = function () {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -107,6 +109,7 @@ policyModule = function () {
 
     publicMethods.updatePolicyPriorities = function (payload) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -135,6 +138,7 @@ policyModule = function () {
     publicMethods.deletePolicy = function (policyId) {
         var isDeleted;
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;

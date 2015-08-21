@@ -80,6 +80,7 @@ var userModule = function () {
     publicMethods.addUser = function (username, firstname, lastname, emailAddress, userRoles) {
         var statusCode, carbon = require('carbon');
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -123,6 +124,7 @@ var userModule = function () {
     publicMethods.removeUser = function (username) {
         var statusCode, carbon = require('carbon');
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -212,6 +214,7 @@ var userModule = function () {
         var carbon = require('carbon');
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -253,6 +256,7 @@ var userModule = function () {
     publicMethods.addPermissions = function (permissionList, path, init) {
         var registry,carbon = require("carbon");
         var carbonServer = application.get("carbonServer");
+        var utility = require('/modules/utility.js').utility;
         var options = {system: true};
         if (init == "login") {
             try {
@@ -311,6 +315,7 @@ var userModule = function () {
 
     publicMethods.inviteUser = function (username) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -340,6 +345,7 @@ var userModule = function () {
     publicMethods.getUsers = function () {
         var users = [];
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         var userInfo = require("/modules/user-info.js");
         if (!carbonUser) {
             log.error("User object was not found in the session");
@@ -372,6 +378,7 @@ var userModule = function () {
         var carbon = require("carbon");
         var carbonServer = application.get("carbonServer");
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
@@ -430,6 +437,7 @@ var userModule = function () {
         var carbon = require("carbon");
         var carbonServer = application.get("carbonServer");
         var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
