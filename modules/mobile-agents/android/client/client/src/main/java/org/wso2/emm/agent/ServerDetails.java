@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -57,6 +59,8 @@ public class ServerDetails extends Activity {
 		evServerIP = (TextView) findViewById(R.id.evServerIP);
 		txtSeverAddress = (TextView) findViewById(R.id.tvSeverAddress);
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
+		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
+		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 
 		Response compatibility = state.evaluateCompatibility();
 
@@ -92,6 +96,22 @@ public class ServerDetails extends Activity {
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 			}
+
+			evServerIP.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+					enableSubmitIfReady();
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					enableSubmitIfReady();
+				}
+			});
 			// on click handler for start registration.
 			btnStartRegistration.setOnClickListener(new OnClickListener() {
 				@Override
@@ -99,6 +119,29 @@ public class ServerDetails extends Activity {
 					loadStartRegistrationDialog();
 				}
 			});
+		}
+	}
+
+	/**
+	 * Validation done to see if the server IP field is properly
+	 * entered.
+	 */
+	private void enableSubmitIfReady() {
+
+		boolean isReady = false;
+
+		if (evServerIP.getText().toString().length() >= 1) {
+			isReady = true;
+		}
+
+		if (isReady) {
+			btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_orange));
+			btnStartRegistration.setTextColor(getResources().getColor(R.color.white));
+			btnStartRegistration.setEnabled(true);
+		} else {
+			btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
+			btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
+			btnStartRegistration.setEnabled(false);
 		}
 	}
 	
