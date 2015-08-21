@@ -52,8 +52,6 @@ var userModule = function () {
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
         try {
-            // get tenant specific full user name.
-            username = username + "@" + carbonModule.server.tenantDomain();
             // check if the user is an authenticated user.
             var isAuthenticated = carbonServer.authenticate(username, password);
             if (isAuthenticated) {
@@ -80,18 +78,22 @@ var userModule = function () {
      * @returns {number} HTTP Status code 201 if succeeded, 409 if user already exists
      */
     publicMethods.addUser = function (username, firstname, lastname, emailAddress, userRoles) {
-        var carbon = require('carbon');
-        var tenantId = carbon.server.tenantId();
-        var url = carbon.server.address('https') + "/admin/services";
-        var server = new carbon.server.Server(url);
-        var userManager = new carbon.user.UserManager(server, tenantId);
+        var statusCode, carbon = require('carbon');
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
         try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
             if (userManager.userExists(username)) {
                 if (log.isDebugEnabled()) {
                     log.debug("A user with name '" + username + "' already exists.");
                 }
                 // http status code 409 refers to - conflict.
-                return 409;
+                statusCode = 409;
             } else {
                 var initialUserPassword = privateMethods.generateInitialUserPassword();
                 var defaultUserClaims = privateMethods.buildDefaultUserClaims(firstname, lastname, emailAddress);
@@ -102,10 +104,13 @@ var userModule = function () {
                     log.debug("A new user with name '" + username + "' was created.");
                 }
                 // http status code 201 refers to - created.
-                return 201;
+                statusCode = 201;
             }
+            return statusCode;
         } catch (e) {
             throw e;
+        } finally{
+            utility.endTenantFlow();
         }
     };
 
@@ -116,29 +121,35 @@ var userModule = function () {
      * @returns {number} HTTP Status code 200 if succeeded, 409 if the user does not exist
      */
     publicMethods.removeUser = function (username) {
-        var carbon = require('carbon');
-        var tenantId = carbon.server.tenantId();
-        var url = carbon.server.address('https') + "/admin/services";
-        var server = new carbon.server.Server(url);
-        var userManager = new carbon.user.UserManager(server, tenantId);
-
+        var statusCode, carbon = require('carbon');
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
         try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
             if (userManager.userExists(username)) {
                 userManager.removeUser(username);
                 if (log.isDebugEnabled()) {
                     log.debug("An existing user with name '" + username + "' was removed.");
                 }
                 // http status code 200 refers to - success.
-                return 200;
+                statusCode = 200;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("A user with name '" + username + "' does not exist to remove.");
                 }
                 // http status code 409 refers to - conflict.
-                return 409;
+                statusCode = 409;
             }
+            return statusCode;
         } catch (e) {
             throw e;
+        } finally {
+            utility.endTenantFlow();
         }
     };
 
@@ -198,6 +209,7 @@ var userModule = function () {
      * @param password Password of the user
      */
     privateMethods.inviteUserToEnroll = function (username, password) {
+        var carbon = require('carbon');
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
@@ -205,17 +217,25 @@ var userModule = function () {
             throw constants.ERRORS.USER_NOT_FOUND;
         }
         //var user = userManagementService.getUser(username, carbonUser.tenantId);
-
-        var emailTo = [];
-        var user = userManager.getUser(username);
-        emailTo[0] = privateMethods.getEmail(username, userManager);
-        var emailMessageProperties = new EmailMessageProperties();
-        emailMessageProperties.setMailTo(emailTo);
-        emailMessageProperties.setFirstName(privateMethods.getFirstName(username, userManager));
-        emailMessageProperties.setUserName(username);
-        emailMessageProperties.setPassword(password);
-        emailMessageProperties.setEnrolmentUrl(enrollmentURL);
-        deviceManagementService.sendRegistrationEmail(emailMessageProperties);
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var emailTo = [];
+            var user = userManager.getUser(username);
+            emailTo[0] = privateMethods.getEmail(username, userManager);
+            var emailMessageProperties = new EmailMessageProperties();
+            emailMessageProperties.setMailTo(emailTo);
+            emailMessageProperties.setFirstName(privateMethods.getFirstName(username, userManager));
+            emailMessageProperties.setUserName(username);
+            emailMessageProperties.setPassword(password);
+            emailMessageProperties.setEnrolmentUrl(enrollmentURL);
+            deviceManagementService.sendRegistrationEmail(emailMessageProperties);
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     privateMethods.getEmail = function(username, userManager) {
@@ -231,27 +251,61 @@ var userModule = function () {
     };
 
     publicMethods.addPermissions = function (permissionList, path, init) {
-        var carbonModule = require("carbon");
+        var registry,carbon = require("carbon");
         var carbonServer = application.get("carbonServer");
         var options = {system: true};
         if (init == "login") {
-            var carbonUser = session.get(constants.USER_SESSION_KEY);
-            if (carbonUser) {
-                options.tenantId = carbonUser.tenantId;
-            }
-        }
-        var registry = new carbonModule.registry.Registry(carbonServer, options);
-        var i, permission, resource;
-        for (i = 0; i < permissionList.length; i++) {
-            permission = permissionList[i];
-            resource = {
-                collection : true,
-                name : permission.name,
-                properties : {
-                    name : permission.name
+            try {
+                var carbonUser = session.get(constants.USER_SESSION_KEY);
+                if (!carbonUser) {
+                    log.error("User object was not found in the session");
+                    throw constants.ERRORS.USER_NOT_FOUND;
                 }
-            };
-            registry.put("/_system/governance/permission/" + path + "/" + permission.key, resource);
+                utility.startTenantFlow(carbonUser);
+                var tenantId = carbon.server.tenantId();
+                if (carbonUser) {
+                    options.tenantId = tenantId;
+                }
+                registry = new carbon.registry.Registry(carbonServer, options);
+                var i, permission, resource;
+                for (i = 0; i < permissionList.length; i++) {
+                    permission = permissionList[i];
+                    resource = {
+                        collection : true,
+                        name : permission.name,
+                        properties : {
+                            name : permission.name
+                        }
+                    };
+                    if(path != ""){
+                        registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
+                    } else {
+                        registry.put("/_system/governance/permission/admin/" + permission.key, resource);
+                    }
+                }
+            } catch (e) {
+                throw e;
+            } finally {
+                utility.endTenantFlow();
+            }
+        } else {
+            registry = new carbon.registry.Registry(carbonServer, options);
+            var i, permission, resource;
+            for (i = 0; i < permissionList.length; i++) {
+                permission = permissionList[i];
+                resource = {
+                    collection : true,
+                    name : permission.name,
+                    properties : {
+                        name : permission.name
+                    }
+                };
+                if(path != ""){
+                    registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
+                } else {
+                    registry.put("/_system/governance/permission/admin/" + permission.key, resource);
+                }
+            }
         }
     };
 
@@ -262,15 +316,25 @@ var userModule = function () {
             throw constants.ERRORS.USER_NOT_FOUND;
         }
         var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
-        var user = userManager.getUser(username);
-        var emailProperties = new EmailMessageProperties();
-        var emailTo = [];
-        emailTo[0] = privateMethods.getEmail(username, userManager);
-        emailProperties.setMailTo(emailTo);
-        //emailProperties.setFirstName(user.getFirstName());
-        emailProperties.setFirstName(privateMethods.getFirstName(username, userManager));
-        emailProperties.setEnrolmentUrl(enrollmentURL);
-        deviceManagementService.sendEnrolmentInvitation(emailProperties);
+
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var user = userManager.getUser(username);
+            var emailProperties = new EmailMessageProperties();
+            var emailTo = [];
+            emailTo[0] = privateMethods.getEmail(username, userManager);
+            emailProperties.setMailTo(emailTo);
+            //emailProperties.setFirstName(user.getFirstName());
+            emailProperties.setFirstName(privateMethods.getFirstName(username, userManager));
+            emailProperties.setEnrolmentUrl(enrollmentURL);
+            deviceManagementService.sendEnrolmentInvitation(emailProperties);
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     publicMethods.getUsers = function () {
@@ -281,21 +345,31 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        var userList = userManager.listUsers("");
-        for (var i = 0; i < userList.length; i++) {
-            var username = userList[i];
-            var email = privateMethods.getEmail(username, userManager);
-            var firstName = privateMethods.getFirstName(username, userManager);
-            var lastName = privateMethods.getLastName(username, userManager);
 
-            var userInfoObj = new userInfo.UserInfo(username, firstName, lastName, email);
-            users.push(userInfoObj);
+        var carbon = require('carbon');
+        try{
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var userList = userManager.listUsers("");
+            for (var i = 0; i < userList.length; i++) {
+                var username = userList[i];
+                var email = privateMethods.getEmail(username, userManager);
+                var firstName = privateMethods.getFirstName(username, userManager);
+                var lastName = privateMethods.getLastName(username, userManager);
+                var userInfoObj = new userInfo.UserInfo(username, firstName, lastName, email);
+                users.push(userInfoObj);
+            }
+            return users;
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
         }
-        return users;
     };
 
     publicMethods.isAuthorized = function (permission) {
-        var carbonModule = require("carbon");
+        var carbon = require("carbon");
         var carbonServer = application.get("carbonServer");
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
@@ -303,9 +377,19 @@ var userModule = function () {
             response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
             exit();
         }
-        var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
-        var user = new carbonModule.user.User(userManager, carbonUser.username);
-        return user.isAuthorized(permission, "ui.execute");
+
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var user = new carbon.user.User(userManager, carbonUser.username);
+            return user.isAuthorized(permission, "ui.execute");
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+        return true;
     };
 
     publicMethods.logout = function (successCallback) {
@@ -315,26 +399,25 @@ var userModule = function () {
 
     publicMethods.getUIPermissions = function(){
         var permissions = {};
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/devices/list") ||
-                        publicMethods.isAuthorized("/permission/device-mgt/user/devices/list")) {
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
+                        publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
             permissions["LIST_DEVICES"] = true;
         }
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/list")) {
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
             permissions["LIST_USERS"] = true;
         }
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/policies/list")) {
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
             permissions["LIST_POLICIES"] = true;
         }
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/users/add")) {
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
             permissions["ADD_USER"] = true;
         }
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/policies/add")) {
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
             permissions["ADD_POLICY"] = true;
         }
-        if (publicMethods.isAuthorized("/permission/device-mgt/admin/dashboard/view")) {
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
             permissions["VIEW_DASHBOARD"] = true;
         }
-
         return permissions;
     };
 
@@ -344,26 +427,35 @@ var userModule = function () {
      * @param enableInternalEveryone boolean value true/false to enable Internal/Everyone role
      */
     publicMethods.getRoles = function (enableInternalEveryone) {
-        var carbonModule = require("carbon");
+        var carbon = require("carbon");
         var carbonServer = application.get("carbonServer");
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        var userManager = new carbonModule.user.UserManager(carbonServer, carbonUser.tenantId);
-        var allRoles = userManager.allRoles();
-        var filteredRoles = [];
-        var i;
-        for (i = 0; i < allRoles.length; i++) {
-            if (enableInternalEveryone && allRoles[i] == "Internal/everyone") {
-                filteredRoles.push(allRoles[i]);
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var allRoles = userManager.allRoles();
+            var filteredRoles = [];
+            var i;
+            for (i = 0; i < allRoles.length; i++) {
+                if (enableInternalEveryone && allRoles[i] == "Internal/everyone") {
+                    filteredRoles.push(allRoles[i]);
+                }
+                if (allRoles[i].indexOf("Internal/") != 0) {
+                    filteredRoles.push(allRoles[i]);
+                }
             }
-            if (allRoles[i].indexOf("Internal/") != 0) {
-                filteredRoles.push(allRoles[i]);
-            }
+            return filteredRoles;
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
         }
-        return filteredRoles;
+
     };
 
     return publicMethods;

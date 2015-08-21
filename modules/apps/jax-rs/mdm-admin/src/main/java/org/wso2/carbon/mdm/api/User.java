@@ -86,6 +86,7 @@ public class User {
         }
     }
 
+    //TODO : Refactor the users/count API to remove tenant-domain parameter
     @GET
     @Path("count/{tenantDomain}")
     public int getUserCount(@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
