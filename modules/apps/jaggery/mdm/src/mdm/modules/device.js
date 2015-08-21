@@ -279,21 +279,10 @@ deviceModule = function () {
     };
 
     publicMethods.getLicense = function () {
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
-        }
-        try{
-            utility.startTenantFlow(carbonUser);
-            var deviceManagementService = utility.getDeviceManagementService();
-            return deviceManagementService.getLicense(constants.PLATFORM_IOS, constants.LANGUAGE_US);
-        }catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
+
+        var deviceManagementService = utility.getDeviceManagementService();
+        return deviceManagementService.getLicense(constants.PLATFORM_IOS, constants.LANGUAGE_US);
+
     };
 
     return publicMethods;
