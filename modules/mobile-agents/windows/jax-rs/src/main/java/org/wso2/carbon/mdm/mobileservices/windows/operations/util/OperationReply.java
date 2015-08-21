@@ -28,7 +28,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,23 +37,30 @@ import static org.wso2.carbon.mdm.mobileservices.windows.operations.util.Operati
  * Used to generate a reply to a receiving syncml from a device.
  */
 public class OperationReply {
+
+    private static Log log = LogFactory.getLog(OperationReply.class);
+
     private SyncmlDocument syncmlDocument;
     private SyncmlDocument replySyncmlDocument;
     private static final int HEADER_STATUS_ID = 0;
-    private static final int HEADER_COMMAND_REFERENCE_ID = 1;
+    private int HEADER_COMMAND_ID = 1;
+    private static final String RESULTS_COMMAND_TEXT = "Results";
     private static final String HEADER_COMMAND_TEXT = "SyncHdr";
     private static final String ALERT_COMMAND_TEXT = "Alert";
     private static final String REPLACE_COMMAND_TEXT = "Replace";
     private static final String GET_COMMAND_TEXT = "Get";
     private static final String EXEC_COMMAND_TEXT = "Exec";
     private List<Operation> operations;
-    private static Log log = LogFactory.getLog(OperationReply.class);
-
 
     public OperationReply(SyncmlDocument syncmlDocument, List<Operation> operations) {
         this.syncmlDocument = syncmlDocument;
         replySyncmlDocument = new SyncmlDocument();
         this.operations = operations;
+    }
+
+    public OperationReply(SyncmlDocument syncmlDocument) {
+        this.syncmlDocument = syncmlDocument;
+        replySyncmlDocument = new SyncmlDocument();
     }
 
     public SyncmlDocument generateReply() throws WindowsOperationException {
@@ -64,6 +70,7 @@ public class OperationReply {
     }
 
     private void generateHeader() {
+        String nextnonceValue = Constants.INITIAL_NONCE;
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
         SyncmlHeader header = new SyncmlHeader();
         header.setMsgID(sourceHeader.getMsgID());
@@ -75,6 +82,26 @@ public class OperationReply {
         Source source = new Source();
         source.setLocURI(sourceHeader.getTarget().getLocURI());
         header.setSource(source);
+
+        Credential cred = new Credential();
+        if (sourceHeader.getCredential() == null) {
+            Meta meta = new Meta();
+            meta.setFormat(Constants.CRED_FORMAT);
+            meta.setType(Constants.CRED_TYPE);
+            cred.setMeta(meta);
+        } else {
+            cred.setMeta(sourceHeader.getCredential().getMeta());
+        }
+        SyncmlBody sourcebody = syncmlDocument.getBody();
+        List<Status> ststusList = sourcebody.getStatus();
+        for (int i = 0; i < ststusList.size(); i++) {
+            if (HEADER_COMMAND_TEXT.equals(ststusList.get(i).getCommand()) && ststusList.get(i).getChallenge() != null) {
+                nextnonceValue = ststusList.get(i).getChallenge().getMeta().getNextNonce();
+            }
+        }
+        cred.setData(new SyncmlCredinitials().generateCredData(nextnonceValue));
+        header.setCredential(cred);
+
         replySyncmlDocument.setHeader(header);
     }
 
@@ -93,24 +120,55 @@ public class OperationReply {
     private SyncmlBody generateStatuses() {
         SyncmlBody sourceSyncmlBody = syncmlDocument.getBody();
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
+        Status headerStatus = null;
         SyncmlBody syncmlBodyReply = new SyncmlBody();
         List<Status> status = new ArrayList<Status>();
-        Status headerStatus =
-                new Status(HEADER_COMMAND_REFERENCE_ID, sourceHeader.getMsgID(), HEADER_STATUS_ID,
-                        HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
-                        String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
-        status.add(headerStatus);
+        List<Status> sourceStatus = sourceSyncmlBody.getStatus();
+        if (sourceStatus.size() == 0) {
+            headerStatus =
+                    new Status(HEADER_COMMAND_ID, sourceHeader.getMsgID(), HEADER_STATUS_ID,
+                            HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
+                            String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
+            status.add(headerStatus);
+        } else {
+
+            for (int i = 0; i < sourceStatus.size(); i++) {
+                Status st = sourceStatus.get(i);
+                if (st.getChallenge() != null && HEADER_COMMAND_TEXT.equals(st.getCommand())) {
+
+                    headerStatus =
+                            new Status(HEADER_COMMAND_ID, sourceHeader.getMsgID(), HEADER_STATUS_ID,
+                                    HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
+                                    String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
+                    status.add(headerStatus);
+                }
+            }
+        }
+        if (sourceSyncmlBody.getResults() != null) {
+            int ResultCommandId = ++HEADER_COMMAND_ID;
+            Status resultStatus = new Status(ResultCommandId,
+                    sourceHeader.getMsgID(),
+                    sourceSyncmlBody.getResults().getCommandId(),
+                    RESULTS_COMMAND_TEXT, null,
+                    String.valueOf(
+                            Constants.SyncMLResponseCodes.ACCEPTED));
+            status.add(resultStatus);
+
+        }
         if (sourceSyncmlBody.getAlert() != null) {
-            Status alertStatus = new Status(sourceSyncmlBody.getAlert().getCommandId(),
-                    HEADER_COMMAND_REFERENCE_ID,
+            int alertCommandId = ++HEADER_COMMAND_ID;
+            Status alertStatus = new Status(alertCommandId,
+                    sourceHeader.getMsgID(),
                     sourceSyncmlBody.getAlert().getCommandId(),
                     ALERT_COMMAND_TEXT, null,
                     String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
             status.add(alertStatus);
+
         }
         if (sourceSyncmlBody.getReplace() != null) {
-            Status replaceStatus = new Status(sourceSyncmlBody.getReplace().getCommandId(),
-                    HEADER_COMMAND_REFERENCE_ID,
+            int replaceCommandId = ++HEADER_COMMAND_ID;
+            Status replaceStatus = new Status(replaceCommandId,
+                    sourceHeader.getMsgID(),
                     sourceSyncmlBody.getReplace().getCommandId(),
                     REPLACE_COMMAND_TEXT, null,
                     String.valueOf(
@@ -119,8 +177,9 @@ public class OperationReply {
             status.add(replaceStatus);
         }
         if (sourceSyncmlBody.getExec() != null) {
-            Status replaceStatus = new Status(sourceSyncmlBody.getExec().getCommandId(),
-                    HEADER_COMMAND_REFERENCE_ID,
+            int execCommandId = ++HEADER_COMMAND_ID;
+            Status replaceStatus = new Status(execCommandId,
+                    sourceHeader.getMsgID(),
                     sourceSyncmlBody.getExec().getCommandId(),
                     GET_COMMAND_TEXT, null,
                     String.valueOf(
@@ -129,8 +188,9 @@ public class OperationReply {
             status.add(replaceStatus);
         }
         if (sourceSyncmlBody.getGet() != null) {
-            Status execStatus = new Status(sourceSyncmlBody.getGet().getCommandId(),
-                    HEADER_COMMAND_REFERENCE_ID,
+            int getCommandId = ++HEADER_COMMAND_ID;
+            Status execStatus = new Status(getCommandId,
+                    sourceHeader.getMsgID(),
                     sourceSyncmlBody.getGet().getCommandId(),
                     EXEC_COMMAND_TEXT, null,
                     String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
@@ -236,7 +296,7 @@ public class OperationReply {
 
             String operationCode = operation.getCode();
 
-            Wifi wifiObject = gson.fromJson((String)operation.getPayLoad(), Wifi.class);
+            Wifi wifiObject = gson.fromJson((String) operation.getPayLoad(), Wifi.class);
 
             String data = "&lt;?xml version=&quot;1.0&quot;?&gt;&lt;WLANProfile" +
                     "xmlns=&quot;http://www.microsoft.com/networking/WLAN/profile/v1&quot;&gt;&lt;name&gt;" +

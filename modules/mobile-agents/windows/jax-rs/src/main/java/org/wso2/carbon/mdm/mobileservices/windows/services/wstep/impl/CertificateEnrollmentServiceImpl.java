@@ -18,15 +18,34 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.impl;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.headers.Header;
+import org.apache.cxf.helpers.CastUtils;
+import org.apache.cxf.jaxws.context.WrappedMessageContext;
+import org.apache.cxf.message.Message;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
+import org.w3c.dom.*;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException;
-import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlCredinitials;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.CertificateEnrollmentService;
+import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.BinarySecurityToken;
-import org.apache.commons.codec.binary.Base64;
+import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestSecurityTokenResponse;
+import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestedSecurityToken;
+import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.CertificateSigningService;
+import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.KeyStoreGenerator;
+
 import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
@@ -44,38 +63,15 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
-
-import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.CertificateSigningService;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestSecurityTokenResponse;
-import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestedSecurityToken;
-import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.KeyStoreGenerator;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.pkcs.PKCS10CertificationRequest;
-import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.UnrecoverableKeyException;
+import java.security.*;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
+import java.security.cert.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 
 /**
  * Implementation class of CertificateEnrollmentService interface. This class implements MS-WSTEP
@@ -90,6 +86,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	private static final int REQUEST_ID = 0;
 	private static final int CA_CERTIFICATE_POSITION = 0;
 	private static final int SIGNED_CERTIFICATE_POSITION = 1;
+	private static final int APPAUTH_USERNAME_POSITION = 21;
+	private static final int APPAUTH_PASSWORD_POSITION = 22;
 	private static Log log = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
 	private PrivateKey privateKey;
 	private X509Certificate rootCACertificate;
@@ -111,6 +109,17 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	                                 AdditionalContext additionalContext,
 	                                 Holder<RequestSecurityTokenResponse> response) throws
 	                                 WindowsDeviceEnrolmentException {
+
+		String headerBinarySecurityToken = null;
+		List<Header> ls = getHeaders();
+		for (int i = 0; i < ls.size(); i++) {
+			Header headerElement = ls.get(i);
+			String nodeName = headerElement.getName().getLocalPart();
+			if (nodeName.equals(Constants.SECURITY)) {
+				Element element = (Element) headerElement.getObject();
+				headerBinarySecurityToken = element.getFirstChild().getNextSibling().getFirstChild().getTextContent();
+			}
+		}
 
 		ServletContext ctx =
 				(ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
@@ -149,7 +158,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		String encodedWap;
 		try {
 			encodedWap = prepareWapProvisioningXML(binarySecurityToken, certPropertyList,
-			                                       wapProvisioningFilePath);
+			                                       wapProvisioningFilePath, headerBinarySecurityToken);
 		}
 		//Generic exception is caught here as there is no need of taking different actions for
 		//different exceptions.
@@ -278,13 +287,15 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 */
 	public String prepareWapProvisioningXML(
 			String binarySecurityToken, List<java.io.Serializable> certPropertyList,
-			String wapProvisioningFilePath) throws CertificateGenerationException,
+			String wapProvisioningFilePath, String headerBST) throws CertificateGenerationException,
 	                                               WAPProvisioningException {
 
-		byte[] derByteArray = DatatypeConverter.parseBase64Binary(binarySecurityToken);
+		byte[] byteArrayBST = DatatypeConverter.parseBase64Binary(binarySecurityToken);
+		byte[] byteArrayHeaderBST = DatatypeConverter.parseBase64Binary(headerBST);
+		String decodedBST = new String(byteArrayHeaderBST);
 		PKCS10CertificationRequest certificationRequest;
 		try {
-			certificationRequest = new PKCS10CertificationRequest(derByteArray);
+			certificationRequest = new PKCS10CertificationRequest(byteArrayBST);
 		} catch (IOException e) {
 			String msg = "CSR cannot be recovered.";
 			log.error(msg, e);
@@ -356,6 +367,26 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			if (log.isDebugEnabled()) {
 				log.debug("Signed certificate: " + signedCertEncodedString);
 			}
+
+			// Adding user name auth token to wap-provisioning xml
+			Node userNameAuthPosition = wapParm.item(APPAUTH_USERNAME_POSITION);
+			NamedNodeMap appSrvAttributes = userNameAuthPosition.getAttributes();
+			Node aAUTHNAMENode = appSrvAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
+			CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(decodedBST);
+			String username = cacheentry.getUsername();
+			aAUTHNAMENode.setTextContent(cacheentry.getUsername());
+			DeviceUtil.removeToken(decodedBST);
+			String password = DeviceUtil.generateRandomToken();
+			Node passwordAuthPosition = wapParm.item(APPAUTH_PASSWORD_POSITION);
+			NamedNodeMap appSrvPasswordAttribute = passwordAuthPosition.getAttributes();
+			Node aAUTHPasswordNode = appSrvPasswordAttribute.getNamedItem(Constants.CertificateEnrolment.VALUE);
+			aAUTHPasswordNode.setTextContent(password);
+			String rstr = new SyncmlCredinitials().generateRST(username, password);
+			DeviceUtil.persistChallengeToken(rstr, "", username);
+
+			if (log.isDebugEnabled()) {
+				log.debug("Username: " + username + "Password: " + rstr);
+			}
 			wapProvisioningString = convertDocumentToString(document);
 
 		//Generic exception is caught here as there is no need of taking different actions for
@@ -366,5 +397,19 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			throw new WAPProvisioningException(msg, e);
 		}
 		return base64Encoder.encodeAsString(wapProvisioningString.getBytes());
+	}
+	/**
+	 * This method get the soap request header contents
+	 *
+	 * @return Header object type,soap header tag list
+	 */
+	private List<Header> getHeaders() {
+		MessageContext messageContext = context.getMessageContext();
+		if (messageContext == null || !(messageContext instanceof WrappedMessageContext)) {
+			return null;
+		}
+		Message message = ((WrappedMessageContext) messageContext).getWrappedMessage();
+		List<Header> headers = CastUtils.cast((List<?>) message.get(Header.HEADER_LIST));
+		return headers;
 	}
 }

@@ -12,7 +12,12 @@ public class OperationCode {
 		LANGUAGE("./DevInfo/Lang"),
 		IMSI("./Vendor/MSFT/DeviceInstanceService/Identity/Identity1/IMSI"),
 		IMEI("./Vendor/MSFT/DeviceInstanceService/Identity/Identity1/IMEI"),
-		SOFTWARE_VERSION("./DevDetail/SwV");
+		SOFTWARE_VERSION("./DevDetail/SwV"),
+		VENDER("./DevDetail/OEM"),
+		MAC_ADDRESS("./DevDetail/Ext/WLANMACAddress"),
+		RESOLUTION("./DevDetail/Ext/Microsoft/Resolution"),
+		CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI");
+
 
 		private final String code;
 

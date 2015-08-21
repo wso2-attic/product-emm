@@ -31,6 +31,13 @@ public class Meta {
 
 	String format;
 	String type;
+	String nextNonce;
+
+	public String getNextNonce() { return nextNonce; }
+
+	public void setNextNonce(String nextNonce) {
+		this.nextNonce = nextNonce;
+	}
 
 	public String getFormat() {
 		return format;
@@ -52,7 +59,7 @@ public class Meta {
 		Element meta = doc.createElement(Constants.META);
 		rootElement.appendChild(meta);
 		if (getFormat() != null) {
-			Element format= doc.createElement(Constants.FORMAT);
+			Element format = doc.createElement(Constants.FORMAT);
 			format.appendChild(doc.createTextNode(getFormat()));
 
 			Attr attr = doc.createAttribute(Constants.XMLNS);
@@ -61,16 +68,28 @@ public class Meta {
 
 			meta.appendChild(format);
 		}
-		if (getFormat() != null) {
-			Element format= doc.createElement(Constants.TYPE);
-			format.appendChild(doc.createTextNode(getType()));
+		if (getType() != null) {
+			Element type = doc.createElement(Constants.TYPE);
+			type.appendChild(doc.createTextNode(getType()));
 
 			Attr attr = doc.createAttribute(Constants.XMLNS);
 			attr.setValue(Constants.META_NAMESPACE);
-			format.setAttributeNode(attr);
+			type.setAttributeNode(attr);
 
-			meta.appendChild(format);
+			meta.appendChild(type);
+
 		}
-	}
+		if (getNextNonce() != null) {
+			Element nextNonce = doc.createElement(Constants.NEXTNONCE);
+			nextNonce.appendChild(doc.createTextNode(getNextNonce()));
 
+			Attr attr = doc.createAttribute(Constants.XMLNS);
+			attr.setValue(Constants.META_NAMESPACE);
+			nextNonce.setAttributeNode(attr);
+
+			meta.appendChild(nextNonce);
+
+		}
+
+	}
 }

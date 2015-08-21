@@ -109,6 +109,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
                     PropertyName.PROPERTY_SIGNED_CERT_NOT_BEFORE.getValue()).item(0).getTextContent());
             signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
                     PropertyName.PROPERTY_SIGNED_CERT_NOT_AFTER.getValue()).item(0).getTextContent());
+            domain = document.getElementsByTagName(PropertyName.DOMAIN.getValue()).item(0).getTextContent();
 
         }
 

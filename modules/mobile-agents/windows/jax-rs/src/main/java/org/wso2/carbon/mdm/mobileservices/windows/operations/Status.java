@@ -33,6 +33,7 @@ public class Status {
 	String command;
 	String targetReference;
 	String data;
+	Chal challenge;
 
 	public Status(int commandId, int messageReference, int commandReference, String command,
 	              String targetReference, String data) {
@@ -44,6 +45,12 @@ public class Status {
 		this.data = data;
 	}
 	public Status(){}
+
+	public Chal getChallenge() { return challenge; }
+
+	public void setChallenge(Chal challenge) {
+		this.challenge = challenge;
+	}
 
 	public String getTargetReference() {
 		return targetReference;
@@ -120,6 +127,9 @@ public class Status {
 			Element targetReference = doc.createElement(Constants.TARGET_REFERENCE);
 			targetReference.appendChild(doc.createTextNode(getTargetReference()));
 			status.appendChild(targetReference);
+		}
+		if (getChallenge() != null) {
+			getChallenge().buildChallElement(doc, status);
 		}
 		if (getData() != null) {
 			Element data = doc.createElement(Constants.DATA);

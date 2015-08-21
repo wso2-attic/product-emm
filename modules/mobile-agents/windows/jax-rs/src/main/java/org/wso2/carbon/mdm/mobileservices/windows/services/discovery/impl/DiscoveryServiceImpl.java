@@ -69,18 +69,19 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
 		if(FEDERATED.equals(windowsPluginProperties.getAuthPolicy())) {
 			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
-			discoveryResponse.setEnrollmentPolicyServiceUrl(
-					Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
-			discoveryResponse.setEnrollmentServiceUrl(
-					Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
-			discoveryResponse.setAuthenticationServiceUrl(Constants.Discovery.WAB_URL);
+			discoveryResponse.setEnrollmentPolicyServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
+			discoveryResponse.setEnrollmentServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
+			discoveryResponse.setAuthenticationServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.WAB_URL);
 		}
 		else{
 			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
-			discoveryResponse.setEnrollmentPolicyServiceUrl(
-					Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY);
-			discoveryResponse.setEnrollmentServiceUrl(
-					Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL);
+			discoveryResponse.setEnrollmentPolicyServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY);
+			discoveryResponse.setEnrollmentServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL);
 			discoveryResponse.setAuthenticationServiceUrl(null);
 		}
 		response.value = discoveryResponse;
