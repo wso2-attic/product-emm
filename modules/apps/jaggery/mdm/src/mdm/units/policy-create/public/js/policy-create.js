@@ -1418,7 +1418,8 @@ validateStep["policy-profile"] = function () {
     // start taking specific notifying actions upon validation
     var wizardIsToBeContinued;
     var errorCount = 0;
-    var mainErrorMsgWrapper, mainErrorMsg, subErrorMsgWrapper, subErrorMsg, subErrorIcon, subOkIcon;
+    var mainErrorMsgWrapper, mainErrorMsg,
+        subErrorMsgWrapper, subErrorMsg, subErrorIcon, subOkIcon, featureConfiguredIcon;
     var i;
     for (i = 0; i < validationStatusArray.length; i++) {
         validationStatus = validationStatusArray[i];
@@ -1434,25 +1435,43 @@ validateStep["policy-profile"] = function () {
                 subErrorMsg = subErrorMsgWrapper + " span";
                 subErrorIcon = "#" + validationStatus["erroneousFeature"] + "-error";
                 subOkIcon = "#" + validationStatus["erroneousFeature"] + "-ok";
+                featureConfiguredIcon = "#" + validationStatus["erroneousFeature"] + "-configured";
+                // hiding featureConfiguredState as the first step
+                if (!$(featureConfiguredIcon).hasClass("hidden")) {
+                    $(featureConfiguredIcon).addClass("hidden");
+                }
+                // updating error state and corresponding messages
                 $(subErrorMsg).text(validationStatus["subErrorMsg"]);
-                $(subErrorMsgWrapper).removeClass("hidden");
+                if ($(subErrorMsgWrapper).hasClass("hidden")) {
+                    $(subErrorMsgWrapper).removeClass("hidden");
+                }
                 if (!$(subOkIcon).hasClass("hidden")) {
                     $(subOkIcon).addClass("hidden");
                 }
-                $(subErrorIcon).removeClass("hidden");
+                if ($(subErrorIcon).hasClass("hidden")) {
+                    $(subErrorIcon).removeClass("hidden");
+                }
             }
         } else {
             if (validationStatus["okFeature"]) {
                 subErrorMsgWrapper = "#" + validationStatus["okFeature"] + "-feature-error-msg";
-                subOkIcon = "#" + validationStatus["okFeature"] + "-ok";
                 subErrorIcon = "#" + validationStatus["okFeature"] + "-error";
+                subOkIcon = "#" + validationStatus["okFeature"] + "-ok";
+                featureConfiguredIcon = "#" + validationStatus["okFeature"] + "-configured";
+                // hiding featureConfiguredState as the first step
+                if (!$(featureConfiguredIcon).hasClass("hidden")) {
+                    $(featureConfiguredIcon).addClass("hidden");
+                }
+                // updating success state and corresponding messages
                 if (!$(subErrorMsgWrapper).hasClass("hidden")) {
                     $(subErrorMsgWrapper).addClass("hidden");
                 }
                 if (!$(subErrorIcon).hasClass("hidden")) {
                     $(subErrorIcon).addClass("hidden");
                 }
-                $(subOkIcon).removeClass("hidden");
+                if ($(subOkIcon).hasClass("hidden")) {
+                    $(subOkIcon).removeClass("hidden");
+                }
             }
         }
     }
@@ -1720,12 +1739,18 @@ $(document).ready(function () {
         var operationDataWrapper = $(this).data("target");
         // prevents event bubbling by figuring out what element it's being called from.
         if (event.target.tagName == "INPUT") {
-            var zeroConfiguredOperationsErrorMsg = "#policy-profile-main-error-msg";
+            var featureConfiguredIcon;
             if ($("input[type='checkbox']", this).is(":checked")) {
                 configuredOperations.push(operationCode);
                 // when a feature is enabled, if "zero-configured-features" msg is available, hide that.
+                var zeroConfiguredOperationsErrorMsg = "#policy-profile-main-error-msg";
                 if (!$(zeroConfiguredOperationsErrorMsg).hasClass("hidden")) {
                     $(zeroConfiguredOperationsErrorMsg).addClass("hidden");
+                }
+                // add configured-state-icon to the feature
+                featureConfiguredIcon = "#" + operation + "-configured";
+                if ($(featureConfiguredIcon).hasClass("hidden")) {
+                    $(featureConfiguredIcon).removeClass("hidden");
                 }
             } else {
                 //splicing the array if operation is present.
@@ -1733,10 +1758,12 @@ $(document).ready(function () {
                 if (index != -1) {
                     configuredOperations.splice(index, 1);
                 }
-                // when a feature is disabled, clearing all its current error or success states
+                // when a feature is disabled, clearing all its current configured, error or success states
                 var subErrorMsgWrapper = "#" + operation + "-feature-error-msg";
                 var subErrorIcon = "#" + operation + "-error";
                 var subOkIcon = "#" + operation + "-ok";
+                featureConfiguredIcon = "#" + operation + "-configured";
+
                 if (!$(subErrorMsgWrapper).hasClass("hidden")) {
                     $(subErrorMsgWrapper).addClass("hidden");
                 }
@@ -1745,6 +1772,9 @@ $(document).ready(function () {
                 }
                 if (!$(subOkIcon).hasClass("hidden")) {
                     $(subOkIcon).addClass("hidden");
+                }
+                if (!$(featureConfiguredIcon).hasClass("hidden")) {
+                    $(featureConfiguredIcon).addClass("hidden");
                 }
                 // reinitializing input fields into the defaults
                 $(operationDataWrapper + " input").each(
