@@ -23,6 +23,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.List;
+
 /**
  * Results sent for the requests made to the device.
  */
@@ -30,15 +32,11 @@ public class Results {
 	int commandId = -1;
 	int messageReference = -1;
 	int commandReference = -1;
-	Item item;
+	List<Item> item;
 
-	public int getCommandId() {
-		return commandId;
-	}
+	public int getCommandId() { return commandId; }
 
-	public void setCommandId(int commandId) {
-		this.commandId = commandId;
-	}
+	public void setCommandId(int commandId) { this.commandId = commandId; }
 
 	public int getMessageReference() {
 		return messageReference;
@@ -56,11 +54,11 @@ public class Results {
 		this.commandReference = commandReference;
 	}
 
-	public Item getItem() {
+	public List<Item> getItem() {
 		return item;
 	}
 
-	public void setItem(Item item) {
+	public void setItem(List<Item> item) {
 		this.item = item;
 	}
 
@@ -83,7 +81,11 @@ public class Results {
 			get.appendChild(messageReference);
 		}
 		if (getItem() != null) {
-			getItem().buildItemElement(doc, get);
+			for (int x = 0; x < getItem().size(); x++) {
+				if (getItem().get(x) != null) {
+					getItem().get(x).buildItemElement(doc, get);
+				}
+			}
 		}
 	}
 }

@@ -13,7 +13,7 @@
     }
   },
   "androidAgentApp" : "android-agent.apk",
-  "windowsConfigRoot": "http://10.10.10.198:9763/mdm-windows-agent/services/federated/bst/authentication",
+  "windowsConfigRoot": "http://10.10.10.70:9763/mdm-windows-agent/services/federated/bst/authentication",
   "ssoConfiguration": {
         "enabled": false,
         "issuer": "mdm",

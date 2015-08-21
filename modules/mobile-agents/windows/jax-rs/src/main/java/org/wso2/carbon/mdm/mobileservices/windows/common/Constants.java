@@ -73,23 +73,19 @@ public final class Constants {
 	 * Discovery service related other constants
 	 */
 	public final class Discovery {
+		public static final String ENROLL_SUBDOMAIN = "https://EnterpriseEnrollment.";
 		public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL =
-				"https://EnterpriseEnrollment.wso2" +
-				".com/ENROLLMENTSERVER/PolicyEnrollmentWebservice" +
-				".svc";
+				"/ENROLLMENTSERVER/PolicyEnrollmentWebservice" +
+						".svc";
 		public static final String CERTIFICATE_ENROLLMENT_SERVICE_URL =
-				"https://EnterpriseEnrollment.wso2" +
-				".com/ENROLLMENTSERVER/DeviceEnrollmentWebservice" +
-				".svc";
+				"/ENROLLMENTSERVER/DeviceEnrollmentWebservice" +
+						".svc";
 		public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY =
-				"https://EnterpriseEnrollment.wso2.com/" +
-				"ENROLLMENTSERVER/ONPREMISE/" +
-				"PolicyEnrollmentWebservice.svc";
-	    public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
-				"https://EnterpriseEnrollment.wso2.com/" +
-				"ENROLLMENTSERVER/ONPREMISE/" +
-				"DeviceEnrollmentWebservice.svc";
-        public static final String WAB_URL = "https://EnterpriseEnrollment.wso2.com/mdm/login-agent";
+				"/ENROLLMENTSERVER/ONPREMISE/" +
+						"PolicyEnrollmentWebservice.svc";
+		public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
+				"/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
+		public static final String WAB_URL = "/mdm/login-agent";
 	}
 
 	/**
@@ -147,17 +143,48 @@ public final class Constants {
 	 * SynclML service related constants
 	 */
 	public final class SyncML {
-		public static final String SYNCML_RESPONSE = "device-info-response.xml";
-		public static final String SYNCML_SECOND_RESPONSE = "syncml-session-ending-response.xml";
-		public static final String SYNC_ML = "SyncML";
-		public static final String SYNCML_MSG_ID = "MsgID";
-		public static final String SYNCML_TARGET = "Target";
+
 		public static final String SYNCML_SOURCE = "Source";
-		public static final String SYNCML_RESULTS = "Results";
-		public static final String SYNCML_SOURCE_URI = "SOURCE_URI";
-		public static final String SYNCML_TARGET_URI = "TARGET_URI";
-		public static final String SYNCML_MESSAGE_ONE = "1";
-		public static final String SYNCML_MESSAGE_TWO = "2";
+		public static final String SYNCML_DATA = "Data";
+		public static final String SYNCML_CMD = "Cmd";
+		public static final String SYNCML_CHAL = "Chal";
+		public static final String SYNCML_CMD_ID = "CmdID";
+		public static final String SYNCML_CMD_REF = "CmdRef";
+		public static final String SYNCML_MESSAGE_REF = "MsgRef";
+		public static final String SYNCML_LOCATION_URI = "LocURI";
+	}
+
+
+	/**
+	 * windows device constants
+	 */
+	public final class DeviceConstants {
+		private DeviceConstants() { throw new AssertionError(); }
+
+		public static final String DEVICE_ID_NOT_FOUND = "Device Id not found for device found at %s";
+		public static final String DEVICE_ID_SERVICE_NOT_FOUND =
+				"Issue in retrieving device management service instance for device found at %s";
+	}
+
+	/**
+	 * Device Operation codes
+	 */
+	public final class OperationCodes {
+		private OperationCodes() {
+			throw new AssertionError();
+		}
+
+		public static final String CAMERA = "CAMERA";
+		public static final String DEVICE_LOCK = "DEVICE_LOCK";
+
+	}
+
+	public final class StatusCodes {
+		private StatusCodes() {
+			throw new AssertionError();
+		}
+
+		public static final int MULTI_STATUS_HTTP_CODE = 207;
 	}
 
 }

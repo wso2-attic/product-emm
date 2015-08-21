@@ -27,57 +27,38 @@ public class WindowsPluginProperties {
 	private String privateKeyPassword;
 	private String commonName;
 	private String authPolicy;
+	private String domain;
 	private int notBeforeDays;
 	private int notAfterDays;
 
-	public String getKeyStorePassword() {
-		return keyStorePassword;
-	}
+	public String getKeyStorePassword() { return keyStorePassword; }
 
-	public String getPrivateKeyPassword() {
-		return privateKeyPassword;
-	}
+	public String getPrivateKeyPassword() { return privateKeyPassword; }
 
-	public String getCommonName() {
-		return commonName;
-	}
+	public String getCommonName() { return commonName; }
 
-	public int getNotBeforeDays() {
-		return notBeforeDays;
-	}
+	public int getNotBeforeDays() { return notBeforeDays; }
 
-	public int getNotAfterDays() {
-		return notAfterDays;
-	}
+	public int getNotAfterDays() { return notAfterDays; }
 
-	public void setKeyStorePassword(String keyStorePassword) {
-		this.keyStorePassword = keyStorePassword;
-	}
+	public void setKeyStorePassword(String keyStorePassword) { this.keyStorePassword = keyStorePassword; }
 
-	public void setPrivateKeyPassword(String privateKeyPassword) {
-		this.privateKeyPassword = privateKeyPassword;
-	}
+	public void setPrivateKeyPassword(String privateKeyPassword) { this.privateKeyPassword = privateKeyPassword; }
 
-	public void setCommonName(String commonName) {
-		this.commonName = commonName;
-	}
+	public void setCommonName(String commonName) { this.commonName = commonName; }
 
-	public void setNotBeforeDays(int notBeforeDays) {
-		this.notBeforeDays = notBeforeDays;
-	}
+	public void setNotBeforeDays(int notBeforeDays) { this.notBeforeDays = notBeforeDays; }
 
-	public void setNotAfterDays(int notAfterDays) {
-		this.notAfterDays = notAfterDays;
-	}
+	public void setNotAfterDays(int notAfterDays) { this.notAfterDays = notAfterDays; }
 
-	public String getAuthPolicy() {
-		return authPolicy;
-	}
+	public String getAuthPolicy() { return authPolicy; }
 
-	public void setAuthPolicy(String authPolicy) {
-		this.authPolicy = authPolicy;
-	}
+	public void setAuthPolicy(String authPolicy) { this.authPolicy = authPolicy; }
+
+	public String getDomain() { return domain; }
+
+	public void setDomain(String domain) { this.domain = domain; }
+
 
 }
-
 

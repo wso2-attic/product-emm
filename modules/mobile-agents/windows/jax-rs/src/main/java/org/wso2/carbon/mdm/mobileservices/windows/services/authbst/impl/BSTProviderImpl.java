@@ -21,8 +21,11 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.TokenBean;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
 import org.wso2.carbon.mdm.mobileservices.windows.services.authbst.BSTProvider;
 import org.wso2.carbon.mdm.mobileservices.windows.services.authbst.beans.Credentials;
 import org.wso2.carbon.user.api.UserRealm;
@@ -59,16 +62,24 @@ public class BSTProviderImpl implements BSTProvider {
         String password = credentials.getPassword();
 
         try {
-            if(authenticate(user, password, domain)){
-                return Response.ok().entity("123456789123456789").build();
-            }
-            else{
+            if (authenticate(user, password, domain)) {
+                String challengetoken = DeviceUtil.generateRandomToken();
+                TokenBean tokenbean = new TokenBean();
+                tokenbean.setChallengeToken(challengetoken);
+                DeviceUtil.persistChallengeToken(tokenbean.getChallengeToken(), "", user);
+
+                return Response.ok().entity(tokenbean.getChallengeToken()).build();
+            } else {
                 String msg = "Authentication failure due to incorrect credentials.";
                 log.error(msg);
                 return Response.status(403).entity("Authentication failure").build();
             }
         } catch (AuthenticationException e) {
             String msg = "Failure occurred in user authentication process.";
+            log.error(msg);
+           throw new WindowsDeviceEnrolmentException(msg);
+        } catch (DeviceManagementException e) {
+            String msg = "Failure occurred in generating challenge token.";
             log.error(msg);
             throw new WindowsDeviceEnrolmentException(msg);
         }
