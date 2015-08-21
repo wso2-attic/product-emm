@@ -173,7 +173,7 @@ public class DeviceManagementService {
         log.error(msg, e);
         throw new AndroidAgentException(msg, e);
     }
-        return (license == null) ? null : license.toString();
+        return (license == null) ? null : license.getText();
     }
 
 }

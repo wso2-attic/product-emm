@@ -32,6 +32,7 @@ import org.wso2.carbon.mdm.services.android.exception.AndroidOperationException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidConstants;
 import org.wso2.carbon.mdm.services.android.util.Message;
+import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -65,8 +66,9 @@ public class OperationMgtService {
                 updateOperations(id, resultOperations);
             }
         } catch (OperationManagementException e) {
-            String msg = "Issue in retrieving operation management service instance";
-            log.error(msg, e);
+            log.error("Issue in retrieving operation management service instance", e);
+        } catch (PolicyComplianceException e) {
+            log.error("Issue in updating Monitoring operation");
         }
 
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
@@ -79,8 +81,8 @@ public class OperationMgtService {
             }
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -110,14 +112,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -142,14 +144,14 @@ public class OperationMgtService {
                     message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -176,14 +178,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -219,14 +221,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -253,14 +255,14 @@ public class OperationMgtService {
                     responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -288,14 +290,14 @@ public class OperationMgtService {
                     responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -331,14 +333,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -366,14 +368,14 @@ public class OperationMgtService {
                     responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -401,14 +403,14 @@ public class OperationMgtService {
                     responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -436,14 +438,14 @@ public class OperationMgtService {
                     responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -478,14 +480,14 @@ public class OperationMgtService {
                     operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -519,14 +521,14 @@ public class OperationMgtService {
                     operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -561,14 +563,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -603,14 +605,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -645,14 +647,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -687,14 +689,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -729,14 +731,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -771,14 +773,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -813,14 +815,14 @@ public class OperationMgtService {
 
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -856,21 +858,21 @@ public class OperationMgtService {
 
 		} catch (OperationManagementException e) {
 			String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
 			log.error(errorMessage, e);
 			throw new AndroidOperationException(message, responseMediaType);
 		} catch (DeviceManagementException e) {
 			String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage)
-                    .responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
 			log.error(errorMessage, e);
 			throw new AndroidOperationException(message, responseMediaType);
 		}
 	}
 
-    public void updateOperations(String deviceId, List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
-            throws OperationManagementException {
+    public void updateOperations(String deviceId, List<? extends Operation> operations)
+            throws OperationManagementException, PolicyComplianceException {
 
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
             AndroidAPIUtils.updateOperation(deviceId ,operation);

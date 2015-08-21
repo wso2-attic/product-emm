@@ -18,6 +18,8 @@
 
 package org.wso2.carbon.mdm.services.android.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -26,6 +28,7 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -37,6 +40,8 @@ import java.util.List;
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
  */
 public class AndroidAPIUtils {
+
+    private static Log log = LogFactory.getLog(AndroidAPIUtils.class);
 
     public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
         DeviceIdentifier identifier = new DeviceIdentifier();
@@ -122,10 +127,16 @@ public class AndroidAPIUtils {
     }
 
     public static void updateOperation(String deviceId, Operation operation)
-            throws OperationManagementException {
+            throws OperationManagementException, PolicyComplianceException {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setId(deviceId);
         deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+        if (AndroidConstants.OperationCodes.MONITOR.equals(operation.getCode())) {
+            if (log.isDebugEnabled()) {
+                log.info("Received complince status from MONITOR operation ID: " + operation.getId());
+            }
+            getPolicyManagerService().CheckPolicyCompliance(deviceIdentifier, operation.getOperationResponse());
+        }
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
 
