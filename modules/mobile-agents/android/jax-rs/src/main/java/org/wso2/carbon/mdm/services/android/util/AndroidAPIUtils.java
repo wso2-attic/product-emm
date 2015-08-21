@@ -90,7 +90,7 @@ public class AndroidAPIUtils {
     public static PolicyManagerService getPolicyManagerService() {
 
         PolicyManagerService policyManager;
-        CarbonContext ctx = CarbonContext.getThreadLocalCarbonContext();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         policyManager =
                 (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
@@ -101,7 +101,7 @@ public class AndroidAPIUtils {
     public static ApplicationManagementProviderService getApplicationManagerService() {
 
         ApplicationManagementProviderService applicationManagementProviderService;
-        CarbonContext ctx = CarbonContext.getThreadLocalCarbonContext();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         applicationManagementProviderService =
                 (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
