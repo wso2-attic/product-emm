@@ -130,7 +130,7 @@
     <string name="intent_extra_android">android</string>
     <string name="intent_extra_public">public</string>
     <string name="intent_extra_web">webapp</string>
-    <string name="intent_extra_at">/@</string>
+    <string name="intent_extra_at">\/@</string>
     <string name="intent_extra_space">&#160;</string>
     <string name="intent_extra_comma">, \/ </string>
     <string name="intent_extra_stop_ringing">Your phone is ringing</string>
