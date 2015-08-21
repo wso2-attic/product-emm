@@ -143,6 +143,17 @@
                 <include>**/process/</include>
                 <include>**/uuid/</include>
                 <include>**/i18n/</include>
+                <include>**/appmgtpublisher/</include>
+                <include>**/lifecycle/</include>
+                <include>**/utils/</include>
+                <include>**/store/</include>
+                <include>**/caramel/</include>
+                <include>**/markdown/</include>
+                <include>**/handlebars/</include>
+                <include>**/event/</include>
+                <include>**/claims/</include>
+                <include>**/permission/</include>
+                <include>**/registration/</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -324,6 +335,21 @@
                 <exclude>login/**</exclude>
                 <exclude>styles-layout.css</exclude>
             </excludes>
+        </fileSet>
+        <!-- AppManager -->
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/entitlement-templates</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/entitlement-templates</outputDirectory>
+            <includes>
+                <include>**/**.xml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/lifecycles</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/lifecycles</outputDirectory>
+            <includes>
+                <include>**/**.xml</include>
+            </includes>
         </fileSet>
     </fileSets>
 
@@ -688,5 +714,26 @@
             <fileMode>644</fileMode>
         </file>
 
+        <!-- AppM files -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/app-manager.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/service-providers/default.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/service-providers/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <!--<file>-->
+            <!--<source>-->
+                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/governance.xml-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>-->
+            <!--<fileMode>644</fileMode>-->
+        <!--</file>-->
     </files>
+
 </assembly>

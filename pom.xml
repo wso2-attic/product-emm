@@ -835,7 +835,7 @@
         <carbon.multitenancy.version>4.4.0</carbon.multitenancy.version>
 
         <!-- Carbon Registry -->
-        <carbon.registry.version>4.4.1</carbon.registry.version>
+        <carbon.registry.version>4.4.3</carbon.registry.version>
 
         <!-- Carbon Governance -->
         <carbon.governance.version>4.4.1</carbon.governance.version>
@@ -850,6 +850,20 @@
 
         <!-- API Management -->
         <carbon.api.mgt.version>1.4.0</carbon.api.mgt.version>
+
+        <!-- App Management -->
+        <carbon.app.mgt.version>1.1.0-SNAPSHOT</carbon.app.mgt.version>
+        <carbon.tenant.mgt.common.version>4.4.4</carbon.tenant.mgt.common.version>
+        <carbon.store.version>1.1.1-SNAPSHOT</carbon.store.version>
+        <carbon.social.version>1.2.1-SNAPSHOT</carbon.social.version>
+        <carbon.governance.appm.version>4.5.1</carbon.governance.appm.version>
+        <carbon.registry.appm.version>4.4.4</carbon.registry.appm.version>
+        <carbon.identity.um.version>4.5.3</carbon.identity.um.version>
+        <carbon.identity.4.version>4.4.0</carbon.identity.4.version>
+        <caramel.feature.version>1.0.1</caramel.feature.version>
+        <handlebars.feature.version>1.0.0</handlebars.feature.version>
+        <jaggeryjs.markdown.feature.version>1.0.0</jaggeryjs.markdown.feature.version>
+        <jaggeryjs.caramel.feature.version>1.0.1</jaggeryjs.caramel.feature.version>
 
         <!-- Tomcat -->
         <orbit.tomcat.version>7.0.59.wso2v1</orbit.tomcat.version>
