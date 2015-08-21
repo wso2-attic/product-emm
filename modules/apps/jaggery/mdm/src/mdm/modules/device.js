@@ -205,5 +205,9 @@ deviceModule = function () {
         }
     };
 
+    publicMethods.getLicense = function () {
+        return deviceManagementService.getLicense(constants.PLATFORM_IOS, constants.LANGUAGE_US);
+    };
+
     return publicMethods;
 }();
