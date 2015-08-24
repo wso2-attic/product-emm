@@ -29,6 +29,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDevic
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationReply;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlGenerator;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlParser;
@@ -218,31 +219,49 @@ public class SyncmlServiceImpl implements SyncmlService {
 				return Response.status(401).entity("Authentication failure").build();
 			}
 		} else if (SYNCML_SECOND_MESSAGE == msgID && SESSIONID_FIRST == sessionId) {
-            enrolDevice(request);
-			OperationReply operationReply = new OperationReply(syncmlDocument);
-			SyncmlDocument syncmlResponse = operationReply.generateReply();
-			SyncmlGenerator generator = new SyncmlGenerator();
-			response = generator.generatePayload(syncmlResponse);
-			return Response.ok().entity(response).build();
+			if (enrolDevice(request)) {
+				OperationReply operationReply = new OperationReply(syncmlDocument);
+				SyncmlDocument syncmlResponse = operationReply.generateReply();
+				SyncmlGenerator generator = new SyncmlGenerator();
+				response = generator.generatePayload(syncmlResponse);
+				return Response.ok().entity(response).build();
+			} else {
+				String msg = "Enrollment failure occurred.";
+				log.error(msg);
+			}
 
 		} else if (sessionId >= SESSIONID_SECOND) {
-
-			try {
-				    pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
+			if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
+				try {
+					pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
 					OperationReply operationReply = new OperationReply(syncmlDocument, (List<Operation>) pendingOperations);
 					SyncmlDocument syncmlResponse = operationReply.generateReply();
 					SyncmlGenerator generator = new SyncmlGenerator();
 					response = generator.generatePayload(syncmlResponse);
-				    return Response.ok().entity(response).build();
+					return Response.ok().entity(response).build();
 
 				} catch (OperationManagementException e) {
 					String msg = "Cannot access operation management service.";
 					log.error(msg);
 					throw new WindowsOperationException(msg, e);
-			    }
+				}
+			} else {
+				try {
+					if (WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier) != null)
+						WindowsAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+					OperationReply operationReply = new OperationReply(syncmlDocument);
+					SyncmlDocument syncmlResponse = operationReply.generateReply();
+					SyncmlGenerator generator = new SyncmlGenerator();
+					response = generator.generatePayload(syncmlResponse);
+					return Response.ok().entity(response).build();
+				} catch (DeviceManagementException e) {
+					String msg = "Failure occurred in dis-enrollment flow.";
+					log.error(msg);
+					throw new WindowsOperationException(msg, e);
+				}
 			}
-
-		return Response.status(400).entity("Authentication failure").build();
+		}
+		return null;
 	}
 	private boolean enrolDevice(Document request) throws WindowsOperationException, WindowsDeviceEnrolmentException {
 
@@ -306,7 +325,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 			try {
 				Device existingDevice = WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
 				if (existingDevice.getProperties() == null) {
-					List<Device.Property> existingProperties = new ArrayList<Device.Property>();
+					List<Device.Property> existingProperties = new ArrayList<>();
 
 					Device.Property imeiProperty = new Device.Property();
 					imeiProperty.setName("IMEI");
@@ -346,11 +365,9 @@ public class SyncmlServiceImpl implements SyncmlService {
 				}
 
 			} catch (DeviceManagementException e) {
-				String msg = "Enrollment modification fail.";
+				String msg = "Error occurred in Enrollment modification.";
 				log.error(msg);
 			}
-
-
 		}
 		return false;
 	}

@@ -89,4 +89,9 @@ public class OperationsImpl implements Operations {
             return operationResponse;
         }
     }
+
+    @Override
+    public OperationResponse disenroll(OperationRequest disenroll) throws WindowsDeviceEnrolmentException {
+        return null;
+    }
 }
