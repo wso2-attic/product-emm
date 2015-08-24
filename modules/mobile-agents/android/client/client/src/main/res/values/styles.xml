@@ -35,7 +35,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-    <style name="TopBarTheme" parent="android:Theme">
+    <style name="TopBarTheme" parent="Theme.Sherlock">
         <item name="android:windowBackground">@null</item>
         <item name="android:windowNoTitle">true</item>
     </style>

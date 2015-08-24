@@ -120,11 +120,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
-					dialog.dismiss();
+					startUnRegistration();
 					break;
 
 				case DialogInterface.BUTTON_NEGATIVE:
-					startUnRegistration();
+					dialog.dismiss();
 					break;
 				default:
 					break;
@@ -370,13 +370,14 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Display unregistration confirmation dialog.
 	 */
 	private void showUnregisterDialog() {
-		AlertDialog.Builder builder =
-				new AlertDialog.Builder(
-						AlreadyRegisteredActivity.this);
-		builder.setMessage(getResources().getString(R.string.dialog_unregister))
-				.setNegativeButton(getResources().getString(R.string.yes), dialogClickListener)
-				.setPositiveButton(getResources().getString(R.string.no),
-						dialogClickListener).show();
+		AlertDialog.Builder alertDialog =
+				CommonDialogUtils.getAlertDialogWithTwoButtonAndTitle(context,
+                      null,
+                      getResources().getString(R.string.dialog_unregister),
+                      getResources().getString(R.string.yes),
+                      getResources().getString(R.string.no),
+                      dialogClickListener, dialogClickListener);
+		alertDialog.show();
 	}
 
 	/**

@@ -537,7 +537,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		dialog.show();
 	}
 
-	private void loadPincodeAcitvity() {
+	private void loadPinCodeActivity() {
 		Intent intent = new Intent(AuthenticationActivity.this, PinCodeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(Constants.USERNAME, usernameVal);
@@ -732,7 +732,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 */
 	private void loadNextActivity() {
 		if (Constants.OWNERSHIP_BYOD.equalsIgnoreCase(deviceType)) {
-			loadPincodeAcitvity();
+			loadPinCodeActivity();
 		} else {
 			loadRegistrationActivity();
 		}
