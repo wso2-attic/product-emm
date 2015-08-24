@@ -20,6 +20,7 @@ package org.wso2.carbon.mdm.services.android.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -30,7 +31,6 @@ import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderServ
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -51,16 +51,10 @@ public class AndroidAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
-
-        //TODO: complete login change super tenent context
         DeviceManagementProviderService dmService;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
         dmService =
                 (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
         return dmService;
     }
 
@@ -101,10 +95,7 @@ public class AndroidAPIUtils {
     public static PolicyManagerService getPolicyManagerService() {
 
         PolicyManagerService policyManager;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
         policyManager =
                 (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
@@ -115,10 +106,7 @@ public class AndroidAPIUtils {
     public static ApplicationManagementProviderService getApplicationManagerService() {
 
         ApplicationManagementProviderService applicationManagementProviderService;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
         applicationManagementProviderService =
                 (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
@@ -133,7 +121,7 @@ public class AndroidAPIUtils {
         deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
         if (AndroidConstants.OperationCodes.MONITOR.equals(operation.getCode())) {
             if (log.isDebugEnabled()) {
-                log.info("Received complince status from MONITOR operation ID: " + operation.getId());
+                log.info("Received compliance status from MONITOR operation ID: " + operation.getId());
             }
             getPolicyManagerService().CheckPolicyCompliance(deviceIdentifier, operation.getOperationResponse());
         }

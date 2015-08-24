@@ -1942,6 +1942,10 @@ a.wr-side-panel-toggle-btn.selected {
     font-size: 20px;
 }
 
+.wr-advance-operations .wr-hidden-operations-nav a span.has-configured.status-icon {
+    color: #cccccc;
+}
+
 .wr-advance-operations .wr-hidden-operations-nav a span.has-success.status-icon {
     color: #A4C639;
 }

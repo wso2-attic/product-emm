@@ -82,6 +82,8 @@
             android:layout_below="@+id/tvSeverAddress"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="22dp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             android:ems="10"
             android:inputType="text" >
         </EditText>

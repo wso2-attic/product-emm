@@ -50,6 +50,16 @@
             android:layout_weight="2" >
 
             <Button
+                android:id="@+id/dialogButtonCancel"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/button_cancel" />
+
+            <Button
                 android:id="@+id/dialogButtonOK"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
@@ -59,16 +69,6 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/button_agree" />
-
-            <Button
-                android:id="@+id/dialogButtonCancel"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/button_cancel" />
         </LinearLayout>
     </LinearLayout>
 

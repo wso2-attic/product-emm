@@ -25,34 +25,45 @@ policyModule = function () {
 
     // Class imports from java layer.
     var Policy = Packages.org.wso2.carbon.policy.mgt.common.Policy;
-
-    var policyManagementService = utility.getPolicyManagementService();
-    var policyAdminPoint = policyManagementService.getPAP();
     var publicMethods = {};
     var privateMethods = {};
 
     publicMethods.getPolicies = function () {
-        log.debug(policyAdminPoint.getPolicies());
-
-        var policies = policyAdminPoint.getPolicies();
-        var policyList = [];
-        var i, policy, policyObject;
-        for (i = 0; i < policies.size(); i++) {
-            policy = policies.get(i);
-            policyObject = {};
-
-            policyObject.id = policy.getId();
-            policyObject.priorityId = policy.getPriorityId();
-            policyObject.name = policy.getPolicyName();
-            policyObject.platform = policy.getProfile().getDeviceType().getName();
-            policyObject.ownershipType = policy.getOwnershipType();
-            policyObject.roles = privateMethods.getElementsInAString(policy.getRoles());
-            policyObject.users = privateMethods.getElementsInAString(policy.getUsers());
-            policyObject.compliance = policy.getCompliance();
-
-            policyList.push(policyObject);
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
         }
-        return policyList;
+        try{
+            utility.startTenantFlow(carbonUser);
+            var policyManagementService = utility.getPolicyManagementService();
+            var policyAdminPoint = policyManagementService.getPAP();
+            log.debug(policyAdminPoint.getPolicies());
+            var policies = policyAdminPoint.getPolicies();
+            var policyList = [];
+            var i, policy, policyObject;
+            for (i = 0; i < policies.size(); i++) {
+                policy = policies.get(i);
+                policyObject = {};
+
+                policyObject.id = policy.getId();
+                policyObject.priorityId = policy.getPriorityId();
+                policyObject.name = policy.getPolicyName();
+                policyObject.platform = policy.getProfile().getDeviceType().getName();
+                policyObject.ownershipType = policy.getOwnershipType();
+                policyObject.roles = privateMethods.getElementsInAString(policy.getRoles());
+                policyObject.users = privateMethods.getElementsInAString(policy.getUsers());
+                policyObject.compliance = policy.getCompliance();
+
+                policyList.push(policyObject);
+            }
+            return policyList;
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     privateMethods.getElementsInAString = function (elementList) {
@@ -68,35 +79,74 @@ policyModule = function () {
     };
 
     publicMethods.getProfiles = function () {
-        var profiles = policyAdminPoint.getProfiles();
-        var profileList = [];
-        var i, profile, profileObject;
-        for (i = 0; i < profiles.size(); i++) {
-            profile = profiles.get(i);
-            profileObject = {};
-            profileObject.name = profile.getProfileName();
-            profileObject.id = profile.getProfileId();
-            profileList.push(profileObject);
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
         }
-        return profileList;
+        try{
+            utility.startTenantFlow(carbonUser);
+            var policyManagementService = utility.getPolicyManagementService();
+            var policyAdminPoint = policyManagementService.getPAP();
+            var profiles = policyAdminPoint.getProfiles();
+            var profileList = [];
+            var i, profile, profileObject;
+            for (i = 0; i < profiles.size(); i++) {
+                profile = profiles.get(i);
+                profileObject = {};
+                profileObject.name = profile.getProfileName();
+                profileObject.id = profile.getProfileId();
+                profileList.push(profileObject);
+            }
+            return profileList;
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     publicMethods.updatePolicyPriorities = function (payload) {
-        var policyCount = payload.length;
-        var policyList = new java.util.ArrayList();
-        var i, policyObject;
-        for (i = 0; i < policyCount; i++) {
-            policyObject = new Policy();
-            policyObject.setId(payload[i].id);
-            policyObject.setPriorityId(payload[i].priority);
-            policyList.add(policyObject);
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
         }
-        policyAdminPoint.updatePolicyPriorities(policyList);
+        try{
+            utility.startTenantFlow(carbonUser);
+            var policyManagementService = utility.getPolicyManagementService();
+            var policyAdminPoint = policyManagementService.getPAP();
+            var policyCount = payload.length;
+            var policyList = new java.util.ArrayList();
+            var i, policyObject;
+            for (i = 0; i < policyCount; i++) {
+                policyObject = new Policy();
+                policyObject.setId(payload[i].id);
+                policyObject.setPriorityId(payload[i].priority);
+                policyList.add(policyObject);
+            }
+            policyAdminPoint.updatePolicyPriorities(policyList);
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     publicMethods.deletePolicy = function (policyId) {
         var isDeleted;
-        try {
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        try{
+            utility.startTenantFlow(carbonUser);
+            var policyManagementService = utility.getPolicyManagementService();
+            var policyAdminPoint = policyManagementService.getPAP();
             isDeleted = policyAdminPoint.deletePolicy(policyId);
             if (isDeleted) {
                 // http status code 200 refers to - success.
@@ -105,8 +155,10 @@ policyModule = function () {
                 // http status code 409 refers to - conflict.
                 return 409;
             }
-        } catch (e) {
+        }catch (e) {
             throw e;
+        } finally {
+            utility.endTenantFlow();
         }
     };
 
