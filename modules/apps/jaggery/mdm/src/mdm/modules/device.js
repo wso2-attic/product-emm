@@ -41,168 +41,248 @@ deviceModule = function () {
     };
 
     publicMethods.listDevices = function () {
-        var devices = deviceManagementService.getAllDevices();
-        var deviceList = [];
-        var i, device, propertiesList, deviceObject;
-        for (i = 0; i < devices.size(); i++) {
-            device = devices.get(i);
-            propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
-
-            deviceObject = {};
-            deviceObject[constants.DEVICE_IDENTIFIER] =
-                privateMethods.validateAndReturn(device.getDeviceIdentifier());
-            deviceObject[constants.DEVICE_NAME] =
-                privateMethods.validateAndReturn(device.getName());
-            deviceObject[constants.DEVICE_OWNERSHIP] =
-                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
-            deviceObject[constants.DEVICE_OWNER] =
-                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwner());
-            deviceObject[constants.DEVICE_TYPE] =
-                privateMethods.validateAndReturn(device.getType());
-            deviceObject[constants.DEVICE_PROPERTIES] = {};
-            if (device.getType() == constants.PLATFORM_IOS) {
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
-                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
-            } else {
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
-                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
-                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_VENDOR));
-            }
-            deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
-                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
-
-            deviceList.push(deviceObject);
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
         }
-        return deviceList;
+        try{
+            utility.startTenantFlow(carbonUser);
+            var deviceManagementService = utility.getDeviceManagementService();
+            var devices = deviceManagementService.getAllDevices();
+            var deviceList = [];
+            var i, device, propertiesList, deviceObject;
+            for (i = 0; i < devices.size(); i++) {
+                device = devices.get(i);
+                propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
+
+                deviceObject = {};
+                deviceObject[constants.DEVICE_IDENTIFIER] =
+                    privateMethods.validateAndReturn(device.getDeviceIdentifier());
+                deviceObject[constants.DEVICE_NAME] =
+                    privateMethods.validateAndReturn(device.getName());
+                deviceObject[constants.DEVICE_OWNERSHIP] =
+                    privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
+                deviceObject[constants.DEVICE_OWNER] =
+                    privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwner());
+                deviceObject[constants.DEVICE_TYPE] =
+                    privateMethods.validateAndReturn(device.getType());
+                deviceObject[constants.DEVICE_PROPERTIES] = {};
+                if (device.getType() == constants.PLATFORM_IOS) {
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
+                        privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
+                } else {
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
+                        privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
+                        privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_VENDOR));
+                }
+                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
+                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
+
+                deviceList.push(deviceObject);
+            }
+            return deviceList;
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     publicMethods.listDevicesForUser = function (username) {
-        var devices = deviceManagementService.getDeviceListOfUser(username);
-        var deviceList = [];
-        var i, device, propertiesList, deviceObject;
-        for (i = 0; i < devices.size(); i++) {
-            device = devices.get(i);
-            propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
-
-            deviceObject = {};
-            deviceObject[constants.DEVICE_IDENTIFIER] =
-                privateMethods.validateAndReturn(device.getDeviceIdentifier());
-            deviceObject[constants.DEVICE_NAME] =
-                privateMethods.validateAndReturn(device.getName());
-            deviceObject[constants.DEVICE_OWNERSHIP] =
-                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
-            deviceObject[constants.DEVICE_OWNER] =
-                privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwner());
-            deviceObject[constants.DEVICE_TYPE] =
-                privateMethods.validateAndReturn(device.getType());
-            deviceObject[constants.DEVICE_PROPERTIES] = {};
-            if (device.getType() == constants.PLATFORM_IOS) {
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
-                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
-            } else {
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
-                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
-                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
-                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_VENDOR));
-            }
-            deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
-                privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
-
-            deviceList.push(deviceObject);
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
         }
-        return deviceList;
+        try{
+            utility.startTenantFlow(carbonUser);
+            var deviceManagementService = utility.getDeviceManagementService();
+            var devices = deviceManagementService.getDeviceListOfUser(username);
+            var deviceList = [];
+            var i, device, propertiesList, deviceObject;
+            for (i = 0; i < devices.size(); i++) {
+                device = devices.get(i);
+                propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
+
+                deviceObject = {};
+                deviceObject[constants.DEVICE_IDENTIFIER] =
+                    privateMethods.validateAndReturn(device.getDeviceIdentifier());
+                deviceObject[constants.DEVICE_NAME] =
+                    privateMethods.validateAndReturn(device.getName());
+                deviceObject[constants.DEVICE_OWNERSHIP] =
+                    privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
+                deviceObject[constants.DEVICE_OWNER] =
+                    privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwner());
+                deviceObject[constants.DEVICE_TYPE] =
+                    privateMethods.validateAndReturn(device.getType());
+                deviceObject[constants.DEVICE_PROPERTIES] = {};
+                if (device.getType() == constants.PLATFORM_IOS) {
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
+                        privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_PRODUCT));
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
+                } else {
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_MODEL] =
+                        privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_MODEL));
+                    deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_VENDOR] =
+                        privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_VENDOR));
+                }
+                deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
+                    privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
+
+                deviceList.push(deviceObject);
+            }
+            return deviceList;
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     /*
      Get the supported features by the device type
      */
     publicMethods.getFeatures = function (deviceType) {
-        var features = deviceManagementService.getFeatureManager(deviceType).getFeatures();
-        var featuresConverted = {};
-
-        if (features) {
-            var i, feature, featureObject;
-            for (i = 0; i < features.size(); i++) {
-                feature = features.get(i);
-                featureObject = {};
-                featureObject[constants.FEATURE_NAME] = feature.getName();
-                featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription();
-                featuresConverted[feature.getName()] = featureObject;
-            }
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
         }
-        return featuresConverted;
+        try{
+            utility.startTenantFlow(carbonUser);
+            var deviceManagementService = utility.getDeviceManagementService();
+            var features = deviceManagementService.getFeatureManager(deviceType).getFeatures();
+            var featuresConverted = {};
+            if (features) {
+                var i, feature, featureObject;
+                for (i = 0; i < features.size(); i++) {
+                    feature = features.get(i);
+                    featureObject = {};
+                    featureObject[constants.FEATURE_NAME] = feature.getName();
+                    featureObject[constants.FEATURE_DESCRIPTION] = feature.getDescription();
+                    featuresConverted[feature.getName()] = featureObject;
+                }
+            }
+            return featuresConverted;
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     publicMethods.performOperation = function (devices, operation) {
-        var operationInstance;
-        if (operation.type == "COMMAND") {
-            operationInstance = new CommandOperation();
-        } else if (operation.type == "CONFIG") {
-            operationInstance = new ConfigOperation();
-        } else {
-            operationInstance = new SimpleOperation();
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
         }
-        operationInstance.setCode(operation.featureName);
-        var props = new Properties();
-        var i, object;
-        for (i = 0; i < operation.properties.length; i++) {
-            object = properties[i];
-            props.setProperty(object.key, object.value);
+        try{
+            utility.startTenantFlow(carbonUser);
+            var deviceManagementService = utility.getDeviceManagementService();
+            var operationInstance;
+            if (operation.type == "COMMAND") {
+                operationInstance = new CommandOperation();
+            } else if (operation.type == "CONFIG") {
+                operationInstance = new ConfigOperation();
+            } else {
+                operationInstance = new SimpleOperation();
+            }
+            operationInstance.setCode(operation.featureName);
+            var props = new Properties();
+            var i, object;
+            for (i = 0; i < operation.properties.length; i++) {
+                object = properties[i];
+                props.setProperty(object.key, object.value);
+            }
+            operationInstance.setProperties(props);
+            var deviceList = new ArrayList();
+            var j, device, deviceIdentifier;
+            for (j = 0; j < devices.length; i++) {
+                device = devices[j];
+                deviceIdentifier = new DeviceIdentifier();
+                deviceIdentifier.setId(device.id);
+                deviceIdentifier.setType(device.type);
+                deviceList.add(deviceIdentifier);
+            }
+            deviceManagementService.addOperation(operationInstance, deviceList);
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
         }
-        operationInstance.setProperties(props);
-        var deviceList = new ArrayList();
-        var j, device, deviceIdentifier;
-        for (j = 0; j < devices.length; i++) {
-            device = devices[j];
-            deviceIdentifier = new DeviceIdentifier();
-            deviceIdentifier.setId(device.id);
-            deviceIdentifier.setType(device.type);
-            deviceList.add(deviceIdentifier);
-        }
-        deviceManagementService.addOperation(operationInstance, deviceList);
     };
 
     privateMethods.getDevice = function (type, deviceId) {
-        var deviceIdentifier = new DeviceIdentifier();
-        deviceIdentifier.setType(type);
-        deviceIdentifier.setId(deviceId);
-        return deviceManagementService.getDevice(deviceIdentifier);
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        try{
+            utility.startTenantFlow(carbonUser);
+            var deviceManagementService = utility.getDeviceManagementService();
+            var deviceIdentifier = new DeviceIdentifier();
+            deviceIdentifier.setType(type);
+            deviceIdentifier.setId(deviceId);
+            return deviceManagementService.getDevice(deviceIdentifier);
+        }catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     publicMethods.viewDevice = function (type, deviceId) {
-        var device = privateMethods.getDevice(type, deviceId);
-        if (device) {
-            var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
-            var entries = propertiesList.entrySet();
-            var iterator = entries.iterator();
-            var properties = {};
-            var entry, key, value;
+        try{
+            var device = privateMethods.getDevice(type, deviceId);
+            if (device) {
+                var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
+                var entries = propertiesList.entrySet();
+                var iterator = entries.iterator();
+                var properties = {};
+                var entry, key, value;
 
-            while (iterator.hasNext()) {
-                entry = iterator.next();
-                key = entry.getKey();
-                value = entry.getValue();
-                properties[key] = privateMethods.validateAndReturn(value);
-            }
+                while (iterator.hasNext()) {
+                    entry = iterator.next();
+                    key = entry.getKey();
+                    value = entry.getValue();
+                    properties[key] = privateMethods.validateAndReturn(value);
+                }
 
-            var deviceObject = {};
-            deviceObject[constants.DEVICE_IDENTIFIER] = device.getDeviceIdentifier();
-            deviceObject[constants.DEVICE_NAME] = privateMethods.validateAndReturn(device.getName());
-            deviceObject[constants.DEVICE_OWNERSHIP] = privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
-            deviceObject[constants.DEVICE_OWNER] = device.getEnrolmentInfo().getOwner();
-            deviceObject[constants.DEVICE_TYPE] = device.getType();
-            if (device.getType() == constants.PLATFORM_IOS) {
-                properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
-                delete properties[constants.DEVICE_PRODUCT];
-                properties[constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
+                var deviceObject = {};
+                deviceObject[constants.DEVICE_IDENTIFIER] = device.getDeviceIdentifier();
+                deviceObject[constants.DEVICE_NAME] = privateMethods.validateAndReturn(device.getName());
+                deviceObject[constants.DEVICE_OWNERSHIP] = privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
+                deviceObject[constants.DEVICE_OWNER] = device.getEnrolmentInfo().getOwner();
+                deviceObject[constants.DEVICE_TYPE] = device.getType();
+                if (device.getType() == constants.PLATFORM_IOS) {
+                    properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
+                    delete properties[constants.DEVICE_PRODUCT];
+                    properties[constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
+                }
+                deviceObject[constants.DEVICE_PROPERTIES] = properties;
+
+                return deviceObject;
             }
-            deviceObject[constants.DEVICE_PROPERTIES] = properties;
-            
-            return deviceObject;
+        } catch (e) {
+            throw e;
         }
+    };
+
+    publicMethods.getLicense = function () {
+
+        var deviceManagementService = utility.getDeviceManagementService();
+        return deviceManagementService.getLicense(constants.PLATFORM_IOS, constants.LANGUAGE_US);
+
     };
 
     return publicMethods;

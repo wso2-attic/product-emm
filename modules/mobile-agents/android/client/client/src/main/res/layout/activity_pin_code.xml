@@ -84,6 +84,7 @@
             android:ems="10"
             android:hint="@string/txt_old_pin"
             android:inputType="numberDecimal"
+            android:textColor="@android:color/black"
             android:visibility="gone" >
         </EditText>
 
@@ -95,6 +96,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="22dp"
             android:layout_marginTop="10dp"
+            android:textColor="@android:color/black"
             android:ems="10"
             android:hint="@string/txt_enter_pin"
             android:inputType="numberPassword" >
