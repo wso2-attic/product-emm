@@ -176,6 +176,7 @@ public final class Constants {
 
 		public static final String CAMERA = "CAMERA";
 		public static final String DEVICE_LOCK = "DEVICE_LOCK";
+		public static final String DISENROLL = "DISENROLL";
 
 	}
 

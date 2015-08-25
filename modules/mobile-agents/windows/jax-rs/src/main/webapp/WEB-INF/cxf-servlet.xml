@@ -123,6 +123,9 @@
         <jaxrs:serviceBeans>
             <ref bean="adminoperations_bean"/>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
     </jaxrs:server>
 
     <bean id="bstprovider_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl.BSTProviderImpl"/>
@@ -157,5 +160,6 @@
           class="org.wso2.carbon.mdm.mobileservices.windows.common.util.UsernameTokenValidator"/>
     <bean id="serviceOptionsHandler"
           class="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.MessageHandler"/>
+    <bean id="jsonProvider" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.GsonMessageBodyHandler"/>
 </beans>
 

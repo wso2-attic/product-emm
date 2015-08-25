@@ -19,46 +19,27 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Interface for Admin operations persisting. This interface accepts operations added via UI.
  */
-@Path("/operations")
+@Path("/operation")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+
 public interface Operations {
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/devicelock")
-    OperationResponse lock(OperationRequest lock) throws WindowsDeviceEnrolmentException;
+    Response lock(@HeaderParam("Accept")String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/devicering")
-    OperationResponse ring(OperationRequest ring) throws WindowsDeviceEnrolmentException;
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/devicewipe")
-    OperationResponse wipe(OperationRequest wipe) throws WindowsDeviceEnrolmentException;
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/wifi")
-    OperationResponse wifi(OperationRequest wifi) throws WindowsDeviceEnrolmentException;
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/devicedisenroll")
-    OperationResponse disenroll(OperationRequest disenroll)throws WindowsDeviceEnrolmentException;
+    Response disenroll(@HeaderParam("Accept")String headerParam, List<String> deviceids)throws WindowsDeviceEnrolmentException;
+
 }

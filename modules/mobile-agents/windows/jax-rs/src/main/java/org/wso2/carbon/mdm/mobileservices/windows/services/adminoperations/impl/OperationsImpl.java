@@ -18,13 +18,26 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl;
 
+import com.ibm.wsdl.OperationImpl;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsOperationsException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.Message;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.util.OperationStore;
+
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Implementation class of operations interface. Each method in this class receives the operations comes via UI
@@ -32,66 +45,69 @@ import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.util.
  */
 public class OperationsImpl implements Operations {
 
-    @Override
-    public OperationResponse lock(OperationRequest lock) throws WindowsDeviceEnrolmentException {
+    private static Log log = LogFactory.getLog(OperationImpl.class);
 
-        OperationResponse operationResponse = new OperationResponse();
-
-        if(OperationStore.storeOperation(lock, Operation.Type.COMMAND, "LOCK")){
-            operationResponse.setStatusCode("Lock operation added successfully.");
-            return operationResponse;
+    @POST
+    @Path("/devicelock")
+    public Response lock(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs) throws WindowsDeviceEnrolmentException {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking windows device lock operation");
         }
-        else{
-            operationResponse.setErrorCode("Error while storing Lock operation.");
-            return operationResponse;
-        }
-    }
 
-    @Override
-    public OperationResponse ring(OperationRequest ring) throws WindowsDeviceEnrolmentException {
-        OperationResponse operationResponse = new OperationResponse();
+        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
 
-        if(OperationStore.storeOperation(ring, Operation.Type.COMMAND, "RING")){
-            operationResponse.setStatusCode("Ring operation added successfully.");
-            return operationResponse;
-        }
-        else{
-            operationResponse.setErrorCode("Error while storing Ring operation.");
-            return operationResponse;
-        }
-    }
+        try {
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(Constants.OperationCodes.DEVICE_LOCK);
+            operation.setType(Operation.Type.COMMAND);
+            operation.setEnabled(true);
 
-    @Override
-    public OperationResponse wipe(OperationRequest wipe) throws WindowsDeviceEnrolmentException {
-        OperationResponse operationResponse = new OperationResponse();
+            return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
 
-        if(OperationStore.storeOperation(wipe, Operation.Type.COMMAND, "WIPE")){
-            operationResponse.setStatusCode("Wipe operation added successfully.");
-            return operationResponse;
-        }
-        else{
-            operationResponse.setErrorCode("Error while storing Wipe operation.");
-            return operationResponse;
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
         }
     }
 
-    @Override
-    public OperationResponse wifi(OperationRequest wifi) throws WindowsDeviceEnrolmentException {
+    @POST
+    @Path("/devicedisenroll")
+    public Response disenroll(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs) throws WindowsDeviceEnrolmentException {
 
-        OperationResponse operationResponse = new OperationResponse();
+        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(Constants.OperationCodes.DISENROLL);
+            operation.setType(Operation.Type.COMMAND);
+            operation.setEnabled(true);
+        try {
+            return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message,
+                    responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        }
 
-        if(OperationStore.storeOperation(wifi, Operation.Type.CONFIG, SyncmlCommandType.WIFI.getValue())){
-            operationResponse.setStatusCode("Wifi operation added successfully.");
-            return operationResponse;
-        }
-        else{
-            operationResponse.setErrorCode("Error while storing Lock operation.");
-            return operationResponse;
-        }
     }
 
-    @Override
-    public OperationResponse disenroll(OperationRequest disenroll) throws WindowsDeviceEnrolmentException {
-        return null;
-    }
+
 }
