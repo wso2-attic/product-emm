@@ -31,13 +31,13 @@ import org.wso2.carbon.mdm.services.android.bean.wrapper.*;
 import org.wso2.carbon.mdm.services.android.exception.AndroidOperationException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidConstants;
+import org.wso2.carbon.mdm.services.android.util.AndroidDeviceUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,39 +46,51 @@ import java.util.List;
 public class OperationMgtService {
 
     private static Log log = LogFactory.getLog(OperationMgtService.class);
-	private static final String ACCEPT = "Accept";
+    private static final String ACCEPT = "Accept";
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public List<Operation> getPendingOperations
+    public List<? extends Operation> getPendingOperations
             (@HeaderParam(ACCEPT) String acceptHeader, @PathParam("id") String id,
-                    List<? extends Operation> resultOperations) {
-
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking Android pending operations:" + id);
-        }
+             List<? extends Operation> resultOperations) {
         Message message;
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
 
+        if (id == null || id.isEmpty()) {
+            String errorMessage = "Device identifier is null or empty, hence returning device not found";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.BAD_REQUEST.toString()).build();
+            log.error(errorMessage);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+
+        DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
         try {
-            if (resultOperations != null) {
+            if (!AndroidDeviceUtils.isValidDeviceIdentifier(deviceIdentifier)) {
+                String errorMessage = "Device not found for identifier '" + id + "'";
+                message = Message.responseMessage(errorMessage).
+                        responseCode(Response.Status.BAD_REQUEST.toString()).build();
+                log.error(errorMessage);
+                throw new AndroidOperationException(message, responseMediaType);
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("Invoking Android pending operations:" + id);
+            }
+            if (resultOperations != null || !resultOperations.isEmpty()) {
                 updateOperations(id, resultOperations);
             }
         } catch (OperationManagementException e) {
             log.error("Issue in retrieving operation management service instance", e);
         } catch (PolicyComplianceException e) {
             log.error("Issue in updating Monitoring operation");
+        } catch (DeviceManagementException e) {
+            log.error("Issue in retrieving device management service instance", e);
         }
 
-        DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-        List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-        List<Operation> pendingOperations = new ArrayList<Operation>();
+        List<? extends Operation> pendingOperations;
         try {
-            operations = AndroidAPIUtils.getPendingOperations(deviceIdentifier);
-            for(Operation operation:operations){
-                pendingOperations.add(operation);
-            }
+            pendingOperations = AndroidAPIUtils.getPendingOperations(deviceIdentifier);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message = Message.responseMessage(errorMessage).
@@ -86,7 +98,6 @@ public class OperationMgtService {
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
-
         return pendingOperations;
     }
 
@@ -129,7 +140,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("location")
     public Response getDeviceLocation(@HeaderParam(ACCEPT) String acceptHeader,
-            List<String> deviceIDs) {
+                                      List<String> deviceIDs) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android device location operation");
         }
@@ -151,7 +162,7 @@ public class OperationMgtService {
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
             message = Message.responseMessage(errorMessage).
-                responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
         }
@@ -161,7 +172,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("clear-password")
     public Response removePassword(@HeaderParam(ACCEPT) String acceptHeader,
-            List<String> deviceIDs) {
+                                   List<String> deviceIDs) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android clear password operation");
         }
@@ -195,7 +206,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("camera")
     public Response configureCamera(@HeaderParam(ACCEPT) String acceptHeader,
-            CameraBeanWrapper cameraBeanWrapper) {
+                                    CameraBeanWrapper cameraBeanWrapper) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android Camera operation");
@@ -238,7 +249,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("device-info")
     public Response getDeviceInformation(@HeaderParam(ACCEPT) String acceptHeader,
-            List<String> deviceIDs) {
+                                         List<String> deviceIDs) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking get Android device information operation");
@@ -272,7 +283,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("enterprise-wipe")
     public Response wipeDevice(@HeaderParam(ACCEPT) String acceptHeader,
-            List<String> deviceIDs) {
+                               List<String> deviceIDs) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking enterprise-wipe device operation");
@@ -307,7 +318,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("wipe-data")
     public Response wipeData(@HeaderParam(ACCEPT) String acceptHeader,
-            WipeDataBeanWrapper wipeDataBeanWrapper) {
+                             WipeDataBeanWrapper wipeDataBeanWrapper) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android wipe-data device operation");
@@ -350,7 +361,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("get-application-list")
     public Response getApplications(@HeaderParam(ACCEPT) String acceptHeader,
-            List<String> deviceIDs) {
+                                    List<String> deviceIDs) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android getApplicationList device operation");
@@ -385,7 +396,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("ring-device")
     public Response ringDevice(@HeaderParam(ACCEPT) String acceptHeader,
-            List<String> deviceIDs) {
+                               List<String> deviceIDs) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android ring-device device operation");
@@ -420,7 +431,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("mute")
     public Response muteDevice(@HeaderParam(ACCEPT) String acceptHeader,
-            List<String> deviceIDs) {
+                               List<String> deviceIDs) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking mute device operation");
@@ -455,7 +466,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("install-application")
     public Response installApplication(@HeaderParam(ACCEPT) String acceptHeader,
-            ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
+                                       ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'InstallApplication' operation");
@@ -497,7 +508,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("uninstall-application")
     public Response uninstallApplication(@HeaderParam(ACCEPT) String acceptHeader,
-            ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
+                                         ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'UninstallApplication' operation");
         }
@@ -538,7 +549,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("blacklist-applications")
     public Response blacklistApplications(@HeaderParam(ACCEPT) String acceptHeader,
-            BlacklistApplicationsBeanWrapper blacklistApplicationsBeanWrapper) {
+                                          BlacklistApplicationsBeanWrapper blacklistApplicationsBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'Blacklist-Applications' operation");
         }
@@ -580,7 +591,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("notification")
     public Response sendNotification(@HeaderParam(ACCEPT) String acceptHeader,
-            NotificationBeanWrapper notificationBeanWrapper) {
+                                     NotificationBeanWrapper notificationBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'notification' operation");
         }
@@ -622,7 +633,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("wifi")
     public Response configureWifi(@HeaderParam(ACCEPT) String acceptHeader,
-            WifiBeanWrapper wifiBeanWrapper) {
+                                  WifiBeanWrapper wifiBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'configure wifi' operation");
         }
@@ -664,7 +675,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("encrypt")
     public Response encryptStorage(@HeaderParam(ACCEPT) String acceptHeader,
-            EncryptionBeanWrapper encryptionBeanWrapper) {
+                                   EncryptionBeanWrapper encryptionBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'encrypt' operation");
         }
@@ -706,7 +717,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("change-lock-code")
     public Response changeLockCode(@HeaderParam(ACCEPT) String acceptHeader,
-            LockCodeBeanWrapper lockCodeBeanWrapper) {
+                                   LockCodeBeanWrapper lockCodeBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'change lock code' operation");
         }
@@ -748,7 +759,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("password-policy")
     public Response setPasswordPolicy(@HeaderParam(ACCEPT) String acceptHeader,
-            PasswordPolicyBeanWrapper passwordPolicyBeanWrapper) {
+                                      PasswordPolicyBeanWrapper passwordPolicyBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'password policy' operation");
         }
@@ -790,7 +801,7 @@ public class OperationMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("webclip")
     public Response setWebClip(@HeaderParam(ACCEPT) String acceptHeader,
-            WebClipBeanWrapper webClipBeanWrapper) {
+                               WebClipBeanWrapper webClipBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'webclip' operation");
         }
@@ -828,56 +839,56 @@ public class OperationMgtService {
         }
     }
 
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("disenroll")
-	public Response setDisenrollment(@HeaderParam(ACCEPT) String acceptHeader,
-			DisenrollmentBeanWrapper disenrollmentBeanWrapper) {
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("disenroll")
+    public Response setDisenrollment(@HeaderParam(ACCEPT) String acceptHeader,
+                                     DisenrollmentBeanWrapper disenrollmentBeanWrapper) {
 
-		if (log.isDebugEnabled()) {
-			log.debug("Invoking Android device disenrollment operation");
-		}
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android device disenrollment operation");
+        }
 
-		MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
-		Message message = new Message();
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
 
-		try {
-			Disenrollment disenrollment = disenrollmentBeanWrapper.getOperation();
+        try {
+            Disenrollment disenrollment = disenrollmentBeanWrapper.getOperation();
 
-			if (disenrollment == null) {
-				throw new OperationManagementException("Disenrollment bean is empty");
-			}
+            if (disenrollment == null) {
+                throw new OperationManagementException("Disenrollment bean is empty");
+            }
 
-			CommandOperation operation = new CommandOperation();
-			operation.setCode(AndroidConstants.OperationCodes.DISENROLL);
-			operation.setType(Operation.Type.COMMAND);
-			operation.setEnabled(disenrollment.isEnabled());
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(AndroidConstants.OperationCodes.DISENROLL);
+            operation.setType(Operation.Type.COMMAND);
+            operation.setEnabled(disenrollment.isEnabled());
 
-			return AndroidAPIUtils.getOperationResponse(disenrollmentBeanWrapper.getDeviceIDs(), operation,
-					message, responseMediaType);
+            return AndroidAPIUtils.getOperationResponse(disenrollmentBeanWrapper.getDeviceIDs(), operation,
+                    message, responseMediaType);
 
-		} catch (OperationManagementException e) {
-			String errorMessage = "Issue in retrieving operation management service instance";
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
             message = Message.responseMessage(errorMessage).
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
-			log.error(errorMessage, e);
-			throw new AndroidOperationException(message, responseMediaType);
-		} catch (DeviceManagementException e) {
-			String errorMessage = "Issue in retrieving device management service instance";
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
             message = Message.responseMessage(errorMessage).
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
-			log.error(errorMessage, e);
-			throw new AndroidOperationException(message, responseMediaType);
-		}
-	}
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+    }
 
     public void updateOperations(String deviceId, List<? extends Operation> operations)
             throws OperationManagementException, PolicyComplianceException {
 
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
-            AndroidAPIUtils.updateOperation(deviceId ,operation);
+            AndroidAPIUtils.updateOperation(deviceId, operation);
             if (log.isDebugEnabled()) {
-                log.debug("Updating operation '" + operation.toString()+ "'");
+                log.debug("Updating operation '" + operation.toString() + "'");
             }
         }
     }
