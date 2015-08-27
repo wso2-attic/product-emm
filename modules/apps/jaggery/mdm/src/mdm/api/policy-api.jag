@@ -17,6 +17,10 @@
  * under the License.
  */
 
+/*
+ @To Be Deprecated
+ */
+
 var uri = request.getRequestURI();
 var uriMatcher = new URIMatcher(String(uri));
 

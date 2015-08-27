@@ -124,17 +124,21 @@ $(document).ready(function () {
 
     $(".policy-remove-link").click(function () {
         var policyId = $(this).data("id");
-        var deletePolicyAPI = "/mdm/api/policies/" + policyId + "/delete";
+        var deletePolicyAPI = "/mdm-admin/policies/" + policyId;
 
         $(modalPopupContent).html($('#remove-policy-modal-content').html());
         showPopup();
 
         $("a#remove-policy-yes-link").click(function () {
             $.ajax({
-                type : "GET",
+                headers: {
+                    Accept : "application/json"
+                },
+                type : "DELETE",
                 url : deletePolicyAPI,
                 success : function (data) {
-                    if (data == 200) {
+                    var responseCode = data["responseCode"];
+                    if (responseCode == 200) {
                         $("#" + policyId).remove();
                         sortElements();
                         var newPolicyListCount = $(".policy-list > span").length;
@@ -148,14 +152,9 @@ $(document).ready(function () {
                         $("a#remove-policy-200-link").click(function () {
                             hidePopup();
                         });
-                    } else if (data == 409) {
+                    } else if (responseCode == 409) {
                         $(modalPopupContent).html($('#remove-policy-409-content').html());
                         $("a#remove-policy-409-link").click(function () {
-                            hidePopup();
-                        });
-                    } else if (data == 500) {
-                        $(modalPopupContent).html($('#remove-policy-500-content').html());
-                        $("a#remove-policy-500-link").click(function () {
                             hidePopup();
                         });
                     }
