@@ -367,16 +367,13 @@
                                     org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.services.api.feature:${carbon.app.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.wso2mdm.feature:${carbon.app.mgt.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.wso2emm.feature:${carbon.app.mgt.version}
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.appmgt.mdm.wso2mdm.direct.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mobile.feature:${carbon.app.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.store:org.wso2.store.feature:${carbon.store.version}
+                                    org.wso2.carbon.store:org.wso2.store.feature:${carbon.store.version}
                                 </featureArtifactDef>
 
 
@@ -407,7 +404,7 @@
                                     org.jaggeryjs.modules:markdown.feature:${jaggeryjs.markdown.feature.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.social.feature:${carbon.social.version}
+                                    org.wso2.carbon.store:org.wso2.carbon.social.feature:${carbon.store.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.registry:org.wso2.carbon.registry.task.feature:${carbon.registry.version}
@@ -751,10 +748,6 @@
                                     <version>${carbon.app.mgt.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.appmgt.mdm.wso2mdm.feature.group</id>
-                                    <version>${carbon.app.mgt.version}</version>
-                                </feature>
-                                <feature>
                                     <id>org.wso2.carbon.appmgt.mobile.feature.group</id>
                                     <version>${carbon.app.mgt.version}</version>
                                 </feature>
@@ -776,7 +769,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.social.feature.group</id>
-                                    <version>${carbon.social.version}</version>
+                                    <version>${carbon.store.version}</version>
                                 </feature>
 
                             </features>

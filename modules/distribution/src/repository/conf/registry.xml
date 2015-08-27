@@ -172,6 +172,12 @@
     </filter>
    </handler>
 
+    <!-- This handler runs the permission setting in Store lifecycle transitions -->
+    <handler class="org.wso2.jaggery.scxml.registry.handlers.JaggeryExecutorHandler" methods="PUT">
+        <filter class="org.wso2.jaggery.scxml.registry.filters.JaggeryExecutorFilter">
+        </filter>
+    </handler>
+
     <!--remoteInstance url="https://localhost:9443/registry">
 	<id>instanceid</id>
 	    <username>username</username>
