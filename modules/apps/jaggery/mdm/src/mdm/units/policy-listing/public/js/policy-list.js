@@ -98,10 +98,10 @@ $(document).ready(function () {
             newPolicyPriorityList.push(policy);
         }
 
-        var updatePolicyAPI = "/mdm/api/policies/update";
+        var updatePolicyAPI = "/mdm-admin/policies/priorities";
 
         $.ajax({
-            type : "POST",
+            type : "PUT",
             url : updatePolicyAPI,
             contentType : "application/json",
             data : JSON.stringify(newPolicyPriorityList),

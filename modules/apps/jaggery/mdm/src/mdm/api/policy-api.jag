@@ -18,7 +18,7 @@
  */
 
 /*
- @To Be Deprecated
+ @Deprecated
  */
 
 var uri = request.getRequestURI();
