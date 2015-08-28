@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.beans;
 
-public class UpdatedPolicyPriorityWrapper {
+public class PriorityUpdatedPolicyWrapper {
     private int id;
     private int priority;
 
