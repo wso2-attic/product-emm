@@ -26,7 +26,7 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.PolicyWrapper;
-import org.wso2.carbon.mdm.beans.UpdatedPolicyPriorityWrapper;
+import org.wso2.carbon.mdm.beans.PriorityUpdatedPolicyWrapper;
 import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
@@ -98,7 +98,7 @@ public class Policy {
     @PUT
     @Path("priorities")
     public Response updatePolicyPriorities(@HeaderParam("Accept") String responseMediaType,
-                            List<UpdatedPolicyPriorityWrapper> priorityUpdatedPolicies) throws MDMAPIException {
+                            List<PriorityUpdatedPolicyWrapper> priorityUpdatedPolicies) throws MDMAPIException {
         ResponsePayload responsePayload = new ResponsePayload();
         try {
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
