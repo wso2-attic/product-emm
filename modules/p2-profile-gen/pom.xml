@@ -752,6 +752,10 @@
                                     <version>${carbon.app.mgt.version}</version>
                                 </feature>
                                 <feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.wso2mdm.direct.feature.group</id>
+                                    <version>${carbon.device.mgt.version}</version>
+                                </feature>
+                                <feature>
                                     <id>org.jaggeryjs.modules.caramel.feature.group</id>
                                     <version>${jaggeryjs.caramel.feature.version}</version>
                                 </feature>
