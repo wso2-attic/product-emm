@@ -34,14 +34,14 @@ public class MDMAPIException extends Exception {
 		this.errorMessage = errorMessage;
 	}
 
-	public MDMAPIException(String msg, Exception nestedEx) {
-		super(msg, nestedEx);
+	public MDMAPIException(String msg, Exception e) {
+		super(msg, e);
 		setErrorMessage(msg);
 	}
 
-	public MDMAPIException(String message, Throwable cause) {
-		super(message, cause);
-		setErrorMessage(message);
+	public MDMAPIException(String msg, Throwable cause) {
+		super(msg, cause);
+		setErrorMessage(msg);
 	}
 
 	public MDMAPIException(String msg) {

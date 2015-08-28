@@ -24,8 +24,9 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
-import org.wso2.carbon.mdm.api.util.Message;
+import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.PolicyWrapper;
+import org.wso2.carbon.mdm.beans.UpdatedPolicyPriorityWrapper;
 import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
@@ -37,15 +38,17 @@ import org.wso2.carbon.policy.mgt.core.task.TaskScheduleService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Policy {
     private static Log log = LogFactory.getLog(Policy.class);
 
     @POST
-    public Message addPolicy(PolicyWrapper policyWrapper) throws MDMAPIException {
+    public ResponsePayload addPolicy(PolicyWrapper policyWrapper) throws MDMAPIException {
 
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-        Message responseMsg = new Message();
+        ResponsePayload responseMsg = new ResponsePayload();
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
@@ -72,10 +75,10 @@ public class Policy {
 
     @POST
     @Path("{id}")
-    public Message updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy, @PathParam("id") int policyId)
+    public ResponsePayload updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy, @PathParam("id") int policyId)
             throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-        Message responseMsg = new Message();
+        ResponsePayload responseMsg = new ResponsePayload();
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             policy.setProfile(pap.getProfile(policy.getProfileId()));
@@ -92,16 +95,62 @@ public class Policy {
         }
     }
 
+    @PUT
+    @Path("priorities")
+    public Response updatePolicyPriorities(@HeaderParam("Accept") String responseMediaType,
+                            List<UpdatedPolicyPriorityWrapper> priorityUpdatedPolicies) throws MDMAPIException {
+        ResponsePayload responsePayload = new ResponsePayload();
+        try {
+            PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+            PolicyAdministratorPoint pap = policyManagementService.getPAP();
+            List<org.wso2.carbon.policy.mgt.common.Policy> policiesToUpdate =
+                                        new ArrayList<org.wso2.carbon.policy.mgt.common.Policy>();
+            int i;
+            for (i = 0; i < priorityUpdatedPolicies.size(); i++) {
+                org.wso2.carbon.policy.mgt.common.Policy policyObj = new org.wso2.carbon.policy.mgt.common.Policy();
+                policyObj.setId(priorityUpdatedPolicies.get(i).getId());
+                policyObj.setPriorityId(priorityUpdatedPolicies.get(i).getPriority());
+                policiesToUpdate.add(policyObj);
+            }
+
+            boolean policiesUpdated = pap.updatePolicyPriorities(policiesToUpdate);
+            if (policiesUpdated) {
+                responsePayload.setResponseCode(HttpStatus.SC_OK);
+                responsePayload.setResponseMessage("Policy Priorities successfully updated.");
+                return Response.status(HttpStatus.SC_OK).type(responseMediaType).entity(responsePayload).build();
+            } else {
+                responsePayload.setResponseCode(HttpStatus.SC_CONFLICT);
+                responsePayload.setResponseMessage("Policy priorities did not update. Conflict in request.");
+                return Response.status(HttpStatus.SC_CONFLICT).type(responseMediaType).entity(responsePayload).build();
+            }
+        } catch (PolicyManagementException e) {
+            String error = "Exception in updating policy priorities.";
+            log.error(error, e);
+            throw new MDMAPIException(error, e);
+        }
+    }
+
     @DELETE
     @Path("{id}")
-    public void deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
-        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+    public Response deletePolicy(@HeaderParam("Accept") String responseMediaType, @PathParam("id") int policyId) throws
+            MDMAPIException {
+        ResponsePayload responsePayload = new ResponsePayload();
         try {
+            PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
-            pap.deletePolicy(policy);
+            boolean policyDeleted = pap.deletePolicy(policy);
+            if (policyDeleted) {
+                responsePayload.setResponseCode(HttpStatus.SC_OK);
+                responsePayload.setResponseMessage("Policy by id:" + policyId + " has been successfully deleted.");
+                return Response.status(HttpStatus.SC_OK).type(responseMediaType).entity(responsePayload).build();
+            } else {
+                responsePayload.setResponseCode(HttpStatus.SC_CONFLICT);
+                responsePayload.setResponseMessage("Policy by id:" + policyId + " does not exist.");
+                return Response.status(HttpStatus.SC_CONFLICT).type(responseMediaType).entity(responsePayload).build();
+            }
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
+            String error = "Exception in deleting policy by id:" + policyId;
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }

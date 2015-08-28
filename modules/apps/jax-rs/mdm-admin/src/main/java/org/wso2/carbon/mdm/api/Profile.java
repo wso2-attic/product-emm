@@ -22,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
-import org.wso2.carbon.mdm.api.util.Message;
+import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -52,10 +52,10 @@ public class Profile {
 	}
 	@POST
 	@Path("{id}")
-	public Message updateProfile(org.wso2.carbon.policy.mgt.common.Profile profile,  @PathParam("id") String profileId)
+	public ResponsePayload updateProfile(org.wso2.carbon.policy.mgt.common.Profile profile,  @PathParam("id") String profileId)
 			throws MDMAPIException {
 		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-		Message responseMsg = new Message();
+		ResponsePayload responseMsg = new ResponsePayload();
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
 			pap.updateProfile(profile);
@@ -70,9 +70,9 @@ public class Profile {
 	}
 	@DELETE
 	@Path("{id}")
-	public Message deleteProfile(@PathParam("id") int profileId) throws MDMAPIException {
+	public ResponsePayload deleteProfile(@PathParam("id") int profileId) throws MDMAPIException {
 		PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-		Message responseMsg = new Message();
+		ResponsePayload responseMsg = new ResponsePayload();
 		try {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
 			org.wso2.carbon.policy.mgt.common.Profile profile = pap.getProfile(profileId);
