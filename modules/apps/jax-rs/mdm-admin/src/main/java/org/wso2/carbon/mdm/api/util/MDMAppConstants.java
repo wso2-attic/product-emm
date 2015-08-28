@@ -44,4 +44,14 @@ public class MDMAppConstants {
 		public static final String OPCODE_INSTALL_APPLICATION = "INSTALL_APPLICATION";
 		public static final String OPCODE_UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
 	}
+
+	public class RegistryConstants {
+
+		private RegistryConstants() {
+			throw new AssertionError();
+		}
+		public static final String TENANT_CONFIG_REGISTRY_ROOT = "/_system/config";
+		public static final String GENERAL_CONFIG_RESOURCE_PATH = "general";
+		public static final String MEDIA_TYPE_XML = "application/xml";
+	}
 }
