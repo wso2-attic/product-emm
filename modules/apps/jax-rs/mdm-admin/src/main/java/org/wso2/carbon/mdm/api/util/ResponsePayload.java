@@ -21,10 +21,19 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Message {
+public class ResponsePayload {
 
-    private String responseCode;
+    private int responseCode;
     private String responseMessage;
+
+    @XmlElement
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
+    }
 
     @XmlElement
     public String getResponseMessage() {
@@ -33,16 +42,6 @@ public class Message {
 
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
-    }
-
-
-    @XmlElement
-    public String getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(String responseCode) {
-        this.responseCode = responseCode;
     }
 
 }

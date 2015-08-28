@@ -46,4 +46,5 @@
 	 'managed-api-transports' - Transports through which the 'Managed API' is exposed.
      -->
     <Listener className="org.wso2.carbon.apimgt.webapp.publisher.lifecycle.listener.APIPublisherLifecycleListener"/>
+    <Listener className="org.wso2.carbon.device.mgt.core.config.permission.lifecycle.WebAppDeploymentLifecycleListener"/>
 </Context>
