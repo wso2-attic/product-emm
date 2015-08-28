@@ -1,4 +1,3 @@
-<%
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,19 +16,25 @@
  * under the License.
  */
 
-/*
- @Deprecated
- */
+package org.wso2.carbon.mdm.beans;
 
-var uri = request.getRequestURI();
-var uriMatcher = new URIMatcher(String(uri));
+public class PriorityUpdatedPolicyWrapper {
+    private int id;
+    private int priority;
 
-var log = new Log("api/operation-api.jag");
+    public int getId() {
+        return id;
+    }
 
-var deviceModule = require("/modules/device.js").deviceModule;
+    public void setId(int id) {
+        this.id = id;
+    }
 
-if (uriMatcher.match("/{context}/api/operation")) {
-    payload = request.getContent();
-    result = deviceModule.performOperation(payload.devices, payload.operation);
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 }
-%>

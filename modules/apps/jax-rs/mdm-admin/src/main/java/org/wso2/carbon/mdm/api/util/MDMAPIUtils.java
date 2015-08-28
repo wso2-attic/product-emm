@@ -38,7 +38,6 @@ public class MDMAPIUtils {
 
     private static Log log = LogFactory.getLog(MDMAPIUtils.class);
 
-
     public static DeviceManagementProviderService getDeviceManagementService(
             String tenantDomain) throws MDMAPIException {
         // until complete login this is use to load super tenant context
