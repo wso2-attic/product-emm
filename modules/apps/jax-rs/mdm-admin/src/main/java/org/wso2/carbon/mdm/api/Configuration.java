@@ -18,26 +18,22 @@
 
 package org.wso2.carbon.mdm.api;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.MDMAppConstants;
-import org.wso2.carbon.mdm.api.util.Message;
-import org.wso2.carbon.registry.api.RegistryException;
-import org.wso2.carbon.registry.api.Resource;
+import org.wso2.carbon.mdm.api.util.ResponsePayload;
 
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
 
 /**
- * Android Platform Configuration REST-API implementation.
+ * General Tenant Configuration REST-API implementation.
  * All end points supports JSON, XMl with content negotiation.
  */
 @WebService
@@ -48,30 +44,53 @@ public class Configuration {
 	private static Log log = LogFactory.getLog(Configuration.class);
 
 	@POST
-	public Message configureSettings(TenantConfiguration configuration)
+	public ResponsePayload saveTenantConfiguration(TenantConfiguration configuration)
 			throws MDMAPIException {
-
-		Message responseMsg = new Message();
+		ResponsePayload responseMsg = new ResponsePayload();
+		String msg;
 		try {
-			StringWriter writer = new StringWriter();
-			JAXBContext context = JAXBContext.newInstance(TenantConfiguration.class);
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.marshal(configuration, writer);
-
-			Resource resource = MDMAPIUtils.getConfigurationRegistry().newResource();
-			resource.setContent(writer.toString());
-			resource.setMediaType(MDMAppConstants.RegistryConstants.MEDIA_TYPE_XML);
-			MDMAPIUtils.putRegistryResource(MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH, resource);
-			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Android platform configuration saved successfully");
-			responseMsg.setResponseCode(Response.Status.CREATED.toString());
+			MDMAPIUtils.getTenantConfigurationManagementService().saveConfiguration(configuration,
+                                    MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
+			Response.status(HttpStatus.SC_CREATED);
+			responseMsg.setResponseMessage("Tenant configuration saved successfully.");
+			responseMsg.setResponseCode(HttpStatus.SC_CREATED);
 			return responseMsg;
-		} catch (RegistryException e) {
-			throw new MDMAPIException(
-					"Error occurred while persisting the Registry resource of Android Configuration : " + e.getMessage(), e);
-		} catch (JAXBException e) {
-			throw new MDMAPIException(
-					"Error occurred while parsing the Android configuration : " + e.getMessage(), e);
+		} catch (ConfigurationManagementException e) {
+			msg = "Error occurred while saving the tenant configuration.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+	}
+
+	@GET
+	public TenantConfiguration getConfiguration() throws MDMAPIException {
+		String msg;
+		try {
+			return MDMAPIUtils.getTenantConfigurationManagementService().getConfiguration(MDMAppConstants.
+                                        RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
+		} catch (ConfigurationManagementException e) {
+			msg = "Error occurred while retrieving the tenant configuration.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+	}
+
+	@PUT
+	public ResponsePayload updateConfiguration(TenantConfiguration configuration)
+			throws MDMAPIException {
+		ResponsePayload responseMsg = new ResponsePayload();
+		String msg;
+		try {
+			MDMAPIUtils.getTenantConfigurationManagementService().saveConfiguration(configuration,
+                                    MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
+			Response.status(HttpStatus.SC_CREATED);
+			responseMsg.setResponseMessage("Tenant configuration updated successfully");
+			responseMsg.setResponseCode(HttpStatus.SC_CREATED);
+			return responseMsg;
+		} catch (ConfigurationManagementException e) {
+			msg = "Error occurred while updating the tenant configuration.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
 		}
 	}
 

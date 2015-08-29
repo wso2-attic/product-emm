@@ -22,7 +22,11 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.registry.api.RegistryException;
 import org.wso2.carbon.registry.api.Resource;
@@ -34,6 +38,14 @@ import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 
 /**
  * MDMAPIUtils class provides utility function used by CDM REST-API classes.
@@ -154,52 +166,16 @@ public class MDMAPIUtils {
         return policyManagementService;
     }
 
+	public static TenantConfigurationManagementService getTenantConfigurationManagementService() {
+		TenantConfigurationManagementService tenantConfigService;
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		tenantConfigService =
+				(TenantConfigurationManagementService) ctx.getOSGiService(TenantConfigurationManagementService.class, null);
+		return tenantConfigService;
+	}
+
     public static PolicyManagerService getPolicyManagementService() throws MDMAPIException {
         return getPolicyManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
     }
 
-	public static RegistryService getRegistryService() throws MDMAPIException {
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		RegistryService registryService = (RegistryService) ctx.getOSGiService(RegistryService.class, null);
-		return registryService;
-	}
-
-	public static Registry getConfigurationRegistry() throws MDMAPIException {
-		try {
-			int tenantId = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId();
-			return MDMAPIUtils.getRegistryService().getConfigSystemRegistry(tenantId);
-		} catch (RegistryException e) {
-			String msg = "Error in retrieving conf registry instance.";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-	}
-
-	public static Resource getRegistryResource(String path) throws MDMAPIException {
-		try {
-			if(MDMAPIUtils.getConfigurationRegistry().resourceExists(path)){
-				return MDMAPIUtils.getConfigurationRegistry().get(path);
-			}
-			return null;
-		} catch (RegistryException e) {
-			String msg = "Error in retrieving registry resource.";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-	}
-
-	public static boolean putRegistryResource(String path, Resource resource) throws MDMAPIException {
-		boolean status;
-		try {
-			MDMAPIUtils.getConfigurationRegistry().beginTransaction();
-			MDMAPIUtils.getConfigurationRegistry().put(path, resource);
-			MDMAPIUtils.getConfigurationRegistry().commitTransaction();
-			status = true;
-		} catch (RegistryException e) {
-			String msg = "Error occurred while persisting registry resource.";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-		return status;
-	}
 }
