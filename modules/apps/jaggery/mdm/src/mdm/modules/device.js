@@ -40,6 +40,9 @@ deviceModule = function () {
         return (value == undefined || value == null) ? constants.UNSPECIFIED : value;
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.listDevices = function () {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -145,6 +148,9 @@ deviceModule = function () {
     };
 
     /*
+     @Deprecated
+     */
+    /*
      Get the supported features by the device type
      */
     publicMethods.getFeatures = function (deviceType) {
@@ -177,6 +183,9 @@ deviceModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.performOperation = function (devices, operation) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
