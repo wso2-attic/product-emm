@@ -31,6 +31,7 @@ import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class MobileDevice {
      */
     @GET
     @Path("{type}/{id}")
-    @Produces("application/json")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getDevice(@PathParam("type") String type,
                          @PathParam("id") String id) throws MDMAPIException {
         DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);

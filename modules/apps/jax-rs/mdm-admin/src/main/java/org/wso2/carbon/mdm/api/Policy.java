@@ -37,6 +37,7 @@ import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.policy.mgt.core.task.TaskScheduleService;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class Policy {
     }
 
     @GET
-    @Produces("application/json")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getAllPolicies() throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         List<org.wso2.carbon.policy.mgt.common.Policy> policies;
@@ -131,8 +132,8 @@ public class Policy {
 
     @PUT
     @Path("priorities")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response updatePolicyPriorities(List<PriorityUpdatedPolicyWrapper> priorityUpdatedPolicies)
                     throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
@@ -168,7 +169,7 @@ public class Policy {
 
     @DELETE
     @Path("{id}")
-    @Produces("application/json")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         boolean policyDeleted;

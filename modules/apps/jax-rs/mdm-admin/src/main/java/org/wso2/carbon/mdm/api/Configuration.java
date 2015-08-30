@@ -47,16 +47,15 @@ public class Configuration {
 	public ResponsePayload saveTenantConfiguration(TenantConfiguration configuration)
 			throws MDMAPIException {
 		ResponsePayload responseMsg = new ResponsePayload();
-		String msg;
 		try {
 			MDMAPIUtils.getTenantConfigurationManagementService().saveConfiguration(configuration,
                                     MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
 			Response.status(HttpStatus.SC_CREATED);
-			responseMsg.setResponseMessage("Tenant configuration saved successfully.");
-			responseMsg.setResponseCode(HttpStatus.SC_CREATED);
+			responseMsg.setMessageFromServer("Tenant configuration saved successfully.");
+			responseMsg.setStatusCode(HttpStatus.SC_CREATED);
 			return responseMsg;
 		} catch (ConfigurationManagementException e) {
-			msg = "Error occurred while saving the tenant configuration.";
+            String msg = "Error occurred while saving the tenant configuration.";
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
 		}
@@ -76,19 +75,17 @@ public class Configuration {
 	}
 
 	@PUT
-	public ResponsePayload updateConfiguration(TenantConfiguration configuration)
-			throws MDMAPIException {
+	public ResponsePayload updateConfiguration(TenantConfiguration configuration) throws MDMAPIException {
 		ResponsePayload responseMsg = new ResponsePayload();
-		String msg;
 		try {
 			MDMAPIUtils.getTenantConfigurationManagementService().saveConfiguration(configuration,
                                     MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
 			Response.status(HttpStatus.SC_CREATED);
-			responseMsg.setResponseMessage("Tenant configuration updated successfully");
-			responseMsg.setResponseCode(HttpStatus.SC_CREATED);
+			responseMsg.setMessageFromServer("Tenant configuration updated successfully");
+			responseMsg.setStatusCode(HttpStatus.SC_CREATED);
 			return responseMsg;
 		} catch (ConfigurationManagementException e) {
-			msg = "Error occurred while updating the tenant configuration.";
+            String msg = "Error occurred while updating the tenant configuration.";
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
 		}
