@@ -16,68 +16,96 @@
  * under the License.
  */
 
+/*
+ @Refactored
+ */
 var policyModule;
 policyModule = function () {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
-    var utility = require("/modules/utility.js").utility;
+    var utility = require("/modules/utility.js")["utility"];
+    var mdmProps = require('/config/mdm-props.js').config();
 
-    // Class imports from java layer.
-    var Policy = Packages.org.wso2.carbon.policy.mgt.common.Policy;
     var publicMethods = {};
     var privateMethods = {};
 
-    publicMethods.getPolicies = function () {
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
+    /*
+     @Updated
+     */
+    publicMethods.getAllPolicies = function () {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         if (!carbonUser) {
             log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
-        try{
+        var utility = require('/modules/utility.js')["utility"];
+        try {
             utility.startTenantFlow(carbonUser);
-            var policyManagementService = utility.getPolicyManagementService();
-            var policyAdminPoint = policyManagementService.getPAP();
-            log.debug(policyAdminPoint.getPolicies());
-            var policies = policyAdminPoint.getPolicies();
-            var policyList = [];
-            var i, policy, policyObject;
-            for (i = 0; i < policies.size(); i++) {
-                policy = policies.get(i);
-                policyObject = {};
 
-                policyObject.id = policy.getId();
-                policyObject.priorityId = policy.getPriorityId();
-                policyObject.name = policy.getPolicyName();
-                policyObject.platform = policy.getProfile().getDeviceType().getName();
-                policyObject.ownershipType = policy.getOwnershipType();
-                policyObject.roles = privateMethods.getElementsInAString(policy.getRoles());
-                policyObject.users = privateMethods.getElementsInAString(policy.getUsers());
-                policyObject.compliance = policy.getCompliance();
+            var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
 
-                policyList.push(policyObject);
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var policyListFromRestEndpoint = responsePayload["responseContent"];
+                var policyListToView = [];
+                var i, policyObjectFromRestEndpoint, policyObjectToView;
+                for (i = 0; i < policyListFromRestEndpoint.length; i++) {
+                    // get list object
+                    policyObjectFromRestEndpoint = policyListFromRestEndpoint[i];
+                    // populate list object values to view-object
+                    policyObjectToView = {};
+                    policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
+                    policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
+                    policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
+                    policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
+                    policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
+                    policyObjectToView["roles"] = privateMethods.
+                        getElementsInAString(policyObjectFromRestEndpoint["roles"]);
+                    policyObjectToView["users"] = privateMethods.
+                        getElementsInAString(policyObjectFromRestEndpoint["users"]);
+                    policyObjectToView["compliance"] = policyObjectFromRestEndpoint["Compliance"];
+                    // push view-objects to list
+                    policyListToView.push(policyObjectToView);
+                }
+                // generate response
+                response["status"] = "success";
+                response["content"] = policyListToView;
+                return response;
+            } else {
+                // generate response
+                response["status"] = "error";
+                return response;
             }
-            return policyList;
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
         }
     };
 
+    /*
+     @Updated - used by getAllPolicies
+     */
     privateMethods.getElementsInAString = function (elementList) {
         var i, elementsInAString = "";
-        for (i = 0; i < elementList.size(); i++) {
-            if (i == elementList.size() - 1) {
-                elementsInAString += elementList.get(i);
+        for (i = 0; i < elementList.length; i++) {
+            if (i == elementList.length - 1) {
+                elementsInAString += elementList[i];
             } else {
-                elementsInAString += elementList.get(i) + ", ";
+                elementsInAString += elementList[i] + ", ";
             }
         }
         return elementsInAString;
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.getProfiles = function () {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -107,6 +135,9 @@ policyModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.updatePolicyPriorities = function (payload) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -135,6 +166,9 @@ policyModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.deletePolicy = function (policyId) {
         var isDeleted;
         var carbonUser = session.get(constants.USER_SESSION_KEY);
