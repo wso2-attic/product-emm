@@ -98,11 +98,11 @@ public class MDMAPIUtils {
         return userStoreManager;
     }
 
-    public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId, String deviceType) {
-        DeviceIdentifier identifier = new DeviceIdentifier();
-        identifier.setId(deviceId);
-        identifier.setType(deviceType);
-        return identifier;
+    public static DeviceIdentifier instantiateDeviceIdentifier(String deviceType, String deviceId) {
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        deviceIdentifier.setType(deviceType);
+        deviceIdentifier.setId(deviceId);
+        return deviceIdentifier;
     }
 
     public static ApplicationManager getAppManagementService(String tenantDomain) throws MDMAPIException {

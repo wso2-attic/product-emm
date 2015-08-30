@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.api;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -27,6 +28,7 @@ import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.mdm.api.util.ResponsePayload;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -35,8 +37,6 @@ import java.util.List;
 /**
  * Device related operations
  */
-@Produces({"application/json", "application/xml"})
-@Consumes({"application/json", "application/xml"})
 public class MobileDevice {
     private static Log log = LogFactory.getLog(MobileDevice.class);
 
@@ -44,7 +44,7 @@ public class MobileDevice {
      * Get all devices
      *
      * @return Device List
-     * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
+     * @throws MDMAPIException
      *
      */
     @GET
@@ -73,31 +73,39 @@ public class MobileDevice {
     }
 
     /**
-     * Fetch Android device details of a given device Id.
+     * Fetch device details for a given device type and device Id.
      *
-     * @param id   Device Id
      * @param type Device Type
-     * @return Device
-     * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
-     *
+     * @param id Device Identifier
+     * @return Device wrapped inside Response
+     * @throws MDMAPIException
      */
     @GET
     @Path("{type}/{id}")
-    public org.wso2.carbon.device.mgt.common.Device getDevice(
-            @PathParam("id") String id, @PathParam("type") String type) throws MDMAPIException {
-        String msg;
+    @Produces("application/json")
+    public Response getDevice(@PathParam("type") String type,
+                         @PathParam("id") String id) throws MDMAPIException {
+        DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
+        DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         Device device;
         try {
-            DeviceIdentifier deviceIdentifier = MDMAPIUtils.convertToDeviceIdentifierObject(id, type);
-            device = MDMAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
-            if (device == null) {
-                Response.status(Response.Status.NOT_FOUND);
-            }
-            return device;
+            device = deviceManagementProviderService.getDevice(deviceIdentifier);
         } catch (DeviceManagementException e) {
-            msg = "Error occurred while fetching the device information.";
-            log.error(msg, e);
-            throw new MDMAPIException(msg, e);
+            String error = "Error occurred while fetching the device information.";
+            log.error(error, e);
+            throw new MDMAPIException(error, e);
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        if (device == null) {
+            responsePayload.setStatusCode(HttpStatus.SC_NOT_FOUND);
+            responsePayload.setMessageFromServer("Requested device by type: " +
+                    type + " and id: " + id + " does not exist.");
+            return Response.status(HttpStatus.SC_NOT_FOUND).entity(responsePayload).build();
+        } else {
+            responsePayload.setStatusCode(HttpStatus.SC_OK);
+            responsePayload.setMessageFromServer("Sending Requested device by type: " + type + " and id: " + id + ".");
+            responsePayload.setResponseContent(device);
+            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
         }
     }
 

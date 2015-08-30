@@ -50,7 +50,7 @@ deviceModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var deviceManagementService = utility.getDeviceManagementService();
             var devices = deviceManagementService.getAllDevices();
@@ -88,7 +88,7 @@ deviceModule = function () {
                 deviceList.push(deviceObject);
             }
             return deviceList;
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -251,7 +251,7 @@ deviceModule = function () {
     };
 
     publicMethods.viewDevice = function (type, deviceId) {
-        try{
+        try {
             var device = privateMethods.getDevice(type, deviceId);
             if (device) {
                 var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
