@@ -112,7 +112,9 @@ $(document).ready(function () {
                     hidePopup();
                 });
             },
-            error : function () {
+            error : function (data) {
+                $("#save-policy-priorities-error-content").find(".message-from-server").html(
+                        "Message From Server  :  " + data["statusText"]);
                 $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
                 showPopup();
                 $("a#save-policy-priorities-error-link").click(function () {
