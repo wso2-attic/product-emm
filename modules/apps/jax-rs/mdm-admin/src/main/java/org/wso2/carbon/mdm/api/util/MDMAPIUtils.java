@@ -22,14 +22,30 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.registry.api.RegistryException;
+import org.wso2.carbon.registry.api.Resource;
+import org.wso2.carbon.registry.core.Registry;
+import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 
 /**
  * MDMAPIUtils class provides utility function used by CDM REST-API classes.
@@ -150,7 +166,16 @@ public class MDMAPIUtils {
         return policyManagementService;
     }
 
+	public static TenantConfigurationManagementService getTenantConfigurationManagementService() {
+		TenantConfigurationManagementService tenantConfigService;
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		tenantConfigService =
+				(TenantConfigurationManagementService) ctx.getOSGiService(TenantConfigurationManagementService.class, null);
+		return tenantConfigService;
+	}
+
     public static PolicyManagerService getPolicyManagementService() throws MDMAPIException {
         return getPolicyManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
     }
+
 }
