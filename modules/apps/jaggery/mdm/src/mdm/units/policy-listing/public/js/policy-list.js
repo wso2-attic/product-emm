@@ -146,14 +146,14 @@ $(document).ready(function () {
                     } else if (newPolicyListCount == 0) {
                         $("#policy-listing-status-msg").text("No Policies to show currently.");
                     }
-                    $(modalPopupContent).html($('#remove-policy-200-content').html());
-                    $("a#remove-policy-200-link").click(function () {
+                    $(modalPopupContent).html($('#remove-policy-success-content').html());
+                    $("a#remove-policy-success-link").click(function () {
                         hidePopup();
                     });
                 },
                 error : function () {
-                    $(modalPopupContent).html($('#remove-policy-unexpected-error-content').html());
-                    $("a#remove-policy-unexpected-error-link").click(function () {
+                    $(modalPopupContent).html($('#remove-policy-error-content').html());
+                    $("a#remove-policy-error-link").click(function () {
                         hidePopup();
                     });
                 }
