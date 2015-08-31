@@ -40,10 +40,11 @@ import java.util.List;
 import java.util.Map;
 
 public class User {
-    private static Log log = LogFactory.getLog(MobileDevice.class);
+    private static Log log = LogFactory.getLog(User.class);
 
     /**
      * Method to add user to emm-user-store.
+     *
      * @param userWrapper Wrapper object representing input json payload
      * @return {Response} Status of the request wrapped inside Response object
      * @throws MDMAPIException
@@ -52,10 +53,10 @@ public class User {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response addUser(UserWrapper userWrapper) throws MDMAPIException {
-        UserStoreManager usm = MDMAPIUtils.getUserStoreManager();
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
         try {
-            if (usm.isExistingUser(userWrapper.getUsername())) {
+            if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
                 // if user already exists
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
@@ -71,7 +72,7 @@ public class User {
                 Map<String, String> defaultUserClaims = buildDefaultUserClaims(userWrapper.getFirstname(),
                         userWrapper.getLastname(), userWrapper.getEmailAddress());
                 // calling addUser method of carbon user api
-                usm.addUser(userWrapper.getUsername(), initialUserPassword, userWrapper.getRoles(),
+                userStoreManager.addUser(userWrapper.getUsername(), initialUserPassword, userWrapper.getRoles(),
                         defaultUserClaims, null);
                 // Outputting debug message upon successful addition of user
                 if (log.isDebugEnabled()) {
@@ -94,6 +95,7 @@ public class User {
      * Private method to be used by addUser() to
      * generate an initial user password for a user.
      * This will be the password used by a user for his initial login to the system.
+     *
      * @return {string} Initial User Password
      */
     private String generateInitialUserPassword() {
@@ -118,6 +120,7 @@ public class User {
 
     /**
      * Method to build default user claims.
+     *
      * @param firstname First name of the user
      * @param lastname Last name of the user
      * @param emailAddress Email address of the user
@@ -136,6 +139,7 @@ public class User {
 
     /**
      * Method to remove user from emm-user-store.
+     *
      * @param username Username of the user
      * @return {Response} Status of the request wrapped inside Response object
      * @throws MDMAPIException
@@ -145,12 +149,12 @@ public class User {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response removeUser(@PathParam("username") String username) throws MDMAPIException {
-        UserStoreManager usm = MDMAPIUtils.getUserStoreManager();
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
         try {
-            if (usm.isExistingUser(username)) {
+            if (userStoreManager.isExistingUser(username)) {
                 // if user already exists, trying to remove user
-                usm.deleteUser(username);
+                userStoreManager.deleteUser(username);
                 // Outputting debug message upon successful removal of user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " was successfully removed.");
@@ -178,6 +182,7 @@ public class User {
 
     /**
      * Get a list of devices based on the username.
+     *
      * @param username Username of the device owner
      * @return A list of devices
      * @throws MDMAPIException
