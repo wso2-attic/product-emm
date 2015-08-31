@@ -852,7 +852,7 @@
         <carbon.api.mgt.version>1.4.0</carbon.api.mgt.version>
 
         <!-- App Management -->
-        <carbon.app.mgt.version>1.1.0-SNAPSHOT</carbon.app.mgt.version>
+        <carbon.app.mgt.version>1.1.0</carbon.app.mgt.version>
         <carbon.tenant.mgt.common.version>4.4.4</carbon.tenant.mgt.common.version>
         <carbon.store.version>1.4.0</carbon.store.version>
         <carbon.governance.appm.version>4.5.1</carbon.governance.appm.version>
