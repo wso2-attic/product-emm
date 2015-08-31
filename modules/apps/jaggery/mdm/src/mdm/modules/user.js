@@ -14,7 +14,6 @@
  * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
 /*
@@ -66,6 +65,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Add user to mdm-user-store.
      *
@@ -115,6 +117,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Remove an existing user from mdm-user-store.
      *
@@ -155,6 +160,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Private method to be used by addUser() to
      * generate an initial user password for a user.
@@ -182,6 +190,9 @@ var userModule = function () {
         return String(initialUserPassword);
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Build default user claims.
      *
@@ -463,7 +474,6 @@ var userModule = function () {
         } finally {
             utility.endTenantFlow();
         }
-
     };
 
     return publicMethods;

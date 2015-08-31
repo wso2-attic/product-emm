@@ -50,7 +50,8 @@ policyModule = function () {
 
             var response = {};
             if (xhr.status == 200 && xhr.readyState == 4) {
-                var policyListFromRestEndpoint = parse(xhr.responseText);
+                var responsePayload = parse(xhr.responseText);
+                var policyListFromRestEndpoint = responsePayload["responseContent"];
                 var policyListToView = [];
                 var i, policyObjectFromRestEndpoint, policyObjectToView;
                 for (i = 0; i < policyListFromRestEndpoint.length; i++) {

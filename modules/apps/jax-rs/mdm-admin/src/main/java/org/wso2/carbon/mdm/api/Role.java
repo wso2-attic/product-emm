@@ -16,26 +16,11 @@
  * under the License.
  */
 
-package org.wso2.carbon.mdm.beans;
+package org.wso2.carbon.mdm.api;
 
-public class PriorityUpdatedPolicyWrapper {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-    private int id;
-    private int priority;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+public class Role {
+    private static Log log = LogFactory.getLog(Role.class);
 }

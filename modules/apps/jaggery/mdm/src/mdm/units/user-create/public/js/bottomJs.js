@@ -34,8 +34,8 @@ $(document).ready(function () {
         var username = $("input#username").val();
         var firstname = $("input#firstname").val();
         var lastname = $("input#lastname").val();
-        var emailAddress = $("input#email").val();
-        var userRoles = $("select#roles").val();
+        var emailAddress = $("input#emailAddress").val();
+        var roles = $("select#roles").val();
 
         var errorMsgWrapper = "#user-create-error-msg";
         var errorMsg = "#user-create-error-msg span";
@@ -70,15 +70,15 @@ $(document).ready(function () {
             addUserFormData.firstname = firstname;
             addUserFormData.lastname = lastname;
             addUserFormData.emailAddress = emailAddress;
-            addUserFormData.userRoles = userRoles;
+            addUserFormData.roles = roles;
 
-            var addUserAPI = "/mdm/api/users/add";
+            var addUserAPI = "/mdm-admin/users";
 
             invokerUtil.post(
                 addUserAPI,
                 addUserFormData,
                 function (data) {
-                    if (data == 201) {
+                    if (data["statusCode"] == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");
@@ -88,16 +88,9 @@ $(document).ready(function () {
                         // Refreshing with success message
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
-                    } else if (data == 400) {
-                        $(errorMsg).text("Exception occurred at backend.");
-                    } else if (data == 403) {
-                        $(errorMsg).text("Action was not permitted.");
-                    } else if (data == 409) {
-                        $(errorMsg).text("Sorry, User already exists.");
                     }
-                    $(errorMsgWrapper).removeClass("hidden");
                 }, function () {
-                    $(errorMsg).text("An unexpected error occurred.");
+                    $(errorMsg).text("An unexpected error occurred. Please try again later.");
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );
