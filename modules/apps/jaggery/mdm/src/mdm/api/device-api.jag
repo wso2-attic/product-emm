@@ -17,6 +17,10 @@
  * under the License.
  */
 
+/*
+ @Deprecated
+ */
+
 var uri = request.getRequestURI();
 var uriMatcher = new URIMatcher(String(uri));
 
@@ -28,9 +32,6 @@ var userModule = require("/modules/user.js").userModule;
 var result;
 
 if (uriMatcher.match("/{context}/api/devices/")) {
-    /*
-     @Deprecated
-     */
     if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")) {
         result = deviceModule.listDevices();
     } else {

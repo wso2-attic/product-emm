@@ -98,10 +98,10 @@ $(document).ready(function () {
             newPolicyPriorityList.push(policy);
         }
 
-        var updatePolicyAPI = "/mdm/api/policies/update";
+        var updatePolicyAPI = "/mdm-admin/policies/priorities";
 
         $.ajax({
-            type : "POST",
+            type : "PUT",
             url : updatePolicyAPI,
             contentType : "application/json",
             data : JSON.stringify(newPolicyPriorityList),
@@ -112,7 +112,9 @@ $(document).ready(function () {
                     hidePopup();
                 });
             },
-            error : function () {
+            error : function (data) {
+                $("#save-policy-priorities-error-content").find(".message-from-server").html(
+                        "Message From Server  :  " + data["statusText"]);
                 $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
                 showPopup();
                 $("a#save-policy-priorities-error-link").click(function () {
@@ -124,45 +126,36 @@ $(document).ready(function () {
 
     $(".policy-remove-link").click(function () {
         var policyId = $(this).data("id");
-        var deletePolicyAPI = "/mdm/api/policies/" + policyId + "/delete";
+        var deletePolicyAPI = "/mdm-admin/policies/" + policyId;
 
         $(modalPopupContent).html($('#remove-policy-modal-content').html());
         showPopup();
 
         $("a#remove-policy-yes-link").click(function () {
             $.ajax({
-                type : "GET",
+                headers: {
+                    Accept : "application/json"
+                },
+                type : "DELETE",
                 url : deletePolicyAPI,
-                success : function (data) {
-                    if (data == 200) {
-                        $("#" + policyId).remove();
-                        sortElements();
-                        var newPolicyListCount = $(".policy-list > span").length;
-                        if (newPolicyListCount == 1) {
-                            $(saveNewPrioritiesButton).addClass("hide");
-                            $("#policy-count-status-msg").text("Add more policies to set-up a priority order.");
-                        } else if (newPolicyListCount == 0) {
-                            $("#policy-count-status-msg").text("No Policies to show currently.");
-                        }
-                        $(modalPopupContent).html($('#remove-policy-200-content').html());
-                        $("a#remove-policy-200-link").click(function () {
-                            hidePopup();
-                        });
-                    } else if (data == 409) {
-                        $(modalPopupContent).html($('#remove-policy-409-content').html());
-                        $("a#remove-policy-409-link").click(function () {
-                            hidePopup();
-                        });
-                    } else if (data == 500) {
-                        $(modalPopupContent).html($('#remove-policy-500-content').html());
-                        $("a#remove-policy-500-link").click(function () {
-                            hidePopup();
-                        });
+                success : function () {
+                    $("#" + policyId).remove();
+                    sortElements();
+                    var newPolicyListCount = $(".policy-list > span").length;
+                    if (newPolicyListCount == 1) {
+                        $(saveNewPrioritiesButton).addClass("hidden");
+                        $("#policy-listing-status-msg").text("Add more policies to set-up a priority order.");
+                    } else if (newPolicyListCount == 0) {
+                        $("#policy-listing-status-msg").text("No Policies to show currently.");
                     }
+                    $(modalPopupContent).html($('#remove-policy-success-content').html());
+                    $("a#remove-policy-success-link").click(function () {
+                        hidePopup();
+                    });
                 },
                 error : function () {
-                    $(modalPopupContent).html($('#remove-policy-unexpected-error-content').html());
-                    $("a#remove-policy-unexpected-error-link").click(function () {
+                    $(modalPopupContent).html($('#remove-policy-error-content').html());
+                    $("a#remove-policy-error-link").click(function () {
                         hidePopup();
                     });
                 }
