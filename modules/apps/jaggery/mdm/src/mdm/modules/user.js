@@ -117,6 +117,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Remove an existing user from mdm-user-store.
      *
@@ -471,7 +474,6 @@ var userModule = function () {
         } finally {
             utility.endTenantFlow();
         }
-
     };
 
     return publicMethods;
