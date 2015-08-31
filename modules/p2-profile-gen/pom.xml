@@ -283,6 +283,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.claim.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.oauth.ui.feature:${carbon.identity.version}
+                                </featureArtifactDef>
                                 <!--   <featureArtifactDef>
                                        org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.iwa.ui.feature:${carbon.identity.version}
                                    </featureArtifactDef>
@@ -599,6 +602,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.claim.mgt.feature.group</id>
+                                    <version>${carbon.identity.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.identity.oauth.ui.feature.group</id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
                                 <!--       <feature>
