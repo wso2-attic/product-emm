@@ -143,6 +143,16 @@
                 <include>**/process/</include>
                 <include>**/uuid/</include>
                 <include>**/i18n/</include>
+                <include>**/appmgtpublisher/</include>
+                <include>**/lifecycle/</include>
+                <include>**/utils/</include>
+                <include>**/caramel/</include>
+                <include>**/markdown/</include>
+                <include>**/handlebars/</include>
+                <include>**/event/</include>
+                <include>**/claims/</include>
+                <include>**/permission/</include>
+                <include>**/registration/</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -151,6 +161,7 @@
             <includes>
                 <include>**/api-manager.xml</include>
                 <include>**/security/</include>
+                <include>**/app-manager.xml</include>
                 <!-- <include>**/emm-config.xml</include>-->
             </includes>
         </fileSet>
@@ -688,5 +699,20 @@
             <fileMode>644</fileMode>
         </file>
 
+        <!-- AppM files -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/service-providers/default.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/service-providers/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <!--<file>-->
+            <!--<source>-->
+                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/governance.xml-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>-->
+            <!--<fileMode>644</fileMode>-->
+        <!--</file>-->
     </files>
+
 </assembly>

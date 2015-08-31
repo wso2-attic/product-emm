@@ -216,7 +216,25 @@
     </MultifactorAuthentication>
 
     <SSOService>
+        <PersistanceCacheTimeout>157680000</PersistanceCacheTimeout>
+        <SessionIndexCacheTimeout>157680000</SessionIndexCacheTimeout>
         <IdentityProviderURL>https://localhost:9443/samlsso</IdentityProviderURL>
+        <SingleLogoutRetryCount>5</SingleLogoutRetryCount>
+        <SingleLogoutRetryInterval>60000</SingleLogoutRetryInterval> <!-- in milli seconds -->
+        <TenantPartitioningEnabled>false</TenantPartitioningEnabled>
+        <SessionTimeout>36000</SessionTimeout> <!-- remember me session timeout in seconds -->
+        <!-- skips authentication if valid SAML2 Web SSO browser session available -->
+        <AttributeStatementBuilder>org.wso2.carbon.identity.sso.saml.attributes.UserAttributeStatementBuilder</AttributeStatementBuilder>
+        <AttributesClaimDialect>http://wso2.org/claims</AttributesClaimDialect>
+        <AcceptOpenIDLogin>false</AcceptOpenIDLogin>
+        <ClaimsRetrieverImplClass>org.wso2.carbon.identity.sso.saml.builders.claims.DefaultClaimsRetriever</ClaimsRetrieverImplClass>
+        <SAMLSSOEncrypter>org.wso2.carbon.identity.sso.saml.builders.encryption.DefaultSSOEncrypter</SAMLSSOEncrypter>
+        <SAMLSSOSigner>org.wso2.carbon.identity.sso.saml.builders.signature.DefaultSSOSigner</SAMLSSOSigner>
+        <SAML2HTTPRedirectSignatureValidator>org.wso2.carbon.identity.sso.saml.validators.SAML2HTTPRedirectDeflateSignatureValidator</SAML2HTTPRedirectSignatureValidator>
+
+        <!-- SAML Token validity period in minutes -->
+        <SAMLResponseValidityPeriod>5</SAMLResponseValidityPeriod>
+        <UseAuthenticatedUserDomainCrypto>true</UseAuthenticatedUserDomainCrypto>
     </SSOService>
 
     <EntitlementSettings>
