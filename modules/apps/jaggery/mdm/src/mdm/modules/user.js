@@ -65,6 +65,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Add user to mdm-user-store.
      *
@@ -154,6 +157,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Private method to be used by addUser() to
      * generate an initial user password for a user.
@@ -181,6 +187,9 @@ var userModule = function () {
         return String(initialUserPassword);
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Build default user claims.
      *

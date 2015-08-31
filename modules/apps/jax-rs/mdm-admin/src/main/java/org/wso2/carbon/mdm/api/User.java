@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.api;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -25,18 +26,82 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.mdm.api.util.ResponsePayload;
+import org.wso2.carbon.mdm.beans.UserWrapper;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.api.UserStoreManager;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
     private static Log log = LogFactory.getLog(MobileDevice.class);
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response addUser(UserWrapper userWrapper) throws MDMAPIException {
+        UserStoreManager usm = MDMAPIUtils.getUserStoreManager();
+        ResponsePayload responsePayload = new ResponsePayload();
+        try {
+            if (usm.isExistingUser(userWrapper.getUsername())) {
+                // if user already exists
+                responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+                responsePayload.setMessageFromServer("User already exists.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
+            } else {
+                String initialUserPassword = generateInitialUserPassword();
+                Map<String, String> defaultUserClaims = buildDefaultUserClaims(userWrapper.getFirstname(),
+                        userWrapper.getLastname(), userWrapper.getEmailAddress());
+                // calling addUser method of carbon user api
+                usm.addUser(userWrapper.getUsername(), initialUserPassword, userWrapper.getRoles(),
+                        defaultUserClaims, null);
+                // if addUser method successfully executed without no exception
+                responsePayload.setStatusCode(HttpStatus.SC_CREATED);
+                responsePayload.setMessageFromServer("User was successfully added.");
+                return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
+            }
+        } catch (UserStoreException e) {
+            String errorMsg = "Exception in trying to add user.";
+            log.error(errorMsg, e);
+            throw new MDMAPIException(errorMsg, e);
+        }
+    }
+
+    private String generateInitialUserPassword() {
+        int passwordLength = 6;
+        //defining the pool of characters to be used for initial password generation
+        String lowerCaseCharset = "abcdefghijklmnopqrstuvwxyz";
+        String upperCaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String numericCharset = "0123456789";
+
+        String totalCharset = lowerCaseCharset + upperCaseCharset + numericCharset;
+        int totalCharsetLength = totalCharset.length();
+
+        String initialUserPassword = "";
+        for (int i = 0; i < passwordLength; i++) {
+            initialUserPassword += totalCharset.charAt((int) (Math.random() * totalCharsetLength));
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("Initial user password is created for new user: " + initialUserPassword);
+        }
+        return initialUserPassword;
+    }
+
+    private Map<String, String> buildDefaultUserClaims (String firstname, String lastname, String emailAddress) {
+        Map<String, String> defaultUserClaims = new HashMap<String, String>();
+        defaultUserClaims.put("http://wso2.org/claims/givenname", firstname);
+        defaultUserClaims.put("http://wso2.org/claims/lastname", lastname);
+        defaultUserClaims.put("http://wso2.org/claims/emailaddress", emailAddress);
+        if (log.isDebugEnabled()) {
+            log.debug("Default claim map is created for new user: " + defaultUserClaims.toString());
+        }
+        return defaultUserClaims;
+    }
 
     /**
      * Get a list of devices based on the username.
