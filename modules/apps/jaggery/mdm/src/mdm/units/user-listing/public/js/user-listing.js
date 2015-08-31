@@ -84,46 +84,31 @@ $("a.invite-user-link").click(function () {
  */
 $("a.remove-user-link").click(function () {
     var username = $(this).data("username");
-    var removeUserAPI = "/mdm/api/users/" + username + "/remove";
+    var removeUserAPI = "/mdm-admin/users/" + username;
 
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
 
     $("a#remove-user-yes-link").click(function () {
-        invokerUtil.get(
+        invokerUtil.delete(
             removeUserAPI,
             function (data) {
-                if (data == 200) {
+                if (data["statusCode"] == 200) {
                     $("#" + username).remove();
                     // get new user-list-count
                     var newUserListCount = $(".user-list > span").length;
                     // update user-listing-status-msg with new user-count
                     $("#user-count-status-msg").text("Total number of Users found : " + newUserListCount);
                     // update modal-content with success message
-                    $(modalPopupContent).html($('#remove-user-200-content').html());
-                    $("a#remove-user-200-link").click(function () {
-                        hidePopup();
-                    });
-                } else if (data == 400) {
-                    $(modalPopupContent).html($('#remove-user-400-content').html());
-                    $("a#remove-user-400-link").click(function () {
-                        hidePopup();
-                    });
-                } else if (data == 403) {
-                    $(modalPopupContent).html($('#remove-user-403-content').html());
-                    $("a#remove-user-403-link").click(function () {
-                        hidePopup();
-                    });
-                } else if (data == 409) {
-                    $(modalPopupContent).html($('#remove-user-409-content').html());
-                    $("a#remove-user-409-link").click(function () {
+                    $(modalPopupContent).html($('#remove-user-success-content').html());
+                    $("a#remove-user-success-link").click(function () {
                         hidePopup();
                     });
                 }
             },
             function () {
-                $(modalPopupContent).html($('#remove-user-unexpected-error-content').html());
-                $("a#remove-user-unexpected-error-link").click(function () {
+                $(modalPopupContent).html($('#remove-user-error-content').html());
+                $("a#remove-user-error-link").click(function () {
                     hidePopup();
                 });
             }
