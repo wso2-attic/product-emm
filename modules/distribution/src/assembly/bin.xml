@@ -534,6 +534,16 @@
             <fileMode>644</fileMode>
         </file>
 
+        <!--certificate config file-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/certificate-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!-- nTask Component -->
         <file>
             <source>
