@@ -59,6 +59,9 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         response.sendRedirect(mdmProps.appContext + "login");
     });
 } else if (uriMatcher.match("/{context}/api/user/devices/")) {
+    /*
+     @Deprecated
+     */
     if (userModule.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
         carbonUser = session.get(constants.USER_SESSION_KEY);
         result = deviceModule.listDevicesForUser(carbonUser.username);
@@ -66,6 +69,9 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         response.sendError(403);
     }
 } else if (uriMatcher.match("/{context}/api/users/{username}/invite")) {
+    /*
+     @Deprecated
+     */
     if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/users/invite")) {
         elements = uriMatcher.elements();
         username = elements.username;
@@ -74,6 +80,9 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         response.sendError(403);
     }
 } else if (uriMatcher.match("/{context}/api/users/add")) {
+    /*
+     @Deprecated
+     */
     if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
         addUserFormData = request.getContent();
 
@@ -100,6 +109,9 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         result = 403;
     }
 } else if (uriMatcher.match("/{context}/api/users/{username}/remove")) {
+    /*
+     @Deprecated
+     */
     if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/users/remove")) {
         elements = uriMatcher.elements();
         username = elements.username;
