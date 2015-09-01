@@ -367,7 +367,7 @@ public class Policy {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        responsePayload.setMessageFromServer("Policy monitoring service updated successfully.");
+        responsePayload.setMessageFromServer("Policy monitoring service stopped successfully.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
