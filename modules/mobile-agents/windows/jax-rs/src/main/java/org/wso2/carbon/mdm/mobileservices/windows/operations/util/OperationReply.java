@@ -177,15 +177,17 @@ public class OperationReply {
             status.add(replaceStatus);
         }
         if (sourceSyncmlBody.getExec() != null) {
-            int execCommandId = ++HEADER_COMMAND_ID;
-            Status replaceStatus = new Status(execCommandId,
-                    sourceHeader.getMsgID(),
-                    sourceSyncmlBody.getExec().getCommandId(),
-                    GET_COMMAND_TEXT, null,
-                    String.valueOf(
-                            Constants.SyncMLResponseCodes.ACCEPTED)
-            );
-            status.add(replaceStatus);
+            for(int z = 0; z<sourceSyncmlBody.getExec().size(); z++) {
+                int execCommandId = ++HEADER_COMMAND_ID;
+                Status execStatus = new Status(execCommandId,
+                        sourceHeader.getMsgID(),
+                        sourceSyncmlBody.getExec().get(z).getCommandId(),
+                        GET_COMMAND_TEXT, null,
+                        String.valueOf(
+                                Constants.SyncMLResponseCodes.ACCEPTED)
+                );
+                status.add(execStatus);
+            }
         }
         if (sourceSyncmlBody.getGet() != null) {
             int getCommandId = ++HEADER_COMMAND_ID;
@@ -204,10 +206,12 @@ public class OperationReply {
     private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException {
         Get getElement = new Get();
         List<Item> itemsGet = new ArrayList<Item>();
+        int y = 5;
+        List<Exec> execList = new ArrayList<>();
 
 
-        Exec execElement = new Exec();
-        List<Item> itemsExec = new ArrayList<Item>();
+//        Exec execElement = new Exec();
+//        List<Item> itemsExec = new ArrayList<Item>();
 
         Atomic atomicElement = new Atomic();
         List<Add> addsAtomic = new ArrayList<Add>();
@@ -231,8 +235,13 @@ public class OperationReply {
                         itemsGet.add(itemGet);
                         break;
                     case COMMAND:
+                        Exec execElement = new Exec();
+                        execElement.setCommandId(y++);
+                        List<Item> itemsExec = new ArrayList<Item>();
                         Item itemExec = appendExecInfo(operation);
                         itemsExec.add(itemExec);
+                        execElement.setItems(itemsExec);
+                        execList.add(execElement);
                         break;
                     default:
                         throw new WindowsOperationException("Operation with no type found");
@@ -245,10 +254,10 @@ public class OperationReply {
             getElement.setItems(itemsGet);
         }
 
-        if (!itemsExec.isEmpty()) {
-            execElement.setCommandId(5);
-            execElement.setItems(itemsExec);
-        }
+//        if (!itemsExec.isEmpty()) {
+//            execElement.setCommandId(5);
+//            execElement.setItems(itemsExec);
+//        }
 
         if (!addsAtomic.isEmpty()) {
             atomicElement.setCommandId(300);
@@ -256,7 +265,7 @@ public class OperationReply {
         }
 
         syncmlBody.setGet(getElement);
-        syncmlBody.setExec(execElement);
+        syncmlBody.setExec(execList);
     }
 
     private Item appendExecInfo(Operation operation) {

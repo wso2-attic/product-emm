@@ -152,6 +152,7 @@ public final class Constants {
 		public static final String SYNCML_CMD_REF = "CmdRef";
 		public static final String SYNCML_MESSAGE_REF = "MsgRef";
 		public static final String SYNCML_LOCATION_URI = "LocURI";
+		public static final String SYNCML_TARGET_REF = "TargetRef";
 	}
 
 

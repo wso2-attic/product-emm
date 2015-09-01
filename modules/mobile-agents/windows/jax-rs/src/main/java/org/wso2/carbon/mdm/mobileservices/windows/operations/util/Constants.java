@@ -77,8 +77,10 @@ public class Constants {
 	 * SynclML service related constants
 	 */
 	public final class SyncMLResponseCodes {
-		public static final int AUTHENTICATION_ACCEPTED = 212;
-		public static final int ACCEPTED = 200;
+		public static final String AUTHENTICATION_ACCEPTED = "212";
+		public static final String ACCEPTED = "200";
+		public static final String ERROR = "405";
+		public static final String Internal_ERROR = "500";
 	}
 
 }

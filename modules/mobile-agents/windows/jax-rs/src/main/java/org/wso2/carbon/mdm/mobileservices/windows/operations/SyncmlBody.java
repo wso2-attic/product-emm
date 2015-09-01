@@ -30,7 +30,27 @@ import java.util.List;
  */
 public class SyncmlBody {
 	Get getCommands;
-	Exec exec;
+
+
+
+	public Get getGetCommands() {
+		return getCommands;
+	}
+
+	public void setGetCommands(Get getCommands) {
+		this.getCommands = getCommands;
+	}
+
+	public List<Exec> getExec() {
+		return exec;
+	}
+
+	public void setExec(List<Exec> exec) {
+		this.exec = exec;
+	}
+
+	//Exec exec;
+	List<Exec> exec;
 	List<Status> status;
 	Alert alert;
 	Replace replace;
@@ -76,13 +96,13 @@ public class SyncmlBody {
 		this.getCommands = get;
 	}
 
-	public Exec getExec() {
-		return exec;
-	}
-
-	public void setExec(Exec exec) {
-		this.exec = exec;
-	}
+//	public Exec getExec() {
+//		return exec;
+//	}
+//
+//	public void setExec(Exec exec) {
+//		this.exec = exec;
+//	}
 
 	public void buildBodyElement(Document doc, Element rootElement) {
 
@@ -109,12 +129,20 @@ public class SyncmlBody {
 			getGet().buildGetElement(doc, syncBody);
 		}
 
-		if (getExec() != null) {
-			getExec().buildExecElement(doc, syncBody);
-		}
+//		if (getExec() != null) {
+//			getExec().buildExecElement(doc, syncBody);
+//		}
 
 		if (getReplace() != null) {
 			getReplace().buildReplaceElement(doc, syncBody);
+		}
+
+		if (getExec() !=null) {
+			for (int x = 0; x < getExec().size(); x++) {
+				if (getExec().get(x) != null) {
+					getExec().get(x).buildExecElement(doc, syncBody);
+				}
+			}
 		}
 
 		syncBody.appendChild(doc.createElement(Constants.FINAL));
