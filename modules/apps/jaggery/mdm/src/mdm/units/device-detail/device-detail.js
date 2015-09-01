@@ -26,8 +26,7 @@ function onRequest(context) {
                         - viewModel.AvailableDeviceCapacity) * 100) / 100;
                     viewModel.DeviceCapacityPercentage = Math.round(viewModel.DeviceCapacityUsed
                         / viewModel.DeviceCapacity * 10000) /100;
-                }else if(device.type == "android"){
-
+                }else if(device.type == "android") {
                     viewModel.imei = device.properties.IMEI;
                     viewModel.model = device.properties.DEVICE_MODEL;
                     viewModel.vendor = device.properties.VENDOR;
@@ -37,6 +36,14 @@ function onRequest(context) {
                         latitude: device.properties.LATITUDE,
                         longitude: device.properties.LONGITUDE
                     };
+                    var info = {};
+                    var infoList = parse(deviceInfo);
+                    if (infoList != null && infoList != undefined) {
+                        for (var j = 0; j < infoList.length; j++) {
+                            info[infoList[j].name] = infoList[j].value;
+                        }
+                    }
+                    deviceInfo = info;
                     viewModel.BatteryLevel = deviceInfo.BATTERY_LEVEL;
                     viewModel.internal_memory.FreeCapacity = Math.round((deviceInfo.INTERNAL_TOTAL_MEMORY -
                     deviceInfo.INTERNAL_AVAILABLE_MEMORY) * 100) / 100;
@@ -56,7 +63,6 @@ function onRequest(context) {
                 device.viewModel = viewModel;
             }
         }
-        log.info(stringify(device));
         context.device = device;
     } else {
         response.sendError(404);
