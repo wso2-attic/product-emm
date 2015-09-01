@@ -35,7 +35,8 @@ public class OperationCode {
 	public static enum Command {
 		DEVICE_RING("./Vendor/MSFT/RemoteRing/Ring"),
 		DEVICE_LOCK("./Vendor/MSFT/RemoteLock/Lock"),
-		WIPE_DATA("./Vendor/MSFT/RemoteWipe/doWipe");
+		WIPE_DATA("./Vendor/MSFT/RemoteWipe/doWipe"),
+		DISENROLL("./Vendor/MSFT/DMClient/Unenroll");
 
 		private final String code;
 

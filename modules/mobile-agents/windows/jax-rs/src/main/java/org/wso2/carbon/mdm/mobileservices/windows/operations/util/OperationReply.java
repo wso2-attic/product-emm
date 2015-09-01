@@ -206,12 +206,7 @@ public class OperationReply {
     private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException {
         Get getElement = new Get();
         List<Item> itemsGet = new ArrayList<Item>();
-        int y = 5;
         List<Exec> execList = new ArrayList<>();
-
-
-//        Exec execElement = new Exec();
-//        List<Item> itemsExec = new ArrayList<Item>();
 
         Atomic atomicElement = new Atomic();
         List<Add> addsAtomic = new ArrayList<Add>();
@@ -236,7 +231,7 @@ public class OperationReply {
                         break;
                     case COMMAND:
                         Exec execElement = new Exec();
-                        execElement.setCommandId(y++);
+                        execElement.setCommandId(operation.getId());
                         List<Item> itemsExec = new ArrayList<Item>();
                         Item itemExec = appendExecInfo(operation);
                         itemsExec.add(itemExec);
@@ -254,11 +249,6 @@ public class OperationReply {
             getElement.setItems(itemsGet);
         }
 
-//        if (!itemsExec.isEmpty()) {
-//            execElement.setCommandId(5);
-//            execElement.setItems(itemsExec);
-//        }
-
         if (!addsAtomic.isEmpty()) {
             atomicElement.setCommandId(300);
             atomicElement.setAdds(addsAtomic);
@@ -275,6 +265,13 @@ public class OperationReply {
             if (operationCode != null && operationCode.equals(command.name())) {
                 Target target = new Target();
                 target.setLocURI(command.getCode());
+                if(operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.DISENROLL)) {
+                    Meta meta = new Meta();
+                    meta.setFormat("chr");
+                    item.setMeta(meta);
+                    item.setData(Constants.PROVIDER_ID);
+                }
                 item.setTarget(target);
             }
         }

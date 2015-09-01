@@ -230,7 +230,10 @@ public class SyncmlServiceImpl implements SyncmlService {
 				if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA) ) {
 					try {
 						pendingOperations = getPendingOperation(syncmlDocument);
-						return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations)).build();
+						String gen = generateReply(syncmlDocument, (List<Operation>)pendingOperations);
+						//return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
+							//	pendingOperations)).build();
+						return Response.ok().entity(gen).build();
 					} catch (OperationManagementException e) {
 						String msg = "Cannot access operation management service.";
 						log.error(msg);
@@ -255,9 +258,10 @@ public class SyncmlServiceImpl implements SyncmlService {
 			{
 				try {
 					pendingOperations = getPendingOperation(syncmlDocument);
-					//pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations
-							//(deviceIdentifier);
-					return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations)).build();
+					String replygen = generateReply(syncmlDocument, (List<Operation>)pendingOperations);
+					//return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations))
+							//.build();
+					return Response.ok().entity(replygen).build();
 
 				} catch (OperationManagementException e) {
 					String msg = "Cannot access operation management service.";
@@ -448,7 +452,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 								updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
 							}
 						}
-						if (status.getData().equals(Constants.SyncMLResponseCodes.ERROR)) {
+						if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
 							inProgressOperations = SyncmlUtils.getDeviceManagementService()
 									.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
 							for (int z = 0; z < inProgressOperations.size(); z++) {
