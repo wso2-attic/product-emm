@@ -49,7 +49,8 @@ public class OperationsImpl implements Operations {
 
     @POST
     @Path("/devicelock")
-    public Response lock(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs) throws WindowsDeviceEnrolmentException {
+    public Response lock (@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
+            throws WindowsDeviceEnrolmentException {
         if (log.isDebugEnabled()) {
             log.debug("Invoking windows device lock operation");
         }
@@ -82,7 +83,8 @@ public class OperationsImpl implements Operations {
 
     @POST
     @Path("/devicedisenroll")
-    public Response disenroll(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs) throws WindowsDeviceEnrolmentException {
+    public Response disenroll (@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
+            throws WindowsDeviceEnrolmentException {
 
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
@@ -91,22 +93,89 @@ public class OperationsImpl implements Operations {
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(true);
         try {
-            return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message,
-                    responseMediaType);
-        } catch (DeviceManagementException e) {
+
+            return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
+
+        } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message.setResponseMessage(errorMessage);
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new WindowsOperationsException(message, responseMediaType);
-        } catch (OperationManagementException e) {
+        } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
             message.setResponseMessage(errorMessage);
             message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             log.error(errorMessage, e);
             throw new WindowsOperationsException(message, responseMediaType);
         }
+    }
 
+    @POST
+    @Path("/devicewipe")
+    public Response wipe (@HeaderParam("Accept") String acceptHeader, List<String> deviceids)
+            throws WindowsDeviceEnrolmentException {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking windows wipe-data device operation");
+        }
+
+
+        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(Constants.OperationCodes.WIPE_DATA);
+            operation.setType(Operation.Type.COMMAND);
+            try{
+        return WindowsAPIUtils.getOperationResponse(deviceids, operation, message,
+                    responseMediaType);
+
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        }
+    }
+
+    @POST
+    @Path("/devicering")
+    public Response ring (@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
+            throws WindowsDeviceEnrolmentException {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Windows ring-device device operation");
+        }
+
+        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(Constants.OperationCodes.DEVICE_RING);
+            operation.setType(Operation.Type.COMMAND);
+
+            return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        }
     }
 
 

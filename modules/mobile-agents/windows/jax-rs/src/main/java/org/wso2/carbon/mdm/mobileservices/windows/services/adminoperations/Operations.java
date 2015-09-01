@@ -36,10 +36,19 @@ public interface Operations {
 
     @POST
     @Path("/devicelock")
-    Response lock(@HeaderParam("Accept")String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
+    Response lock (@HeaderParam("Accept")String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
 
     @POST
     @Path("/devicedisenroll")
-    Response disenroll(@HeaderParam("Accept")String headerParam, List<String> deviceids)throws WindowsDeviceEnrolmentException;
+    Response disenroll (@HeaderParam("Accept")String headerParam, List<String> deviceids)throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Path("/devicewipe")
+    Response wipe (@HeaderParam("Accept")String headerParam, List<String> deviceids)throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Path("/devicering")
+    Response ring (@HeaderParam("Accept")String headerParam, List<String> deviceids)throws WindowsDeviceEnrolmentException;
+
 
 }

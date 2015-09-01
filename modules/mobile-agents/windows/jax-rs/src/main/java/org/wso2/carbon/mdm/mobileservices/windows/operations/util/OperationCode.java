@@ -16,6 +16,7 @@ public class OperationCode {
 		VENDER("./DevDetail/OEM"),
 		MAC_ADDRESS("./DevDetail/Ext/WLANMACAddress"),
 		RESOLUTION("./DevDetail/Ext/Microsoft/Resolution"),
+		DEVICE_NAME("./DevDetail/Ext/Microsoft/DeviceName"),
 		CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI");
 
 
@@ -32,8 +33,9 @@ public class OperationCode {
 	}
 
 	public static enum Command {
-		RING("./Vendor/MSFT/RemoteRing/Ring"),
-		RING2("./Vendor/MSFT/RemoteRing/Ring");
+		DEVICE_RING("./Vendor/MSFT/RemoteRing/Ring"),
+		DEVICE_LOCK("./Vendor/MSFT/RemoteLock/Lock"),
+		WIPE_DATA("./Vendor/MSFT/RemoteWipe/doWipe");
 
 		private final String code;
 
