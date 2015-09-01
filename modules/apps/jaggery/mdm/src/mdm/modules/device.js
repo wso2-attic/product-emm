@@ -269,7 +269,8 @@ deviceModule = function () {
 
             var response = {};
             if (xhr.status == 200 && xhr.readyState == 4) {
-                var device = parse(xhr.responseText);
+                var responsePayload = parse(xhr.responseText);
+                var device = responsePayload["responseContent"];
                 if(device){
                     var propertiesList = device.properties;
                     var properties = {};
