@@ -215,6 +215,7 @@ public class OperationReply {
             for (int x = 0; x < operations.size(); x++) {
                 Operation operation = operations.get(x);
                 Operation.Type type = operation.getType();
+                String operationcode = operation.getCode();
                 switch (type) {
                     case CONFIG:
                         List<Add> addConfig = appendAddConfiguration(operation);
