@@ -779,6 +779,12 @@
                 <version>${carbon.identity.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <scope>test</scope>
+                <version>${junit.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -802,6 +808,7 @@
 
         <!--Testing -->
         <test.framework.version>4.4.1</test.framework.version>
+        <junit.version>4.8.2</junit.version>
         <testng.version>6.8</testng.version>
         <automation.utils.version>4.4.1</automation.utils.version>
         <test.automation.emm.ui.version>1.1.0</test.automation.emm.ui.version>
