@@ -80,7 +80,8 @@ public class Constants {
 		public static final String AUTHENTICATION_ACCEPTED = "212";
 		public static final String ACCEPTED = "200";
 		public static final String PIN_NOTFOUND = "405";
-		public static final String Internal_ERROR = "500";
+		public static final String COMMAND_FAIL = "500";
+		public static final String ACCEPTED_FOR_PROCESSING = "202";
 	}
 
 }

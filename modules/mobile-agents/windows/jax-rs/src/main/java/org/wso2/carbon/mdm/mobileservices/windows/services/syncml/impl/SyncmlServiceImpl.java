@@ -59,13 +59,14 @@ public class SyncmlServiceImpl implements SyncmlService {
 	private static final int VENDER_POSITION = 7;
 	private static final int MACADDRESS_POSITION = 8;
 	private static final int RESOLUTION_POSITION = 9;
-	private static final int DEVICE_NAME_POSITION=10;
+	private static final int DEVICE_NAME_POSITION = 10;
 	private static final String OS_VERSION = "OS_VERSION";
 	private static final String IMSI = "IMSI";
 	private static final String IMEI = "IMEI";
 	private static final String VENDOR = "VENDER";
 	private static final String MODEL = "DEVICE_MODEL";
 
+	List<? extends Operation> inProgressOperations;
 	private static Log log = LogFactory.getLog(SyncmlServiceImpl.class);
 
 	/**
@@ -156,7 +157,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 			CacheEntry ob = (CacheEntry) DeviceUtil.getCacheEntry(token);
 			if (ob.getUsername().equals(user)) {
 
-				enrolDevice(request);
+				enrollDevice(request);
 				deviceInfoList = new ArrayList<>();
 				Operation osVersion = new Operation();
 				osVersion.setCode("SOFTWARE_VERSION");
@@ -213,7 +214,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 				deviceName.setType(Operation.Type.INFO);
 				deviceInfoList.add(deviceName);
 
-                response = generateReply(syncmlDocument, deviceInfoList);
+				response = generateReply(syncmlDocument, deviceInfoList);
 				return Response.ok().entity(response).build();
 
 			} else {
@@ -222,17 +223,17 @@ public class SyncmlServiceImpl implements SyncmlService {
 				return Response.status(401).entity(msg).build();
 			}
 		} else if (SYNCML_SECOND_MESSAGE == msgID && SESSIONID_FIRST == sessionId) {
-			enrolDevice(request);
+			enrollDevice(request);
 			return Response.ok().entity(generateReply(syncmlDocument, null)).build();
 
 		} else if (sessionId >= SESSIONID_SECOND) {
-			if((syncmlDocument.getBody().getAlert()!=null)) {
-				if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA) ) {
+			if ((syncmlDocument.getBody().getAlert() != null)) {
+				if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
 					try {
 						pendingOperations = getPendingOperation(syncmlDocument);
-						String gen = generateReply(syncmlDocument, (List<Operation>)pendingOperations);
+						String gen = generateReply(syncmlDocument, (List<Operation>) pendingOperations);
 						//return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
-							//	pendingOperations)).build();
+						//	pendingOperations)).build();
 						return Response.ok().entity(gen).build();
 					} catch (OperationManagementException e) {
 						String msg = "Cannot access operation management service.";
@@ -241,8 +242,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 					} catch (DeviceManagementException e) {
 						e.printStackTrace();
 					}
-				}
-				else {
+				} else {
 					try {
 						if (WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier) != null)
 							WindowsAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
@@ -253,14 +253,12 @@ public class SyncmlServiceImpl implements SyncmlService {
 						throw new WindowsOperationException(msg, e);
 					}
 				}
-			}
-			else
-			{
+			} else {
 				try {
 					pendingOperations = getPendingOperation(syncmlDocument);
-					String replygen = generateReply(syncmlDocument, (List<Operation>)pendingOperations);
+					String replygen = generateReply(syncmlDocument, (List<Operation>) pendingOperations);
 					//return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations))
-							//.build();
+					//.build();
 					return Response.ok().entity(replygen).build();
 
 				} catch (OperationManagementException e) {
@@ -274,7 +272,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 		}
 		return null;
 	}
-	private boolean enrolDevice(Document request) throws WindowsOperationException, WindowsDeviceEnrolmentException {
+
+	private boolean enrollDevice(Document request) throws WindowsOperationException, WindowsDeviceEnrolmentException {
 
 		SyncmlDocument syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
 		int msgID;
@@ -315,8 +314,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 				status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(generateDevice);
 				return status;
 			} catch (DeviceManagementException e) {
-                String msg = "Failure occurred in enrolling device.";
-				log.debug(msg,e);
+				String msg = "Failure occurred in enrolling device.";
+				log.debug(msg, e);
 
 				return false;
 			}
@@ -397,19 +396,18 @@ public class SyncmlServiceImpl implements SyncmlService {
 		return lsSerializer.writeToString(doc);
 	}
 
-	public String generateReply(SyncmlDocument syncmlDocument, List<Operation>lsDeviceInfo)
+	public String generateReply(SyncmlDocument syncmlDocument, List<Operation> lsDeviceInfo)
 			throws WindowsOperationException {
 		OperationReply operationReply;
 		SyncmlGenerator generator;
 		SyncmlDocument syncmlResponse;
-		if(lsDeviceInfo == null) {
+		if (lsDeviceInfo == null) {
 			operationReply = new OperationReply(syncmlDocument);
+		} else {
+			operationReply = new OperationReply(syncmlDocument, lsDeviceInfo);
 		}
-		else {
-			operationReply = new OperationReply(syncmlDocument,lsDeviceInfo);
-		}
-		    syncmlResponse = operationReply.generateReply();
-			generator = new SyncmlGenerator();
+		syncmlResponse = operationReply.generateReply();
+		generator = new SyncmlGenerator();
 		return generator.generatePayload(syncmlResponse);
 	}
 
@@ -430,58 +428,37 @@ public class SyncmlServiceImpl implements SyncmlService {
 
 		for (int x = 0; x < lsStatus.size(); x++) {
 			Status status = lsStatus.get(x);
-			if (status.getCommand().equals(Constants.EXECUTE)) {
-				if (status.getTargetReference()==null) {
-					if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+			if (status.getCommand().equals(Constants.EXECUTE) && (status.getTargetReference() == null)) {
+					if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED) || status.getData().equals
+							(Constants.SyncMLResponseCodes.ACCEPTED_FOR_PROCESSING)) {
 						inProgressOperations = SyncmlUtils.getDeviceManagementService()
 								.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
 						for (int y = 0; y < inProgressOperations.size(); y++) {
-							inProgressOperations.get(y).setStatus(Operation.Status.COMPLETED);
+							Operation operation = inProgressOperations.get(y);
+							if (operation.getId() == status.getCommandId()) {
+								operation.setStatus(Operation.Status.COMPLETED);
+								operation.setOperationResponse("true");
+							}
+							updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
 						}
-						updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+
 					}
+			}
+		}
+
+		for (int x = 0; x < lsStatus.size(); x++) {
+			Status status = lsStatus.get(x);
+			if (status.getCommand().equals(Constants.EXECUTE) && (status.getTargetReference() != null)) {
+
+				if (status.getTargetReference().equals(OperationCode.Command.DEVICE_LOCK)) {
+					deviceLock(status, syncmlDocument, deviceIdentifier);
 				}
-				if (status.getTargetReference()!=null) {
-					if (status.getTargetReference().equals(OperationCode.Command.DEVICE_LOCK)) {
-						if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-							inProgressOperations = SyncmlUtils.getDeviceManagementService()
-									.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
-							for (int z = 0; z < inProgressOperations.size(); z++) {
-								if (inProgressOperations.get(x).getCode().equals(OperationCode.Command.DEVICE_LOCK))
-								inProgressOperations.get(x).setStatus(Operation.Status.COMPLETED);
-								updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
-							}
-						}
-						if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
-							inProgressOperations = SyncmlUtils.getDeviceManagementService()
-									.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
-							for (int z = 0; z < inProgressOperations.size(); z++) {
-								if (inProgressOperations.get(x).getCode().equals(OperationCode.Command.DEVICE_LOCK))
-									inProgressOperations.get(x).setStatus(Operation.Status.ERROR);
-								updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
-							}
-						}
-
-					}
-
-					if (status.getTargetReference().equals(OperationCode.Command.DEVICE_RING)) {
-						if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-							inProgressOperations = SyncmlUtils.getDeviceManagementService()
-									.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
-							for (int z = 0; z < inProgressOperations.size(); z++) {
-								if (inProgressOperations.get(x).getCode().equals(OperationCode.Command.DEVICE_RING))
-									inProgressOperations.get(x).setStatus(Operation.Status.COMPLETED);
-								updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
-							}
-						}
-
-					}
-					if (status.getTargetReference().equals(OperationCode.Command.WIPE_DATA)) {
-
-					}
+				if (status.getTargetReference().equals(OperationCode.Command.DEVICE_RING)) {
+					deviceRing(status, syncmlDocument, deviceIdentifier);
 				}
-
-
+				if (status.getTargetReference().equals(OperationCode.Command.WIPE_DATA)) {
+					dataWipe(status, syncmlDocument, deviceIdentifier);
+				}
 			}
 		}
 		try {
@@ -509,7 +486,78 @@ public class SyncmlServiceImpl implements SyncmlService {
 		}
 	}
 
+	public void deviceLock(Status status, SyncmlDocument syncmlDocument,DeviceIdentifier deviceIdentifier)
+			throws OperationManagementException, DeviceManagementException {
 
+		if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+			inProgressOperations = SyncmlUtils.getDeviceManagementService()
+					.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+			for (int z = 0; z < inProgressOperations.size(); z++) {
+				Operation operation = inProgressOperations.get(z);
+				if (inProgressOperations.get(z).getCode().equals(OperationCode.Command.DEVICE_LOCK)
+						&& operation.getId() == status.getCommandId())
+					operation.setStatus(Operation.Status.COMPLETED);
+				try {
+					updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+				} catch (OperationManagementException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
+			inProgressOperations = SyncmlUtils.getDeviceManagementService()
+					.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+			for (int z = 0; z < inProgressOperations.size(); z++) {
+				Operation operation = inProgressOperations.get(z);
+				if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK) &&
+						operation.getId() == status.getCommandId())
+					operation.setStatus(Operation.Status.ERROR);
 
+				try {
+					updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+				} catch (OperationManagementException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
+	public void deviceRing(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+			throws OperationManagementException, DeviceManagementException {
+
+		if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+			inProgressOperations = SyncmlUtils.getDeviceManagementService()
+					.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+			for (int z = 0; z < inProgressOperations.size(); z++) {
+				Operation operation = inProgressOperations.get(z);
+				if (operation.getCode().equals(OperationCode.Command.DEVICE_RING) &&
+						operation.getId() == status.getCommandId() )
+					operation.setStatus(Operation.Status.COMPLETED);
+				try {
+					updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+				} catch (OperationManagementException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void dataWipe(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+			throws OperationManagementException, DeviceManagementException {
+		if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+			inProgressOperations = SyncmlUtils.getDeviceManagementService()
+					.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+			for (int z = 0; z < inProgressOperations.size(); z++) {
+				Operation operation = inProgressOperations.get(z);
+				if (operation.getCode().equals(OperationCode.Command.WIPE_DATA) &&
+						operation.getId() == status.getCommandId() )
+					operation.setStatus(Operation.Status.COMPLETED);
+				try {
+					updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+				} catch (OperationManagementException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

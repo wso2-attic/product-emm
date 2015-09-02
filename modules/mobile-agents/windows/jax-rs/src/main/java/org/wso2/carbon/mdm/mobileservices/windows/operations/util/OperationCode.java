@@ -17,7 +17,8 @@ public class OperationCode {
 		MAC_ADDRESS("./DevDetail/Ext/WLANMACAddress"),
 		RESOLUTION("./DevDetail/Ext/Microsoft/Resolution"),
 		DEVICE_NAME("./DevDetail/Ext/Microsoft/DeviceName"),
-		CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI");
+		CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI"),
+		LOCK_PIN("./Vendor/MSFT/RemoteLock/NewPINValue");
 
 
 		private final String code;
@@ -36,7 +37,8 @@ public class OperationCode {
 		DEVICE_RING("./Vendor/MSFT/RemoteRing/Ring"),
 		DEVICE_LOCK("./Vendor/MSFT/RemoteLock/Lock"),
 		WIPE_DATA("./Vendor/MSFT/RemoteWipe/doWipe"),
-		DISENROLL("./Vendor/MSFT/DMClient/Unenroll");
+		DISENROLL("./Vendor/MSFT/DMClient/Unenroll"),
+		LOCK_AND_RESET_PIN("./Vendor/MSFT/RemoteLock/LockAndResetPIN");
 
 		private final String code;
 
