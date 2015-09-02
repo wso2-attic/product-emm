@@ -50,4 +50,18 @@
     <session-config>
         <session-timeout>60</session-timeout>
     </session-config>
+
+    <context-param>
+        <param-name>doAuthentication</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>managed-api-enabled</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>managed-api-owner</param-name>
+        <param-value>admin</param-value>
+    </context-param>
+
 </web-app>
