@@ -104,7 +104,7 @@
                             </div>
                             <!-- /device summary -->
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                {{#if viewModel.location}}
+                                {{#if device.viewModel.location}}
                                     <!-- device location -->
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingOne">
@@ -119,7 +119,7 @@
                                             </h2>
                                         </div>
                                         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                            <div id="device-location" data-lat="{{viewModel.location.latitude}}" data-lat="{{viewModel.location.longitude}}" style="height:200px" class="panel-body">
+                                            <div id="device-location" data-lat="{{device.viewModel.location.latitude}}" data-long="{{device.viewModel.location.longitude}}" style="height:200px" class="panel-body">
 
                                             </div>
                                         </div>

@@ -86,8 +86,12 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		String username =
 				Preference.getString(context,
 				                     context.getResources().getString(R.string.username));
-		deviceInfoBuilder.build(type, username);
-		
+		try {
+			deviceInfoBuilder.build(type, username);
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Error occurred while building the device info payload." + e);
+		}
+
 		// Check network connection availability before calling the API.
 		if (CommonUtils.isNetworkAvailable(context)) {
 			// Call device registration API.
