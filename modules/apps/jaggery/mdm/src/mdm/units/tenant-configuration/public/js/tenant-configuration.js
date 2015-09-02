@@ -50,6 +50,7 @@ var platformTypeConstants = {
 
 var responseCodes = {
     "CREATED": "Created",
+    "SUCCESS": "201",
     "INTERNAL_SERVER_ERROR": "Internal Server Error"
 };
 
@@ -68,21 +69,28 @@ var configParams = {
     "MDM_CERT_TOPIC_ID": "MDMCertTopicID",
     "APNS_CERT_PASSWORD": "APNSCertPassword",
     "MDM_CERT": "MDMCert",
-    "APNS_CERT": "APNSCert"
+    "APNS_CERT": "APNSCert",
+    "GENERAL_EMAIL_HOST": "emailHost",
+    "GENERAL_EMAIL_PORT": "emailPort",
+    "GENERAL_EMAIL_USERNAME": "emailUsername",
+    "GENERAL_EMAIL_PASSWORD": "emailPassword",
+    "GENERAL_EMAIL_SENDER_ADDRESS": "emailSender",
+    "GENERAL_EMAIL_TEMPLATE": "emailTemplate"
 };
 
 $(document).ready(function () {
     $("#gcm-inputs").hide();
-    var getConfigAPI = "/mdm-android-agent/configuration";
+    var getAndroidConfigAPI = "/mdm-android-agent/configuration";
+    var getGeneralConfigAPI = "/mdm-admin/configuration";
 
     /**
-     * Following request would execute
+     * Following requests would execute
      * on page load event of tenant configuration page in WSO2 EMM Console.
      * Upon receiving the response, the parameters will be set to the fields,
      * in case those configurations are already set.
      */
     invokerUtil.get(
-        getConfigAPI,
+        getAndroidConfigAPI,
 
         function (data) {
 
@@ -102,6 +110,35 @@ $(document).ready(function () {
                         $("input#android-config-gcm-api-key").val(config.value);
                     } else if(config.name == configParams["GCM_SENDER_ID"]){
                         $("input#android-config-gcm-sender-id").val(config.value);
+                    }
+                }
+            }
+
+        }, function () {
+
+        }
+    );
+
+    invokerUtil.get(
+        getGeneralConfigAPI,
+
+        function (data) {
+
+            if (data != null && data.configuration != null) {
+                for (var i = 0; i < data.configuration.length; i++) {
+                    var config = data.configuration[i];
+                    if(config.name == configParams["GENERAL_EMAIL_HOST"]){
+                        $("input#email-config-host").val(config.value);
+                    } else if(config.name == configParams["GENERAL_EMAIL_PORT"]){
+                        $("input#email-config-port").val(config.value);
+                    } else if(config.name == configParams["GENERAL_EMAIL_USERNAME"]){
+                        $("input#email-config-username").val(config.value);
+                    } else if(config.name == configParams["GENERAL_EMAIL_PASSWORD"]){
+                        $("input#email-config-password").val(config.value);
+                    } else if(config.name == configParams["GENERAL_EMAIL_SENDER_ADDRESS"]){
+                        $("input#email-config-sender-email").val(config.value);
+                    } else if(config.name == configParams["GENERAL_EMAIL_TEMPLATE"]){
+                        $("input#email-config-template").val(config.value);
                     }
                 }
             }
@@ -170,6 +207,7 @@ $(document).ready(function () {
                 "value": gcmAPIKey,
                 "contentType": "text"
             };
+
             var gcmId = {
                 "name": configParams["GCM_SENDER_ID"],
                 "value": gcmSenderId,
@@ -193,6 +231,113 @@ $(document).ready(function () {
                 addConfigFormData,
                 function (data) {
                     if (data.responseCode == responseCodes["CREATED"]) {
+                        $("#config-save-form").addClass("hidden");
+                        $("#record-created-msg").removeClass("hidden");
+                    } else if (data == 500) {
+                        $(errorMsg).text("Exception occurred at backend.");
+                    } else if (data == 403) {
+                        $(errorMsg).text("Action was not permitted.");
+                    }
+
+                    $(errorMsgWrapper).removeClass("hidden");
+                }, function () {
+                    $(errorMsg).text("An unexpected error occurred.");
+                    $(errorMsgWrapper).removeClass("hidden");
+                }
+            );
+        }
+    });
+
+    /**
+     * Following click function would execute
+     * when a user clicks on "Save" button
+     * on General tenant configuration page in WSO2 EMM Console.
+     */
+    $("button#save-general-btn").click(function() {
+        var emailHost = $("input#email-config-host").val();
+        var emailPort = $("input#email-config-port").val();
+        var emailUsername = $("input#email-config-username").val();
+        var emailPassword = $("input#email-config-password").val();
+        var emailSenderAddress = $("input#email-config-sender-email").val();
+        var emailTemplate = $("input#email-config-template").val();
+
+        var errorMsgWrapper = "#email-config-error-msg";
+        var errorMsg = "#email-config-error-msg span";
+        if (!emailHost) {
+            $(errorMsg).text("Email Host is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!emailPort) {
+            $(errorMsg).text("Email Port is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!emailUsername) {
+            $(errorMsg).text("Username is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!emailPassword) {
+            $(errorMsg).text("Password is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!emailSenderAddress) {
+            $(errorMsg).text("Sender Email Address is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!emailIsValid(emailSenderAddress)) {
+            $(errorMsg).text("Provided sender email is invalid. Please check.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else {
+
+            var addConfigFormData = {};
+            var configList = new Array();
+
+            var host = {
+                "name": configParams["GENERAL_EMAIL_HOST"],
+                "value": emailHost,
+                "contentType": "text"
+            };
+
+            var port = {
+                "name": configParams["GENERAL_EMAIL_PORT"],
+                "value": emailPort,
+                "contentType": "text"
+            };
+
+            var username = {
+                "name": configParams["GENERAL_EMAIL_USERNAME"],
+                "value": emailUsername,
+                "contentType": "text"
+            };
+
+            var password = {
+                "name": configParams["GENERAL_EMAIL_PASSWORD"],
+                "value": emailPassword,
+                "contentType": "text"
+            };
+
+            var sender = {
+                "name": configParams["GENERAL_EMAIL_SENDER_ADDRESS"],
+                "value": emailSenderAddress,
+                "contentType": "text"
+            };
+
+            var template = {
+                "name": configParams["GENERAL_EMAIL_TEMPLATE"],
+                "value": emailTemplate,
+                "contentType": "text"
+            };
+
+            configList.push(host);
+            configList.push(port);
+            configList.push(username);
+            configList.push(password);
+            configList.push(sender);
+            configList.push(template);
+
+            addConfigFormData.configuration = configList;
+
+            var addConfigAPI = "/mdm-admin/configuration";
+
+            invokerUtil.post(
+                addConfigAPI,
+                addConfigFormData,
+                function (data) {
+                    if (data.responseCode == responseCodes["SUCCESS"]) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
                     } else if (data == 500) {

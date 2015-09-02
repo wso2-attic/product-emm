@@ -60,7 +60,7 @@ public class Profile {
 			PolicyAdministratorPoint pap = policyManagementService.getPAP();
 			pap.updateProfile(profile);
 			Response.status(HttpStatus.SC_OK);
-			responseMsg.setResponseMessage("Profile has been updated successfully.");
+			responseMsg.setMessageFromServer("Profile has been updated successfully.");
 			return responseMsg;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";
@@ -78,7 +78,7 @@ public class Profile {
 			org.wso2.carbon.policy.mgt.common.Profile profile = pap.getProfile(profileId);
 			pap.deleteProfile(profile);
 			Response.status(HttpStatus.SC_OK);
-			responseMsg.setResponseMessage("Profile has been deleted successfully.");
+			responseMsg.setMessageFromServer("Profile has been deleted successfully.");
 			return responseMsg;
 		} catch (PolicyManagementException e) {
 			String error = "Policy Management related exception";

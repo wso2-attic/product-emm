@@ -112,7 +112,9 @@ $(document).ready(function () {
                     hidePopup();
                 });
             },
-            error : function () {
+            error : function (data) {
+                $("#save-policy-priorities-error-content").find(".message-from-server").html(
+                        "Message From Server  :  " + data["statusText"]);
                 $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
                 showPopup();
                 $("a#save-policy-priorities-error-link").click(function () {
@@ -136,32 +138,24 @@ $(document).ready(function () {
                 },
                 type : "DELETE",
                 url : deletePolicyAPI,
-                success : function (data) {
-                    var responseCode = data["responseCode"];
-                    if (responseCode == 200) {
-                        $("#" + policyId).remove();
-                        sortElements();
-                        var newPolicyListCount = $(".policy-list > span").length;
-                        if (newPolicyListCount == 1) {
-                            $(saveNewPrioritiesButton).addClass("hide");
-                            $("#policy-count-status-msg").text("Add more policies to set-up a priority order.");
-                        } else if (newPolicyListCount == 0) {
-                            $("#policy-count-status-msg").text("No Policies to show currently.");
-                        }
-                        $(modalPopupContent).html($('#remove-policy-200-content').html());
-                        $("a#remove-policy-200-link").click(function () {
-                            hidePopup();
-                        });
-                    } else if (responseCode == 409) {
-                        $(modalPopupContent).html($('#remove-policy-409-content').html());
-                        $("a#remove-policy-409-link").click(function () {
-                            hidePopup();
-                        });
+                success : function () {
+                    $("#" + policyId).remove();
+                    sortElements();
+                    var newPolicyListCount = $(".policy-list > span").length;
+                    if (newPolicyListCount == 1) {
+                        $(saveNewPrioritiesButton).addClass("hidden");
+                        $("#policy-listing-status-msg").text("Add more policies to set-up a priority order.");
+                    } else if (newPolicyListCount == 0) {
+                        $("#policy-listing-status-msg").text("No Policies to show currently.");
                     }
+                    $(modalPopupContent).html($('#remove-policy-success-content').html());
+                    $("a#remove-policy-success-link").click(function () {
+                        hidePopup();
+                    });
                 },
                 error : function () {
-                    $(modalPopupContent).html($('#remove-policy-unexpected-error-content').html());
-                    $("a#remove-policy-unexpected-error-link").click(function () {
+                    $(modalPopupContent).html($('#remove-policy-error-content').html());
+                    $("a#remove-policy-error-link").click(function () {
                         hidePopup();
                     });
                 }

@@ -22,6 +22,7 @@ deviceModule = function () {
 
     var utility = require('/modules/utility.js').utility;
     var constants = require('/modules/constants.js');
+    var mdmProps = require('/config/mdm-props.js').config();
 
     var ArrayList = Packages.java.util.ArrayList;
     var Properties = Packages.java.util.Properties;
@@ -40,6 +41,9 @@ deviceModule = function () {
         return (value == undefined || value == null) ? constants.UNSPECIFIED : value;
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.listDevices = function () {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -145,6 +149,9 @@ deviceModule = function () {
     };
 
     /*
+     @Deprecated
+     */
+    /*
      Get the supported features by the device type
      */
     publicMethods.getFeatures = function (deviceType) {
@@ -177,6 +184,9 @@ deviceModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.performOperation = function (devices, operation) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -242,39 +252,54 @@ deviceModule = function () {
     };
 
     publicMethods.viewDevice = function (type, deviceId) {
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        var utility = require('/modules/utility.js')["utility"];
         try{
-            var device = privateMethods.getDevice(type, deviceId);
-            if (device) {
-                var propertiesList = DeviceManagerUtil.convertDevicePropertiesToMap(device.getProperties());
-                var entries = propertiesList.entrySet();
-                var iterator = entries.iterator();
-                var properties = {};
-                var entry, key, value;
+            utility.startTenantFlow(carbonUser);
 
-                while (iterator.hasNext()) {
-                    entry = iterator.next();
-                    key = entry.getKey();
-                    value = entry.getValue();
-                    properties[key] = privateMethods.validateAndReturn(value);
+            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/"+type+"/"+deviceId;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var device = responsePayload["responseContent"];
+                if(device){
+                    var propertiesList = device.properties;
+                    var properties = {};
+                    for(var i = 0; i < propertiesList.length; i++){
+                        properties[propertiesList[i].name] = propertiesList[i].value;
+                    }
+
+                    var deviceObject = {};
+                    deviceObject[constants.DEVICE_IDENTIFIER] = device.deviceIdentifier;
+                    deviceObject[constants.DEVICE_NAME] = device.name;
+                    deviceObject[constants.DEVICE_OWNERSHIP] = device.enrolmentInfo.ownership;
+                    deviceObject[constants.DEVICE_OWNER] = device.enrolmentInfo.owner;
+                    deviceObject[constants.DEVICE_TYPE] = device.type;
+                    if (device.type == constants.PLATFORM_IOS) {
+                        properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
+                        delete properties[constants.DEVICE_PRODUCT];
+                        properties[constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
+                    }
+                    deviceObject[constants.DEVICE_PROPERTIES] = properties;
+                    return deviceObject;
                 }
-
-                var deviceObject = {};
-                deviceObject[constants.DEVICE_IDENTIFIER] = device.getDeviceIdentifier();
-                deviceObject[constants.DEVICE_NAME] = privateMethods.validateAndReturn(device.getName());
-                deviceObject[constants.DEVICE_OWNERSHIP] = privateMethods.validateAndReturn(device.getEnrolmentInfo().getOwnership());
-                deviceObject[constants.DEVICE_OWNER] = device.getEnrolmentInfo().getOwner();
-                deviceObject[constants.DEVICE_TYPE] = device.getType();
-                if (device.getType() == constants.PLATFORM_IOS) {
-                    properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
-                    delete properties[constants.DEVICE_PRODUCT];
-                    properties[constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
-                }
-                deviceObject[constants.DEVICE_PROPERTIES] = properties;
-
-                return deviceObject;
+            } else {
+                response["status"] = "error";
+                return response;
             }
         } catch (e) {
             throw e;
+        } finally {
+            utility.endTenantFlow();
         }
     };
 
