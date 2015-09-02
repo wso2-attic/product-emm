@@ -77,7 +77,7 @@ public class Operation {
                     operationContext.getDevices());
             if (operationId>0) {
                 Response.status(HttpStatus.SC_CREATED);
-                responseMsg.setResponseMessage("Operation has added successfully.");
+                responseMsg.setMessageFromServer("Operation has added successfully.");
             }
             return responseMsg;
         } catch (OperationManagementException e) {

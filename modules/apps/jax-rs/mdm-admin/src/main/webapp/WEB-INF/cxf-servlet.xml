@@ -60,6 +60,15 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
+    <jaxrs:server id="roleService" address="/roles">
+        <jaxrs:serviceBeans>
+            <ref bean="roleServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
     <jaxrs:server id="policyService" address="/policies">
         <jaxrs:serviceBeans>
             <ref bean="policyServiceBean"/>
@@ -72,6 +81,15 @@
     <jaxrs:server id="profileService" address="/profiles">
         <jaxrs:serviceBeans>
             <ref bean="profileServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <jaxrs:server id="configurationService" address="/configuration">
+        <jaxrs:serviceBeans>
+            <ref bean="configurationServiceBean"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"/>
@@ -92,7 +110,9 @@
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.api.Operation"/>
     <bean id="deviceServiceBean" class="org.wso2.carbon.mdm.api.MobileDevice"/>
     <bean id="userServiceBean" class="org.wso2.carbon.mdm.api.User"/>
+    <bean id="roleServiceBean" class="org.wso2.carbon.mdm.api.Role"/>
     <bean id="featureServiceBean" class="org.wso2.carbon.mdm.api.Feature"/>
+    <bean id="configurationServiceBean" class="org.wso2.carbon.mdm.api.Configuration"/>
     <!--
     <bean id="authenticationServiceBean" class="org.wso2.carbon.mdm.api.Authentication"/>
     -->

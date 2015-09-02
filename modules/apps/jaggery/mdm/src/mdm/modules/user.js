@@ -14,7 +14,6 @@
  * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
 /*
@@ -66,6 +65,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Add user to mdm-user-store.
      *
@@ -115,6 +117,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Remove an existing user from mdm-user-store.
      *
@@ -155,6 +160,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Private method to be used by addUser() to
      * generate an initial user password for a user.
@@ -182,6 +190,9 @@ var userModule = function () {
         return String(initialUserPassword);
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Build default user claims.
      *
@@ -203,6 +214,9 @@ var userModule = function () {
         return defaultUserClaims;
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Send an initial invitation email to a user with username/password attached
      * for the very-first enrollment with WSO2 MDM.
@@ -313,6 +327,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.inviteUser = function (username) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -342,6 +359,9 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.getUsers = function () {
         var users = [];
         var carbonUser = session.get(constants.USER_SESSION_KEY);
@@ -428,6 +448,9 @@ var userModule = function () {
         return permissions;
     };
 
+    /*
+     @Deprecated
+     */
     /**
      * Get User Roles from user store.
      * If "Internal/Everyone" role is required - true param needs to be passed.
@@ -463,7 +486,6 @@ var userModule = function () {
         } finally {
             utility.endTenantFlow();
         }
-
     };
 
     return publicMethods;
