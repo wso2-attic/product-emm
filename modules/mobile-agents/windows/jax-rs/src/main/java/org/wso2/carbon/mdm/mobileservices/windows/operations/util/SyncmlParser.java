@@ -283,7 +283,6 @@ public class SyncmlParser {
             } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD) {
                 String command = node.getChildNodes().item(x).getTextContent().trim();
                 status.setCommand(command);
-
             } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CHAL) {
                 NodeList chalNodes = node.getChildNodes().item(x).getChildNodes();
                 Meta meta = new Meta();
@@ -296,6 +295,14 @@ public class SyncmlParser {
                 meta.setNextNonce(nonce);
                 chal.setMeta(meta);
                 status.setChallenge(chal);
+            }
+            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_DATA) {
+                String data = node.getChildNodes().item(x).getTextContent().trim();
+                status.setData(data);
+            }
+            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_TARGET_REF) {
+                String targetReference =node.getChildNodes().item(x).getTextContent().trim();
+                status.setTargetReference(targetReference);
             }
         }
         return status;

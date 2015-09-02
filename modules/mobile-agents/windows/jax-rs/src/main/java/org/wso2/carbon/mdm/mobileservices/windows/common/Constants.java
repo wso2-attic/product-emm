@@ -152,6 +152,7 @@ public final class Constants {
 		public static final String SYNCML_CMD_REF = "CmdRef";
 		public static final String SYNCML_MESSAGE_REF = "MsgRef";
 		public static final String SYNCML_LOCATION_URI = "LocURI";
+		public static final String SYNCML_TARGET_REF = "TargetRef";
 	}
 
 
@@ -177,6 +178,8 @@ public final class Constants {
 		public static final String CAMERA = "CAMERA";
 		public static final String DEVICE_LOCK = "DEVICE_LOCK";
 		public static final String DISENROLL = "DISENROLL";
+		public static final String DEVICE_RING = "DEVICE_RING";
+		public static final String WIPE_DATA = "WIPE_DATA";
 
 	}
 
