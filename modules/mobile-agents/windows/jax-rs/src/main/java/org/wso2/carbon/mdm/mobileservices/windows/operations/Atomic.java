@@ -30,6 +30,11 @@ import java.util.List;
 public class Atomic {
     int commandId = -1;
     List<Add> adds;
+    List<Replace> replaces;
+
+    public List<Replace> getReplaces() { return replaces; }
+
+    public void setReplaces(List<Replace> replaces) { this.replaces = replaces; }
 
     public List<Add> getAdds() {
         return adds;
@@ -59,6 +64,11 @@ public class Atomic {
             for (int x = 0; x < getAdds().size(); x++) {
                 if (getAdds().get(x) != null) {
                     getAdds().get(x).buildAddElement(doc, atomic);
+                }
+            }
+            for (int x = 0; x < getReplaces().size(); x++) {
+                if (getReplaces().get(x) != null) {
+                    getReplaces().get(x).buildReplaceElement(doc, atomic);
                 }
             }
         }

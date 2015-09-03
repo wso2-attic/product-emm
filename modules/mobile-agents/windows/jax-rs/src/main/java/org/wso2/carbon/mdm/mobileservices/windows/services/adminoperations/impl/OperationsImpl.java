@@ -31,6 +31,8 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsOpera
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.Message;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Encrypt;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.wrapper.EncryptBeanWrapper;
 
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -49,7 +51,7 @@ public class OperationsImpl implements Operations {
 
     @POST
     @Path("/devicelock")
-    public Response lock (@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
+    public Response lock(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
         if (log.isDebugEnabled()) {
             log.debug("Invoking windows device lock operation");
@@ -83,15 +85,15 @@ public class OperationsImpl implements Operations {
 
     @POST
     @Path("/devicedisenroll")
-    public Response disenroll (@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
+    public Response disenroll(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
 
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
-            CommandOperation operation = new CommandOperation();
-            operation.setCode(Constants.OperationCodes.DISENROLL);
-            operation.setType(Operation.Type.COMMAND);
-            operation.setEnabled(true);
+        CommandOperation operation = new CommandOperation();
+        operation.setCode(Constants.OperationCodes.DISENROLL);
+        operation.setType(Operation.Type.COMMAND);
+        operation.setEnabled(true);
         try {
 
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
@@ -113,21 +115,20 @@ public class OperationsImpl implements Operations {
 
     @POST
     @Path("/devicewipe")
-    public Response wipe (@HeaderParam("Accept") String acceptHeader, List<String> deviceids)
+    public Response wipe(@HeaderParam("Accept") String acceptHeader, List<String> deviceids)
             throws WindowsDeviceEnrolmentException {
+
         if (log.isDebugEnabled()) {
             log.debug("Invoking windows wipe-data device operation");
         }
-
-
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
 
-            CommandOperation operation = new CommandOperation();
-            operation.setCode(Constants.OperationCodes.WIPE_DATA);
-            operation.setType(Operation.Type.COMMAND);
-            try{
-        return WindowsAPIUtils.getOperationResponse(deviceids, operation, message,
+        CommandOperation operation = new CommandOperation();
+        operation.setCode(Constants.OperationCodes.WIPE_DATA);
+        operation.setType(Operation.Type.COMMAND);
+        try {
+            return WindowsAPIUtils.getOperationResponse(deviceids, operation, message,
                     responseMediaType);
 
         } catch (OperationManagementException e) {
@@ -147,7 +148,7 @@ public class OperationsImpl implements Operations {
 
     @POST
     @Path("/devicering")
-    public Response ring (@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
+    public Response ring(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
 
         if (log.isDebugEnabled()) {
@@ -163,6 +164,47 @@ public class OperationsImpl implements Operations {
             operation.setType(Operation.Type.COMMAND);
 
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        }
+    }
+
+    @POST
+    @Path("/storage-encrypt")
+    public Response encryptStorage(@HeaderParam("Accept") String acceptHeader,
+                                   EncryptBeanWrapper encryptBeanWrapper) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking windows device encrypt storage operation");
+        }
+        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            Encrypt encrypt = encryptBeanWrapper.getOperation();
+
+            if (encrypt == null) {
+                throw new OperationManagementException("Encrypt bean is empty");
+            }
+
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(Constants.OperationCodes.ENCRYPT_STORAGE);
+            operation.setType(Operation.Type.COMMAND);
+            operation.setEnabled(encrypt.isEncrypted());
+
+            return WindowsAPIUtils.getOperationResponse(encryptBeanWrapper.getDeviceIDs(),
+                    operation, message, responseMediaType);
+
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message.setResponseMessage(errorMessage);

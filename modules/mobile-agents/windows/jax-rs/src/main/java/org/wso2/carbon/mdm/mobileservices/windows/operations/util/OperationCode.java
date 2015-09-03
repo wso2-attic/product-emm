@@ -53,7 +53,9 @@ public class OperationCode {
 	}
 
 	public static enum Configure {
-		WIFI("./Vendor/MSFT/WiFi/Profile/MyNetwork/WlanXml");
+		WIFI("./Vendor/MSFT/WiFi/Profile/MyNetwork/WlanXml"),
+		CAMERA("./Vendor/MSFT/PolicyManager/My/Camera/AllowCamera");
+
 
 		private final String code;
 

@@ -108,7 +108,7 @@ public class OperationReply {
     private void generateBody() throws WindowsOperationException {
         SyncmlBody syncmlBody = generateStatuses();
         try {
-            appendOperations(syncmlBody);
+           appendOperations(syncmlBody);
         } catch (WindowsOperationException e) {
             String message = "Error while generating operation of the syncml message.";
             log.error(message);
@@ -167,14 +167,15 @@ public class OperationReply {
         }
         if (sourceSyncmlBody.getReplace() != null) {
             int replaceCommandId = ++HEADER_COMMAND_ID;
-            Status replaceStatus = new Status(replaceCommandId,
-                    sourceHeader.getMsgID(),
-                    sourceSyncmlBody.getReplace().getCommandId(),
-                    REPLACE_COMMAND_TEXT, null,
-                    String.valueOf(
-                            Constants.SyncMLResponseCodes.ACCEPTED)
-            );
-            status.add(replaceStatus);
+                Status replaceStatus = new Status(replaceCommandId,
+                        sourceHeader.getMsgID(),
+                        sourceSyncmlBody.getReplace().getCommandId(),
+                        REPLACE_COMMAND_TEXT, null,
+                        String.valueOf(
+                                Constants.SyncMLResponseCodes.ACCEPTED)
+                );
+                status.add(replaceStatus);
+
         }
         if (sourceSyncmlBody.getExec() != null) {
             for(int z = 0; z<sourceSyncmlBody.getExec().size(); z++) {
@@ -207,9 +208,9 @@ public class OperationReply {
         Get getElement = new Get();
         List<Item> itemsGet = new ArrayList<Item>();
         List<Exec> execList = new ArrayList<>();
-
         Atomic atomicElement = new Atomic();
         List<Add> addsAtomic = new ArrayList<Add>();
+        Replace replaceElement = new Replace();
 
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
@@ -231,13 +232,36 @@ public class OperationReply {
                         itemsGet.add(itemGet);
                         break;
                     case COMMAND:
-                        Exec execElement = new Exec();
-                        execElement.setCommandId(operation.getId());
-                        List<Item> itemsExec = new ArrayList<Item>();
-                        Item itemExec = appendExecInfo(operation);
-                        itemsExec.add(itemExec);
-                        execElement.setItems(itemsExec);
-                        execList.add(execElement);
+                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                                .OperationCodes.DEVICE_LOCK)) {
+                            Exec execElement = executeCommand(operation);
+                            execList.add(execElement);
+                        }
+                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                                .OperationCodes.DEVICE_RING)) {
+                            Exec execElement = executeCommand(operation);
+                            execList.add(execElement);
+                        }
+                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                                .OperationCodes.DISENROLL)) {
+                            Exec execElement = executeCommand(operation);
+                            execList.add(execElement);
+                        }
+                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                                .OperationCodes.WIPE_DATA)) {
+
+                            Exec execElement = executeCommand(operation);
+                            execList.add(execElement);
+                        }
+                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                                .OperationCodes.ENCRYPT_STORAGE)) {
+
+                            replaceElement.setCommandId(operation.getId());
+                            List<Item> itemsReplace = new ArrayList<>();
+                            Item itemReplace = appendReplaceInfo(operation);
+                            itemsReplace.add(itemReplace);
+                            replaceElement.setItems(itemsReplace);
+                        }
                         break;
                     default:
                         throw new WindowsOperationException("Operation with no type found");
@@ -254,9 +278,9 @@ public class OperationReply {
             atomicElement.setCommandId(300);
             atomicElement.setAdds(addsAtomic);
         }
-
         syncmlBody.setGet(getElement);
         syncmlBody.setExec(execList);
+        syncmlBody.setReplace(replaceElement);
     }
 
     private Item appendExecInfo(Operation operation) {
@@ -287,6 +311,26 @@ public class OperationReply {
             if (operationCode != null && operationCode.equals(info.name())) {
                 Target target = new Target();
                 target.setLocURI(info.getCode());
+                item.setTarget(target);
+            }
+        }
+        return item;
+    }
+
+    private Item appendReplaceInfo(Operation operation) {
+        Item item = new Item();
+        String operationCode = operation.getCode();
+        for (Command command : Command.values()) {
+            if (operationCode != null && operationCode.equals(command.name())) {
+                Target target = new Target();
+                target.setLocURI(command.getCode());
+                if(operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.ENCRYPT_STORAGE)) {
+                    Meta meta = new Meta();
+                    meta.setFormat("chr");
+                    item.setMeta(meta);
+                    item.setData("1");
+                }
                 item.setTarget(target);
             }
         }
@@ -341,4 +385,28 @@ public class OperationReply {
         return null;
     }
 
-}
+    public Exec executeCommand(Operation operation) {
+        Exec execElement = new Exec();
+        execElement.setCommandId(operation.getId());
+        List<Item> itemsExec = new ArrayList<Item>();
+        Item itemExec = appendExecInfo(operation);
+        itemsExec.add(itemExec);
+        execElement.setItems(itemsExec);
+        return execElement;
+    }
+
+    public void cameraOperation(Operation operation) {
+        Atomic atomicElement = new Atomic();
+        atomicElement.setCommandId(1);
+        List<Replace> replaces = new ArrayList<>();
+        Replace replace = new Replace();
+        replace.setCommandId(operation.getId());
+        List<Item> items = new ArrayList<>();
+        Item targetItem = appendExecInfo(operation);
+        items.add(targetItem);
+
+    }
+
+    }
+
+

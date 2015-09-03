@@ -30,7 +30,11 @@ import java.util.List;
  */
 public class SyncmlBody {
 	Get getCommands;
-
+	List<Exec> exec;
+	List<Status> status;
+	Alert alert;
+	Replace replace;
+	Results results;
 
 
 	public Get getGetCommands() {
@@ -41,20 +45,9 @@ public class SyncmlBody {
 		this.getCommands = getCommands;
 	}
 
-	public List<Exec> getExec() {
-		return exec;
-	}
+	public List<Exec> getExec() { return exec; }
 
-	public void setExec(List<Exec> exec) {
-		this.exec = exec;
-	}
-
-	//Exec exec;
-	List<Exec> exec;
-	List<Status> status;
-	Alert alert;
-	Replace replace;
-	Results results;
+	public void setExec(List<Exec> exec) { this.exec = exec; }
 
 	public Results getResults() {
 		return results;
@@ -64,13 +57,9 @@ public class SyncmlBody {
 		this.results = results;
 	}
 
-	public Replace getReplace() {
-		return replace;
-	}
+	public Replace getReplace() { return replace; }
 
-	public void setReplace(Replace replace) {
-		this.replace = replace;
-	}
+	public void setReplace(Replace replace) { this.replace = replace; }
 
 	public List<Status> getStatus() {
 		return status;
@@ -96,14 +85,6 @@ public class SyncmlBody {
 		this.getCommands = get;
 	}
 
-//	public Exec getExec() {
-//		return exec;
-//	}
-//
-//	public void setExec(Exec exec) {
-//		this.exec = exec;
-//	}
-
 	public void buildBodyElement(Document doc, Element rootElement) {
 
 		Element syncBody = doc.createElement(Constants.SYNC_BODY);
@@ -128,10 +109,6 @@ public class SyncmlBody {
 		if (getGet() != null) {
 			getGet().buildGetElement(doc, syncBody);
 		}
-
-//		if (getExec() != null) {
-//			getExec().buildExecElement(doc, syncBody);
-//		}
 
 		if (getReplace() != null) {
 			getReplace().buildReplaceElement(doc, syncBody);
