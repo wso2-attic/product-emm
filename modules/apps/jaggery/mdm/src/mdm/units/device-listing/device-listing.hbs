@@ -1,8 +1,58 @@
 {{#zone "main"}}
     <span id="permission" data-permission="{{permissions}}"></span>
-    <div id="ast-container" class="ast-container">
+    <div class="container-fluid">
+
+    <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view" id="device-grid">
+        <thead>
+        <tr class="sort-row">
+            <th></th>
+            <th>Device Name</th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th>Platform</th>
+            <th>Ownership</th>
+            <th></th>
+        </tr>
+        <tr class="filter-row filter-box">
+            <th></th>
+            <th data-for="Device Name" class="text-filter"></th>
+            <th data-for="Owner" class="text-filter"></th>
+            <th data-for="Status" class="select-filter"></th>
+            <th data-for="Platform" class="select-filter data-platform"></th>
+            <th data-for="Ownership" class="select-filter"></th>
+            <th></th>
+        </tr>
+        <tr class="bulk-action-row">
+            <th colspan="7">
+                <div id = "operation-bar">
+                    {{unit "operation-bar"}}
+                </div>
+                <div id="operation-guide" class="bs-callout bs-callout-info">
+                    <h4>Enabling Device Operations</h4>
+                    <p>To enable device operations, select the desired platform from above filter.</p>
+                </div>
+            </th>
+        </tr>
+        </thead>
+
+    <tbody id="ast-container">
+
         <br class="c-both" />
+    </tbody>
+    </table>
+
     </div>
+    <br class="c-both"/>
+    <div id="content-filter-types" style="display: none">
+        <div class="sort-title">Sort By</div>
+        <div class="sort-options">
+            <a href="#">Name & Owner<span class="ico-sort-asc"></span></a>
+            <a href="#">Status</a>
+            <a href="#">Operating System</a>
+            <a href="#">Model</a>
+        </div>
+    </div>
+
 {{/zone}}
 {{#zone "bottomJs"}}
     <script id="device-listing" data-current-user="{{currentUser.username}}" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/device-listing.hbs" type="text/x-handlebars-template" ></script>
