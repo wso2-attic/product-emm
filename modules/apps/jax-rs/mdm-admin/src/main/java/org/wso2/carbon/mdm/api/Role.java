@@ -27,6 +27,8 @@ import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.user.api.UserStoreException;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class Role {
@@ -40,6 +42,7 @@ public class Role {
      * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
      */
     @GET
+    @Produces({ MediaType.APPLICATION_JSON })
     public Response getRoles() throws MDMAPIException {
         ResponsePayload responsePayload = new ResponsePayload();
         try {

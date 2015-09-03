@@ -230,6 +230,7 @@ public class User {
 	 * @throws MDMAPIException
 	 */
 	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getUsers() throws MDMAPIException {
 		ArrayList<UserWrapper> userList= new ArrayList<UserWrapper>();
 		ResponsePayload responsePayload = new ResponsePayload();
@@ -263,6 +264,7 @@ public class User {
 	 * @throws MDMAPIException
 	 */
 	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{by-name}")
 	public List<String> getAllUsers() throws MDMAPIException {
 		try {
@@ -276,6 +278,7 @@ public class User {
 	}
 
 	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{type}/{id}")
 	public List<String> getUserRoles() throws MDMAPIException {
 		try {
