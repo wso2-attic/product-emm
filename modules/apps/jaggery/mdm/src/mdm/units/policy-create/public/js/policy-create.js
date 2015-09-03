@@ -1614,7 +1614,7 @@ var savePolicy = function (policy) {
     console.log(JSON.stringify(payload));
 
     invokerUtil.post(
-        "/mdm-admin/policies",
+        "/mdm-admin/policies/inactive-policy",
         payload,
         function () {
             $(".policy-message").removeClass("hidden");

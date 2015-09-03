@@ -49,14 +49,15 @@ function hidePopup() {
  */
 $("a.invite-user-link").click(function () {
     var username = $(this).data("username");
-    var inviteUserAPI = "/mdm/api/users/" + username + "/invite";
+    var inviteUserAPI = "/mdm-admin/users/" + username + "/email-invitation";
 
     $(modalPopupContent).html($('#invite-user-modal-content').html());
     showPopup();
 
     $("a#invite-user-yes-link").click(function () {
-        invokerUtil.get(
+        invokerUtil.post(
             inviteUserAPI,
+            username,
             function () {
                 $(modalPopupContent).html($('#invite-user-success-content').html());
                 $("a#invite-user-success-link").click(function () {
