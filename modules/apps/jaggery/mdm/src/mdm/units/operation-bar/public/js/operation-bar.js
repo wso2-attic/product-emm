@@ -32,6 +32,7 @@ var operations = '.wr-operations',
     // maxOperationsLimit = 15,
     // hiddenOperation = '.wr-hidden-operations-content > div',
     deviceSelection = '.device-select',
+    dataTableSelection = '.DTTT_selected',
     currentOperationList = [];
 
 /*
@@ -93,6 +94,16 @@ function getSelectedDeviceIds() {
         var device = $(this);
         var deviceId = device.data('deviceid');
         var deviceType = device.data('type');
+        deviceIdentifierList.push({
+            "id" : deviceId,
+            "type" : deviceType
+        });
+    });
+
+    $(dataTableSelection).each(function (index) {
+        var device = $(this);
+        var deviceId = device.data('deviceid');
+        var deviceType = device.data('devicetype');
         deviceIdentifierList.push({
             "id" : deviceId,
             "type" : deviceType
