@@ -1,3 +1,6 @@
+/*
+ @Deprecated
+ */
 function UserInfo (username, firstName, lastName, email) {
     this.username = username;
     this.firstName = firstName;
@@ -15,22 +18,37 @@ function UserInfo (username, firstName, lastName, email) {
     }
 }
 
+/*
+ @Deprecated
+ */
 UserInfo.prototype.getUsername = function() {
     return this.username;
 };
 
+/*
+ @Deprecated
+ */
 UserInfo.prototype.getFirstName = function() {
     return this.firstName;
 };
 
+/*
+ @Deprecated
+ */
 UserInfo.prototype.getLastName = function() {
     return this.lastName;
 };
 
+/*
+ @Deprecated
+ */
 UserInfo.prototype.getEmail = function() {
     return this.email;
 };
 
+/*
+ @Deprecated
+ */
 UserInfo.prototype.getName = function() {
     return this.name;
 };

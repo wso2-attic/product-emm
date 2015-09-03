@@ -67,41 +67,34 @@ public class User {
 				}
 				// returning response with bad request state
 				responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-				responsePayload
-						.setMessageFromServer("User by username: " + userWrapper.getUsername() +
+				responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
 						                      " already exists. Therefore, request made to add user was refused.");
 				return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
 			} else {
 				String initialUserPassword = generateInitialUserPassword();
-				Map<String, String> defaultUserClaims =
-						buildDefaultUserClaims(userWrapper.getFirstname(),
-						                       userWrapper.getLastname(),
-						                       userWrapper.getEmailAddress());
+				Map<String, String> defaultUserClaims = buildDefaultUserClaims(userWrapper.getFirstname(),
+						                       userWrapper.getLastname(), userWrapper.getEmailAddress());
 				// calling addUser method of carbon user api
 				userStoreManager.addUser(userWrapper.getUsername(), initialUserPassword,
-				                         userWrapper.getRoles(),
-				                         defaultUserClaims, null);
-				inviteUserToEnroll(userWrapper.getUsername());
+                        userWrapper.getRoles(), defaultUserClaims, null);
+                // invite newly added user to enroll device
+				inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername());
 				// Outputting debug message upon successful addition of user
 				if (log.isDebugEnabled()) {
-					log.debug("User by username: " + userWrapper.getUsername() +
-					          " was successfully added.");
+					log.debug("User by username: " + userWrapper.getUsername() + " was successfully added.");
 				}
 				// returning response with success state
 				responsePayload.setStatusCode(HttpStatus.SC_CREATED);
-				responsePayload
-						.setMessageFromServer("User by username: " + userWrapper.getUsername() +
+				responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
 						                      " was successfully added.");
 				return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
 			}
 		} catch (UserStoreException e) {
-			String errorMsg =
-					"Exception in trying to add user by username: " + userWrapper.getUsername();
+			String errorMsg = "Exception in trying to add user by username: " + userWrapper.getUsername();
 			log.error(errorMsg, e);
 			throw new MDMAPIException(errorMsg, e);
 		} catch (DeviceManagementException e) {
-			String errorMsg =
-					"Exception in trying to add user by username: " + userWrapper.getUsername();
+			String errorMsg = "Exception in trying to add user by username: " + userWrapper.getUsername();
 			log.error(errorMsg, e);
 			throw new MDMAPIException(errorMsg, e);
 		}
@@ -142,8 +135,7 @@ public class User {
 	 * @param emailAddress Email address of the user
 	 * @return {Object} Default user claims to be provided
 	 */
-	private Map<String, String> buildDefaultUserClaims(String firstname, String lastname,
-	                                                   String emailAddress) {
+	private Map<String, String> buildDefaultUserClaims(String firstname, String lastname, String emailAddress) {
 		Map<String, String> defaultUserClaims = new HashMap<String, String>();
 		defaultUserClaims.put(Constants.USER_CLAIM_FIRST_NAME, firstname);
 		defaultUserClaims.put(Constants.USER_CLAIM_LAST_NAME, lastname);
@@ -163,7 +155,6 @@ public class User {
 	 */
 	@DELETE
 	@Path("{username}")
-	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response removeUser(@PathParam("username") String username) throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
@@ -200,46 +191,23 @@ public class User {
 	}
 
 	/**
-	 * Get a list of devices based on the username.
-	 *
-	 * @param username Username of the device owner
-	 * @return A list of devices
-	 * @throws MDMAPIException
-	 */
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/{tenantDomain}/{username}/devices")
-	public List<Device> getAllDeviceOfUser(@PathParam("username") String username,
-	                                       @PathParam("tenantDomain") String tenantDomain)
-			throws MDMAPIException {
-		DeviceManagementProviderService dmService;
-		try {
-			dmService = MDMAPIUtils.getDeviceManagementService(tenantDomain);
-			return dmService.getDevicesOfUser(username);
-		} catch (DeviceManagementException e) {
-			String errorMsg = "Device management error";
-			log.error(errorMsg, e);
-			throw new MDMAPIException(errorMsg, e);
-		}
-	}
-
-	/**
-	 * Get a list of users in user-store.
+	 * Get the list of all users with all user-related info.
 	 *
 	 * @return A list of users
 	 * @throws MDMAPIException
 	 */
 	@GET
-	public Response getUsers() throws MDMAPIException {
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getAllUsers() throws MDMAPIException {
+        if (log.isDebugEnabled()) {
+            log.debug("Getting the list of users with all user-related information");
+        }
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
 		ArrayList<UserWrapper> userList= new ArrayList<UserWrapper>();
-		ResponsePayload responsePayload = new ResponsePayload();
-		UserWrapper user;
 		try {
-			if (log.isDebugEnabled()) {
-				log.debug("Getting the list of users.");
-			}
-			String[] users = MDMAPIUtils.getUserStoreManager().listUsers("", -1);
-			for(String username:users){
+			String[] users = userStoreManager.listUsers("", -1);
+            UserWrapper user;
+			for (String username : users) {
 				user = new UserWrapper();
 				user.setUsername(username);
 				user.setEmailAddress(getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS));
@@ -247,35 +215,148 @@ public class User {
 				user.setLastname(getClaimValue(username, Constants.USER_CLAIM_LAST_NAME));
 				userList.add(user);
 			}
-			responsePayload.setResponseContent(userList);
-			return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
 		} catch (UserStoreException e) {
 			String msg = "Error occurred while retrieving the list of users";
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
 		}
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All users were successfully retrieved. " +
+                "Obtained user count: " + userList.size());
+        responsePayload.setResponseContent(userList);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
 	}
 
-	/**
-	 * Get a list of usernames in user-store.
-	 *
-	 * @return A list of usernames
-	 * @throws MDMAPIException
-	 */
-	@GET
-	@Path("{by-name}")
-	public List<String> getAllUsers() throws MDMAPIException {
-		try {
-			String[] users = MDMAPIUtils.getUserStoreManager().listUsers("", -1);
-			return Arrays.asList(users);
-		} catch (UserStoreException e) {
-			String msg = "Error occurred while retrieving the list of users";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-	}
+    /**
+     * Get the list of usernames in the system.
+     *
+     * @return A list of usernames
+     * @throws MDMAPIException
+     */
+    @GET
+    @Path("users-by-username")
+    public Response getAllUsersByUsername() throws MDMAPIException {
+        if (log.isDebugEnabled()) {
+            log.debug("Getting the list of users by name");
+        }
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        String[] users;
+        try {
+            users = userStoreManager.listUsers("", -1);
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the list of users";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
+                "Obtained user count: " + users.length);
+        responsePayload.setResponseContent(Arrays.asList(users));
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    /**
+     * Gets a claim-value from user-store.
+     *
+     * @param username Username of the user
+     * @param claimUri required ClaimUri
+     * @return A list of usernames
+     * @throws MDMAPIException, UserStoreException
+     */
+    private String getClaimValue(String username, String claimUri) throws MDMAPIException, UserStoreException {
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        return userStoreManager.getUserClaimValue(username, claimUri, null);
+    }
+
+    /**
+     * Method used to send an invitation email to a new user to enroll a device.
+     *
+     * @param username Username of the user
+     * @throws MDMAPIException, UserStoreException, DeviceManagementException
+     */
+    private void inviteNewlyAddedUserToEnrollDevice(String username) throws
+            MDMAPIException, UserStoreException, DeviceManagementException {
+        if (log.isDebugEnabled()) {
+            log.debug("Sending invitation mail to user by username: " + username);
+        }
+        DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
+        EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
+        emailMessageProperties.setUserName(username);
+        emailMessageProperties.setEnrolmentUrl("https://download-agent");
+        emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
+        emailMessageProperties.setPassword(generateInitialUserPassword());
+        String[] mailAddress = new String[1];
+        mailAddress[0] = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
+        emailMessageProperties.setMailTo(mailAddress);
+        deviceManagementProviderService.sendRegistrationEmail(emailMessageProperties);
+    }
+
+    /**
+     * Method used to send an invitation email to a existing user to enroll a device.
+     *
+     * @param username Username of the user
+     * @throws MDMAPIException
+     */
+    @POST
+    @Path("{username}/email-invitation")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response inviteExistingUserToEnrollDevice(@PathParam("username") String username) throws MDMAPIException {
+        if (log.isDebugEnabled()) {
+            log.debug("Sending enrollment invitation mail to existing user by username: " + username);
+        }
+        DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
+        try {
+            EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
+            emailMessageProperties.setEnrolmentUrl("https://download-agent");
+            emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
+            emailMessageProperties.setUserName(username);
+            String[] mailAddress = new String[1];
+            mailAddress[0] = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
+            emailMessageProperties.setMailTo(mailAddress);
+            deviceManagementProviderService.sendEnrolmentInvitation(emailMessageProperties);
+        } catch (UserStoreException e) {
+            String errorMsg = "Exception in trying to invite user by username: " + username;
+            log.error(errorMsg, e);
+            throw new MDMAPIException(errorMsg, e);
+        } catch (DeviceManagementException e) {
+            String errorMsg = "Exception in trying to invite user by username: " + username;
+            log.error(errorMsg, e);
+            throw new MDMAPIException(errorMsg, e);
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("Email invitation was successfully sent to user by username:" + username);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    /**
+     * Get a list of devices based on the username.
+     *
+     * @param username Username of the device owner
+     * @return A list of devices
+     * @throws MDMAPIException
+     */
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Path("/{tenantDomain}/{username}/devices")
+    public List<Device> getAllDeviceOfUser(@PathParam("username") String username,
+                                           @PathParam("tenantDomain") String tenantDomain)
+            throws MDMAPIException {
+        DeviceManagementProviderService dmService;
+        try {
+            dmService = MDMAPIUtils.getDeviceManagementService(tenantDomain);
+            return dmService.getDevicesOfUser(username);
+        } catch (DeviceManagementException e) {
+            String errorMsg = "Device management error";
+            log.error(errorMsg, e);
+            throw new MDMAPIException(errorMsg, e);
+        }
+    }
 
 	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{type}/{id}")
 	public List<String> getUserRoles() throws MDMAPIException {
 		try {
@@ -303,86 +384,6 @@ public class User {
 					"Error occurred while retrieving the list of users that exist within the current tenant";
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
-		}
-	}
-
-	/**
-	 * Gets a claim-value from user-store.
-	 *
-	 * @param username Username
-	 * @param claimUri required ClaimUri
-	 * @return A list of usernames
-	 * @throws MDMAPIException, UserStoreException
-	 */
-	private String getClaimValue(String username, String claimUri) throws MDMAPIException, UserStoreException {
-		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-		return userStoreManager.getUserClaimValue(username, claimUri, null);
-	}
-
-	/**
-	 * Method used to send an invitation email to a new user.
-	 *
-	 * @param username Username
-	 * @throws MDMAPIException, UserStoreException, DeviceManagementException
-	 */
-	private void inviteUserToEnroll(String username)
-			throws MDMAPIException, UserStoreException, DeviceManagementException {
-		if (log.isDebugEnabled()) {
-			log.debug("Sending the invitation mail to user : " + username);
-		}
-		DeviceManagementProviderService deviceManagementProviderService =
-				MDMAPIUtils.getDeviceManagementService();
-		//Todo Need to get the server url
-		String enrollmentURL = "https://download-agent";
-		String[] mailAddress = new String[1];
-		mailAddress[0] = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
-		EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-		emailMessageProperties.setUserName(username);
-		emailMessageProperties.setEnrolmentUrl(enrollmentURL);
-		emailMessageProperties.setFirstName(
-				getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
-		emailMessageProperties.setPassword(generateInitialUserPassword());
-		emailMessageProperties.setMailTo(mailAddress);
-		deviceManagementProviderService.sendRegistrationEmail(emailMessageProperties);
-	}
-
-	/**
-	 * Method used to send an invitation email to a existing user.
-	 *
-	 * @param username Username
-	 * @throws MDMAPIException
-	 */
-	@POST
-	@Path("{username}/email")
-	@Consumes({ MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response inviteUser(@PathParam("username") String username) throws MDMAPIException {
-		DeviceManagementProviderService deviceManagementProviderService =
-				MDMAPIUtils.getDeviceManagementService();
-		ResponsePayload responsePayload = new ResponsePayload();
-		try {
-			String enrollmentURL = "https://download-agent";
-			if (log.isDebugEnabled()) {
-				log.debug("Sending the invitation mail to the user : " + username);
-			}
-			String[] mailAddress = new String[1];
-			mailAddress[0] = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
-			EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-			emailMessageProperties.setEnrolmentUrl(enrollmentURL);
-			emailMessageProperties.setFirstName(
-					getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
-			emailMessageProperties.setUserName(username);
-			emailMessageProperties.setMailTo(mailAddress);
-			deviceManagementProviderService.sendEnrolmentInvitation(emailMessageProperties);
-			return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
-		} catch (UserStoreException e) {
-			String errorMsg = "Exception in trying to invite user by username: " + username;
-			log.error(errorMsg, e);
-			throw new MDMAPIException(errorMsg, e);
-		} catch (DeviceManagementException e) {
-			String errorMsg = "Exception in trying to invite user by username: " + username;
-			log.error(errorMsg, e);
-			throw new MDMAPIException(errorMsg, e);
 		}
 	}
 }

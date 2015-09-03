@@ -23,13 +23,12 @@ under the License. --}}
 {{/zone}}
 {{#zone "body"}}
     {{unit "appbar" pageTitle="Device Management" pageLink="device-mgt" enableBack=true}}
-    {{unit "extended-search-box"}}
-    {{unit "operation-mod"}}
+    {{unit "datatables"}}
     <div class="wr-device-list row">
         <div class="wr-hidden-operations wr-advance-operations"></div>
         <div class="col-md-12 wr-page-content">
             <div>
-                {{unit "operation-bar"}}
+                {{unit "operation-mod"}}
                 {{unit "device-listing"}}
             </div>
         </div>

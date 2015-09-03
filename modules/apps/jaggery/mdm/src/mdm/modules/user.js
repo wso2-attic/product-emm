@@ -39,32 +39,6 @@ var userModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
-    /**
-     * Authenticate a user when he or she attempts to login to MDM.
-     *
-     * @param username Username of the user
-     * @param password Password of the user
-     * @param successCallback Function to be called at the event of successful authentication
-     * @param failureCallback Function to be called at the event of failed authentication
-     */
-    publicMethods.login = function (username, password, successCallback, failureCallback) {
-        var carbonModule = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        try {
-            // check if the user is an authenticated user.
-            var isAuthenticated = carbonServer.authenticate(username, password);
-            if (isAuthenticated) {
-                var tenantUser = carbonModule.server.tenantUser(username);
-                session.put(constants.USER_SESSION_KEY, tenantUser);
-                successCallback(tenantUser);
-            } else {
-                failureCallback();
-            }
-        } catch (e) {
-            throw e;
-        }
-    };
-
     /*
      @Deprecated
      */
@@ -255,76 +229,25 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     privateMethods.getEmail = function(username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/emailaddress", null)
     };
 
+    /*
+     @Deprecated
+     */
     privateMethods.getFirstName = function(username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/givenname", null)
     };
 
+    /*
+     @Deprecated
+     */
     privateMethods.getLastName = function(username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/lastname", null)
-    };
-
-    publicMethods.addPermissions = function (permissionList, path, init) {
-        var registry,carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var utility = require('/modules/utility.js').utility;
-        var options = {system: true};
-        if (init == "login") {
-            try {
-                var carbonUser = session.get(constants.USER_SESSION_KEY);
-                if (!carbonUser) {
-                    log.error("User object was not found in the session");
-                    throw constants.ERRORS.USER_NOT_FOUND;
-                }
-                utility.startTenantFlow(carbonUser);
-                var tenantId = carbon.server.tenantId();
-                if (carbonUser) {
-                    options.tenantId = tenantId;
-                }
-                registry = new carbon.registry.Registry(carbonServer, options);
-                var i, permission, resource;
-                for (i = 0; i < permissionList.length; i++) {
-                    permission = permissionList[i];
-                    resource = {
-                        collection : true,
-                        name : permission.name,
-                        properties : {
-                            name : permission.name
-                        }
-                    };
-                    if(path != ""){
-                        registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
-                    } else {
-                        registry.put("/_system/governance/permission/admin/" + permission.key, resource);
-                    }
-                }
-            } catch (e) {
-                throw e;
-            } finally {
-                utility.endTenantFlow();
-            }
-        } else {
-            registry = new carbon.registry.Registry(carbonServer, options);
-            var i, permission, resource;
-            for (i = 0; i < permissionList.length; i++) {
-                permission = permissionList[i];
-                resource = {
-                    collection : true,
-                    name : permission.name,
-                    properties : {
-                        name : permission.name
-                    }
-                };
-                if(path != ""){
-                    registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
-                } else {
-                    registry.put("/_system/governance/permission/admin/" + permission.key, resource);
-                }
-            }
-        }
     };
 
     /*
@@ -394,60 +317,6 @@ var userModule = function () {
         }
     };
 
-    publicMethods.isAuthorized = function (permission) {
-        var carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
-            exit();
-        }
-
-        try {
-            utility.startTenantFlow(carbonUser);
-            var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var user = new carbon.user.User(userManager, carbonUser.username);
-            return user.isAuthorized(permission, "ui.execute");
-        } catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-        return true;
-    };
-
-    publicMethods.logout = function (successCallback) {
-        session.invalidate();
-        successCallback();
-    };
-
-    publicMethods.getUIPermissions = function(){
-        var permissions = {};
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
-                        publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
-            permissions["LIST_DEVICES"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
-            permissions["LIST_USERS"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
-            permissions["LIST_POLICIES"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
-            permissions["ADD_USER"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
-            permissions["ADD_POLICY"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
-            permissions["VIEW_DASHBOARD"] = true;
-        }
-        return permissions;
-    };
-
     /*
      @Deprecated
      */
@@ -488,7 +357,147 @@ var userModule = function () {
         }
     };
 
+    /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Authenticate a user when he or she attempts to login to MDM.
+     *
+     * @param username Username of the user
+     * @param password Password of the user
+     * @param successCallback Function to be called at the event of successful authentication
+     * @param failureCallback Function to be called at the event of failed authentication
+     */
+    publicMethods.login = function (username, password, successCallback, failureCallback) {
+        var carbonModule = require("carbon");
+        var carbonServer = application.get("carbonServer");
+        try {
+            // check if the user is an authenticated user.
+            var isAuthenticated = carbonServer.authenticate(username, password);
+            if (isAuthenticated) {
+                var tenantUser = carbonModule.server.tenantUser(username);
+                session.put(constants.USER_SESSION_KEY, tenantUser);
+                successCallback(tenantUser);
+            } else {
+                failureCallback();
+            }
+        } catch (e) {
+            throw e;
+        }
+    };
+
+    publicMethods.logout = function (successCallback) {
+        session.invalidate();
+        successCallback();
+    };
+
+    publicMethods.isAuthorized = function (permission) {
+        var carbon = require("carbon");
+        var carbonServer = application.get("carbonServer");
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
+            exit();
+        }
+
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var user = new carbon.user.User(userManager, carbonUser.username);
+            return user.isAuthorized(permission, "ui.execute");
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+        return true;
+    };
+
+    publicMethods.getUIPermissions = function(){
+        var permissions = {};
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
+            publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
+            permissions["LIST_DEVICES"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
+            permissions["LIST_USERS"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
+            permissions["LIST_POLICIES"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
+            permissions["ADD_USER"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
+            permissions["ADD_POLICY"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
+            permissions["VIEW_DASHBOARD"] = true;
+        }
+        return permissions;
+    };
+
+    publicMethods.addPermissions = function (permissionList, path, init) {
+        var registry,carbon = require("carbon");
+        var carbonServer = application.get("carbonServer");
+        var utility = require('/modules/utility.js').utility;
+        var options = {system: true};
+        if (init == "login") {
+            try {
+                var carbonUser = session.get(constants.USER_SESSION_KEY);
+                if (!carbonUser) {
+                    log.error("User object was not found in the session");
+                    throw constants.ERRORS.USER_NOT_FOUND;
+                }
+                utility.startTenantFlow(carbonUser);
+                var tenantId = carbon.server.tenantId();
+                if (carbonUser) {
+                    options.tenantId = tenantId;
+                }
+                registry = new carbon.registry.Registry(carbonServer, options);
+                var i, permission, resource;
+                for (i = 0; i < permissionList.length; i++) {
+                    permission = permissionList[i];
+                    resource = {
+                        collection : true,
+                        name : permission.name,
+                        properties : {
+                            name : permission.name
+                        }
+                    };
+                    if(path != ""){
+                        registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
+                    } else {
+                        registry.put("/_system/governance/permission/admin/" + permission.key, resource);
+                    }
+                }
+            } catch (e) {
+                throw e;
+            } finally {
+                utility.endTenantFlow();
+            }
+        } else {
+            registry = new carbon.registry.Registry(carbonServer, options);
+            var i, permission, resource;
+            for (i = 0; i < permissionList.length; i++) {
+                permission = permissionList[i];
+                resource = {
+                    collection : true,
+                    name : permission.name,
+                    properties : {
+                        name : permission.name
+                    }
+                };
+                if(path != ""){
+                    registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
+                } else {
+                    registry.put("/_system/governance/permission/admin/" + permission.key, resource);
+                }
+            }
+        }
+    };
+
     return publicMethods;
 }();
-
-
