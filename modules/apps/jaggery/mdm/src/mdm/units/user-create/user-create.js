@@ -5,7 +5,10 @@
  * @returns {*} A context object that returns the dynamic state of this page to be presented
  */
 function onRequest(context) {
-    var userModule = require("/modules/user.js").userModule;
-    context.roles = userModule.getRoles(false);
+    var userModule = require("/modules/user.js")["userModule"];
+    var response = userModule.getRoles();
+    if (response["status"] == "success") {
+        context["roles"] = response["content"];
+    }
     return context;
 }
