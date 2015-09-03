@@ -25,34 +25,51 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.api.UserStoreManager;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Role {
 
     private static Log log = LogFactory.getLog(Role.class);
 
     /**
-     * Get a list of roles in user-store.
+     * Get user roles (except all internal roles) from system.
      *
      * @return A list of users
      * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
      */
     @GET
+    @Produces({ MediaType.APPLICATION_JSON })
     public Response getRoles() throws MDMAPIException {
-        ResponsePayload responsePayload = new ResponsePayload();
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        String[] roles;
         try {
             if (log.isDebugEnabled()) {
-                log.debug("Getting the list of roles.");
+                log.debug("Getting the list of user roles");
             }
-            String[] roles = MDMAPIUtils.getUserStoreManager().getRoleNames();
-            responsePayload.setResponseContent(roles);
-            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+            roles = userStoreManager.getRoleNames();
         } catch (UserStoreException e) {
-            String msg = "Error occurred while retrieving the list of roles.";
+            String msg = "Error occurred while retrieving the list of user roles.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
+        // removing all internal roles
+        List<String> rolesWithoutInternalRoles = new ArrayList<String>();
+        for (String role : roles) {
+            if (!role.startsWith("Internal/")) {
+                rolesWithoutInternalRoles.add(role);
+            }
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All user roles were successfully retrieved.");
+        responsePayload.setResponseContent(rolesWithoutInternalRoles);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 }
