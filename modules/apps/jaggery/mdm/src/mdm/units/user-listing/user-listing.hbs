@@ -10,17 +10,17 @@
         <div class="col-md-12">
             <!-- content -->
             <div class="wr-content">
-                <span id="user-count-status-msg">{{userCountStatusMsg}}</span>
+                <span id="user-listing-status-msg">{{userListingStatusMsg}}</span>
                 <div class="wr-list-group wr-sortable user-list">
                     {{#each users}}
                         <span id="{{username}}" class="list-group-item">
                             <i class="wr-sortable-icon fw fw-sort hide"></i>
                             <i class="wr-list-icon fw fw-user"></i>
                             <div class="wr-list-desc">
-                                <h3 class="wr-list-name">{{name}}</h3>
+                                <h3 class="wr-list-name">{{firstname}} {{lastname}}</h3>
                                 <span class="wr-list-username">{{username}}</span>
                                 {{#unequal "admin" username }}
-                                    <a href="mailto:{{email}}" class="wr-list-email"> | {{email}}</a>
+                                    <a href="mailto:{{emailAddress}}" class="wr-list-email"> | {{emailAddress}}</a>
                                 {{/unequal}}
                             </div>
                             <span class="list-group-item-actions">

@@ -23,8 +23,8 @@ var userModule = function () {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
-    var dataConfig = require("/config/mdm-props.js").config();
-    var utility = require("/modules/utility.js").utility;
+    var utility = require("/modules/utility.js")["utility"];
+    var mdmProps = require('/config/mdm-props.js').config();
 
     /* Initializing user manager */
     var carbon = require('carbon');
@@ -200,7 +200,7 @@ var userModule = function () {
      */
     privateMethods.inviteUserToEnroll = function (username, password) {
         var carbon = require('carbon');
-        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
+        var enrollmentURL = mdmProps.httpsURL + mdmProps.appContext + "download-agent";
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
@@ -260,7 +260,7 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
+        var enrollmentURL = mdmProps.httpsURL + mdmProps.appContext + "download-agent";
 
         try {
             utility.startTenantFlow(carbonUser);
@@ -283,34 +283,37 @@ var userModule = function () {
     };
 
     /*
-     @Deprecated
+     @Updated
      */
     publicMethods.getUsers = function () {
-        var users = [];
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        var userInfo = require("/modules/user-info.js");
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
-
-        var carbon = require('carbon');
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
-            var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var userList = userManager.listUsers("");
-            for (var i = 0; i < userList.length; i++) {
-                var username = userList[i];
-                var email = privateMethods.getEmail(username, userManager);
-                var firstName = privateMethods.getFirstName(username, userManager);
-                var lastName = privateMethods.getLastName(username, userManager);
-                var userInfoObj = new userInfo.UserInfo(username, firstName, lastName, email);
-                users.push(userInfoObj);
+
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var userList = responsePayload["responseContent"];
+                // generate response
+                response["status"] = "success";
+                response["content"] = userList;
+                return response;
+            } else {
+                // generate response
+                response["status"] = "error";
+                return response;
             }
-            return users;
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -318,38 +321,77 @@ var userModule = function () {
     };
 
     /*
-     @Deprecated
+     @NewlyAdded
      */
-    /**
-     * Get User Roles from user store.
-     * If "Internal/Everyone" role is required - true param needs to be passed.
-     * @param enableInternalEveryone boolean value true/false to enable Internal/Everyone role
-     */
-    publicMethods.getRoles = function (enableInternalEveryone) {
-        var carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
+    publicMethods.getUsersByUsername = function () {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var allRoles = userManager.allRoles();
-            var filteredRoles = [];
-            var i;
-            for (i = 0; i < allRoles.length; i++) {
-                if (enableInternalEveryone && allRoles[i] == "Internal/everyone") {
-                    filteredRoles.push(allRoles[i]);
-                }
-                if (allRoles[i].indexOf("Internal/") != 0) {
-                    filteredRoles.push(allRoles[i]);
-                }
+
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var userList = responsePayload["responseContent"];
+                // generate response
+                response["status"] = "success";
+                response["content"] = userList;
+                return response;
+            } else {
+                // generate response
+                response["status"] = "error";
+                return response;
             }
-            return filteredRoles;
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+
+    /*
+     @Updated
+     */
+    /**
+     * Get User Roles from user store (Internal roles not included).
+     */
+    publicMethods.getRoles = function () {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require('/modules/utility.js')["utility"];
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
+        }
+        try {
+            utility.startTenantFlow(carbonUser);
+
+            var url = mdmProps["httpsURL"] + "/mdm-admin/roles";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var rolesToView = responsePayload["responseContent"];
+                // generate response
+                response["status"] = "success";
+                response["content"] = rolesToView;
+                return response;
+            } else {
+                // generate response
+                response["status"] = "error";
+                return response;
+            }
         } catch (e) {
             throw e;
         } finally {
