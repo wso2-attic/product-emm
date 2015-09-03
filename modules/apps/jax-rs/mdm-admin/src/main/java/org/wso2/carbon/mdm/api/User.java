@@ -198,6 +198,7 @@ public class User {
 	 * @throws MDMAPIException
 	 */
 	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getAllUsers() throws MDMAPIException {
         if (log.isDebugEnabled()) {
             log.debug("Getting the list of users with all user-related information");
@@ -357,6 +358,7 @@ public class User {
     }
 
 	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{type}/{id}")
 	public List<String> getUserRoles() throws MDMAPIException {
 		try {

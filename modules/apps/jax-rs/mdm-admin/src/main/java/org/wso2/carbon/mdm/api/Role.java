@@ -28,6 +28,8 @@ import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class Role {
      * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
      */
     @GET
+    @Produces({ MediaType.APPLICATION_JSON })
     public Response getRoles() throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         String[] roles;
