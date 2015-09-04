@@ -19,6 +19,7 @@ package org.wso2.emm.agent;
 
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.api.DeviceInfo;
@@ -80,7 +81,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private static final String MIME_TYPE = "text/html";
 	private static final String ENCODING_METHOD = "utf-8";
 	private static final int DEFAILT_REPEAT_COUNT = 0;
-
+	private static final int NOTIFIER_CHECK = 2;
+	public static int DEFAULT_INTERVAL = 30000;
 	private DeviceInfo deviceInfo;
 	private static final String TAG = AuthenticationActivity.class.getSimpleName();
 
@@ -379,10 +381,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				}
 
 			} else {
-				loadNextActivity();
+				getConfigurationsFromServer();
 			}
 		} else {
-			loadNextActivity();
+			getConfigurationsFromServer();
 		}
 
 	}
@@ -403,12 +405,122 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		);
 	}
 
+	/**
+	 * Retriever configurations from the server.
+	 */
+	private void getConfigurationsFromServer() {
+		OnCancelListener cancelListener = new OnCancelListener() {
+
+			@Override
+			public void onCancel(DialogInterface arg0) {
+				CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+	                                          getResources().getString(R.string.error_enrollment_failed_detail),
+	                                          getResources().getString(R.string.error_enrollment_failed),
+	                                          getResources().getString(R.string.button_ok), null);
+			}
+		};
+		progressDialog =
+				CommonDialogUtils.showPrgressDialog(context,
+				                                    getResources().getString(
+						                                    R.string.dialog_sender_id),
+				                                    getResources().getString(
+						                                    R.string.dialog_please_wait),
+				                                    cancelListener);
+		String ipSaved =
+				Preference.getString(context.getApplicationContext(),Constants.IP);
+
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(ipSaved);
+		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
+		                           utils.getAPIServerURL() + Constants.CONFIGURATION_ENDPOINT,
+		                           HTTP_METHODS.GET, null, AuthenticationActivity.this,
+		                           Constants.CONFIGURATION_REQUEST_CODE
+		);
+	}
+
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		if (requestCode == Constants.LICENSE_REQUEST_CODE) {
 			manipulateLicenseResponse(result);
+		} else if(requestCode == Constants.CONFIGURATION_REQUEST_CODE){
+			manipulateConfigurationResponse(result);
 		}
 	}
+	/**
+	 * Manipulates the Configuration response received from server.
+	 *
+	 * @param result the result of the configuration request
+	 */
+	private void manipulateConfigurationResponse(Map<String, String> result) {
+		String responseStatus;
+		CommonDialogUtils.stopProgressDialog(progressDialog);
+
+		if (result != null) {
+			responseStatus = result.get(Constants.STATUS);
+			if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+				String configurationResponse = result.get(Constants.RESPONSE);
+
+				if (configurationResponse != null) {
+					try {
+						JSONObject config = new JSONObject(configurationResponse.toString());
+						if (!config.isNull(context.getString(R.string.shared_pref_configuration))) {
+							JSONArray configList = new JSONArray(config.getString(context.getString(R.string.
+					                                                                      shared_pref_configuration)));
+							for (int i = 0; i < configList.length(); i++) {
+								JSONObject param = new JSONObject(configList.get(i).toString());
+								if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().equals(
+										context.getString(R.string.shared_pref_notifier))){
+									String type = param.getString(context.getString(R.string.shared_pref_config_value)).trim();
+									if(type.equals(String.valueOf(NOTIFIER_CHECK))) {
+										Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
+										                     Constants.NOTIFIER_GCM);
+									}else{
+										Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
+										                     Constants.NOTIFIER_LOCAL);
+									}
+								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
+										equals(context.getString(R.string.shared_pref_frequency))){
+										Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
+										                  Integer.valueOf(param.getString(context.getString(R.string.shared_pref_config_value)).trim()));
+								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
+										equals(context.getString(R.string.shared_pref_gcm))){
+										Preference.putString(context, getResources().getString(R.string.shared_pref_sender_id),
+									                     param.getString(context.getString(R.string.shared_pref_config_value)).trim());
+								}
+							}
+						}
+
+					} catch (JSONException e) {
+						Log.e(TAG, "Error parsing configuration response JSON." + e);
+						setDefaultNotifier();
+					}
+				} else {
+					Log.e(TAG, "Empty configuration response.");
+					setDefaultNotifier();
+				}
+
+			} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
+				Log.e(TAG, "Empty configuration response.");
+				setDefaultNotifier();
+			} else {
+				Log.e(TAG, "Empty configuration response.");
+				setDefaultNotifier();
+			}
+
+		} else {
+			Log.e(TAG, "Empty configuration response.");
+			setDefaultNotifier();
+		}
+		loadNextActivity();
+	}
+
+	private void setDefaultNotifier(){
+		Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
+		                     Constants.NOTIFIER_LOCAL);
+		Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
+		                    DEFAULT_INTERVAL);
+	}
+
 
 	/**
 	 * Manipulates the License agreement response received from server.
@@ -507,7 +619,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 						getResources().getString(R.string.shared_pref_reg_success));
 				dialog.dismiss();
 				//load the next intent based on ownership type
-				loadNextActivity();
+				getConfigurationsFromServer();
 			}
 		});
 
@@ -717,7 +829,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 		RegistrationProfile profile = new RegistrationProfile();
 		profile.setCallbackUrl(Constants.EMPTY_STRING);
-		profile.setClientName(deviceInfo.getMACAddress());
+		profile.setClientName(deviceInfo.getDeviceId());
 		profile.setGrantType(Constants.GRANT_TYPE);
 		profile.setOwner(usernameVal);
 		profile.setTokenScope(Constants.TOKEN_SCOPE);
