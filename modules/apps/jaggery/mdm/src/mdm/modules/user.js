@@ -454,7 +454,6 @@ var userModule = function () {
         } finally {
             utility.endTenantFlow();
         }
-        return true;
     };
 
     publicMethods.getUIPermissions = function(){

@@ -18,7 +18,7 @@
 
 var deviceModule;
 deviceModule = function () {
-    //var log = new Log("modules/device.js");
+    var log = new Log("modules/device.js");
 
     var utility = require('/modules/utility.js').utility;
     var constants = require('/modules/constants.js');
@@ -230,6 +230,9 @@ deviceModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     privateMethods.getDevice = function (type, deviceId) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -251,18 +254,20 @@ deviceModule = function () {
         }
     };
 
-    publicMethods.viewDevice = function (type, deviceId) {
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
+    /*
+     @Updated
+     */
+    publicMethods.viewDevice = function (deviceType, deviceId) {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         if (!carbonUser) {
             log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         var utility = require('/modules/utility.js')["utility"];
         try{
             utility.startTenantFlow(carbonUser);
 
-            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/"+type+"/"+deviceId;
+            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/" + deviceType + "/" + deviceId;
             var xhr = new XMLHttpRequest();
             xhr.open("GET", url);
             xhr.send();
@@ -271,25 +276,25 @@ deviceModule = function () {
             if (xhr.status == 200 && xhr.readyState == 4) {
                 var responsePayload = parse(xhr.responseText);
                 var device = responsePayload["responseContent"];
-                if(device){
-                    var propertiesList = device.properties;
+                if (device) {
+                    var propertiesList = device["properties"];
                     var properties = {};
                     for(var i = 0; i < propertiesList.length; i++){
-                        properties[propertiesList[i].name] = propertiesList[i].value;
+                        properties[propertiesList[i]["name"]] = propertiesList[i]["value"];
                     }
 
                     var deviceObject = {};
-                    deviceObject[constants.DEVICE_IDENTIFIER] = device.deviceIdentifier;
-                    deviceObject[constants.DEVICE_NAME] = device.name;
-                    deviceObject[constants.DEVICE_OWNERSHIP] = device.enrolmentInfo.ownership;
-                    deviceObject[constants.DEVICE_OWNER] = device.enrolmentInfo.owner;
-                    deviceObject[constants.DEVICE_TYPE] = device.type;
-                    if (device.type == constants.PLATFORM_IOS) {
-                        properties[constants.DEVICE_MODEL] = properties[constants.DEVICE_PRODUCT];
-                        delete properties[constants.DEVICE_PRODUCT];
-                        properties[constants.DEVICE_VENDOR] = constants.VENDOR_APPLE;
+                    deviceObject[constants["DEVICE_IDENTIFIER"]] = device["deviceIdentifier"];
+                    deviceObject[constants["DEVICE_NAME"]] = device["name"];
+                    deviceObject[constants["DEVICE_OWNERSHIP"]] = device["enrolmentInfo"]["ownership"];
+                    deviceObject[constants["DEVICE_OWNER"]] = device["enrolmentInfo"]["owner"];
+                    deviceObject[constants["DEVICE_TYPE"]] = device["deviceType"];
+                    if (device["deviceType"] == constants["PLATFORM_IOS"]) {
+                        properties[constants["DEVICE_MODEL"]] = properties[constants["DEVICE_PRODUCT"]];
+                        delete properties[constants["DEVICE_PRODUCT"]];
+                        properties[constants["DEVICE_VENDOR"]] = constants["VENDOR_APPLE"];
                     }
-                    deviceObject[constants.DEVICE_PROPERTIES] = properties;
+                    deviceObject[constants["DEVICE_PROPERTIES"]] = properties;
                     return deviceObject;
                 }
             } else {
@@ -304,10 +309,8 @@ deviceModule = function () {
     };
 
     publicMethods.getLicense = function () {
-
         var deviceManagementService = utility.getDeviceManagementService();
-        return deviceManagementService.getLicense(constants.PLATFORM_IOS, constants.LANGUAGE_US);
-
+        return deviceManagementService.getLicense(constants["PLATFORM_IOS"], constants["LANGUAGE_US"]);
     };
 
     return publicMethods;
