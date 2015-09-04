@@ -1,11 +1,13 @@
 function onRequest(context) {
-    // var log = new Log("user-listing");
-    var userModule = require("/modules/user.js").userModule;
-    var allUsers = userModule.getUsers();
-
-    context.users = allUsers;
-    context.userCountStatusMsg = "Total number of Users found : " + allUsers.length;
-    context.permissions = userModule.getUIPermissions();
-
+    var userModule = require("/modules/user.js")["userModule"];
+    var response = userModule.getUsers();
+    context["permissions"] = userModule.getUIPermissions();
+    if (response["status"] == "success") {
+        context["users"] = response["content"];
+        context["userListingStatusMsg"] = "Total number of Users found : " + context["users"].length;
+    } else {
+        context["users"] = [];
+        context["userListingStatusMsg"] = "Error in retrieving user list.";
+    }
     return context;
 }

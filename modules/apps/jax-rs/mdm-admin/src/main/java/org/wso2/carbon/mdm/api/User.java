@@ -155,7 +155,6 @@ public class User {
 	 */
 	@DELETE
 	@Path("{username}")
-	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response removeUser(@PathParam("username") String username) throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
@@ -302,7 +301,6 @@ public class User {
      */
     @POST
     @Path("{username}/email-invitation")
-    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public Response inviteExistingUserToEnrollDevice(@PathParam("username") String username) throws MDMAPIException {
         if (log.isDebugEnabled()) {

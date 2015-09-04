@@ -23,8 +23,8 @@ var userModule = function () {
     var log = new Log("modules/user.js");
 
     var constants = require("/modules/constants.js");
-    var dataConfig = require("/config/mdm-props.js").config();
-    var utility = require("/modules/utility.js").utility;
+    var utility = require("/modules/utility.js")["utility"];
+    var mdmProps = require('/config/mdm-props.js').config();
 
     /* Initializing user manager */
     var carbon = require('carbon');
@@ -38,32 +38,6 @@ var userModule = function () {
 
     var publicMethods = {};
     var privateMethods = {};
-
-    /**
-     * Authenticate a user when he or she attempts to login to MDM.
-     *
-     * @param username Username of the user
-     * @param password Password of the user
-     * @param successCallback Function to be called at the event of successful authentication
-     * @param failureCallback Function to be called at the event of failed authentication
-     */
-    publicMethods.login = function (username, password, successCallback, failureCallback) {
-        var carbonModule = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        try {
-            // check if the user is an authenticated user.
-            var isAuthenticated = carbonServer.authenticate(username, password);
-            if (isAuthenticated) {
-                var tenantUser = carbonModule.server.tenantUser(username);
-                session.put(constants.USER_SESSION_KEY, tenantUser);
-                successCallback(tenantUser);
-            } else {
-                failureCallback();
-            }
-        } catch (e) {
-            throw e;
-        }
-    };
 
     /*
      @Deprecated
@@ -226,7 +200,7 @@ var userModule = function () {
      */
     privateMethods.inviteUserToEnroll = function (username, password) {
         var carbon = require('carbon');
-        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
+        var enrollmentURL = mdmProps.httpsURL + mdmProps.appContext + "download-agent";
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
@@ -255,16 +229,256 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     privateMethods.getEmail = function(username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/emailaddress", null)
     };
 
+    /*
+     @Deprecated
+     */
     privateMethods.getFirstName = function(username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/givenname", null)
     };
 
+    /*
+     @Deprecated
+     */
     privateMethods.getLastName = function(username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/lastname", null)
+    };
+
+    /*
+     @Deprecated
+     */
+    publicMethods.inviteUser = function (username) {
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        var enrollmentURL = mdmProps.httpsURL + mdmProps.appContext + "download-agent";
+
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var user = userManager.getUser(username);
+            var emailProperties = new EmailMessageProperties();
+            var emailTo = [];
+            emailTo[0] = privateMethods.getEmail(username, userManager);
+            emailProperties.setMailTo(emailTo);
+            //emailProperties.setFirstName(user.getFirstName());
+            emailProperties.setFirstName(privateMethods.getFirstName(username, userManager));
+            emailProperties.setEnrolmentUrl(enrollmentURL);
+            deviceManagementService.sendEnrolmentInvitation(emailProperties);
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+
+    /*
+     @Updated
+     */
+    publicMethods.getUsers = function () {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require("/modules/utility.js")["utility"];
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
+        }
+        try {
+            utility.startTenantFlow(carbonUser);
+
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var userList = responsePayload["responseContent"];
+                // generate response
+                response["status"] = "success";
+                response["content"] = userList;
+                return response;
+            } else {
+                // generate response
+                response["status"] = "error";
+                return response;
+            }
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+
+    /*
+     @NewlyAdded
+     */
+    publicMethods.getUsersByUsername = function () {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require("/modules/utility.js")["utility"];
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
+        }
+        try {
+            utility.startTenantFlow(carbonUser);
+
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var userList = responsePayload["responseContent"];
+                // generate response
+                response["status"] = "success";
+                response["content"] = userList;
+                return response;
+            } else {
+                // generate response
+                response["status"] = "error";
+                return response;
+            }
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+
+    /*
+     @Updated
+     */
+    /**
+     * Get User Roles from user store (Internal roles not included).
+     */
+    publicMethods.getRoles = function () {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require('/modules/utility.js')["utility"];
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
+        }
+        try {
+            utility.startTenantFlow(carbonUser);
+
+            var url = mdmProps["httpsURL"] + "/mdm-admin/roles";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            var response = {};
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var responsePayload = parse(xhr.responseText);
+                var rolesToView = responsePayload["responseContent"];
+                // generate response
+                response["status"] = "success";
+                response["content"] = rolesToView;
+                return response;
+            } else {
+                // generate response
+                response["status"] = "error";
+                return response;
+            }
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+
+    /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Authenticate a user when he or she attempts to login to MDM.
+     *
+     * @param username Username of the user
+     * @param password Password of the user
+     * @param successCallback Function to be called at the event of successful authentication
+     * @param failureCallback Function to be called at the event of failed authentication
+     */
+    publicMethods.login = function (username, password, successCallback, failureCallback) {
+        var carbonModule = require("carbon");
+        var carbonServer = application.get("carbonServer");
+        try {
+            // check if the user is an authenticated user.
+            var isAuthenticated = carbonServer.authenticate(username, password);
+            if (isAuthenticated) {
+                var tenantUser = carbonModule.server.tenantUser(username);
+                session.put(constants.USER_SESSION_KEY, tenantUser);
+                successCallback(tenantUser);
+            } else {
+                failureCallback();
+            }
+        } catch (e) {
+            throw e;
+        }
+    };
+
+    publicMethods.logout = function (successCallback) {
+        session.invalidate();
+        successCallback();
+    };
+
+    publicMethods.isAuthorized = function (permission) {
+        var carbon = require("carbon");
+        var carbonServer = application.get("carbonServer");
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
+            exit();
+        }
+
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var user = new carbon.user.User(userManager, carbonUser.username);
+            return user.isAuthorized(permission, "ui.execute");
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+        return true;
+    };
+
+    publicMethods.getUIPermissions = function(){
+        var permissions = {};
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
+            publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
+            permissions["LIST_DEVICES"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
+            permissions["LIST_USERS"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
+            permissions["LIST_POLICIES"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
+            permissions["ADD_USER"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
+            permissions["ADD_POLICY"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
+            permissions["VIEW_DASHBOARD"] = true;
+        }
+        return permissions;
     };
 
     publicMethods.addPermissions = function (permissionList, path, init) {
@@ -327,168 +541,5 @@ var userModule = function () {
         }
     };
 
-    /*
-     @Deprecated
-     */
-    publicMethods.inviteUser = function (username) {
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
-        }
-        var enrollmentURL = dataConfig.httpsURL + dataConfig.appContext + "download-agent";
-
-        try {
-            utility.startTenantFlow(carbonUser);
-            var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var user = userManager.getUser(username);
-            var emailProperties = new EmailMessageProperties();
-            var emailTo = [];
-            emailTo[0] = privateMethods.getEmail(username, userManager);
-            emailProperties.setMailTo(emailTo);
-            //emailProperties.setFirstName(user.getFirstName());
-            emailProperties.setFirstName(privateMethods.getFirstName(username, userManager));
-            emailProperties.setEnrolmentUrl(enrollmentURL);
-            deviceManagementService.sendEnrolmentInvitation(emailProperties);
-        } catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-    };
-
-    /*
-     @Deprecated
-     */
-    publicMethods.getUsers = function () {
-        var users = [];
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        var userInfo = require("/modules/user-info.js");
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
-        }
-
-        var carbon = require('carbon');
-        try{
-            utility.startTenantFlow(carbonUser);
-            var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var userList = userManager.listUsers("");
-            for (var i = 0; i < userList.length; i++) {
-                var username = userList[i];
-                var email = privateMethods.getEmail(username, userManager);
-                var firstName = privateMethods.getFirstName(username, userManager);
-                var lastName = privateMethods.getLastName(username, userManager);
-                var userInfoObj = new userInfo.UserInfo(username, firstName, lastName, email);
-                users.push(userInfoObj);
-            }
-            return users;
-        }catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-    };
-
-    publicMethods.isAuthorized = function (permission) {
-        var carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
-            exit();
-        }
-
-        try {
-            utility.startTenantFlow(carbonUser);
-            var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var user = new carbon.user.User(userManager, carbonUser.username);
-            return user.isAuthorized(permission, "ui.execute");
-        } catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-        return true;
-    };
-
-    publicMethods.logout = function (successCallback) {
-        session.invalidate();
-        successCallback();
-    };
-
-    publicMethods.getUIPermissions = function(){
-        var permissions = {};
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
-                        publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
-            permissions["LIST_DEVICES"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
-            permissions["LIST_USERS"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
-            permissions["LIST_POLICIES"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
-            permissions["ADD_USER"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
-            permissions["ADD_POLICY"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
-            permissions["VIEW_DASHBOARD"] = true;
-        }
-        return permissions;
-    };
-
-    /*
-     @Deprecated
-     */
-    /**
-     * Get User Roles from user store.
-     * If "Internal/Everyone" role is required - true param needs to be passed.
-     * @param enableInternalEveryone boolean value true/false to enable Internal/Everyone role
-     */
-    publicMethods.getRoles = function (enableInternalEveryone) {
-        var carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
-        }
-        try {
-            utility.startTenantFlow(carbonUser);
-            var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var allRoles = userManager.allRoles();
-            var filteredRoles = [];
-            var i;
-            for (i = 0; i < allRoles.length; i++) {
-                if (enableInternalEveryone && allRoles[i] == "Internal/everyone") {
-                    filteredRoles.push(allRoles[i]);
-                }
-                if (allRoles[i].indexOf("Internal/") != 0) {
-                    filteredRoles.push(allRoles[i]);
-                }
-            }
-            return filteredRoles;
-        } catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-    };
-
     return publicMethods;
 }();
-
-

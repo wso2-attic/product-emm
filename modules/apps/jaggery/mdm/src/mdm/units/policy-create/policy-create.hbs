@@ -114,11 +114,11 @@
                                 <div class="wr-input-control">
                                     <label class="wr-input-control radio light">
                                         <input id="user-roles-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" checked/>
-                                        <span class="helper">Set User Role(s)</span>
+                                        <span class="helper">&nbsp;Set User Role(s)</span>
                                     </label>
                                     <label class="wr-input-control radio light" rel="assetfilter">
                                         <input id="users-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" />
-                                        <span class="helper">Set User(s)</span>
+                                        <span class="helper">&nbsp;Set User(s)</span>
                                     </label>
                                 </div>
                                 <div id="user-roles-select-field" class="select-users">
@@ -140,7 +140,7 @@
                                             <select id="users-input" class="form-control select2" multiple="multiple">
                                                 <option value="ANY" selected>ANY</option>
                                                 {{#each users}}
-                                                    <option>{{username}}</option>
+                                                    <option>{{this}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>

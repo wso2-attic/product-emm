@@ -99,7 +99,7 @@ $("a.remove-user-link").click(function () {
                     // get new user-list-count
                     var newUserListCount = $(".user-list > span").length;
                     // update user-listing-status-msg with new user-count
-                    $("#user-count-status-msg").text("Total number of Users found : " + newUserListCount);
+                    $("#user-listing-status-msg").text("Total number of Users found : " + newUserListCount);
                     // update modal-content with success message
                     $(modalPopupContent).html($('#remove-user-success-content').html());
                     $("a#remove-user-success-link").click(function () {
