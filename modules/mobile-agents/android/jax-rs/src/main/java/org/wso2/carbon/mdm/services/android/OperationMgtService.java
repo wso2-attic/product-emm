@@ -77,7 +77,7 @@ public class OperationMgtService {
             if (log.isDebugEnabled()) {
                 log.debug("Invoking Android pending operations:" + id);
             }
-            if (resultOperations != null || !resultOperations.isEmpty()) {
+            if (resultOperations != null && !resultOperations.isEmpty()) {
                 updateOperations(id, resultOperations);
             }
         } catch (OperationManagementException e) {
