@@ -175,7 +175,7 @@ function loadDevices(searchType, searchParam){
             var viewModel = {};
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;
-            if(data.length != 0){
+            if(data.length > 0){
                 var content = template(viewModel);
                 $("#ast-container").html(content);
                 /*
