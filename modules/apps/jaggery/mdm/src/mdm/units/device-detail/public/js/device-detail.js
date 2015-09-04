@@ -51,17 +51,24 @@
                 var lat = $("#device-location").data("lat");
                 var long = $("#device-location").data("long");
 
-                map = new google.maps.Map(document.getElementById('device-location'),
-                    mapOptions);
+                if(lat != null && lat != undefined && lat != "" && long != null && long != undefined && long != "") {
+                    $("#map-error").hide();
+                    $("#device-location").show();
+                    map = new google.maps.Map(document.getElementById('device-location'),
+                        mapOptions);
 
-                var pos = new google.maps.LatLng(lat,
-                    long);
-                var marker = new google.maps.Marker({
-                    position: pos,
-                    map: map
-                });
+                    var pos = new google.maps.LatLng(lat,
+                        long);
+                    var marker = new google.maps.Marker({
+                        position: pos,
+                        map: map
+                    });
 
-                map.setCenter(pos);
+                    map.setCenter(pos);
+                }else{
+                    $("#device-location").hide();
+                    $("#map-error").show();
+                }
 
         }
         google.maps.event.addDomListener(window, 'load', initialize);
