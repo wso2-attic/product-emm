@@ -288,8 +288,8 @@ deviceModule = function () {
                     deviceObject[constants["DEVICE_NAME"]] = device["name"];
                     deviceObject[constants["DEVICE_OWNERSHIP"]] = device["enrolmentInfo"]["ownership"];
                     deviceObject[constants["DEVICE_OWNER"]] = device["enrolmentInfo"]["owner"];
-                    deviceObject[constants["DEVICE_TYPE"]] = device["deviceType"];
-                    if (device["deviceType"] == constants["PLATFORM_IOS"]) {
+                    deviceObject[constants["DEVICE_TYPE"]] = device["type"];
+                    if (device["type"] == constants["PLATFORM_IOS"]) {
                         properties[constants["DEVICE_MODEL"]] = properties[constants["DEVICE_PRODUCT"]];
                         delete properties[constants["DEVICE_PRODUCT"]];
                         properties[constants["DEVICE_VENDOR"]] = constants["VENDOR_APPLE"];
