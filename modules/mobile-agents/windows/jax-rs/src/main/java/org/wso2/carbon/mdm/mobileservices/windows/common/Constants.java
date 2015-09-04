@@ -175,12 +175,13 @@ public final class Constants {
 			throw new AssertionError();
 		}
 
-		public static final String CAMERA = "CAMERA";
 		public static final String DEVICE_LOCK = "DEVICE_LOCK";
 		public static final String DISENROLL = "DISENROLL";
 		public static final String DEVICE_RING = "DEVICE_RING";
 		public static final String WIPE_DATA = "WIPE_DATA";
 		public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
+		public static final String LOCK_RESET = "LOCKRESET";
+		public static final String PIN_CODE = "LOCK_PIN";
 
 	}
 

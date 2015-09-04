@@ -18,7 +18,8 @@ public class OperationCode {
 		RESOLUTION("./DevDetail/Ext/Microsoft/Resolution"),
 		DEVICE_NAME("./DevDetail/Ext/Microsoft/DeviceName"),
 		CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI"),
-		LOCK_PIN("./Vendor/MSFT/RemoteLock/NewPINValue");
+		LOCK_PIN("./Vendor/MSFT/RemoteLock/NewPINValue"),
+		LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN");
 
 
 		private final String code;
@@ -38,7 +39,8 @@ public class OperationCode {
 		DEVICE_LOCK("./Vendor/MSFT/RemoteLock/Lock"),
 		WIPE_DATA("./Vendor/MSFT/RemoteWipe/doWipe"),
 		DISENROLL("./Vendor/MSFT/DMClient/Unenroll"),
-		LOCK_AND_RESET_PIN("./Vendor/MSFT/RemoteLock/LockAndResetPIN");
+		LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN");
+
 
 		private final String code;
 

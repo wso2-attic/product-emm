@@ -53,7 +53,7 @@
 
     <context-param>
         <param-name>doAuthentication</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
     <context-param>
         <param-name>managed-api-enabled</param-name>

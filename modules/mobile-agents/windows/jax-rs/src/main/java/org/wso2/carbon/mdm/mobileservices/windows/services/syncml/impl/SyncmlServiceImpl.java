@@ -24,6 +24,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.notification.mgt.Notification;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
@@ -223,6 +226,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 				log.error(msg);
 				return Response.status(401).entity(msg).build();
 			}
+
 		} else if (SYNCML_SECOND_MESSAGE == msgID && SESSIONID_FIRST == sessionId) {
 			enrollDevice(request);
 			return Response.ok().entity(generateReply(syncmlDocument, null)).build();
@@ -442,11 +446,33 @@ public class SyncmlServiceImpl implements SyncmlService {
 				}
 			}
 		}
+		Results result = syncmlDocument.getBody().getResults();
+		if (result != null) {
+			List<Item> itemList = result.getItem();
+			for (int i = 0; i < itemList.size(); i++) {
+				Item item = itemList.get(i);
+				if (!item.getData().equals(null) && item.getSource().getLocURI().equals(OperationCode.Info
+						.LOCK_PIN)) {
+					String pinValue = item.getData();
+					NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
+					Notification notification = new Notification();
+					notification.setDescription(pinValue);
+					notification.setOperationId(result.getCommandReference());
+					notification.setDeviceIdentifier(deviceIdentifier);
+					try {
+						nmService.addNotification(notification);
+					} catch (NotificationManagementException e) {
+						String msg = "Failure Occurred in ";
+						log.error(msg);
+					}
+				}
+			}
+		}
 		pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
 		for (int z = 0; z < pendingOperations.size(); z++) {
-				pendingOperations.get(z).setStatus(Operation.Status.IN_PROGRESS);
-				SyncmlUtils.getDeviceManagementService().updateOperation(deviceIdentifier, pendingOperations.get(z));
-			}
+			pendingOperations.get(z).setStatus(Operation.Status.IN_PROGRESS);
+			SyncmlUtils.getDeviceManagementService().updateOperation(deviceIdentifier, pendingOperations.get(z));
+		}
 		return pendingOperations;
 	}
 
@@ -487,6 +513,19 @@ public class SyncmlServiceImpl implements SyncmlService {
 						operation.getId() == status.getCommandReference()) {
 					operation.setStatus(Operation.Status.ERROR);
 					updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+
+					NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
+					Notification lockResetNotification = new Notification();
+					lockResetNotification.setOperationId(status.getCommandReference());
+					lockResetNotification.setStatus("Error");
+					lockResetNotification.setDeviceIdentifier(deviceIdentifier);
+					lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
+					try {
+						service.addNotification(lockResetNotification);
+					} catch (NotificationManagementException e) {
+						String msg = "Failure occured in getting notification service";
+						log.error(msg);
+					}
 				}
 			}
 		}
@@ -543,5 +582,22 @@ public class SyncmlServiceImpl implements SyncmlService {
 			}
 			updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
 		}
+		else {
+			inProgressOperations = SyncmlUtils.getDeviceManagementService()
+					.getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+			for (int y = 0; y < inProgressOperations.size(); y++) {
+				Operation operation = inProgressOperations.get(y);
+				if (operation.getId() == status.getCommandReference()) {
+					operation.setStatus(Operation.Status.ERROR);
+					operation.setOperationResponse("false");
+				}
+			}
+			updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+
+		}
+	}
+
+	public void getDeviceInfo() {
+		
 	}
 }

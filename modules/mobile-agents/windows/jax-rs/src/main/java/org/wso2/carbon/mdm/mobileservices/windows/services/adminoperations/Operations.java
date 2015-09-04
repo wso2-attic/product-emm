@@ -55,4 +55,9 @@ public interface Operations {
     @Path("/storage-encrypt")
     Response encryptStorage(@HeaderParam("Accept") String acceptHeader,
                             EncryptBeanWrapper encryptBeanWrapper) throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Path("/lockreset")
+    Response lockReset(@HeaderParam("Accept") String acceptHeader, List<String> deviceids)
+            throws WindowsDeviceEnrolmentException;
 }

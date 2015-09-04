@@ -35,7 +35,11 @@ public class SyncmlBody {
 	Alert alert;
 	Replace replace;
 	Results results;
+	Sequence sequence;
 
+	public Sequence getSequence() { return sequence; }
+
+	public void setSequence(Sequence sequence) { this.sequence = sequence; }
 
 	public Get getGetCommands() {
 		return getCommands;
@@ -120,6 +124,10 @@ public class SyncmlBody {
 					getExec().get(x).buildExecElement(doc, syncBody);
 				}
 			}
+		}
+
+		if (getSequence() !=null) {
+			getSequence().buildSequenceElement(doc, syncBody);
 		}
 
 		syncBody.appendChild(doc.createElement(Constants.FINAL));

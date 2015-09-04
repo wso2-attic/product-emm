@@ -72,6 +72,7 @@ public class Constants {
 	public static final String RESULTS = "Results";
 	public static final String CRED_FORMAT = "b64";
 	public static final String CRED_TYPE = "syncml:auth-md5";
+	public static final String SEQUENCE = "Sequence";
 
 	/**
 	 * SynclML service related constants
@@ -82,6 +83,7 @@ public class Constants {
 		public static final String PIN_NOTFOUND = "405";
 		public static final String COMMAND_FAIL = "500";
 		public static final String ACCEPTED_FOR_PROCESSING = "202";
+		public static final String LOCKRESET_NOTIFICATION = "Please Reset device lock.";
 	}
 
 }

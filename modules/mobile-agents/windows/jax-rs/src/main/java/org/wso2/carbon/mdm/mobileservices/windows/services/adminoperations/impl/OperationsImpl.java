@@ -220,5 +220,35 @@ public class OperationsImpl implements Operations {
         }
     }
 
+    @POST
+    @Path("/lockreset")
+    public Response lockReset(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
+            throws WindowsDeviceEnrolmentException {
 
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking windows device lockReset storage operation");
+        }
+        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(Constants.OperationCodes.LOCK_RESET);
+            operation.setType(Operation.Type.COMMAND);
+
+            return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message.setResponseMessage(errorMessage);
+            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            log.error(errorMessage, e);
+            throw new WindowsOperationsException(message, responseMediaType);
+        }
+    }
 }

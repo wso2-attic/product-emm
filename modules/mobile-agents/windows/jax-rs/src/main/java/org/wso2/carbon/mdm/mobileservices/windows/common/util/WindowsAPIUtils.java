@@ -19,6 +19,7 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -54,6 +55,19 @@ public class WindowsAPIUtils {
                 (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
         return dmService;
+    }
+
+    public static NotificationManagementService getNotificationManagementService() {
+
+        NotificationManagementService nmService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        nmService =
+                (NotificationManagementService)ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
+        return nmService;
     }
 
     public static MediaType getResponseMediaType(String acceptHeader) {

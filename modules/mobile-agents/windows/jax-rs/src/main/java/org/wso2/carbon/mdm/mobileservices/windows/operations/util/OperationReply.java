@@ -95,8 +95,9 @@ public class OperationReply {
         SyncmlBody sourcebody = syncmlDocument.getBody();
         List<Status> ststusList = sourcebody.getStatus();
         for (int i = 0; i < ststusList.size(); i++) {
-            if (HEADER_COMMAND_TEXT.equals(ststusList.get(i).getCommand()) && ststusList.get(i).getChallenge() != null) {
-                nextnonceValue = ststusList.get(i).getChallenge().getMeta().getNextNonce();
+            if (HEADER_COMMAND_TEXT.equals(ststusList.get(i).getCommand()) &&
+                    ststusList.get(i).getChallenge() != null) {nextnonceValue = ststusList.get(i).getChallenge().
+                    getMeta().getNextNonce();
             }
         }
         cred.setData(new SyncmlCredinitials().generateCredData(nextnonceValue));
@@ -212,11 +213,11 @@ public class OperationReply {
         List<Add> addsAtomic = new ArrayList<Add>();
         Replace replaceElement = new Replace();
 
+
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
                 Operation operation = operations.get(x);
                 Operation.Type type = operation.getType();
-                String operationcode = operation.getCode();
                 switch (type) {
                     case CONFIG:
                         List<Add> addConfig = appendAddConfiguration(operation);
@@ -249,9 +250,36 @@ public class OperationReply {
                         }
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                                 .OperationCodes.WIPE_DATA)) {
-
                             Exec execElement = executeCommand(operation);
                             execList.add(execElement);
+                        }
+                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                                .OperationCodes.LOCK_RESET)) {
+                            Sequence sequenceElement = new Sequence();
+                            Sequence sequence = buildSequence(operation, sequenceElement);
+                           // Sequence sequenceElement = new Sequence();
+
+//                            sequenceElement.setCommandId(operation.getId());
+//
+//                            Exec execElement = new Exec();
+//                            execElement.setCommandId(operation.getId());
+//                            List<Item> itemsExec = new ArrayList<Item>();
+//                            Item itemExec = appendExecInfo(operation);
+//                            itemsExec.add(itemExec);
+//                            execElement.setItems(itemsExec);
+//
+//                            sequenceElement.setExec(execElement);
+//
+//                            Get getElements = new Get();
+//                            getElements.setCommandId(operation.getId());
+//                            List<Item> getItems = new ArrayList<>();
+//                            Item itemGets = appendGetInfo(operation);
+//                            getItems.add(itemGets);
+//                            getElements.setItems(getItems);
+//
+//                            sequenceElement.setGet(getElements);
+                            //syncmlBody.setSequence(sequenceElement);
+                            syncmlBody.setSequence(sequence);
                         }
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                                 .OperationCodes.ENCRYPT_STORAGE)) {
@@ -281,6 +309,9 @@ public class OperationReply {
         syncmlBody.setGet(getElement);
         syncmlBody.setExec(execList);
         syncmlBody.setReplace(replaceElement);
+
+
+
     }
 
     private Item appendExecInfo(Operation operation) {
@@ -314,6 +345,16 @@ public class OperationReply {
                 item.setTarget(target);
             }
         }
+            if (operationCode.equals("LOCKRESET")) {
+                operation.setCode(org.wso2.carbon.mdm.mobileservices.windows.common.Constants.OperationCodes.PIN_CODE);
+                for (Info getInfo : Info.values()) {
+                    if (operation.getCode().equals(getInfo.name())) {
+                        Target target = new Target();
+                        target.setLocURI(getInfo.getCode());
+                        item.setTarget(target);
+                    }
+                }
+            }
         return item;
     }
 
@@ -395,18 +436,29 @@ public class OperationReply {
         return execElement;
     }
 
-    public void cameraOperation(Operation operation) {
-        Atomic atomicElement = new Atomic();
-        atomicElement.setCommandId(1);
-        List<Replace> replaces = new ArrayList<>();
-        Replace replace = new Replace();
-        replace.setCommandId(operation.getId());
-        List<Item> items = new ArrayList<>();
-        Item targetItem = appendExecInfo(operation);
-        items.add(targetItem);
+    public Sequence buildSequence(Operation operation, Sequence sequenceElement) {
+        sequenceElement.setCommandId(operation.getId());
+
+        Exec execElement = new Exec();
+        execElement.setCommandId(operation.getId());
+        List<Item> itemsExec = new ArrayList<Item>();
+        Item itemExec = appendExecInfo(operation);
+        itemsExec.add(itemExec);
+        execElement.setItems(itemsExec);
+
+        sequenceElement.setExec(execElement);
+
+        Get getElements = new Get();
+        getElements.setCommandId(operation.getId());
+        List<Item> getItems = new ArrayList<>();
+        Item itemGets = appendGetInfo(operation);
+        getItems.add(itemGets);
+        getElements.setItems(getItems);
+
+        sequenceElement.setGet(getElements);
+        return  sequenceElement;
 
     }
-
-    }
+}
 
 
