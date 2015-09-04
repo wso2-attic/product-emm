@@ -257,28 +257,6 @@ public class OperationReply {
                                 .OperationCodes.LOCK_RESET)) {
                             Sequence sequenceElement = new Sequence();
                             Sequence sequence = buildSequence(operation, sequenceElement);
-                           // Sequence sequenceElement = new Sequence();
-
-//                            sequenceElement.setCommandId(operation.getId());
-//
-//                            Exec execElement = new Exec();
-//                            execElement.setCommandId(operation.getId());
-//                            List<Item> itemsExec = new ArrayList<Item>();
-//                            Item itemExec = appendExecInfo(operation);
-//                            itemsExec.add(itemExec);
-//                            execElement.setItems(itemsExec);
-//
-//                            sequenceElement.setExec(execElement);
-//
-//                            Get getElements = new Get();
-//                            getElements.setCommandId(operation.getId());
-//                            List<Item> getItems = new ArrayList<>();
-//                            Item itemGets = appendGetInfo(operation);
-//                            getItems.add(itemGets);
-//                            getElements.setItems(getItems);
-//
-//                            sequenceElement.setGet(getElements);
-                            //syncmlBody.setSequence(sequenceElement);
                             syncmlBody.setSequence(sequence);
                         }
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
