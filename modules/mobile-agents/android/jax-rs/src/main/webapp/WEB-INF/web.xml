@@ -70,5 +70,13 @@
     <!--<param-name>managed-api-endpoint</param-name>-->
     <!--<param-value>http://localhost:9763/mdm-android-agent</param-value>-->
     <!--</context-param>-->
-
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>MDM-Android-Agent</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>
