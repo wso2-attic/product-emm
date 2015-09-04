@@ -176,7 +176,7 @@ function loadDevices(searchType, searchParam){
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;
             if(data.length == 0){
-                $("#ast-container").html("No Devices to show currently.");
+                $("#ast-container").html("No device is available to be displayed.");
             }else{
                 var content = template(viewModel);
                 $("#ast-container").html(content);
