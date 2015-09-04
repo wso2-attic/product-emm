@@ -427,6 +427,7 @@ public class SyncmlServiceImpl implements SyncmlService {
 		deviceIdentifier.setId(syncmlDocument.getHeader().getSource().getLocURI());
 		deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
 		List<Status> lsStatus = syncmlDocument.getBody().getStatus();
+		String locUri = null;
 
 		for (int x = 0; x < lsStatus.size(); x++) {
 			Status status = lsStatus.get(x);
@@ -448,11 +449,15 @@ public class SyncmlServiceImpl implements SyncmlService {
 		}
 		Results result = syncmlDocument.getBody().getResults();
 		if (result != null) {
+			for (OperationCode.Info info : OperationCode.Info.values()) {
+				if ("LOCK_PIN".equals(info.name())) {
+					locUri = info.getCode();
+				}
+			}
 			List<Item> itemList = result.getItem();
 			for (int i = 0; i < itemList.size(); i++) {
 				Item item = itemList.get(i);
-				if (!item.getData().equals(null) && item.getSource().getLocURI().equals(OperationCode.Info
-						.LOCK_PIN)) {
+				if (!item.getData().equals(null) && item.getSource().getLocURI().equals(locUri)) {
 					String pinValue = item.getData();
 					NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
 					Notification notification = new Notification();
