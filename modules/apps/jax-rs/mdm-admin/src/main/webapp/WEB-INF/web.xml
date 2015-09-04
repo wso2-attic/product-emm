@@ -68,6 +68,7 @@
         <!--<param-value>true</param-value>-->
     <!--</context-param>-->
 
+    <!-- Below configuration is used to redirect http requests to https -->
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>MDM-Admin</web-resource-name>
