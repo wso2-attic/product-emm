@@ -37,7 +37,7 @@ $.fn.datatables_extended = function(settings){
                 'lip' +
                 '>',
             language: {
-                searchPlaceholder: 'Filter by ...',
+                searchPlaceholder: 'Search for ...',
                 search: ''
             },
             initComplete: function(){
