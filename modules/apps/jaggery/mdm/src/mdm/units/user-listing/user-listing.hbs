@@ -1,52 +1,97 @@
 {{#zone "main"}}
     <div class="row wr-device-board">
         <div class="col-lg-12 wr-secondary-bar">
-            <span class="page-sub-title">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Users
-            </span>
+            <span class="page-sub-title">Users</span>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <!-- content -->
-            <div class="wr-content">
-                <span id="user-listing-status-msg">{{userListingStatusMsg}}</span>
-                <div class="wr-list-group wr-sortable user-list">
-                    {{#each users}}
-                        <span id="{{username}}" class="list-group-item">
-                            <i class="wr-sortable-icon fw fw-sort hide"></i>
-                            <i class="wr-list-icon fw fw-user"></i>
-                            <div class="wr-list-desc">
-                                <h3 class="wr-list-name">{{firstname}} {{lastname}}</h3>
-                                <span class="wr-list-username">{{username}}</span>
-                                {{#unequal "admin" username }}
-                                    <a href="mailto:{{emailAddress}}" class="wr-list-email"> | {{emailAddress}}</a>
-                                {{/unequal}}
-                            </div>
-                            <span class="list-group-item-actions">
-                                <a href="#" class="invite-user-link cu-btn-inner" data-username="{{username}}">
-                                    <span class="fw-stack">
+    <!-- content -->
+    <div class="container-fluid">
+        <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view" id="user-grid">
+            <thead>
+            <tr class="sort-row">
+                <th></th>
+                <th>By Name</th>
+                <th>By Username</th>
+                <th>By Email</th>
+                <th></th>
+            </tr>
+            <tr class="filter-row filter-box">
+                <th></th>
+                <th data-for="By Name" class="text-filter"></th>
+                <th data-for="By Username" class="text-filter"></th>
+                <th data-for="By Email" class="text-filter"></th>
+                <th></th>
+            </tr>
+            <tr class="bulk-action-row">
+                <th colspan="5">
+                    <ul class="tiles">
+                        <li class="square">
+                            <a href="#" data-click-event="remove-form" class="btn square-element invite-user-link" data-toggle="modal" data-target="#modalDemo">
+                                    <span class="icon fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-invitation fw-stack-1x"></i>
                                     </span>
-                                    Invite
-                                </a>
-                                {{#unequal "admin" username }}
-                                    <a href="#" class="remove-user-link cu-btn-inner" data-username="{{username}}">
-                                    <span class="fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="fw fw-delete fw-stack-1x"></i>
-                                    </span>
-                                        Remove
-                                    </a>
-                                {{/unequal}}
+                                Invite Selected
+                            </a>
+                        </li>
+                    </ul>
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {{#each users}}
+                <tr data-type="selectable" data-id="{{username}}">
+                    <td class="remove-padding icon-only content-fill">
+                        <div class="thumbnail icon">
+                            <i class="square-element text fw fw-user"></i>
+                        </div>
+                    </td>
+                    <td class="fade-edge" data-search="{{firstname}},{{lastname}}" data-display="{{firstname}} {{lastname}}">
+                        <h4>{{firstname}} {{lastname}}</h4>
+                    </td>
+                    <td class="fade-edge remove-padding-top" data-search="{{username}}" data-display="{{username}}" data-grid-label="Username">{{username}}</td>
+                    <td class="fade-edge remove-padding-top" data-search="{{emailAddress}}" data-display="{{emailAddress}}" data-grid-label="Email">
+                        <a href="mailto:{{emailAddress}}" class="wr-list-email">
+                            {{emailAddress}}
+                            {{#unequal "" emailAddress }}
+                                Unspecified
+                            {{/unequal}}
+                        </a>
+                    </td>
+                    <td class="text-right content-fill text-left-on-grid-view no-wrap">
+                        <!--<a href="#" data-username="{{username}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view edit-user-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-edit fw-stack-1x"></i>
                             </span>
-                            <div class="clearfix"></div>
-                        </span>
-                    {{/each}}
-                </div>
-            </div>
-            <!-- /content -->
+                            <span class="hidden-xs hidden-on-grid-view">Edit</span>
+                        </a>-->
+
+                        {{#unequal "admin" username }}
+                            <a href="#" data-username="{{username}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-user-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-delete fw-stack-1x"></i>
+                            </span>
+                                <span class="hidden-xs hidden-on-grid-view">Remove</span>
+                            </a>
+                        {{/unequal}}
+                    </td>
+                </tr>
+            {{/each}}
+            <br class="c-both" />
+            </tbody>
+        </table>
+
+    </div>
+    <br class="c-both"/>
+    <div id="content-filter-types" style="display: none">
+        <div class="sort-title">Sort By</div>
+        <div class="sort-options">
+            <a href="#">By Name<span class="ico-sort-asc"></span></a>
+            <a href="#">By Username</a>
+            <a href="#">By Email</a>
         </div>
     </div>
 
@@ -144,6 +189,30 @@
                     <div class="buttons">
                         <a href="#" id="remove-user-error-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorUsers" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        Please select a user or a list of users to send invitation emails.
+                    </h4>
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </div>
                 </div>
