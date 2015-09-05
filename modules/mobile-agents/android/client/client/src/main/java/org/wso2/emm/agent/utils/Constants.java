@@ -26,8 +26,8 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
-    public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
-    public static final String REG_ID = "gcm_reg_id";
+    	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
+    	public static final String REG_ID = "gcm_reg_id";
 	public static final String NOTIFIER_LOCAL = "LOCAL";
 	public static final String NOTIFIER_GCM = "GCM";
 
@@ -72,7 +72,7 @@ public class Constants {
 	public static final String ENABLED= "enabled";
 	public static final String LOCAL = "LOCAL";
 	public static final String LOG_FILE = "wso2log.txt";
-    public static final String MESSAGE_TYPE_GCM = "gcm";
+    	public static final String MESSAGE_TYPE_GCM = "gcm";
 	public static final String OWNERSHIP_BYOD = "BYOD";
 	public static final String OWNERSHIP_COPE = "COPE";
 	public static final String DEVICE_TYPE = "deviceType";
@@ -194,7 +194,7 @@ public class Constants {
 		public static final String MEMORY_INFO_EXTERNAL_AVAILABLE = "EXTERNAL_AVAILABLE_MEMORY";
 		public static final String NETWORK_OPERATOR = "OPERATOR";
 		public static final String INFO = "DEVICE_INFO";
-        public static final String GCM_TOKEN = "GCM_TOKEN";
+        	public static final String GCM_TOKEN = "GCM_TOKEN";
 	}
 
 }
