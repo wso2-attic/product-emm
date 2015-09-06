@@ -65,13 +65,12 @@ public class WindowsAPIUtils {
         ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
         ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
         nmService =
-                (NotificationManagementService)ctx.getOSGiService(DeviceManagementProviderService.class, null);
+                (NotificationManagementService) ctx.getOSGiService(NotificationManagementService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
         return nmService;
     }
 
     public static MediaType getResponseMediaType(String acceptHeader) {
-
         MediaType responseMediaType;
         if (MediaType.WILDCARD.equals(acceptHeader)) {
             responseMediaType = MediaType.APPLICATION_JSON_TYPE;
@@ -132,4 +131,6 @@ public class WindowsAPIUtils {
         operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
         return operations;
     }
+
+
 }
