@@ -392,8 +392,8 @@ public class SyncmlServiceImpl implements SyncmlService {
             throws OperationManagementException, DeviceManagementException {
 
         List<? extends Operation> pendingOperations;
-        DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlDocument.getHeader().getSource()
-                                                                                    .getLocURI());
+        DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
+                syncmlDocument.getHeader().getSource().getLocURI());
         List<Status> lsStatus = syncmlDocument.getBody().getStatus();
         String lockUri = null;
 
@@ -475,7 +475,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
             for (int z = 0; z < inProgressOperations.size(); z++) {
                 Operation operation = inProgressOperations.get(z);
-                if (inProgressOperations.get(z).getCode().equals(OperationCode.Command.DEVICE_LOCK)
+                if (inProgressOperations.get(z).getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode())
                     && operation.getId() == status.getCommandReference()) {
                     operation.setStatus(Operation.Status.COMPLETED);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
@@ -485,7 +485,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
             for (int z = 0; z < inProgressOperations.size(); z++) {
                 Operation operation = inProgressOperations.get(z);
-                if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK) &&
+                if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode()) &&
                     operation.getId() == status.getCommandReference()) {
                     operation.setStatus(Operation.Status.ERROR);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
@@ -538,15 +538,15 @@ public class SyncmlServiceImpl implements SyncmlService {
                 if (operation.getCode().equals(OperationCode.Command.WIPE_DATA) &&
                     operation.getId() == status.getCommandReference()) {
                     operation.setStatus(Operation.Status.COMPLETED);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                                     inProgressOperations);
                 }
             }
         }
     }
 
     public void updateDeviceOperations(Status status, SyncmlDocument syncmlDocument,
-                                       DeviceIdentifier
-                                               deviceIdentifier)
+                                       DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException {
 
         inProgressOperations = SyncmlUtils.getDeviceManagementService()
@@ -561,7 +561,31 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
             }
             updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
-        } else {
+        } else if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
+            for (int x = 0; x < inProgressOperations.size(); x++) {
+                Operation operation = inProgressOperations.get(x);
+                if (operation.getId() == status.getCommandReference() && inProgressOperations.get(x).
+                        getCode().equals(String.valueOf(OperationCode.Command.DEVICE_LOCK))) {
+                    operation.setStatus(Operation.Status.ERROR);
+                    operation.setOperationResponse("false");
+                    try {
+                        NotificationManagementService service =
+                                WindowsAPIUtils.getNotificationManagementService();
+                        Notification lockResetNotification = new Notification();
+                        lockResetNotification.setOperationId(status.getCommandReference());
+                        lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
+                        lockResetNotification.setDeviceIdentifier(deviceIdentifier);
+                        lockResetNotification.setDescription(
+                                Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
+                        service.addNotification(lockResetNotification);
+                    } catch (NotificationManagementException e) {
+                        String msg = "Failure occurred in getting notification service";
+                        log.error(msg);
+                    }
+                }
+            }
+        }
+        else {
             for (int x = 0; x < inProgressOperations.size(); x++) {
                 Operation operation = inProgressOperations.get(x);
                 if (operation.getId() == status.getCommandReference()) {
