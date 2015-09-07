@@ -17,7 +17,7 @@ var mdmProps = require('/config/mdm-props.js').config();
 log.info(platform);
 var authUrl;
 if(platform == "iOS"){
-    var authUrl = mdmProps.iOSConfigRoot + 'enrollment/authenticate';
+    var authUrl = mdmProps.iOSConfigRoot + 'authenticate';
 } else if(platform == "Windows Phone"){
     var authUrl = mdmProps.windowsConfigRoot;
 }
