@@ -3516,8 +3516,13 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:first-child {
 .status-active{
     color: #A4C639;
 }
+
 .status-inactive{
     color: #a94442;
+}
+
+.status-removed{
+    color: #a99d2f;
 }
 
 

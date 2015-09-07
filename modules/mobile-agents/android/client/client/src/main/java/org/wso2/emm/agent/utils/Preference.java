@@ -74,4 +74,35 @@ public class Preference {
 		return mainPref.getFloat(key, DEFAULT_INDEX);
 	}
 
+	/**
+	 * Put data to shared preferences in private mode.
+	 * @param context - The context of activity which is requesting to put data.
+	 * @param key     - Used to identify the value.
+	 * @param value   - The actual value to be saved.
+	 */
+	public static void putInt(Context context, String key, int value) {
+		SharedPreferences mainPref =
+				context.getSharedPreferences(context.getResources()
+						                             .getString(R.string.shared_pref_package),
+				                             Context.MODE_PRIVATE
+				);
+		Editor editor = mainPref.edit();
+		editor.putInt(key, value);
+		editor.commit();
+	}
+
+	/**
+	 * Retrieve data from shared preferences in private mode.
+	 * @param context - The context of activity which is requesting to put data.
+	 * @param key     - Used to identify the value to to be retrieved.
+	 */
+	public static int getInt(Context context, String key) {
+		SharedPreferences mainPref =
+				context.getSharedPreferences(context.getResources()
+						                             .getString(R.string.shared_pref_package),
+				                             Context.MODE_PRIVATE
+				);
+		return mainPref.getInt(key, DEFAULT_INDEX);
+	}
+
 }

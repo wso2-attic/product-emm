@@ -17,6 +17,9 @@ var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
+var dataTableSelection = '.DTTT_selected';
+$('#user-grid').datatables_extended();
+$(".icon .text").res_text(0.2);
 
 /*
  * set popup maximum height function.
@@ -42,35 +45,55 @@ function hidePopup() {
     $(modalPopup).hide();
 }
 
+/*
+ * Function to get selected usermanes.
+ */
+function getSelectedUsernames() {
+    var usernameList = [];
+    $(dataTableSelection).each(function (index) {
+        var user = $(this);
+        var userId = user.data('id');
+        usernameList.push(userId);
+    });
+    return usernameList;
+}
+
 /**
  * Following click function would execute
  * when a user clicks on "Invite" link
  * on User Management page in WSO2 MDM Console.
  */
 $("a.invite-user-link").click(function () {
-    var username = $(this).data("username");
-    var inviteUserAPI = "/mdm-admin/users/" + username + "/email-invitation";
+    var usernameList = getSelectedUsernames();
+    var inviteUserAPI = "/mdm-admin/users/email-invitation";
 
-    $(modalPopupContent).html($('#invite-user-modal-content').html());
+    if (usernameList == 0) {
+        $(modalPopupContent).html($("#errorUsers").html());
+    } else {
+        $(modalPopupContent).html($('#invite-user-modal-content').html());
+    }
+
     showPopup();
 
     $("a#invite-user-yes-link").click(function () {
-        invokerUtil.post(
-            inviteUserAPI,
-            username,
-            function () {
+        $.ajax({
+            type : "POST",
+            url : inviteUserAPI,
+            contentType : "application/json",
+            data : JSON.stringify(usernameList),
+            success : function () {
                 $(modalPopupContent).html($('#invite-user-success-content').html());
                 $("a#invite-user-success-link").click(function () {
                     hidePopup();
                 });
             },
-            function () {
+            error : function (data) {
                 $(modalPopupContent).html($('#invite-user-error-content').html());
                 $("a#invite-user-error-link").click(function () {
                     hidePopup();
                 });
             }
-        );
+        });
     });
 
     $("a#invite-user-cancel-link").click(function () {

@@ -146,7 +146,7 @@ $(document).ready(function () {
                         $(saveNewPrioritiesButton).addClass("hidden");
                         $("#policy-listing-status-msg").text("Add more policies to set-up a priority order.");
                     } else if (newPolicyListCount == 0) {
-                        $("#policy-listing-status-msg").text("No Policies to show currently.");
+                        $("#policy-listing-status-msg").text("No policy is available to be displayed.");
                     }
                     $(modalPopupContent).html($('#remove-policy-success-content').html());
                     $("a#remove-policy-success-link").click(function () {

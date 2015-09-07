@@ -17,12 +17,13 @@
  */
 
 var carbonModule = require("carbon");
-var mdmProps = require('/config/mdm-props.js').config();
+var mdmProps = require("/config/mdm-props.js").config();
 var carbonServer = new carbonModule.server.Server({
     tenanted: true,
-    url: mdmProps.httpsURL + '/admin'
+    url: mdmProps["httpsURL"] + "/admin"
 });
 application.put("carbonServer", carbonServer);
-var userModule = require("/modules/user.js").userModule;
-var utility = require("/modules/utility.js").utility;
+
+var userModule = require("/modules/user.js")["userModule"];
+var utility = require("/modules/utility.js")["utility"];
 utility.insertAppPermissions(userModule, "init");
