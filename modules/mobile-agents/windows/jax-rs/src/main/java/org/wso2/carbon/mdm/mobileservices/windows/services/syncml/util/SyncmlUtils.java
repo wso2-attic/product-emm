@@ -45,7 +45,7 @@ public class SyncmlUtils {
             context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             deviceManagementService =
                     (DeviceManagementProviderService) context.getOSGiService(DeviceManagementProviderService.class,
-                            null);
+                                                                             null);
             return deviceManagementService;
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
