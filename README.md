@@ -32,6 +32,6 @@ Whether it is device provisioning, device configuration management, policy enfor
 
 WSO2 MDM developers can be contacted via the mailing lists:
 
-* Carbon Developers List : dev@wso2.org
-* Carbon Architecture List : architecture@wso2.org
+* MDM Developers List : dev@wso2.org
+* MDM Architecture List : architecture@wso2.org
 
