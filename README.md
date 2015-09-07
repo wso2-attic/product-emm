@@ -4,9 +4,9 @@ WSO2 Mobile Device Manager (WSO2 MDM) is a comprehensive platform that helps sol
 
 Whether it is device provisioning, device configuration management, policy enforcement, mobile application management, device data security, or compliance monitoring, WSO2 MDM offers a single enterprise-grade platform.
 
-##FEATURES
+###FEATURES
 
-Mobile Device Management (MDM)
+#####Mobile Device Management (MDM)
 * Self-service device enrollment and management with end-user MDM console
 * Manage both employee and corporate owned devices (BYOD, COPE)
 * Support for Android, iOS and Windows Mobile
@@ -19,16 +19,16 @@ Mobile Device Management (MDM)
 * Track locations of enrolled devices
 * Get reports and analytics
  
-Mobile Data Security
+#####Mobile Data Security
 * Enforce built-in security features of passcode and encryption
 * Encryption of data storage
  
-##How to Contribute
+###How to Contribute
 
 * WSO2 Mobile Devce Management code is hosted in [GitHub](https://github.com/wso2/product-mdm/).
 * Please report issues at [MDM JIRA](https://wso2.org/jira/browse/MDM) and Send your pull requests to [development branch](https://github.com/wso2/product-mdm).
 
-##Contact us
+###Contact us
 
 WSO2 MDM developers can be contacted via the mailing lists:
 
