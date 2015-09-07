@@ -26,7 +26,7 @@ Mobile Data Security
 ##How to Contribute
 
 * WSO2 Mobile Devce Management code is hosted in [GitHub](https://github.com/wso2/product-mdm/).
-* Please report issues at [Carbon JIRA](https://wso2.org/jira/browse/MDM) and Send your pull requests to [development branch](https://github.com/wso2/product-mdm).
+* Please report issues at [MDM JIRA](https://wso2.org/jira/browse/MDM) and Send your pull requests to [development branch](https://github.com/wso2/product-mdm).
 
 ##Contact us
 
