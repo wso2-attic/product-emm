@@ -1,24 +1,39 @@
+{{!-- Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+
+WSO2 Inc. licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except
+in compliance with the License.
+You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License. --}}
+
 {{#zone "main"}}
     <div class="row">
-
-        <div class="container col-md-8 wr-text">
-            <div class="wr-head"><h2>{{header}}</h2></div>
-            <p>If you are not registered with WSO2 Enterprise Mobility Manager, Please download and install the Agent.</p>
-        </div>
-        <div class="container col-md-4">
-        </div>
-    </div>
-    <div class="row">
-        {{#if rootCertificateURL}}
-            <div class="container col-md-4 wr-buttons">
-                <a href="{{rootCertificateURL}}" class="btn-download-agent">Download Root Certificate</a>
+        <div class="container col-md-4 wr-text">
+            <hr>
+            <div class="wr-head"><h2>{{pageHeader}}</h2></div>
+            {{#if emmCertificateDownloadURL}}
+                If you have not already enrolled this device with WSO2 Enterprise Mobility Manager,
+                Please download and install following EMM Certificate and Agent to continue.
+            {{else}}
+                If you have not already enrolled this device with WSO2 Enterprise Mobility Manager,
+                Please download and install following Agent to continue.
+            {{/if}}
+            {{#if emmCertificateDownloadURL}}
+                <div class="wr-buttons">
+                    <a href="{{emmCertificateDownloadURL}}" class="btn-download-agent">Download EMM Certificate</a>
+                </div>
+            {{/if}}
+            <div class="wr-buttons">
+                <a href="{{agentDownloadURL}}" class="btn-download-agent">Download EMM Agent</a>
             </div>
-        {{/if}}
-        <div class="container col-md-4 wr-buttons">
-            <a href="{{link}}"
-               class="btn-download-agent">Download Agent</a>
-        </div>
-        <div class="container col-md-9">
         </div>
     </div>
 {{/zone}}
