@@ -40,5 +40,7 @@ public class Message {
         return responseCode;
     }
 
-    public void setResponseCode(String responseCode) { this.responseCode = responseCode; }
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
 }
