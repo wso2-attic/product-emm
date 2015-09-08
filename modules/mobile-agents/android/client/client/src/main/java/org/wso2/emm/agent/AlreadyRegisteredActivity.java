@@ -19,6 +19,9 @@ package org.wso2.emm.agent;
 
 import java.util.Map;
 
+import android.app.Activity;
+import android.widget.Toast;
+import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
@@ -69,6 +72,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private boolean isPollingStarted;
 	private DevicePolicyManager devicePolicyManager;
 	private ComponentName cdmDeviceAdmin;
+	private DeviceInfo info;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
 		context = this;
 		resources = context.getResources();
+		info = new DeviceInfo(context);
 		Bundle extras = getIntent().getExtras();
 
 		if (extras != null) {
@@ -97,6 +102,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
+		} else{
+			regId = info.getDeviceId();
 		}
 
 		if (freshRegFlag) {
@@ -168,9 +175,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 						getResources().getString(R.string.dialog_message_unregistering),
 						getResources().getString(R.string.dialog_message_please_wait),
 						true);
-
-		regId = Preference.getString(context,
-				context.getResources().getString(R.string.shared_pref_regId));
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {

@@ -42,7 +42,7 @@ $(document).ready(function () {
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z0-9]{3,30}$/, username)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, username)) {
             $(errorMsg).text("Provided username is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {

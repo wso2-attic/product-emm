@@ -20,6 +20,7 @@ package org.wso2.emm.agent.services;
 import java.util.Locale;
 
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 import android.app.AlarmManager;
@@ -35,7 +36,6 @@ import android.os.SystemClock;
  * notification service at device startup.
  */
 public class DeviceStartupIntentReceiver extends BroadcastReceiver {
-	private static final String NOTIFIER_MODE = "LOCAL";
 	private static final int DEFAULT_TIME_MILLISECONDS = 1000;
 	private static final int DEFAULT_REQUEST_CODE = 0;
 	private Resources resources;
@@ -53,12 +53,11 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 		this.resources = context.getApplicationContext().getResources();
 		String mode =
 				Preference
-						.getString(context, resources.getString(R.string.shared_pref_message_mode));
-		Float interval =
-				(Float) Preference
-						.getFloat(context, resources.getString(R.string.shared_pref_interval));
+						.getString(context, resources.getString(R.string.shared_pref_notifier));
+		Float interval = Float.valueOf(Preference
+				                               .getString(context, resources.getString(R.string.shared_pref_frequency)).toString());
 
-		if (NOTIFIER_MODE.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
+		if (mode != null && Constants.NOTIFIER_LOCAL.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
 			long startTime = SystemClock.elapsedRealtime() + DEFAULT_TIME_MILLISECONDS;
 
 			Intent alarmIntent = new Intent(context, AlarmReceiver.class);

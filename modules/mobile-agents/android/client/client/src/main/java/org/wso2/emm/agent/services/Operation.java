@@ -202,7 +202,7 @@ public class Operation implements APIResultCallBack {
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
-		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getMACAddress();
+		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
 
 		CommonUtils.callSecuredAPI(context, url,
 				org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload,
