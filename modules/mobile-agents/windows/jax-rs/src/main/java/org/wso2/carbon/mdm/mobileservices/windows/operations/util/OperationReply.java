@@ -96,8 +96,8 @@ public class OperationReply {
         List<Status> ststusList = sourcebody.getStatus();
         for (int i = 0; i < ststusList.size(); i++) {
             if (HEADER_COMMAND_TEXT.equals(ststusList.get(i).getCommand()) &&
-                    ststusList.get(i).getChallenge() != null) {nextnonceValue = ststusList.get(i).getChallenge().
-                    getMeta().getNextNonce();
+                    ststusList.get(i).getChallenge() != null) {
+                nextnonceValue = ststusList.get(i).getChallenge().getMeta().getNextNonce();
             }
         }
         cred.setData(new SyncmlCredinitials().generateCredData(nextnonceValue));
