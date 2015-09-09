@@ -58,19 +58,16 @@ public class PolicyMgtService {
             PolicyManagerService policyManagerService = AndroidAPIUtils.getPolicyManagerService();
             policy = policyManagerService.getEffectivePolicy(deviceIdentifier);
             if (policy == null) {
-				responseMessage.setResponseCode(Response.Status.NO_CONTENT.toString());
-				responseMessage.setResponseMessage("No effective policy found");
+				responseMessage = Message.responseMessage("No effective policy found").
+                        responseCode(Response.Status.NO_CONTENT.toString()).build();
                 return  responseMessage;
             } else {
-				responseMessage.setResponseCode(Response.Status.OK.toString());
-				responseMessage.setResponseMessage("Effective policy added to operation");
+                responseMessage = Message.responseMessage("Effective policy added to operation").
+                        responseCode(Response.Status.OK.toString()).build();
 				return  responseMessage;
 			}
-
         } catch (PolicyManagementException e) {
-            String msg = "Error occurred while getting the policy.";
-            log.error(msg, e);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred while getting the policy.", e);
         }
     }
 
@@ -88,9 +85,7 @@ public class PolicyMgtService {
             }
             return profileFeatures;
         } catch (FeatureManagementException e) {
-            String msg = "Error occurred while getting the features.";
-            log.error(msg, e);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred while getting the features.", e);
         }
     }
 }
