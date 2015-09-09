@@ -22,6 +22,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.utils.Preference;
 
 /**
  * Local notification is a communication mechanism that essentially,
@@ -30,12 +32,15 @@ import android.os.SystemClock;
 public class LocalNotification {
 	public static boolean localNoticicationInvoked = false;
 	public static int DEFAULT_INTERVAL = 30000;
+	public static int DEFAULT_INDEX = 0;
 	public static int DEFAULT_BUFFER = 1000;
 	public static int REQUEST_CODE = 0;
 
 	public static void startPolling(Context context) {
-		int interval = DEFAULT_INTERVAL;
-
+		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
+		if(interval == DEFAULT_INDEX){
+			interval = DEFAULT_INTERVAL;
+		}
 		long currentTime = SystemClock.elapsedRealtime();
 		currentTime += DEFAULT_BUFFER;
 		if (localNoticicationInvoked == false) {

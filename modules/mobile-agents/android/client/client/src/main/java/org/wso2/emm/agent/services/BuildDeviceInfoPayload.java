@@ -69,7 +69,7 @@ public class BuildDeviceInfoPayload {
 		Device.EnrolmentInfo info = new Device.EnrolmentInfo();
 		//setting up basic details of the device
 		info.setOwner(owner);
-		device.setDeviceIdentifier(deviceInfo.getMACAddress());
+		device.setDeviceIdentifier(deviceInfo.getDeviceId());
 		device.setDescription(deviceInfo.getDeviceName());
 		device.setName(deviceInfo.getDeviceName());
 		info.setOwnership(type.equals(Constants.OWNERSHIP_BYOD)?Device.EnrolmentInfo.OwnerShip.BYOD
@@ -185,7 +185,7 @@ public class BuildDeviceInfoPayload {
 	public void build() throws AndroidAgentException {
 		device = new Device();
 
-		device.setDeviceIdentifier(deviceInfo.getMACAddress());
+		device.setDeviceIdentifier(deviceInfo.getDeviceId());
 		device.setDescription(deviceInfo.getDeviceName());
 		device.setName(deviceInfo.getDeviceName());
 

@@ -7,7 +7,7 @@ function onRequest(context) {
         context["policyListToView"] = policyListToView;
         var policyCount = policyListToView.length;
         if (policyCount == 0) {
-            context["policyListingStatusMsg"] = "No Policies to show currently.";
+            context["policyListingStatusMsg"] = "No plicy is available to be displayed.";
             context["saveNewPrioritiesButtonEnabled"] = false;
         } else if (policyCount == 1) {
             context["policyListingStatusMsg"] = "Add more policies to set-up a priority order.";

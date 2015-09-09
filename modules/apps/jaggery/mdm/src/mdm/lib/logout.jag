@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+/*
+@SSO-Related
+*/
 var constants = require('/modules/constants.js');
 var user = session.get(constants.USER_SESSION_KEY);
 var dataConfig = require('/config/mdm-props.js').config();
