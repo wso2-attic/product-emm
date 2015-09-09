@@ -50,7 +50,7 @@ public class GPSTracker extends Service implements LocationListener {
 	 * @return - Device location coordinates.
 	 */
 	private Location getLocation() {
-		try {			
+		try {
 			boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 

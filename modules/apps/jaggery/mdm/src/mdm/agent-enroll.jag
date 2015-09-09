@@ -24,7 +24,7 @@ if (username) {
     var mdmProps = require('/config/mdm-props.js').config();
     log.info(platform);
     if(platform == "iOS"){
-        var enrollUrl = mdmProps.iOSConfigRoot + 'enrollment/enroll';
+        var enrollUrl = mdmProps.iOSConfigRoot + 'enroll';
         var client = new HttpClient();
         var method = new PostMethod(enrollUrl);
         var header =  new Header();

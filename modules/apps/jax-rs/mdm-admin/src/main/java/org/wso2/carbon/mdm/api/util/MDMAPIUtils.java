@@ -6,15 +6,16 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.carbon.mdm.api.util;
 
 import org.apache.commons.logging.Log;
@@ -23,9 +24,11 @@ import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
@@ -37,7 +40,6 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 public class MDMAPIUtils {
 
     private static Log log = LogFactory.getLog(MDMAPIUtils.class);
-
 
     public static DeviceManagementProviderService getDeviceManagementService(
             String tenantDomain) throws MDMAPIException {
@@ -72,7 +74,6 @@ public class MDMAPIUtils {
     }
 
     public static UserStoreManager getUserStoreManager() throws MDMAPIException {
-
         RealmService realmService;
         UserStoreManager userStoreManager;
         try {
@@ -81,7 +82,6 @@ public class MDMAPIUtils {
             ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
             ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
-
             if (realmService == null) {
                 String msg = "Realm service not initialized";
                 log.error(msg);
@@ -99,11 +99,11 @@ public class MDMAPIUtils {
         return userStoreManager;
     }
 
-    public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId, String deviceType) {
-        DeviceIdentifier identifier = new DeviceIdentifier();
-        identifier.setId(deviceId);
-        identifier.setType(deviceType);
-        return identifier;
+    public static DeviceIdentifier instantiateDeviceIdentifier(String deviceType, String deviceId) {
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        deviceIdentifier.setType(deviceType);
+        deviceIdentifier.setId(deviceId);
+        return deviceIdentifier;
     }
 
     public static ApplicationManager getAppManagementService(String tenantDomain) throws MDMAPIException {
@@ -151,7 +151,16 @@ public class MDMAPIUtils {
         return policyManagementService;
     }
 
+	public static TenantConfigurationManagementService getTenantConfigurationManagementService() {
+		TenantConfigurationManagementService tenantConfigService;
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		tenantConfigService =
+				(TenantConfigurationManagementService) ctx.getOSGiService(TenantConfigurationManagementService.class, null);
+		return tenantConfigService;
+	}
+
     public static PolicyManagerService getPolicyManagementService() throws MDMAPIException {
         return getPolicyManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
     }
+
 }

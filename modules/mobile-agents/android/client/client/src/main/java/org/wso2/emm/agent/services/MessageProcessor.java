@@ -72,7 +72,7 @@ public class MessageProcessor implements APIResultCallBack {
 
 		if (deviceId == null) {
 			DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
-			deviceId = deviceInfo.getMACAddress();
+			deviceId = deviceInfo.getDeviceId();
 			Preference.putString(context, DEVICE_ID_PREFERENCE_KEY, deviceId);
 		}
 	}
@@ -150,10 +150,12 @@ public class MessageProcessor implements APIResultCallBack {
 			Log.d(TAG, "replay-payload: " + requestParams);
 		}
 
-		CommonUtils.callSecuredAPI(context, url,
-				HTTP_METHODS.PUT, requestParams, MessageProcessor.this,
-				Constants.NOTIFICATION_REQUEST_CODE
-		);
+		if(ipSaved != null && !ipSaved.isEmpty()) {
+			CommonUtils.callSecuredAPI(context, url,
+			                           HTTP_METHODS.PUT, requestParams, MessageProcessor.this,
+			                           Constants.NOTIFICATION_REQUEST_CODE
+			);
+		}
 	}
 
 	@SuppressWarnings("unused")

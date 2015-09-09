@@ -3,7 +3,8 @@
   "apiContext" : "api",
   "httpsURL": "%https.ip%",
   "httpURL": "%http.ip%",
-  "iOSConfigRoot": "%https.ip%/ios/",
+  "iOSConfigRoot": "%https.ip%/ios-enrollment/",
+  "iOSAPIRoot": "%https.ip%/ios/",
   "device": {
     "ios": {
       "location": "%http.ip%/mdm/public/asset-download-agent/asset/ios-agent.ipa",

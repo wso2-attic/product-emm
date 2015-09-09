@@ -166,6 +166,12 @@
     <!-- SHARED PREF KEYS -->
     <string name="shared_pref_package">com.mdm</string>
     <string name="shared_pref_policy">policy</string>
+    <string name="shared_pref_configuration">configuration</string>
+    <string name="shared_pref_notifier">notifierType</string>
+    <string name="shared_pref_frequency">notifierFrequency</string>
+    <string name="shared_pref_gcm">gcmSenderId</string>
+    <string name="shared_pref_config_key">name</string>
+    <string name="shared_pref_config_value">value</string>
     <string name="shared_pref_policy_applied">policy_applied</string>
     <string name="shared_pref_isagreed">isAgreed</string>
     <string name="shared_pref_registered">registered</string>

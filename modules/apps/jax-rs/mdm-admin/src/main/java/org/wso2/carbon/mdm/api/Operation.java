@@ -32,7 +32,7 @@ import org.wso2.carbon.mdm.api.context.DeviceOperationContext;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.MDMAndroidOperationUtil;
 import org.wso2.carbon.mdm.api.util.MDMIOSOperationUtil;
-import org.wso2.carbon.mdm.api.util.Message;
+import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.ApplicationWrapper;
 import org.wso2.carbon.mdm.beans.MobileApp;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
@@ -68,16 +68,16 @@ public class Operation {
     }
 
     @POST
-    public Message addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
+    public ResponsePayload addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
         DeviceManagementProviderService dmService;
-        Message responseMsg = new Message();
+        ResponsePayload responseMsg = new ResponsePayload();
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
             int  operationId = dmService.addOperation(operationContext.getOperation(),
                     operationContext.getDevices());
             if (operationId>0) {
                 Response.status(HttpStatus.SC_CREATED);
-                responseMsg.setResponseMessage("Operation has added successfully.");
+                responseMsg.setMessageFromServer("Operation has added successfully.");
             }
             return responseMsg;
         } catch (OperationManagementException e) {
@@ -89,10 +89,9 @@ public class Operation {
 
     @POST
     @Path("installApp/{tenantDomain}")
-    public Message installApplication(ApplicationWrapper applicationWrapper,
+    public ResponsePayload installApplication(ApplicationWrapper applicationWrapper,
                                       @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
-
-        Message responseMsg = new Message();
+        ResponsePayload responseMsg = new ResponsePayload();
         ApplicationManager appManagerConnector;
         DeviceManagementProviderService deviceManagementService;
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
@@ -126,10 +125,10 @@ public class Operation {
 
     @POST
     @Path("uninstallApp/{tenantDomain}")
-    public Message uninstallApplication(ApplicationWrapper applicationWrapper,
+    public ResponsePayload uninstallApplication(ApplicationWrapper applicationWrapper,
                                         @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
 
-        Message responseMsg = new Message();
+        ResponsePayload responseMsg = new ResponsePayload();
         ApplicationManager appManagerConnector;
         DeviceManagementProviderService deviceManagementService;
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;

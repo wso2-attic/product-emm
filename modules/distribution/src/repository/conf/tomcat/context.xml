@@ -46,4 +46,28 @@
 	 'managed-api-transports' - Transports through which the 'Managed API' is exposed.
      -->
     <Listener className="org.wso2.carbon.apimgt.webapp.publisher.lifecycle.listener.APIPublisherLifecycleListener"/>
+
+    <!-- WebAppDeploymentLifecycleListener listens to webapp deployment events and adds the custom permissions defined in webapps'
+        META-INF/permissions.xml to the permissions/admin section of registry. Given below is a sample of permissions.xml file.
+
+    <PermissionConfiguration>
+            <Permission>
+                <name>Device Management</name>
+                <path>/device-mgt</path>
+            </Permission>
+            <Permission>
+                <name>Administrator</name>
+                <path>/device-mgt/admin</path>
+            </Permission>
+            <Permission>
+                <name>Dashboard</name>
+                <path>/device-mgt/admin/dashboard</path>
+            </Permission>
+            <Permission>
+                <name>Lock</name>
+                <path>/device-mgt/admin/operation/lock</path>
+            </Permission>
+    </PermissionConfiguration>
+     -->
+    <Listener className="org.wso2.carbon.device.mgt.core.config.permission.lifecycle.WebAppDeploymentLifecycleListener"/>
 </Context>

@@ -21,28 +21,37 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Message {
+public class ResponsePayload {
 
-    private String responseCode;
-    private String responseMessage;
-
-    @XmlElement
-    public String getResponseMessage() {
-        return responseMessage;
-    }
-
-    public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
-    }
-
+    private int statusCode;
+    private String messageFromServer;
+    private Object responseContent;
 
     @XmlElement
-    public String getResponseCode() {
-        return responseCode;
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public void setResponseCode(String responseCode) {
-        this.responseCode = responseCode;
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    @XmlElement
+    public String getMessageFromServer() {
+        return messageFromServer;
+    }
+
+    public void setMessageFromServer(String messageFromServer) {
+        this.messageFromServer = messageFromServer;
+    }
+
+    @XmlElement
+    public Object getResponseContent() {
+        return responseContent;
+    }
+
+    public void setResponseContent(Object responseContent) {
+        this.responseContent = responseContent;
     }
 
 }

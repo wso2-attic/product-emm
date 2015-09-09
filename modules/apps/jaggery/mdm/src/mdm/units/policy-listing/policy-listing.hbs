@@ -10,9 +10,9 @@
         <div class="col-md-12">
             <!-- content -->
             <div class="wr-content">
-                <span id="policy-count-status-msg" >{{policyCountStatusMsg}}</span>
+                <span id="policy-listing-status-msg" >{{policyListingStatusMsg}}</span>
                 <div class="wr-list-group wr-sortable policy-list">
-                    {{#each policies}}
+                    {{#each policyListToView}}
                         <span class="list-group-item" id="{{id}}">
                             <div class="row">
                                 <div class="col-lg-3 clearfix">
@@ -114,13 +114,13 @@
         </div>
     </div>
 
-    <div id="remove-policy-200-content" class="hide">
+    <div id="remove-policy-success-content" class="hide">
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>Done. Selected policy was successfully removed.</h3>
                     <div class="buttons">
-                        <a href="#" id="remove-policy-200-link" class="btn-operations">
+                        <a href="#" id="remove-policy-success-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </div>
@@ -129,43 +129,13 @@
         </div>
     </div>
 
-    <div id="remove-policy-409-content" class="hide">
-        <div class="content">
-            <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered">
-                    <h3>Selected policy does not actually exist.</h3>
-                    <div class="buttons">
-                        <a href="#" id="remove-policy-409-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="remove-policy-500-content" class="hide">
-        <div class="content">
-            <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered">
-                    <h3>Exception at backend. Please try again later.</h3>
-                    <div class="buttons">
-                        <a href="#" id="remove-policy-500-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="remove-policy-unexpected-error-content" class="hide">
+    <div id="remove-policy-error-content" class="hide">
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>An unexpected error occurred. Please try again later.</h3>
                     <div class="buttons">
-                        <a href="#" id="remove-policy-unexpected-error-link" class="btn-operations">
+                        <a href="#" id="remove-policy-error-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </div>
@@ -178,9 +148,7 @@
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
-                    <h3>
-                        Done. New Policy priorities were successfully updated.
-                    </h3>
+                    <h3>Done. New Policy priorities were successfully updated.</h3>
                     <div class="buttons">
                         <a href="#" id="save-policy-priorities-success-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
@@ -195,9 +163,8 @@
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
-                    <h3>
-                        Error. Policy priority update was failed. <br> Please try again.
-                    </h3>
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+                    <h4 class="message-from-server"></h4>
                     <div class="buttons">
                         <a href="#" id="save-policy-priorities-error-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
