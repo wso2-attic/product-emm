@@ -2,7 +2,7 @@
 var username = session.get("enrollUser");
 if (username) {
     var mdmProps = require('/config/mdm-props.js').config();
-    var deviceCheckURL = mdmProps.iOSConfigRoot + 'device/deviceid';
+    var deviceCheckURL = mdmProps.iOSAPIRoot + 'device/deviceid';
     var challengeToken = session.get("iOS_challenge_token");
     var xhr = new XMLHttpRequest();
     var log = new Log();
