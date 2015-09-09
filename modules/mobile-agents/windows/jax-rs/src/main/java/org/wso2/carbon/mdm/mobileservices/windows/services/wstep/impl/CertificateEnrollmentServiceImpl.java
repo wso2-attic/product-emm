@@ -88,6 +88,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	private static final int SIGNED_CERTIFICATE_POSITION = 1;
 	private static final int APPAUTH_USERNAME_POSITION = 21;
 	private static final int APPAUTH_PASSWORD_POSITION = 22;
+	private static final int POLLING_FREQUENCY_POSITION = 27;
 	private static Log log = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
 	private PrivateKey privateKey;
 	private X509Certificate rootCACertificate;
@@ -384,6 +385,21 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			String rstr = new SyncmlCredinitials().generateRST(username, password);
 			DeviceUtil.persistChallengeToken(rstr, "", username);
 
+			// Adding device polling time//////////////////////////////////////////////////
+//			String pollingFrequency = null;
+//			TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
+//			List<ConfigurationEntry>config = configuration.getConfiguration();
+//			for (int x = 0; x < config.size(); x++) {
+//				ConfigurationEntry configvalue = config.get(x);
+//				if (configvalue.getName().equals("notifierFrequency")) {
+//					pollingFrequency = configvalue.getValue().toString();
+//				}
+//			}
+//			Node numberOfFirstRetries = wapParm.item(POLLING_FREQUENCY_POSITION);
+//			NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
+//			Node pollvalue = pollingAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
+//			pollvalue.setTextContent(pollingFrequency);
+			////////////////////////////////////////////////////////////////////////////////
 			if (log.isDebugEnabled()) {
 				log.debug("Username: " + username + "Password: " + rstr);
 			}

@@ -19,6 +19,7 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
@@ -124,13 +125,16 @@ public class WindowsAPIUtils {
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
 
-    public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
-            (DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+//    public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
+//            (DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+//
+//        List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+//        operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
+//        return operations;
+//    }
 
-        List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-        operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
-        return operations;
+    public static TenantConfiguration getTenantConfiguration() throws DeviceManagementException {
+        return getDeviceManagementService().getConfiguration(
+                DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
     }
-
-
 }
