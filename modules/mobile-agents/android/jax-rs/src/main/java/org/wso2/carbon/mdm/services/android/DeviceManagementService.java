@@ -26,7 +26,6 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
-import org.wso2.carbon.device.mgt.common.license.mgt.LicenseManagementException;
 import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
@@ -163,6 +162,7 @@ public class DeviceManagementService {
     @Produces("text/html")
     public String getLicense() throws AndroidAgentException {
         License license;
+
 	try {
         	license =
 			AndroidAPIUtils.getDeviceManagementService().getLicense(
@@ -173,7 +173,7 @@ public class DeviceManagementService {
         log.error(msg, e);
         throw new AndroidAgentException(msg, e);
     }
-        return (license == null) ? null : license.toString();
+        return (license == null) ? null : license.getText();
     }
 
 }
