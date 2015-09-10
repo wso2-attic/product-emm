@@ -41,7 +41,7 @@ if (xhr.status == 200) {
         var responseText = parse(xhr.responseText);
         session.put("iOS_challenge_token", responseText.challengeToken);
     }
-    response.sendRedirect("/mdm/license-agent");
+    response.sendRedirect("/mdm/enrollments/windows/license-agent");
 } else if (xhr.status == 403) {
     response.sendRedirect("/mdm/login-agent#auth-failed");
 } else {
