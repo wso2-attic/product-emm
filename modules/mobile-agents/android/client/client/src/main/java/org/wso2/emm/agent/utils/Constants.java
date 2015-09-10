@@ -33,10 +33,10 @@ public class Constants {
 
 	public static final String SERVER_PORT = "9763";
 	public static final String SERVER_PROTOCOL = "http://";
-	public static final String API_VERSION = "1.0.0";
+	public static final String API_VERSION = "1.0.0/";
 	public static final String API_SERVER_PORT = "9763";
 
-	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
+	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/" + API_VERSION;
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";

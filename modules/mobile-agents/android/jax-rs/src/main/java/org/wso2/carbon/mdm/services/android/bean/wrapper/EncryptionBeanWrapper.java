@@ -15,22 +15,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
-package org.wso2.carbon.mdm.services.android.bean;
+import org.wso2.carbon.mdm.services.android.bean.DeviceEncryption;
 
-import com.google.gson.Gson;
-/*
-* This abstract class is used for extending generic functions with regard to operation.
-*/
-public abstract class AndroidOperation {
+import java.util.List;
 
-	/*
-	* This method is used to convert operation object to a json format.
-	* 
-	* @return json formatted String.
-	*/
-    public String toJSON() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
+/**
+ * This class is used to wrap the Encrypt bean with devices.
+ */
+public class EncryptionBeanWrapper {
+
+	private DeviceEncryption operation;
+	private List<String> deviceIDs;
+
+	public DeviceEncryption getOperation() {
+		return operation;
+	}
+
+	public void setOperation(DeviceEncryption operation) {
+		this.operation = operation;
+	}
+
+	public List<String> getDeviceIDs() {
+		return deviceIDs;
+	}
+
+	public void setDeviceIDs(List<String> deviceIDs) {
+		this.deviceIDs = deviceIDs;
+	}
 }

@@ -17,25 +17,17 @@
  */
 package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
-import org.wso2.carbon.mdm.services.android.bean.LockCode;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationInstallation;
 
 import java.util.List;
 
 /**
- * This class is used to wrap the LockCode bean with devices.
+ * This class is used to wrap the InstallApplication bean with devices.
  */
-public class LockCodeBeanWrapper {
+public class ApplicationInstallationBeanWrapper {
 
-	private LockCode operation;
 	private List<String> deviceIDs;
-
-	public LockCode getOperation() {
-		return operation;
-	}
-
-	public void setOperation(LockCode operation) {
-		this.operation = operation;
-	}
+	private ApplicationInstallation operation;
 
 	public List<String> getDeviceIDs() {
 		return deviceIDs;
@@ -43,5 +35,13 @@ public class LockCodeBeanWrapper {
 
 	public void setDeviceIDs(List<String> deviceIDs) {
 		this.deviceIDs = deviceIDs;
+	}
+
+	public ApplicationInstallation getOperation() {
+		return operation;
+	}
+
+	public void setOperation(ApplicationInstallation operation) {
+		this.operation = operation;
 	}
 }

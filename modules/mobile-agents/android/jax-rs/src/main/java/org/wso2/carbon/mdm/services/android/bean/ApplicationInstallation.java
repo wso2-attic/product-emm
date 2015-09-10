@@ -21,14 +21,13 @@ package org.wso2.carbon.mdm.services.android.bean;
 import java.io.Serializable;
 
 /**
- * This class represents the information of uninstall application operation.
+ * This class represents the information of install application operation.
  */
-public class UninstallApplication extends AndroidOperation implements Serializable {
+public class ApplicationInstallation extends AndroidOperation implements Serializable {
 
 	private String appIdentifier;
 	private String type;
 	private String url;
-	private String name;
 
 	public String getAppIdentifier() {
 		return appIdentifier;
@@ -52,13 +51,5 @@ public class UninstallApplication extends AndroidOperation implements Serializab
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 }

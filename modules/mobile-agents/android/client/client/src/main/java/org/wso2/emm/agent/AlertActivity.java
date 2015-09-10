@@ -47,7 +47,7 @@ public class AlertActivity extends SherlockActivity {
 	private DeviceInfo deviceInfo;
 	private String type;
 
-	private static final String RING = "ring";
+	private static final String DEVICE_OPERATION_RING = "ring";
 	private static final String TAG = AlertActivity.class.getSimpleName();
 
 
@@ -69,7 +69,7 @@ public class AlertActivity extends SherlockActivity {
 
 			type = extras.getString(getResources().getString(R.string.intent_extra_type));
 
-			if (RING.equalsIgnoreCase(type)) {
+			if (DEVICE_OPERATION_RING.equalsIgnoreCase(type)) {
 				startRing();
 			}
 		}
@@ -79,7 +79,7 @@ public class AlertActivity extends SherlockActivity {
 		btnOK.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (RING.equalsIgnoreCase(type)) {
+				if (DEVICE_OPERATION_RING.equalsIgnoreCase(type)) {
 					stopRing();
 					AlertActivity.this.finish();
 				} else {
@@ -132,7 +132,7 @@ public class AlertActivity extends SherlockActivity {
 	public void onBackPressed() {
 		//do nothing
 		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.i(TAG, "Back button pressed");
+			Log.i(TAG, "Back button is pressed");
 		}
 	}
 
