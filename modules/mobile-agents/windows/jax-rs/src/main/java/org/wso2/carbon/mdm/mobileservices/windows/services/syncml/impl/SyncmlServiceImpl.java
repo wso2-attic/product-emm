@@ -197,7 +197,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
                     try {
                         pendingOperations = getPendingOperations(syncmlDocument);
-                        String gen = generateReply(syncmlDocument, (List<Operation>) pendingOperations);
+                        String gen = generateReply(syncmlDocument, pendingOperations);
                         //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
                         //	pendingOperations)).build();
                         return Response.ok().entity(gen).build();
@@ -367,7 +367,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         return lsSerializer.writeToString(doc);
     }
 
-    public String generateReply(SyncmlDocument syncmlDocument, List<Operation> lsDeviceInfo)
+    public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> lsDeviceInfo)
             throws WindowsOperationException {
         OperationReply operationReply;
         SyncmlGenerator generator;
@@ -642,5 +642,6 @@ public class SyncmlServiceImpl implements SyncmlService {
 
         return deviceInfoList;
     }
+
 
 }

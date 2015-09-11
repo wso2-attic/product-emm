@@ -125,14 +125,6 @@ public class WindowsAPIUtils {
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
 
-//    public static List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getPendingOperations
-//            (DeviceIdentifier deviceIdentifier) throws OperationManagementException {
-//
-//        List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-//        operations = getDeviceManagementService().getPendingOperations(deviceIdentifier);
-//        return operations;
-//    }
-
     public static TenantConfiguration getTenantConfiguration() throws DeviceManagementException {
         return getDeviceManagementService().getConfiguration(
                 DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);

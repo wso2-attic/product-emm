@@ -50,9 +50,9 @@ public class OperationReply {
     private static final String REPLACE_COMMAND_TEXT = "Replace";
     private static final String GET_COMMAND_TEXT = "Get";
     private static final String EXEC_COMMAND_TEXT = "Exec";
-    private List<Operation> operations;
+    private List<? extends Operation> operations;
 
-    public OperationReply(SyncmlDocument syncmlDocument, List<Operation> operations) {
+    public OperationReply(SyncmlDocument syncmlDocument, List<? extends Operation> operations) {
         this.syncmlDocument = syncmlDocument;
         replySyncmlDocument = new SyncmlDocument();
         this.operations = operations;
@@ -218,7 +218,14 @@ public class OperationReply {
             for (int x = 0; x < operations.size(); x++) {
                 Operation operation = operations.get(x);
                 Operation.Type type = operation.getType();
+               Object obj =  operation.getPayLoad();
                 switch (type) {
+
+                    case PROFILE:
+                        if (operation.getCode().equals("POLICY_BUNDLE"))
+                        {
+
+                        }
                     case CONFIG:
                         List<Add> addConfig = appendAddConfiguration(operation);
                         for (Add addConfiguration : addConfig) {
