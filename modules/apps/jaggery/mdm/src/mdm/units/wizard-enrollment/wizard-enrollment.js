@@ -1,6 +1,7 @@
-function onRequest(context){
+function onRequest (context) {
+    var log = new Log("");
+
     var activeClass = "itm-wiz-current";
-    var log = new Log();
     var userAgent = request.getHeader("User-Agent");
     var UAParser = require("/modules/ua-parser.min.js").UAParser;
     var parser = new UAParser();
