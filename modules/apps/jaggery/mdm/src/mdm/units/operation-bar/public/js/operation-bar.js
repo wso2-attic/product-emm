@@ -32,6 +32,7 @@ var operations = '.wr-operations',
     // maxOperationsLimit = 15,
     // hiddenOperation = '.wr-hidden-operations-content > div',
     deviceSelection = '.device-select',
+    dataTableSelection = '.DTTT_selected',
     currentOperationList = [];
 
 /*
@@ -98,6 +99,20 @@ function getSelectedDeviceIds() {
             "type" : deviceType
         });
     });
+    if(deviceIdentifierList.length == 0) {
+        var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
+        thisTable.api().rows().every(function () {
+            if ($(this.node()).hasClass('DTTT_selected')) {
+                var deviceId = $(thisTable.api().row(this).node()).data('deviceid');
+                var deviceType = $(thisTable.api().row(this).node()).data('devicetype');
+                deviceIdentifierList.push({
+                    "id": deviceId,
+                    "type": deviceType
+                });
+            }
+        });
+    }
+
     return deviceIdentifierList;
 }
 

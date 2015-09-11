@@ -30,7 +30,7 @@ import javax.ws.rs.core.Response;
 public class BadRequestException extends WebApplicationException {
 
 	public BadRequestException(Message message, MediaType mediaType) {
-		super(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).
+		super(Response.status(Response.Status.BAD_REQUEST).entity(message).
 				type(mediaType).build());
 	}
 }

@@ -201,7 +201,6 @@ public class User {
 	 */
 	@DELETE
 	@Path("{username}")
-	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response removeUser(@PathParam("username") String username) throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
@@ -343,39 +342,44 @@ public class User {
     /**
      * Method used to send an invitation email to a existing user to enroll a device.
      *
-     * @param username Username of the user
+     * @param usernames Username list of the users to be invited
      * @throws MDMAPIException
      */
     @POST
-    @Path("{username}/email-invitation")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Path("email-invitation")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response inviteExistingUserToEnrollDevice(@PathParam("username") String username) throws MDMAPIException {
+    public Response inviteExistingUsersToEnrollDevice(List<String> usernames) throws MDMAPIException {
         if (log.isDebugEnabled()) {
-            log.debug("Sending enrollment invitation mail to existing user by username: " + username);
+            log.debug("Sending enrollment invitation mail to existing user.");
         }
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         try {
-            EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-            emailMessageProperties.setEnrolmentUrl("https://download-agent");
-            emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
-            emailMessageProperties.setUserName(username);
-            String[] mailAddress = new String[1];
-            mailAddress[0] = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
-            emailMessageProperties.setMailTo(mailAddress);
-            deviceManagementProviderService.sendEnrolmentInvitation(emailMessageProperties);
+	        int i;
+	        for (i = 0; i < usernames.size(); i++) {
+		        EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
+		        emailMessageProperties.setEnrolmentUrl("https://download-agent");
+		        emailMessageProperties
+				        .setFirstName(getClaimValue(usernames.get(i), Constants.USER_CLAIM_FIRST_NAME));
+		        emailMessageProperties.setUserName(usernames.get(i));
+		        String[] mailAddress = new String[1];
+		        mailAddress[0] = getClaimValue(usernames.get(i), Constants.USER_CLAIM_EMAIL_ADDRESS);
+		        if(mailAddress != null && mailAddress.length > 0) {
+			        emailMessageProperties.setMailTo(mailAddress);
+			        deviceManagementProviderService.sendEnrolmentInvitation(emailMessageProperties);
+		        }
+	        }
         } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to invite user by username: " + username;
+            String errorMsg = "Exception in trying to invite user.";
             log.error(errorMsg, e);
             throw new MDMAPIException(errorMsg, e);
         } catch (DeviceManagementException e) {
-            String errorMsg = "Exception in trying to invite user by username: " + username;
+            String errorMsg = "Exception in trying to invite user.";
             log.error(errorMsg, e);
             throw new MDMAPIException(errorMsg, e);
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        responsePayload.setMessageFromServer("Email invitation was successfully sent to user by username:" + username);
+        responsePayload.setMessageFromServer("Email invitation was successfully sent to user.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 

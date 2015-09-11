@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/*
+ @SSO-Related
+ */
 var dataConfig = require('/config/mdm-props.js').config();
 var sso = require('/modules/sso.js').sso;
 var constants = require('/modules/constants.js');

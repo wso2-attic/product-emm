@@ -26,7 +26,6 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
-import org.wso2.carbon.device.mgt.common.license.mgt.LicenseManagementException;
 import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
@@ -177,20 +176,18 @@ public class DeviceManagementService {
 	@Produces("text/html")
 	public String getLicense() throws AndroidAgentException {
 		License license;
+
 		try {
 			license =
 					AndroidAPIUtils.getDeviceManagementService().getLicense(
 							DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
 							DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
 		} catch (DeviceManagementException e) {
-			String msg =
-					"Error occurred while retrieving the license configured for Android device enrolment";
+			String msg = "Error occurred while retrieving the license configured for Android device enrolment";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
-		return (license == null) ? null : license.toString();
+		return (license == null) ? null : license.getText();
 	}
 
 }

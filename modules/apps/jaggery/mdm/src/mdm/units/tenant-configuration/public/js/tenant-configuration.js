@@ -156,7 +156,9 @@ $(document).ready(function () {
         var notifierType = $("#android-config-notifier").find("option:selected").attr("value");
         if(notifierType  != notifierTypeConstants["GCM"] ) {
             $("#gcm-inputs").hide();
+            $("#local-inputs").show();
         }else{
+            $("#local-inputs").hide();
             $("#gcm-inputs").show();
         }
     });
@@ -337,7 +339,7 @@ $(document).ready(function () {
                 addConfigAPI,
                 addConfigFormData,
                 function (data) {
-                    if (data.responseCode == responseCodes["SUCCESS"]) {
+                    if (data.statusCode == responseCodes["SUCCESS"]) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
                     } else if (data == 500) {

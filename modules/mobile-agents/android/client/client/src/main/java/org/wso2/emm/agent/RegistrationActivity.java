@@ -62,7 +62,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		deviceInfoBuilder = new BuildDeviceInfoPayload(context);
 		resources = context.getResources();
 		DeviceInfo deviceInfo = new DeviceInfo(context);
-		deviceIdentifier = deviceInfo.getMACAddress();
+		deviceIdentifier = deviceInfo.getDeviceId();
 		Preference.putString(context, resources.getString(R.string.shared_pref_regId), deviceIdentifier);
 		registerDevice();
 	}
@@ -191,13 +191,18 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		CommonDialogUtils.stopProgressDialog(progressDialog);
+		DeviceInfo info = new DeviceInfo(context);
 		if (Constants.REGISTER_REQUEST_CODE == requestCode) {
 			String responseStatus;
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
-
+				Preference.putString(context, resources.getString(R.string.shared_pref_regId), info.getDeviceId());
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					getEffectivePolicy();
+					if(Preference.getString(context, context.getResources().getString(R.string.shared_pref_notifier)).trim().equals(Constants.NOTIFIER_GCM)){
+						registerGCM();
+					}else{
+						getEffectivePolicy();
+					}
 				} else {
 					displayInternalServerError();
 				}
@@ -217,8 +222,8 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
      */
 	private void registerGCM() {
 		new AsyncTask<Void, Void, String>() {
-			GCMRegistrationManager registrationManager = new GCMRegistrationManager(RegistrationActivity.this,
-			                                                                        Constants.GCM_PROJECT_NUMBER);
+			String senderId = Preference.getString(context, context.getResources().getString(R.string.shared_pref_sender_id));
+			GCMRegistrationManager registrationManager = new GCMRegistrationManager(RegistrationActivity.this, senderId);
 
 			@Override
 			protected String doInBackground(Void... params) {
@@ -237,23 +242,29 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				} else {
 					try {
 						CommonUtils.clearAppData(context);
+						displayInternalServerError();
 					} catch (AndroidAgentException e) {
 						Log.e(TAG, "Failed to clear app data." + e);
 					}
 				}
 			}
 		}.execute();
+		getEffectivePolicy();
 	}
 
 	/**
 	 * Loads Authentication error activity.
 	 */
 	private void loadAuthenticationErrorActivity() {
-		Intent intent = new Intent(RegistrationActivity.this, AuthenticationErrorActivity.class);
+		Preference.putString(context, Constants.IP, Constants.EMPTY_STRING);
+		Intent intent = new Intent(
+				RegistrationActivity.this,
+				ServerDetails.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
 		                RegistrationActivity.class.getSimpleName());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
+		finish();
 	}
 
 	/**

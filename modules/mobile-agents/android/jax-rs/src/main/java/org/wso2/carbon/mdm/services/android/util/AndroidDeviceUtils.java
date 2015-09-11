@@ -39,7 +39,7 @@ public class AndroidDeviceUtils {
 	public DeviceIDHolder validateDeviceIdentifiers(List<String> deviceIDs,
 		Message message, MediaType responseMediaType) {
 
-		if (deviceIDs == null) {
+		if (deviceIDs == null || deviceIDs.isEmpty()) {
 			message.setResponseMessage("Device identifier list is empty");
 			throw new BadRequestException(message, responseMediaType);
 		}
@@ -64,17 +64,12 @@ public class AndroidDeviceUtils {
 				deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.
 						MOBILE_DEVICE_TYPE_ANDROID);
 
-				Device device = AndroidAPIUtils.getDeviceManagementService().
-						getDevice(deviceIdentifier);
-
-				if (device == null || device.getDeviceIdentifier() == null || 
-						device.getDeviceIdentifier().isEmpty()) {
-					errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
-							deviceIDCounter));
-					continue;
-				}
-
-				validDeviceIDList.add(deviceIdentifier);
+				if (isValidDeviceIdentifier(deviceIdentifier)) {
+                    validDeviceIDList.add(deviceIdentifier);
+                } else {
+                    errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
+                            deviceIDCounter));
+                }
 			} catch (DeviceManagementException e) {
 				errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_SERVICE_NOT_FOUND,
 						deviceIDCounter));
@@ -91,4 +86,15 @@ public class AndroidDeviceUtils {
 	public String convertErrorMapIntoErrorMessage(List<String> errorDeviceIdList) {
 		return StringUtils.join(errorDeviceIdList.iterator(), COMMA_SEPARATION_PATTERN);
 	}
+
+    public static boolean isValidDeviceIdentifier(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+        Device device = AndroidAPIUtils.getDeviceManagementService().
+                getDevice(deviceIdentifier);
+
+        if (device == null || device.getDeviceIdentifier() == null ||
+                device.getDeviceIdentifier().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 }

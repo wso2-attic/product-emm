@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+/*
+ @SSO-Related
+ */
 (function(){
     var constants = require('/modules/constants.js');
     if (!session.get(constants.USER_SESSION_KEY)) {

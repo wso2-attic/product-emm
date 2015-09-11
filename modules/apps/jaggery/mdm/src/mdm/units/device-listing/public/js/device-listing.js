@@ -141,6 +141,11 @@ function addDeviceSelectedClass(checkbox) {
         $(checkbox).closest(".ctrl-wr-asset").removeClass("selected device-select");
     }
 }
+
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
 function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
     var deviceListingSrc = deviceListing.attr("src");
@@ -170,9 +175,7 @@ function loadDevices(searchType, searchParam){
             var viewModel = {};
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;
-            if(data.length == 0){
-                $("#ast-container").html("No Devices to show currently.");
-            }else{
+            if(data.length > 0){
                 var content = template(viewModel);
                 $("#ast-container").html(content);
                 /*
@@ -182,6 +185,10 @@ function loadDevices(searchType, searchParam){
                     addDeviceSelectedClass(this);
                 });
             }
+            $('#device-grid').datatables_extended();
+            $(".icon .text").res_text(0.2);
+
+
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){
@@ -189,6 +196,80 @@ function loadDevices(searchType, searchParam){
             });
     });
 }
+
+/*
+ * Setting-up global variables.
+ */
+var deviceCheckbox = "#ast-container .ctrl-wr-asset .itm-select input[type='checkbox']";
+var assetContainer = "#ast-container";
+
+function openCollapsedNav(){
+    $('.wr-hidden-nav-toggle-btn').addClass('active');
+    $('#hiddenNav').slideToggle('slideDown', function(){
+        if($(this).css('display') == 'none'){
+            $('.wr-hidden-nav-toggle-btn').removeClass('active');
+        }
+    });
+}
+
+
+
+/*
+ * DOM ready functions.
+ */
 $(document).ready(function () {
     loadDevices();
+    //$('#device-grid').datatables_extended();
+
+    /* Adding selected class for selected devices */
+    $(deviceCheckbox).each(function () {
+        addDeviceSelectedClass(this);
+    });
+
+    var i;
+    var permissionList = $("#permission").data("permission");
+    for (i = 0; i < permissionList.length; i++) {
+        $.setPermission(permissionList[i]);
+    }
+
+    /* for device list sorting drop down */
+    $(".ctrl-filter-type-switcher").popover({
+        html : true,
+        content : function () {
+            return $("#content-filter-types").html();
+        }
+    });
+
+    $(".ast-container").on("click", ".claim-btn", function(e){
+        e.stopPropagation();
+        var deviceId = $(this).data("deviceid");
+        var deviceListing = $("#device-listing");
+        var currentUser = deviceListing.data("current-user");
+        var serviceURL = "/temp-controller-agent/enrollment/claim?username=" + currentUser;
+        var deviceIdentifier = {id: deviceId, type: "TemperatureController"};
+        invokerUtil.put(serviceURL, deviceIdentifier, function(message){
+            console.log(message);
+        }, function(message){
+                console.log(message);
+            });
+    });
+
+    /* for data tables*/
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $("[data-toggle=popover]").popover();
+
+    $(".ctrl-filter-type-switcher").popover({
+        html : true,
+        content: function() {
+            return $('#content-filter-types').html();
+        }
+    });
+
+    $('#nav').affix({
+        offset: {
+            top: $('header').height()
+        }
+    });
+
 });

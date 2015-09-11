@@ -17,6 +17,9 @@ var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
+var dataTableSelection = '.DTTT_selected';
+$('#user-grid').datatables_extended();
+$(".icon .text").res_text(0.2);
 
 /*
  * set popup maximum height function.
@@ -42,35 +45,56 @@ function hidePopup() {
     $(modalPopup).hide();
 }
 
+/*
+ * Function to get selected usernames.
+ */
+function getSelectedUsernames() {
+    var usernameList = [];
+    var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
+    thisTable.api().rows().every(function(){
+        if($(this.node()).hasClass('DTTT_selected')){
+            usernameList.push($(thisTable.api().row(this).node()).data('id'));
+        }
+    });
+    return usernameList;
+}
+
 /**
  * Following click function would execute
  * when a user clicks on "Invite" link
  * on User Management page in WSO2 MDM Console.
  */
 $("a.invite-user-link").click(function () {
-    var username = $(this).data("username");
-    var inviteUserAPI = "/mdm-admin/users/" + username + "/email-invitation";
+    var usernameList = getSelectedUsernames();
+    var inviteUserAPI = "/mdm-admin/users/email-invitation";
 
-    $(modalPopupContent).html($('#invite-user-modal-content').html());
+    if (usernameList == 0) {
+        $(modalPopupContent).html($("#errorUsers").html());
+    } else {
+        $(modalPopupContent).html($('#invite-user-modal-content').html());
+    }
+
     showPopup();
 
     $("a#invite-user-yes-link").click(function () {
-        invokerUtil.post(
-            inviteUserAPI,
-            username,
-            function () {
+        $.ajax({
+            type : "POST",
+            url : inviteUserAPI,
+            contentType : "application/json",
+            data : JSON.stringify(usernameList),
+            success : function () {
                 $(modalPopupContent).html($('#invite-user-success-content').html());
                 $("a#invite-user-success-link").click(function () {
                     hidePopup();
                 });
             },
-            function () {
+            error : function (data) {
                 $(modalPopupContent).html($('#invite-user-error-content').html());
                 $("a#invite-user-error-link").click(function () {
                     hidePopup();
                 });
             }
-        );
+        });
     });
 
     $("a#invite-user-cancel-link").click(function () {
@@ -99,7 +123,7 @@ $("a.remove-user-link").click(function () {
                     // get new user-list-count
                     var newUserListCount = $(".user-list > span").length;
                     // update user-listing-status-msg with new user-count
-                    $("#user-count-status-msg").text("Total number of Users found : " + newUserListCount);
+                    $("#user-listing-status-msg").text("Total number of Users found : " + newUserListCount);
                     // update modal-content with success message
                     $(modalPopupContent).html($('#remove-user-success-content').html());
                     $("a#remove-user-success-link").click(function () {

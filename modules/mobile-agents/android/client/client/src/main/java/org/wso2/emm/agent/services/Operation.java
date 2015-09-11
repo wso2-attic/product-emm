@@ -202,7 +202,7 @@ public class Operation implements APIResultCallBack {
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
-		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getMACAddress();
+		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
 
 		CommonUtils.callSecuredAPI(context, url,
 				org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload,
@@ -309,7 +309,7 @@ public class Operation implements APIResultCallBack {
 		resultBuilder.build(operation);
 
 		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(TAG, "Device started ringing");
+			Log.d(TAG, "Ringing is activated on the device");
 		}
 	}
 

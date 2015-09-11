@@ -84,7 +84,8 @@ public final class AndroidConstants {
 		public static final String NOTIFICATION = "NOTIFICATION";
 		public static final String WEBCLIP = "WEBCLIP";
 		public static final String DISENROLL = "DISENROLL";
-	}
+		public static final String MONITOR = "MONITOR";
+    }
 
 	public final class StatusCodes{
 		private StatusCodes(){
