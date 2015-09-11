@@ -46,14 +46,15 @@ function hidePopup() {
 }
 
 /*
- * Function to get selected usermanes.
+ * Function to get selected usernames.
  */
 function getSelectedUsernames() {
     var usernameList = [];
-    $(dataTableSelection).each(function (index) {
-        var user = $(this);
-        var userId = user.data('id');
-        usernameList.push(userId);
+    var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
+    thisTable.api().rows().every(function(){
+        if($(this.node()).hasClass('DTTT_selected')){
+            usernameList.push($(thisTable.api().row(this).node()).data('id'));
+        }
     });
     return usernameList;
 }
