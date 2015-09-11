@@ -309,7 +309,7 @@ public class Operation implements APIResultCallBack {
 		resultBuilder.build(operation);
 
 		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(TAG, "Device started ringing");
+			Log.d(TAG, "Ringing is activated on the device");
 		}
 	}
 

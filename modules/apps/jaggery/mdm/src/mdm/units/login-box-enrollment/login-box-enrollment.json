@@ -1,4 +1,4 @@
 {
-  	"predicate" : "true",
-	"extends" : "login-box"
+	"extends" : "login-box",
+    "predicate" : true
 }

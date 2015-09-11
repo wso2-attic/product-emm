@@ -156,7 +156,9 @@ $(document).ready(function () {
         var notifierType = $("#android-config-notifier").find("option:selected").attr("value");
         if(notifierType  != notifierTypeConstants["GCM"] ) {
             $("#gcm-inputs").hide();
+            $("#local-inputs").show();
         }else{
+            $("#local-inputs").hide();
             $("#gcm-inputs").show();
         }
     });

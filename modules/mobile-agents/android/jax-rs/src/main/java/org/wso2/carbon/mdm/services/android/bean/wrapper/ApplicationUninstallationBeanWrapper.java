@@ -17,25 +17,17 @@
  */
 package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
-import org.wso2.carbon.mdm.services.android.bean.LockCode;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationUninstallation;
 
 import java.util.List;
 
 /**
- * This class is used to wrap the LockCode bean with devices.
+ * This class is used to wrap the UninstallApplication bean with devices.
  */
-public class LockCodeBeanWrapper {
+public class ApplicationUninstallationBeanWrapper {
 
-	private LockCode operation;
 	private List<String> deviceIDs;
-
-	public LockCode getOperation() {
-		return operation;
-	}
-
-	public void setOperation(LockCode operation) {
-		this.operation = operation;
-	}
+	private ApplicationUninstallation operation;
 
 	public List<String> getDeviceIDs() {
 		return deviceIDs;
@@ -43,5 +35,13 @@ public class LockCodeBeanWrapper {
 
 	public void setDeviceIDs(List<String> deviceIDs) {
 		this.deviceIDs = deviceIDs;
+	}
+
+	public ApplicationUninstallation getOperation() {
+		return operation;
+	}
+
+	public void setOperation(ApplicationUninstallation operation) {
+		this.operation = operation;
 	}
 }

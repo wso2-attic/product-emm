@@ -2,96 +2,106 @@
     <div class="row wr-device-board">
         <div class="col-lg-12 wr-secondary-bar">
             <span class="page-sub-title">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Policy List by priority order
+                &nbsp;&nbsp;Policy List by priority order
             </span>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <!-- content -->
-            <div class="wr-content">
-                <span id="policy-listing-status-msg" >{{policyListingStatusMsg}}</span>
-                <div class="wr-list-group wr-sortable policy-list">
-                    {{#each policyListToView}}
-                        <span class="list-group-item" id="{{id}}">
-                            <div class="row">
-                                <div class="col-lg-3 clearfix">
-                                    <span class="wr-sortable-icon"><i class="fw fw-sort"></i></span>
-                                    <span class="wr-sort-index"><i>{{priorityId}}</i></span>
-                                    <span class="wr-list-icon">
-                                        {{#equal platform "android"}}
-                                            <i class=" fw fw-android"></i>
-                                        {{/equal}}
-                                        {{#equal platform "ios"}}
-                                            <i class=" fw fw-apple"></i>
-                                        {{/equal}}
+    <!-- content -->
+    <div class="container-fluid">
+        <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view" id="policy-grid">
+            <thead>
+            <tr class="sort-row">
+                <th></th>
+                <th></th>
+                <th>By Platform</th>
+                <th>By Ownership Type</th>
+                <th>By Role</th>
+                <th>By User</th>
+                <th>By Compliance Type</th>
+                <th></th>
+            </tr>
+            <tr class="filter-row filter-box">
+                <th></th>
+                <th></th>
+                <th data-for="By Platform" class="select-filter"></th>
+                <th data-for="By Ownership Type" class="select-filter"></th>
+                <th data-for="By Role" class="select-filter"></th>
+                <th data-for="By User" class="text-filter"></th>
+                <th data-for="By Compliance Type" class="select-filter"></th>
+                <th></th>
+            </tr>
+            <tr class="bulk-action-row">
+                <th colspan="8">
+                    <ul class="tiles">
+                        <li class="square">
+                            <a href="#" data-click-event="remove-form" class="btn square-element policy-remove-link" data-toggle="modal" data-target="#modalDemo">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-delete fw-stack-1x"></i>
                                     </span>
-                                    <span class="wr-list-desc">
-                                        <h3 class="wr-list-name">{{name}}</h3>
-                                        <span class="wr-list-username">{{platform}}</span>
-                                    </span>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="row no-gutter">
-                                        <div class="wr-desc-list-configs highlight col-lg-4">
-                                            <div>
-                                                <b>Ownership Type : </b> {{ownershipType}}
-                                            </div>
-                                        </div>
-                                        {{#if roles}}
-                                            <div class="wr-desc-list-configs highlight col-lg-4">
-                                                <div>
-                                                    <b>Assigned Role(s) : </b> {{roles}}
-                                                </div>
-                                            </div>
-                                        {{else}}
-                                            <div class="wr-desc-list-configs highlight col-lg-4">
-                                                <div>
-                                                    <b>Assigned User(s) : </b> {{users}}
-                                                </div>
-                                            </div>
-                                        {{/if}}
-                                        <div class="wr-desc-list-configs col-lg-4">
-                                            <div>
-                                                <b>Compliance Type :</b> {{compliance}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <span class="list-group-item-actions">
-                                        <a href="#" class="cu-btn-inner policy-view-link" data-id="{{id}}">
-                                            <span class="fw-stack">
-                                                <i class="fw fw-ring fw-stack-2x"></i>
-                                                <i class="fw fw-view fw-stack-1x"></i>
-                                            </span>
-                                            View
-                                        </a>
-                                        <a href="#" class="cu-btn-inner policy-update-link" data-id="{{id}}">
-                                            <span class="fw-stack">
-                                                <i class="fw fw-ring fw-stack-2x"></i>
-                                                <i class="fw fw-settings fw-stack-1x"></i>
-                                            </span>
-                                            Re-Configure
-                                        </a>
-                                        <a href="#" class="cu-btn-inner policy-remove-link" data-id="{{id}}">
-                                            <span class="fw-stack">
-                                                <i class="fw fw-ring fw-stack-2x"></i>
-                                                <i class="fw fw-delete fw-stack-1x"></i>
-                                            </span>
-                                            Remove
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-                        </span>
-                    {{/each}}
-                </div>
-                <div id="save-new-priorities-button" class="wr-input-control wr-btn-grp hide" data-enabled="{{saveNewPrioritiesButtonEnabled}}">
-                    <button class="wr-btn" id="sortUpdateBtn" data-policycount="{{policyCount}}" disabled>Save New Priority Order</button>
-                </div>
-            </div>
-            <!-- /content -->
+                                Remove
+                            </a>
+                        </li>
+                    </ul>
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {{#each policyListToView}}
+                <tr data-type="selectable" data-id="{{id}}">
+                    <td class="remove-padding icon-only content-fill">
+                        <div class="thumbnail icon">
+                            {{#equal platform "android"}}
+                                <i class="square-element text fw fw-android"></i>
+                            {{/equal}}
+                            {{#equal platform "ios"}}
+                                <i class="square-element text fw fw-apple"></i>
+                            {{/equal}}
+                        </div>
+                    </td>
+                    <td class="fade-edge" data-search="{{name}}" data-display="{{name}}">
+                        <h4>{{name}}</h4>
+                        <div>({{platform}})</div>
+                    </td>
+                    <td class="fade-edge remove-padding-top" data-search="{{platform}}" data-display="{{platform}}"></td>
+                    <td class="fade-edge remove-padding-top" data-search="{{ownershipType}}" data-display="{{ownershipType}}" data-grid-label="Ownership">{{ownershipType}}</td>
+                    <td class="fade-edge remove-padding-top" data-search="{{roles}}" data-display="{{roles}}" data-grid-label="Role(s)">{{roles}}</td>
+                    <td class="fade-edge remove-padding-top" data-search="{{users}}" data-display="{{users}}" data-grid-label="User(s)">{{users}}</td>
+                    <td class="fade-edge remove-padding-top" data-search="{{compliance}}" data-display="{{compliance}}" data-grid-label="Compliance">{{compliance}}</td>
+                    <td class="text-right content-fill text-left-on-grid-view no-wrap">
+                        <a href="#" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-view-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-view fw-stack-1x"></i>
+                            </span>
+                            <span class="hidden-xs hidden-on-grid-view">View</span>
+                        </a>
+                        <a href="#" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-update-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-settings fw-stack-1x"></i>
+                            </span>
+                            <span class="hidden-xs hidden-on-grid-view">Re-Configure</span>
+                        </a>
+                    </td>
+                </tr>
+            {{/each}}
+            <br class="c-both" />
+            </tbody>
+        </table>
+    </div>
+    <br class="c-both"/>
+    <!-- /content -->
+
+    <div id="content-filter-types" style="display: none">
+        <div class="sort-title">Sort By</div>
+        <div class="sort-options">
+            <a href="#">By Platform<span class="ico-sort-asc"></span></a>
+            <a href="#">By Ownership Type</a>
+            <a href="#">By Role</a>
+            <a href="#">By User</a>
+            <a href="#">By Compliance Type</a>
         </div>
     </div>
 
@@ -99,7 +109,7 @@
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
-                    <h3>Do you really want to remove this policy?</h3>
+                    <h3>Do you really want to remove the selected policy(s)?</h3>
                     <div class="buttons">
                         <a href="#" id="remove-policy-yes-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;
@@ -174,6 +184,30 @@
             </div>
         </div>
     </div>
+    <div id="errorPolicy" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        Please select a policy or a list of policies to remove.
+                    </h4>
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 {{/zone}}
 {{#zone "bottomJs"}}
