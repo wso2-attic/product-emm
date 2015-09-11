@@ -45,8 +45,13 @@ public class AndroidAPIUtils {
         return identifier;
     }
 
+    public static void endTenantFlow(){
+        PrivilegedCarbonContext.endTenantFlow();
+    }
+
     public static DeviceManagementProviderService getDeviceManagementService() {
         DeviceManagementProviderService dmService;
+        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         dmService =
                 (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
@@ -54,7 +59,6 @@ public class AndroidAPIUtils {
     }
 
     public static MediaType getResponseMediaType(String acceptHeader) {
-
         MediaType responseMediaType;
         if (MediaType.WILDCARD.equals(acceptHeader)) {
             responseMediaType = MediaType.APPLICATION_JSON_TYPE;

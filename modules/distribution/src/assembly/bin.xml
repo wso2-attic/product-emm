@@ -291,7 +291,7 @@
             <includes>
                 <include>authenticationendpoint.war</include>
                 <include>oauth2.war</include>
-                <include>dynamic-client-manager.war</include>
+                <include>dynamic-client-web.war</include>
             </includes>
         </fileSet>
         <!--copy jaxrs web app for OAuth feature-->

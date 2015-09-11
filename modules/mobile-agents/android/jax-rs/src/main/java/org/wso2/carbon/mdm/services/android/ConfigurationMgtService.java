@@ -56,24 +56,31 @@ public class ConfigurationMgtService {
 			Response.status(Response.Status.CREATED);
 			responseMsg.setResponseMessage("Android platform configuration saved successfully");
 			responseMsg.setResponseCode(Response.Status.CREATED.toString());
-			return responseMsg;
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while configuring the android platform";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
 		}
+		return responseMsg;
 	}
 
 	@GET
 	public TenantConfiguration getConfiguration() throws AndroidAgentException {
 		String msg;
+		TenantConfiguration tenantConfiguration;
 		try {
-			return AndroidAPIUtils.getDeviceManagementService().getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+			tenantConfiguration = AndroidAPIUtils.getDeviceManagementService().
+					getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while retrieving the Android tenant configuration";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
 		}
+		return tenantConfiguration;
 	}
 
 	@PUT
@@ -87,11 +94,13 @@ public class ConfigurationMgtService {
 			Response.status(Response.Status.CREATED);
 			responseMsg.setResponseMessage("Android platform configuration succeeded");
 			responseMsg.setResponseCode(Response.Status.CREATED.toString());
-			return responseMsg;
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying configuration settings of Android platform";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
 		}
+		return responseMsg;
 	}
 }

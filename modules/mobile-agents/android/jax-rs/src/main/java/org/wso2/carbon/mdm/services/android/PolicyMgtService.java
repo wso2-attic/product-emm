@@ -60,37 +60,40 @@ public class PolicyMgtService {
             if (policy == null) {
 				responseMessage.setResponseCode(Response.Status.NO_CONTENT.toString());
 				responseMessage.setResponseMessage("No effective policy found");
-                return  responseMessage;
             } else {
 				responseMessage.setResponseCode(Response.Status.OK.toString());
 				responseMessage.setResponseMessage("Effective policy added to operation");
-				return  responseMessage;
 			}
 
         } catch (PolicyManagementException e) {
             String msg = "Error occurred while getting the policy.";
             log.error(msg, e);
             throw new AndroidAgentException(msg, e);
+        } finally {
+            AndroidAPIUtils.endTenantFlow();
         }
+        return responseMessage;
     }
 
     @GET
     @Path("/features/{id}")
     public List<ProfileFeature> getEffectiveFeatures(@HeaderParam("Accept") String acceptHeader,
 													 @PathParam("id") String id) throws AndroidAgentException {
-
+        List<ProfileFeature> profileFeatures;
 		DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
         try {
             PolicyManagerService policyManagerService = AndroidAPIUtils.getPolicyManagerService();
-            List<ProfileFeature> profileFeatures =  policyManagerService.getEffectiveFeatures(deviceIdentifier);
+            profileFeatures =  policyManagerService.getEffectiveFeatures(deviceIdentifier);
             if (profileFeatures == null) {
                 Response.status(Response.Status.NOT_FOUND);
             }
-            return profileFeatures;
         } catch (FeatureManagementException e) {
             String msg = "Error occurred while getting the features.";
             log.error(msg, e);
             throw new AndroidAgentException(msg, e);
+        } finally {
+            AndroidAPIUtils.endTenantFlow();
         }
+        return profileFeatures;
     }
 }
