@@ -10,11 +10,11 @@ function onRequest(context) {
     var os = parser.getOS();
 
     if (os.name == "Android") {
-        context["header"] = "Complete MDM Registration";
+        context["header"] = "Complete EMM Registration";
     } else if (os.name == "iOS") {
-        context["header"] = "Step 2. Login to EMM";
+        context["header"] = "Step 2: Login to Enterprise Mobility Manager";
     } else if (os.name == "Windows Phone") {
-        context["header"] = "Step 1. Login to EMM";
+        context["header"] = "Step 1: Login to Enterprise Mobility Manager";
     }
     return context;
 }

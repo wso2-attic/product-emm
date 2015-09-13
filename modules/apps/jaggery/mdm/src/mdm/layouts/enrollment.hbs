@@ -19,26 +19,33 @@ under the License. --}}
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {{defineZone "favicon"}}
         <title>
-            {{ defineZone "title"}}
+            {{defineZone "title"}}
         </title>
-        {{ defineZone "topLibCss"}}
-        {{ defineZone "topCss"}}
+        {{defineZone "topLibCss"}}
+        {{defineZone "topCss"}}
     </head>
     <body>
         <div class="container col-lg-12 col-md-12 col-sm-12">
             <header>
                 <div class="row wr-global-header">
                     <div class="col-sm-8 app-logo">
-                        {{ defineZone "brand"}}
+                        {{defineZone "brand"}}
                     </div>
                 </div>
             </header>
-            {{ defineZone "body"}}
-            {{ defineZone "footer"}}
+            <div class="container c-both">
+                <div class="wr-head">
+                    <h2>{{defineZone "header"}}</h2>
+                    <hr>
+                </div>
+                {{defineZone "body"}}
+            </div>
+            {{!-- {{ defineZone "footer"}} --}}
         </div>
-        {{ defineZone "bottomjquery" }}
-        {{ defineZone "bottomLibJs" }}
-        {{ defineZone "bottomJs" }}
+        {{defineZone "bottomjquery" }}
+        {{defineZone "bottomLibJs" }}
+        {{defineZone "bottomJs" }}
     </body>
 </html>
