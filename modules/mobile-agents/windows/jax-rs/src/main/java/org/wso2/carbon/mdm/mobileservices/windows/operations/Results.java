@@ -63,27 +63,27 @@ public class Results {
 	}
 
 	public void buildResultElement(Document doc, Element rootElement) {
-		Element get = doc.createElement(Constants.RESULTS);
-		rootElement.appendChild(get);
+		Element results = doc.createElement(Constants.RESULTS);
+		rootElement.appendChild(results);
 		if (getCommandId() != -1) {
 			Element commandId = doc.createElement(Constants.COMMAND_ID);
 			commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
-			get.appendChild(commandId);
+			results.appendChild(commandId);
 		}
 		if (getMessageReference() != -1) {
 			Element messageReference = doc.createElement(Constants.MESSAGE_REFERENCE);
 			messageReference.appendChild(doc.createTextNode(String.valueOf(getMessageReference())));
-			get.appendChild(messageReference);
+			results.appendChild(messageReference);
 		}
 		if (getCommandReference() != -1) {
 			Element messageReference = doc.createElement(Constants.COMMAND_REFERENCE);
 			messageReference.appendChild(doc.createTextNode(String.valueOf(getCommandReference())));
-			get.appendChild(messageReference);
+			results.appendChild(messageReference);
 		}
 		if (getItem() != null) {
 			for (int x = 0; x < getItem().size(); x++) {
 				if (getItem().get(x) != null) {
-					getItem().get(x).buildItemElement(doc, get);
+					getItem().get(x).buildItemElement(doc, results);
 				}
 			}
 		}

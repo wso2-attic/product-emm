@@ -1,10 +1,13 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
- * you may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,7 +35,9 @@ public class Sequence {
         return exec;
     }
 
-    public void setExec(Exec exec) { this.exec = exec; }
+    public void setExec(Exec exec) {
+        this.exec = exec;
+    }
 
     public int getCommandId() {
         return commandId;
@@ -58,19 +63,11 @@ public class Sequence {
             commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
             sequence.appendChild(commandId);
         }
-
         if (getExec() != null) {
-            getExec().buildExecElement(doc, sequence );
-
+            getExec().buildExecElement(doc, sequence);
         }
-
         if (getGet() != null) {
             getGet().buildGetElement(doc, sequence);
         }
-
     }
-
-
-
-
 }

@@ -61,34 +61,26 @@ public class Meta {
 		if (getFormat() != null) {
 			Element format = doc.createElement(Constants.FORMAT);
 			format.appendChild(doc.createTextNode(getFormat()));
-
 			Attr attr = doc.createAttribute(Constants.XMLNS);
 			attr.setValue(Constants.META_NAMESPACE);
 			format.setAttributeNode(attr);
-
 			meta.appendChild(format);
 		}
 		if (getType() != null) {
 			Element type = doc.createElement(Constants.TYPE);
 			type.appendChild(doc.createTextNode(getType()));
-
 			Attr attr = doc.createAttribute(Constants.XMLNS);
 			attr.setValue(Constants.META_NAMESPACE);
 			type.setAttributeNode(attr);
-
 			meta.appendChild(type);
-
 		}
 		if (getNextNonce() != null) {
 			Element nextNonce = doc.createElement(Constants.NEXTNONCE);
 			nextNonce.appendChild(doc.createTextNode(getNextNonce()));
-
 			Attr attr = doc.createAttribute(Constants.XMLNS);
 			attr.setValue(Constants.META_NAMESPACE);
 			nextNonce.setAttributeNode(attr);
-
 			meta.appendChild(nextNonce);
-
 		}
 
 	}

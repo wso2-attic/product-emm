@@ -1,20 +1,19 @@
 /*
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * /
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations;
@@ -93,7 +92,6 @@ public class SyncmlBody {
 
 		Element syncBody = doc.createElement(Constants.SYNC_BODY);
 		rootElement.appendChild(syncBody);
-
 		if (getStatus() != null) {
 			for (int x = 0; x < getStatus().size(); x++) {
 				if (getStatus().get(x) != null) {
@@ -101,36 +99,28 @@ public class SyncmlBody {
 				}
 			}
 		}
-
 		if (getAlert() != null) {
 			getAlert().buildAlertElement(doc, syncBody);
 		}
-
 		if (getResults() != null) {
 			getResults().buildResultElement(doc, syncBody);
 		}
-
 		if (getGet() != null) {
 			getGet().buildGetElement(doc, syncBody);
 		}
-
 		if (getReplace() != null) {
 			getReplace().buildReplaceElement(doc, syncBody);
 		}
-
-		if (getExec() !=null) {
+		if (getExec() != null) {
 			for (int x = 0; x < getExec().size(); x++) {
 				if (getExec().get(x) != null) {
 					getExec().get(x).buildExecElement(doc, syncBody);
 				}
 			}
 		}
-
-		if (getSequence() !=null) {
+		if (getSequence() != null) {
 			getSequence().buildSequenceElement(doc, syncBody);
 		}
-
 		syncBody.appendChild(doc.createElement(Constants.FINAL));
-
 	}
 }

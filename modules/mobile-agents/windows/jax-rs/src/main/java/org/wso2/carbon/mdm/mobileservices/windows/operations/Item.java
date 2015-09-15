@@ -78,13 +78,11 @@ public class Item {
 				getSource().buildSourceElement(doc, item);
 			}
 		}
-
 		if (getData() != null) {
 			Element data = doc.createElement(Constants.DATA);
 			data.appendChild(doc.createTextNode(getData()));
 			item.appendChild(data);
 		}
-
 		if(getMeta() != null){
 			getMeta().buildMetaElement(doc, item);
 		}

@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -56,12 +57,17 @@ public class Add {
 				commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
 				add.appendChild(commandId);
 			}
-			for (int x = 0; x < getItems().size(); x++) {
-				if (getItems().get(x) != null) {
-					getItems().get(x).buildItemElement(doc, add);
+//			for (int x = 0; x < getItems().size(); x++) {
+//				if (getItems().get(x) != null) {
+//					getItems().get(x).buildItemElement(doc, add);
+//				}
+//			}
+			for (Iterator<Item> itemIterator = getItems().iterator(); itemIterator.hasNext(); ) {
+				Item item = itemIterator.next();
+				if (item != null) {
+					item.buildItemElement(doc, add);
 				}
 			}
 		}
 	}
-
 }

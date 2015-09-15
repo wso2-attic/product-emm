@@ -22,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.beans.TokenBean;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.Token;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
@@ -55,18 +55,18 @@ public class BSTProviderImpl implements BSTProvider {
     public Response getBST(Credentials credentials) throws WindowsDeviceEnrolmentException {
 
         String domainUser = credentials.getUsername();
-        String[] domainUserArray = domainUser.split(DELIMITER);
-        String user = domainUserArray[USER_SEGMENT];
-        String domain = domainUserArray[DOMAIN_SEGMENT];
-        domain = "";
+//        String[] domainUserArray = domainUser.split(DELIMITER);
+//        String user = domainUserArray[USER_SEGMENT];
+//        String domain = domainUserArray[DOMAIN_SEGMENT];
+          String  domain = "";
         String password = credentials.getPassword();
 
         try {
-            if (authenticate(user, password, domain)) {
+            if (authenticate(domainUser, password, domain)) {
                 String challengetoken = DeviceUtil.generateRandomToken();
-                TokenBean tokenbean = new TokenBean();
+                Token tokenbean = new Token();
                 tokenbean.setChallengeToken(challengetoken);
-                DeviceUtil.persistChallengeToken(tokenbean.getChallengeToken(), "", user);
+                DeviceUtil.persistChallengeToken(tokenbean.getChallengeToken(), "", domainUser);
 
                 return Response.ok().entity(tokenbean.getChallengeToken()).build();
             } else {

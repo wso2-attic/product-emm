@@ -29,6 +29,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationCode.*;
@@ -43,7 +44,7 @@ public class OperationReply {
     private SyncmlDocument syncmlDocument;
     private SyncmlDocument replySyncmlDocument;
     private static final int HEADER_STATUS_ID = 0;
-    private int HEADER_COMMAND_ID = 1;
+    private int headerCommandId = 1;
     private static final String RESULTS_COMMAND_TEXT = "Results";
     private static final String HEADER_COMMAND_TEXT = "SyncHdr";
     private static final String ALERT_COMMAND_TEXT = "Alert";
@@ -127,7 +128,7 @@ public class OperationReply {
         List<Status> sourceStatus = sourceSyncmlBody.getStatus();
         if (sourceStatus.size() == 0) {
             headerStatus =
-                    new Status(HEADER_COMMAND_ID, sourceHeader.getMsgID(), HEADER_STATUS_ID,
+                    new Status(headerCommandId, sourceHeader.getMsgID(), HEADER_STATUS_ID,
                             HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
                             String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
             status.add(headerStatus);
@@ -138,7 +139,7 @@ public class OperationReply {
                 if (st.getChallenge() != null && HEADER_COMMAND_TEXT.equals(st.getCommand())) {
 
                     headerStatus =
-                            new Status(HEADER_COMMAND_ID, sourceHeader.getMsgID(), HEADER_STATUS_ID,
+                            new Status(headerCommandId, sourceHeader.getMsgID(), HEADER_STATUS_ID,
                                     HEADER_COMMAND_TEXT, sourceHeader.getSource().getLocURI(),
                                     String.valueOf(Constants.SyncMLResponseCodes.AUTHENTICATION_ACCEPTED));
                     status.add(headerStatus);
@@ -146,61 +147,54 @@ public class OperationReply {
             }
         }
         if (sourceSyncmlBody.getResults() != null) {
-            int ResultCommandId = ++HEADER_COMMAND_ID;
-            Status resultStatus = new Status(ResultCommandId,
-                    sourceHeader.getMsgID(),
-                    sourceSyncmlBody.getResults().getCommandId(),
-                    RESULTS_COMMAND_TEXT, null,
-                    String.valueOf(
-                            Constants.SyncMLResponseCodes.ACCEPTED));
+            int ResultCommandId = ++headerCommandId;
+            Status resultStatus = new Status(ResultCommandId, sourceHeader.getMsgID(),
+                    sourceSyncmlBody.getResults().getCommandId(), RESULTS_COMMAND_TEXT, null,
+                    String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
             status.add(resultStatus);
-
         }
         if (sourceSyncmlBody.getAlert() != null) {
-            int alertCommandId = ++HEADER_COMMAND_ID;
+            int alertCommandId = ++headerCommandId;
             Status alertStatus = new Status(alertCommandId,
                     sourceHeader.getMsgID(),
                     sourceSyncmlBody.getAlert().getCommandId(),
                     ALERT_COMMAND_TEXT, null,
                     String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
             status.add(alertStatus);
-
         }
         if (sourceSyncmlBody.getReplace() != null) {
-            int replaceCommandId = ++HEADER_COMMAND_ID;
-                Status replaceStatus = new Status(replaceCommandId,
-                        sourceHeader.getMsgID(),
-                        sourceSyncmlBody.getReplace().getCommandId(),
-                        REPLACE_COMMAND_TEXT, null,
-                        String.valueOf(
-                                Constants.SyncMLResponseCodes.ACCEPTED)
-                );
-                status.add(replaceStatus);
-
+            int replaceCommandId = ++headerCommandId;
+            Status replaceStatus = new Status(replaceCommandId, sourceHeader.getMsgID(),
+                    sourceSyncmlBody.getReplace().getCommandId(), REPLACE_COMMAND_TEXT, null,
+                    String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED)
+            );
+            status.add(replaceStatus);
         }
         if (sourceSyncmlBody.getExec() != null) {
-            for(int z = 0; z<sourceSyncmlBody.getExec().size(); z++) {
-                int execCommandId = ++HEADER_COMMAND_ID;
-                Status execStatus = new Status(execCommandId,
-                        sourceHeader.getMsgID(),
-                        sourceSyncmlBody.getExec().get(z).getCommandId(),
-                        GET_COMMAND_TEXT, null,
-                        String.valueOf(
-                                Constants.SyncMLResponseCodes.ACCEPTED)
+//            for (int z = 0; z < sourceSyncmlBody.getExec().size(); z++) {
+//                int execCommandId = ++headerCommandId;
+//                Status execStatus = new Status(execCommandId, sourceHeader.getMsgID(),
+//                        sourceSyncmlBody.getExec().get(z).getCommandId(), GET_COMMAND_TEXT, null,
+//                        String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED)
+//                );
+//                status.add(execStatus);
+//            }
+            for (Iterator<Exec>execIterator = sourceSyncmlBody.getExec().iterator(); execIterator.hasNext();) {
+                int execCommandId = ++headerCommandId;
+                Exec exec = execIterator.next();
+                Status execStatus = new Status(execCommandId, sourceHeader.getMsgID(),
+                        exec.getCommandId(), GET_COMMAND_TEXT, null,
+                        String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED)
                 );
                 status.add(execStatus);
             }
         }
         if (sourceSyncmlBody.getGet() != null) {
-            int getCommandId = ++HEADER_COMMAND_ID;
-            Status execStatus = new Status(getCommandId,
-                    sourceHeader.getMsgID(),
-                    sourceSyncmlBody.getGet().getCommandId(),
-                    EXEC_COMMAND_TEXT, null,
-                    String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
+            int getCommandId = ++headerCommandId;
+            Status execStatus = new Status(getCommandId, sourceHeader.getMsgID(), sourceSyncmlBody.getGet().getCommandId(),
+                    EXEC_COMMAND_TEXT, null, String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
             status.add(execStatus);
         }
-
         syncmlBodyReply.setStatus(status);
         return syncmlBodyReply;
     }
@@ -213,18 +207,23 @@ public class OperationReply {
         List<Add> addsAtomic = new ArrayList<Add>();
         Replace replaceElement = new Replace();
 
-
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
                 Operation operation = operations.get(x);
                 Operation.Type type = operation.getType();
-               Object obj =  operation.getPayLoad();
-                switch (type) {
 
-                    case PROFILE:
+                switch (type) {
+                    case POLICY:
                         if (operation.getCode().equals("POLICY_BUNDLE"))
                         {
-
+                            List<?extends Operation>operationList =  (List<? extends Operation>)operation.getPayLoad();
+                            for (int y=0; y < operationList.size();y++) {
+                                Operation policy = operationList.get(y);
+                                if (policy.getCode().equals("CAMERA")) {
+                                    Item itemGet = appendGetInfo(policy);
+                                    itemsGet.add(itemGet);
+                                }
+                            }
                         }
                     case CONFIG:
                         List<Add> addConfig = appendAddConfiguration(operation);
@@ -270,10 +269,10 @@ public class OperationReply {
                                 .OperationCodes.ENCRYPT_STORAGE)) {
 
                             replaceElement.setCommandId(operation.getId());
-                            List<Item> itemsReplace = new ArrayList<>();
+                            List<Item> replaceItem = new ArrayList<>();
                             Item itemReplace = appendReplaceInfo(operation);
-                            itemsReplace.add(itemReplace);
-                            replaceElement.setItems(itemsReplace);
+                            replaceItem.add(itemReplace);
+                            replaceElement.setItems(replaceItem);
                         }
                         break;
                     default:
@@ -286,7 +285,6 @@ public class OperationReply {
             getElement.setCommandId(75);
             getElement.setItems(itemsGet);
         }
-
         if (!addsAtomic.isEmpty()) {
             atomicElement.setCommandId(300);
             atomicElement.setAdds(addsAtomic);
@@ -294,9 +292,6 @@ public class OperationReply {
         syncmlBody.setGet(getElement);
         syncmlBody.setExec(execList);
         syncmlBody.setReplace(replaceElement);
-
-
-
     }
 
     private Item appendExecInfo(Operation operation) {
@@ -318,7 +313,6 @@ public class OperationReply {
         }
         return item;
     }
-
 
     private Item appendGetInfo(Operation operation) {
         Item item = new Item();
@@ -442,7 +436,6 @@ public class OperationReply {
 
         sequenceElement.setGet(getElements);
         return  sequenceElement;
-
     }
 }
 

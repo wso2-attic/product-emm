@@ -73,6 +73,8 @@ public final class Constants {
      * Discovery service related other constants
      */
     public final class Discovery {
+        private Discovery() { throw new AssertionError(); }
+
         public static final String ENROLL_SUBDOMAIN = "https://EnterpriseEnrollment.";
         public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL =
                 "/ENROLLMENTSERVER/PolicyEnrollmentWebservice" +
@@ -86,13 +88,15 @@ public final class Constants {
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
         public static final String WAB_URL = "/mdm/login-agent";
-        //public static final String WAB_URL = "/mdm/enrollments/windows/login-agent";
+
     }
 
     /**
      * Certificate enrolment policy service related constants
      */
     public final class CertificateEnrolmentPolicy {
+        private CertificateEnrolmentPolicy() { throw new AssertionError(); }
+
         public static final int MINIMAL_KEY_LENGTH = 2048;
         public static final int POLICY_SCHEMA = 3;
         public static final int HASH_ALGORITHM_OID_REFERENCE = 0;
@@ -107,6 +111,8 @@ public final class Constants {
      * Certificate enrollment Service related constants
      */
     public final class CertificateEnrolment {
+        private CertificateEnrolment () { throw new AssertionError(); }
+
         public static final String TOKEN_TYPE =
                 "http://schemas.microsoft.com/5.0.0" +
                 ".0/ConfigurationManager/Enrollment/DeviceEnrollmentToken";
@@ -144,6 +150,7 @@ public final class Constants {
      * SynclML service related constants
      */
     public final class SyncML {
+        private SyncML() { throw new AssertionError(); }
 
         public static final String SYNCML_SOURCE = "Source";
         public static final String SYNCML_DATA = "Data";

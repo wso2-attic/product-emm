@@ -31,7 +31,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsOpera
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.Message;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Encrypt;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.StorageEncryption;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.wrapper.EncryptBeanWrapper;
 
 import javax.ws.rs.HeaderParam;
@@ -56,18 +56,14 @@ public class OperationsImpl implements Operations {
         if (log.isDebugEnabled()) {
             log.debug("Invoking windows device lock operation");
         }
-
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
-
         try {
             CommandOperation operation = new CommandOperation();
             operation.setCode(Constants.OperationCodes.DEVICE_LOCK);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(true);
-
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
-
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message.setResponseMessage(errorMessage);
@@ -95,9 +91,7 @@ public class OperationsImpl implements Operations {
         operation.setType(Operation.Type.COMMAND);
         operation.setEnabled(true);
         try {
-
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
-
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message.setResponseMessage(errorMessage);
@@ -123,14 +117,11 @@ public class OperationsImpl implements Operations {
         }
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
-
         CommandOperation operation = new CommandOperation();
         operation.setCode(Constants.OperationCodes.WIPE_DATA);
         operation.setType(Operation.Type.COMMAND);
         try {
-            return WindowsAPIUtils.getOperationResponse(deviceids, operation, message,
-                    responseMediaType);
-
+            return WindowsAPIUtils.getOperationResponse(deviceids, operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message.setResponseMessage(errorMessage);
@@ -154,15 +145,12 @@ public class OperationsImpl implements Operations {
         if (log.isDebugEnabled()) {
             log.debug("Invoking Windows ring-device device operation");
         }
-
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
-
         try {
             CommandOperation operation = new CommandOperation();
             operation.setCode(Constants.OperationCodes.DEVICE_RING);
             operation.setType(Operation.Type.COMMAND);
-
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
@@ -189,22 +177,17 @@ public class OperationsImpl implements Operations {
         }
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
-
         try {
-            Encrypt encrypt = encryptBeanWrapper.getOperation();
-
+            StorageEncryption encrypt = encryptBeanWrapper.getOperation();
             if (encrypt == null) {
                 throw new OperationManagementException("Encrypt bean is empty");
             }
-
             CommandOperation operation = new CommandOperation();
             operation.setCode(Constants.OperationCodes.ENCRYPT_STORAGE);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(encrypt.isEncrypted());
-
-            return WindowsAPIUtils.getOperationResponse(encryptBeanWrapper.getDeviceIDs(),
-                    operation, message, responseMediaType);
-
+            return WindowsAPIUtils.getOperationResponse(encryptBeanWrapper.getDeviceIDs(), operation, message,
+                    responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message.setResponseMessage(errorMessage);
@@ -230,12 +213,10 @@ public class OperationsImpl implements Operations {
         }
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
-
         try {
             CommandOperation operation = new CommandOperation();
             operation.setCode(Constants.OperationCodes.LOCK_RESET);
             operation.setType(Operation.Type.COMMAND);
-
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";

@@ -19,7 +19,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * class for generate security token for client and server.
@@ -40,8 +42,11 @@ public class SyncmlCredinitials {
             String usrPwdHash = Base64.encodeBase64String(digest.digest(usrPwd.getBytes("utf-8")));
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes("utf-8")));
-        } catch (Exception e) {
-            String msg = "Problem occurred in generating server credentials.";
+        } catch (UnsupportedEncodingException e) {
+            String msg = "Problem occurred in encoding credentials data.";
+            log.error(msg, e);
+        } catch (NoSuchAlgorithmException e) {
+            String msg = "Problem occurred in generating password hash.";
             log.error(msg, e);
         }
         return usrPwdNonceHash;
@@ -58,11 +63,13 @@ public class SyncmlCredinitials {
             String usrPwdHash = Base64.encodeBase64String(digest.digest(usrPwd.getBytes("utf-8")));
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes("utf-8")));
-        } catch (Exception e) {
-            String msg = "Problem occurred in generating security token.";
+        } catch (UnsupportedEncodingException e) {
+            String msg = "Problem occurred in encoding credentials data.";
+            log.error(msg, e);
+        } catch (NoSuchAlgorithmException e) {
+            String msg = "Problem occurred in generating password hash.";
             log.error(msg, e);
         }
         return usrPwdNonceHash;
     }
-
 }

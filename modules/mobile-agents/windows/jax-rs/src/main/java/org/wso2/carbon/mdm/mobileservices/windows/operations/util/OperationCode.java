@@ -19,7 +19,8 @@ public class OperationCode {
         DEVICE_NAME("./DevDetail/Ext/Microsoft/DeviceName"),
         CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI"),
         LOCK_PIN("./Vendor/MSFT/RemoteLock/NewPINValue"),
-        LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN");
+        LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
+        CAMERA("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera");
 
 
         private final String code;

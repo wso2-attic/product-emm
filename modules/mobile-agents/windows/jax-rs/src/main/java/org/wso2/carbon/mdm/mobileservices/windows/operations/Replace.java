@@ -50,17 +50,17 @@ public class Replace {
 
 	public void buildReplaceElement(Document doc, Element rootElement) {
 		if (getItems() != null) {
-			Element get = doc.createElement(Constants.REPLACE);
-			rootElement.appendChild(get);
+			Element replace = doc.createElement(Constants.REPLACE);
+			rootElement.appendChild(replace);
 			if (getCommandId() != -1) {
 				Element commandId = doc.createElement(Constants.COMMAND_ID);
 				commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
-				get.appendChild(commandId);
+				replace.appendChild(commandId);
 			}
 			if (getItems() != null) {
 				for (int x = 0; x < getItems().size(); x++) {
 					if (getItems().get(x) != null) {
-						getItems().get(x).buildItemElement(doc, get);
+						getItems().get(x).buildItemElement(doc, replace);
 					}
 				}
 			}

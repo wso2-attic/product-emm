@@ -1,10 +1,13 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
- * you may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -38,7 +41,6 @@ import java.util.List;
 public class WindowsAPIUtils {
 
     public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
-
         DeviceIdentifier identifier = new DeviceIdentifier();
         identifier.setId(deviceId);
         identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
@@ -46,7 +48,6 @@ public class WindowsAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
-
         DeviceManagementProviderService dmService;
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -59,7 +60,6 @@ public class WindowsAPIUtils {
     }
 
     public static NotificationManagementService getNotificationManagementService() {
-
         NotificationManagementService nmService;
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -78,20 +78,16 @@ public class WindowsAPIUtils {
         } else {
             responseMediaType = MediaType.valueOf(acceptHeader);
         }
-
         return responseMediaType;
     }
 
     public static Response getOperationResponse(List<String> deviceIDs, Operation operation,
                                                 Message message, MediaType responseMediaType)
             throws DeviceManagementException, OperationManagementException {
-
         WindowsDeviceUtils deviceUtils = new WindowsDeviceUtils();
         DeviceIDHolder deviceIDHolder = deviceUtils.validateDeviceIdentifiers(deviceIDs,
                 message, responseMediaType);
-
         getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
-
         if (!deviceIDHolder.getErrorDeviceIdList().isEmpty()) {
             return javax.ws.rs.core.Response.status(Constants.StatusCodes.
                     MULTI_STATUS_HTTP_CODE).type(
@@ -102,9 +98,7 @@ public class WindowsAPIUtils {
                 type(responseMediaType).build();
     }
 
-
     public static PolicyManagerService getPolicyManagerService() {
-
         PolicyManagerService policyManager;
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -113,7 +107,6 @@ public class WindowsAPIUtils {
         policyManager =
                 (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
-
         return policyManager;
     }
 

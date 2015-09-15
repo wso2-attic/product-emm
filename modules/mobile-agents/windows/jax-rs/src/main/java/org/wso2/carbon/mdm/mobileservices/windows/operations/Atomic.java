@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,9 +33,13 @@ public class Atomic {
     List<Add> adds;
     List<Replace> replaces;
 
-    public List<Replace> getReplaces() { return replaces; }
+    public List<Replace> getReplaces() {
+        return replaces;
+    }
 
-    public void setReplaces(List<Replace> replaces) { this.replaces = replaces; }
+    public void setReplaces(List<Replace> replaces) {
+        this.replaces = replaces;
+    }
 
     public List<Add> getAdds() {
         return adds;
@@ -61,14 +66,26 @@ public class Atomic {
                 commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
                 atomic.appendChild(commandId);
             }
-            for (int x = 0; x < getAdds().size(); x++) {
-                if (getAdds().get(x) != null) {
-                    getAdds().get(x).buildAddElement(doc, atomic);
+//            for (int x = 0; x < getAdds().size(); x++) {
+//                if (getAdds().get(x) != null) {
+//                    getAdds().get(x).buildAddElement(doc, atomic);
+//                }
+//            }
+//            for (int x = 0; x < getReplaces().size(); x++) {
+//                if (getReplaces().get(x) != null) {
+//                    getReplaces().get(x).buildReplaceElement(doc, atomic);
+//                }
+//            }
+            for (Iterator<Add> addIterator = getAdds().iterator(); addIterator.hasNext(); ) {
+                Add add = addIterator.next();
+                if (add != null) {
+                    add.buildAddElement(doc, atomic);
                 }
             }
-            for (int x = 0; x < getReplaces().size(); x++) {
-                if (getReplaces().get(x) != null) {
-                    getReplaces().get(x).buildReplaceElement(doc, atomic);
+            for (Iterator<Replace> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
+                Replace add = replaceIterator.next();
+                if (add != null) {
+                    add.buildReplaceElement(doc, atomic);
                 }
             }
         }

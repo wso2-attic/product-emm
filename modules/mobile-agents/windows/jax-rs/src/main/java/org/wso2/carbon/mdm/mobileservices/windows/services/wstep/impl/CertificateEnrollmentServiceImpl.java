@@ -288,15 +288,15 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 */
 	public String prepareWapProvisioningXML(
 			String binarySecurityToken, List<java.io.Serializable> certPropertyList,
-			String wapProvisioningFilePath, String headerBST) throws CertificateGenerationException,
+			String wapProvisioningFilePath, String headerBst) throws CertificateGenerationException,
 	                                               WAPProvisioningException {
 
-		byte[] byteArrayBST = DatatypeConverter.parseBase64Binary(binarySecurityToken);
-		byte[] byteArrayHeaderBST = DatatypeConverter.parseBase64Binary(headerBST);
+		byte[] byteArrayBst = DatatypeConverter.parseBase64Binary(binarySecurityToken);
+		byte[] byteArrayHeaderBST = DatatypeConverter.parseBase64Binary(headerBst);
 		String decodedBST = new String(byteArrayHeaderBST);
 		PKCS10CertificationRequest certificationRequest;
 		try {
-			certificationRequest = new PKCS10CertificationRequest(byteArrayBST);
+			certificationRequest = new PKCS10CertificationRequest(byteArrayBst);
 		} catch (IOException e) {
 			String msg = "CSR cannot be recovered.";
 			log.error(msg, e);
