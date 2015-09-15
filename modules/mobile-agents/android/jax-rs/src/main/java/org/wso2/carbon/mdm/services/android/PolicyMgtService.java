@@ -34,7 +34,6 @@ import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.jws.WebService;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -51,7 +50,6 @@ public class PolicyMgtService {
                                       @PathParam("id") String id) throws AndroidAgentException {
 
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
         Message responseMessage = new Message();
         Policy policy;
         try {
@@ -65,7 +63,9 @@ public class PolicyMgtService {
                         responseCode(Response.Status.OK.toString()).build();
             }
         } catch (PolicyManagementException e) {
-            throw new AndroidAgentException("Error occurred while getting the policy.", e);
+            String msg = "Error occurred while getting the policy.";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
         } finally {
             AndroidAPIUtils.endTenantFlow();
         }
@@ -85,7 +85,9 @@ public class PolicyMgtService {
                 Response.status(Response.Status.NOT_FOUND);
             }
         } catch (FeatureManagementException e) {
-            throw new AndroidAgentException("Error occurred while getting the features.", e);
+            String msg = "Error occurred while getting the features.";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
         } finally {
             AndroidAPIUtils.endTenantFlow();
         }
