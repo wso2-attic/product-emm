@@ -183,7 +183,8 @@ Handlebars.compileFile = function (file) {
     Handlebars.cache[f.getPath()] = compiled;
     return compiled;
 };
-Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
+
+Handlebars.registerHelper('equal', function (lvalue, rvalue, options) {
     if (arguments.length < 3)
         throw new Error("Handlebars Helper equal needs 2 parameters");
     if( lvalue!=rvalue ) {
@@ -192,12 +193,29 @@ Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
         return options.fn(this);
     }
 });
-Handlebars.registerHelper('unequal', function(lvalue, rvalue, options) {
+
+Handlebars.registerHelper('unequal', function (lvalue, rvalue, options) {
     if (arguments.length < 3)
         throw new Error("Handlebars Helper equal needs 2 parameters");
-    if( lvalue == rvalue ) {
+    if ( lvalue == rvalue ) {
         return options.inverse(this);
     } else {
         return options.fn(this);
     }
+});
+
+Handlebars.registerHelper("math", function (lvalue, operator, rvalue) {
+    if (arguments.length < 4)
+        throw new Error("Handlebars Helper math needs 3 parameters");
+
+    lvalue = parseFloat(lvalue);
+    rvalue = parseFloat(rvalue);
+
+    return {
+        "+": lvalue + rvalue,
+        "-": lvalue - rvalue,
+        "*": lvalue * rvalue,
+        "/": lvalue / rvalue,
+        "%": lvalue % rvalue
+    }[operator];
 });

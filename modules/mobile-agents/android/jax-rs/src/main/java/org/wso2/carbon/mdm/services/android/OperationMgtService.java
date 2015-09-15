@@ -97,6 +97,8 @@ public class OperationMgtService {
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
+        } finally {
+            AndroidAPIUtils.endTenantFlow();
         }
         return pendingOperations;
     }
@@ -112,15 +114,14 @@ public class OperationMgtService {
 
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
+        Response response;
 
         try {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_LOCK);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(true);
-
-            return AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
-
+            response = AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message = Message.responseMessage(errorMessage).
@@ -133,7 +134,10 @@ public class OperationMgtService {
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
+        } finally {
+            AndroidAPIUtils.endTenantFlow();
         }
+        return response;
     }
 
     @POST
@@ -276,6 +280,8 @@ public class OperationMgtService {
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
+        } finally {
+            AndroidAPIUtils.endTenantFlow();
         }
     }
 
@@ -409,7 +415,6 @@ public class OperationMgtService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_RING);
             operation.setType(Operation.Type.COMMAND);
-
             return AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message,
                     responseMediaType);
         } catch (OperationManagementException e) {

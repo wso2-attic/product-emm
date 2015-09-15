@@ -101,6 +101,52 @@ public class User {
 	}
 
 	/**
+	 * Method to get user information from emm-user-store.
+	 *
+	 * @param username User-name of the user
+	 * @return {Response} Status of the request wrapped inside Response object
+	 * @throws MDMAPIException
+	 */
+	@GET
+	@Path("{username}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getUser(@PathParam("username") String username) throws MDMAPIException {
+		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+		ResponsePayload responsePayload = new ResponsePayload();
+		try {
+			if (userStoreManager.isExistingUser(username)) {
+				UserWrapper user = new UserWrapper();
+				user.setUsername(username);
+				user.setEmailAddress(getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS));
+				user.setFirstname(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
+				user.setLastname(getClaimValue(username, Constants.USER_CLAIM_LAST_NAME));
+				// Outputting debug message upon successful retrieval of user
+				if (log.isDebugEnabled()) {
+					log.debug("User by username: " + username + " was found.");
+				}
+				responsePayload.setStatusCode(HttpStatus.SC_OK);
+				responsePayload.setMessageFromServer("User information was retrieved successfully.");
+				responsePayload.setResponseContent(user);
+				return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+			} else {
+				// Outputting debug message upon trying to remove non-existing user
+				if (log.isDebugEnabled()) {
+					log.debug("User by username: " + username + " does not exist.");
+				}
+				// returning response with bad request state
+				responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+				responsePayload.setMessageFromServer(
+						"User by username: " + username + " does not exist.");
+				return Response.status(HttpStatus.SC_NOT_FOUND).entity(responsePayload).build();
+			}
+		} catch (UserStoreException e) {
+			String errorMsg = "Exception in trying to retrieve user by username: " + username;
+			log.error(errorMsg, e);
+			throw new MDMAPIException(errorMsg, e);
+		}
+	}
+
+	/**
 	 * Private method to be used by addUser() to
 	 * generate an initial user password for a user.
 	 * This will be the password used by a user for his initial login to the system.
