@@ -19,6 +19,7 @@
 
 var log = new Log("/modules/enrollments/ios/agent-controller.jag");
 
+var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
@@ -27,23 +28,21 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-var mdmProps = require('/config/mdm-props.js').config();
-var authUrl;
 if (platform == "iOS") {
     var username = request.getParameter("username");
     var password = request.getParameter("password");
     var ownership = request.getParameter("ownership");
 
     var xhr = new XMLHttpRequest();
-    authUrl = mdmProps["iOSConfigRoot"] + "authenticate";
+    var authUrl = mdmProps["iOSConfigRoot"] + "authenticate";
     xhr.open("POST", authUrl);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(stringify({"username": username, "password": password, "ownership": ownership}));
 
     if (xhr.status == 200 && xhr.readyState == 4) {
-        var responseText = parse(xhr.responseText);
+        var responseContent = parse(xhr.responseText);
 
-        session.put("iOSChallengeToken", responseText["challengeToken"]);
+        session.put("iOSChallengeToken", responseContent["challengeToken"]);
         session.put("username", username);
         session.put("password", password);
         session.put("ownership", ownership);
