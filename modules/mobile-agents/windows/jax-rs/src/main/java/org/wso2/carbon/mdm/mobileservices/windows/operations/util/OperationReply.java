@@ -19,10 +19,11 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
-
 import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
@@ -171,14 +172,6 @@ public class OperationReply {
             status.add(replaceStatus);
         }
         if (sourceSyncmlBody.getExec() != null) {
-//            for (int z = 0; z < sourceSyncmlBody.getExec().size(); z++) {
-//                int execCommandId = ++headerCommandId;
-//                Status execStatus = new Status(execCommandId, sourceHeader.getMsgID(),
-//                        sourceSyncmlBody.getExec().get(z).getCommandId(), GET_COMMAND_TEXT, null,
-//                        String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED)
-//                );
-//                status.add(execStatus);
-//            }
             for (Iterator<Exec>execIterator = sourceSyncmlBody.getExec().iterator(); execIterator.hasNext();) {
                 int execCommandId = ++headerCommandId;
                 Exec exec = execIterator.next();
@@ -216,15 +209,23 @@ public class OperationReply {
                     case POLICY:
                         if (operation.getCode().equals("POLICY_BUNDLE"))
                         {
-                            List<?extends Operation>operationList =  (List<? extends Operation>)operation.getPayLoad();
-                            for (int y=0; y < operationList.size();y++) {
+                            List<? extends Operation> operationList = (List<? extends Operation>) operation.getPayLoad();
+                            for (int y = 0; y < operationList.size(); y++) {
                                 Operation policy = operationList.get(y);
                                 if (policy.getCode().equals("CAMERA")) {
-                                    Item itemGet = appendGetInfo(policy);
-                                    itemsGet.add(itemGet);
+                                    List<Item> replaceItem = new ArrayList<>();
+                                    Item itemReplace = null;
+                                    try {
+                                        itemReplace = appendReplaceInfo(policy);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    replaceItem.add(itemReplace);
+                                    replaceElement.setItems(replaceItem);
                                 }
                             }
                         }
+                        break;
                     case CONFIG:
                         List<Add> addConfig = appendAddConfiguration(operation);
                         for (Add addConfiguration : addConfig) {
@@ -270,7 +271,12 @@ public class OperationReply {
 
                             replaceElement.setCommandId(operation.getId());
                             List<Item> replaceItem = new ArrayList<>();
-                            Item itemReplace = appendReplaceInfo(operation);
+                            Item itemReplace = null;
+                            try {
+                                itemReplace = appendReplaceInfo(operation);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             replaceItem.add(itemReplace);
                             replaceElement.setItems(replaceItem);
                         }
@@ -337,21 +343,35 @@ public class OperationReply {
         return item;
     }
 
-    private Item appendReplaceInfo(Operation operation) {
+    private Item appendReplaceInfo(Operation operation) throws JSONException {
         Item item = new Item();
         String operationCode = operation.getCode();
         for (Command command : Command.values()) {
             if (operationCode != null && operationCode.equals(command.name())) {
                 Target target = new Target();
                 target.setLocURI(command.getCode());
-                if(operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.ENCRYPT_STORAGE)) {
                     Meta meta = new Meta();
                     meta.setFormat("chr");
                     item.setMeta(meta);
                     item.setData("1");
                 }
-                item.setTarget(target);
+                if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.CAMERA)) {
+                    JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+                    if (payload.getBoolean("enabled")) {
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setMeta(meta);
+                        item.setData("1");
+                    } else {
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setMeta(meta);
+                        item.setData("0");
+                    }
+                }
             }
         }
         return item;

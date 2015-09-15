@@ -40,7 +40,8 @@ public class OperationCode {
         DEVICE_LOCK("./Vendor/MSFT/RemoteLock/Lock"),
         WIPE_DATA("./Vendor/MSFT/RemoteWipe/doWipe"),
         DISENROLL("./Vendor/MSFT/DMClient/Unenroll"),
-        LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN");
+        LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
+        CAMERA("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera");
 
 
         private final String code;

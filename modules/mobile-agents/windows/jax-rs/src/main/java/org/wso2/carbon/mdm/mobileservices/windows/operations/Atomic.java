@@ -66,16 +66,6 @@ public class Atomic {
                 commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
                 atomic.appendChild(commandId);
             }
-//            for (int x = 0; x < getAdds().size(); x++) {
-//                if (getAdds().get(x) != null) {
-//                    getAdds().get(x).buildAddElement(doc, atomic);
-//                }
-//            }
-//            for (int x = 0; x < getReplaces().size(); x++) {
-//                if (getReplaces().get(x) != null) {
-//                    getReplaces().get(x).buildReplaceElement(doc, atomic);
-//                }
-//            }
             for (Iterator<Add> addIterator = getAdds().iterator(); addIterator.hasNext(); ) {
                 Add add = addIterator.next();
                 if (add != null) {

@@ -57,11 +57,6 @@ public class Add {
 				commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
 				add.appendChild(commandId);
 			}
-//			for (int x = 0; x < getItems().size(); x++) {
-//				if (getItems().get(x) != null) {
-//					getItems().get(x).buildItemElement(doc, add);
-//				}
-//			}
 			for (Iterator<Item> itemIterator = getItems().iterator(); itemIterator.hasNext(); ) {
 				Item item = itemIterator.next();
 				if (item != null) {

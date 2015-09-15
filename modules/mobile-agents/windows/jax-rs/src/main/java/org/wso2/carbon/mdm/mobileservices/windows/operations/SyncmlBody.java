@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -112,9 +113,10 @@ public class SyncmlBody {
 			getReplace().buildReplaceElement(doc, syncBody);
 		}
 		if (getExec() != null) {
-			for (int x = 0; x < getExec().size(); x++) {
-				if (getExec().get(x) != null) {
-					getExec().get(x).buildExecElement(doc, syncBody);
+			for (Iterator<Exec> execIterator = getExec().iterator(); execIterator.hasNext(); ) {
+				Exec exec = execIterator.next();
+				if (exec != null) {
+					exec.buildExecElement(doc, syncBody);
 				}
 			}
 		}

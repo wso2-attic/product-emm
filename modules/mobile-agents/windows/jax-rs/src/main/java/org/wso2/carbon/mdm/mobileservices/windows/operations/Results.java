@@ -23,6 +23,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -82,8 +83,11 @@ public class Results {
 		}
 		if (getItem() != null) {
 			for (int x = 0; x < getItem().size(); x++) {
-				if (getItem().get(x) != null) {
-					getItem().get(x).buildItemElement(doc, results);
+				for (Iterator<Item> itemIterator = getItem().iterator(); itemIterator.hasNext(); ) {
+					Item item = itemIterator.next();
+					if (item != null) {
+						item.buildItemElement(doc, results);
+					}
 				}
 			}
 		}

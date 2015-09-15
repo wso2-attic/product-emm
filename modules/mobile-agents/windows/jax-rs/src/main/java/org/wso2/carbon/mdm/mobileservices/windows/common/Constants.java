@@ -191,6 +191,7 @@ public final class Constants {
         public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
         public static final String LOCK_RESET = "LOCKRESET";
         public static final String PIN_CODE = "LOCK_PIN";
+        public static final String CAMERA = "CAMERA";
 
     }
 
