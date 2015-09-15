@@ -96,6 +96,9 @@ deviceModule = function () {
         }
     };
 
+    /*
+     @Deprecated
+     */
     publicMethods.listDevicesForUser = function (username) {
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
