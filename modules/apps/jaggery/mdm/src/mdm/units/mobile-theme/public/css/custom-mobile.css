@@ -109,7 +109,7 @@ a.btn-download-agent:hover {
 	padding:15px;
 	border:1px solid #f0f0f0;
 	background:#fafafa;
-	height:280px;
+	height:320px;
 	overflow-y:auto;
 }
 
@@ -133,5 +133,5 @@ h4 {
 }
 
 .itm-wiz {
-    margin-top: 50px;
+    margin-top: 20px;
 }

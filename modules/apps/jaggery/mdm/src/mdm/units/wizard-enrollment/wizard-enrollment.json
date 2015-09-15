@@ -1,4 +1,4 @@
 {
   "extends": "wizard",
-  "predicate": "true"
+  "predicate": true
 }

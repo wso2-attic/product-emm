@@ -1,0 +1,59 @@
+{{!-- Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+
+WSO2 Inc. licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except
+in compliance with the License.
+You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License. --}}
+
+{{#zone "main"}}
+    <div>
+        <form class="form-login-box" action="{{loginActionURL}}" method="POST">
+            <div class="row">
+                <div class="container col-md-8 wr-text">
+                    <!-- validation -->
+                    <span class="wr-validation-summary hidden">
+                        <p></p>
+                    </span>
+                    <label class="input-label">Username *</label>
+                        <div class="input-control text">
+                            <input name="username" type="text" placeholder="Enter your username here"/>
+                        </div>
+                    <label class="input-label">Password *</label>
+                        <div class="input-control text">
+                            <input name="password" type="password" value="" placeholder="Enter your password here"/>
+                        </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="ownership" id="optionsRadios1" value="BYOD" checked>
+                            &nbsp; BYOD (This is my own device)
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="ownership" id="optionsRadios2" value="COPE">
+                            &nbsp; COPE (This is a corporate device)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container col-md-4 wr-buttons">
+                    <a href="#" class="btn-download-agent">Login</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{{/zone}}
+
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/login-box.js"></script>
+{{/zone}}

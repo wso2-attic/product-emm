@@ -44,136 +44,150 @@ import java.util.List;
 @Consumes({ "application/json", "application/xml" })
 public class DeviceManagementService {
 
-    private static Log log = LogFactory.getLog(DeviceManagementService.class);
+	private static Log log = LogFactory.getLog(DeviceManagementService.class);
 
-    /**
-     * Get all devices.Returns list of Android devices registered in MDM.
-     *
-     * @return Device List
-     * @throws org.wso2.carbon.mdm.services.android.exception.AndroidAgentException
-     */
-    @GET
-    public List<org.wso2.carbon.device.mgt.common.Device> getAllDevices()
-            throws AndroidAgentException {
-        String msg;
-        List<org.wso2.carbon.device.mgt.common.Device> devices;
+	/**
+	 * Get all devices.Returns list of Android devices registered in MDM.
+	 *
+	 * @return Device List
+	 * @throws org.wso2.carbon.mdm.services.android.exception.AndroidAgentException
+	 */
+	@GET
+	public List<org.wso2.carbon.device.mgt.common.Device> getAllDevices()
+			throws AndroidAgentException {
+		String msg;
+		List<org.wso2.carbon.device.mgt.common.Device> devices;
 
-        try {
-            devices = AndroidAPIUtils.getDeviceManagementService().
-                    getAllDevices(DeviceManagementConstants.MobileDeviceTypes.
-                            MOBILE_DEVICE_TYPE_ANDROID);
-            return devices;
-        } catch (DeviceManagementException e) {
-            msg = "Error occurred while fetching the device list.";
-            log.error(msg, e);
-            throw new AndroidAgentException(msg, e);
-        }
-    }
+		try {
+			devices = AndroidAPIUtils.getDeviceManagementService().
+					getAllDevices(DeviceManagementConstants.MobileDeviceTypes.
+							              MOBILE_DEVICE_TYPE_ANDROID);
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while fetching the device list.";
+			log.error(msg, e);
+			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
+		}
+		return devices;
+	}
 
-    /**
-     * Fetch Android device details of a given device Id.
-     *
-     * @param id Device Id
-     * @return Device
-     * @throws org.wso2.carbon.mdm.services.android.exception.AndroidAgentException
-     */
-    @GET
-    @Path("{id}")
-    public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id)
-            throws AndroidAgentException {
+	/**
+	 * Fetch Android device details of a given device Id.
+	 *
+	 * @param id Device Id
+	 * @return Device
+	 * @throws org.wso2.carbon.mdm.services.android.exception.AndroidAgentException
+	 */
+	@GET
+	@Path("{id}")
+	public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id)
+			throws AndroidAgentException {
 
-        String msg;
-        org.wso2.carbon.device.mgt.common.Device device;
+		String msg;
+		org.wso2.carbon.device.mgt.common.Device device;
 
-        try {
-            DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
-            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
-            if (device == null) {
-                Response.status(Response.Status.NOT_FOUND);
-            }
-            return device;
-        } catch (DeviceManagementException deviceMgtEx) {
-            msg = "Error occurred while fetching the device information.";
-            log.error(msg, deviceMgtEx);
-            throw new AndroidAgentException(msg, deviceMgtEx);
-        }
-    }
+		try {
+			DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
+			device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+			if (device == null) {
+				Response.status(Response.Status.NOT_FOUND);
+			}
+		} catch (DeviceManagementException deviceMgtEx) {
+			msg = "Error occurred while fetching the device information.";
+			log.error(msg, deviceMgtEx);
+			throw new AndroidAgentException(msg, deviceMgtEx);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
+		}
+		return device;
+	}
 
-    /**
-     * Update Android device details of given device id.
-     *
-     * @param id     Device Id
-     * @param device Device Details
-     * @return Message
-     * @throws AndroidAgentException
-     */
-    @PUT
-    @Path("{id}")
-    public Message updateDevice(@PathParam("id") String id, Device device) throws AndroidAgentException {
-        String msg;
-        Message responseMessage = new Message();
-        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-        deviceIdentifier.setId(id);
-        deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-        boolean result;
-        try {
-            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            result = AndroidAPIUtils.getDeviceManagementService().updateDeviceInfo(deviceIdentifier, device);
-            if (result) {
-                Response.status(Response.Status.ACCEPTED);
-                responseMessage.setResponseMessage("Device information has modified successfully.");
-            } else {
-                Response.status(Response.Status.NOT_MODIFIED);
-                responseMessage.setResponseMessage("Device not found for the update.");
-            }
-            return responseMessage;
-        } catch (DeviceManagementException e) {
-            msg = "Error occurred while modifying the device information.";
-            log.error(msg, e);
-            throw new AndroidAgentException(msg, e);
-        }
-    }
+	/**
+	 * Update Android device details of given device id.
+	 *
+	 * @param id     Device Id
+	 * @param device Device Details
+	 * @return Message
+	 * @throws AndroidAgentException
+	 */
+	@PUT
+	@Path("{id}")
+	public Message updateDevice(@PathParam("id") String id, Device device)
+			throws AndroidAgentException {
+		String msg;
+		Message responseMessage = new Message();
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		deviceIdentifier.setId(id);
+		deviceIdentifier
+				.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+		boolean result;
+		try {
+			device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+			result = AndroidAPIUtils.getDeviceManagementService()
+			                        .updateDeviceInfo(deviceIdentifier, device);
+			if (result) {
+				Response.status(Response.Status.ACCEPTED);
+				responseMessage.setResponseMessage("Device information has modified successfully.");
+			} else {
+				Response.status(Response.Status.NOT_MODIFIED);
+				responseMessage.setResponseMessage("Device not found for the update.");
+			}
+		} catch (DeviceManagementException e) {
+			msg = "Error occurred while modifying the device information.";
+			log.error(msg, e);
+			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
+		}
+		return responseMessage;
+	}
 
-    @POST
-    @Path("appList/{id}")
-    public Message updateApplicationList(@PathParam("id") String id, List<Application> applications) throws
-            AndroidAgentException {
+	@POST
+	@Path("appList/{id}")
+	public Message updateApplicationList(@PathParam("id") String id, List<Application> applications)
+			throws
+			AndroidAgentException {
 
-        Message responseMessage = new Message();
-        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-        deviceIdentifier.setId(id);
-        deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-        try {
-            AndroidAPIUtils.getApplicationManagerService().updateApplicationListInstalledInDevice(deviceIdentifier,
-                    applications);
-            Response.status(Response.Status.ACCEPTED);
-            responseMessage.setResponseMessage("Device information has modified successfully.");
+		Message responseMessage = new Message();
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		deviceIdentifier.setId(id);
+		deviceIdentifier
+				.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+		try {
+			AndroidAPIUtils.getApplicationManagerService()
+			               .updateApplicationListInstalledInDevice(deviceIdentifier,
+			                                                       applications);
+			Response.status(Response.Status.ACCEPTED);
+			responseMessage.setResponseMessage("Device information has modified successfully.");
 
-            return responseMessage;
-        } catch (ApplicationManagementException e) {
-            String msg = "Error occurred while modifying the application list.";
-            log.error(msg, e);
-            throw new AndroidAgentException(msg, e);
-        }
-    }
+		} catch (ApplicationManagementException e) {
+			String msg = "Error occurred while modifying the application list.";
+			log.error(msg, e);
+			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
+		}
+		return responseMessage;
+	}
 
-    @GET
-    @Path("license")
-    @Produces("text/html")
-    public String getLicense() throws AndroidAgentException {
-        License license;
+	@GET
+	@Path("license")
+	@Produces("text/html")
+	public String getLicense() throws AndroidAgentException {
+		License license;
 
-	try {
-        	license =
-			AndroidAPIUtils.getDeviceManagementService().getLicense(
-				DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
-				DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
-	} catch (DeviceManagementException e) {
-        String msg = "Error occurred while retrieving the license configured for Android device enrolment";
-        log.error(msg, e);
-        throw new AndroidAgentException(msg, e);
-    }
-        return (license == null) ? null : license.getText();
-    }
+		try {
+			license =
+					AndroidAPIUtils.getDeviceManagementService().getLicense(
+							DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
+							DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
+		} catch (DeviceManagementException e) {
+			String msg = "Error occurred while retrieving the license configured for Android device enrolment";
+			log.error(msg, e);
+			throw new AndroidAgentException(msg, e);
+		}
+		return (license == null) ? null : license.getText();
+	}
 
 }

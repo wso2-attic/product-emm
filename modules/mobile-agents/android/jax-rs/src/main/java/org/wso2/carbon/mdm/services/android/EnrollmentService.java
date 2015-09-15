@@ -54,12 +54,14 @@ public class EnrollmentService {
 			Response.status(Response.Status.CREATED);
 			responseMsg.setResponseMessage("Device enrollment succeeded");
 			responseMsg.setResponseCode(Response.Status.CREATED.toString());
-			return responseMsg;
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
 		}
+		return responseMsg;
 	}
 
 	@GET
@@ -81,12 +83,14 @@ public class EnrollmentService {
 				responseMsg.setResponseCode(Response.Status.NOT_FOUND.toString());
 				Response.status(Response.Status.NOT_FOUND);
 			}
-			return responseMsg;
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrollment of the device.";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
 		}
+		return responseMsg;
 	}
 
 	@PUT
@@ -109,12 +113,14 @@ public class EnrollmentService {
 				responseMsg.setResponseCode(Response.Status.NOT_MODIFIED.toString());
 				Response.status(Response.Status.NOT_MODIFIED);
 			}
-			return responseMsg;
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying enrollment of the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
 		}
+		return responseMsg;
 	}
 
 	@DELETE
@@ -136,11 +142,13 @@ public class EnrollmentService {
 				responseMsg.setResponseCode(Response.Status.NOT_FOUND.toString());
 				Response.status(Response.Status.NOT_FOUND);
 			}
-			return responseMsg;
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while dis enrolling the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
+		} finally {
+			AndroidAPIUtils.endTenantFlow();
 		}
+		return responseMsg;
 	}
 }
