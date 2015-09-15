@@ -38,7 +38,8 @@ if (platform == "Windows Phone") {
     var authUrl = mdmProps["windowsConfigRoot"];
     xhr.open("POST", authUrl);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(stringify({"username": username, "email": email, "password": password, "ownership": ownership}));
+    xhr.send(stringify({"credentials": {"username": username, "email": email,
+        "password": password, "ownership": ownership}}));
 
     if (xhr.status == 200 && xhr.readyState == 4) {
         session.put("windowsBinaryToken", xhr.responseText);
