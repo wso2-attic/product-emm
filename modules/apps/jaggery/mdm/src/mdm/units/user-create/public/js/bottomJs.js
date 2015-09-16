@@ -89,8 +89,14 @@ $(document).ready(function () {
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
                     }
-                }, function () {
-                    $(errorMsg).text("An unexpected error occurred. Please try again later.");
+                }, function (data) {
+                    if (data["status"] == 409) {
+                        $(errorMsg).text("User : " + username + " already exists. You cannot proceed.");
+                    } else if (data["status"] == 500) {
+                        $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred. Please try again later.");
+                    }
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );

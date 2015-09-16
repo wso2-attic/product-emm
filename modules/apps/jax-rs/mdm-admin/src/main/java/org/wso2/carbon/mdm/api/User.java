@@ -66,10 +66,10 @@ public class User {
 					          " already exists. Therefore, request made to add user was refused.");
 				}
 				// returning response with bad request state
-				responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+				responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
 				responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
 						                      " already exists. Therefore, request made to add user was refused.");
-				return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
+				return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
 			} else {
 				String initialUserPassword = generateInitialUserPassword();
 				Map<String, String> defaultUserClaims = buildDefaultUserClaims(userWrapper.getFirstname(),
