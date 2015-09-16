@@ -504,6 +504,7 @@ var operationModule = function () {
     };
 
     /**
+     * Method to generate Platform specific operation payload.
      *
      * @param platformType Platform Type of the profile
      * @param operationCode Operation Codes to generate the profile from
@@ -630,7 +631,7 @@ var operationModule = function () {
     };
 
     /**
-     * generateProfile method is only used for policy-creation UIs
+     * generateProfile method is only used for policy-creation UIs.
      *
      * @param platformType Platform Type of the profile
      * @param operationCodes Operation codes to generate the profile from
