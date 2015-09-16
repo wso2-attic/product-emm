@@ -166,7 +166,7 @@ public class DeviceInfoPayload {
 			deviceInfoPayload = mapper.writeValueAsString(properties);
 		} catch (JsonProcessingException e) {
 			String errorMsg = "Error occurred while parsing property object to json.";
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new AndroidAgentException(errorMsg, e);
 		}
 		property = new Device.Property();
@@ -279,7 +279,7 @@ public class DeviceInfoPayload {
 			deviceInfoPayload = mapper.writeValueAsString(properties);
 		} catch (JsonProcessingException e) {
 			String errorMsg = "Error occurred while parsing property object to json.";
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new AndroidAgentException(errorMsg, e);
 		}
 		property = new Device.Property();
@@ -299,7 +299,7 @@ public class DeviceInfoPayload {
 		try {
 			return device.toJSON();
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Error occurred while building device info payload. " + e.getMessage());
+			Log.e(TAG, "Error occurred while building device info payload", e);
 		}
 		return null;
 	}

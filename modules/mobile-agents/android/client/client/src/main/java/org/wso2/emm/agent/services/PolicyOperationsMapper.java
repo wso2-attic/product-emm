@@ -51,9 +51,7 @@ public class PolicyOperationsMapper {
 			case Constants.Operation.WIFI:
 				return buildWifiOperation(operation);
 			default:
-				String msg = "Invalid operation code received";
-				Log.e(TAG, msg);
-				throw new AndroidAgentException(msg);
+				throw new AndroidAgentException("Invalid operation code received");
 		}
 	}
 

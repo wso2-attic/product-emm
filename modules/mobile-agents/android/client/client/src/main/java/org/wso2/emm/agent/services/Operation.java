@@ -586,9 +586,7 @@ public class Operation implements APIResultCallBack {
 		} catch (JSONException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
 			resultBuilder.build(operation);
-			String msg = "Issue in parsing json";
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Issue in parsing json", e);
 		}
 		operation.setPayLoad(result.toString());
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
@@ -860,9 +858,7 @@ public class Operation implements APIResultCallBack {
 		} catch (IOException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
 			resultBuilder.build(operation);
-			String msg = "Error occurred while parsing stream." + e.getMessage();
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Error occurred while parsing stream", e);
 		}
 	}
 
@@ -899,9 +895,7 @@ public class Operation implements APIResultCallBack {
 		} catch (IOException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
 			resultBuilder.build(operation);
-			String msg = "Error occurred while parsing stream." + e.getMessage();
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Error occurred while parsing stream.", e);
 		}
 	}
 

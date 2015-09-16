@@ -84,9 +84,7 @@ public class PolicyComplianceChecker {
             case Constants.Operation.WIFI:
                 return checkWifiPolicy(operation);
             default:
-                String msg = "Invalid operation code received";
-                Log.e(TAG, msg);
-                throw new AndroidAgentException(msg);
+                throw new AndroidAgentException("Invalid operation code received");
         }
     }
 

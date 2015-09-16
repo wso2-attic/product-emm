@@ -46,7 +46,7 @@ public class PayloadParser {
 			outerJson.put(LABEL_REG_ID, registrationId);
 			outerJson.put(LABEL_DATA, outerArr);
 		} catch (JSONException e) {
-			Log.e(TAG, "Invalid JSON Exception - RegId." + e.toString());
+			Log.e(TAG, "Invalid JSON Exception - RegId", e);
 		}
 
 		for (int i = 0; i < inputPayload.length(); i++) {
@@ -70,7 +70,7 @@ public class PayloadParser {
 				outerArr.put(dataArrContents);
 
 			} catch (JSONException e) {
-				Log.d(TAG, "Invalid JSON Exception - Input payload " + e.toString());
+				Log.e(TAG, "Invalid JSON Exception - Input payload", e);
 			}
 
 		}

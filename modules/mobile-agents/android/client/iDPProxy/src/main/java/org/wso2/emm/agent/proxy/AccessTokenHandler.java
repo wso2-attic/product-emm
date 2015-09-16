@@ -97,7 +97,7 @@ public class AccessTokenHandler extends Activity {
                 response = responseParams.get(Constants.SERVER_RESPONSE_BODY);
                 responseCode = responseParams.get(Constants.SERVER_RESPONSE_STATUS);
             } catch (IDPTokenManagerException e) {
-                Log.e(TAG, "Failed to contact server." + e);
+                Log.e(TAG, "Failed to contact server", e);
             }
 
             return response;
@@ -141,7 +141,7 @@ public class AccessTokenHandler extends Activity {
 
                         identityProxy.receiveAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
                     } catch (JSONException e) {
-                        Log.e(TAG, "Invalid JSON format." + e);
+                        Log.e(TAG, "Invalid JSON format", e);
                     }
 
                 } else if (responseCode != null) {
@@ -154,7 +154,7 @@ public class AccessTokenHandler extends Activity {
                     }
                 }
             } catch (JSONException e) {
-                Log.e(TAG, "Invalid JSON." + e);
+                Log.e(TAG, "Invalid JSON", e);
             }
         }
     }

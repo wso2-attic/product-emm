@@ -97,19 +97,16 @@ public class MessageProcessor implements APIResultCallBack {
 			}
 
 		} catch (JsonProcessingException e) {
-			String msg = "Issue in json parsing.";
-			Log.e(TAG, msg);
-
+			Log.e(TAG,  "Issue in json parsing", e);
 		} catch (IOException e) {
-			String msg = "Issue in stream parsing.";
-			Log.e(TAG, msg);
+			Log.e(TAG, "Issue in stream parsing", e);
 		}
 
 		for (org.wso2.emm.agent.beans.Operation op : operations) {
 			try {
 				operation.doTask(op);
 			} catch (AndroidAgentException e) {
-				Log.e(TAG, "Failed to perform operation." + e.getMessage());
+				Log.e(TAG, "Failed to perform operation", e);
 			}
 		}
 		replyPayload = operation.getResultPayload();
@@ -120,9 +117,7 @@ public class MessageProcessor implements APIResultCallBack {
 	 * Call the message retrieval end point of the server to get messages pending.
 	 */
 	public void getMessages() throws AndroidAgentException {
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(),
-						context.getResources().getString(R.string.shared_pref_ip));
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
@@ -134,17 +129,11 @@ public class MessageProcessor implements APIResultCallBack {
 			ObjectMapper mapper = new ObjectMapper();
 			requestParams =  mapper.writeValueAsString(replyPayload);
 		} catch (JsonMappingException e) {
-			String msg = "Issue in json mapping.";
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Issue in json mapping", e);
 		} catch (JsonGenerationException e) {
-			String msg = "Issue in json generation.";
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Issue in json generation", e);
 		} catch (IOException e) {
-			String msg = "Issue in parsing stream.";
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Issue in parsing stream", e);
 		}
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "replay-payload: " + requestParams);

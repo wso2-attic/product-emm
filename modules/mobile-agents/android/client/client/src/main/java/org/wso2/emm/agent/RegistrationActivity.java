@@ -81,7 +81,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		try {
 			deviceInfoBuilder.build(type, username);
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Error occurred while building the device info payload." + e);
+			Log.e(TAG, "Error occurred while building the device info payload.", e);
 		}
 
 		// Check network connection availability before calling the API.
@@ -184,10 +184,10 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				responseStatus = result.get(Constants.STATUS);
 				Preference.putString(context, resources.getString(R.string.shared_pref_regId), info.getDeviceId());
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					if(Preference.getString(context, context.getResources().
-							getString(R.string.shared_pref_notifier)).trim().equals(Constants.NOTIFIER_GCM)){
+					if (Preference.getString(context, context.getResources().
+							getString(R.string.shared_pref_notifier)).trim().equals(Constants.NOTIFIER_GCM)) {
 						registerGCM();
-					}else{
+					} else {
 						getEffectivePolicy();
 					}
 				} else {
@@ -231,7 +231,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 						CommonUtils.clearAppData(context);
 						displayInternalServerError();
 					} catch (AndroidAgentException e) {
-						Log.e(TAG, "Failed to clear app data." + e);
+						Log.e(TAG, "Failed to clear app data", e);
 					}
 				}
 			}

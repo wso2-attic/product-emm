@@ -95,7 +95,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 					registrationId = cloudMessaging.register(getGoogleProjectNumber());
 
 				} catch (IOException ex) {
-					Log.e(TAG, "Error while registering with GCM. " + ex);
+					Log.e(TAG, "Error while registering with GCM ", ex);
 					clearData(getContext());
 					displayConnectionError();
 				}
@@ -116,7 +116,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		try {
 			CommonUtils.clearAppData(context);
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to clear app data." + e);
+			Log.e(TAG, "Failed to clear app data.", e);
 		}
 	}
 

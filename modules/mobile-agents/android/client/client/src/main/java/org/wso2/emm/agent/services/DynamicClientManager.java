@@ -77,13 +77,9 @@ public class DynamicClientManager {
                 return null;
             }
         } catch (InterruptedException e) {
-            String msg = "error occurred due to thread interruption";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred due to thread interruption", e);
         } catch (ExecutionException e) {
-            String msg = "error occurred while fetching credentials";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred while fetching credentials", e);
         }
     }
 
@@ -122,13 +118,9 @@ public class DynamicClientManager {
                 return false;
             }
         } catch (InterruptedException e) {
-            String msg = "error occurred due to thread interruption";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred due to thread interruption", e);
         } catch (ExecutionException e) {
-            String msg = "error occurred while fetching credentials";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred while fetching credentials", e);
         }
     }
 
@@ -165,7 +157,7 @@ public class DynamicClientManager {
                 }
 
             } catch (IDPTokenManagerException e) {
-                Log.e(TAG, "Failed to contact server." + e);
+                Log.e(TAG, "Failed to contact server", e);
             }
             return responseParams;
         }

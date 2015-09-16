@@ -146,17 +146,11 @@ public class CommonUtils {
 			ObjectMapper mapper = new ObjectMapper();
 			return mapper.writeValueAsString(obj);
 		} catch (JsonMappingException e) {
-			String errorMessage = "Error occurred while mapping class to json.";
-			Log.e(TAG, errorMessage);
-			throw new AndroidAgentException(errorMessage, e);
+			throw new AndroidAgentException("Error occurred while mapping class to json", e);
 		} catch (JsonGenerationException e) {
-			String errorMessage = "Error occurred while generating json.";
-			Log.e(TAG, errorMessage);
-			throw new AndroidAgentException(errorMessage, e);
+			throw new AndroidAgentException("Error occurred while generating json", e);
 		} catch (IOException e) {
-			String errorMessage = "Error occurred while reading the stream.";
-			Log.e(TAG, errorMessage);
-			throw new AndroidAgentException(errorMessage, e);
+			throw new AndroidAgentException("Error occurred while reading the stream", e);
 		}
 	}
 
@@ -225,9 +219,7 @@ public class CommonUtils {
 				Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), null);
 			}
 		} catch (IOException e) {
-			String msg = "Error occurred while parsing stream." + e.getMessage();
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Error occurred while parsing stream", e);
 		}
 	}
 }

@@ -59,7 +59,7 @@ public class Root {
 		String buildTags = android.os.Build.TAGS;
 		if (buildTags != null && buildTags.contains(SU_TAG)) {
 			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Build tags found");
+				Log.d(TAG, "Build tags are found in the device");
 			}
 			return true;
 		}
@@ -75,7 +75,7 @@ public class Root {
 		File suApk = new File(SU_APK);
 		if (suApk != null && suApk.exists()) {
 			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Super apk found");
+				Log.d(TAG, "Super apk is found in the device");
 			}
 			return true;
 		}
@@ -90,7 +90,7 @@ public class Root {
 	public boolean checkRootBySuAccess() {
 		if (new ShellExecutor().executeCommand(SU_CHECK_COMMAND) != null) {
 			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "su command enabled");
+				Log.d(TAG, "su command is enabled");
 			}
 			return true;
 		} else {
