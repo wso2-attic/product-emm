@@ -64,7 +64,7 @@ public class Operation implements APIResultCallBack {
 	private DevicePolicyManager devicePolicyManager;
 	private ApplicationManager appList;
 	private Resources resources;
-	private BuildResultPayload resultBuilder;
+	private ResultPayload resultBuilder;
 	private DeviceInfo deviceInfo;
 	private GPSTracker gps;
 
@@ -85,13 +85,12 @@ public class Operation implements APIResultCallBack {
 	private Map<String, String> bundleParams;
 
 	public Operation(Context context) {
-
 		this.context = context;
 		this.resources = context.getResources();
 		this.devicePolicyManager =
 				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		this.appList = new ApplicationManager(context.getApplicationContext());
-		this.resultBuilder = new BuildResultPayload();
+		this.resultBuilder = new ResultPayload();
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
 		gps = new GPSTracker(context.getApplicationContext());
 	}
@@ -190,15 +189,12 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void getDeviceInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-
-		BuildDeviceInfoPayload deviceInfoPayload = new BuildDeviceInfoPayload(context);
+		DeviceInfoPayload deviceInfoPayload = new DeviceInfoPayload(context);
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
 
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(),
-						context.getResources().getString(R.string.shared_pref_ip));
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
@@ -207,8 +203,7 @@ public class Operation implements APIResultCallBack {
 		CommonUtils.callSecuredAPI(context, url,
 				org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload,
 				Operation.this,
-				Constants.DEVICE_INFO_REQUEST_CODE
-		);
+				Constants.DEVICE_INFO_REQUEST_CODE);
 
 		operation.setPayLoad(replyPayload);
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
@@ -250,7 +245,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void getApplicationList(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-
 		ArrayList<DeviceAppInfo> apps = new ArrayList<>(appList.getInstalledApps().values());
 		JSONArray result = new JSONArray();
 		for (DeviceAppInfo infoApp : apps) {
@@ -281,7 +275,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void lockDevice(org.wso2.emm.agent.beans.Operation operation) {
-
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 		devicePolicyManager.lockNow();
@@ -296,7 +289,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void ringDevice(org.wso2.emm.agent.beans.Operation operation) {
-
 		Intent intent = new Intent(context, AlertActivity.class);
 		intent.putExtra(resources.getString(R.string.intent_extra_type),
 				resources.getString(R.string.intent_extra_ring));
@@ -320,9 +312,7 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void wipeDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		String inputPin;
-		String savedPin =
-				Preference.getString(context,
-						resources.getString(R.string.shared_pref_pin));
+		String savedPin = Preference.getString(context, resources.getString(R.string.shared_pref_pin));
 		JSONObject result = new JSONObject();
 
 		try {
@@ -395,7 +385,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void displayNotification(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-
 		try {
 			JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
 			String message = inputData.getString(resources.getString(R.string.intent_extra_message));
@@ -439,8 +428,7 @@ public class Operation implements APIResultCallBack {
 				ssid = (String) wifiData.get(resources.getString(R.string.intent_extra_ssid));
 			}
 			if (!wifiData.isNull(resources.getString(R.string.intent_extra_password))) {
-				password =
-						(String) wifiData.get(resources.getString(R.string.intent_extra_password));
+				password = (String) wifiData.get(resources.getString(R.string.intent_extra_password));
 			}
 		} catch (JSONException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -449,7 +437,6 @@ public class Operation implements APIResultCallBack {
 		}
 
 		WiFiConfig config = new WiFiConfig(context.getApplicationContext());
-
 		wifiStatus = config.saveWEPConfig(ssid, password);
 
 		try {
@@ -457,7 +444,6 @@ public class Operation implements APIResultCallBack {
 			if (wifiStatus) {
 				status = resources.getString(R.string.shared_pref_default_status);
 				result.put(resources.getString(R.string.operation_status), status);
-
 			} else {
 				status = resources.getString(R.string.shared_pref_false_status);
 				result.put(resources.getString(R.string.operation_status), status);
@@ -481,7 +467,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void disableCamera(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-
 		boolean camFunc = operation.isEnabled();
 		ComponentName cameraAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
@@ -499,7 +484,6 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void installAppBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		try {
-
 			if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION)) {
 				JSONObject appData = new JSONObject(operation.getPayLoad().toString());
 				installApplication(appData, operation);
@@ -532,7 +516,6 @@ public class Operation implements APIResultCallBack {
 		String type;
 		try {
 			JSONObject appData = new JSONObject(operation.getPayLoad().toString());
-
 			type = appData.getString(resources.getString(R.string.app_type));
 
 			if (resources.getString(R.string.intent_extra_web).equalsIgnoreCase(type)) {
@@ -568,7 +551,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void encryptStorage(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-
 		boolean doEncrypt = operation.isEnabled();
 		JSONObject result = new JSONObject();
 		ComponentName admin = new ComponentName(context, AgentDeviceAdminReceiver.class);
@@ -614,7 +596,6 @@ public class Operation implements APIResultCallBack {
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Encryption process started");
 		}
-
 	}
 
 	/**
@@ -631,7 +612,6 @@ public class Operation implements APIResultCallBack {
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Device muted");
 		}
-
 	}
 
 	/**
@@ -684,53 +664,43 @@ public class Operation implements APIResultCallBack {
 
 		try {
 			JSONObject policyData = new JSONObject(operation.getPayLoad().toString());
-			if (!policyData
-					.isNull(resources.getString(R.string.policy_password_max_failed_attempts)) &&
-					policyData.get(resources.getString(R.string.policy_password_max_failed_attempts)) !=
-							null) {
+			if (!policyData.isNull(resources.getString(R.string.policy_password_max_failed_attempts)) &&
+			    policyData.get(resources.getString(R.string.policy_password_max_failed_attempts)) != null) {
 				attempts = policyData.getInt(resources.getString(R.string.policy_password_max_failed_attempts));
 				devicePolicyManager.setMaximumFailedPasswordsForWipe(demoDeviceAdmin, attempts);
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_min_length)) &&
-					policyData.get(resources.getString(R.string.policy_password_min_length)) != null) {
+			    policyData.get(resources.getString(R.string.policy_password_min_length)) != null) {
 				length = policyData.getInt(resources.getString(R.string.policy_password_min_length));
 				devicePolicyManager.setPasswordMinimumLength(demoDeviceAdmin, length);
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_pin_history)) &&
-					policyData.get(resources.getString(R.string.policy_password_pin_history)) != null) {
+			    policyData.get(resources.getString(R.string.policy_password_pin_history)) != null) {
 				history = policyData.getInt(resources.getString(R.string.policy_password_pin_history));
 				devicePolicyManager.setPasswordHistoryLength(demoDeviceAdmin, history);
 			}
 
-			if (!policyData
-					.isNull(resources.getString(R.string.policy_password_min_complex_chars)) &&
-					policyData.get(resources.getString(R.string.policy_password_min_complex_chars)) !=
-							null) {
+			if (!policyData.isNull(resources.getString(R.string.policy_password_min_complex_chars)) &&
+			    policyData.get(resources.getString(R.string.policy_password_min_complex_chars)) != null) {
 				specialChars = policyData.getInt(resources.getString(R.string.policy_password_min_complex_chars));
 				devicePolicyManager.setPasswordMinimumSymbols(demoDeviceAdmin, specialChars);
 			}
 
-			if (!policyData
-					.isNull(resources.getString(R.string.policy_password_require_alphanumeric)) &&
-					policyData
-							.get(resources.getString(R.string.policy_password_require_alphanumeric)) !=
-							null) {
+			if (!policyData.isNull(resources.getString(R.string.policy_password_require_alphanumeric)) &&
+			    policyData.get(resources.getString(R.string.policy_password_require_alphanumeric)) != null) {
 				if (policyData.get(resources.getString(
 						R.string.policy_password_require_alphanumeric)) instanceof String) {
-					alphanumeric =
-							(String) policyData.get(resources.getString(
+					alphanumeric = (String) policyData.get(resources.getString(
 									R.string.policy_password_require_alphanumeric));
-					if (alphanumeric
-							.equals(resources.getString(R.string.shared_pref_default_status))) {
+					if (alphanumeric.equals(resources.getString(R.string.shared_pref_default_status))) {
 						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
 								DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC);
 					}
 				} else if (policyData.get(resources.getString(
 						R.string.policy_password_require_alphanumeric)) instanceof Boolean) {
-					isAlphanumeric =
-							policyData.getBoolean(resources.getString(
+					isAlphanumeric = policyData.getBoolean(resources.getString(
 									R.string.policy_password_require_alphanumeric));
 					if (isAlphanumeric) {
 						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
@@ -740,12 +710,10 @@ public class Operation implements APIResultCallBack {
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_allow_simple)) &&
-					policyData.get(resources.getString(R.string.policy_password_allow_simple)) != null) {
-
+			    policyData.get(resources.getString(R.string.policy_password_allow_simple)) != null) {
 				if (policyData.get(resources.getString(
 						R.string.policy_password_allow_simple)) instanceof String) {
-					complex =
-							(String) policyData.get(resources.getString(
+					complex = (String) policyData.get(resources.getString(
 									R.string.policy_password_allow_simple));
 					if (!complex.equals(resources.getString(R.string.shared_pref_default_status))) {
 						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
@@ -753,8 +721,7 @@ public class Operation implements APIResultCallBack {
 					}
 				} else if (policyData.get(resources.getString(
 						R.string.policy_password_allow_simple)) instanceof Boolean) {
-					isComplex =
-							policyData.getBoolean(
+					isComplex = policyData.getBoolean(
 									resources.getString(R.string.policy_password_allow_simple));
 					if (!isComplex) {
 						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
@@ -764,8 +731,7 @@ public class Operation implements APIResultCallBack {
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_pin_age_in_days)) &&
-					policyData.get(resources.getString(R.string.policy_password_pin_age_in_days)) !=
-							null) {
+			    policyData.get(resources.getString(R.string.policy_password_pin_age_in_days)) != null) {
 				int daysOfExp = policyData.getInt(resources.getString(R.string.policy_password_pin_age_in_days));
 				timout = daysOfExp * DAY_MILLISECONDS_MULTIPLIER;
 				devicePolicyManager.setPasswordExpirationTimeout(demoDeviceAdmin, timout);
@@ -779,7 +745,6 @@ public class Operation implements APIResultCallBack {
 			resultBuilder.build(operation);
 			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
-
 	}
 
 	/**
@@ -957,7 +922,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void enterpriseWipe(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 
@@ -1027,7 +991,7 @@ public class Operation implements APIResultCallBack {
 	}
 
 	/**
-	 * Install an Application
+	 * Install an Application.
 	 *
 	 * @param operation - Operation object.
 	 */
@@ -1074,7 +1038,6 @@ public class Operation implements APIResultCallBack {
 					Log.d(TAG, "Application installation started");
 				}
 			}
-
 		} catch (JSONException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
 			resultBuilder.build(operation);
@@ -1090,7 +1053,7 @@ public class Operation implements APIResultCallBack {
 	}
 
 	/**
-	 * This method returns the completed operations list
+	 * This method returns the completed operations list.
 	 *
 	 * @return operation list
 	 */
@@ -1117,7 +1080,6 @@ public class Operation implements APIResultCallBack {
 						if (Constants.DEBUG_MODE_ENABLED) {
 							Log.d(TAG, "onReceiveAPIResult." + response);
 							Log.d(TAG, "Device information sent");
-
 						}
 					}
 				}

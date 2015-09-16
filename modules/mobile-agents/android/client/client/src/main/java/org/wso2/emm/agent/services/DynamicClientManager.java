@@ -40,9 +40,9 @@ import java.util.concurrent.ExecutionException;
 public class DynamicClientManager {
 
     private static final String TAG = DynamicClientManager.class.getSimpleName();
-    private final String USER_ID = "userId";
-    private final String CONSUMER_KEY = "consumerKey";
-    private final String APPLICATION_NAME = "applicationName";
+    private static final String USER_ID = "userId";
+    private static final String CONSUMER_KEY = "consumerKey";
+    private static final String APPLICATION_NAME = "applicationName";
 
     /**
      * This method is used to register an oauth application in the backend.
@@ -55,7 +55,6 @@ public class DynamicClientManager {
      */
     public String registerClient(RegistrationProfile profile, ServerConfig utils)
             throws AndroidAgentException {
-
         EndPointInfo endPointInfo = new EndPointInfo();
         String endPoint = utils.getAPIServerURL() +
                 org.wso2.emm.agent.utils.Constants.DYNAMIC_CLIENT_REGISTER_ENDPOINT;
@@ -77,7 +76,6 @@ public class DynamicClientManager {
             } else {
                 return null;
             }
-
         } catch (InterruptedException e) {
             String msg = "error occurred due to thread interruption";
             Log.e(TAG, msg);
@@ -101,7 +99,6 @@ public class DynamicClientManager {
      */
     public boolean unregisterClient(UnregisterProfile profile, ServerConfig utils)
             throws AndroidAgentException {
-
         StringBuilder endPoint = new StringBuilder();
         endPoint.append(utils.getAPIServerURL());
         endPoint.append(Constants.DYNAMIC_CLIENT_REGISTER_ENDPOINT);
@@ -133,7 +130,6 @@ public class DynamicClientManager {
             Log.e(TAG, msg);
             throw new AndroidAgentException(msg, e);
         }
-
     }
 
     /**
@@ -174,5 +170,4 @@ public class DynamicClientManager {
             return responseParams;
         }
     }
-
 }

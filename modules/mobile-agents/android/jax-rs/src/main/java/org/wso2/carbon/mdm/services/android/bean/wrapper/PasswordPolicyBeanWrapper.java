@@ -17,7 +17,7 @@
  */
 package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
-import org.wso2.carbon.mdm.services.android.bean.PasswordPolicy;
+import org.wso2.carbon.mdm.services.android.bean.PasscodePolicy;
 
 import java.util.List;
 
@@ -26,14 +26,14 @@ import java.util.List;
  */
 public class PasswordPolicyBeanWrapper {
 
-	private PasswordPolicy operation;
+	private PasscodePolicy operation;
 	private List<String> deviceIDs;
 
-	public PasswordPolicy getOperation() {
+	public PasscodePolicy getOperation() {
 		return operation;
 	}
 
-	public void setOperation(PasswordPolicy operation) {
+	public void setOperation(PasscodePolicy operation) {
 		this.operation = operation;
 	}
 

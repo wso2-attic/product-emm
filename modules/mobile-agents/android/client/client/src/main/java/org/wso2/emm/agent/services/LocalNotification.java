@@ -61,7 +61,7 @@ public class LocalNotification {
 		if (localNoticicationInvoked) {
 			localNoticicationInvoked = false;
 			Intent alarm = new Intent(context, AlarmReceiver.class);
-			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, 0);
+			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, DEFAULT_INDEX);
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.cancel(sender);
 		}

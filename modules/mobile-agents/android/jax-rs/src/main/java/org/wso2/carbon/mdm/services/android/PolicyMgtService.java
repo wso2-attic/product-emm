@@ -45,9 +45,9 @@ public class PolicyMgtService {
     private static Log log = LogFactory.getLog(PolicyMgtService.class);
 
     @GET
-    @Path("{id}")
+    @Path("{deviceId}")
     public Message getEffectivePolicy(@HeaderParam("Accept") String acceptHeader,
-                                      @PathParam("id") String id) throws AndroidAgentException {
+                                      @PathParam("deviceId") String id) throws AndroidAgentException {
 
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
         Message responseMessage = new Message();
@@ -73,9 +73,9 @@ public class PolicyMgtService {
     }
 
     @GET
-    @Path("/features/{id}")
+    @Path("/features/{deviceId}")
     public List<ProfileFeature> getEffectiveFeatures(@HeaderParam("Accept") String acceptHeader,
-                                                     @PathParam("id") String id) throws AndroidAgentException {
+                                                     @PathParam("deviceId") String id) throws AndroidAgentException {
         List<ProfileFeature> profileFeatures;
         DeviceIdentifier deviceIdentifier = AndroidAPIUtils.convertToDeviceIdentifierObject(id);
         try {

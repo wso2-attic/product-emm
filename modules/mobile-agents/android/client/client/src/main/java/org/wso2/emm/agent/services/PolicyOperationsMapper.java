@@ -38,7 +38,6 @@ public class PolicyOperationsMapper {
 
 	public Operation getOperation(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		switch (operation.getCode()) {
-
 			case Constants.Operation.CAMERA:
 				return buildCameraOperation(operation);
 			case Constants.Operation.INSTALL_APPLICATION:
@@ -101,5 +100,4 @@ public class PolicyOperationsMapper {
 		operation.setId(INVALID_FLAG);
 		return operation;
 	}
-
 }

@@ -27,7 +27,7 @@ public class UnregisterProfile {
     private String consumerKey;
     private String applicationName;
 
-    private final String TAG = UnregisterProfile.class.getSimpleName();
+    private static final String TAG = UnregisterProfile.class.getSimpleName();
 
     public String getUserId() {
         return userId;

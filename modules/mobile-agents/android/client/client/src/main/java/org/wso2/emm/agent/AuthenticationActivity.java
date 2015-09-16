@@ -822,8 +822,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @throws AndroidAgentException
 	 */
 	private String getClientCredentials() throws AndroidAgentException {
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(), Constants.IP);
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 

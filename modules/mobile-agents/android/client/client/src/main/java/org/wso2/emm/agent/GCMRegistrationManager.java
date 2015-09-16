@@ -32,7 +32,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.services.BuildDeviceInfoPayload;
+import org.wso2.emm.agent.services.DeviceInfoPayload;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
@@ -130,7 +130,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	 */
 	public void sendRegistrationId() throws AndroidAgentException {
 		DeviceInfo deviceInfo = new DeviceInfo(getContext());
-		BuildDeviceInfoPayload deviceInfoPayload = new BuildDeviceInfoPayload(getContext());
+		DeviceInfoPayload deviceInfoPayload = new DeviceInfoPayload(getContext());
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();

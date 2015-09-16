@@ -106,9 +106,9 @@ public class AccessTokenHandler extends Activity {
         @SuppressLint("SimpleDateFormat")
         @Override
         protected void onPostExecute(String result) {
-            String refreshToken = null;
-            String accessToken = null;
-            int timeToExpireSecond = 3000;
+            String refreshToken;
+            String accessToken;
+            int timeToExpireSecond;
             try {
                 IdentityProxy identityProxy = IdentityProxy.getInstance();
 
@@ -117,8 +117,7 @@ public class AccessTokenHandler extends Activity {
                     try {
                         accessToken = response.getString(Constants.ACCESS_TOKEN);
                         refreshToken = response.getString(Constants.REFRESH_TOKEN);
-                        timeToExpireSecond =
-                                Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
+                        timeToExpireSecond = Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
                         Token token = new Token();
                         Date date = new Date();
                         String currentDate = dateFormat.format(date);
@@ -127,11 +126,8 @@ public class AccessTokenHandler extends Activity {
                         token.setAccessToken(accessToken);
                         token.setExpired(false);
 
-                        SharedPreferences mainPref =
-                                IdentityProxy.getInstance()
-                                        .getContext()
-                                        .getSharedPreferences(Constants.APPLICATION_PACKAGE,
-                                                Context.MODE_PRIVATE);
+                        SharedPreferences mainPref = IdentityProxy.getInstance().getContext().
+                                getSharedPreferences(Constants.APPLICATION_PACKAGE, Context.MODE_PRIVATE);
                         Editor editor = mainPref.edit();
                         editor.putString(Constants.ACCESS_TOKEN, accessToken);
                         editor.putString(Constants.REFRESH_TOKEN, refreshToken);
@@ -143,8 +139,7 @@ public class AccessTokenHandler extends Activity {
                         editor.putString(Constants.DATE_LABEL, strDate);
                         editor.commit();
 
-                        identityProxy.receiveAccessToken(responseCode, Constants.SUCCESS_RESPONSE,
-                                token);
+                        identityProxy.receiveAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
                     } catch (JSONException e) {
                         Log.e(TAG, "Invalid JSON format." + e);
                     }
@@ -154,8 +149,7 @@ public class AccessTokenHandler extends Activity {
                         identityProxy.receiveAccessToken(responseCode, result, null);
                     } else {
                         JSONObject mainObject = new JSONObject(result);
-                        String errorDescription =
-                                mainObject.getString(Constants.ERROR_DESCRIPTION_LABEL);
+                        String errorDescription = mainObject.getString(Constants.ERROR_DESCRIPTION_LABEL);
                         identityProxy.receiveAccessToken(responseCode, errorDescription, null);
                     }
                 }
