@@ -17,8 +17,8 @@
  */
 
 function onRequest (context) {
-    var log = new Log("asset-download-agent-ios-unit");
-    log.debug("calling asset-download-agent-ios-unit backend js");
+    var log = new Log("asset-download-agent-android-unit");
+    log.debug("calling asset-download-agent-android-unit backend js");
 
     var mdmProps = require('/config/mdm-props.js').config();
     var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
@@ -29,10 +29,9 @@ function onRequest (context) {
     parser.getResult();
 
     var os = parser.getOS();
-    if (os.name == "iOS") {
-        context["emmCertificateDownloadURL"] = mdmProps["appContext"] + "ios/enrollments/certificate-download";
-        context["agentDownloadURL"] = "itms-services://?action=download-manifest&url=" +
-            mdmProps["httpsURL"] + mdmProps["appContext"] + "ios/enrollments/agent-download";
+    if (os.name == "Android") {
+        context["agentDownloadURL"] = mdmProps["httpURL"] + mdmProps["appContext"] +
+            "public/asset-download-agent-android/asset/" + mdmProps["androidAgentApp"];
     } else {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error-page");
     }
