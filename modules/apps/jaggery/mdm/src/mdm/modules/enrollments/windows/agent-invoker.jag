@@ -17,7 +17,7 @@
  * under the License.
  */
 
-var log = new Log("/modules/enrollments/windows/agent-enroll.jag");
+var log = new Log("/modules/enrollments/windows/agent-invoker.jag");
 
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
 var parser = new UAParser();
@@ -28,37 +28,21 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform == "Windows Phone") {
-    var username = session.get("username");
-    if (username) {
-        var windowsWorkplaceAppID = session.get("windowsWorkplaceAppID");
-        var windowsBinaryToken = session.get("windowsBinaryToken");
-        %>
-        <html>
-          <head>
-            <title>
-              Working...
-            </title>
-            <script>
-              function formSubmit() {
-                document.forms[0].submit();
-              }
-              window.onload=formSubmit;
+    %>
+    <html lang=”en-US”>
+        <head>
+            <meta charset=”UTF-8″>
+            <meta http-equiv=”refresh” content=”0;url=”ms-settings-workplace://”>
+            <script type=”text/javascript”>
+                window.location.href = “ms-settings-workplace://”
             </script>
-          </head>
-          <body>
-            <form method="post" action="<%=windowsWorkplaceAppID%>">
-              <p>
-                <input type="hidden" name="wresult" value="<%=windowsBinaryToken%>"/>
-              </p>
-              <input type="submit"/>
-            </form>
-          </body>
-        </html>
-        <%
-    } else {
-        // in case of username is not set
-    }
-} else {
-    // in case of a wrong request
+            <title>Page Redirection</title>
+        </head>
+        <body>
+        <!– Note: don’t tell people to `click` the link, just tell them that it is a link. –>
+        If you are not redirected automatically, follow the <a href=’ms-settings-workplace://’>link to example</a>
+        </body>
+    </html>
+    <%
 }
 %>

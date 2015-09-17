@@ -33,7 +33,7 @@ if (platform == "Android") {
 } else if (platform == "iOS") {
     response.sendRedirect("/mdm/enrollments/ios/download-agent");
 } else if (platform == "Windows Phone") {
-    response.sendRedirect("/mdm/enrollments/windows/login-agent");
+    response.sendRedirect("/mdm/windows/controller/agent");
 } else {
     response.sendRedirect("/mdm/enrollments/error-page");
 }
