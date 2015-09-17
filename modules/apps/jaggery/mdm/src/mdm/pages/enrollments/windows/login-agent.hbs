@@ -18,13 +18,24 @@ under the License. --}}
 {{layout "enrollment"}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Login
+    WSO2 EMM | Windows Phone Enrollment | Login to Enterprise Mobility Manager
+{{/zone}}
+{{#zone "header"}}
+    Windows Phone Enrollment
 {{/zone}}
 {{#zone "body"}}
-    <div class="container c-both">
-        <div class="clearfix"></div>
-        {{unit "wizard" page=1}}
-        {{unit "login-page-agent" header="Step 1. Login to EMM"}}
-        {{unit "login-box" actionURL="/mdm/controller/login"}}
-    </div>
+    {{
+        unit "agent-to-web-context-mapper-windows"
+    }}
+    {{
+        unit "wizard-stepper"
+        steps = "Login to Enterprise Mobility Manager,
+        Accept End User License Agreement"
+        currentStep = "Login to Enterprise Mobility Manager"
+        currentStepIndex = 0
+    }}
+    {{
+        unit "login-box-agent"
+        loginActionURL = "/mdm/windows/controller/login"
+    }}
 {{/zone}}
