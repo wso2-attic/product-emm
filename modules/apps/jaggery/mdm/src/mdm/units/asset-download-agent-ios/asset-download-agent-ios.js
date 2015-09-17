@@ -34,7 +34,7 @@ function onRequest (context) {
         context["agentDownloadURL"] = "itms-services://?action=download-manifest&url=" +
             mdmProps["httpsURL"] + mdmProps["appContext"] + "ios/enrollments/agent-download";
     } else {
-        // page should be redirected to an error page with status info
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error-page");
     }
     return context;
 }

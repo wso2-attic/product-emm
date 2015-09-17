@@ -33,7 +33,7 @@ function onRequest (context) {
         context["agentDownloadURL"] = mdmProps["httpURL"] + mdmProps["appContext"] +
             "public/asset-download-agent-android/asset/" + mdmProps["androidAgentApp"];
     } else {
-        // page should be redirected to an error page with status info
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error-page");
     }
     return context;
 }
