@@ -19,7 +19,9 @@
 
 var log = new Log("/modules/enrollments/ios/agent-enroll.jag");
 
+var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
 parser.setUA(userAgent);
@@ -27,7 +29,9 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-if (platform == "iOS") {
+if (platform != "iOS") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+} else {
     var username = session.get("username");
     if (username) {
         var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
@@ -41,7 +45,6 @@ if (platform == "iOS") {
         var challengeToken = session.get("iOSChallengeToken");
 
         var client = new HttpClient();
-        var mdmProps = require("/config/mdm-props.js").config();
         var enrollUrl = mdmProps["iOSConfigRoot"] + "enroll";
         var method = new PostMethod(enrollUrl);
         var header =  new Header();
@@ -70,7 +73,5 @@ if (platform == "iOS") {
     } else {
         // in case of username is not set
     }
-} else {
-    // in case of a wrong request
 }
 %>

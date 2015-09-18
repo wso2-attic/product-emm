@@ -21,19 +21,8 @@ function onRequest (context) {
     log.debug("calling asset-download-agent-android-unit backend js");
 
     var mdmProps = require('/config/mdm-props.js').config();
-    var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
-
-    var parser = new UAParser();
-    var userAgent = request.getHeader("User-Agent");
-    parser.setUA(userAgent);
-    parser.getResult();
-
-    var os = parser.getOS();
-    if (os.name == "Android") {
-        context["agentDownloadURL"] = mdmProps["httpURL"] + mdmProps["appContext"] +
-            "public/asset-download-agent-android/asset/" + mdmProps["androidAgentApp"];
-    } else {
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/error-page");
-    }
+    // setting android agent download URL
+    context["agentDownloadURL"] = mdmProps["httpURL"] + mdmProps["appContext"] +
+        "public/asset-download-agent-android/asset/" + mdmProps["androidAgentApp"];
     return context;
 }

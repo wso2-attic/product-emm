@@ -35,6 +35,6 @@ if (platform == "Android") {
 } else if (platform == "Windows Phone") {
     response.sendRedirect("/mdm/windows/controller/agent");
 } else {
-    response.sendRedirect("/mdm/enrollments/error-page");
+    response.sendRedirect("/mdm/enrollments/unintentional-request");
 }
 %>

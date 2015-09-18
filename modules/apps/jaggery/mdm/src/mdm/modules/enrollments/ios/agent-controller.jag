@@ -21,6 +21,7 @@ var log = new Log("/modules/enrollments/ios/agent-controller.jag");
 
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
 parser.setUA(userAgent);
@@ -28,7 +29,9 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-if (platform == "iOS") {
+if (platform != "iOS") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+} else {
     var username = request.getParameter("username");
     var password = request.getParameter("password");
     var ownership = request.getParameter("ownership");
@@ -53,7 +56,5 @@ if (platform == "iOS") {
     } else {
         response.sendRedirect("/mdm/enrollments/ios/login-agent#error");
     }
-} else {
-    // in case of a wrong request
 }
 %>

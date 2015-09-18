@@ -19,26 +19,40 @@
 
 var log = new Log("/modules/enrollments/ios/certificate.jag");
 
-var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
-var GetMethod = Packages.org.apache.commons.httpclient.methods.GetMethod;
-var ByteArrayInputStream = Packages.java.io.ByteArrayInputStream;
+var mdmProps = require('/config/mdm-props.js').config();
+var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
 
-var caURL = mdmProps["iOSConfigRoot"] + 'ca';
-var method = new GetMethod(caURL);
-var client = new HttpClient();
-try {
-    client.executeMethod(method);
-    var status = method.getStatusCode();
-    if (status == 200) {
-        var stream = method.getResponseBody();
-        response.contentType = "application/x-x509-ca-cert";
-        var byteArrayInputStream = new ByteArrayInputStream(stream);
-        print(new Stream(byteArrayInputStream));
-    } else {
+var parser = new UAParser();
+var userAgent = request.getHeader("User-Agent");
+parser.setUA(userAgent);
+parser.getResult();
+var os = parser.getOS();
+var platform = os.name;
+
+if (platform != "iOS") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+} else {
+    var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
+    var GetMethod = Packages.org.apache.commons.httpclient.methods.GetMethod;
+    var ByteArrayInputStream = Packages.java.io.ByteArrayInputStream;
+
+    var caURL = mdmProps["iOSConfigRoot"] + 'ca';
+    var method = new GetMethod(caURL);
+    var client = new HttpClient();
+    try {
+        client.executeMethod(method);
+        var status = method.getStatusCode();
+        if (status == 200) {
+            var stream = method.getResponseBody();
+            response.contentType = "application/x-x509-ca-cert";
+            var byteArrayInputStream = new ByteArrayInputStream(stream);
+            print(new Stream(byteArrayInputStream));
+        } else {
+            response.sendRedirect("/error-page");
+        }
+    } catch (e) {
+        log.error("Error occurred when downloading CA: " + e);
         response.sendRedirect("/error-page");
     }
-} catch (e) {
-    log.error("Error occurred when downloading CA: " + e);
-    response.sendRedirect("/error-page");
 }
 %>
