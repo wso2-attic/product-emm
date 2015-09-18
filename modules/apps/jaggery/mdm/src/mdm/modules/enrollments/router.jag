@@ -29,12 +29,12 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform == "Android") {
-    response.sendRedirect("/mdm/enrollments/android/download-agent");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/android/download-agent");
 } else if (platform == "iOS") {
-    response.sendRedirect("/mdm/enrollments/ios/download-agent");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/download-agent");
 } else if (platform == "Windows Phone") {
-    response.sendRedirect("/mdm/windows/controller/agent");
+    response.sendRedirect(mdmProps["appContext"] + "windows/controller/agent");
 } else {
-    response.sendRedirect("/mdm/enrollments/unintentional-request");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
 }
 %>

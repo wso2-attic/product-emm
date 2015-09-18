@@ -27,7 +27,9 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-if (platform == "Windows Phone") {
+if (platform != "Windows Phone") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+} else {
     %>
     <html lang="en-US">
     <head>

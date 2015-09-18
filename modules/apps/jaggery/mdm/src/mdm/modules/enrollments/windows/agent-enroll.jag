@@ -27,7 +27,9 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-if (platform == "Windows Phone") {
+if (platform != "Windows Phone") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+} else {
     var username = session.get("username");
     if (username) {
         var windowsWorkplaceAppID = session.get("windowsWorkplaceAppID");
@@ -58,7 +60,5 @@ if (platform == "Windows Phone") {
     } else {
         // in case of username is not set
     }
-} else {
-    // in case of a wrong request
 }
 %>
