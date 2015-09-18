@@ -50,11 +50,11 @@ if (platform != "iOS") {
         session.put("password", password);
         session.put("ownership", ownership);
 
-        response.sendRedirect("/mdm/enrollments/ios/license-agent");
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/license-agent");
     } else if (xhr.status == 403) {
-        response.sendRedirect("/mdm/enrollments/ios/login-agent#auth-failed");
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#auth-failed");
     } else {
-        response.sendRedirect("/mdm/enrollments/ios/login-agent#error");
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#error");
     }
 }
 %>

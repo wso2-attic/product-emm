@@ -65,7 +65,7 @@ if (platform != "iOS") {
                 response.contentType = "application/x-apple-aspen-config";
                 print(new Stream(byteArrayInputStream));
             } else if (status == 403) {
-                response.sendRedirect("/mdm/enrollments/ios/login-agent#auth-failed");
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#auth-failed");
             }
         } catch (e) {
             log.error("Error occurred in enrolling ios device: " + e);
