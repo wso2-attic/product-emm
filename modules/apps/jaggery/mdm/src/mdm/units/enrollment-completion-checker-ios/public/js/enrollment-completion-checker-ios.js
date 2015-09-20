@@ -24,7 +24,6 @@ $(document).ready(function () {
             function (data) {
                 var parsedData = JSON.parse(data);
                 var deviceID = parsedData["deviceID"];
-
                 if (deviceID != null) {
                     window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + deviceID;
                 }

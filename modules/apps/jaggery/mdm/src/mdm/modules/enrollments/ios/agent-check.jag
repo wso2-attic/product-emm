@@ -37,7 +37,7 @@ if (platform != "iOS") {
     var enrolledUser = session.get("enrolledUser");
     if (!enrolledUser) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
-   } else {
+    } else {
         var deviceCheckURL = mdmProps["iOSAPIRoot"] + "device/deviceid";
 
         var xhr = new XMLHttpRequest();
@@ -53,9 +53,7 @@ if (platform != "iOS") {
             var deviceID = responseObject["deviceID"];
             response["status"] = 200;
             response["content"] = {"deviceID" : deviceID};
-        } else if (xhr.status == 400) {
-            response["status"] = 400;
         }
-   }
+    }
 }
 %>
