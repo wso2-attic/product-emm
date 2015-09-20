@@ -31,12 +31,16 @@ var platform = os.name;
 
 if (platform != "iOS") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+} else if (session.get("lastAccessedPage") != "license-agent") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
 } else {
-    var username = session.get("enrolledUser");
-    if (username) {
+    var enrolledUser = session.get("enrolledUser");
+    if (!enrolledUser) {
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+   } else {
         var deviceCheckURL = mdmProps["iOSAPIRoot"] + "device/deviceid";
-        var xhr = new XMLHttpRequest();
 
+        var xhr = new XMLHttpRequest();
         xhr.open("POST", deviceCheckURL);
         var challengeToken = session.get("iOSChallengeToken");
         var inputs = {"challengeToken" : challengeToken};
@@ -45,15 +49,13 @@ if (platform != "iOS") {
         xhr.send(stringify(inputs));
 
         if (xhr.status == 200) {
-            var responseText = parse(xhr["responseText"]);
-            var deviceID = responseText["deviceID"];
+            var responseObject = parse(xhr["responseText"]);
+            var deviceID = responseObject["deviceID"];
             response["status"] = 200;
             response["content"] = {"deviceID" : deviceID};
         } else if (xhr.status == 400) {
-            // to do
+            response["status"] = 400;
         }
-    } else {
-        // to do
-    }
+   }
 }
 %>

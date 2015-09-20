@@ -31,6 +31,8 @@ function onRequest(context) {
 
     if (userAgentPlatform != context["allowedPlatform"]) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+    } else {
+        session.put("lastAccessedPage", context["currentPage"]);
     }
     return context;
 }

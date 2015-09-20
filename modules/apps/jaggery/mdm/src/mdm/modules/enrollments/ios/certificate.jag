@@ -31,6 +31,8 @@ var platform = os.name;
 
 if (platform != "iOS") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+} else if (session.get("lastAccessedPage") != "download-agent") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
 } else {
     var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
     var GetMethod = Packages.org.apache.commons.httpclient.methods.GetMethod;
