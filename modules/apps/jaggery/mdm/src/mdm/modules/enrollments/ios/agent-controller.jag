@@ -30,15 +30,15 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform != "iOS") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else if (session.get("lastAccessedPage") != "login-agent") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
     var username = request.getParameter("username");
     var password = request.getParameter("password");
     var ownership = request.getParameter("ownership");
     if (!username || !password || !ownership) {
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
         var xhr = new XMLHttpRequest();
         var authUrl = mdmProps["iOSConfigRoot"] + "authenticate";

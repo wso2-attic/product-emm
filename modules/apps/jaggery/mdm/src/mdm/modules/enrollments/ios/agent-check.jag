@@ -30,13 +30,13 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform != "iOS") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else if (session.get("lastAccessedPage") != "license-agent") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
     var enrolledUser = session.get("enrolledUser");
     if (!enrolledUser) {
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/unintentional-request");
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
    } else {
         var deviceCheckURL = mdmProps["iOSAPIRoot"] + "device/deviceid";
 
