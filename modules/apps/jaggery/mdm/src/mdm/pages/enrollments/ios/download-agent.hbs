@@ -16,6 +16,14 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
+{{!-- defining controlled access parameters --}}
+{{#zone "accessControl"}}
+    {{
+        unit "enrollment-access-control"
+        allowedPlatform = "iOS"
+        currentPage = "download-agent"
+    }}
+{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
     WSO2 EMM | iOS Enrollment | Download and Install Certificate and Agent
@@ -34,10 +42,5 @@ under the License. --}}
     }}
     {{
         unit "asset-download-agent-ios"
-    }}
-    {{
-        unit "enrollment-access-control"
-        allowedPlatform = "iOS"
-        currentPage = "download-agent"
     }}
 {{/zone}}

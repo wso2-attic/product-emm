@@ -29,9 +29,13 @@ var platform = os.name;
 
 if (platform != "Windows Phone") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+} else if (session.get("lastAccessedPage") != "license-agent") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
     var username = session.get("username");
-    if (username) {
+    if (!username) {
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    } else {
         var windowsWorkplaceAppID = session.get("windowsWorkplaceAppID");
         var windowsBinaryToken = session.get("windowsBinaryToken");
         %>
@@ -57,8 +61,6 @@ if (platform != "Windows Phone") {
           </body>
         </html>
         <%
-    } else {
-        // in case of username is not set
     }
 }
 %>

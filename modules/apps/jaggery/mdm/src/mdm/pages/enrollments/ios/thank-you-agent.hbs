@@ -16,6 +16,14 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
+{{!-- defining controlled access parameters --}}
+{{#zone "accessControl"}}
+    {{
+        unit "enrollment-access-control"
+        allowedPlatform = "iOS"
+        currentPage = "thank-you-agent"
+    }}
+{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
     WSO2 EMM | iOS Enrollment | Success Note
@@ -26,10 +34,5 @@ under the License. --}}
 {{#zone "body"}}
     {{
         unit "enrollment-success-note-ios"
-    }}
-    {{
-        unit "enrollment-access-control"
-        allowedPlatform = "iOS"
-        currentPage = "thank-you-agent"
     }}
 {{/zone}}
