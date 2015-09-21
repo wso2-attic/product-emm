@@ -17,7 +17,7 @@
  * under the License.
  */
 
-var log = new Log("/modules/enrollments/ios/agent-enroll.jag");
+var log = new Log("/modules/enrollments/windows/agent-enroll.jag");
 
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
 var parser = new UAParser();
@@ -27,9 +27,15 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-if (platform == "Windows Phone") {
+if (platform != "Windows Phone") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+} else if (session.get("lastAccessedPage") != "license-agent") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+} else {
     var username = session.get("username");
-    if (username) {
+    if (!username) {
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    } else {
         var windowsWorkplaceAppID = session.get("windowsWorkplaceAppID");
         var windowsBinaryToken = session.get("windowsBinaryToken");
         %>
@@ -55,10 +61,6 @@ if (platform == "Windows Phone") {
           </body>
         </html>
         <%
-    } else {
-        // in case of username is not set
     }
-} else {
-    // in case of a wrong request
 }
 %>

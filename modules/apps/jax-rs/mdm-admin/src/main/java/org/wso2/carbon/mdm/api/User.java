@@ -330,7 +330,7 @@ public class User {
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(username);
-        emailMessageProperties.setEnrolmentUrl("https://download-agent");
+        emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
         emailMessageProperties.setPassword(generateInitialUserPassword());
         String[] mailAddress = new String[1];

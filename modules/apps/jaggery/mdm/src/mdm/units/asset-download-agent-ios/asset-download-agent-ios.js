@@ -21,20 +21,10 @@ function onRequest (context) {
     log.debug("calling asset-download-agent-ios-unit backend js");
 
     var mdmProps = require('/config/mdm-props.js').config();
-    var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
-
-    var parser = new UAParser();
-    var userAgent = request.getHeader("User-Agent");
-    parser.setUA(userAgent);
-    parser.getResult();
-
-    var os = parser.getOS();
-    if (os.name == "iOS") {
-        context["emmCertificateDownloadURL"] = mdmProps["appContext"] + "ios/enrollments/certificate-download";
-        context["agentDownloadURL"] = "itms-services://?action=download-manifest&url=" +
-            mdmProps["httpsURL"] + mdmProps["appContext"] + "ios/enrollments/agent-download";
-    } else {
-        // page should be redirected to an error page with status info
-    }
+    // setting iOS certificate download URL
+    context["emmCertificateDownloadURL"] = mdmProps["appContext"] + "ios/enrollments/certificate-download";
+    // setting iOS agent download URL
+    context["agentDownloadURL"] = "itms-services://?action=download-manifest&url=" +
+        mdmProps["httpsURL"] + mdmProps["appContext"] + "ios/enrollments/agent-download";
     return context;
 }
