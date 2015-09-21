@@ -23,6 +23,12 @@ package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
  * Constant values used in syncml generator.
  */
 public class Constants {
+
+	public static final String PROVIDER_ID = "MobiCDMServer";
+	public static final String SERVER_SECRET = "dummy";
+	public static final String INITIAL_NONCE = "ZHVtbXk=";
+	public static final String DISENROLL_ALERT_DATA = "1226";
+
 	public static final String SYNCML_ROOT_ELEMENT_NAME = "SyncML";
 	public static final String XMLNS_SYNCML = "SYNCML:SYNCML1.2";
 	public static final String UTF_8 = "UTF-8";
@@ -59,16 +65,25 @@ public class Constants {
 	public static final String CREDENTIAL = "Cred";
 	public static final String FORMAT = "Format";
 	public static final String TYPE = "Type";
+	public static final String NEXTNONCE = "NextNonce";
+	public static final String CHALLENGE = "chal";
 	public static final String META_NAMESPACE = "syncml:metinf";
 	public static final String XMLNS = "xmlns";
 	public static final String RESULTS = "Results";
+	public static final String CRED_FORMAT = "b64";
+	public static final String CRED_TYPE = "syncml:auth-md5";
+	public static final String SEQUENCE = "Sequence";
 
 	/**
 	 * SynclML service related constants
 	 */
 	public final class SyncMLResponseCodes {
-		public static final int AUTHENTICATION_ACCEPTED = 212;
-		public static final int ACCEPTED = 200;
+		public static final String AUTHENTICATION_ACCEPTED = "212";
+		public static final String ACCEPTED = "200";
+		public static final String PIN_NOTFOUND = "405";
+		public static final String COMMAND_FAIL = "500";
+		public static final String ACCEPTED_FOR_PROCESSING = "202";
+		public static final String LOCKRESET_NOTIFICATION = "Please Reset device lock.";
 	}
 
 }

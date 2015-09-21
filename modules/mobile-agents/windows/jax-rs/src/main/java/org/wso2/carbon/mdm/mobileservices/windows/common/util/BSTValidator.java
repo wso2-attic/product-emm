@@ -25,6 +25,7 @@ import org.apache.ws.security.handler.RequestData;
 import org.apache.ws.security.message.token.BinarySecurity;
 import org.apache.ws.security.validate.Credential;
 import org.apache.ws.security.validate.Validator;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 
@@ -75,12 +76,11 @@ public class BSTValidator implements Validator {
     public boolean authenticate(String binarySecurityToken) throws
             AuthenticationException {
 
-        if("123456789123456789".equals(binarySecurityToken)){
-            System.out.println("TRUE");
+        CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(binarySecurityToken);
+        String username = cacheentry.getUsername();
+        if (username != null) {
             return true;
-        }
-        else {
-            System.out.println("FALSE");
+        } else {
             return false;
         }
     }

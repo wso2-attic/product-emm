@@ -19,41 +19,45 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.wrapper.EncryptBeanWrapper;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Interface for Admin operations persisting. This interface accepts operations added via UI.
  */
-@Path("/operations")
+@Path("/operation")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+
 public interface Operations {
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/lock")
-    OperationResponse lock(OperationRequest lock) throws WindowsDeviceEnrolmentException;
+    @Path("/devicelock")
+    Response lock(@HeaderParam("Accept") String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/ring")
-    OperationResponse ring(OperationRequest ring) throws WindowsDeviceEnrolmentException;
+    @Path("/devicedisenroll")
+    Response disenroll(@HeaderParam("Accept") String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/wipe")
-    OperationResponse wipe(OperationRequest wipe) throws WindowsDeviceEnrolmentException;
+    @Path("/devicewipe")
+    Response wipe(@HeaderParam("Accept") String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/wifi")
-    OperationResponse wifi(OperationRequest wifi) throws WindowsDeviceEnrolmentException;
+    @Path("/devicering")
+    Response ring(@HeaderParam("Accept") String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Path("/storage-encrypt")
+    Response encryptStorage(@HeaderParam("Accept") String acceptHeader,
+                            EncryptBeanWrapper encryptBeanWrapper) throws WindowsDeviceEnrolmentException;
+
+    @POST
+    @Path("/lockreset")
+    Response lockReset(@HeaderParam("Accept") String acceptHeader, List<String> deviceids)
+            throws WindowsDeviceEnrolmentException;
 }

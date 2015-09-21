@@ -22,7 +22,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 import org.xml.sax.SAXException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -31,8 +33,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-
-import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 
 /**
  * This class performs one time operations.
@@ -47,7 +47,8 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         PROPERTY_SIGNED_CERT_NOT_AFTER("SignedCertNotAfter"),
         PROPERTY_PASSWORD("Password"),
         PROPERTY_PRIVATE_KEY_PASSWORD("PrivateKeyPassword"),
-        AUTH_POLICY("AuthPolicy");
+        AUTH_POLICY("AuthPolicy"),
+        DOMAIN("domain");
 
         private final String propertyName;
         private PropertyName(final String propertyName) {
@@ -90,6 +91,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         String privateKeyPassword = null;
         String signedCertCommonName = null;
         String authPolicy=null;
+        String domain = null;
         int signedCertNotBeforeDate = INITIAL_VALUE;
         int signedCertNotAfterDate = INITIAL_VALUE;
 
@@ -107,6 +109,8 @@ public class ConfigInitializerContextListener implements ServletContextListener 
                     PropertyName.PROPERTY_SIGNED_CERT_NOT_BEFORE.getValue()).item(0).getTextContent());
             signedCertNotAfterDate = Integer.valueOf(document.getElementsByTagName(
                     PropertyName.PROPERTY_SIGNED_CERT_NOT_AFTER.getValue()).item(0).getTextContent());
+            domain = document.getElementsByTagName(PropertyName.DOMAIN.getValue()).item(0).getTextContent();
+
         }
 
         WindowsPluginProperties properties = new WindowsPluginProperties();
@@ -116,6 +120,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         properties.setNotBeforeDays(signedCertNotBeforeDate);
         properties.setNotAfterDays(signedCertNotAfterDate);
         properties.setAuthPolicy(authPolicy);
+        properties.setDomain(domain);
         servletContext.setAttribute(Constants.WINDOWS_PLUGIN_PROPERTIES, properties);
 
         File wapProvisioningFile = new File(getClass().getClassLoader().getResource(

@@ -14,6 +14,7 @@
     }
   },
   "androidAgentApp" : "android-agent.apk",
+
   "windowsConfigRoot" : "%http.ip%/mdm-windows-agent/services/federated/bst/authentication",
   "ssoConfiguration" : {
         "enabled" : false,
@@ -24,5 +25,6 @@
         "keyStorePassword" : "wso2carbon",
         "identityAlias" : "wso2carbon",
         "keyStoreName" : "/repository/resources/security/wso2carbon.jks"
+
   }
 }
