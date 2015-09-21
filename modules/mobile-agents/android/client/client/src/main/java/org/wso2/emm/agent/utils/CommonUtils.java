@@ -93,11 +93,9 @@ public class CommonUtils {
 	public static void clearAppData(Context context) throws AndroidAgentException {
 		revokePolicy(context);
 		Resources resources = context.getResources();
-		SharedPreferences mainPref =
-				context.getSharedPreferences(context.getResources()
-								.getString(R.string.shared_pref_package),
-						Context.MODE_PRIVATE
-				);
+		SharedPreferences mainPref = context.getSharedPreferences(context.getResources().
+				                                                          getString(R.string.shared_pref_package),
+		                                                          Context.MODE_PRIVATE);
 
 		Editor editor = mainPref.edit();
 		editor.putString(context.getResources().getString(R.string.shared_pref_policy),
@@ -148,17 +146,11 @@ public class CommonUtils {
 			ObjectMapper mapper = new ObjectMapper();
 			return mapper.writeValueAsString(obj);
 		} catch (JsonMappingException e) {
-			String errorMessage = "Error occurred while mapping class to json.";
-			Log.e(TAG, errorMessage);
-			throw new AndroidAgentException(errorMessage, e);
+			throw new AndroidAgentException("Error occurred while mapping class to json", e);
 		} catch (JsonGenerationException e) {
-			String errorMessage = "Error occurred while generating json.";
-			Log.e(TAG, errorMessage);
-			throw new AndroidAgentException(errorMessage, e);
+			throw new AndroidAgentException("Error occurred while generating json", e);
 		} catch (IOException e) {
-			String errorMessage = "Error occurred while reading the stream.";
-			Log.e(TAG, errorMessage);
-			throw new AndroidAgentException(errorMessage, e);
+			throw new AndroidAgentException("Error occurred while reading the stream", e);
 		}
 	}
 
@@ -169,7 +161,6 @@ public class CommonUtils {
 	 * @throws AndroidAgentException
 	 */
 	public static void unRegisterClientApp(Context context) throws AndroidAgentException {
-
 		String applicationName = Preference.getString(context, Constants.CLIENT_NAME);
 		String consumerKey = Preference.getString(context, Constants.CLIENT_ID);
 		String userId = Preference.getString(context, Constants.USERNAME);
@@ -185,7 +176,6 @@ public class CommonUtils {
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
 		dynamicClientManager.unregisterClient(profile,utils);
-
 	}
 
 	/**
@@ -195,8 +185,7 @@ public class CommonUtils {
 	public static void disableAdmin(Context context) {
 		DevicePolicyManager devicePolicyManager;
 		ComponentName demoDeviceAdmin;
-		devicePolicyManager =
-				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		devicePolicyManager.removeActiveAdmin(demoDeviceAdmin);
 	}
@@ -230,9 +219,7 @@ public class CommonUtils {
 				Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), null);
 			}
 		} catch (IOException e) {
-			String msg = "Error occurred while parsing stream." + e.getMessage();
-			Log.e(TAG, msg);
-			throw new AndroidAgentException(msg, e);
+			throw new AndroidAgentException("Error occurred while parsing stream", e);
 		}
 	}
 }

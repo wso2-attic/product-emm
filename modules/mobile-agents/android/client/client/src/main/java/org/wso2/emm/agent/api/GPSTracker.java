@@ -86,7 +86,7 @@ public class GPSTracker extends Service implements LocationListener {
 			}
 
 		} catch (RuntimeException e) {
-			Log.e("Location", "No network/GPS Switched off." + e);
+			Log.e("Location", "No network/GPS Switched off.", e);
 		}
 
 		return location;

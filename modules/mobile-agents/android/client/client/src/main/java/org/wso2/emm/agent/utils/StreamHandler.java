@@ -39,7 +39,7 @@ public class StreamHandler {
 			try {
 				stream.close();
 			} catch (IOException e) {
-				Log.e(tag, "Exception occured when closing InputStream." + e);
+				Log.e(tag, "Exception occured when closing InputStream", e);
 			}
 		}
 	}
@@ -55,7 +55,7 @@ public class StreamHandler {
 			try {
 				stream.close();
 			} catch (IOException e) {
-				Log.e(tag, "Exception occured when closing BufferedReader." + e);
+				Log.e(tag, "Exception occured when closing BufferedReader", e);
 			}
 		}
 	}

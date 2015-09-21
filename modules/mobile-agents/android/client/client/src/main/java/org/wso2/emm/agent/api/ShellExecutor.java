@@ -49,7 +49,7 @@ public class ShellExecutor {
 				shellProcess = Runtime.getRuntime().exec(shellCommand);
 			}
 		} catch (IOException e) {
-			Log.e(LOG_TAG, "Shell command processing failed." + e);
+			Log.e(LOG_TAG, "Shell command processing failed", e);
 		}
 
 		if(shellProcess!=null){
@@ -67,7 +67,7 @@ public class ShellExecutor {
 				}
 			}
 		} catch (IOException e) {
-			Log.e(LOG_TAG, "Shell input processing failed." + e);
+			Log.e(LOG_TAG, "Shell input processing failed", e);
 		}finally{
 			StreamHandler.closeBufferedReader(shellInput, LOG_TAG);
 		}

@@ -60,7 +60,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		try {
 			processor.getMessages();
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform operation." + e);
+			Log.e(TAG, "Failed to perform operation", e);
 		}
 
 		Toast.makeText(context, R.string.device_admin_enabled,
@@ -112,7 +112,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 			CommonUtils.unRegisterClientApp(context);
 			CommonUtils.clearAppData(context);
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Error occurred while removing Oauth application. " + e);
+			Log.e(TAG, "Error occurred while removing Oauth application", e);
 		}
 	}
 

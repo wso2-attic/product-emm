@@ -152,12 +152,10 @@ public class DeviceManagementService {
 		Message responseMessage = new Message();
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
 		deviceIdentifier.setId(id);
-		deviceIdentifier
-				.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+		deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
 		try {
-			AndroidAPIUtils.getApplicationManagerService()
-			               .updateApplicationListInstalledInDevice(deviceIdentifier,
-			                                                       applications);
+			AndroidAPIUtils.getApplicationManagerService().
+			               updateApplicationListInstalledInDevice(deviceIdentifier, applications);
 			Response.status(Response.Status.ACCEPTED);
 			responseMessage.setResponseMessage("Device information has modified successfully.");
 

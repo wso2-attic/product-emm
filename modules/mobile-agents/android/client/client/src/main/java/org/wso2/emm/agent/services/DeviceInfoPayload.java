@@ -38,17 +38,17 @@ import java.util.List;
 /**
  * This class handles building of the device information payload to be sent to the server.
  */
-public class BuildDeviceInfoPayload {
+public class DeviceInfoPayload {
 	private DeviceInfo deviceInfo;
 	private Device device;
 	private Context context;
-	private static final String TAG = BuildDeviceInfoPayload.class.getName();
+	private static final String TAG = DeviceInfoPayload.class.getName();
 	private ObjectMapper mapper;
 	private DeviceState phoneState;
 	private GPSTracker gps;
 	private String registrationId ;
 
-	public BuildDeviceInfoPayload(Context context) {
+	public DeviceInfoPayload(Context context) {
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
 		this.context = context;
 		mapper = new ObjectMapper();
@@ -166,7 +166,7 @@ public class BuildDeviceInfoPayload {
 			deviceInfoPayload = mapper.writeValueAsString(properties);
 		} catch (JsonProcessingException e) {
 			String errorMsg = "Error occurred while parsing property object to json.";
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new AndroidAgentException(errorMsg, e);
 		}
 		property = new Device.Property();
@@ -279,7 +279,7 @@ public class BuildDeviceInfoPayload {
 			deviceInfoPayload = mapper.writeValueAsString(properties);
 		} catch (JsonProcessingException e) {
 			String errorMsg = "Error occurred while parsing property object to json.";
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new AndroidAgentException(errorMsg, e);
 		}
 		property = new Device.Property();
@@ -288,7 +288,6 @@ public class BuildDeviceInfoPayload {
 		properties.add(property);
 
 		device.setProperties(properties);
-
 	}
 
 	/**
@@ -300,7 +299,7 @@ public class BuildDeviceInfoPayload {
 		try {
 			return device.toJSON();
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Error occurred while building device info payload. " + e.getMessage());
+			Log.e(TAG, "Error occurred while building device info payload", e);
 		}
 		return null;
 	}
