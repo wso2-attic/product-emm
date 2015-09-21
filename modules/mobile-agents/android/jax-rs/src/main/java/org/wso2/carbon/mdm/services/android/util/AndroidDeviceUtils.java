@@ -34,63 +34,62 @@ import java.util.List;
  */
 public class AndroidDeviceUtils {
 
-	private static final String COMMA_SEPARATION_PATTERN = ", ";
+    private static final String COMMA_SEPARATION_PATTERN = ", ";
 
-	public DeviceIDHolder validateDeviceIdentifiers(List<String> deviceIDs,
-		Message message, MediaType responseMediaType) {
+    public DeviceIDHolder validateDeviceIdentifiers(List<String> deviceIDs,
+                                                    Message message, MediaType responseMediaType) {
 
-		if (deviceIDs == null || deviceIDs.isEmpty()) {
-			message.setResponseMessage("Device identifier list is empty");
-			throw new BadRequestException(message, responseMediaType);
-		}
+        if (deviceIDs == null || deviceIDs.isEmpty()) {
+            message.setResponseMessage("Device identifier list is empty");
+            throw new BadRequestException(message, responseMediaType);
+        }
 
-		List<String> errorDeviceIdList = new ArrayList<String>();
-		List<DeviceIdentifier> validDeviceIDList = new ArrayList<DeviceIdentifier>();
+        List<String> errorDeviceIdList = new ArrayList<String>();
+        List<DeviceIdentifier> validDeviceIDList = new ArrayList<DeviceIdentifier>();
 
-		int deviceIDCounter = 0;
-		for (String deviceID : deviceIDs) {
+        int deviceIDCounter = 0;
+        for (String deviceID : deviceIDs) {
 
-			deviceIDCounter++;
+            deviceIDCounter++;
 
-			if (deviceID == null || deviceID.isEmpty()) {
-				errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
-						deviceIDCounter));
-				continue;
-			}
+            if (deviceID == null || deviceID.isEmpty()) {
+                errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
+                        deviceIDCounter));
+                continue;
+            }
 
-			try {
-				DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-				deviceIdentifier.setId(deviceID);
-				deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.
-						MOBILE_DEVICE_TYPE_ANDROID);
+            try {
+                DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+                deviceIdentifier.setId(deviceID);
+                deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.
+                        MOBILE_DEVICE_TYPE_ANDROID);
 
-				if (isValidDeviceIdentifier(deviceIdentifier)) {
+                if (isValidDeviceIdentifier(deviceIdentifier)) {
                     validDeviceIDList.add(deviceIdentifier);
                 } else {
                     errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
                             deviceIDCounter));
                 }
-			} catch (DeviceManagementException e) {
-				errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_SERVICE_NOT_FOUND,
-						deviceIDCounter));
-			}
-		}
+            } catch (DeviceManagementException e) {
+                errorDeviceIdList.add(String.format(AndroidConstants.DeviceConstants.DEVICE_ID_SERVICE_NOT_FOUND,
+                        deviceIDCounter));
+            }
+        }
 
-		DeviceIDHolder deviceIDHolder = new DeviceIDHolder();
-		deviceIDHolder.setValidDeviceIDList(validDeviceIDList);
-		deviceIDHolder.setErrorDeviceIdList(errorDeviceIdList);
+        DeviceIDHolder deviceIDHolder = new DeviceIDHolder();
+        deviceIDHolder.setValidDeviceIDList(validDeviceIDList);
+        deviceIDHolder.setErrorDeviceIdList(errorDeviceIdList);
 
-		return deviceIDHolder;
-	}
+        return deviceIDHolder;
+    }
 
-	public String convertErrorMapIntoErrorMessage(List<String> errorDeviceIdList) {
-		return StringUtils.join(errorDeviceIdList.iterator(), COMMA_SEPARATION_PATTERN);
-	}
+    public String convertErrorMapIntoErrorMessage(List<String> errorDeviceIdList) {
+        return StringUtils.join(errorDeviceIdList.iterator(), COMMA_SEPARATION_PATTERN);
+    }
 
     public static boolean isValidDeviceIdentifier(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
         Device device = AndroidAPIUtils.getDeviceManagementService().
                 getDevice(deviceIdentifier);
-
         if (device == null || device.getDeviceIdentifier() == null ||
                 device.getDeviceIdentifier().isEmpty()) {
             return false;

@@ -59,7 +59,6 @@ var configParams = {
     "NOTIFIER_FREQUENCY": "notifierFrequency",
     "GCM_API_KEY": "gcmAPIKey",
     "GCM_SENDER_ID": "gcmSenderId",
-    "CONFIG_EMAIL": "configEmail",
     "CONFIG_COUNTRY": "configCountry",
     "CONFIG_STATE": "configState",
     "CONFIG_LOCALITY": "configLocality",
@@ -70,6 +69,7 @@ var configParams = {
     "APNS_CERT_PASSWORD": "APNSCertPassword",
     "MDM_CERT": "MDMCert",
     "APNS_CERT": "APNSCert",
+    "ORG_DISPLAY_NAME": "OrganizationDisplayName",
     "GENERAL_EMAIL_HOST": "emailHost",
     "GENERAL_EMAIL_PORT": "emailPort",
     "GENERAL_EMAIL_USERNAME": "emailUsername",
@@ -424,7 +424,6 @@ $(document).ready(function () {
 
     $("button#save-ios-btn").click(function() {
 
-        var configEmail = $("#ios-config-email").val();
         var configCountry = $("#ios-config-country").val();
         var configState = $("#ios-config-state").val();
         var configLocality = $("#ios-config-locality").val();
@@ -433,11 +432,9 @@ $(document).ready(function () {
         var MDMCertPassword = $("#ios-config-mdm-certificate-password").val();
         var MDMCertTopicID = $("#ios-config-mdm-certificate-topic-id").val();
         var APNSCertPassword = $("#ios-config-apns-certificate-password").val();
+        var configOrgDisplayName = $("#ios-org-display-name").val();
 
-        if (!configEmail) {
-            $(errorMsg).text("SCEP email is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!configCountry) {
+        if (!configCountry) {
             $(errorMsg).text("SCEP country is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!configState) {
@@ -476,16 +473,13 @@ $(document).ready(function () {
         } else if (base64APNSCert == '') {
             $(errorMsg).text("APNS certificate is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
+        } else if (!configOrgDisplayName) {
+            $(errorMsg).text("Organization display name is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
         }
 
         var addConfigFormData = {};
         var configList = new Array();
-
-        var configEmail = {
-            "name": configParams["CONFIG_EMAIL"],
-            "value": configEmail,
-            "contentType": "text"
-        };
 
         var configCountry = {
             "name": configParams["CONFIG_COUNTRY"],
@@ -547,7 +541,12 @@ $(document).ready(function () {
             "contentType": "text"
         };
 
-        configList.push(configEmail);
+        var paramOrganizationDisplayName = {
+            "name": configParams["ORG_DISPLAY_NAME"],
+            "value": configOrgDisplayName,
+            "contentType": "text"
+        };
+
         configList.push(configCountry);
         configList.push(configState);
         configList.push(configLocality);
@@ -558,6 +557,7 @@ $(document).ready(function () {
         configList.push(APNSCertPassword);
         configList.push(paramBase64MDMCert);
         configList.push(paramBase64APNSCert);
+        configList.push(paramOrganizationDisplayName);
 
         addConfigFormData.type = platformTypeConstants["IOS"];
         addConfigFormData.configuration = configList;

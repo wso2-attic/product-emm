@@ -34,6 +34,7 @@ import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.factory.DeviceStateFactory;
 import org.wso2.emm.agent.interfaces.DeviceState;
+import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
 
@@ -73,8 +74,7 @@ public class ServerDetails extends Activity {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
 			String ipSaved =
-					Preference.getString(context.getApplicationContext(),
-							getResources().getString(R.string.shared_pref_ip));
+					Preference.getString(context.getApplicationContext(), Constants.IP);
 
 			// check if we have the IP saved previously.
 			if (ipSaved != null && !ipSaved.isEmpty()) {
@@ -84,14 +84,11 @@ public class ServerDetails extends Activity {
 				evServerIP.setText(ipSaved);
 			}
 
-			String deviceActive =
-					Preference.getString(context,
-							context.getResources()
-									.getString(R.string.shared_pref_device_active)
-					);
+			String deviceActive = Preference.getString(context, context.getResources().
+					getString(R.string.shared_pref_device_active));
 
-			if (deviceActive != null && deviceActive.equals(context.getResources()
-					.getString(R.string.shared_pref_reg_success))) {
+			if (deviceActive != null && deviceActive.equals(context.getResources().
+					getString(R.string.shared_pref_reg_success))) {
 				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
@@ -170,12 +167,9 @@ public class ServerDetails extends Activity {
 			switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (!evServerIP.getText().toString().trim().isEmpty()) {
-						Preference.putString(context.getApplicationContext(),
-						                     getResources()
-								                     .getString(R.string.shared_pref_ip),
+						Preference.putString(context.getApplicationContext(), Constants.IP,
 						                     evServerIP.getText().toString().trim());
 						startAuthenticationActivity();
-
 					} else {
 						Toast.makeText(context.getApplicationContext(),
 						               getResources().getString(

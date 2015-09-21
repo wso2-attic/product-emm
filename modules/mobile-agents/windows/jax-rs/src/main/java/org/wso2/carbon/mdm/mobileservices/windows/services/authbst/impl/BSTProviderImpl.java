@@ -21,12 +21,18 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.Token;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.MDMAPIException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.authbst.BSTProvider;
 import org.wso2.carbon.mdm.mobileservices.windows.services.authbst.beans.Credentials;
 import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -52,23 +58,31 @@ public class BSTProviderImpl implements BSTProvider {
     public Response getBST(Credentials credentials) throws WindowsDeviceEnrolmentException {
 
         String domainUser = credentials.getUsername();
-        String[] domainUserArray = domainUser.split(DELIMITER);
-        String user = domainUserArray[USER_SEGMENT];
-        String domain = domainUserArray[DOMAIN_SEGMENT];
-        domain = "";
+//        String[] domainUserArray = domainUser.split(DELIMITER);
+//        String user = domainUserArray[USER_SEGMENT];
+//        String domain = domainUserArray[DOMAIN_SEGMENT];
+          String  domain = "";
         String password = credentials.getPassword();
 
         try {
-            if(authenticate(user, password, domain)){
-                return Response.ok().entity("123456789123456789").build();
-            }
-            else{
+            if (authenticate(domainUser, password, domain)) {
+                String challengetoken = DeviceUtil.generateRandomToken();
+                Token tokenbean = new Token();
+                tokenbean.setChallengeToken(challengetoken);
+                DeviceUtil.persistChallengeToken(tokenbean.getChallengeToken(), "", domainUser);
+
+                return Response.ok().entity(tokenbean.getChallengeToken()).build();
+            } else {
                 String msg = "Authentication failure due to incorrect credentials.";
                 log.error(msg);
                 return Response.status(403).entity("Authentication failure").build();
             }
         } catch (AuthenticationException e) {
             String msg = "Failure occurred in user authentication process.";
+            log.error(msg);
+           throw new WindowsDeviceEnrolmentException(msg);
+        } catch (DeviceManagementException e) {
+            String msg = "Failure occurred in generating challenge token.";
             log.error(msg);
             throw new WindowsDeviceEnrolmentException(msg);
         }
@@ -120,5 +134,18 @@ public class BSTProviderImpl implements BSTProvider {
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
+    }
+
+    /**
+     * Gets a claim-value from user-store.
+     *
+     * @param username Username of the user
+     * @param claimUri required ClaimUri
+     * @return A list of usernames
+     * @throws MDMAPIException, UserStoreException
+     */
+    private String getClaimValue(String username, String claimUri) throws MDMAPIException, UserStoreException {
+        UserStoreManager userStoreManager = WindowsAPIUtils.getUserStoreManager();
+        return userStoreManager.getUserClaimValue(username, claimUri, null);
     }
 }

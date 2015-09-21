@@ -49,7 +49,6 @@ public class OperationMgtService {
     private static final String ACCEPT = "Accept";
 
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public List<? extends Operation> getPendingOperations
             (@HeaderParam(ACCEPT) String acceptHeader, @PathParam("id") String id,
@@ -104,7 +103,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("lock")
     public Response configureDeviceLock(@HeaderParam(ACCEPT) String acceptHeader, List<String> deviceIDs) {
 
@@ -141,7 +139,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("location")
     public Response getDeviceLocation(@HeaderParam(ACCEPT) String acceptHeader,
                                       List<String> deviceIDs) {
@@ -173,7 +170,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("clear-password")
     public Response removePassword(@HeaderParam(ACCEPT) String acceptHeader,
                                    List<String> deviceIDs) {
@@ -207,7 +203,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("camera")
     public Response configureCamera(@HeaderParam(ACCEPT) String acceptHeader,
                                     CameraBeanWrapper cameraBeanWrapper) {
@@ -250,7 +245,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("device-info")
     public Response getDeviceInformation(@HeaderParam(ACCEPT) String acceptHeader,
                                          List<String> deviceIDs) {
@@ -286,7 +280,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("enterprise-wipe")
     public Response wipeDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {
@@ -321,7 +314,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("wipe-data")
     public Response wipeData(@HeaderParam(ACCEPT) String acceptHeader,
                              WipeDataBeanWrapper wipeDataBeanWrapper) {
@@ -364,7 +356,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("get-application-list")
     public Response getApplications(@HeaderParam(ACCEPT) String acceptHeader,
                                     List<String> deviceIDs) {
@@ -399,7 +390,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("ring-device")
     public Response ringDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {
@@ -433,7 +423,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("mute")
     public Response muteDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {
@@ -468,7 +457,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("install-application")
     public Response installApplication(@HeaderParam(ACCEPT) String acceptHeader,
                                        ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
@@ -510,7 +498,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("uninstall-application")
     public Response uninstallApplication(@HeaderParam(ACCEPT) String acceptHeader,
                                          ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
@@ -551,7 +538,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("blacklist-applications")
     public Response blacklistApplications(@HeaderParam(ACCEPT) String acceptHeader,
                                           BlacklistApplicationsBeanWrapper blacklistApplicationsBeanWrapper) {
@@ -593,7 +579,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("notification")
     public Response sendNotification(@HeaderParam(ACCEPT) String acceptHeader,
                                      NotificationBeanWrapper notificationBeanWrapper) {
@@ -635,7 +620,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("wifi")
     public Response configureWifi(@HeaderParam(ACCEPT) String acceptHeader,
                                   WifiBeanWrapper wifiBeanWrapper) {
@@ -677,7 +661,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("encrypt")
     public Response encryptStorage(@HeaderParam(ACCEPT) String acceptHeader,
                                    EncryptionBeanWrapper encryptionBeanWrapper) {
@@ -719,7 +702,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("change-lock-code")
     public Response changeLockCode(@HeaderParam(ACCEPT) String acceptHeader,
                                    LockCodeBeanWrapper lockCodeBeanWrapper) {
@@ -761,7 +743,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("password-policy")
     public Response setPasswordPolicy(@HeaderParam(ACCEPT) String acceptHeader,
                                       PasswordPolicyBeanWrapper passwordPolicyBeanWrapper) {
@@ -773,16 +754,16 @@ public class OperationMgtService {
         Message message = new Message();
 
         try {
-            PasswordPolicy passwordPolicy = passwordPolicyBeanWrapper.getOperation();
+            PasscodePolicy passcodePolicy = passwordPolicyBeanWrapper.getOperation();
 
-            if (passwordPolicy == null) {
+            if (passcodePolicy == null) {
                 throw new OperationManagementException("Password policy bean is empty");
             }
 
             ProfileOperation operation = new ProfileOperation();
             operation.setCode(AndroidConstants.OperationCodes.PASSCODE_POLICY);
             operation.setType(Operation.Type.PROFILE);
-            operation.setPayLoad(passwordPolicy.toJSON());
+            operation.setPayLoad(passcodePolicy.toJSON());
 
             return AndroidAPIUtils.getOperationResponse(passwordPolicyBeanWrapper.getDeviceIDs(),
                     operation, message, responseMediaType);
@@ -803,7 +784,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("webclip")
     public Response setWebClip(@HeaderParam(ACCEPT) String acceptHeader,
                                WebClipBeanWrapper webClipBeanWrapper) {
@@ -845,7 +825,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("disenroll")
     public Response setDisenrollment(@HeaderParam(ACCEPT) String acceptHeader,
                                      DisenrollmentBeanWrapper disenrollmentBeanWrapper) {
@@ -887,7 +866,7 @@ public class OperationMgtService {
         }
     }
 
-    public void updateOperations(String deviceId, List<? extends Operation> operations)
+    private void updateOperations(String deviceId, List<? extends Operation> operations)
             throws OperationManagementException, PolicyComplianceException {
 
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {

@@ -20,10 +20,11 @@ package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
-import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,9 @@ import java.util.List;
  */
 public class SyncmlParser {
 
+    private static String commandId;
+    private static String messageReference;
+    private static String commandReference;
     private static final String SYNC_HDR = "SyncHdr";
     private static final String SYNC_BODY = "SyncBody";
     private enum SyncMLHeaderParameter {
@@ -81,10 +85,6 @@ public class SyncmlParser {
         SyncmlDocument syncmlDocument = new SyncmlDocument();
         syncmlDocument.setHeader(header);
         syncmlDocument.setBody(body);
-
-        SyncmlGenerator generator = new SyncmlGenerator();
-      //  System.out.println(generator.generatePayload(syncmlDocument));
-
         return syncmlDocument;
     }
 
@@ -231,18 +231,33 @@ public class SyncmlParser {
     private static Results generateResults(Node node) {
 
         Results results = new Results();
+        List<Item> item = new ArrayList<Item>();
 
-        if(node.getNodeType() == Node.ELEMENT_NODE) {
-            String commandID = node.getChildNodes().item(0).getTextContent().trim();
-            String messageReference = node.getChildNodes().item(1).getTextContent().trim();
-            String commandReference = node.getChildNodes().item(2).getTextContent().trim();
-            Item item = generateItem(node.getChildNodes().item(3));
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
 
-            results.setCommandId(Integer.valueOf(commandID));
+            NodeList nodelist = node.getChildNodes();
+
+            for (int i = 0; i < nodelist.getLength(); i++) {
+                String nodeName = nodelist.item(i).getNodeName();
+
+                if (nodeName.equals(org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants.COMMAND_ID)) {
+                    commandId = node.getChildNodes().item(i).getTextContent().trim();
+                } else if (nodeName.equals(org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants.MESSAGE_REFERENCE)) {
+                    messageReference = node.getChildNodes().item(i).getTextContent().trim();
+                } else if (nodeName.equals(org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants.COMMAND_REFERENCE)) {
+                    commandReference = node.getChildNodes().item(i).getTextContent().trim();
+
+                } else if (nodeName.equals(org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants.ITEM)) {
+                    item.add(generateItem(node.getChildNodes().item(i)));
+                }
+
+            }
+            results.setCommandId(Integer.valueOf(commandId));
             results.setMessageReference(Integer.valueOf(messageReference));
             results.setCommandReference(Integer.valueOf(commandReference));
             results.setItem(item);
         }
+
         return results;
     }
 
@@ -254,19 +269,42 @@ public class SyncmlParser {
     private static Status generateStatus(Node node) {
 
         Status status = new Status();
-        String commandId = node.getChildNodes().item(0).getTextContent().trim();
-        String messageReference = node.getChildNodes().item(1).getTextContent().trim();
-        String commandReference = node.getChildNodes().item(2).getTextContent().trim();
-        String command = node.getChildNodes().item(3).getTextContent().trim();
-        String targetReference = node.getChildNodes().item(4).getTextContent().trim();
-        String data = node.getChildNodes().item(5).getTextContent().trim();
-
-        status.setCommandId(Integer.valueOf(commandId));
-        status.setMessageReference(Integer.valueOf(messageReference));
-        status.setCommandReference(Integer.valueOf(commandReference));
-        status.setCommand(command);
-        status.setTargetReference(targetReference);
-        status.setData(data);
+        for (int x = 0; x < node.getChildNodes().getLength(); x++) {
+            String nodeName = node.getChildNodes().item(x).getNodeName();
+            if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD_ID) {
+                String commandId = node.getChildNodes().item(x).getTextContent().trim();
+                status.setCommandId(Integer.valueOf(commandId));
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_MESSAGE_REF) {
+                String messageReference = node.getChildNodes().item(x).getTextContent().trim();
+                status.setMessageReference(Integer.valueOf(messageReference));
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD_REF) {
+                String commandReference = node.getChildNodes().item(x).getTextContent().trim();
+                status.setCommandReference(Integer.valueOf(commandReference));
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD) {
+                String command = node.getChildNodes().item(x).getTextContent().trim();
+                status.setCommand(command);
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CHAL) {
+                NodeList chalNodes = node.getChildNodes().item(x).getChildNodes();
+                Meta meta = new Meta();
+                Chal chal = new Chal();
+                String format = chalNodes.item(0).getFirstChild().getTextContent();
+                meta.setFormat(format);
+                String type = chalNodes.item(0).getFirstChild().getNextSibling().getTextContent();
+                meta.setType(type);
+                String nonce = chalNodes.item(0).getFirstChild().getNextSibling().getNextSibling().getTextContent();
+                meta.setNextNonce(nonce);
+                chal.setMeta(meta);
+                status.setChallenge(chal);
+            }
+            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_DATA) {
+                String data = node.getChildNodes().item(x).getTextContent().trim();
+                status.setData(data);
+            }
+            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_TARGET_REF) {
+                String targetReference =node.getChildNodes().item(x).getTextContent().trim();
+                status.setTargetReference(targetReference);
+            }
+        }
         return status;
     }
 
@@ -309,19 +347,22 @@ public class SyncmlParser {
      */
     private static Item generateItem(Node node){
         Item item = new Item();
+        Source source = new Source();
         String data;
-
-        if(SyncMLHeaderParameter.SOURCE.getValue().equals(node.getChildNodes().item(0).getNodeName())){
-            Source source = generateSource(node.getChildNodes().item(0));
-            item.setSource(source);
+        for (int x = 0; x < node.getChildNodes().getLength(); x++) {
+            String nodeName = node.getChildNodes().item(x).getNodeName();
+            if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_SOURCE) {
+                String childNodeName = node.getChildNodes().item(x).getChildNodes().item(x).getNodeName();
+                if (childNodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_LOCATION_URI) {
+                    String LocUri = node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim();
+                    source.setLocURI(LocUri);
+                    item.setSource(source);
+                }
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_DATA) {
+                data = node.getChildNodes().item(x).getTextContent().trim();
+                item.setData(data);
+            }
         }
-        else if(SyncMLHeaderParameter.TARGET.getValue().equals(node.getChildNodes().item(0).getNodeName())){
-            Target target = generateTarget(node.getChildNodes().item(0));
-            item.setTarget(target);
-        }
-        Node dataItem = node.getChildNodes().item(1);
-        data = dataItem.getTextContent().trim();
-        item.setData(data);
         return item;
     }
 
