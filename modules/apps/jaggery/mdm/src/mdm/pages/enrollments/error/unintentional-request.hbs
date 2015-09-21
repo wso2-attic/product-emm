@@ -16,35 +16,18 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
-{{!-- defining controlled access parameters --}}
-{{#zone "accessControl"}}
-    {{
-        unit "enrollment-access-control"
-        allowedPlatform = "iOS"
-        currentPage = "license-agent"
-    }}
-{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | iOS Enrollment | Accept End User License Agreement
+    WSO2 EMM | Unintentional Request
 {{/zone}}
 {{#zone "header"}}
-    iOS Enrollment
+    Unintentional Request
 {{/zone}}
 {{#zone "body"}}
-    {{
-        unit "wizard-stepper"
-        steps = "Download and Install Certificate and Agent,
-        Login to Enterprise Mobility Manager,
-        Accept End User License Agreement"
-        currentStep = "Accept End User License Agreement"
-        currentStepIndex = 2
-    }}
-    {{
-        unit "license-box-agent"
-        licenseAcceptActionURL = "/mdm/ios/controller/enroll"
-    }}
-    {{
-        unit "enrollment-completion-checker-ios"
-    }}
+    You have tried making a request call intended to be made by a different Platform.
+    <div class="row">
+        <div class="container col-md-4 wr-buttons">
+            <a href="/mdm/enrollment" class="btn-download-agent">Redirect</a>
+        </div>
+    </div>
 {{/zone}}

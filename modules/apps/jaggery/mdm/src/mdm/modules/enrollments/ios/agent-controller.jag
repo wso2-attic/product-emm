@@ -21,6 +21,7 @@ var log = new Log("/modules/enrollments/ios/agent-controller.jag");
 
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
 parser.setUA(userAgent);
@@ -28,32 +29,37 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-if (platform == "iOS") {
+if (platform != "iOS") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+} else if (session.get("lastAccessedPage") != "login-agent") {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+} else {
     var username = request.getParameter("username");
     var password = request.getParameter("password");
     var ownership = request.getParameter("ownership");
-
-    var xhr = new XMLHttpRequest();
-    var authUrl = mdmProps["iOSConfigRoot"] + "authenticate";
-    xhr.open("POST", authUrl);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(stringify({"username": username, "password": password, "ownership": ownership}));
-
-    if (xhr.status == 200 && xhr.readyState == 4) {
-        var responseContent = parse(xhr.responseText);
-
-        session.put("iOSChallengeToken", responseContent["challengeToken"]);
-        session.put("username", username);
-        session.put("password", password);
-        session.put("ownership", ownership);
-
-        response.sendRedirect("/mdm/enrollments/ios/license-agent");
-    } else if (xhr.status == 403) {
-        response.sendRedirect("/mdm/enrollments/ios/login-agent#auth-failed");
+    if (!username || !password || !ownership) {
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
-        response.sendRedirect("/mdm/enrollments/ios/login-agent#error");
+        var xhr = new XMLHttpRequest();
+        var authUrl = mdmProps["iOSConfigRoot"] + "authenticate";
+        xhr.open("POST", authUrl);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(stringify({"username": username, "password": password, "ownership": ownership}));
+
+        if (xhr.status == 200 && xhr.readyState == 4) {
+            var responseContent = parse(xhr.responseText);
+
+            session.put("username", username);
+            session.put("password", password);
+            session.put("ownership", ownership);
+            session.put("iOSChallengeToken", responseContent["challengeToken"]);
+
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/license-agent");
+        } else if (xhr.status == 403 || xhr.status == 404) {
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#auth-failed");
+        } else {
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#error");
+        }
     }
-} else {
-    // in case of a wrong request
 }
 %>

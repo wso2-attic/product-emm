@@ -16,6 +16,13 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
+{{!-- defining controlled access parameters --}}
+{{#zone "accessControl"}}
+    {{
+        unit "enrollment-access-control"
+        allowedPlatform = "Android"
+    }}
+{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
     WSO2 EMM | Android Enrollment | Download and Install Agent
@@ -25,10 +32,10 @@ under the License. --}}
 {{/zone}}
 {{#zone "body"}}
     {{
-    unit "wizard-stepper"
-    steps = "Download and Install Agent"
-    currentStep = "Download and Install Agent"
-    currentStepIndex = 0
+        unit "wizard-stepper"
+        steps = "Download and Install Agent"
+        currentStep = "Download and Install Agent"
+        currentStepIndex = 0
     }}
     {{
         unit "asset-download-agent-android"
