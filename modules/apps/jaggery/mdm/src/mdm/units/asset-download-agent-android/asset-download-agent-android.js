@@ -16,21 +16,13 @@
  * under the License.
  */
 
-$(document).ready(function () {
-    var iOSCheckUrl = "/mdm/ios/controller/check";
-    setInterval(function () {
-        invokerUtil.get(
-            iOSCheckUrl,
-            function (data) {
-                var parsedData = JSON.parse(data);
-                var deviceID = parsedData["deviceID"];
-                if (deviceID != null) {
-                    window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + deviceID;
-                }
-            },
-            function () {
-                window.location = "/mdm/enrollments/ios/login-agent#error"
-            }
-        );
-    }, 1000);
-});
+function onRequest (context) {
+    var log = new Log("asset-download-agent-android-unit");
+    log.debug("calling asset-download-agent-android-unit backend js");
+
+    var mdmProps = require('/config/mdm-props.js').config();
+    // setting android agent download URL
+    context["agentDownloadURL"] = mdmProps["httpURL"] + mdmProps["appContext"] +
+        "public/asset-download-agent-android/asset/" + mdmProps["androidAgentApp"];
+    return context;
+}

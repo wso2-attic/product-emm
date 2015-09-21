@@ -20,31 +20,24 @@ under the License. --}}
 {{#zone "accessControl"}}
     {{
         unit "enrollment-access-control"
-        allowedPlatform = "iOS"
-        currentPage = "license-agent"
+        allowedPlatform = "Android"
     }}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | iOS Enrollment | Accept End User License Agreement
+    WSO2 EMM | Android Enrollment | Download and Install Agent
 {{/zone}}
 {{#zone "header"}}
-    iOS Enrollment
+    Android Enrollment
 {{/zone}}
 {{#zone "body"}}
     {{
         unit "wizard-stepper"
-        steps = "Download and Install Certificate and Agent,
-        Login to Enterprise Mobility Manager,
-        Accept End User License Agreement"
-        currentStep = "Accept End User License Agreement"
-        currentStepIndex = 2
+        steps = "Download and Install Agent"
+        currentStep = "Download and Install Agent"
+        currentStepIndex = 0
     }}
     {{
-        unit "license-box-agent"
-        licenseAcceptActionURL = "/mdm/ios/controller/enroll"
-    }}
-    {{
-        unit "enrollment-completion-checker-ios"
+        unit "asset-download-agent-android"
     }}
 {{/zone}}

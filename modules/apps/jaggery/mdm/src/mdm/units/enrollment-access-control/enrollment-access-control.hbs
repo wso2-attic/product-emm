@@ -14,25 +14,4 @@ either express or implied. See the License for the
 specific language governing permissions and limitations
 under the License. --}}
 
-{{!-- Using enrollment layout --}}
-{{layout "enrollment"}}
-{{!-- defining controlled access parameters --}}
-{{#zone "accessControl"}}
-    {{
-        unit "enrollment-access-control"
-        allowedPlatform = "iOS"
-        currentPage = "thank-you-agent"
-    }}
-{{/zone}}
-{{!-- Inputting content into defined zones in enrollment layout --}}
-{{#zone "title"}}
-    WSO2 EMM | iOS Enrollment | Success Note
-{{/zone}}
-{{#zone "header"}}
-    iOS Enrollment
-{{/zone}}
-{{#zone "body"}}
-    {{
-        unit "enrollment-success-note-ios"
-    }}
-{{/zone}}
+{{#zone "main"}}{{/zone}}

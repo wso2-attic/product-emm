@@ -16,15 +16,23 @@
  * under the License.
  */
 
-function onRequest (context) {
-    var log = new Log("asset-download-agent-ios-unit");
-    log.debug("calling asset-download-agent-ios-unit backend js");
+function onRequest(context) {
+    var log = new Log("enrollment-access-control-unit backend js");
+    log.debug("calling enrollment-access-control-unit");
 
     var mdmProps = require('/config/mdm-props.js').config();
-    // setting iOS certificate download URL
-    context["emmCertificateDownloadURL"] = mdmProps["appContext"] + "ios/enrollments/certificate-download";
-    // setting iOS agent download URL
-    context["agentDownloadURL"] = "itms-services://?action=download-manifest&url=" +
-        mdmProps["httpsURL"] + mdmProps["appContext"] + "ios/enrollments/agent-download";
+    var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+
+    var parser = new UAParser();
+    var userAgent = request.getHeader("User-Agent");
+    parser.setUA(userAgent);
+    parser.getResult();
+    var userAgentPlatform = parser.getOS()["name"];
+
+    if (userAgentPlatform != context["allowedPlatform"]) {
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    } else if (context["currentPage"]) {
+        session.put("lastAccessedPage", context["currentPage"]);
+    }
     return context;
 }
