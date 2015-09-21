@@ -35,10 +35,20 @@ function onRequest(context) {
     } else {
         // if userAgentPlatform is allowed,
         // restricting unordered intermediate page access
-        if (context["lastPage"]) {
+        if (context["lastPage"] && context["nextPage"]) {
             // this means it's not first page, but a middle page
             if (!session.get("lastAccessedPage")) {
                 // this means a middle page is accessed at first
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+            } else if (!(session.get("lastAccessedPage") == context["currentPage"]) &&
+                !(session.get("lastAccessedPage") == context["lastPage"]) &&
+                !(session.get("lastAccessedPage") == context["nextPage"])) {
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+            }
+        } else if (context["lastPage"] && !context["nextPage"]) {
+            // this means it's not first page, not a middle page, but the last page in wizard
+            if (!session.get("lastAccessedPage")) {
+                // this means the last page is accessed at first
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
             } else if (!(session.get("lastAccessedPage") == context["currentPage"]) &&
                 !(session.get("lastAccessedPage") == context["lastPage"])) {
