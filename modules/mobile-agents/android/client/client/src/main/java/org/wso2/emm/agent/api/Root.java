@@ -73,7 +73,7 @@ public class Root {
 	 */
 	public boolean checkRootBySuperUserApk() {
 		File suApk = new File(SU_APK);
-		if (suApk != null && suApk.exists()) {
+		if (suApk.exists()) {
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "Super apk is found in the device");
 			}
