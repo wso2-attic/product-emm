@@ -58,8 +58,8 @@ public class Atomic {
     }
 
     public void buildAtomicElement(Document doc, Element rootElement) {
+        Element atomic = doc.createElement(Constants.ATOMIC);
         if (getAdds() != null) {
-            Element atomic = doc.createElement(Constants.ATOMIC);
             rootElement.appendChild(atomic);
             if (getCommandId() != -1) {
                 Element commandId = doc.createElement(Constants.COMMAND_ID);
@@ -72,6 +72,8 @@ public class Atomic {
                     add.buildAddElement(doc, atomic);
                 }
             }
+        }
+        if (getReplaces() != null) {
             for (Iterator<Replace> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
                 Replace add = replaceIterator.next();
                 if (add != null) {

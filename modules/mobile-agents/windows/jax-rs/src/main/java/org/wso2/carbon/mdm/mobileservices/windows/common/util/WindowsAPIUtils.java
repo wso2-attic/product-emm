@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -28,7 +29,11 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.api.UserStoreManager;
+import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
@@ -57,6 +62,30 @@ public class WindowsAPIUtils {
                 (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
         return dmService;
+    }
+
+    public static UserStoreManager getUserStoreManager() throws MDMAPIException {
+        RealmService realmService;
+        UserStoreManager userStoreManager;
+        try {
+            PrivilegedCarbonContext.startTenantFlow();
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+            if (realmService == null) {
+                String msg = "Realm service not initialized";
+                throw new MDMAPIException(msg);
+            }
+            int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            userStoreManager = realmService.getTenantUserRealm(tenantId).getUserStoreManager();
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving current user store manager";
+            throw new MDMAPIException(msg, e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
+        }
+        return userStoreManager;
     }
 
     public static NotificationManagementService getNotificationManagementService() {

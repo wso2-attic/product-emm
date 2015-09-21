@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.PasscodePolicy;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
 
 import java.util.ArrayList;
@@ -198,7 +199,7 @@ public class OperationReply {
         List<Exec> execList = new ArrayList<>();
         Atomic atomicElement = new Atomic();
         List<Add> addsAtomic = new ArrayList<Add>();
-        Replace replaceElement = new Replace();
+
 
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
@@ -220,8 +221,33 @@ public class OperationReply {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+                                    Replace camReplaceElement = new Replace();
+                                    camReplaceElement.setCommandId(75);
                                     replaceItem.add(itemReplace);
-                                    replaceElement.setItems(replaceItem);
+                                    camReplaceElement.setItems(replaceItem);
+                                    syncmlBody.setReplace(camReplaceElement);
+                                }
+                                if (policy.getCode().equals("ENCRYPT_STORAGE")) {
+                                    List<Item> replaceItem = new ArrayList<>();
+                                    Item itemReplace = null;
+                                    try {
+                                        itemReplace = appendReplaceInfo(policy);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Replace encryptReplaceElement = new Replace();
+                                    encryptReplaceElement.setCommandId(300);
+                                    replaceItem.add(itemReplace);
+                                    encryptReplaceElement.setItems(replaceItem);
+                                    syncmlBody.setReplace(encryptReplaceElement);
+                                }
+                                if (policy.getCode().equals("PASSCODE_POLICY")) {
+                                    List<Add> addConfig = appendAddInfo(policy);
+                                    for (Add addConfiguration : addConfig) {
+                                        addsAtomic.add(addConfiguration);
+                                    }
+                                    atomicElement.setCommandId(76);
+
                                 }
                             }
                         }
@@ -266,20 +292,6 @@ public class OperationReply {
                             Sequence sequence = buildSequence(operation, sequenceElement);
                             syncmlBody.setSequence(sequence);
                         }
-                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
-                                .OperationCodes.ENCRYPT_STORAGE)) {
-
-                            replaceElement.setCommandId(operation.getId());
-                            List<Item> replaceItem = new ArrayList<>();
-                            Item itemReplace = null;
-                            try {
-                                itemReplace = appendReplaceInfo(operation);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            replaceItem.add(itemReplace);
-                            replaceElement.setItems(replaceItem);
-                        }
                         break;
                     default:
                         throw new WindowsOperationException("Operation with no type found");
@@ -292,12 +304,13 @@ public class OperationReply {
             getElement.setItems(itemsGet);
         }
         if (!addsAtomic.isEmpty()) {
-            atomicElement.setCommandId(300);
+            atomicElement.setCommandId(400);
             atomicElement.setAdds(addsAtomic);
         }
         syncmlBody.setGet(getElement);
         syncmlBody.setExec(execList);
-        syncmlBody.setReplace(replaceElement);
+        syncmlBody.setAtomic(atomicElement);
+
     }
 
     private Item appendExecInfo(Operation operation) {
@@ -345,36 +358,288 @@ public class OperationReply {
 
     private Item appendReplaceInfo(Operation operation) throws JSONException {
         Item item = new Item();
+        Target target = new Target();
         String operationCode = operation.getCode();
         for (Command command : Command.values()) {
             if (operationCode != null && operationCode.equals(command.name())) {
-                Target target = new Target();
                 target.setLocURI(command.getCode());
-                if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
-                        .OperationCodes.ENCRYPT_STORAGE)) {
-                    Meta meta = new Meta();
-                    meta.setFormat("chr");
-                    item.setMeta(meta);
-                    item.setData("1");
-                }
                 if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.CAMERA)) {
                     JSONObject payload = new JSONObject(operation.getPayLoad().toString());
                     if (payload.getBoolean("enabled")) {
                         Meta meta = new Meta();
                         meta.setFormat("int");
+                        item.setTarget(target);
                         item.setMeta(meta);
                         item.setData("1");
                     } else {
                         Meta meta = new Meta();
                         meta.setFormat("int");
+                        item.setTarget(target);
                         item.setMeta(meta);
                         item.setData("0");
                     }
                 }
+                if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.ENCRYPT_STORAGE)) {
+                    JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+                    if (payload.getBoolean("encrypted")) {
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("1");
+                    } else {
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("0");
+                    }
+
+                }
             }
         }
         return item;
+    }
+
+    private List<Add> appendAddInfo(Operation operation) throws WindowsOperationException {
+
+        List<Add> addList = new ArrayList<>();
+
+        Gson gson = new Gson();
+        String operationCode = operation.getCode();
+        if (operationCode.equals("PASSCODE_POLICY")) {
+            PasscodePolicy passcodeObject = gson.fromJson((String) operation.getPayLoad(), PasscodePolicy.class);
+            for (Configure configure : Configure.values()) {
+                String maxAttempt = "PASSWORD_MAX_FAIL_ATTEMPTS";
+                if (operationCode != null && maxAttempt.equals(configure.name())) {
+                    int maxFailedAttempts = passcodeObject.getMaxFailedAttempts();
+                    String attempt = String.valueOf(maxFailedAttempts);
+                    Add add = new Add();
+                    List<Item> itemList = new ArrayList<>();
+                    Item item = new Item();
+                    Target target = new Target();
+                    target.setLocURI(configure.getCode());
+                    Meta meta = new Meta();
+                    meta.setFormat("int");
+                    item.setTarget(target);
+                    item.setMeta(meta);
+                    item.setData(attempt);
+                    itemList.add(item);
+                    add.setCommandId(90);
+                    add.setItems(itemList);
+                    addList.add(add);
+                }
+                String allowPassword = "DEVICE_PASSWORD_ENABLE";
+                if (operationCode != null && allowPassword.equals(configure.name())) {
+                    List<Item> itemList = new ArrayList<>();
+                    if (passcodeObject.isEnablePassword()) {
+                        Add add = new Add();
+                        Item item = new Item();
+                        Target target = new Target();
+                        target.setLocURI(configure.getCode());
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("0");
+
+                        itemList.add(item);
+                        add.setCommandId(91);
+                        add.setItems(itemList);
+                        addList.add(add);
+                    } else {
+                        Add add = new Add();
+                        Item item = new Item();
+                        Target target = new Target();
+                        target.setLocURI(configure.getCode());
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("1");
+
+                        itemList.add(item);
+                        add.setCommandId(91);
+                        add.setItems(itemList);
+                        addList.add(add);
+                    }
+                }
+                String passwordLength = "MIN_PASSWORD_LENGTH";
+                if (operationCode != null && passwordLength.equals(configure.name())) {
+                    int minLength = passcodeObject.getMinLength();
+                    String attempt = String.valueOf(minLength);
+                    Add add = new Add();
+                    List<Item> itemList = new ArrayList<>();
+                    Item item = new Item();
+                    Target target = new Target();
+                    target.setLocURI(configure.getCode());
+                    Meta meta = new Meta();
+                    meta.setFormat("int");
+                    item.setTarget(target);
+                    item.setMeta(meta);
+                    item.setData(attempt);
+
+                    itemList.add(item);
+                    add.setCommandId(92);
+                    add.setItems(itemList);
+                    addList.add(add);
+                }
+                String allowSimplePassword = "SIMPLE_PASSWORD";
+                if (operationCode != null && allowSimplePassword.equals(configure.name())) {
+                    List<Item> itemList = new ArrayList<>();
+                    if (passcodeObject.isAllowSimple()) {
+                        Add add = new Add();
+                        Item item = new Item();
+                        Target target = new Target();
+                        target.setLocURI(configure.getCode());
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("1");
+
+                        itemList.add(item);
+                        add.setCommandId(93);
+                        add.setItems(itemList);
+                        addList.add(add);
+                    } else {
+                        Add add = new Add();
+                        Item item = new Item();
+                        Target target = new Target();
+                        target.setLocURI(configure.getCode());
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("0");
+
+                        itemList.add(item);
+                        add.setCommandId(93);
+                        add.setItems(itemList);
+                        addList.add(add);
+                    }
+                }
+                String allowAlfaNumeric = "Alphanumeric_PASSWORD";
+                if (operationCode != null && allowAlfaNumeric.equals(configure.name())) {
+                    Add add = new Add();
+                    List<Item> itemList = new ArrayList<>();
+                    if (passcodeObject.isRequireAlphanumeric()) {
+                        Item item = new Item();
+                        Target target = new Target();
+                        target.setLocURI(configure.getCode());
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("1");
+
+                        itemList.add(item);
+                        add.setCommandId(94);
+                        add.setItems(itemList);
+                        addList.add(add);
+                    } else {
+                        Item item = new Item();
+                        Target target = new Target();
+                        target.setLocURI(configure.getCode());
+                        Meta meta = new Meta();
+                        meta.setFormat("int");
+                        item.setTarget(target);
+                        item.setMeta(meta);
+                        item.setData("0");
+
+                        itemList.add(item);
+                        add.setCommandId(94);
+                        add.setItems(itemList);
+                        addList.add(add);
+                    }
+                }
+                String passwordExpiteTime = "PASSWORD_EXPIRE";
+                if (operationCode != null && passwordExpiteTime.equals(configure.name())) {
+                    int minAgeDays = passcodeObject.getMaxPINAgeInDays();
+                    String minAgeString = String.valueOf(minAgeDays);
+                    Add add = new Add();
+                    List<Item> itemList = new ArrayList<>();
+                    Item item = new Item();
+                    Target target = new Target();
+                    target.setLocURI(configure.getCode());
+                    Meta meta = new Meta();
+                    meta.setFormat("int");
+                    item.setTarget(target);
+                    item.setMeta(meta);
+                    item.setData(minAgeString);
+
+                    itemList.add(item);
+                    add.setCommandId(95);
+                    add.setItems(itemList);
+                    addList.add(add);
+                }
+                String devicePasswordHistory = "PASSWORD_HISTORY";
+                if (operationCode != null && devicePasswordHistory.equals(configure.name())) {
+                    int pinHistory = passcodeObject.getPinHistory();
+                    Add add = new Add();
+                    String pinHistoryString = String.valueOf(pinHistory);
+                    List<Item> itemList = new ArrayList<>();
+                    Item item = new Item();
+                    Target target = new Target();
+                    target.setLocURI(configure.getCode());
+                    Meta meta = new Meta();
+                    meta.setFormat("int");
+                    item.setTarget(target);
+                    item.setMeta(meta);
+                    item.setData(pinHistoryString);
+
+                    itemList.add(item);
+                    add.setCommandId(96);
+                    add.setItems(itemList);
+                    addList.add(add);
+                }
+                String pinInactiveTime = "MAX_PASSWORD_INACTIVE_TIME";
+                if (operationCode != null && pinInactiveTime.equals(configure.name())) {
+                    int pinInactive = passcodeObject.getMaxInactiveTime();
+                    String pinInactiveString = String.valueOf(pinInactive);
+                    Add add = new Add();
+                    List<Item> itemList = new ArrayList<>();
+                    Item item = new Item();
+                    Target target = new Target();
+                    target.setLocURI(configure.getCode());
+                    Meta meta = new Meta();
+                    meta.setFormat("int");
+                    item.setTarget(target);
+                    item.setMeta(meta);
+                    item.setData(pinInactiveString);
+
+                    itemList.add(item);
+                    add.setCommandId(97);
+                    add.setItems(itemList);
+                    addList.add(add);
+                }
+                String minpasswordComplexCharacters = "MIN_PASSWORD_COMPLEX_CHARACTERS";
+                if (operationCode != null && minpasswordComplexCharacters.equals(configure.name())) {
+                    int complexChars = passcodeObject.getMinComplexChars();
+                    String complexCharactersString = String.valueOf(complexChars);
+                    Add add = new Add();
+                    List<Item> itemList = new ArrayList<>();
+                    Item item = new Item();
+                    Target target = new Target();
+                    target.setLocURI(configure.getCode());
+                    Meta meta = new Meta();
+                    meta.setFormat("int");
+                    item.setTarget(target);
+                    item.setMeta(meta);
+                    item.setData(complexCharactersString);
+
+                    itemList.add(item);
+                    add.setCommandId(98);
+                    add.setItems(itemList);
+                    addList.add(add);
+                }
+
+            }
+
+        }
+        return addList;
     }
 
     private List<Add> appendAddConfiguration(Operation operation) throws WindowsOperationException {
@@ -383,13 +648,9 @@ public class OperationReply {
         Gson gson = new Gson();
 
         if (SyncmlCommandType.WIFI.getValue().equals(operation.getCode())) {
-
             Add add = new Add();
-
             String operationCode = operation.getCode();
-
             Wifi wifiObject = gson.fromJson((String) operation.getPayLoad(), Wifi.class);
-
             String data = "&lt;?xml version=&quot;1.0&quot;?&gt;&lt;WLANProfile" +
                     "xmlns=&quot;http://www.microsoft.com/networking/WLAN/profile/v1&quot;&gt;&lt;name&gt;" +
                     wifiObject.getNetworkName() + "&lt;/name&gt;&lt;SSIDConfig&gt;&lt;SSID&gt;&lt;name&gt;" +

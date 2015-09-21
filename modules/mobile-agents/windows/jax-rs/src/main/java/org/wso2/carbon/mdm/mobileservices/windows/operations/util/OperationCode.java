@@ -22,7 +22,6 @@ public class OperationCode {
         LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
         CAMERA("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera");
 
-
         private final String code;
 
         Info(String code) {
@@ -41,8 +40,10 @@ public class OperationCode {
         WIPE_DATA("./Vendor/MSFT/RemoteWipe/doWipe"),
         DISENROLL("./Vendor/MSFT/DMClient/Unenroll"),
         LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
-        CAMERA("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera");
-
+        CAMERA("./Vendor/MSFT/PolicyManager/My/Camera/AllowCamera"),
+        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
+        ENCRYPT_STORAGE("./Vendor/MSFT/PolicyManager/My/Security/RequireDeviceEncryption"),
+        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption");
 
         private final String code;
 
@@ -58,8 +59,19 @@ public class OperationCode {
 
     public static enum Configure {
         WIFI("./Vendor/MSFT/WiFi/Profile/MyNetwork/WlanXml"),
-        CAMERA("./Vendor/MSFT/PolicyManager/My/Camera/AllowCamera");
-
+        CAMERA("./Vendor/MSFT/PolicyManager/My/Camera/AllowCamera"),
+        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
+        ENCRYPT_STORAGE("./Vendor/MSFT/PolicyManager/My/Security/RequireDeviceEncryption"),
+        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption"),
+        PASSWORD_MAX_FAIL_ATTEMPTS("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MaxDevicePasswordFailedAttempts"),
+        DEVICE_PASSWORD_ENABLE("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordEnabled"),
+        SIMPLE_PASSWORD("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/AllowSimpleDevicePassword"),
+        MIN_PASSWORD_LENGTH("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MinDevicePasswordLength"),
+        Alphanumeric_PASSWORD("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/AlphanumericDevicePasswordRequired"),
+        PASSWORD_EXPIRE("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordExpiration"),
+        PASSWORD_HISTORY("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordHistory"),
+        MAX_PASSWORD_INACTIVE_TIME("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MaxInactivityTimeDeviceLock"),
+        MIN_PASSWORD_COMPLEX_CHARACTERS("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MinDevicePasswordComplexCharacters");
 
         private final String code;
 

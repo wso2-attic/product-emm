@@ -32,11 +32,30 @@ public class Credentials {
 
     @XmlElement(required = true, name = "username")
     private String username;
+    @XmlElement(required = true, name = "email")
+    private String email;
     @XmlElement(required = true, name = "password")
     private String password;
+    @XmlElement(required = true, name = "ownership")
+    private String ownership;
 
-    public Credentials(){
+    public Credentials() {
 
+    }
+    public String getOwnership() {
+        return ownership;
+    }
+
+    public void setOwnership(String ownership) {
+        this.ownership = ownership;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setUsername(String username) {
@@ -47,7 +66,9 @@ public class Credentials {
         this.password = password;
     }
 
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 
     public String getPassword() {
         return password;

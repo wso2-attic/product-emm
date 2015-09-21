@@ -87,7 +87,8 @@ public final class Constants {
                 "PolicyEnrollmentWebservice.svc";
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
-        public static final String WAB_URL = "/mdm/login-agent";
+        public static final String WAB_URL = "/mdm/enrollments/windows/login-agent";
+        //public static final String WAB_URL = "/mdm/enrollment
 
     }
 
@@ -192,6 +193,7 @@ public final class Constants {
         public static final String LOCK_RESET = "LOCKRESET";
         public static final String PIN_CODE = "LOCK_PIN";
         public static final String CAMERA = "CAMERA";
+        public static final String PASSCODE_POLICY = "";
 
     }
 

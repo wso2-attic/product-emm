@@ -24,12 +24,15 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.Token;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.MDMAPIException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.authbst.BSTProvider;
 import org.wso2.carbon.mdm.mobileservices.windows.services.authbst.beans.Credentials;
 import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -131,5 +134,18 @@ public class BSTProviderImpl implements BSTProvider {
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
+    }
+
+    /**
+     * Gets a claim-value from user-store.
+     *
+     * @param username Username of the user
+     * @param claimUri required ClaimUri
+     * @return A list of usernames
+     * @throws MDMAPIException, UserStoreException
+     */
+    private String getClaimValue(String username, String claimUri) throws MDMAPIException, UserStoreException {
+        UserStoreManager userStoreManager = WindowsAPIUtils.getUserStoreManager();
+        return userStoreManager.getUserClaimValue(username, claimUri, null);
     }
 }

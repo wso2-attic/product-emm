@@ -36,6 +36,15 @@ public class SyncmlBody {
 	Replace replace;
 	Results results;
 	Sequence sequence;
+	Atomic atomic;
+
+	public Atomic getAtomic() {
+		return atomic;
+	}
+
+	public void setAtomic(Atomic atomic) {
+		this.atomic = atomic;
+	}
 
 	public Sequence getSequence() { return sequence; }
 
@@ -122,6 +131,9 @@ public class SyncmlBody {
 		}
 		if (getSequence() != null) {
 			getSequence().buildSequenceElement(doc, syncBody);
+		}
+		if (getAtomic() != null) {
+			getAtomic().buildAtomicElement(doc, syncBody);
 		}
 		syncBody.appendChild(doc.createElement(Constants.FINAL));
 	}
