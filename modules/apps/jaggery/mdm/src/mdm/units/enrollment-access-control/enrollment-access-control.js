@@ -67,7 +67,7 @@ function onRequest(context) {
         }
     }
 
-    if (log.isDebugEnabeld()) {
+    if (log.isDebugEnabled()) {
         log.debug("last-accessed-page = " + session.get("lastAccessedPage") +
             " : " + "session-id = " + session.getId());
     }
