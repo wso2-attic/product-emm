@@ -17,7 +17,7 @@
  */
 
 $(document).ready(function () {
-    var iOSCheckUrl = "/mdm/ios/controller/check";
+    var iOSCheckUrl = "/mdm/enrollment/ios/check";
     setInterval(function () {
         invokerUtil.get(
             iOSCheckUrl,

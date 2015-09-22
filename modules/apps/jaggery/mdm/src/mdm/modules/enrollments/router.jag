@@ -34,7 +34,7 @@ if (platform == "Android") {
 } else if (platform == "iOS") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/download-agent");
 } else if (platform == "Windows Phone") {
-    response.sendRedirect(mdmProps["appContext"] + "windows/controller/agent");
+    response.sendRedirect(mdmProps["appContext"] + "enrollment/windows/invoke-agent");
 } else {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 }
