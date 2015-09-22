@@ -20,8 +20,6 @@ function onRequest(context) {
     var log = new Log("enrollment-access-control-unit backend js");
     log.debug("calling enrollment-access-control-unit");
 
-    log.info(session.get("lastAccessedPage"));
-
     var mdmProps = require('/config/mdm-props.js').config();
     var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
 
@@ -38,9 +36,9 @@ function onRequest(context) {
         // if userAgentPlatform is allowed,
         // restricting unordered intermediate page access
         if (context["lastPage"] && context["currentPage"] && context["nextPage"]) {
-            // this means it's not first page, but a middle page
+            // meaning it's not first page, but a middle page
             if (!session.get("lastAccessedPage")) {
-                // this means a middle page is accessed at first
+                // meaning a middle page is accessed at first
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
             } else if (!(session.get("lastAccessedPage") == context["currentPage"]) &&
                 !(session.get("lastAccessedPage") == context["lastPage"]) &&
@@ -51,7 +49,7 @@ function onRequest(context) {
                 session.put("lastAccessedPage", context["currentPage"]);
             }
         } else if (context["lastPage"] && context["currentPage"] && !context["nextPage"]) {
-            // this means it's not first page, not a middle page, but the last page in wizard
+            // meaning it's not first page, not a middle page, but the last page in wizard
             if (!session.get("lastAccessedPage")) {
                 // this means the last page is accessed at first
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
@@ -63,11 +61,15 @@ function onRequest(context) {
                 session.put("lastAccessedPage", context["currentPage"]);
             }
         } else if (context["currentPage"]) {
-            // this means it's the first page
+            // meaning it's the first page
             // if currentPage is set, update lastAccessedPage as currentPage
             session.put("lastAccessedPage", context["currentPage"]);
         }
     }
 
+    if (log.isDebugEnabeld()) {
+        log.debug("last-accessed-page = " + session.get("lastAccessedPage") +
+            " : " + "session-id = " + session.getId());
+    }
     return context;
 }
