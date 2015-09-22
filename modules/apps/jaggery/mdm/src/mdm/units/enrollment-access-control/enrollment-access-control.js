@@ -37,7 +37,7 @@ function onRequest(context) {
     } else {
         // if userAgentPlatform is allowed,
         // restricting unordered intermediate page access
-        if (context["lastPage"] && context["nextPage"]) {
+        if (context["lastPage"] && context["currentPage"] && context["nextPage"]) {
             // this means it's not first page, but a middle page
             if (!session.get("lastAccessedPage")) {
                 // this means a middle page is accessed at first
@@ -50,7 +50,7 @@ function onRequest(context) {
                 // if currentPage is set, update lastAccessedPage as currentPage
                 session.put("lastAccessedPage", context["currentPage"]);
             }
-        } else if (context["lastPage"] && !context["nextPage"]) {
+        } else if (context["lastPage"] && context["currentPage"] && !context["nextPage"]) {
             // this means it's not first page, not a middle page, but the last page in wizard
             if (!session.get("lastAccessedPage")) {
                 // this means the last page is accessed at first
