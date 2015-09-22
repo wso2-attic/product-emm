@@ -18,9 +18,7 @@
 package org.wso2.emm.agent.api;
 
 import android.util.Log;
-
 import org.wso2.emm.agent.utils.Constants;
-
 import java.io.File;
 
 /**
@@ -38,16 +36,7 @@ public class Root {
 	 * @return - Device rooted status.
 	 */
 	public boolean isDeviceRooted() {
-		if (checkRootBySuAccess()) {
-			return true;
-		}
-		if (checkRootBySuperUserApk()) {
-			return true;
-		}
-		if (checkRootByBuildTags()) {
-			return true;
-		}
-		return false;
+		return checkRootBySuAccess() || checkRootBySuperUserApk() || checkRootByBuildTags();
 	}
 
 	/**
