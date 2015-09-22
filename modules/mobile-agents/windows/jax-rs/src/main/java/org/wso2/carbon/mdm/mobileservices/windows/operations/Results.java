@@ -23,6 +23,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Results sent for the requests made to the device.
  */
@@ -30,15 +33,11 @@ public class Results {
 	int commandId = -1;
 	int messageReference = -1;
 	int commandReference = -1;
-	Item item;
+	List<Item> item;
 
-	public int getCommandId() {
-		return commandId;
-	}
+	public int getCommandId() { return commandId; }
 
-	public void setCommandId(int commandId) {
-		this.commandId = commandId;
-	}
+	public void setCommandId(int commandId) { this.commandId = commandId; }
 
 	public int getMessageReference() {
 		return messageReference;
@@ -56,34 +55,41 @@ public class Results {
 		this.commandReference = commandReference;
 	}
 
-	public Item getItem() {
+	public List<Item> getItem() {
 		return item;
 	}
 
-	public void setItem(Item item) {
+	public void setItem(List<Item> item) {
 		this.item = item;
 	}
 
 	public void buildResultElement(Document doc, Element rootElement) {
-		Element get = doc.createElement(Constants.RESULTS);
-		rootElement.appendChild(get);
+		Element results = doc.createElement(Constants.RESULTS);
+		rootElement.appendChild(results);
 		if (getCommandId() != -1) {
 			Element commandId = doc.createElement(Constants.COMMAND_ID);
 			commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
-			get.appendChild(commandId);
+			results.appendChild(commandId);
 		}
 		if (getMessageReference() != -1) {
 			Element messageReference = doc.createElement(Constants.MESSAGE_REFERENCE);
 			messageReference.appendChild(doc.createTextNode(String.valueOf(getMessageReference())));
-			get.appendChild(messageReference);
+			results.appendChild(messageReference);
 		}
 		if (getCommandReference() != -1) {
 			Element messageReference = doc.createElement(Constants.COMMAND_REFERENCE);
 			messageReference.appendChild(doc.createTextNode(String.valueOf(getCommandReference())));
-			get.appendChild(messageReference);
+			results.appendChild(messageReference);
 		}
 		if (getItem() != null) {
-			getItem().buildItemElement(doc, get);
+			for (int x = 0; x < getItem().size(); x++) {
+				for (Iterator<Item> itemIterator = getItem().iterator(); itemIterator.hasNext(); ) {
+					Item item = itemIterator.next();
+					if (item != null) {
+						item.buildItemElement(doc, results);
+					}
+				}
+			}
 		}
 	}
 }
