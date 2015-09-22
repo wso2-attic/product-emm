@@ -20,6 +20,8 @@ function onRequest(context) {
     var log = new Log("enrollment-access-control-unit backend js");
     log.debug("calling enrollment-access-control-unit");
 
+    log.info(session.get("lastAccessedPage"));
+
     var mdmProps = require('/config/mdm-props.js').config();
     var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
 
@@ -44,6 +46,9 @@ function onRequest(context) {
                 !(session.get("lastAccessedPage") == context["lastPage"]) &&
                 !(session.get("lastAccessedPage") == context["nextPage"])) {
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+            } else if (context["currentPage"]) {
+                // if currentPage is set, update lastAccessedPage as currentPage
+                session.put("lastAccessedPage", context["currentPage"]);
             }
         } else if (context["lastPage"] && !context["nextPage"]) {
             // this means it's not first page, not a middle page, but the last page in wizard
@@ -53,11 +58,13 @@ function onRequest(context) {
             } else if (!(session.get("lastAccessedPage") == context["currentPage"]) &&
                 !(session.get("lastAccessedPage") == context["lastPage"])) {
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+            } else if (context["currentPage"]) {
+                // if currentPage is set, update lastAccessedPage as currentPage
+                session.put("lastAccessedPage", context["currentPage"]);
             }
-        }
-
-        // if page access is in order, updating currentPage as lastAccessedPage
-        if (context["currentPage"]) {
+        } else if (context["currentPage"]) {
+            // this means it's the first page
+            // if currentPage is set, update lastAccessedPage as currentPage
             session.put("lastAccessedPage", context["currentPage"]);
         }
     }
