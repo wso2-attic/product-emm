@@ -35,6 +35,25 @@
         <session-timeout>60</session-timeout>
     </session-config>
 
+    <!-- Dynamic client registration configuration -->
+    <context-param>
+        <param-name>requireDynamicClientRegistration</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>tokenScope</param-name>
+        <param-value>admin</param-value>
+    </context-param>
+    <context-param>
+        <param-name>grantType</param-name>
+        <param-value>password</param-value>
+    </context-param>
+    <context-param>
+        <param-name>saasApp</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- End of Dynamic client registration configuration -->
+
     <context-param>
         <param-name>isAdminService</param-name>
         <param-value>false</param-value>
@@ -47,26 +66,26 @@
         <param-name>managed-api-owner</param-name>
         <param-value>admin</param-value>
     </context-param>
-    <!--<context-param>-->
-        <!--<param-name>managed-api-name</param-name>-->
-        <!--<param-value>MDMAdmin</param-value>-->
-    <!--</context-param>-->
-    <!--<context-param>-->
-        <!--<param-name>managed-api-endpoint</param-name>-->
-        <!--<param-value>http://localhost:9763/mdm-admin</param-value>-->
-    <!--</context-param>-->
-    <!--<context-param>-->
-        <!--<param-name>managed-api-version</param-name>-->
-        <!--<param-value>1.0.0</param-value>-->
-    <!--</context-param>-->
-    <!--<context-param>-->
-        <!--<param-name>managed-api-context</param-name>-->
-        <!--<param-value>mdm-admin</param-value>-->
-    <!--</context-param>-->
-    <!--<context-param>-->
-        <!--<param-name>managed-api-isSecured</param-name>-->
-        <!--<param-value>true</param-value>-->
-    <!--</context-param>-->
+    <context-param>
+        <param-name>managed-api-name</param-name>
+        <param-value>MDMAdmin</param-value>
+    </context-param>
+    <context-param>
+        <param-name>managed-api-endpoint</param-name>
+        <param-value>http://localhost:9763/mdm-admin</param-value>
+    </context-param>
+    <context-param>
+        <param-name>managed-api-version</param-name>
+        <param-value>1.0.0</param-value>
+    </context-param>
+    <context-param>
+        <param-name>managed-api-context</param-name>
+        <param-value>mdm-admin</param-value>
+    </context-param>
+    <context-param>
+        <param-name>managed-api-isSecured</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
     <!-- Below configuration is used to redirect http requests to https -->
     <security-constraint>
