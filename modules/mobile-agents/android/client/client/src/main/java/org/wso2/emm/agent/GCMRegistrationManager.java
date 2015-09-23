@@ -134,9 +134,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
-
-		String ipSaved = Preference.getString(getContext(),
-		                                      getContext().getResources().getString(R.string.shared_pref_ip));
+		String ipSaved = Preference.getString(getContext(), Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
@@ -175,7 +173,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
 			String status = result.get(Constants.STATUS_KEY);
-			if (status != null && !Constants.Status.SUCCESSFUL.equals(status)) {
+			if (!Constants.Status.SUCCESSFUL.equals(status)) {
 				clearData(getContext());
 				displayConnectionError();
 			}
