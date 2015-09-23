@@ -361,18 +361,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <!--<version>2.5.2</version>-->
                 <executions>
                     <execution>
                         <id>1-pre-dist</id>
                         <phase>test</phase>
                         <!--we are creating a temporary carbon distribution for document extracting purposes during the test phase-->
                         <goals>
-                            <goal>attached</goal>
+                            <goal>single</goal>
                         </goals>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
-                            <filters>
+                            <encoding>UTF-8</encoding>
+			    <filters>
                                 <filter>${basedir}/src/assembly/filter.properties</filter>
                             </filters>
                             <descriptors>
@@ -380,16 +380,16 @@
                             </descriptors>
                         </configuration>
                     </execution>
-
                     <execution>
                         <id>2-dist</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>attached</goal>
+                            <goal>single</goal>
                         </goals>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
-                            <filters>
+			    <encoding>UTF-8</encoding>
+			    <filters>
                                 <filter>${basedir}/src/assembly/filter.properties</filter>
                             </filters>
                             <descriptors>
