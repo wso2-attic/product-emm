@@ -371,7 +371,8 @@
                         </goals>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
-                            <filters>
+                            <encoding>UTF-8</encoding>
+			    <filters>
                                 <filter>${basedir}/src/assembly/filter.properties</filter>
                             </filters>
                             <descriptors>
@@ -387,6 +388,7 @@
                         </goals>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
+			    <encoding>UTF-8</encoding>
 			    <filters>
                                 <filter>${basedir}/src/assembly/filter.properties</filter>
                             </filters>
