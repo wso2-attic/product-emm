@@ -53,8 +53,10 @@ if (platform != "iOS") {
             response.sendRedirect("/error-page");
         }
     } catch (e) {
-        log.error("Error occurred when downloading CA: " + e);
+        log.error("Error occurred when downloading emm certificate", e);
         response.sendRedirect("/error-page");
+    } finally {
+        method.releaseConnection();
     }
 }
 %>
