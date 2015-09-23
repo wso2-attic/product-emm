@@ -15,14 +15,20 @@ specific language governing permissions and limitations
 under the License. --}}
 
 {{#zone "main"}}
-    <div class="container c-both">
-        <div class="clearfix"></div>
-        <div class="row">
-            <div class="container col-md-12 wr-text">
-                <h1 class="text-center">You have successfully registered to EMM</h1>
-            </div>
-        </div>
+    <div class="wr-head">
+        <h3>DEVICE ADDED</h3>
     </div>
+    You have successfully enrolled your iOS device with WSO2 Enterprise Mobility Manager.
+    <br class="c-both" />
+    <br class="c-both" />
+    Device Owner : {{deviceOwner}}
+    <br class="c-both" />
+    <br class="c-both" />
+    Changes related to your company device policy will usually be applied
+    on your phone with in the next couple of minutes.
+    <br class="c-both" />
+    <br class="c-both" />
+    Thank You.
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/enrollment-success-note-ios.js"></script>
