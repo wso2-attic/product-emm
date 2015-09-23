@@ -69,7 +69,7 @@ var configParams = {
     "APNS_CERT_PASSWORD": "APNSCertPassword",
     "MDM_CERT": "MDMCert",
     "APNS_CERT": "APNSCert",
-    "ORG_DISPLAY_NAME": "OrganizationDisplayName",
+    "ORG_DISPLAY_NAME": "organizationDisplayName",
     "GENERAL_EMAIL_HOST": "emailHost",
     "GENERAL_EMAIL_PORT": "emailPort",
     "GENERAL_EMAIL_USERNAME": "emailUsername",
