@@ -82,6 +82,7 @@ public class Constants {
 	public static final String IP = "ip";
 	public static final String GRANT_TYPE = "password";
 	public static final String TOKEN_SCOPE = "production";
+	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
 
 	/**
 	 * Request codes.
