@@ -16,7 +16,7 @@
  ~ under the License.
  -->
 <assembly>
-    <id>wso2-cdm-dist</id>
+    <id>wso2-mdm-dist</id>
     <formats>
         <format>zip</format>
     </formats>
