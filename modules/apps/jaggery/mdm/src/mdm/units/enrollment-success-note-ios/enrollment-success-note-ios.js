@@ -20,7 +20,9 @@ function onRequest (context) {
     var log = new Log("enrollment-success-note-ios-unit");
     log.debug("calling enrollment-success-note-ios-unit backend js");
 
+    var mdmProps = require('/config/mdm-props.js').config();
     context["deviceOwner"] = session.get("enrolledUser");
+    context["serverURL"] = mdmProps["httpsURL"] + mdmProps["appContext"];
 
     return context;
 }
