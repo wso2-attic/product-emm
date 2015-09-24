@@ -29,6 +29,8 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
+log.info("agent-controller");
+
 if (platform != "Windows Phone") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else if (session.get("lastAccessedPage") != "login-agent") {
@@ -58,6 +60,7 @@ if (platform != "Windows Phone") {
         } else if (xhr.status == 403) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent#auth-failed");
         } else {
+            // only possibility would be server sending 500
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent#error");
         }
     }

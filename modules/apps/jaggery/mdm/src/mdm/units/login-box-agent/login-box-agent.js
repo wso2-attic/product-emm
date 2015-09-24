@@ -17,5 +17,8 @@
  */
 
 function onRequest(context) {
+
+    log.info("calling login-box-agent-unit");
+
     return context;
 }

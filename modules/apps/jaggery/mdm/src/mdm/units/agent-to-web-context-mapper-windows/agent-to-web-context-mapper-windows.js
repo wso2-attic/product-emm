@@ -20,6 +20,8 @@ function onRequest(context) {
     var log = new Log("agent-to-web-context-mapper-windows-unit backend js");
     log.debug("calling agent-to-web-context-mapper-windows-unit");
 
+    log.info("calling agent-to-web-context-mapper-windows-unit");
+
     // login_hint passes the user email value entered in Windows workplace app
     var userEmail = request.getParameter("login_hint");
     // appru passes app ID of the Windows workplace app
