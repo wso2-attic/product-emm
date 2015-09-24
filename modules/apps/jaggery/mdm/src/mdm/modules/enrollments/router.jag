@@ -29,15 +29,13 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-log.info("router.jag");
-
 if (platform == "Android") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/android/download-agent");
 } else if (platform == "iOS") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/download-agent");
 } else if (platform == "Windows Phone") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollment/windows/invoke-agent");
-} else {
     response.sendRedirect("ms-settings-workplace://");
+} else {
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 }
 %>
