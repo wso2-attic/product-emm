@@ -16,6 +16,15 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
+{{!-- defining controlled access parameters --}}
+{{#zone "accessControl"}}
+    {{
+        unit "enrollment-access-control"
+        allowedPlatform = "Windows Phone"
+        currentPage = "license-agent"
+        lastPage = "login-agent"
+    }}
+{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
     WSO2 EMM | Windows Phone Enrollment | Accept End User License Agreement
@@ -33,6 +42,6 @@ under the License. --}}
     }}
     {{
         unit "license-box-agent"
-        licenseAcceptActionURL = "/mdm/windows/controller/enroll"
+        licenseAcceptActionURL = "/mdm/enrollment/windows/enroll"
     }}
 {{/zone}}

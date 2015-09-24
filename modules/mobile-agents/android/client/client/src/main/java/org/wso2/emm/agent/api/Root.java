@@ -18,9 +18,7 @@
 package org.wso2.emm.agent.api;
 
 import android.util.Log;
-
 import org.wso2.emm.agent.utils.Constants;
-
 import java.io.File;
 
 /**
@@ -30,7 +28,7 @@ public class Root {
 	private static final String[] SU_CHECK_COMMAND = new String[] { "/system/xbin/which", "su" };
 	private static final String SU_TAG = "test-keys";
 	private static final String SU_APK = "/system/app/Superuser.apk";
-	private String TAG = Root.class.getSimpleName();
+	private static final String TAG = Root.class.getSimpleName();
 
 	/**
 	 * Returns true if the device is rooted (if any of the root methods returns
@@ -38,16 +36,7 @@ public class Root {
 	 * @return - Device rooted status.
 	 */
 	public boolean isDeviceRooted() {
-		if (checkRootBySuAccess()) {
-			return true;
-		}
-		if (checkRootBySuperUserApk()) {
-			return true;
-		}
-		if (checkRootByBuildTags()) {
-			return true;
-		}
-		return false;
+		return checkRootBySuAccess() || checkRootBySuperUserApk() || checkRootByBuildTags();
 	}
 
 	/**
@@ -58,8 +47,8 @@ public class Root {
 
 		String buildTags = android.os.Build.TAGS;
 		if (buildTags != null && buildTags.contains(SU_TAG)) {
-			if (Constants.DEBUG_MODE_ENABLED){
-				Log.d(TAG, "Build tags found");
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "Build tags are found in the device");
 			}
 			return true;
 		}
@@ -73,9 +62,9 @@ public class Root {
 	 */
 	public boolean checkRootBySuperUserApk() {
 		File suApk = new File(SU_APK);
-		if (suApk != null && suApk.exists()) {
-			if (Constants.DEBUG_MODE_ENABLED){
-				Log.d(TAG, "Super apk found");
+		if (suApk.exists()) {
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "Super apk is found in the device");
 			}
 			return true;
 		}
@@ -89,8 +78,8 @@ public class Root {
 	 */
 	public boolean checkRootBySuAccess() {
 		if (new ShellExecutor().executeCommand(SU_CHECK_COMMAND) != null) {
-			if (Constants.DEBUG_MODE_ENABLED){
-				Log.d(TAG, "su command enabled");
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "su command is enabled");
 			}
 			return true;
 		} else {

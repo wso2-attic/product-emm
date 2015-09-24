@@ -61,8 +61,8 @@ public class MDMIOSOperationUtil {
 			case PUBLIC:
 				org.wso2.carbon.mdm.beans.ios.AppStoreApplication appStoreApplication =
 						new org.wso2.carbon.mdm.beans.ios.AppStoreApplication();
-				appStoreApplication.setRemoveAppUponMDMProfileRemoval((Boolean) application.getProperties()
-						.get(MDMAppConstants.IOSConstants.IS_REMOVE_APP));
+				appStoreApplication.setRemoveAppUponMDMProfileRemoval((Boolean) application.getProperties().
+						get(MDMAppConstants.IOSConstants.IS_REMOVE_APP));
 				appStoreApplication.setIdentifier(application.getIdentifier());
 				appStoreApplication.setPreventBackupOfAppData((Boolean) application.getProperties().
 						get(MDMAppConstants.IOSConstants.IS_PREVENT_BACKUP));

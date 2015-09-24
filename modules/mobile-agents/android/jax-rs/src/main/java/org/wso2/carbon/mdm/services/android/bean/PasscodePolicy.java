@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * This class represents the information of setting up password policy.
  */
-public class PasswordPolicy extends AndroidOperation implements Serializable {
+public class PasscodePolicy extends AndroidOperation implements Serializable {
 
 	private int maxFailedAttempts;
 	private int minLength;

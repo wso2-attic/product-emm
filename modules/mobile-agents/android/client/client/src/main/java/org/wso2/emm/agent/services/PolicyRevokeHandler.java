@@ -81,9 +81,7 @@ public class PolicyRevokeHandler {
                 revokeWifiPolicy(operation);
                 break;
             default:
-                String msg = "Invalid operation code received";
-                Log.e(TAG, msg);
-                throw new AndroidAgentException(msg);
+                throw new AndroidAgentException("Invalid operation code received");
         }
     }
 

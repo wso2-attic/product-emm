@@ -170,16 +170,14 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		final Context context = AlreadyRegisteredActivity.this;
 		isUnregisterBtnClicked = true;
 
-		progressDialog =
-				ProgressDialog.show(AlreadyRegisteredActivity.this,
+		progressDialog = ProgressDialog.show(AlreadyRegisteredActivity.this,
 						getResources().getString(R.string.dialog_message_unregistering),
 						getResources().getString(R.string.dialog_message_please_wait),
 						true);
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-				String serverIP =
-						Preference.getString(AlreadyRegisteredActivity.this, Constants.IP);
+				String serverIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.IP);
 				ServerConfig utils = new ServerConfig();
 				utils.setServerIP(serverIP);
 
@@ -254,7 +252,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
 
-		if(getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
+		if (getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
 
 			if (CommonUtils.isNetworkAvailable(context)) {
 

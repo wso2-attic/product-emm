@@ -65,8 +65,8 @@ public class EnrollmentService {
 	}
 
 	@GET
-	@Path("{id}")
-	public Message isEnrolled(@PathParam("id") String id) throws AndroidAgentException {
+	@Path("{deviceId}")
+	public Message isEnrolled(@PathParam("deviceId") String id) throws AndroidAgentException {
 		String msg;
 		boolean result;
 		Message responseMsg = new Message();
@@ -94,8 +94,8 @@ public class EnrollmentService {
 	}
 
 	@PUT
-	@Path("{id}")
-	public Message modifyEnrollment(@PathParam("id") String id,
+	@Path("{deviceId}")
+	public Message modifyEnrollment(@PathParam("deviceId") String id,
 									org.wso2.carbon.device.mgt.common.Device device)
 			throws AndroidAgentException {
 		String msg;
@@ -124,8 +124,8 @@ public class EnrollmentService {
 	}
 
 	@DELETE
-	@Path("{id}")
-	public Message disEnrollDevice(@PathParam("id") String id) throws AndroidAgentException {
+	@Path("{deviceId}")
+	public Message disEnrollDevice(@PathParam("deviceId") String id) throws AndroidAgentException {
 		Message responseMsg = new Message();
 		boolean result;
 		String msg;

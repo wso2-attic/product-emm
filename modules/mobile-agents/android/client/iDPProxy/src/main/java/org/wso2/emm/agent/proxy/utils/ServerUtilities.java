@@ -113,16 +113,14 @@ public class ServerUtilities {
 		return bodyBuilder.toString();
 	}
 
-	public static HttpRequestBase buildHeaders(HttpRequestBase httpRequestBase,
-	                                           Map<String, String> headers) {
+	public static HttpRequestBase buildHeaders(HttpRequestBase httpRequestBase, Map<String, String> headers) {
 		for (Entry<String, String> header : headers.entrySet()) {
 			httpRequestBase.setHeader(header.getKey(), header.getValue());
 		}
 		return httpRequestBase;
 	}
 
-	public static Map<String, String> postData(EndPointInfo endPointInfo,
-	                                           Map<String, String> headers)
+	public static Map<String, String> postData(EndPointInfo endPointInfo, Map<String, String> headers)
 			throws IDPTokenManagerException {
 
 		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
@@ -155,8 +153,8 @@ public class ServerUtilities {
 
 	}
 
-	public static Map<String, String> sendGetRequest(String url, Map<String,
-			String> headers) throws IDPTokenManagerException {
+	public static Map<String, String> sendGetRequest(String url, Map<String, String> headers)
+			throws IDPTokenManagerException {
 		HttpGet httpGet = new HttpGet(url);
 		HttpGet httpGetWithHeaders = (HttpGet) buildHeaders(httpGet, headers);
 		HttpClient httpClient = getCertifiedHttpClient();
@@ -168,19 +166,15 @@ public class ServerUtilities {
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
 					String.valueOf(response.getStatusLine().getStatusCode()));
 		} catch (ClientProtocolException e) {
-			String errorMsg =
-					"Error occurred while sending 'Get' request due to an invalid client protocol being used";
+			String errorMsg = "Error occurred while sending 'Get' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (IOException e) {
-			String errorMsg =
-					"Error occurred while sending 'Get' request due to failure of server connection";
+			String errorMsg = "Error occurred while sending 'Get' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
 		}
@@ -205,19 +199,16 @@ public class ServerUtilities {
                     String.valueOf(response.getStatusLine().getStatusCode()));
 
         } catch (ClientProtocolException e) {
-			String errorMsg =
-					"Error occurred while sending 'Delete' request due to an invalid client protocol being used";
+			String errorMsg = "Error occurred while sending 'Delete' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IOException e) {
 			String errorMsg =
 					"Error occurred while sending 'Delete' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
         }
@@ -248,19 +239,15 @@ public class ServerUtilities {
             responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
 
         } catch (ClientProtocolException e) {
-			String errorMsg =
-					"Error occurred while sending 'Post' request due to an invalid client protocol being used";
+			String errorMsg = "Error occurred while sending 'Post' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IOException e) {
-			String errorMsg =
-					"Error occurred while sending 'Post' request due to failure of server connection";
+			String errorMsg = "Error occurred while sending 'Post' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
         }
@@ -268,8 +255,8 @@ public class ServerUtilities {
         return responseParams;
     }
 
-    public static Map<String, String> sendPutRequest(String url, String params, Map<String,
-            String> headers) throws IDPTokenManagerException {
+    public static Map<String, String> sendPutRequest(String url, String params, Map<String, String> headers)
+		    throws IDPTokenManagerException {
 
         HttpPut httpPut = new HttpPut(url);
         HttpClient httpClient = getCertifiedHttpClient();
@@ -290,27 +277,22 @@ public class ServerUtilities {
             responseParams.put(Constants.SERVER_RESPONSE_BODY, getResponseBody(response));
 
         } catch (ClientProtocolException e) {
-			String errorMsg =
-					"Error occurred while sending 'Put' request due to an invalid client protocol being used";
+			String errorMsg = "Error occurred while sending 'Put' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IOException e) {
-			String errorMsg =
-					"Error occurred while sending 'Put' request due to failure of server connection";
+			String errorMsg = "Error occurred while sending 'Put' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-			responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-					Constants.INTERNAL_SERVER_ERROR);
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
         }
         return responseParams;
     }
 
-	public static Map<String, String> postDataAPI(EndPointInfo endPointInfo,
-	                                              Map<String, String> headers)
+	public static Map<String, String> postDataAPI(EndPointInfo endPointInfo, Map<String, String> headers)
 			throws IDPTokenManagerException {
 		HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
 		String url = endPointInfo.getEndPoint();
@@ -334,19 +316,15 @@ public class ServerUtilities {
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, status);
 				return responseParams;
 			} catch (ClientProtocolException e) {
-				String errorMsg =
-						"Error occurred while sending 'Post' request due to an invalid client protocol being used";
+				String errorMsg = "Error occurred while sending 'Post' request due to an invalid client protocol being used";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-						Constants.INTERNAL_SERVER_ERROR);
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 				Log.e(TAG, errorMsg);
 				throw new IDPTokenManagerException(errorMsg, e);
 			} catch (IOException e) {
-				String errorMsg =
-						"Error occurred while sending 'Post' request due to failure of server connection";
+				String errorMsg = "Error occurred while sending 'Post' request due to failure of server connection";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
-				responseParams.put(Constants.SERVER_RESPONSE_STATUS,
-						Constants.INTERNAL_SERVER_ERROR);
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 				Log.e(TAG, errorMsg);
 				throw new IDPTokenManagerException(errorMsg, e);
 			}
@@ -360,21 +338,17 @@ public class ServerUtilities {
 		try {
 			if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
 				KeyStore localTrustStore = KeyStore.getInstance("BKS");
-				inStream =
-						IdentityProxy.getInstance().getContext().getResources()
-						             .openRawResource(R.raw.emm_truststore);
+				inStream = IdentityProxy.getInstance().getContext().getResources().
+						openRawResource(R.raw.emm_truststore);
 				localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
 
 				SchemeRegistry schemeRegistry = new SchemeRegistry();
-				schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(),
-				                                   Constants.HTTP));
+				schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), Constants.HTTP));
 				SSLSocketFactory sslSocketFactory = new SSLSocketFactory(localTrustStore);
 				sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 				schemeRegistry.register(new Scheme("https", sslSocketFactory, Constants.HTTPS));
 				HttpParams params = new BasicHttpParams();
-				ClientConnectionManager connectionManager =
-						new ThreadSafeClientConnManager(params,
-						                                schemeRegistry);
+				ClientConnectionManager connectionManager = new ThreadSafeClientConnManager(params, schemeRegistry);
 
 				client = new DefaultHttpClient(connectionManager, params);
 
@@ -438,8 +412,7 @@ public class ServerUtilities {
 		return responseBody;
 	}
 
-	public static String getResponseBodyContent(final HttpEntity entity) throws IOException,
-	                                                                            ParseException {
+	public static String getResponseBodyContent(final HttpEntity entity) throws IOException, ParseException {
 
 		InputStream instream = entity.getContent();
 

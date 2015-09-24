@@ -49,7 +49,6 @@ public class OperationMgtService {
     private static final String ACCEPT = "Accept";
 
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public List<? extends Operation> getPendingOperations
             (@HeaderParam(ACCEPT) String acceptHeader, @PathParam("id") String id,
@@ -104,7 +103,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("lock")
     public Response configureDeviceLock(@HeaderParam(ACCEPT) String acceptHeader, List<String> deviceIDs) {
 
@@ -141,7 +139,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("location")
     public Response getDeviceLocation(@HeaderParam(ACCEPT) String acceptHeader,
                                       List<String> deviceIDs) {
@@ -173,7 +170,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("clear-password")
     public Response removePassword(@HeaderParam(ACCEPT) String acceptHeader,
                                    List<String> deviceIDs) {
@@ -207,7 +203,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("camera")
     public Response configureCamera(@HeaderParam(ACCEPT) String acceptHeader,
                                     CameraBeanWrapper cameraBeanWrapper) {
@@ -223,7 +218,10 @@ public class OperationMgtService {
             Camera camera = cameraBeanWrapper.getOperation();
 
             if (camera == null) {
-                throw new OperationManagementException("Camera bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the configure camera operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new camera instance");
             }
 
             CommandOperation operation = new CommandOperation();
@@ -250,7 +248,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("device-info")
     public Response getDeviceInformation(@HeaderParam(ACCEPT) String acceptHeader,
                                          List<String> deviceIDs) {
@@ -286,7 +283,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("enterprise-wipe")
     public Response wipeDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {
@@ -321,7 +317,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("wipe-data")
     public Response wipeData(@HeaderParam(ACCEPT) String acceptHeader,
                              WipeDataBeanWrapper wipeDataBeanWrapper) {
@@ -364,7 +359,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("get-application-list")
     public Response getApplications(@HeaderParam(ACCEPT) String acceptHeader,
                                     List<String> deviceIDs) {
@@ -399,7 +393,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("ring-device")
     public Response ringDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {
@@ -433,7 +426,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("mute")
     public Response muteDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {
@@ -468,7 +460,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("install-application")
     public Response installApplication(@HeaderParam(ACCEPT) String acceptHeader,
                                        ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
@@ -484,7 +475,10 @@ public class OperationMgtService {
             ApplicationInstallation applicationInstallation = applicationInstallationBeanWrapper.getOperation();
 
             if (applicationInstallation == null) {
-                throw new OperationManagementException("Install application bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the application installing operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new application installation instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -510,7 +504,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("uninstall-application")
     public Response uninstallApplication(@HeaderParam(ACCEPT) String acceptHeader,
                                          ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
@@ -525,7 +518,10 @@ public class OperationMgtService {
             ApplicationUninstallation applicationUninstallation = applicationUninstallationBeanWrapper.getOperation();
 
             if (applicationUninstallation == null) {
-                throw new OperationManagementException("Uninstall application bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the application uninstalling operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new application uninstallation instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -551,7 +547,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("blacklist-applications")
     public Response blacklistApplications(@HeaderParam(ACCEPT) String acceptHeader,
                                           BlacklistApplicationsBeanWrapper blacklistApplicationsBeanWrapper) {
@@ -566,7 +561,10 @@ public class OperationMgtService {
             BlacklistApplications blacklistApplications = blacklistApplicationsBeanWrapper.getOperation();
 
             if (blacklistApplications == null) {
-                throw new OperationManagementException("Blacklist applications bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the blacklisting apps operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new blacklist applications instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -593,7 +591,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("notification")
     public Response sendNotification(@HeaderParam(ACCEPT) String acceptHeader,
                                      NotificationBeanWrapper notificationBeanWrapper) {
@@ -608,7 +605,10 @@ public class OperationMgtService {
             Notification notification = notificationBeanWrapper.getOperation();
 
             if (notification == null) {
-                throw new OperationManagementException("Notification bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the notification operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new notification instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -635,7 +635,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("wifi")
     public Response configureWifi(@HeaderParam(ACCEPT) String acceptHeader,
                                   WifiBeanWrapper wifiBeanWrapper) {
@@ -650,7 +649,10 @@ public class OperationMgtService {
             Wifi wifi = wifiBeanWrapper.getOperation();
 
             if (wifi == null) {
-                throw new OperationManagementException("Wifi bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the wifi operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new Wifi instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -677,7 +679,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("encrypt")
     public Response encryptStorage(@HeaderParam(ACCEPT) String acceptHeader,
                                    EncryptionBeanWrapper encryptionBeanWrapper) {
@@ -692,7 +693,10 @@ public class OperationMgtService {
             DeviceEncryption deviceEncryption = encryptionBeanWrapper.getOperation();
 
             if (deviceEncryption == null) {
-                throw new OperationManagementException("Encrypt bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the device encryption operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new encryption instance");
             }
 
             CommandOperation operation = new CommandOperation();
@@ -719,7 +723,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("change-lock-code")
     public Response changeLockCode(@HeaderParam(ACCEPT) String acceptHeader,
                                    LockCodeBeanWrapper lockCodeBeanWrapper) {
@@ -734,7 +737,10 @@ public class OperationMgtService {
             LockCode lockCode = lockCodeBeanWrapper.getOperation();
 
             if (lockCode == null) {
-                throw new OperationManagementException("Encrypt bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the change lock code operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in retrieving a new lock-code instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -761,7 +767,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("password-policy")
     public Response setPasswordPolicy(@HeaderParam(ACCEPT) String acceptHeader,
                                       PasswordPolicyBeanWrapper passwordPolicyBeanWrapper) {
@@ -773,16 +778,19 @@ public class OperationMgtService {
         Message message = new Message();
 
         try {
-            PasswordPolicy passwordPolicy = passwordPolicyBeanWrapper.getOperation();
+            PasscodePolicy passcodePolicy = passwordPolicyBeanWrapper.getOperation();
 
-            if (passwordPolicy == null) {
-                throw new OperationManagementException("Password policy bean is empty");
+            if (passcodePolicy == null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the change password policy operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new Password policy instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
             operation.setCode(AndroidConstants.OperationCodes.PASSCODE_POLICY);
             operation.setType(Operation.Type.PROFILE);
-            operation.setPayLoad(passwordPolicy.toJSON());
+            operation.setPayLoad(passcodePolicy.toJSON());
 
             return AndroidAPIUtils.getOperationResponse(passwordPolicyBeanWrapper.getDeviceIDs(),
                     operation, message, responseMediaType);
@@ -803,7 +811,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("webclip")
     public Response setWebClip(@HeaderParam(ACCEPT) String acceptHeader,
                                WebClipBeanWrapper webClipBeanWrapper) {
@@ -818,7 +825,10 @@ public class OperationMgtService {
             WebClip webClip = webClipBeanWrapper.getOperation();
 
             if (webClip == null) {
-                throw new OperationManagementException("Web Clip bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the add webclip operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new web clip instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -845,7 +855,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("disenroll")
     public Response setDisenrollment(@HeaderParam(ACCEPT) String acceptHeader,
                                      DisenrollmentBeanWrapper disenrollmentBeanWrapper) {
@@ -861,7 +870,10 @@ public class OperationMgtService {
             Disenrollment disenrollment = disenrollmentBeanWrapper.getOperation();
 
             if (disenrollment == null) {
-                throw new OperationManagementException("Disenrollment bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the device disenrollment operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new disenrollment instance");
             }
 
             CommandOperation operation = new CommandOperation();
@@ -887,7 +899,7 @@ public class OperationMgtService {
         }
     }
 
-    public void updateOperations(String deviceId, List<? extends Operation> operations)
+    private void updateOperations(String deviceId, List<? extends Operation> operations)
             throws OperationManagementException, PolicyComplianceException {
 
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {

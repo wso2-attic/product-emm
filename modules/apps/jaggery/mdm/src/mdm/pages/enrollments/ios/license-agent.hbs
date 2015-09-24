@@ -16,6 +16,16 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
+{{!-- defining controlled access parameters --}}
+{{#zone "accessControl"}}
+    {{
+        unit "enrollment-access-control"
+        allowedPlatform = "iOS"
+        currentPage = "license-agent"
+        lastPage = "login-agent"
+        nextPage = "thank-you-agent"
+    }}
+{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
     WSO2 EMM | iOS Enrollment | Accept End User License Agreement
@@ -34,7 +44,7 @@ under the License. --}}
     }}
     {{
         unit "license-box-agent"
-        licenseAcceptActionURL = "/mdm/ios/controller/enroll"
+        licenseAcceptActionURL = "/mdm/enrollment/ios/enroll"
     }}
     {{
         unit "enrollment-completion-checker-ios"

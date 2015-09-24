@@ -31,10 +31,10 @@ import org.wso2.emm.agent.utils.Preference;
  */
 public class LocalNotification {
 	public static boolean localNoticicationInvoked = false;
-	public static int DEFAULT_INTERVAL = 30000;
-	public static int DEFAULT_INDEX = 0;
-	public static int DEFAULT_BUFFER = 1000;
-	public static int REQUEST_CODE = 0;
+	public static final int DEFAULT_INTERVAL = 30000;
+	public static final int DEFAULT_INDEX = 0;
+	public static final int DEFAULT_BUFFER = 1000;
+	public static final int REQUEST_CODE = 0;
 
 	public static void startPolling(Context context) {
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
@@ -43,7 +43,7 @@ public class LocalNotification {
 		}
 		long currentTime = SystemClock.elapsedRealtime();
 		currentTime += DEFAULT_BUFFER;
-		if (localNoticicationInvoked == false) {
+		if (!localNoticicationInvoked) {
 			localNoticicationInvoked = true;
 			Intent alarm = new Intent(context, AlarmReceiver.class);
 			PendingIntent recurringAlarm =
@@ -58,10 +58,10 @@ public class LocalNotification {
 	}
 
 	public static void stopPolling(Context context) {
-		if (localNoticicationInvoked == true) {
+		if (localNoticicationInvoked) {
 			localNoticicationInvoked = false;
 			Intent alarm = new Intent(context, AlarmReceiver.class);
-			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, 0);
+			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, DEFAULT_INDEX);
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.cancel(sender);
 		}

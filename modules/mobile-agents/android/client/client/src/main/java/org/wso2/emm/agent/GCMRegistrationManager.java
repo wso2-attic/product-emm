@@ -32,7 +32,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.services.BuildDeviceInfoPayload;
+import org.wso2.emm.agent.services.DeviceInfoPayload;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
@@ -95,7 +95,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 					registrationId = cloudMessaging.register(getGoogleProjectNumber());
 
 				} catch (IOException ex) {
-					Log.e(TAG, "Error while registering with GCM. " + ex);
+					Log.e(TAG, "Error while registering with GCM ", ex);
 					clearData(getContext());
 					displayConnectionError();
 				}
@@ -116,7 +116,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		try {
 			CommonUtils.clearAppData(context);
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to clear app data." + e);
+			Log.e(TAG, "Failed to clear app data.", e);
 		}
 	}
 
@@ -130,13 +130,11 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	 */
 	public void sendRegistrationId() throws AndroidAgentException {
 		DeviceInfo deviceInfo = new DeviceInfo(getContext());
-		BuildDeviceInfoPayload deviceInfoPayload = new BuildDeviceInfoPayload(getContext());
+		DeviceInfoPayload deviceInfoPayload = new DeviceInfoPayload(getContext());
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
-
-		String ipSaved = Preference.getString(getContext(),
-		                                      getContext().getResources().getString(R.string.shared_pref_ip));
+		String ipSaved = Preference.getString(getContext(), Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
@@ -175,7 +173,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
 			String status = result.get(Constants.STATUS_KEY);
-			if (status != null && !Constants.Status.SUCCESSFUL.equals(status)) {
+			if (!Constants.Status.SUCCESSFUL.equals(status)) {
 				clearData(getContext());
 				displayConnectionError();
 			}

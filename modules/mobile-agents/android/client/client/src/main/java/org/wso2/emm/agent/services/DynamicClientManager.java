@@ -40,9 +40,9 @@ import java.util.concurrent.ExecutionException;
 public class DynamicClientManager {
 
     private static final String TAG = DynamicClientManager.class.getSimpleName();
-    private final String USER_ID = "userId";
-    private final String CONSUMER_KEY = "consumerKey";
-    private final String APPLICATION_NAME = "applicationName";
+    private static final String USER_ID = "userId";
+    private static final String CONSUMER_KEY = "consumerKey";
+    private static final String APPLICATION_NAME = "applicationName";
 
     /**
      * This method is used to register an oauth application in the backend.
@@ -50,19 +50,19 @@ public class DynamicClientManager {
      * @param profile Payload of the register request.
      * @param utils Server configurations.
      *
-     * @return consumer key and consumer secret.
+     * @return returns consumer key and consumer secret if success. Else returns null
+     *         if it fails to register.
      * @throws AndroidAgentException
      */
-    public String registerClient(RegistrationProfile profile, ServerConfig utils)
+    public String getClientCredentials(RegistrationProfile profile, ServerConfig utils)
             throws AndroidAgentException {
-
         EndPointInfo endPointInfo = new EndPointInfo();
         String endPoint = utils.getAPIServerURL() +
                 org.wso2.emm.agent.utils.Constants.DYNAMIC_CLIENT_REGISTER_ENDPOINT;
         endPointInfo.setHttpMethod(org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.POST);
         endPointInfo.setEndPoint(endPoint);
         endPointInfo.setRequestParams(profile.toJSON());
-
+        String response = null;
         try {
             SendRequest sendRequestTask = new SendRequest();
             Map<String, String> responseParams = sendRequestTask.execute(endPointInfo).get();
@@ -70,22 +70,14 @@ public class DynamicClientManager {
             if (responseParams != null) {
                 String statusCode = responseParams.get(Constants.STATUS);
                 if (Constants.Status.ACCEPT.equalsIgnoreCase(statusCode)) {
-                    return responseParams.get(Constants.RESPONSE);
-                } else {
-                    return null;
+                    response = responseParams.get(Constants.RESPONSE);
                 }
-            } else {
-                return null;
             }
-
+            return response;
         } catch (InterruptedException e) {
-            String msg = "error occurred due to thread interruption";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred due to thread interruption", e);
         } catch (ExecutionException e) {
-            String msg = "error occurred while fetching credentials";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred while fetching credentials", e);
         }
     }
 
@@ -101,7 +93,6 @@ public class DynamicClientManager {
      */
     public boolean unregisterClient(UnregisterProfile profile, ServerConfig utils)
             throws AndroidAgentException {
-
         StringBuilder endPoint = new StringBuilder();
         endPoint.append(utils.getAPIServerURL());
         endPoint.append(Constants.DYNAMIC_CLIENT_REGISTER_ENDPOINT);
@@ -116,24 +107,13 @@ public class DynamicClientManager {
         try {
             SendRequest sendRequestTask = new SendRequest();
             Map<String, String> responseParams = sendRequestTask.execute(endPointInfo).get();
-
             String statusCode = responseParams.get(Constants.STATUS);
-
-            if (Constants.Status.ACCEPT.equalsIgnoreCase(statusCode)) {
-                return true;
-            } else {
-                return false;
-            }
+            return Constants.Status.ACCEPT.equalsIgnoreCase(statusCode);
         } catch (InterruptedException e) {
-            String msg = "error occurred due to thread interruption";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred due to thread interruption", e);
         } catch (ExecutionException e) {
-            String msg = "error occurred while fetching credentials";
-            Log.e(TAG, msg);
-            throw new AndroidAgentException(msg, e);
+            throw new AndroidAgentException("Error occurred while fetching credentials", e);
         }
-
     }
 
     /**
@@ -151,7 +131,7 @@ public class DynamicClientManager {
             Map<String, String> headers = new HashMap<String, String>();
             headers.put("Content-Type", "application/json");
             headers.put("Accept", "application/json");
-            headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
+            headers.put("User-Agent", Constants.USER_AGENT);
 
             try {
                 responseParams = ServerUtilities.postData(endPointInfo, headers);
@@ -169,10 +149,9 @@ public class DynamicClientManager {
                 }
 
             } catch (IDPTokenManagerException e) {
-                Log.e(TAG, "Failed to contact server." + e);
+                Log.e(TAG, "Failed to contact server", e);
             }
             return responseParams;
         }
     }
-
 }
