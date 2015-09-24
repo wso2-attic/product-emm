@@ -20,6 +20,8 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
@@ -38,7 +40,9 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Profile;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
-import org.wso2.carbon.policy.mgt.common.*;
+import org.wso2.carbon.policy.mgt.common.ProfileFeature;
+import org.wso2.carbon.policy.mgt.common.monitor.ComplianceFeature;
+import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -477,14 +481,41 @@ public class SyncmlServiceImpl implements SyncmlService {
                     profiles.add(encryptStorage);
                 }
             }
+            boolean isCompliance = false;
             if (! profiles.equals(null)) {
                 try {
-                    List<ProfileFeature> profileFeatues = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
+                    List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
                     deviceIdentifier);
-                    for (int x =0 ; x < profileFeatues.size(); x++ ) {
-                        ProfileFeature pf = profileFeatues.get(x);
+                    for (int x =0 ; x < profileFeatures.size(); x++ ) {
+                        ProfileFeature pf = profileFeatures.get(x);
+                        pf.getFeatureCode();
+                        JSONObject policyContent = new JSONObject(pf.getContent().toString());
+                        for (int y =0; y < profiles.size(); y++) {
+                           if (profiles.get(y).equals(pf.getFeatureCode()) && pf.getFeatureCode().equals("CAMERA")) {
+                              if (policyContent.getBoolean("enabled") == (profiles.get(y).isEnable()))
+                              {
+                                  isCompliance = true;
+                                  profiles.get(x).setCompliance(isCompliance);
+                              }
+                               else
+                              {
+                                  profiles.get(x).setCompliance(isCompliance);
+                              }
+                            }
+                            List<ComplianceFeature> complianceFeatures = new ArrayList<ComplianceFeature>();
+                                ComplianceFeature complianceFeature = new ComplianceFeature();
+                                complianceFeature.setFeature(profileFeatures.get(x));
+                                complianceFeature.setFeatureCode(profileFeatures.get(x).getFeatureCode());
+                                complianceFeature.setCompliance(isCompliance);
+                                complianceFeatures.add(complianceFeature);
+                            WindowsAPIUtils.getPolicyManagerService().CheckPolicyCompliance(deviceIdentifier, complianceFeatures);
+                        }
                     }
                 } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (PolicyComplianceException e) {
                     e.printStackTrace();
                 }
 

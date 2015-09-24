@@ -210,7 +210,8 @@ public class OperationReply {
         List<Exec> execList = new ArrayList<>();
         Atomic atomicElement = new Atomic();
         List<Add> addsAtomic = new ArrayList<Add>();
-
+        Replace replaceElement = new Replace();
+        List<Item> replaceItem = new ArrayList<>();
 
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
@@ -225,32 +226,23 @@ public class OperationReply {
                             for (int y = 0; y < operationList.size(); y++) {
                                 Operation policy = operationList.get(y);
                                 if (policy.getCode().equals("CAMERA")) {
-                                    List<Item> replaceItem = new ArrayList<>();
                                     Item itemReplace = null;
                                     try {
                                         itemReplace = appendReplaceInfo(policy);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    Replace camReplaceElement = new Replace();
-                                    camReplaceElement.setCommandId(75);
                                     replaceItem.add(itemReplace);
-                                    camReplaceElement.setItems(replaceItem);
-                                    syncmlBody.setReplace(camReplaceElement);
                                 }
                                 if (policy.getCode().equals("ENCRYPT_STORAGE")) {
-                                    List<Item> replaceItem = new ArrayList<>();
+
                                     Item itemReplace = null;
                                     try {
                                         itemReplace = appendReplaceInfo(policy);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    Replace encryptReplaceElement = new Replace();
-                                    encryptReplaceElement.setCommandId(300);
                                     replaceItem.add(itemReplace);
-                                    encryptReplaceElement.setItems(replaceItem);
-                                    syncmlBody.setReplace(encryptReplaceElement);
                                 }
                                 if (policy.getCode().equals("PASSCODE_POLICY")) {
                                     List<Add> addConfig = appendAddInfo(policy);
@@ -305,7 +297,6 @@ public class OperationReply {
                         }
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                                 .OperationCodes.MONITOR)) {
-
                             PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
                             DeviceIdentifier deviceIdentifier =
                                     convertToDeviceIdentifierObject(syncmlDocument.getHeader().getSource().getLocURI());
@@ -323,14 +314,14 @@ public class OperationReply {
                                     Item item = appendGetInfo(operationcode);
                                     itemsGet.add(item);
                                 }
-//                                if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
-//                                    String encryptCode = "ENCRYPT_STORAGE_STATUS";
-//                                    Operation storageOperatonCode = new Operation();
-//                                    storageOperatonCode.setCode(encryptCode);
-//
-//                                    Item storageStatusItem = appendGetInfo(storageOperatonCode);
-//                                    itemsGet.add(storageStatusItem);
-//                                }
+                                if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
+                                    String encryptCode = "ENCRYPT_STORAGE_STATUS";
+                                    Operation storageOperatonCode = new Operation();
+                                    storageOperatonCode.setCode(encryptCode);
+
+                                    Item storageStatusItem = appendGetInfo(storageOperatonCode);
+                                    itemsGet.add(storageStatusItem);
+                                }
                             }
 //                            Item itemMonitorGet = appendGetInfo(operation);
 //                            itemsGet.add(itemMonitorGet);
@@ -341,7 +332,10 @@ public class OperationReply {
                 }
             }
         }
-
+        if (!replaceItem.isEmpty()) {
+            replaceElement.setCommandId(300);
+            replaceElement.setItems(replaceItem);
+        }
         if (!itemsGet.isEmpty()) {
             getElement.setCommandId(75);
             getElement.setItems(itemsGet);
@@ -353,6 +347,7 @@ public class OperationReply {
         syncmlBody.setGet(getElement);
         syncmlBody.setExec(execList);
         syncmlBody.setAtomic(atomicElement);
+        syncmlBody.setReplace(replaceElement);
 
     }
 

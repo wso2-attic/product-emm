@@ -26,6 +26,15 @@ public class Profile {
     String featureCode;
     String data;
     boolean enable;
+    boolean compliance;
+
+    public boolean isCompliance() {
+        return compliance;
+    }
+
+    public void setCompliance(boolean compliance) {
+        this.compliance = compliance;
+    }
 
     public boolean isEnable() {
         return enable;
