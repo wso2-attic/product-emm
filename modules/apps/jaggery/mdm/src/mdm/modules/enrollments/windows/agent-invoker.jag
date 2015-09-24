@@ -38,7 +38,7 @@ if (platform != "Windows Phone") {
         <meta charset="UTF-8">
         <meta http-equiv="refresh" content="0;url=ms-settings-workplace://">
         <script type="text/javascript">
-            window.location.href = "ms-settings-workplace://"
+            //window.location.href = "ms-settings-workplace://"
         </script>
         <title>Page Redirection</title>
     </head>
