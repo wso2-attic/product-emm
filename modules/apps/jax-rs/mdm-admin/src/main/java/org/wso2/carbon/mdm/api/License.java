@@ -43,16 +43,16 @@ public class License {
     /**
      * This method returns the license text related to a given device type and language code.
      *
-     * @param deviceType Device type, ex: android, ios
+     * @param deviceType   Device type, ex: android, ios
      * @param languageCode Language code, ex: en_US
      * @return Returns the license text
      * @throws MDMAPIException If the device type or language code arguments are not available or invalid.
      */
     @GET
     @Path ("{deviceType}/{languageCode}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces ({MediaType.APPLICATION_JSON})
     public Response getLicense(@PathParam ("deviceType") String deviceType,
-                             @PathParam ("languageCode") String languageCode) throws MDMAPIException {
+                               @PathParam ("languageCode") String languageCode) throws MDMAPIException {
 
         org.wso2.carbon.device.mgt.common.license.mgt.License license;
         ResponsePayload responsePayload = new ResponsePayload();
