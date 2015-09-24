@@ -218,7 +218,10 @@ public class OperationMgtService {
             Camera camera = cameraBeanWrapper.getOperation();
 
             if (camera == null) {
-                throw new OperationManagementException("Camera bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the configure camera operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new camera instance");
             }
 
             CommandOperation operation = new CommandOperation();
@@ -472,7 +475,10 @@ public class OperationMgtService {
             ApplicationInstallation applicationInstallation = applicationInstallationBeanWrapper.getOperation();
 
             if (applicationInstallation == null) {
-                throw new OperationManagementException("Install application bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the application installing operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new application installation instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -512,7 +518,10 @@ public class OperationMgtService {
             ApplicationUninstallation applicationUninstallation = applicationUninstallationBeanWrapper.getOperation();
 
             if (applicationUninstallation == null) {
-                throw new OperationManagementException("Uninstall application bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the application uninstalling operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new application uninstallation instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -552,7 +561,10 @@ public class OperationMgtService {
             BlacklistApplications blacklistApplications = blacklistApplicationsBeanWrapper.getOperation();
 
             if (blacklistApplications == null) {
-                throw new OperationManagementException("Blacklist applications bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the blacklisting apps operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new blacklist applications instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -593,7 +605,10 @@ public class OperationMgtService {
             Notification notification = notificationBeanWrapper.getOperation();
 
             if (notification == null) {
-                throw new OperationManagementException("Notification bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the notification operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new notification instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -634,7 +649,10 @@ public class OperationMgtService {
             Wifi wifi = wifiBeanWrapper.getOperation();
 
             if (wifi == null) {
-                throw new OperationManagementException("Wifi bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the wifi operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new Wifi instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -675,7 +693,10 @@ public class OperationMgtService {
             DeviceEncryption deviceEncryption = encryptionBeanWrapper.getOperation();
 
             if (deviceEncryption == null) {
-                throw new OperationManagementException("Encrypt bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the device encryption operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new encryption instance");
             }
 
             CommandOperation operation = new CommandOperation();
@@ -716,7 +737,10 @@ public class OperationMgtService {
             LockCode lockCode = lockCodeBeanWrapper.getOperation();
 
             if (lockCode == null) {
-                throw new OperationManagementException("Encrypt bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the change lock code operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in retrieving a new lock-code instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -757,7 +781,10 @@ public class OperationMgtService {
             PasscodePolicy passcodePolicy = passwordPolicyBeanWrapper.getOperation();
 
             if (passcodePolicy == null) {
-                throw new OperationManagementException("Password policy bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the change password policy operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new Password policy instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -798,7 +825,10 @@ public class OperationMgtService {
             WebClip webClip = webClipBeanWrapper.getOperation();
 
             if (webClip == null) {
-                throw new OperationManagementException("Web Clip bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the add webclip operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new web clip instance");
             }
 
             ProfileOperation operation = new ProfileOperation();
@@ -840,7 +870,10 @@ public class OperationMgtService {
             Disenrollment disenrollment = disenrollmentBeanWrapper.getOperation();
 
             if (disenrollment == null) {
-                throw new OperationManagementException("Disenrollment bean is empty");
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the device disenrollment operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new disenrollment instance");
             }
 
             CommandOperation operation = new CommandOperation();
