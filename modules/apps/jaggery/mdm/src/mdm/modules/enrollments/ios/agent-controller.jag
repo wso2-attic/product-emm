@@ -55,9 +55,9 @@ if (platform != "iOS") {
             session.put("iOSChallengeToken", responseContent["challengeToken"]);
 
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/license-agent");
-        } else if (xhr.status == 403 || xhr.status == 404) {
+        } else if (xhr.status == 401) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#auth-failed");
-        } else {
+        } else if (xhr.status == 500) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#error");
         }
     }

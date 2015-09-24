@@ -36,6 +36,7 @@ if (platform != "iOS") {
 } else {
     var enrolledUser = session.get("enrolledUser");
     if (!enrolledUser) {
+        response["status"] = 200;
         response["content"] = {"deviceID" : null};
     } else {
         var deviceCheckURL = mdmProps["iOSAPIRoot"] + "device/deviceid";
@@ -53,6 +54,10 @@ if (platform != "iOS") {
             var deviceID = responseObject["deviceID"];
             response["status"] = 200;
             response["content"] = {"deviceID" : deviceID};
+        } else {
+            // server only returns 400 in case of bad request
+            response["status"] = 200;
+            response["content"] = {"deviceID" : null};
         }
     }
 }

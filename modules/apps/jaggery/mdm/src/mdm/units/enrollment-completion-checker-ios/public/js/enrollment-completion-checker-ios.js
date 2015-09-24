@@ -22,6 +22,7 @@ $(document).ready(function () {
         invokerUtil.get(
             iOSCheckUrl,
             function (data) {
+                // executions on success
                 var parsedData = JSON.parse(data);
                 var deviceID = parsedData["deviceID"];
                 if (deviceID != null) {
@@ -29,7 +30,8 @@ $(document).ready(function () {
                 }
             },
             function () {
-                window.location = "/mdm/enrollments/ios/login-agent#error"
+                // executions on error
+                // doing nothing
             }
         );
     }, 1000);
