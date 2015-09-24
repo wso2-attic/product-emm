@@ -36,7 +36,9 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Profile;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
+import org.wso2.carbon.policy.mgt.common.*;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -224,7 +226,7 @@ public class SyncmlServiceImpl implements SyncmlService {
             } else {
                 try {
                     pendingOperations = getPendingOperations(syncmlDocument);
-                    String replygen = generateReply(syncmlDocument, (List<Operation>) pendingOperations);
+                    String replygen = generateReply(syncmlDocument, pendingOperations);
                     //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations))
                     //.build();
                     return Response.ok().entity(replygen).build();
@@ -390,7 +392,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                 syncmlDocument.getHeader().getSource().getLocURI());
         List<Status> lsStatus = syncmlDocument.getBody().getStatus();
         String lockUri = null;
-
+        int policyCount =0;
+        boolean policyErrorFlag = false;
         for (int x = 0; x < lsStatus.size(); x++) {
             Status status = lsStatus.get(x);
             if (status.getCommand().equals(Constants.EXECUTE)) {
@@ -408,14 +411,90 @@ public class SyncmlServiceImpl implements SyncmlService {
                     }
                 }
             }
+            if (status.getCommandReference() == 300 || status.getCommandReference() == 400 ||
+                    status.getCommandReference() == 75) {
+                if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+                    policyCount++;
+                } else {
+                    policyErrorFlag = true;
+                }
+            }
+        }
+        if (policyCount >= 2) {
+            inProgressOperations = SyncmlUtils.getDeviceManagementService()
+                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+            for (int x = 0; x < inProgressOperations.size(); x++) {
+                Operation operation = inProgressOperations.get(x);
+                if (operation.getCode().equals("POLICY_BUNDLE")) {
+                    operation.setStatus(Operation.Status.COMPLETED);
+                    operation.setOperationResponse("true");
+                }
+            }
+            updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+        } else if (policyErrorFlag) {
+            inProgressOperations = SyncmlUtils.getDeviceManagementService()
+                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+            for (int x = 0; x < inProgressOperations.size(); x++) {
+                Operation operation = inProgressOperations.get(x);
+                if (operation.getCode().equals("POLICY_BUNDLE")) {
+                    operation.setStatus(Operation.Status.ERROR);
+                    operation.setOperationResponse("true");
+                }
+            }
+            updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
         }
         Results result = syncmlDocument.getBody().getResults();
+        List<Profile> profiles = new ArrayList<>();
         if (result != null) {
+            List<Item> results = result.getItem();
+
+            for (int x =0; x < results.size(); x++) {
+               Item item = results.get(x);
+                if (item.getSource().getLocURI().equals("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera")) {
+                    Profile cameraProfile = new Profile();
+                    cameraProfile.setFeatureCode("CAMERA_STATUS");
+                    cameraProfile.setData(item.getData());
+                    if (item.getData().equals("0")) {
+                        cameraProfile.setEnable(true);
+                    }
+                    else
+                    {
+                        cameraProfile.setEnable(false);
+                    }
+                    profiles.add(cameraProfile);
+                }
+                if (item.getSource().getLocURI().equals
+                        ("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption")) {
+                    Profile encryptStorage = new Profile();
+                    encryptStorage.setFeatureCode("ENCRYPT_STORAGE_STATUS");
+                    encryptStorage.setData(item.getData());
+                    if (item.getData().equals("1")) {
+                        encryptStorage.setEnable(true);
+                    }
+                    else {
+                        encryptStorage.setEnable(false);
+                    }
+                    profiles.add(encryptStorage);
+                }
+            }
+            if (! profiles.equals(null)) {
+                try {
+                    List<ProfileFeature> profileFeatues = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
+                    deviceIdentifier);
+                    for (int x =0 ; x < profileFeatues.size(); x++ ) {
+                        ProfileFeature pf = profileFeatues.get(x);
+                    }
+                } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
+                    e.printStackTrace();
+                }
+
+            }
             for (OperationCode.Info info : OperationCode.Info.values()) {
                 if (org.wso2.carbon.mdm.mobileservices.windows.common.Constants.OperationCodes.PIN_CODE.equals(info
                         .name())) {
                     lockUri = info.getCode();
                 }
+
             }
             List<Item> itemList = result.getItem();
             for (int i = 0; i < itemList.size(); i++) {
@@ -442,8 +521,10 @@ public class SyncmlServiceImpl implements SyncmlService {
         }
         pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
         for (int z = 0; z < pendingOperations.size(); z++) {
-            pendingOperations.get(z).setStatus(Operation.Status.IN_PROGRESS);
-            SyncmlUtils.getDeviceManagementService().updateOperation(deviceIdentifier, pendingOperations.get(z));
+            if (!pendingOperations.get(z).getCode().equals("MONITOR")) {
+                pendingOperations.get(z).setStatus(Operation.Status.IN_PROGRESS);
+                SyncmlUtils.getDeviceManagementService().updateOperation(deviceIdentifier, pendingOperations.get(z));
+            }
         }
         return pendingOperations;
     }

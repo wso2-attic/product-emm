@@ -194,6 +194,8 @@ public final class Constants {
         public static final String PIN_CODE = "LOCK_PIN";
         public static final String CAMERA = "CAMERA";
         public static final String PASSCODE_POLICY = "";
+        public static final String MONITOR = "MONITOR";
+        public static final String CAMERA_STATUS = "CAMERA_STATUS";
 
     }
 

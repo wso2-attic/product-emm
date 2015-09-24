@@ -24,16 +24,24 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.PasscodePolicy;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
+import org.wso2.carbon.policy.mgt.common.Policy;
+import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
+import org.wso2.carbon.policy.mgt.common.Profile;
+import org.wso2.carbon.policy.mgt.common.ProfileFeature;
+import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.convertToDeviceIdentifierObject;
 import static org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationCode.*;
 
 /**
@@ -117,6 +125,9 @@ public class OperationReply {
             String message = "Error while generating operation of the syncml message.";
             log.error(message);
             throw new WindowsOperationException(message);
+        } catch (PolicyManagementException e) {
+            String message = "Error while retrieving policy operations.";
+            log.error(message);
         }
         replySyncmlDocument.setBody(syncmlBody);
     }
@@ -193,7 +204,7 @@ public class OperationReply {
         return syncmlBodyReply;
     }
 
-    private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException {
+    private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException, PolicyManagementException {
         Get getElement = new Get();
         List<Item> itemsGet = new ArrayList<Item>();
         List<Exec> execList = new ArrayList<>();
@@ -292,6 +303,38 @@ public class OperationReply {
                             Sequence sequence = buildSequence(operation, sequenceElement);
                             syncmlBody.setSequence(sequence);
                         }
+                        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                                .OperationCodes.MONITOR)) {
+
+                            PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
+                            DeviceIdentifier deviceIdentifier =
+                                    convertToDeviceIdentifierObject(syncmlDocument.getHeader().getSource().getLocURI());
+                            Policy effectivePolicy = policyManagerService.getEffectivePolicy(deviceIdentifier);
+                            Profile profile = effectivePolicy.getProfile();
+                            List<ProfileFeature> profileFeatures = profile.getProfileFeaturesList();
+                            for (int y = 0; y < profileFeatures.size(); y++) {
+                                ProfileFeature profileFeature = profileFeatures.get(y);
+                                String policyOperationCode = profileFeature.getFeatureCode();
+                                if (profileFeature.getFeatureCode().equals("CAMERA")) {
+                                    String opCode = "CAMERA_STATUS";
+                                    Operation operationcode = new Operation();
+                                    operationcode.setCode(opCode);
+
+                                    Item item = appendGetInfo(operationcode);
+                                    itemsGet.add(item);
+                                }
+//                                if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
+//                                    String encryptCode = "ENCRYPT_STORAGE_STATUS";
+//                                    Operation storageOperatonCode = new Operation();
+//                                    storageOperatonCode.setCode(encryptCode);
+//
+//                                    Item storageStatusItem = appendGetInfo(storageOperatonCode);
+//                                    itemsGet.add(storageStatusItem);
+//                                }
+                            }
+//                            Item itemMonitorGet = appendGetInfo(operation);
+//                            itemsGet.add(itemMonitorGet);
+                        }
                         break;
                     default:
                         throw new WindowsOperationException("Operation with no type found");
@@ -343,16 +386,16 @@ public class OperationReply {
                 item.setTarget(target);
             }
         }
-            if (operationCode.equals("LOCKRESET")) {
-                operation.setCode(org.wso2.carbon.mdm.mobileservices.windows.common.Constants.OperationCodes.PIN_CODE);
-                for (Info getInfo : Info.values()) {
-                    if (operation.getCode().equals(getInfo.name())) {
-                        Target target = new Target();
-                        target.setLocURI(getInfo.getCode());
-                        item.setTarget(target);
-                    }
+        if (operationCode.equals("LOCKRESET")) {
+            operation.setCode(org.wso2.carbon.mdm.mobileservices.windows.common.Constants.OperationCodes.PIN_CODE);
+            for (Info getInfo : Info.values()) {
+                if (operation.getCode().equals(getInfo.name())) {
+                    Target target = new Target();
+                    target.setLocURI(getInfo.getCode());
+                    item.setTarget(target);
                 }
             }
+        }
         return item;
     }
 

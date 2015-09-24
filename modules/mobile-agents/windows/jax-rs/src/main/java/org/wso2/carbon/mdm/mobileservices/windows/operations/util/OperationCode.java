@@ -20,7 +20,10 @@ public class OperationCode {
         CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI"),
         LOCK_PIN("./Vendor/MSFT/RemoteLock/NewPINValue"),
         LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
-        CAMERA("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera");
+        CAMERA("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
+        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
+        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption"),
+        DEVICE_PASSWORD_ENABLE("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordEnabled");
 
         private final String code;
 
@@ -41,9 +44,10 @@ public class OperationCode {
         DISENROLL("./Vendor/MSFT/DMClient/Unenroll"),
         LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
         CAMERA("./Vendor/MSFT/PolicyManager/My/Camera/AllowCamera"),
-        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
         ENCRYPT_STORAGE("./Vendor/MSFT/PolicyManager/My/Security/RequireDeviceEncryption"),
-        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption");
+        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
+        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption"),
+        DEVICE_PASSWORD_ENABLE("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordEnabled");
 
         private final String code;
 
