@@ -27,6 +27,8 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
+log.info("calling agent-invoker");
+
 if (platform != "Windows Phone") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
