@@ -36,7 +36,7 @@ if (platform == "Android") {
 } else if (platform == "iOS") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/download-agent");
 } else if (platform == "Windows Phone") {
-    response.sendRedirect("ms-settings-workplace://");
+    response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/invoke-agent");
 } else {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 }
