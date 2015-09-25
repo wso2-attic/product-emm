@@ -22,6 +22,12 @@ function onRequest(context) {
 
     log.info("calling agent-to-web-context-mapper-windows-unit");
 
+    // allowing to skip first step of windows enrollment by setting session.put("lastAccessedPage", "invoke-agent")
+    session.put("lastAccessedPage", "invoke-agent");
+    /* how ever, if the user does not call this page from the workplace app, following checks would fail and
+       user will not be able to continue enrollment, thus no harm in assuming
+       user has accessed the first step on web */
+
     // login_hint passes the user email value entered in Windows workplace app
     var userEmail = request.getParameter("login_hint");
     // appru passes app ID of the Windows workplace app

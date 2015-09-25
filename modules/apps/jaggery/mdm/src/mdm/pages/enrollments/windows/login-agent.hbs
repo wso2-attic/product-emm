@@ -19,6 +19,9 @@ under the License. --}}
 {{!-- defining controlled access parameters --}}
 {{#zone "accessControl"}}
     {{
+        unit "agent-to-web-context-mapper-windows"
+    }}
+    {{
         unit "enrollment-access-control"
         allowedPlatform = "Windows Phone"
         currentPage = "login-agent"
@@ -34,9 +37,6 @@ under the License. --}}
     Windows Phone Enrollment
 {{/zone}}
 {{#zone "body"}}
-    {{
-        unit "agent-to-web-context-mapper-windows"
-    }}
     {{
         unit "wizard-stepper"
         steps = "Start Workplace,
