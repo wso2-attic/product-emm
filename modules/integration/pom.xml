@@ -41,7 +41,7 @@
 
     <build>
         <plugins>
-            <!--<plugin>
+            <!--plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>2.4.1</version>
                 <executions>
@@ -53,7 +53,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin-->
         </plugins>
     </build>
 </project>
