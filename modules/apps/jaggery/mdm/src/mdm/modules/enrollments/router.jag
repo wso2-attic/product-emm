@@ -29,8 +29,6 @@ parser.getResult();
 var os = parser.getOS();
 var platform = os.name;
 
-log.info("router.jag");
-
 if (platform == "Android") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/android/download-agent");
 } else if (platform == "iOS") {
