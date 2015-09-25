@@ -22,7 +22,7 @@ import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.services.BuildDeviceInfoPayload;
+import org.wso2.emm.agent.services.DeviceInfoPayload;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -49,7 +49,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	private Context context;
 	private ProgressDialog progressDialog;
 	private AlertDialog.Builder alertDialog;
-	private BuildDeviceInfoPayload deviceInfoBuilder;
+	private DeviceInfoPayload deviceInfoBuilder;
 	private Resources resources;
 	private String deviceIdentifier;
     private String TAG = RegistrationActivity.class.getSimpleName();
@@ -59,7 +59,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		context = this;
-		deviceInfoBuilder = new BuildDeviceInfoPayload(context);
+		deviceInfoBuilder = new DeviceInfoPayload(context);
 		resources = context.getResources();
 		DeviceInfo deviceInfo = new DeviceInfo(context);
 		deviceIdentifier = deviceInfo.getDeviceId();
@@ -68,39 +68,26 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	}
 
 	private void registerDevice() {
-		progressDialog =
-				CommonDialogUtils.showPrgressDialog(RegistrationActivity.this,
-                        getResources()
-                                .getString(R.string.dialog_enrolling),
-                        getResources()
-                                .getString(R.string.dialog_please_wait),
+		progressDialog = CommonDialogUtils.showPrgressDialog(RegistrationActivity.this,
+                        getResources().getString(R.string.dialog_enrolling),
+                        getResources().getString(R.string.dialog_please_wait),
                         null);
 		progressDialog.show();
 
-		String type =
-				Preference.getString(context,
-				                     context.getResources()
-				                            .getString(R.string.shared_pref_reg_type)
-				);
-		
-		String username =
-				Preference.getString(context,
-				                     context.getResources().getString(R.string.username));
+		String type = Preference.getString(context,
+		                                   context.getResources().getString(R.string.shared_pref_reg_type));
+		String username = Preference.getString(context,
+		                                       context.getResources().getString(R.string.username));
 		try {
 			deviceInfoBuilder.build(type, username);
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Error occurred while building the device info payload." + e);
+			Log.e(TAG, "Error occurred while building the device info payload.", e);
 		}
 
 		// Check network connection availability before calling the API.
 		if (CommonUtils.isNetworkAvailable(context)) {
 			// Call device registration API.
-			String ipSaved =
-					Preference.getString(context.getApplicationContext(),
-							context.getResources()
-									.getString(R.string.shared_pref_ip)
-					);
-
+			String ipSaved = Preference.getString(context.getApplicationContext(),Constants.IP);
 			ServerConfig utils = new ServerConfig();
 			utils.setServerIP(ipSaved);
 
@@ -159,8 +146,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		Intent intent =
 				new Intent(RegistrationActivity.this,
 				           AlreadyRegisteredActivity.class);
-		intent.putExtra(getResources().getString(R.string.intent_extra_fresh_reg_flag),
-		                true);
+		intent.putExtra(getResources().getString(R.string.intent_extra_fresh_reg_flag), true);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
@@ -198,9 +184,10 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				responseStatus = result.get(Constants.STATUS);
 				Preference.putString(context, resources.getString(R.string.shared_pref_regId), info.getDeviceId());
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					if(Preference.getString(context, context.getResources().getString(R.string.shared_pref_notifier)).trim().equals(Constants.NOTIFIER_GCM)){
+					if (Preference.getString(context, context.getResources().
+							getString(R.string.shared_pref_notifier)).trim().equals(Constants.NOTIFIER_GCM)) {
 						registerGCM();
-					}else{
+					} else {
 						getEffectivePolicy();
 					}
 				} else {
@@ -244,7 +231,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 						CommonUtils.clearAppData(context);
 						displayInternalServerError();
 					} catch (AndroidAgentException e) {
-						Log.e(TAG, "Failed to clear app data." + e);
+						Log.e(TAG, "Failed to clear app data", e);
 					}
 				}
 			}

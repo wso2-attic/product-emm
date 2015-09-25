@@ -126,8 +126,7 @@ public class APIController implements TokenCallBack {
 
 		@Override
 		protected void onPostExecute(Map<String, String> result) {
-            apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance()
-                    .getRequestCode());
+            apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance().getRequestCode());
 		}
 	}
 

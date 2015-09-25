@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.mdm.services.android.bean;
 
-//TODO : Need to complete the bean with proper properties.
-
 import java.io.Serializable;
 
 /**

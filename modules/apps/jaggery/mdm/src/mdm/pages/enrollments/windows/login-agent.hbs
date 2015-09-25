@@ -16,6 +16,19 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
+{{!-- defining controlled access parameters --}}
+{{#zone "accessControl"}}
+    {{
+        unit "agent-to-web-context-mapper-windows"
+    }}
+    {{
+        unit "enrollment-access-control"
+        allowedPlatform = "Windows Phone"
+        currentPage = "login-agent"
+        lastPage = "invoke-agent"
+        nextPage = "license-agent"
+    }}
+{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
     WSO2 EMM | Windows Phone Enrollment | Login to Enterprise Mobility Manager
@@ -25,17 +38,15 @@ under the License. --}}
 {{/zone}}
 {{#zone "body"}}
     {{
-        unit "agent-to-web-context-mapper-windows"
-    }}
-    {{
         unit "wizard-stepper"
-        steps = "Login to Enterprise Mobility Manager,
+        steps = "Start Workplace,
+        Login to Enterprise Mobility Manager,
         Accept End User License Agreement"
         currentStep = "Login to Enterprise Mobility Manager"
-        currentStepIndex = 0
+        currentStepIndex = 1
     }}
     {{
         unit "login-box-agent"
-        loginActionURL = "/mdm/windows/controller/login"
+        loginActionURL = "/mdm/enrollment/windows/login"
     }}
 {{/zone}}

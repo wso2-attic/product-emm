@@ -241,7 +241,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 							}
 						} catch (JSONException e) {
 							String msg = "error occurred while parsing client credential payload";
-							Log.e(TAG, msg + e);
+							Log.e(TAG, msg, e);
 							showInternalServerErrorMessage();
 						}
 					} else {
@@ -251,7 +251,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					}
 				} catch (AndroidAgentException e) {
 					String msg = "error occurred while retrieving client credentials";
-					Log.e(TAG, msg + e);
+					Log.e(TAG, msg, e);
 					showInternalServerErrorMessage();
 				}
 			} else {
@@ -324,7 +324,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				try {
 					CommonUtils.clearAppData(context);
 				} catch (AndroidAgentException e) {
-					Log.e(TAG, "Failed to clear app data." + e);
+					Log.e(TAG, "Failed to clear app data.", e);
 				}
 			} else if (status.trim().equals(Constants.Status.INTERNAL_SERVER_ERROR)) {
 				showInternalServerErrorMessage();
@@ -491,11 +491,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 						}
 
 					} catch (JSONException e) {
-						Log.e(TAG, "Error parsing configuration response JSON." + e);
+						Log.e(TAG, "Error parsing configuration response JSON", e);
 						setDefaultNotifier();
 					}
 				} else {
-					Log.e(TAG, "Empty configuration response.");
+					Log.e(TAG, "Empty configuration response");
 					setDefaultNotifier();
 				}
 
@@ -822,8 +822,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @throws AndroidAgentException
 	 */
 	private String getClientCredentials() throws AndroidAgentException {
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(), Constants.IP);
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
@@ -835,7 +834,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		profile.setTokenScope(Constants.TOKEN_SCOPE);
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		return dynamicClientManager.registerClient(profile, utils);
+		return dynamicClientManager.getClientCredentials(profile, utils);
 	}
 
 	/**

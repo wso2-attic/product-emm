@@ -22,4 +22,5 @@
     <SignedCertCN>CN=mdmcn</SignedCertCN>
     <SignedCertNotBefore>3</SignedCertNotBefore>
     <SignedCertNotAfter>300</SignedCertNotAfter>
+    <domain>wso2.com</domain>
 </WindowsPlugin>

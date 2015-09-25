@@ -41,7 +41,7 @@ public class GCMIntentService extends GcmListenerService {
 		try {
 			messageProcessor.getMessages();
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform operation." + e);
+			Log.e(TAG, "Failed to perform operation", e);
 		}
 	}
 

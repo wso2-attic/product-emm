@@ -20,21 +20,23 @@ function onRequest(context) {
     var log = new Log("agent-to-web-context-mapper-windows-unit backend js");
     log.debug("calling agent-to-web-context-mapper-windows-unit");
 
-    var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
-    var parser = new UAParser();
-    var userAgent = request.getHeader("User-Agent");
-    parser.setUA(userAgent);
-    parser.getResult();
-    var os = parser.getOS();
-    if (os.name == "Windows Phone") {
-        // login_hint passes the user email value entered in Windows workplace app
-        var userEmail = request.getParameter("login_hint");
-        // appru passes app ID of the Windows workplace app
-        var windowsWorkplaceAppID = request.getParameter("appru");
-        if (userEmail && windowsWorkplaceAppID) {
-            session.put("email", userEmail);
-            session.put("windowsWorkplaceAppID", windowsWorkplaceAppID);
-        }
+    log.info("calling agent-to-web-context-mapper-windows-unit");
+
+    // allowing to skip first step of windows enrollment by setting session.put("lastAccessedPage", "invoke-agent")
+    session.put("lastAccessedPage", "invoke-agent");
+    /* how ever, if the user does not call this page from the workplace app, following checks would fail and
+       user will not be able to continue enrollment, thus no harm in assuming
+       user has accessed the first step on web */
+
+    // login_hint passes the user email value entered in Windows workplace app
+    var userEmail = request.getParameter("login_hint");
+    // appru passes app ID of the Windows workplace app
+    var windowsWorkplaceAppID = request.getParameter("appru");
+    if (!userEmail || !windowsWorkplaceAppID) {
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    } else {
+        session.put("email", userEmail);
+        session.put("windowsWorkplaceAppID", windowsWorkplaceAppID);
     }
     return context;
 }

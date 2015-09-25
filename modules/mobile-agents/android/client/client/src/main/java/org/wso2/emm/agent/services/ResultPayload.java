@@ -25,11 +25,11 @@ import java.util.List;
 /**
  * This class handles building of the operation list result payload to be sent to the server.
  */
-public class BuildResultPayload {
+public class ResultPayload {
 
 	private List<Operation> operationResponses;
 
-	public BuildResultPayload(){
+	public ResultPayload(){
 		this.operationResponses = new ArrayList<Operation>();
 	}
 

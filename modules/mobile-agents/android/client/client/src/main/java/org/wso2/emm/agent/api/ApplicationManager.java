@@ -244,7 +244,7 @@ public class ApplicationManager {
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);
 			} catch (IOException e) {
-				Log.e("File download/save failure in AppUpdator.", e.getMessage());
+				Log.e(TAG, "File download/save failure in AppUpdator.", e);
 			} finally {
 				StreamHandler.closeOutputStream(outStream, TAG);
 				StreamHandler.closeInputStream(inStream, TAG);

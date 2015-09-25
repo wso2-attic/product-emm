@@ -17,20 +17,21 @@
  */
 
 $(document).ready(function () {
-    var iOSCheckUrl = "/mdm/ios/controller/check";
+    var iOSCheckUrl = "/mdm/enrollment/ios/check";
     setInterval(function () {
         invokerUtil.get(
             iOSCheckUrl,
             function (data) {
+                // executions on success
                 var parsedData = JSON.parse(data);
                 var deviceID = parsedData["deviceID"];
-
                 if (deviceID != null) {
                     window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + deviceID;
                 }
             },
             function () {
-                window.location = "/mdm/enrollments/ios/login-agent#error"
+                // executions on error
+                // doing nothing
             }
         );
     }, 1000);

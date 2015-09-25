@@ -68,7 +68,6 @@ public class Message {
 		private String responseCode;
 		private String responseMessage;
 
-
 		public MessageBuilder responseCode(String responseCode) {
 			this.responseCode = responseCode;
 			return this;
