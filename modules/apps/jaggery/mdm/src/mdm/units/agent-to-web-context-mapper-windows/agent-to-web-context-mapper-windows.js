@@ -20,23 +20,26 @@ function onRequest(context) {
     var log = new Log("agent-to-web-context-mapper-windows-unit backend js");
     log.debug("calling agent-to-web-context-mapper-windows-unit");
 
-    log.info("calling agent-to-web-context-mapper-windows-unit");
-
-    // allowing to skip first step of windows enrollment by setting session.put("lastAccessedPage", "invoke-agent")
-    session.put("lastAccessedPage", "invoke-agent");
-    /* how ever, if the user does not call this page from the workplace app, following checks would fail and
-       user will not be able to continue enrollment, thus no harm in assuming
-       user has accessed the first step on web */
-
-    // login_hint passes the user email value entered in Windows workplace app
-    var userEmail = request.getParameter("login_hint");
-    // appru passes app ID of the Windows workplace app
-    var windowsWorkplaceAppID = request.getParameter("appru");
-    if (!userEmail || !windowsWorkplaceAppID) {
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
-    } else {
-        session.put("email", userEmail);
-        session.put("windowsWorkplaceAppID", windowsWorkplaceAppID);
+    if (!(session.get("email") && session.get("windowsWorkplaceAppID"))) {
+        // if both email and windowsWorkplaceAppID session values are not set
+        // this means either shifting to the page from agent or directly accessing the page out-of-order
+        // login_hint passes the user email value entered in Windows workplace app
+        var userEmail = request.getParameter("login_hint");
+        // appru passes app ID of the Windows workplace app
+        var windowsWorkplaceAppID = request.getParameter("appru");
+        if (!userEmail || !windowsWorkplaceAppID) {
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+        } else {
+            /* allowing to skip first step of windows enrollment by
+            setting session.put("lastAccessedPage", "invoke-agent")...
+            This update was proposed to overcome following problem:
+            First step of enrollment and second step of enrollment being linked with two sessions as
+            first step is initiated by Internet explorer and the second by an internal web-view */
+            session.put("lastAccessedPage", "invoke-agent");
+            session.put("email", userEmail);
+            session.put("windowsWorkplaceAppID", windowsWorkplaceAppID);
+        }
     }
+
     return context;
 }
