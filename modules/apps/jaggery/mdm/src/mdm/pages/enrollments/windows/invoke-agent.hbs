@@ -21,32 +21,39 @@ under the License. --}}
     {{
         unit "enrollment-access-control"
         allowedPlatform = "Windows Phone"
-        currentPage = "login-agent"
-        lastPage = "invoke-agent"
-        nextPage = "license-agent"
+        currentPage = "invoke-agent"
+        nextPage = "login-agent"
     }}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Windows Phone Enrollment | Login to Enterprise Mobility Manager
+    WSO2 EMM | Windows Phone Enrollment | Start Workplace
 {{/zone}}
 {{#zone "header"}}
     Windows Phone Enrollment
 {{/zone}}
 {{#zone "body"}}
     {{
-        unit "agent-to-web-context-mapper-windows"
-    }}
-    {{
         unit "wizard-stepper"
         steps = "Start Workplace,
         Login to Enterprise Mobility Manager,
         Accept End User License Agreement"
-        currentStep = "Login to Enterprise Mobility Manager"
-        currentStepIndex = 1
+        currentStep = "Start Workplace"
+        currentStepIndex = 0
     }}
-    {{
-        unit "login-box-agent"
-        loginActionURL = "/mdm/enrollment/windows/login"
-    }}
+    <div>
+        <div class="row">
+            <div class="container col-md-8 wr-text">
+                Start Windows Phone Workplace to continue your device enrollment.
+                Setting up a Workplace account with WSO2 Enterprise Mobility Manager
+                will offer you company policies, certificates and apps that help you connect
+                to your business.
+            </div>
+        </div>
+        <div class="row">
+            <div class="container col-md-4 wr-buttons">
+                <a href="ms-settings-workplace://" class="btn-download-agent">Start Workplace</a>
+            </div>
+        </div>
+    </div>
 {{/zone}}
