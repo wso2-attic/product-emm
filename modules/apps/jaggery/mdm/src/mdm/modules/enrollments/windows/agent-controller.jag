@@ -56,10 +56,13 @@ if (platform != "Windows Phone") {
 
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
         } else if (xhr.status == 403) {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent#auth-failed");
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
+        } else if (xhr.status == 409) {
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?" +
+                "error=auth-failed&message=Provided Workplace email does not match with username. Please check.");
         } else {
             // only possibility would be server sending 500
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent#error");
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=unexpected");
         }
     }
 }
