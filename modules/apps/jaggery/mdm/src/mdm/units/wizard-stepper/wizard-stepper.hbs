@@ -45,7 +45,11 @@ under the License. --}}
         <div class="wr-head">
             {{#unequal steps.length 1}}
                 {{!-- following stepper title format is visible, if steps.length > 1 --}}
-                <h3>Step {{math currentStepIndex "+" 1}} : {{currentStep}}</h3>
+                <h3>
+                    Step {{math currentStepIndex "+" 1}} :
+                    <br class="c-both" /> <br class="c-both" />
+                    {{currentStep}}
+                </h3>
             {{/unequal}}
             {{#equal steps.length 1}}
                 {{!-- following stepper title format is visible, if steps.length == 1 --}}
