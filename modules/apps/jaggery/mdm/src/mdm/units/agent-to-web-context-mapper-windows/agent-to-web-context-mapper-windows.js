@@ -23,6 +23,8 @@ function onRequest(context) {
     if (!(session.get("email") && session.get("windowsWorkplaceAppID"))) {
         // if both email and windowsWorkplaceAppID session values are not set
         // this means either shifting to the page from agent or directly accessing the page out-of-order
+
+        // checking if user is actually shifting to the page from agent
         // login_hint passes the user email value entered in Windows workplace app
         var userEmail = request.getParameter("login_hint");
         // appru passes app ID of the Windows workplace app
