@@ -49,7 +49,7 @@ if (platform != "Windows Phone") {
             "password": password, "ownership": ownership}}));
 
         if (xhr.status == 200 && xhr.readyState == 4) {
-            session.put("enrolledUser", username);
+            session.put("authenticatedUser", username);
             session.put("windowsBinaryToken", xhr.responseText);
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
         } else if (xhr.status == 403) {
