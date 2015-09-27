@@ -52,12 +52,12 @@ if (platform != "iOS") {
         } else {
             // one visible possibility would be server sending 500
             // error in downloading server certificate
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/error/certificate-download-failure");
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/error/ios/certificate-download-failure");
         }
     } catch (e) {
         log.error("Error occurred when downloading emm certificate", e);
         // error in downloading server certificate
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/error/certificate-download-failure");
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/ios/certificate-download-failure");
     } finally {
         method.releaseConnection();
     }
