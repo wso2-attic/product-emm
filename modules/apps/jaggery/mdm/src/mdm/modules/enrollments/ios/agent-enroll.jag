@@ -34,8 +34,8 @@ if (platform != "iOS") {
 } else if (session.get("lastAccessedPage") != "license-agent") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
-    var username = session.get("username");
-    if (!username) {
+    var authenticatedUser = session.get("authenticatedUser");
+    if (!authenticatedUser) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
         var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
@@ -43,10 +43,6 @@ if (platform != "iOS") {
         var Header = Packages.org.apache.commons.httpclient.Header;
         var StringRequestEntity = Packages.org.apache.commons.httpclient.methods.StringRequestEntity;
         var ByteArrayInputStream = Packages.java.io.ByteArrayInputStream;
-
-        var password = session.get("password");
-        var ownership = session.get("ownership");
-        var challengeToken = session.get("iOSChallengeToken");
 
         var client = new HttpClient();
         var enrollUrl = mdmProps["iOSConfigRoot"] + "enroll";
@@ -57,6 +53,10 @@ if (platform != "iOS") {
         header.setValue("application/json");
         method.addRequestHeader(header);
 
+        var username = authenticatedUser;
+        var password = session.get("authenticatedUserPassword");
+        var challengeToken = session.get("iOSChallengeToken");
+
         var inputs = {"username": username, "password": password, "challengeToken": challengeToken};
         var stringRequestEntity = new StringRequestEntity(stringify(inputs));
         method.setRequestEntity(stringRequestEntity);
@@ -64,7 +64,7 @@ if (platform != "iOS") {
             client.executeMethod(method);
             var status = method.getStatusCode();
             if (status == 200) {
-                session.put("enrolledUser", username);
+                session.put("enrolledUser", authenticatedUser);
                 var stream = method.getResponseBody();
                 var byteArrayInputStream = new ByteArrayInputStream(stream);
                 response.contentType = "application/x-apple-aspen-config";

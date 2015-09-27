@@ -32,8 +32,8 @@ if (platform != "Windows Phone") {
 } else if (session.get("lastAccessedPage") != "license-agent") {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
-    var username = session.get("username");
-    if (!username) {
+    var enrolledUser = session.get("enrolledUser");
+    if (!enrolledUser) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
         var getResource = function (resourcePath) {

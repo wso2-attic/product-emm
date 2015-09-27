@@ -49,11 +49,8 @@ if (platform != "Windows Phone") {
             "password": password, "ownership": ownership}}));
 
         if (xhr.status == 200 && xhr.readyState == 4) {
-            session.put("username", username);
-            session.put("password", password);
-            session.put("ownership", ownership);
+            session.put("enrolledUser", username);
             session.put("windowsBinaryToken", xhr.responseText);
-
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
         } else if (xhr.status == 403) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
