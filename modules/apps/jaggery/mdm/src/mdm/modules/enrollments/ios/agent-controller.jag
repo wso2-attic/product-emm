@@ -57,7 +57,8 @@ if (platform != "iOS") {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/license-agent");
         } else if (xhr.status == 401) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=auth-failed");
-        } else if (xhr.status == 500) {
+        } else {
+            // one visible possibility would be server sending 500
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
         }
     }

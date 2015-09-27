@@ -18,17 +18,18 @@ under the License. --}}
 {{layout "enrollment"}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Device Enrollment | Unintentional Request
+    WSO2 EMM | iOS Enrollment | Certificate Download Failure
 {{/zone}}
 {{#zone "header"}}
-    Unintentional Request
+   iOS Certificate Download Failure
 {{/zone}}
 {{#zone "body"}}
     <div class="wr-head">
         <h3>Possible Causes :</h3>
     </div>
-    [1] You have tried making a request call intended to be made by a different Platform. <br/>
-    [2] You have tried accessing enrollment steps out of order. <br/>
+    [1] Network Issue. <br/>
+    [2] Bad Request Call to Server. <br/>
+    [3] Internal Server Error. <br/>
     <div class="row">
         <div class="container col-md-4 wr-buttons">
             <a href="/mdm/enrollment" class="btn-download-agent">Redirect</a>
