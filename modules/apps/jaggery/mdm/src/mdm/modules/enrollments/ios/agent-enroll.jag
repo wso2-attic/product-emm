@@ -69,14 +69,13 @@ if (platform != "iOS") {
                 var byteArrayInputStream = new ByteArrayInputStream(stream);
                 response.contentType = "application/x-apple-aspen-config";
                 print(new Stream(byteArrayInputStream));
-            } else if (status == 401) {
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#auth-failed");
-            } else if (status == 500) {
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#error");
+            } else {
+                // two visible possibilities would be server sending 401 and 500
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
             }
         } catch (e) {
             log.error("Error occurred in enrolling ios device", e);
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#error");
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
         } finally {
             method.releaseConnection();
         }
