@@ -53,7 +53,11 @@ under the License. --}}
                 {{/unequal}}
                 {{#equal steps.length 1}}
                     {{!-- following stepper title format is visible, if steps.length == 1 --}}
-                    <h3>{{currentStep}}</h3>
+                    <h3>
+                        One step to go :
+                        <br class="c-both" /> <br class="c-both" />
+                        {{currentStep}}
+                    </h3>
                 {{/equal}}
             </div>
         </div>
