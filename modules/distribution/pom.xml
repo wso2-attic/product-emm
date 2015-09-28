@@ -205,8 +205,8 @@
                             </tasks>
                         </configuration>
                     </execution>
-                    <execution>
-                        <!-- Creating IDP Management schema -->
+                    <!-- Creating IDP Management schema -->
+                    <!--execution>
                         <id>create-idp-mgt-schema</id>
                         <phase>package</phase>
                         <goals>
@@ -231,7 +231,7 @@
                                 <echo message="##################### END ####################" />
                             </tasks>
                         </configuration>
-                    </execution>
+                    </execution-->
                     <execution>
                         <!-- Creating API Management schema -->
                         <id>create-api-mgt-schema</id>
@@ -405,6 +405,75 @@
                 <configuration>
                     <skip>true</skip>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <!-- Replace Datasource, Scope mpl classes and OAuth callback class in identity.xml -->
+                    <execution>
+                        <id>replace-for-identity</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.platform.version}/repository/conf/identity/identity.xml</file>
+                            <replacements>
+                                <replacement>
+                                    <xpath>/Server/JDBCPersistenceManager/DataSource/Name</xpath>
+                                    <token>(jdbc/WSO2CarbonDB)</token>
+                                    <value>jdbc/WSO2AM_DB</value>
+                                </replacement>
+                                <!--replacement>
+                                    <xpath>/Server/OAuth/SupportedGrantTypes/SupportedGrantType</xpath>
+                                    <token>(org.wso2.carbon.identity.oauth2.token.handlers.grant.AuthorizationCodeGrantHandler)</token>
+                                    <value>org.wso2.carbon.apimgt.keymgt.handlers.ExtendedAuthorizationCodeGrantHandler</value>
+                                </replacement>
+                                <replacement>
+                                    <xpath>/Server/OAuth/SupportedGrantTypes/SupportedGrantType</xpath>
+                                    <token>(org.wso2.carbon.identity.oauth2.token.handlers.grant.PasswordGrantHandler)</token>
+                                    <value>org.wso2.carbon.apimgt.keymgt.handlers.ExtendedPasswordGrantHandler</value>
+                                </replacement>
+                                <replacement>
+                                    <xpath>/Server/OAuth/SupportedGrantTypes/SupportedGrantType</xpath>
+                                    <token>(org.wso2.carbon.identity.oauth2.token.handlers.grant.ClientCredentialsGrantHandler)</token>
+                                    <value>org.wso2.carbon.apimgt.keymgt.handlers.ExtendedClientCredentialsGrantHandler</value>
+                                </replacement>
+                                <replacement>
+                                    <xpath>/Server/OAuth/SupportedGrantTypes/SupportedGrantType</xpath>
+                                    <token>(org.wso2.carbon.identity.oauth2.token.handlers.grant.saml.SAML2BearerGrantHandler)</token>
+                                    <value>org.wso2.carbon.apimgt.keymgt.handlers.ExtendedSAML2BearerGrantHandler</value>
+                                </replacement>
+                                <replacement>
+                                    <xpath>/Server/OAuth/OAuthCallbackHandlers</xpath>
+                                    <token>(org.wso2.carbon.identity.oauth.callback.DefaultCallbackHandler)</token>
+                                    <value>org.wso2.carbon.apimgt.keymgt.util.APIManagerOAuthCallbackHandler</value>
+                                </replacement-->
+
+                            </replacements>
+                        </configuration>
+                    </execution>
+                    <!-- Replace the Datasource in the thrift-authentication.xml file -->
+                    <execution>
+                        <id>replace-for-thrift</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.platform.version}/repository/conf/identity/thrift-authentication.xml</file>
+                            <replacements>
+                                <replacement>
+                                    <xpath>/Server/JDBCPersistenceManager/DataSource/Name</xpath>
+                                    <token>(jdbc/WSO2CarbonDB)</token>
+                                    <value>jdbc/WSO2AM_DB</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <!--   <plugin>
                    <groupId>org.apache.maven.plugins</groupId>
