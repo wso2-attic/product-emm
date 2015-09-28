@@ -26,10 +26,7 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -61,11 +58,31 @@ public class License {
             if (license == null) {
                 return Response.status(HttpStatus.SC_NOT_FOUND).build();
             }
-            responsePayload.setStatusCode(HttpStatus.SC_OK);
-            responsePayload.setMessageFromServer("License for '" + deviceType + "' was retrieved successfully");
-            responsePayload.setResponseContent(license.getText());
+            responsePayload = ResponsePayload.statusCode(HttpStatus.SC_OK).
+                    messageFromServer("License for '" + deviceType + "' was retrieved successfully").
+                    responseContent(license.getText()).
+                    build();
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while retrieving the license configured for '" + deviceType + "' device type";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    @POST
+    @Path ("{deviceType}")
+    public Response addLicense(@PathParam ("deviceType") String deviceType,
+                               org.wso2.carbon.device.mgt.common.license.mgt.License license) throws MDMAPIException {
+
+        ResponsePayload responsePayload;
+        try {
+            MDMAPIUtils.getDeviceManagementService().addLicense(deviceType, license);
+            responsePayload = ResponsePayload.statusCode(HttpStatus.SC_OK).
+                    messageFromServer("License added successfully for '" + deviceType + "' device type").
+                    build();
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while adding license for '" + deviceType + "' device type";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
