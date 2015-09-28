@@ -18,429 +18,630 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
+import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.notification.mgt.Notification;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.FileOperationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.util.OperationReply;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlGenerator;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlParser;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.util.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
+
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.convertToDeviceIdentifierObject;
 
 /**
  * Implementing class of SyncmlImpl interface.
  */
 public class SyncmlServiceImpl implements SyncmlService {
 
-	private static final String SYNCML_FIRST_MESSAGE = "1";
-	private static final String SYNCML_SECOND_MESSAGE = "2";
-	private static final int SYNCML_MESSAGE_POSITION = 0;
-	private static final int SYNCML_ITEM_DATA_POSITION = 1;
-	private static final String OS_VERSION = "osVersion";
-	private static final String IMSI = "imsi";
-	private static final String IMEI = "imei";
-	private static final String VENDOR = "vendor";
-	private static final String MODEL = "model";
-	private enum DevicePropertyIndex {
-		OS_VERSION(3),
-		IMSI(4),
-		IMEI(5),
-		DEVICE_ID(6),
-		DEVICE_MANUFACTURER(7),
-		DEVICE_MODEL(8),
-		DEVICE_LANGUAGE(9);
-		private final int itemPosition;
-		private DevicePropertyIndex(final int itemPosition) {
-			this.itemPosition = itemPosition;
-		}
-		public int getValue() {
-			return this.itemPosition;
-		}
-	}
-	private static Log log = LogFactory.getLog(SyncmlServiceImpl.class);
+    private static final int SYNCML_FIRST_MESSAGE = 1;
+    private static final int SYNCML_SECOND_MESSAGE = 2;
+    private static final int SESSIONID_FIRST = 1;
+    private static final int SESSIONID_SECOND = 2;
+    private static final int OSVERSION_POSITION = 0;
+    private static final int DEVICE_ID_POSITION = 0;
+    private static final int DEVICE_MODE_POSITION = 2;
+    private static final int DEVICE_MAN_POSITION = 1;
+    private static final int DEVICE_MOD_VER_POSITION = 3;
+    private static final int DEVICE_LANG_POSITION = 4;
+    private static final int IMSI_POSITION = 1;
+    private static final int IMEI_POSITION = 2;
+    private static final int VENDER_POSITION = 7;
+    private static final int MACADDRESS_POSITION = 8;
+    private static final int RESOLUTION_POSITION = 9;
+    private static final int DEVICE_NAME_POSITION = 10;
+    private static final String OS_VERSION = "OS_VERSION";
+    private static final String IMSI = "IMSI";
+    private static final String IMEI = "IMEI";
+    private static final String VENDOR = "VENDER";
+    private static final String MODEL = "DEVICE_MODEL";
 
-	/**
-	 * This method resolves the Syncml messages received through device and send the
-	 * response accordingly.
-	 * @param request - Syncml request comes through the device
-	 * @return - Syncml response generated for the request
-	 */
-	@Override
-	public Response getInitialResponse(Document request) throws WindowsDeviceEnrolmentException {
+    List<? extends Operation> inProgressOperations;
 
-		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
-				          getFirstChild();
-		Node bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
-				        getChildNodes().item(SYNCML_ITEM_DATA_POSITION);
-		NodeList nodeListHeader = headerNode.getChildNodes();
-		NodeList nodeListBody = bodyNode.getChildNodes();
+    private static Log log = LogFactory.getLog(SyncmlServiceImpl.class);
 
-		String targetURI = null;
-		String sourceURI = null;
-		String msgID = null;
-		String osVersion;
-		String imsi;
-		String imei;
-		String devID;
-		String devMan;
-		String devMod;
-		String devLang;
+    /**
+     * This method is used to generate and return Device object from the received information at
+     * the Syncml step.
+     *
+     * @param deviceID     - Unique device ID received from the Device
+     * @param osVersion    - Device OS version
+     * @param imsi         - Device IMSI
+     * @param imei         - Device IMEI
+     * @param manufacturer - Device Manufacturer name
+     * @param model        - Device Model
+     * @return - Generated device object
+     */
+    private Device generateDevice(String type, String deviceID, String osVersion, String imsi,
+                                  String imei, String manufacturer, String model, String user) {
 
-		for (int i = 0; i < nodeListHeader.getLength(); i++) {
-			Node node = nodeListHeader.item(i);
+        Device generatedDevice = new Device();
 
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
+        Device.Property OSVersionProperty = new Device.Property();
+        OSVersionProperty.setName(OS_VERSION);
+        OSVersionProperty.setValue(osVersion);
 
-				String nodeName = node.getNodeName();
+        Device.Property IMSEIProperty = new Device.Property();
+        IMSEIProperty.setName(SyncmlServiceImpl.IMSI);
+        IMSEIProperty.setValue(imsi);
 
-				if (Constants.SyncML.SYNCML_MSG_ID.equals(nodeName)) {
-					msgID = node.getTextContent().trim();
-					if (log.isDebugEnabled()) {
-						log.debug("Request SyncML message ID: " + msgID);
-					}
-				}
-				if (Constants.SyncML.SYNCML_MESSAGE_ONE.equals(msgID)) {
-					if (Constants.SyncML.SYNCML_TARGET.equals(nodeName)) {
-						targetURI = node.getFirstChild().getTextContent().trim();
-					} else if (Constants.SyncML.SYNCML_SOURCE.equals(nodeName)) {
-						sourceURI = node.getFirstChild().getTextContent().trim();
-					}
-				}
-			}
-		}
+        Device.Property IMEIProperty = new Device.Property();
+        IMEIProperty.setName(SyncmlServiceImpl.IMEI);
+        IMEIProperty.setValue(imei);
 
-		for (int i = 0; i < nodeListBody.getLength(); i++) {
-			Node node = nodeListBody.item(i);
+        Device.Property DevManProperty = new Device.Property();
+        DevManProperty.setName(VENDOR);
+        DevManProperty.setValue(manufacturer);
 
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
+        Device.Property DevModProperty = new Device.Property();
+        DevModProperty.setName(MODEL);
+        DevModProperty.setValue(model);
 
-				String nodeName = node.getNodeName();
+        List<Device.Property> propertyList = new ArrayList<Device.Property>();
+        propertyList.add(OSVersionProperty);
+        propertyList.add(IMSEIProperty);
+        propertyList.add(IMEIProperty);
+        propertyList.add(DevManProperty);
+        propertyList.add(DevModProperty);
 
-				if ((Constants.SyncML.SYNCML_MESSAGE_TWO.equals(msgID))&&
-				    (Constants.SyncML.SYNCML_RESULTS.equals(nodeName))) {
+        EnrolmentInfo enrolmentInfo = new EnrolmentInfo();
+        enrolmentInfo.setOwner(user);
+        enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
+        enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
 
-					NodeList childNodes = node.getChildNodes();
-					osVersion = childNodes.item(DevicePropertyIndex.OS_VERSION.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					imsi = childNodes.item(DevicePropertyIndex.IMSI.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					imei = childNodes.item(DevicePropertyIndex.IMEI.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devID = childNodes.item(DevicePropertyIndex.DEVICE_ID.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devMan = childNodes.item(DevicePropertyIndex.DEVICE_MANUFACTURER.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devMod = childNodes.item(DevicePropertyIndex.DEVICE_MODEL.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devLang = childNodes.item(DevicePropertyIndex.DEVICE_LANGUAGE.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+        generatedDevice.setEnrolmentInfo(enrolmentInfo);
+        generatedDevice.setDeviceIdentifier(deviceID);
+        generatedDevice.setProperties(propertyList);
+        generatedDevice.setType(type);
 
-					if (log.isDebugEnabled()) {
-						log.debug(
-								"OS Version:" + osVersion + ", IMSI: " + imsi + ", IMEI: " +
-								imei + ", DevID: " + devID + ", DevMan: " + devMan +
-								", DevMod: " + devMod + ", DevLang: " + devLang);
-					}
+        return generatedDevice;
+    }
 
-					Device generatedDevice =
-						generateDevice(DeviceManagementConstants.MobileDeviceTypes.
-						MOBILE_DEVICE_TYPE_WINDOWS, devID, osVersion, imsi, imei, devMan, devMod);
-					try {
-						SyncmlUtils.getDeviceManagementService().enrollDevice(generatedDevice);
-					} catch (DeviceManagementException e) {
-						String msg = "Exception while getting Device Management Service.";
-						log.error(msg, e);
-						throw new WindowsDeviceEnrolmentException(msg, e);
-					}
-				}
-			}
-		}
-		String response = prepareResponse(msgID, targetURI, sourceURI);
-		return Response.ok().entity(response).build();
-	}
+    /**
+     * Method for calling SyncML engine for producing the Syncml response. For the first SyncML message comes from
+     * the device, this method produces a response to retrieve device information for enrolling the device.
+     *
+     * @param request - SyncML request
+     * @return - SyncML response
+     * @throws WindowsOperationException
+     * @throws WindowsDeviceEnrolmentException
+     */
+    @Override
+    public Response getResponse(Document request)
+            throws WindowsDeviceEnrolmentException, WindowsOperationException {
 
-	/**
-	 * This method is used to generate and return Device object from the received information at
-	 * the Syncml step.
-	 * @param deviceID     - Unique device ID received from the Device
-	 * @param osVersion    - Device OS version
-	 * @param imsi         - Device IMSI
-	 * @param imei         - Device IMEI
-	 * @param manufacturer - Device Manufacturer name
-	 * @param model        - Device Model
-	 * @return - Generated device object
-	 */
-	private Device generateDevice(String type, String deviceID, String osVersion, String imsi,
-	                                    String imei, String manufacturer, String model) {
+        String val = SyncmlServiceImpl.getStringFromDoc(request);
+        int msgID;
+        int sessionId;
+        String user;
+        String token;
+        String response;
+        SyncmlDocument syncmlDocument;
+        List<Operation> deviceInfoList;
+        List<? extends Operation> pendingOperations;
 
-		Device generatedDevice = new Device();
+        syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
+        sessionId = syncmlDocument.getHeader().getSessionId();
+        user = syncmlDocument.getHeader().getSource().getLocName();
+        DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlDocument.getHeader().getSource()
+                                                                                    .getLocURI());
+        msgID = syncmlDocument.getHeader().getMsgID();
 
-		Device.Property OSVersionProperty = new Device.Property();
-		OSVersionProperty.setName(OS_VERSION);
-		OSVersionProperty.setValue(osVersion);
+        if (SYNCML_FIRST_MESSAGE == msgID && SESSIONID_FIRST == sessionId) {
+            token = syncmlDocument.getHeader().getCredential().getData();
+            CacheEntry cacheToken = (CacheEntry) DeviceUtil.getCacheEntry(token);
+            if (cacheToken.getUsername().equals(user)) {
 
-		Device.Property IMSEIProperty = new Device.Property();
-		IMSEIProperty.setName(SyncmlServiceImpl.IMSI);
-		IMSEIProperty.setValue(imsi);
+                if (enrollDevice(request)) {
+                    deviceInfoList = getDeviceInfo();
+                    response = generateReply(syncmlDocument, deviceInfoList);
+                    return Response.ok().entity(response).build();
+                } else {
+                    String msg = "Error occurred in device enrollment.";
+                    log.error(msg);
+                    return Response.status(500).entity(msg).build();
+                }
+            } else {
+                String msg = "Authentication failure due to incorrect credentials.";
+                log.error(msg);
+                return Response.status(401).entity(msg).build();
+            }
 
-		Device.Property IMEIProperty = new Device.Property();
-		IMEIProperty.setName(SyncmlServiceImpl.IMEI);
-		IMEIProperty.setValue(imei);
+        } else if (SYNCML_SECOND_MESSAGE == msgID && SESSIONID_FIRST == sessionId) {
 
-		Device.Property DevManProperty = new Device.Property();
-		DevManProperty.setName(VENDOR);
-		DevManProperty.setValue(manufacturer);
+            if (enrollDevice(request)) {
+                return Response.ok().entity(generateReply(syncmlDocument, null)).build();
+            } else {
+                String msg = "Error occurred in modify enrollment.";
+                log.error(msg);
+                return Response.status(500).entity(msg).build();
+            }
 
-		Device.Property DevModProperty = new Device.Property();
-		DevModProperty.setName(MODEL);
-		DevModProperty.setValue(model);
+        } else if (sessionId >= SESSIONID_SECOND) {
+            if ((syncmlDocument.getBody().getAlert() != null)) {
+                if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
+                    try {
+                        pendingOperations = getPendingOperations(syncmlDocument);
+                        String gen = generateReply(syncmlDocument, pendingOperations);
+                        //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
+                        //	pendingOperations)).build();
+                        return Response.ok().entity(gen).build();
+                    } catch (OperationManagementException e) {
+                        String msg = "Cannot access operation management service.";
+                        log.error(msg);
 
-		List<Device.Property> propertyList = new ArrayList<Device.Property>();
-		propertyList.add(OSVersionProperty);
-		propertyList.add(IMSEIProperty);
-		propertyList.add(IMEIProperty);
-		propertyList.add(DevManProperty);
-		propertyList.add(DevModProperty);
+                    } catch (DeviceManagementException e) {
+                        String msg = "Cannot access Device management service.";
+                        log.error(msg);
+                    }
+                } else {
+                    try {
+                        if (WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier) != null) {
+                            WindowsAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+                        }
+                        return Response.ok().entity(generateReply(syncmlDocument, null)).build();
+                    } catch (DeviceManagementException e) {
+                        String msg = "Failure occurred in dis-enrollment flow.";
+                        log.error(msg);
+                        throw new WindowsOperationException(msg, e);
+                    }
+                }
+            } else {
+                try {
+                    pendingOperations = getPendingOperations(syncmlDocument);
+                    String replygen = generateReply(syncmlDocument, (List<Operation>) pendingOperations);
+                    //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations))
+                    //.build();
+                    return Response.ok().entity(replygen).build();
 
-		generatedDevice.setDeviceIdentifier(deviceID);
-		generatedDevice.setProperties(propertyList);
-		generatedDevice.setType(type);
+                } catch (OperationManagementException e) {
+                    String msg = "Cannot access operation management service.";
+                    log.error(msg);
+                    throw new WindowsOperationException(msg, e);
+                } catch (DeviceManagementException e) {
+                    String msg = "Cannot access Device management service.";
+                    log.error(msg);
+                    throw new WindowsOperationException(msg, e);
+                }
+            }
+        }
+        return null;
+    }
 
-		return generatedDevice;
-	}
+    private boolean enrollDevice(Document request) throws WindowsDeviceEnrolmentException {
 
-	/**
-	 * This method prepares the SyncML response.
-	 * @param msgID - Incoming message ID
-	 * @param targetURI - Target URI in SyncML message
-	 * @param sourceURI - Sourse URI in SyncML message
-	 * @return - Returns the SyncML response as a String
-	 * @throws FileOperationException
-	 */
-	private String prepareResponse(String msgID, String targetURI, String sourceURI) throws
-								   WindowsDeviceEnrolmentException {
+        String osVersion;
+        String imsi = null;
+        String imei = null;
+        String devID;
+        String devMan;
+        String devMod;
+        String devLang;
+        String vender;
+        String macAddress;
+        String resolution;
+        String modVersion;
+        boolean status = true;
+        String user;
+        String deviceName;
+        int msgID;
 
-		String response = null;
-		File responseFile;
-		try {
-			if (SYNCML_FIRST_MESSAGE.equals(msgID)) {
-				responseFile = new File(getClass().getClassLoader().getResource(Constants.SyncML.
-						                          SYNCML_RESPONSE).getFile());
-				response = FileUtils.readFileToString(responseFile);
-				if ((targetURI != null)&&(sourceURI != null)) {
-					response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
-					response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
-				}
-			}
-			else if(SYNCML_SECOND_MESSAGE.equals(msgID)){
-				responseFile = new File(getClass().getClassLoader().getResource(Constants.SyncML.
-						                          SYNCML_SECOND_RESPONSE).getFile());
-				response = FileUtils.readFileToString(responseFile);
-				if ((targetURI != null)&&(sourceURI != null)) {
-					response = response.replaceAll(Constants.SyncML.SYNCML_SOURCE_URI, targetURI);
-					response = response.replaceAll(Constants.SyncML.SYNCML_TARGET_URI, sourceURI);
-				}
-			}
-		} catch (IOException e) {
-			String msg = "Syncml response file cannot be read.";
-			log.error(msg, e);
-			throw new WindowsDeviceEnrolmentException(msg, e);
-		}
-		return response;
-	}
+        SyncmlDocument syncmlDocument = null;
+        try {
+            syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
+        } catch (WindowsOperationException e) {
+            String msg = "Failure occurred in parsing Syncml document.";
+            log.error(msg, e);
+        }
+        msgID = syncmlDocument.getHeader().getMsgID();
+        if (msgID == SYNCML_FIRST_MESSAGE) {
+            Replace replace = syncmlDocument.getBody().getReplace();
+            List<Item> itemList = replace.getItems();
+            devID = itemList.get(DEVICE_ID_POSITION).getData();
+            devMan = itemList.get(DEVICE_MAN_POSITION).getData();
+            devMod = itemList.get(DEVICE_MODE_POSITION).getData();
+            modVersion = itemList.get(DEVICE_MOD_VER_POSITION).getData();
+            devLang = itemList.get(DEVICE_LANG_POSITION).getData();
+            user = syncmlDocument.getHeader().getSource().getLocName();
 
-	//Primary method for Syncml engine usage...
-	/**
-	 * Method for calling SyncML engine for producing the Syncml response. For the first SyncML message comes from
-	 * the device, this method produces a response to retrieve device information for enrolling the device.
-	 * @param request - SyncML request
-	 * @return - SyncML response
-	 * @throws WindowsOperationException
-	 * @throws WindowsDeviceEnrolmentException
-	 */
-	public Response getResponse(Document request) throws WindowsOperationException, WindowsDeviceEnrolmentException {
+            if (log.isDebugEnabled()) {
+                log.debug(
+                        "OS Version:" + modVersion + ", DevID: " + devID + ", DevMan: " + devMan +
+                        ", DevMod: " + devMod + ", DevLang: " + devLang);
+            }
+            Device generateDevice = generateDevice(DeviceManagementConstants.MobileDeviceTypes.
+                                                           MOBILE_DEVICE_TYPE_WINDOWS, devID, modVersion, imsi, imei, devMan, devMod, user);
+            try {
+                status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(generateDevice);
+                return status;
+            } catch (DeviceManagementException e) {
+                String msg = "Failure occurred in enrolling device.";
+                log.debug(msg, e);
+                throw new WindowsDeviceEnrolmentException(msg, e);
+            }
+        } else if (msgID == SYNCML_SECOND_MESSAGE) {
+            Results results = syncmlDocument.getBody().getResults();
+            List<Item> itemList = results.getItem();
+            osVersion = itemList.get(OSVERSION_POSITION).getData();
+            imsi = itemList.get(IMSI_POSITION).getData();
+            imei = itemList.get(IMEI_POSITION).getData();
+            vender = itemList.get(VENDER_POSITION).getData();
+            macAddress = itemList.get(MACADDRESS_POSITION).getData();
+            resolution = itemList.get(RESOLUTION_POSITION).getData();
+            deviceName = itemList.get(DEVICE_NAME_POSITION).getData();
+            DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlDocument.getHeader().getSource()
+                                                                                        .getLocURI());
+            try {
+                Device existingDevice = WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+                if (existingDevice.getProperties() == null) {
+                    List<Device.Property> existingProperties = new ArrayList<>();
 
-		SyncmlDocument syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
-		int msgID = syncmlDocument.getHeader().getMsgID();
-		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-		deviceIdentifier.setId(syncmlDocument.getHeader().getSource().getLocURI());
-		deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
-		List<Operation> deviceInfoList;
-		List<? extends Operation> pendingOperations;
-		String response;
+                    Device.Property imeiProperty = new Device.Property();
+                    imeiProperty.setName("IMEI");
+                    imeiProperty.setValue(imei);
+                    existingProperties.add(imeiProperty);
 
-		if(msgID == 1){
-			    deviceInfoList = new ArrayList<Operation>();
+                    Device.Property osVersionProperty = new Device.Property();
+                    osVersionProperty.setName("OS_VERSION");
+                    osVersionProperty.setValue(osVersion);
+                    existingProperties.add(osVersionProperty);
 
-				Operation osVersion = new Operation();
-				osVersion.setCode("SOFTWARE_VERSION");
-				osVersion.setType(Operation.Type.INFO);
-			    deviceInfoList.add(osVersion);
+                    Device.Property imsiProperty = new Device.Property();
+                    imsiProperty.setName("IMSI");
+                    imsiProperty.setValue(imsi);
+                    existingProperties.add(imsiProperty);
 
-				Operation imsi = new Operation();
-				imsi.setCode("IMSI");
-				imsi.setType(Operation.Type.INFO);
-			    deviceInfoList.add(imsi);
+                    Device.Property venderProperty = new Device.Property();
+                    venderProperty.setName("VENDOR");
+                    venderProperty.setValue(vender);
+                    existingProperties.add(venderProperty);
 
-				Operation imei = new Operation();
-				imei.setCode("IMEI");
-				imei.setType(Operation.Type.INFO);
-			    deviceInfoList.add(imei);
+                    Device.Property macAddressProperty = new Device.Property();
+                    macAddressProperty.setName("MAC_ADDRESS");
+                    macAddressProperty.setValue(macAddress);
+                    existingProperties.add(macAddressProperty);
 
-				Operation deviceID = new Operation();
-				deviceID.setCode("DEV_ID");
-				deviceID.setType(Operation.Type.INFO);
-		    	deviceInfoList.add(deviceID);
+                    Device.Property resolutionProperty = new Device.Property();
+                    resolutionProperty.setName("DEVICE_INFO");
+                    resolutionProperty.setValue(resolution);
+                    existingProperties.add(resolutionProperty);
 
-				Operation manufacturer = new Operation();
-				manufacturer.setCode("MANUFACTURER");
-				manufacturer.setType(Operation.Type.INFO);
-			    deviceInfoList.add(manufacturer);
+                    Device.Property deviceNameProperty = new Device.Property();
+                    deviceNameProperty.setName("DEVICE_NAME");
+                    deviceNameProperty.setValue(deviceName);
+                    existingProperties.add(deviceNameProperty);
 
-				Operation model = new Operation();
-				model.setCode("MODEL");
-				model.setType(Operation.Type.INFO);
-			    deviceInfoList.add(model);
+                    existingDevice.setProperties(existingProperties);
+                    existingDevice.setDeviceIdentifier(syncmlDocument.getHeader().getSource().getLocURI());
+                    existingDevice.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
+                    status = WindowsAPIUtils.getDeviceManagementService().modifyEnrollment(existingDevice);
+                    return status;
+                }
+            } catch (DeviceManagementException e) {
+                String msg = "Error occurred in Enrollment modification.";
+                log.error(msg);
+                throw new WindowsDeviceEnrolmentException(msg, e);
+            }
+        }
+        return status;
+    }
 
-				Operation language = new Operation();
-				language.setCode("LANGUAGE");
-				language.setType(Operation.Type.INFO);
-			    deviceInfoList.add(language);
+    public static String getStringFromDoc(org.w3c.dom.Document doc) {
+        DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
+        LSSerializer lsSerializer = domImplementation.createLSSerializer();
+        return lsSerializer.writeToString(doc);
+    }
 
-			    OperationReply operationReply = new OperationReply(syncmlDocument, deviceInfoList);
-			    SyncmlDocument syncmlResponse = operationReply.generateReply();
-			    SyncmlGenerator generator = new SyncmlGenerator();
-			    response = generator.generatePayload(syncmlResponse);
-		}
-		else{
-			if(msgID == 2){
-				//Second syncML request will provide device details requested by the first SyncML response from server.
-				enrollDevice(request);
-			}
-			try {
-				pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
-				OperationReply operationReply = new OperationReply(syncmlDocument, (List<Operation>)pendingOperations);
-				SyncmlDocument syncmlResponse = operationReply.generateReply();
-				SyncmlGenerator generator = new SyncmlGenerator();
-				response = generator.generatePayload(syncmlResponse);
-			} catch (OperationManagementException e) {
-				throw new WindowsOperationException("Cannot access operation management service." , e);
-			}
-		}
+    public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> lsDeviceInfo)
+            throws WindowsOperationException {
+        OperationReply operationReply;
+        SyncmlGenerator generator;
+        SyncmlDocument syncmlResponse;
+        if (lsDeviceInfo == null) {
+            operationReply = new OperationReply(syncmlDocument);
+        } else {
+            operationReply = new OperationReply(syncmlDocument, lsDeviceInfo);
+        }
+        syncmlResponse = operationReply.generateReply();
+        generator = new SyncmlGenerator();
+        return generator.generatePayload(syncmlResponse);
+    }
 
-		return Response.ok().entity(response).build();
-	}
+    public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
+            throws OperationManagementException, DeviceManagementException {
 
-	//Method which will be called by getResponse method. This method should ideally use syncmlDocument object and
-	//extract information from it. But currently SyncML engine 'Results' object includes a single 'item' and this should
-	//be an 'item' list for implementing this.
-	/**
-	 * Method that enrolls the device by extracting details from SyncML message.
-	 * @param request - Incoming Syncml request
-	 * @return enrollment status
-	 * @throws WindowsDeviceEnrolmentException
-	 */
-	private boolean enrollDevice(Document request) throws WindowsDeviceEnrolmentException {
+        List<? extends Operation> pendingOperations;
+        DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
+                syncmlDocument.getHeader().getSource().getLocURI());
+        List<Status> lsStatus = syncmlDocument.getBody().getStatus();
+        String lockUri = null;
 
-		Node headerNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
-				          getFirstChild();
-		Node bodyNode = request.getElementsByTagName(Constants.SyncML.SYNC_ML).item(SYNCML_MESSAGE_POSITION).
-				        getChildNodes().item(SYNCML_ITEM_DATA_POSITION);
-		NodeList nodeListHeader = headerNode.getChildNodes();
-		NodeList nodeListBody = bodyNode.getChildNodes();
+        for (int x = 0; x < lsStatus.size(); x++) {
+            Status status = lsStatus.get(x);
+            if (status.getCommand().equals(Constants.EXECUTE)) {
+                if (status.getTargetReference() == null) {
+                    updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
+                } else {
+                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_LOCK)) {
+                        lock(status, syncmlDocument, deviceIdentifier);
+                    }
+                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_RING)) {
+                        ring(status, syncmlDocument, deviceIdentifier);
+                    }
+                    if (status.getTargetReference().equals(OperationCode.Command.WIPE_DATA)) {
+                        dataWipe(status, syncmlDocument, deviceIdentifier);
+                    }
+                }
+            }
+        }
+        Results result = syncmlDocument.getBody().getResults();
+        if (result != null) {
+            for (OperationCode.Info info : OperationCode.Info.values()) {
+                if (org.wso2.carbon.mdm.mobileservices.windows.common.Constants.OperationCodes.PIN_CODE.equals(info
+                        .name())) {
+                    lockUri = info.getCode();
+                }
+            }
+            List<Item> itemList = result.getItem();
+            for (int i = 0; i < itemList.size(); i++) {
+                Item item = itemList.get(i);
+                if (!item.getData().equals(null) && item.getSource().getLocURI().equals(lockUri)) {
+                    String pinValue = item.getData();
+                    NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
+                    Notification notification = new Notification();
+                    notification.setDescription(pinValue);
+                    notification.setOperationId(result.getCommandReference());
+                    notification.setDeviceIdentifier(deviceIdentifier);
+                    try {
+                        nmService.addNotification(notification);
+                        if (log.isDebugEnabled()) {
+                            String msg = "Lock Reset Pin code " + pinValue;
+                            log.info(msg);
+                        }
+                    } catch (NotificationManagementException e) {
+                        String msg = "Failure Occurred in getting notification service.";
+                        log.error(msg);
+                    }
+                }
+            }
+        }
+        pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
+        for (int z = 0; z < pendingOperations.size(); z++) {
+            pendingOperations.get(z).setStatus(Operation.Status.IN_PROGRESS);
+            SyncmlUtils.getDeviceManagementService().updateOperation(deviceIdentifier, pendingOperations.get(z));
+        }
+        return pendingOperations;
+    }
 
-		String msgID = null;
-		String osVersion;
-		String imsi;
-		String imei;
-		String devID;
-		String devMan;
-		String devMod;
-		String devLang;
+    public void updateOperations(String deviceId,
+                                 List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
+            throws OperationManagementException {
 
-		for (int i = 0; i < nodeListHeader.getLength(); i++) {
-			Node node = nodeListHeader.item(i);
+        for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
+            WindowsAPIUtils.updateOperation(deviceId, operation);
+            if (log.isDebugEnabled()) {
+                log.debug("Updating operation '" + operation.toString() + "'");
+            }
+        }
+    }
 
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
+    public void lock(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException, DeviceManagementException {
 
-				String nodeName = node.getNodeName();
+        inProgressOperations = SyncmlUtils.getDeviceManagementService()
+                .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+            for (int z = 0; z < inProgressOperations.size(); z++) {
+                Operation operation = inProgressOperations.get(z);
+                if (inProgressOperations.get(z).getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode())
+                    && operation.getId() == status.getCommandReference()) {
+                    operation.setStatus(Operation.Status.COMPLETED);
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+                }
+            }
+        }
+        if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
+            for (int z = 0; z < inProgressOperations.size(); z++) {
+                Operation operation = inProgressOperations.get(z);
+                if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode()) &&
+                    operation.getId() == status.getCommandReference()) {
+                    operation.setStatus(Operation.Status.ERROR);
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+                    try {
+                        NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
+                        Notification lockResetNotification = new Notification();
+                        lockResetNotification.setOperationId(status.getCommandReference());
+                        lockResetNotification.setStatus("Error");
+                        lockResetNotification.setDeviceIdentifier(deviceIdentifier);
+                        lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
 
-				if (Constants.SyncML.SYNCML_MSG_ID.equals(nodeName)) {
-					msgID = node.getTextContent().trim();
-					if (log.isDebugEnabled()) {
-						log.debug("Request SyncML message ID: " + msgID);
-					}
-				}
+                        service.addNotification(lockResetNotification);
+                    } catch (NotificationManagementException e) {
+                        String msg = "Failure occurred in getting notification service";
+                        log.error(msg);
+                    }
+                }
+            }
+        }
+    }
 
-			}
-		}
+    public void ring(Status status, SyncmlDocument syncmlDocument,
+                     DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException, DeviceManagementException {
 
-		for (int i = 0; i < nodeListBody.getLength(); i++) {
-			Node node = nodeListBody.item(i);
+        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+            inProgressOperations = SyncmlUtils.getDeviceManagementService()
+                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+            for (int z = 0; z < inProgressOperations.size(); z++) {
+                Operation operation = inProgressOperations.get(z);
+                if (operation.getCode().equals(OperationCode.Command.DEVICE_RING) &&
+                    operation.getId() == status.getCommandReference()) {
+                    operation.setStatus(Operation.Status.COMPLETED);
 
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+                }
+            }
+        }
+    }
 
-				String nodeName = node.getNodeName();
+    public void dataWipe(Status status, SyncmlDocument syncmlDocument,
+                         DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException, DeviceManagementException {
 
-				if ((Constants.SyncML.SYNCML_MESSAGE_TWO.equals(msgID))&&
-						(Constants.SyncML.SYNCML_RESULTS.equals(nodeName))) {
+        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+            inProgressOperations = SyncmlUtils.getDeviceManagementService()
+                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+            for (int x = 0; x < inProgressOperations.size(); x++) {
+                Operation operation = inProgressOperations.get(x);
+                if (operation.getCode().equals(OperationCode.Command.WIPE_DATA) &&
+                    operation.getId() == status.getCommandReference()) {
+                    operation.setStatus(Operation.Status.COMPLETED);
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                                     inProgressOperations);
+                }
+            }
+        }
+    }
 
-					NodeList childNodes = node.getChildNodes();
-					osVersion = childNodes.item(DevicePropertyIndex.OS_VERSION.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					imsi = childNodes.item(DevicePropertyIndex.IMSI.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					imei = childNodes.item(DevicePropertyIndex.IMEI.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devID = childNodes.item(DevicePropertyIndex.DEVICE_ID.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devMan = childNodes.item(DevicePropertyIndex.DEVICE_MANUFACTURER.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devMod = childNodes.item(DevicePropertyIndex.DEVICE_MODEL.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
-					devLang = childNodes.item(DevicePropertyIndex.DEVICE_LANGUAGE.getValue()).
-							getChildNodes().item(SYNCML_ITEM_DATA_POSITION).getTextContent();
+    public void updateDeviceOperations(Status status, SyncmlDocument syncmlDocument,
+                                       DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException, DeviceManagementException {
 
-					if (log.isDebugEnabled()) {
-						log.debug(
-								"OS Version:" + osVersion + ", IMSI: " + imsi + ", IMEI: " +
-										imei + ", DevID: " + devID + ", DevMan: " + devMan +
-										", DevMod: " + devMod + ", DevLang: " + devLang);
-					}
+        inProgressOperations = SyncmlUtils.getDeviceManagementService()
+                .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.IN_PROGRESS);
+        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED) || status.getData().equals
+                (Constants.SyncMLResponseCodes.ACCEPTED_FOR_PROCESSING)) {
+            for (int x = 0; x < inProgressOperations.size(); x++) {
+                Operation operation = inProgressOperations.get(x);
+                if (operation.getId() == status.getCommandReference()) {
+                    operation.setStatus(Operation.Status.COMPLETED);
+                    operation.setOperationResponse("true");
+                }
+            }
+            updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+        } else if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
+            for (int x = 0; x < inProgressOperations.size(); x++) {
+                Operation operation = inProgressOperations.get(x);
+                if (operation.getId() == status.getCommandReference() && inProgressOperations.get(x).
+                        getCode().equals(String.valueOf(OperationCode.Command.DEVICE_LOCK))) {
+                    operation.setStatus(Operation.Status.ERROR);
+                    operation.setOperationResponse("false");
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), inProgressOperations);
+                    try {
+                        NotificationManagementService service =
+                                WindowsAPIUtils.getNotificationManagementService();
+                        Notification lockResetNotification = new Notification();
+                        lockResetNotification.setOperationId(status.getCommandReference());
+                        lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
+                        lockResetNotification.setDeviceIdentifier(deviceIdentifier);
+                        lockResetNotification.setDescription(
+                                Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
+                        service.addNotification(lockResetNotification);
+                    } catch (NotificationManagementException e) {
+                        String msg = "Failure occurred in getting notification service";
+                        log.error(msg);
+                    }
+                }
+            }
+        }
+    }
 
-					Device generatedDevice = generateDevice(DeviceManagementConstants.MobileDeviceTypes.
-									MOBILE_DEVICE_TYPE_WINDOWS, devID, osVersion, imsi, imei, devMan, devMod);
-					try {
-						SyncmlUtils.getDeviceManagementService().enrollDevice(generatedDevice);
-						return true;
-					} catch (DeviceManagementException e) {
-						String msg = "Exception while getting Device Management Service.";
-						log.error(msg, e);
-						throw new WindowsDeviceEnrolmentException(msg, e);
-					}
-				}
-			}
-		}
+    public List<Operation> getDeviceInfo() {
 
-		return false;
-	}
+        List<Operation> deviceInfoList = new ArrayList<>();
+
+        Operation osVersion = new Operation();
+        osVersion.setCode("SOFTWARE_VERSION");
+        osVersion.setType(Operation.Type.INFO);
+        deviceInfoList.add(osVersion);
+
+        Operation imsi = new Operation();
+        imsi.setCode("IMSI");
+        imsi.setType(Operation.Type.INFO);
+        deviceInfoList.add(imsi);
+
+        Operation imei = new Operation();
+        imei.setCode("IMEI");
+        imei.setType(Operation.Type.INFO);
+        deviceInfoList.add(imei);
+
+        Operation deviceID = new Operation();
+        deviceID.setCode("DEV_ID");
+        deviceID.setType(Operation.Type.INFO);
+        deviceInfoList.add(deviceID);
+
+        Operation manufacturer = new Operation();
+        manufacturer.setCode("MANUFACTURER");
+        manufacturer.setType(Operation.Type.INFO);
+        deviceInfoList.add(manufacturer);
+
+        Operation model = new Operation();
+        model.setCode("MODEL");
+        model.setType(Operation.Type.INFO);
+        deviceInfoList.add(model);
+
+        Operation language = new Operation();
+        language.setCode("LANGUAGE");
+        language.setType(Operation.Type.INFO);
+        deviceInfoList.add(language);
+
+        Operation vender = new Operation();
+        vender.setCode("VENDER");
+        vender.setType(Operation.Type.INFO);
+        deviceInfoList.add(vender);
+
+        Operation macaddress = new Operation();
+        macaddress.setCode("MAC_ADDRESS");
+        macaddress.setType(Operation.Type.INFO);
+        deviceInfoList.add(macaddress);
+
+        Operation resolution = new Operation();
+        resolution.setCode("RESOLUTION");
+        resolution.setType(Operation.Type.INFO);
+        deviceInfoList.add(resolution);
+
+        Operation deviceName = new Operation();
+        deviceName.setCode("DEVICE_NAME");
+        deviceName.setType(Operation.Type.INFO);
+        deviceInfoList.add(deviceName);
+
+        return deviceInfoList;
+    }
+
+
 }

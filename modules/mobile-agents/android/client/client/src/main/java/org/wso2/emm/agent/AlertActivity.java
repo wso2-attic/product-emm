@@ -98,7 +98,6 @@ public class AlertActivity extends SherlockActivity {
 	 * This method stops the device ring.
 	 */
 	private void stopRing() {
-
 		if (defaultRingtone != null && defaultRingtone.isPlaying()) {
 			defaultRingtone.stop();
 		}
@@ -118,11 +117,10 @@ public class AlertActivity extends SherlockActivity {
 					setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).
 					build();
 			defaultRingtone.setAudioAttributes(attributes);
-			defaultRingtone.play();
 		} else {
 			defaultRingtone.setStreamType(AudioManager.STREAM_NOTIFICATION);
-			defaultRingtone.play();
 		}
+		defaultRingtone.play();
 	}
 
 	/**

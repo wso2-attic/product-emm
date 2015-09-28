@@ -41,7 +41,7 @@
     <string name="app_name">WSO2 Agent</string>
     <string name="empty_app_title"></string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello MDM</string>
+    <string name="hello_world">Hello EMM</string>
     <string name="title_activity_display_device_info">DisplayDeviceInfo</string>
     <string name="url">http://192.168.6.6:8080/mdm/register</string>
     <string name="title_activity_register_successful">RegisterSuccessful</string>
@@ -66,7 +66,7 @@
     <string name="menu_item_pin">Change PIN</string>
     <string name="menu_item_ip">Change Server Address</string>
     <string name="menu_item_log">Debug Log</string>
-    <string name="title_activity_alert">Message from MDM</string>
+    <string name="title_activity_alert">Message from EMM</string>
     <string name="device_admin_enable_alert">This will enable device administration</string>
     <string name="device_enroll_type_byod">BYOD</string>
     <string name="device_enroll_type_cope">COPE</string>
@@ -160,7 +160,7 @@
     <string name="policy_violation_password">\nYour screen lock password doesn\'t meet current policy requirement. Please reset your passcode \n</string>
     <string name="policy_violation_password_tail">Your screen lock password doesn\'t meet current policy requirement. Please reset your passcode \n</string>
     <string name="policy_violation_apps">\n</string>
-    <string name="policy_violation_apps_tail">\nFollowing apps are blacklisted by your MDM Admin, please remove them \n\n</string>
+    <string name="policy_violation_apps_tail">\nFollowing apps are blacklisted by your EMM Admin, please remove them \n\n</string>
     <string name="policy_violation_apps_number">. </string>
 
     <!-- SHARED PREF KEYS -->
@@ -216,7 +216,7 @@
     <string name="error_invalid_server_address">Invalid server Address. Please try again.</string>
     <string name="error_encrypt_policy">\nYour device should be encrypted according to the policy, please enable device encryption through device settings\n</string>
     <string name="error_app_install_policy">\nFollowing apps must be installed on your device, please install them. \n</string>
-    <string name="error_app_uninstall_policy">\nFollowing apps are blacklisted by your MDM Admin, please remove them. \n</string>
+    <string name="error_app_uninstall_policy">\nFollowing apps are blacklisted by your EMM Admin, please remove them. \n</string>
     <string name="error_wifi_policy">\nYou are not using company WIFI account, please change your WIFI configuration \n</string>
 
     <!-- DIALOG TITLES AND MESSAGES -->
@@ -235,12 +235,12 @@
     <string name="dialog_init_device_type">Device type</string>
     <string name="dialog_init_end"> device, are you sure you want to proceed ?</string>
     <string name="dialog_init_end_general"> are you sure you want to proceed ?</string>
-    <string name="dialog_unregister">You are trying to unregister from MDM. Are you sure you want to proceed ?</string>
+    <string name="dialog_unregister">You are trying to unregister from EMM. Are you sure you want to proceed ?</string>
 
 
     <!-- REGISTRATION -->
     <string name="register_button_text">Register</string>
-    <string name="register_text_view_text_unregister">Device un-registration successful, click to re-register to the MDM</string>
+    <string name="register_text_view_text_unregister">Device un-registration successful, click to re-register to the EMM</string>
 
     <!-- AGENT SETTINGS ACTIVITY -->
     <string name="menu_item_phone_info">Phone Info</string>
@@ -270,8 +270,8 @@
     <string name="button_agree">Agree</string>
     <string name="button_settings">Settings</string>
     <string name="button_stop">Stop</string>
-    <string name="txt_message">Message from MDM Server</string>
-    <string name="txt_notification">Message from MDM Server</string>
+    <string name="txt_message">Message from EMM Server</string>
+    <string name="txt_notification">Message from EMM Server</string>
     <string name="button_cancel">Cancel</string>
     <string name="authentication_failed">Authentication Failed</string>
     <string name="try_again">Try again</string>
@@ -290,11 +290,11 @@
     <string name="txt_enter_pin">Enter PIN Code</string>
     <string name="txt_new_pin">Set PIN Code</string>
     <string name="txt_start_reg">Start Registration</string>
-    <string name="txt_register_success">Device successfully registered, click to un-register from the MDM</string>
+    <string name="txt_register_success">Device successfully registered, click to un-register from the EMM</string>
     <string name="txt_unregister">Unregister</string>
     <string name="txt_enroll">Please click to enroll the device</string>
     <string name="txt_lblpin">Please enter a PIN code to make your device safe from critical operations</string>
-    <string name="button_unregister_text">Device successfully registered, click to unregister from the MDM</string>
+    <string name="button_unregister_text">Device successfully registered, click to unregister from the EMM</string>
 
     <!-- APPLICATION MANAGER -->
     <string name="application_mgr_download_location">/Download/</string>

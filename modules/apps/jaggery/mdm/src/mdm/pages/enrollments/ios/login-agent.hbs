@@ -22,6 +22,8 @@ under the License. --}}
         unit "enrollment-access-control"
         allowedPlatform = "iOS"
         currentPage = "login-agent"
+        lastPage = "download-agent"
+        nextPage = "license-agent"
     }}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
@@ -34,7 +36,7 @@ under the License. --}}
 {{#zone "body"}}
     {{
         unit "wizard-stepper"
-        steps = "Download and Install Certificate and Agent,
+        steps = "Install Certificate and Agent,
         Login to Enterprise Mobility Manager,
         Accept End User License Agreement"
         currentStep = "Login to Enterprise Mobility Manager"
@@ -42,6 +44,6 @@ under the License. --}}
     }}
     {{
         unit "login-box-agent"
-        loginActionURL = "/mdm/ios/controller/login"
+        loginActionURL = "/mdm/enrollment/ios/login"
     }}
 {{/zone}}

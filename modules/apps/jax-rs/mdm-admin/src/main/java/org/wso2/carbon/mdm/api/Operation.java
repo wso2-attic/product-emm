@@ -90,16 +90,13 @@ public class Operation {
     @POST
     @Path("installApp/{tenantDomain}")
     public ResponsePayload installApplication(ApplicationWrapper applicationWrapper,
-                                      @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+                                              @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
         ResponsePayload responseMsg = new ResponsePayload();
         ApplicationManager appManagerConnector;
-        DeviceManagementProviderService deviceManagementService;
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
         ArrayList<DeviceIdentifier> deviceIdentifiers;
         try {
             appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            deviceManagementService = MDMAPIUtils.getDeviceManagementService(MultitenantConstants
-                    .SUPER_TENANT_DOMAIN_NAME);
             MobileApp mobileApp = applicationWrapper.getApplication();
 
             if (applicationWrapper.getDeviceIdentifiers() != null) {
@@ -126,17 +123,13 @@ public class Operation {
     @POST
     @Path("uninstallApp/{tenantDomain}")
     public ResponsePayload uninstallApplication(ApplicationWrapper applicationWrapper,
-                                        @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
-
+                                                @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
         ResponsePayload responseMsg = new ResponsePayload();
         ApplicationManager appManagerConnector;
-        DeviceManagementProviderService deviceManagementService;
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
         ArrayList<DeviceIdentifier> deviceIdentifiers;
         try {
             appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            deviceManagementService = MDMAPIUtils.getDeviceManagementService(MultitenantConstants
-                    .SUPER_TENANT_DOMAIN_NAME);
             MobileApp mobileApp = applicationWrapper.getApplication();
 
             if (applicationWrapper.getDeviceIdentifiers() != null) {

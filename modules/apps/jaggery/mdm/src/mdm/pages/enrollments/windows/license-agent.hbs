@@ -22,6 +22,7 @@ under the License. --}}
         unit "enrollment-access-control"
         allowedPlatform = "Windows Phone"
         currentPage = "license-agent"
+        lastPage = "login-agent"
     }}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
@@ -34,13 +35,14 @@ under the License. --}}
 {{#zone "body"}}
     {{
         unit "wizard-stepper"
-        steps = "Login to Enterprise Mobility Manager,
+        steps = "Start Workplace,
+        Login to Enterprise Mobility Manager,
         Accept End User License Agreement"
         currentStep = "Accept End User License Agreement"
-        currentStepIndex = 1
+        currentStepIndex = 2
     }}
     {{
         unit "license-box-agent"
-        licenseAcceptActionURL = "/mdm/windows/controller/enroll"
+        licenseAcceptActionURL = "/mdm/enrollment/windows/enroll"
     }}
 {{/zone}}

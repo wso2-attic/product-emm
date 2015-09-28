@@ -29,12 +29,18 @@ var userAgentIsiPodTouch = (userAgent.indexOf("iPod Touch") > -1);
 if (!userAgentIsiPhone && !userAgentIsiPad && !userAgentIsiPodTouch) {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
-    var getResource = function (name) {
-        var f = new File(name);
-        f.open("r");
-        var cont = f.readAll();
-        f.close();
-        return cont;
+    var getResource = function (resourcePath) {
+        var file = new File(resourcePath);
+        var resource = null;
+        try {
+            file.open("r");
+            resource = file.readAll();
+        } catch (e) {
+            log.error("Error in reading resource", e);
+        } finally {
+            file.close();
+        }
+        return resource;
     };
 
     var Handlebars = require("/lib/handlebars-v2.0.0.js")["Handlebars"];

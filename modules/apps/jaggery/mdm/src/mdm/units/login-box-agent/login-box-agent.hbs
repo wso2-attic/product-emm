@@ -15,45 +15,49 @@ specific language governing permissions and limitations
 under the License. --}}
 
 {{#zone "main"}}
-    <div>
-        <form class="form-login-box" action="{{loginActionURL}}" method="POST">
-            <div class="row">
-                <div class="container col-md-8 wr-text">
-                    <!-- validation -->
-                    <span class="wr-validation-summary hidden">
-                        <p></p>
-                    </span>
-                    <label class="input-label">Username *</label>
-                        <div class="input-control text">
-                            <input name="username" type="text" placeholder="Enter your username here"/>
-                        </div>
-                    <label class="input-label">Password *</label>
-                        <div class="input-control text">
-                            <input name="password" type="password" value="" placeholder="Enter your password here"/>
-                        </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="ownership" id="optionsRadios1" value="BYOD" checked>
-                            &nbsp; BYOD (This is my own device)
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="ownership" id="optionsRadios2" value="COPE">
-                            &nbsp; COPE (This is a corporate device)
-                        </label>
-                    </div>
+    <form class="form-login-box" action="{{loginActionURL}}" method="POST" onsubmit="return validate();">
+        <div class="row">
+            <div class="container col-md-8 wr-text">
+                <!-- start of validation -->
+                <div id="enrollment-error-msg" class="alert alert-danger hidden" role="alert">
+                    <span></span>
+                </div>
+                <!-- end of validation -->
+                <div class="wr-input-control">
+                    <label class="input-label" for="username">
+                        Username *
+                    </label>
+                    <input id="username" name="username" type="text" class="form-control" maxlength="30" placeholder="Enter your username here"/>
+                </div>
+                <br class="c-both" />
+                <div class="wr-input-control">
+                    <label class="input-label" for="password">
+                        Password *
+                    </label>
+                    <input id="password" name="password" type="password" class="form-control" maxlength="30" placeholder="Enter your password here"/>
+                </div>
+                <br class="c-both" />
+                <div class="radio">
+                    <label class="input-label">
+                        <input type="radio" name="ownership" value="BYOD" checked>
+                        &nbsp; BYOD (This is my own device)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label class="input-label">
+                        <input type="radio" name="ownership" value="COPE">
+                        &nbsp; COPE (This is a corporate device)
+                    </label>
                 </div>
             </div>
-            <div class="row">
-                <div class="container col-md-4 wr-buttons">
-                    <a href="#" class="btn-download-agent">Login</a>
-                </div>
+        </div>
+        <div class="row">
+            <div class="container col-md-4 wr-buttons">
+                <a href="#" class="btn-download-agent">Login</a>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 {{/zone}}
-
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/login-box-agent.js"></script>
 {{/zone}}

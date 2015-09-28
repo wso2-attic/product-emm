@@ -50,11 +50,16 @@ if (platform != "iOS") {
             var byteArrayInputStream = new ByteArrayInputStream(stream);
             print(new Stream(byteArrayInputStream));
         } else {
-            response.sendRedirect("/error-page");
+            // one visible possibility would be server sending 500
+            // error in downloading server certificate
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/error/ios/certificate-download-failure");
         }
     } catch (e) {
-        log.error("Error occurred when downloading CA: " + e);
-        response.sendRedirect("/error-page");
+        log.error("Error occurred when downloading emm certificate", e);
+        // error in downloading server certificate
+        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/ios/certificate-download-failure");
+    } finally {
+        method.releaseConnection();
     }
 }
 %>

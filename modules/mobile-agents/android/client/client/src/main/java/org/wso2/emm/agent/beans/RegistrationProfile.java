@@ -32,7 +32,7 @@ public class RegistrationProfile {
     private String owner;
     private String grantType;
 
-    private final String TAG = RegistrationProfile.class.getSimpleName();
+    private static final String TAG = RegistrationProfile.class.getSimpleName();
 
     public String getCallbackUrl() {
         return callbackUrl;

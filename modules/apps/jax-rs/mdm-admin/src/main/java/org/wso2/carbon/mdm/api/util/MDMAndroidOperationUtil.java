@@ -37,7 +37,7 @@ public class MDMAndroidOperationUtil {
 	 * @throws MDMAPIException
 	 *
 	 */
-	public static Operation createInstallAppOperation(MobileApp application) throws MDMAPIException{
+	public static Operation createInstallAppOperation(MobileApp application) throws MDMAPIException {
 
 		ProfileOperation operation = new ProfileOperation();
 		operation.setCode(MDMAppConstants.AndroidConstants.OPCODE_INSTALL_APPLICATION);
@@ -78,7 +78,7 @@ public class MDMAndroidOperationUtil {
 	 * @return operation
 	 * @throws MDMAPIException
 	 */
-	public static Operation createAppUninstallOperation(MobileApp application) throws MDMAPIException{
+	public static Operation createAppUninstallOperation(MobileApp application) throws MDMAPIException {
 
 		ProfileOperation operation = new ProfileOperation();
 		operation.setCode(MDMAppConstants.AndroidConstants.OPCODE_UNINSTALL_APPLICATION);

@@ -44,7 +44,7 @@
         <parm name="APPID" value="w7"/>
         <parm name="PROVIDER-ID" value="MobiCDMServer"/>
         <parm name="NAME" value="wso2"/>
-        <parm name="ADDR" value="https://EnterpriseEnrollment.wso2.com/Synchml/initialquery"/>
+        <parm name="ADDR" value="https://EnterpriseEnrollment.wso2.com/Syncml/initialquery"/>
         <parm name="CONNRETRYFREQ" value="6"/>
         <parm name="INITIALBACKOFFTIME" value="30000"/>
         <parm name="MAXBACKOFFTIME" value="120000"/>
@@ -61,8 +61,8 @@
         <characteristic type="APPAUTH">
             <parm name="AAUTHLEVEL" value="APPSRV"/>
             <parm name="AAUTHTYPE" value="DIGEST"/>
-            <parm name="AAUTHNAME" value="dummy"/>
-            <parm name="AAUTHSECRET" value="dummy"/>
+            <parm name="AAUTHNAME" value=""/>
+            <parm name="AAUTHSECRET" value=""/>
             <parm name="AAUTHDATA" value="ZHVtbXk="/>
         </characteristic>
     </characteristic>

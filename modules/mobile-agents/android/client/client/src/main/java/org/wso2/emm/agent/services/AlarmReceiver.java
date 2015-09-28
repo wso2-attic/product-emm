@@ -42,7 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		try {
 			messageProcessor.getMessages();
 		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform operation." + e);
+			Log.e(TAG, "Failed to perform operation", e);
 		}
 	}
 

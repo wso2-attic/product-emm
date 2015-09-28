@@ -18,6 +18,7 @@ target
 
 #built application files
 *.ap_
+*.ipa
 
 # files for the dex VM
 *.dex
