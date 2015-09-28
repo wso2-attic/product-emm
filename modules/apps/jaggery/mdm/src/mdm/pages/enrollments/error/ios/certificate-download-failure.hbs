@@ -16,34 +16,23 @@ under the License. --}}
 
 {{!-- Using enrollment layout --}}
 {{layout "enrollment"}}
-{{!-- defining controlled access parameters --}}
-{{#zone "accessControl"}}
-    {{
-        unit "enrollment-access-control"
-        allowedPlatform = "iOS"
-        currentPage = "login-agent"
-        lastPage = "download-agent"
-        nextPage = "license-agent"
-    }}
-{{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | iOS Enrollment | Login to Enterprise Mobility Manager
+    WSO2 EMM | iOS Enrollment | Certificate Download Failure
 {{/zone}}
 {{#zone "header"}}
-    iOS Enrollment
+   iOS Certificate Download Failure
 {{/zone}}
 {{#zone "body"}}
-    {{
-        unit "wizard-stepper"
-        steps = "Install Certificate and Agent,
-        Login to Enterprise Mobility Manager,
-        Accept End User License Agreement"
-        currentStep = "Login to Enterprise Mobility Manager"
-        currentStepIndex = 1
-    }}
-    {{
-        unit "login-box-agent"
-        loginActionURL = "/mdm/enrollment/ios/login"
-    }}
+    <div class="wr-head">
+        <h3>Possible Causes :</h3>
+    </div>
+    [1] Network Issue. <br/>
+    [2] Bad Request Call to Server. <br/>
+    [3] Internal Server Error. <br/>
+    <div class="row">
+        <div class="container col-md-4 wr-buttons">
+            <a href="/mdm/enrollment" class="btn-download-agent">Redirect</a>
+        </div>
+    </div>
 {{/zone}}

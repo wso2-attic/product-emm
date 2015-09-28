@@ -43,7 +43,7 @@ public class AndroidEnrollment extends TestBase {
         client = new RestClient(backendURL);
     }
 
-    @Test(groups = Constants.Enrollment.ANDROID_ENROLLMENT_GROUP, description = "Test an Android device enrollment.")
+    @Test(description = "Test an Android device enrollment.")
     public void testAndroidEnrollment() throws Exception {
         HttpResponse response = client.post(Constants.Enrollment.ENROLLMENT_ENDPOINT,
                                             Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_PAYLOAD);

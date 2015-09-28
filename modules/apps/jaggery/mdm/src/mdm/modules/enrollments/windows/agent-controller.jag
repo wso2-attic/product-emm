@@ -49,17 +49,17 @@ if (platform != "Windows Phone") {
             "password": password, "ownership": ownership}}));
 
         if (xhr.status == 200 && xhr.readyState == 4) {
-            session.put("username", username);
-            session.put("password", password);
-            session.put("ownership", ownership);
+            session.put("authenticatedUser", username);
             session.put("windowsBinaryToken", xhr.responseText);
-
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
         } else if (xhr.status == 403) {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent#auth-failed");
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
+        } else if (xhr.status == 409) {
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?" +
+                "error=auth-failed&message=Provided Workplace email does not match with username. Please check.");
         } else {
-            // only possibility would be server sending 500
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent#error");
+            // one visible possibility would be server sending 500
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=unexpected");
         }
     }
 }

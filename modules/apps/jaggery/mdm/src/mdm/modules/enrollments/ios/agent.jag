@@ -36,7 +36,7 @@ if (!userAgentIsiPhone && !userAgentIsiPad && !userAgentIsiPodTouch) {
             file.open("r");
             resource = file.readAll();
         } catch (e) {
-            log.error("Error in reading resource" + e);
+            log.error("Error in reading resource", e);
         } finally {
             file.close();
         }
