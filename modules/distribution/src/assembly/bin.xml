@@ -633,13 +633,6 @@
             <filtered>true</filtered>
         </file>
 
-	<!-- Copying identity-mgt.properties -->
-        <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/identity-mgt.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-
         <!-- Copying governance.xml -->
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/governance.xml</source>
