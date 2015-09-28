@@ -61,7 +61,7 @@ if (platform != "Windows Phone") {
             "windowsBinaryToken" : windowsBinaryToken
         });
 
-        response.contentType = "application/html";
+        response.contentType = "text/html";
         response.content = workplaceSwitchRequest;
     }
 }
