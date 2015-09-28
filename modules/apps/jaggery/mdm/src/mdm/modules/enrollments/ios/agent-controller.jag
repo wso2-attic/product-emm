@@ -49,16 +49,17 @@ if (platform != "iOS") {
         if (xhr.status == 200 && xhr.readyState == 4) {
             var responseContent = parse(xhr.responseText);
 
-            session.put("username", username);
-            session.put("password", password);
-            session.put("ownership", ownership);
+            session.put("authenticatedUser", username);
+            session.put("authenticatedUserPassword", password);
+            session.put("authenticatedUserDeviceOwnership", ownership);
             session.put("iOSChallengeToken", responseContent["challengeToken"]);
 
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/license-agent");
-        } else if (xhr.status == 403 || xhr.status == 404) {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#auth-failed");
+        } else if (xhr.status == 401) {
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=auth-failed");
         } else {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent#error");
+            // one visible possibility would be server sending 500
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
         }
     }
 }
