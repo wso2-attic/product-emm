@@ -70,6 +70,14 @@ public class License {
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
+    /**
+     * This method is used to add license to a specific device type.
+     *
+     * @param deviceType Device type, ex: android, ios
+     * @param license License object
+     * @return Returns the acknowledgement for the action
+     * @throws MDMAPIException
+     */
     @POST
     @Path ("{deviceType}")
     public Response addLicense(@PathParam ("deviceType") String deviceType,
