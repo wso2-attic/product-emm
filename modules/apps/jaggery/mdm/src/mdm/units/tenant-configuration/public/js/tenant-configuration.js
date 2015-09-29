@@ -60,6 +60,7 @@ var configParams = {
     "GCM_API_KEY": "gcmAPIKey",
     "GCM_SENDER_ID": "gcmSenderId",
     "ANDROID_EULA": "androidEula",
+    "IOS_EULA": "iosEula",
     "CONFIG_COUNTRY": "configCountry",
     "CONFIG_STATE": "configState",
     "CONFIG_LOCALITY": "configLocality",
@@ -455,6 +456,7 @@ $(document).ready(function () {
         var MDMCertTopicID = $("#ios-config-mdm-certificate-topic-id").val();
         var APNSCertPassword = $("#ios-config-apns-certificate-password").val();
         var configOrgDisplayName = $("#ios-org-display-name").val();
+        var iosLicense = tinymce.get('ios-eula').getContent();
 
         if (!configCountry) {
             $(errorMsg).text("SCEP country is a required field. It cannot be empty.");
@@ -569,6 +571,12 @@ $(document).ready(function () {
             "contentType": "text"
         };
 
+        var iosEula = {
+            "name": configParams["IOS_EULA"],
+            "value": iosLicense,
+            "contentType": "text"
+        };
+
         configList.push(configCountry);
         configList.push(configState);
         configList.push(configLocality);
@@ -580,6 +588,7 @@ $(document).ready(function () {
         configList.push(paramBase64MDMCert);
         configList.push(paramBase64APNSCert);
         configList.push(paramOrganizationDisplayName);
+        configList.push(iosEula);
 
         addConfigFormData.type = platformTypeConstants["IOS"];
         addConfigFormData.configuration = configList;
