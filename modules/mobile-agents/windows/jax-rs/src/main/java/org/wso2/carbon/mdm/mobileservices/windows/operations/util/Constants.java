@@ -28,6 +28,7 @@ public class Constants {
 	public static final String SERVER_SECRET = "dummy";
 	public static final String INITIAL_NONCE = "ZHVtbXk=";
 	public static final String DISENROLL_ALERT_DATA = "1226";
+	public static final String INITIAL_ALERT_DATA ="1201";
 
 	public static final String SYNCML_ROOT_ELEMENT_NAME = "SyncML";
 	public static final String XMLNS_SYNCML = "SYNCML:SYNCML1.2";

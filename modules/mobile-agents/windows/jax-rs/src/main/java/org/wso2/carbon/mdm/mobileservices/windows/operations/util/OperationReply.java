@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -31,11 +31,9 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.PasscodePolicy;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
-import org.wso2.carbon.policy.mgt.common.Policy;
+import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.common.Profile;
 import org.wso2.carbon.policy.mgt.common.ProfileFeature;
-import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -120,7 +118,7 @@ public class OperationReply {
     private void generateBody() throws WindowsOperationException {
         SyncmlBody syncmlBody = generateStatuses();
         try {
-           appendOperations(syncmlBody);
+            appendOperations(syncmlBody);
         } catch (WindowsOperationException e) {
             String message = "Error while generating operation of the syncml message.";
             log.error(message);
@@ -184,7 +182,7 @@ public class OperationReply {
             status.add(replaceStatus);
         }
         if (sourceSyncmlBody.getExec() != null) {
-            for (Iterator<Exec>execIterator = sourceSyncmlBody.getExec().iterator(); execIterator.hasNext();) {
+            for (Iterator<Exec> execIterator = sourceSyncmlBody.getExec().iterator(); execIterator.hasNext(); ) {
                 int execCommandId = ++headerCommandId;
                 Exec exec = execIterator.next();
                 Status execStatus = new Status(execCommandId, sourceHeader.getMsgID(),
@@ -212,6 +210,7 @@ public class OperationReply {
         List<Add> addsAtomic = new ArrayList<Add>();
         Replace replaceElement = new Replace();
         List<Item> replaceItem = new ArrayList<>();
+        Alert alert = new Alert();
 
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
@@ -220,40 +219,9 @@ public class OperationReply {
 
                 switch (type) {
                     case POLICY:
-                        if (operation.getCode().equals("POLICY_BUNDLE"))
-                        {
-                            List<? extends Operation> operationList = (List<? extends Operation>) operation.getPayLoad();
-                            for (int y = 0; y < operationList.size(); y++) {
-                                Operation policy = operationList.get(y);
-                                if (policy.getCode().equals("CAMERA")) {
-                                    Item itemReplace = null;
-                                    try {
-                                        itemReplace = appendReplaceInfo(policy);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    replaceItem.add(itemReplace);
-                                }
-                                if (policy.getCode().equals("ENCRYPT_STORAGE")) {
-
-                                    Item itemReplace = null;
-                                    try {
-                                        itemReplace = appendReplaceInfo(policy);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    replaceItem.add(itemReplace);
-                                }
-                                if (policy.getCode().equals("PASSCODE_POLICY")) {
-                                    List<Add> addConfig = appendAddInfo(policy);
-                                    for (Add addConfiguration : addConfig) {
-                                        addsAtomic.add(addConfiguration);
-                                    }
-                                    atomicElement.setCommandId(76);
-
-                                }
-                            }
-                        }
+                        Sequence policySequence = new Sequence();
+                        policySequence = buildSequence(operation, policySequence);
+                        syncmlBody.setSequence(policySequence);
                         break;
                     case CONFIG:
                         List<Add> addConfig = appendAddConfiguration(operation);
@@ -297,38 +265,54 @@ public class OperationReply {
                         }
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                                 .OperationCodes.MONITOR)) {
-                            PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
-                            DeviceIdentifier deviceIdentifier =
-                                    convertToDeviceIdentifierObject(syncmlDocument.getHeader().getSource().getLocURI());
-                            Policy effectivePolicy = policyManagerService.getEffectivePolicy(deviceIdentifier);
-                            Profile profile = effectivePolicy.getProfile();
-                            List<ProfileFeature> profileFeatures = profile.getProfileFeaturesList();
-                            for (int y = 0; y < profileFeatures.size(); y++) {
-                                ProfileFeature profileFeature = profileFeatures.get(y);
-                                String policyOperationCode = profileFeature.getFeatureCode();
-                                if (profileFeature.getFeatureCode().equals("CAMERA")) {
-                                    String opCode = "CAMERA_STATUS";
-                                    Operation operationcode = new Operation();
-                                    operationcode.setCode(opCode);
+                            if (this.syncmlDocument.getBody().getAlert() != null) {
+                                if (this.syncmlDocument.getBody().getAlert().getData().equals
+                                        (Constants.INITIAL_ALERT_DATA)) {
 
-                                    Item item = appendGetInfo(operationcode);
-                                    itemsGet.add(item);
-                                }
-                                if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
-                                    String encryptCode = "ENCRYPT_STORAGE_STATUS";
-                                    Operation storageOperatonCode = new Operation();
-                                    storageOperatonCode.setCode(encryptCode);
+                                    DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
+                                            syncmlDocument.getHeader().getSource().getLocURI());
+                                    List<ProfileFeature> profileFeatures = null;
+                                    try {
+                                        profileFeatures = WindowsAPIUtils.getPolicyManagerService().
+                                                getEffectiveFeatures(deviceIdentifier);
+                                    } catch (FeatureManagementException e) {
+                                        e.printStackTrace();
+                                    }
 
-                                    Item storageStatusItem = appendGetInfo(storageOperatonCode);
-                                    itemsGet.add(storageStatusItem);
+                                    for (int y = 0; y < profileFeatures.size(); y++) {
+                                        ProfileFeature profileFeature = profileFeatures.get(y);
+
+                                        if (profileFeature.getFeatureCode().equals("CAMERA")) {
+                                            String opCode = "CAMERA_STATUS";
+                                            Operation operationcode = new Operation();
+                                            operationcode.setCode(opCode);
+
+                                            Item item = appendGetInfo(operationcode);
+                                            itemsGet.add(item);
+                                        }
+                                        if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
+                                            String encryptCode = "ENCRYPT_STORAGE_STATUS";
+                                            Operation storageOperatonCode = new Operation();
+                                            storageOperatonCode.setCode(encryptCode);
+
+                                            Item storageStatusItem = appendGetInfo(storageOperatonCode);
+                                            itemsGet.add(storageStatusItem);
+                                        }
+                                        if (profileFeature.getFeatureCode().equals("PASSCODE_POLICY")) {
+                                            String passcode = "DEVICE_PASSWORD_STATUS";
+                                            Operation storageOperatonCode = new Operation();
+                                            storageOperatonCode.setCode(passcode);
+
+                                            Item storageStatusItem = appendGetInfo(storageOperatonCode);
+                                            itemsGet.add(storageStatusItem);
+                                        }
+                                    }
                                 }
                             }
-//                            Item itemMonitorGet = appendGetInfo(operation);
-//                            itemsGet.add(itemMonitorGet);
                         }
                         break;
-                    default:
-                        throw new WindowsOperationException("Operation with no type found");
+//                    default:
+//                        throw new WindowsOperationException("Operation with no type found");
                 }
             }
         }
@@ -358,7 +342,7 @@ public class OperationReply {
             if (operationCode != null && operationCode.equals(command.name())) {
                 Target target = new Target();
                 target.setLocURI(command.getCode());
-                if(operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.DISENROLL)) {
                     Meta meta = new Meta();
                     meta.setFormat("chr");
@@ -735,26 +719,82 @@ public class OperationReply {
     }
 
     public Sequence buildSequence(Operation operation, Sequence sequenceElement) {
+
         sequenceElement.setCommandId(operation.getId());
+        if (operation.getCode().equals("LOCKREST")) {
+            Exec execElement = new Exec();
+            execElement.setCommandId(operation.getId());
+            List<Item> itemsExec = new ArrayList<Item>();
+            Item itemExec = appendExecInfo(operation);
+            itemsExec.add(itemExec);
+            execElement.setItems(itemsExec);
 
-        Exec execElement = new Exec();
-        execElement.setCommandId(operation.getId());
-        List<Item> itemsExec = new ArrayList<Item>();
-        Item itemExec = appendExecInfo(operation);
-        itemsExec.add(itemExec);
-        execElement.setItems(itemsExec);
+            sequenceElement.setExec(execElement);
 
-        sequenceElement.setExec(execElement);
+            Get getElements = new Get();
+            getElements.setCommandId(operation.getId());
+            List<Item> getItems = new ArrayList<>();
+            Item itemGets = appendGetInfo(operation);
+            getItems.add(itemGets);
+            getElements.setItems(getItems);
 
-        Get getElements = new Get();
-        getElements.setCommandId(operation.getId());
-        List<Item> getItems = new ArrayList<>();
-        Item itemGets = appendGetInfo(operation);
-        getItems.add(itemGets);
-        getElements.setItems(getItems);
+            sequenceElement.setGet(getElements);
+            return sequenceElement;
+        } else if (operation.getCode().equals("POLICY_BUNDLE")) {
 
-        sequenceElement.setGet(getElements);
-        return  sequenceElement;
+            List<? extends Operation> operationList = (List<? extends Operation>) operation.getPayLoad();
+
+            for (int y = 0; y < operationList.size(); y++) {
+                Operation policy = operationList.get(y);
+                if (policy.getCode().equals("CAMERA")) {
+
+                    Replace replaceCameraConfig = new Replace();
+                    Item cameraItem;
+                    List<Item> cameraItems = new ArrayList<Item>();
+                    try {
+                        cameraItem = appendReplaceInfo(policy);
+                        cameraItems.add(cameraItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    replaceCameraConfig.setCommandId(operation.getId());
+                    replaceCameraConfig.setItems(cameraItems);
+                    sequenceElement.setReplace(replaceCameraConfig);
+                }
+                if (policy.getCode().equals("ENCRYPT_STORAGE")) {
+                    Replace replaceStorageConfig = new Replace();
+                    Item storageItem;
+                    List<Item> storageItems = new ArrayList<Item>();
+                    try {
+                        storageItem = appendReplaceInfo(policy);
+                        storageItems.add(storageItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    replaceStorageConfig.setCommandId(operation.getId());
+                    replaceStorageConfig.setItems(storageItems);
+                    sequenceElement.setReplace(replaceStorageConfig);
+                }
+                if (policy.getCode().equals("PASSCODE_POLICY")) {
+
+                    Atomic atomicElement = new Atomic();
+                    List<Add> addConfig = null;
+                    try {
+                        addConfig = appendAddInfo(policy);
+                    } catch (WindowsOperationException e) {
+                        e.printStackTrace();
+                    }
+                    atomicElement.setAdds(addConfig);
+                    atomicElement.setCommandId(operation.getId());
+
+                    sequenceElement.setAtomic(atomicElement);
+                }
+            }
+            return sequenceElement;
+
+        } else {
+            return null;
+        }
     }
 }
 

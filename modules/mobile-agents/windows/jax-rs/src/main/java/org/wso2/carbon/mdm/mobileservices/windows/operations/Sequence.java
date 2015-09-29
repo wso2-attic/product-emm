@@ -30,6 +30,24 @@ public class Sequence {
     int commandId;
     Exec exec;
     Get get;
+    Replace replace;
+    Atomic atomic;
+
+    public Replace getReplace() {
+        return replace;
+    }
+
+    public void setReplace(Replace replace) {
+        this.replace = replace;
+    }
+
+    public Atomic getAtomic() {
+        return atomic;
+    }
+
+    public void setAtomic(Atomic atomic) {
+        this.atomic = atomic;
+    }
 
     public Exec getExec() {
         return exec;
@@ -68,6 +86,12 @@ public class Sequence {
         }
         if (getGet() != null) {
             getGet().buildGetElement(doc, sequence);
+        }
+        if (getReplace() != null) {
+            getReplace().buildReplaceElement(doc, sequence);
+        }
+        if (getAtomic() != null) {
+            getAtomic().buildAtomicElement(doc, sequence);
         }
     }
 }
