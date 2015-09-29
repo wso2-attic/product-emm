@@ -59,6 +59,7 @@ var configParams = {
     "NOTIFIER_FREQUENCY": "notifierFrequency",
     "GCM_API_KEY": "gcmAPIKey",
     "GCM_SENDER_ID": "gcmSenderId",
+    "ANDROID_EULA": "androidEula",
     "CONFIG_COUNTRY": "configCountry",
     "CONFIG_STATE": "configState",
     "CONFIG_LOCALITY": "configLocality",
@@ -80,6 +81,17 @@ var configParams = {
 
 $(document).ready(function () {
     $("#gcm-inputs").hide();
+    tinymce.init({
+        selector: "textarea",
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime image table contextmenu paste"
+        ],
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+
     var getAndroidConfigAPI = "/mdm-android-agent/configuration";
     var getGeneralConfigAPI = "/mdm-admin/configuration";
 
@@ -110,6 +122,8 @@ $(document).ready(function () {
                         $("input#android-config-gcm-api-key").val(config.value);
                     } else if(config.name == configParams["GCM_SENDER_ID"]){
                         $("input#android-config-gcm-sender-id").val(config.value);
+                    } else if(config.name == configParams["ANDROID_EULA"]){
+                        $("#android-eula").val(config.value);
                     }
                 }
             }
@@ -172,6 +186,7 @@ $(document).ready(function () {
         var notifierFrequency = $("input#android-config-notifier-frequency").val();
         var gcmAPIKey = $("input#android-config-gcm-api-key").val();
         var gcmSenderId = $("input#android-config-gcm-sender-id").val();
+        var androidLicense = tinymce.get('android-eula').getContent();
 
         var errorMsgWrapper = "#android-config-error-msg";
         var errorMsg = "#android-config-error-msg span";
@@ -216,8 +231,15 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var androidEula = {
+                "name": configParams["ANDROID_EULA"],
+                "value": androidLicense,
+                "contentType": "text"
+            };
+
             configList.push(type);
             configList.push(frequency);
+            configList.push(androidEula);
             if (notifierType == notifierTypeConstants["GCM"]) {
                 configList.push(gcmKey);
                 configList.push(gcmId);
