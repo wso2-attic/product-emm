@@ -95,6 +95,7 @@ $(document).ready(function () {
 
     var getAndroidConfigAPI = "/mdm-android-agent/configuration";
     var getGeneralConfigAPI = "/mdm-admin/configuration";
+    var getIosConfigAPI = "/ios/configuration";
 
     /**
      * Following requests would execute
@@ -162,6 +163,48 @@ $(document).ready(function () {
 
         }
     );
+
+    invokerUtil.get(
+        getIosConfigAPI,
+
+        function (data) {
+
+            if (data != null && data.configuration != null) {
+                for (var i = 0; i < data.configuration.length; i++) {
+                    var config = data.configuration[i];
+                    if(config.name == configParams["CONFIG_COUNTRY"]){
+                        $("input#ios-config-country").val(config.value);
+                    } else if(config.name == configParams["CONFIG_STATE"]){
+                        $("input#ios-config-state").val(config.value);
+                    } else if(config.name == configParams["CONFIG_LOCALITY"]){
+                        $("input#ios-config-locality").val(config.value);
+                    } else if(config.name == configParams["CONFIG_ORGANIZATION"]){
+                        $("input#ios-config-organization").val(config.value);
+                    } else if(config.name == configParams["CONFIG_ORGANIZATION_UNIT"]){
+                        $("input#ios-config-organization-unit").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT_PASSWORD"]){
+                        $("input#ios-config-mdm-certificate-password").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT_TOPIC_ID"]){
+                        $("input#ios-config-mdm-certificate-topic-id").val(config.value);
+                    } else if(config.name == configParams["APNS_CERT_PASSWORD"]){
+                        $("input#ios-config-apns-certificate-password").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT"]){
+                        //$("input#email-config-template").val(config.value);
+                    } else if(config.name == configParams["APNS_CERT"]){
+                        //$("input#email-config-template").val(config.value);
+                    } else if(config.name == configParams["ORG_DISPLAY_NAME"]){
+                        $("input#ios-org-display-name").val(config.value);
+                    } else if(config.name == configParams["IOS_EULA"]){
+                        $("#ios-eula").val(config.value);
+                    }
+                }
+            }
+
+        }, function () {
+
+        }
+    );
+
 
     $("select.select2[multiple=multiple]").select2({
         tags : true
