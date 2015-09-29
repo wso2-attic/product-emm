@@ -884,7 +884,7 @@
         <bouncycastle.version>1.49</bouncycastle.version>
         <apache.wss4j.version>2.0.0</apache.wss4j.version>
         <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
-        <axis2-transports.wso2.version>1.1.0-wso2v13</axis2-transports.wso2.version>
+        <axis2-transports.wso2.version>1.1.0-wso2v12</axis2-transports.wso2.version>
 
         <orbit.version.commons-httpclient>3.1.0.wso2v2</orbit.version.commons-httpclient>
         <wss4j.security.version>1.6.17</wss4j.security.version>
