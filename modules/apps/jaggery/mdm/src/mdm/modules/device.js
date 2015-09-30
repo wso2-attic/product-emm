@@ -311,9 +311,12 @@ deviceModule = function () {
         }
     };
 
+    /*
+     @Updated
+     */
     publicMethods.getLicense = function (deviceType, languageCode) {
-        var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
         var xhr = new XMLHttpRequest();
+        var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
         xhr.open("GET", url);
         xhr.send();
 
@@ -321,8 +324,6 @@ deviceModule = function () {
             var responsePayload = parse(xhr.responseText);
             return responsePayload["responseContent"];
         } else {
-            var errorMsg = "Cannot find a license for the '" + deviceType + "' device type.";
-            log.error(errorMsg);
             return null;
         }
     };
