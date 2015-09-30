@@ -27,7 +27,10 @@ under the License. --}}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | iOS Enrollment | Success Note
+    {{
+        unit "title"
+        pageTitle = "iOS Enrollment | Success Note"
+    }}
 {{/zone}}
 {{#zone "header"}}
     iOS Enrollment

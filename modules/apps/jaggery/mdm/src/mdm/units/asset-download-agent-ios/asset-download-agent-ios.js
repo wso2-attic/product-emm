@@ -26,5 +26,11 @@ function onRequest (context) {
     // setting iOS agent download URL
     context["agentDownloadURL"] = "itms-services://?action=download-manifest&url=" +
         mdmProps["httpsURL"] + mdmProps["appContext"] + "enrollment/ios/download-agent";
+    var companyProps = session.get("COMPANY_DETAILS");
+    if (!companyProps) {
+        context.companyName = mdmProps.generalConfig.companyName;
+    } else {
+        context.companyName = companyProps.companyName;
+    }
     return context;
 }

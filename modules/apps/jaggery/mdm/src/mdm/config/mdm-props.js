@@ -27,6 +27,9 @@ var config = function () {
                 return value.replace('%https.ip%', server.address("https"));
             } else if ((typeof value === 'string') && value.indexOf('%http.ip%') > -1) {
                 return value.replace('%http.ip%', server.address("http"));
+            } else if ((typeof value === 'string') && value.indexOf('%date-year%') > -1) {
+                var year = new Date().getFullYear();
+                return value.replace("%date-year%", year);
             }
             return  value;
         });

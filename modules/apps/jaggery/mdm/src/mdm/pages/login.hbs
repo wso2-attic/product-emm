@@ -18,7 +18,10 @@ under the License. --}}
 {{layout "fluid"}}
 {{!-- Inputting content into defined zones in fluid layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Login
+    {{
+        unit "title"
+        pageTitle = "Login"
+    }}
 {{/zone}}
 {{#zone "body"}}
     {{unit "login"}}

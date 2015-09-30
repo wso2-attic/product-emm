@@ -26,8 +26,8 @@
         "keyStoreName" : "/repository/resources/security/wso2carbon.jks"
     },
     "generalConfig" : {
-        "companyName" : "WSO2",
+        "companyName" : "WSO2 Enterprise Mobility Manager",
         "browserTitle" : "WSO2 EMM",
-        "copyrightText" : "Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved."
+        "copyrightText" : "\u00A9 %date-year%, WSO2 Inc. (http://www.wso2.org) All Rights Reserved."
     }
 }

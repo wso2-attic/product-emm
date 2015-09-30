@@ -31,7 +31,10 @@ under the License. --}}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Windows Phone Enrollment | Login to Enterprise Mobility Manager
+    {{
+        unit "title"
+        pageTitle = "Windows Phone Enrollment | Login to Enterprise Mobility Manager"
+    }}
 {{/zone}}
 {{#zone "header"}}
     Windows Phone Enrollment
