@@ -33,26 +33,26 @@ var keyStoreParams = {
     identityAlias: dataConfig.ssoConfiguration.identityAlias
 };
 sso.configure(dataConfig.ssoConfiguration.issuer,
-                    dataConfig.ssoConfiguration.appName,
-                            keyStoreParams, dataConfig.ssoConfiguration.identityProviderURL);
+        dataConfig.ssoConfiguration.appName,
+        keyStoreParams, dataConfig.ssoConfiguration.identityProviderURL);
 sso.acs(
-    function(loggedInUser, samlResponse) {
-        var carbonUser = carbonModule.server.tenantUser(loggedInUser);
-        session.put(constants.USER_SESSION_KEY, carbonUser);
-        var username = carbonUser.username;
-        if(log.isDebugEnabled()){
-            log.debug("User logged in: "+username);
+        function(loggedInUser, samlResponse) {
+            var carbonUser = carbonModule.server.tenantUser(loggedInUser);
+            session.put(constants.USER_SESSION_KEY, carbonUser);
+            var username = carbonUser.username;
+            if(log.isDebugEnabled()){
+                log.debug("User logged in: "+username);
+            }
+            var permissions = userModule.getUIPermissions();
+            if (permissions.VIEW_DASHBOARD){
+                apiWrapperUtil.setupAccessTokenPair("saml", samlResponse);
+                response.sendRedirect(dataConfig.appContext + "/mdm");
+            }
+        }, function() {
+            if(log.isDebugEnabled()){
+                log.debug("User logged out");
+            }
+            response.sendRedirect(dataConfig.appContext);
         }
-        var permissions = userModule.getUIPermissions();
-        if (permissions.VIEW_DASHBOARD){
-            apiWrapperUtil.setupAccessTokenPair("saml", samlResponse);
-            response.sendRedirect(dataConfig.appContext + "/device-mgt");
-        }
-    }, function() {
-        if(log.isDebugEnabled()){
-            log.debug("User logged out");
-        }
-        response.sendRedirect(dataConfig.appContext);
-    }
 );
 %>

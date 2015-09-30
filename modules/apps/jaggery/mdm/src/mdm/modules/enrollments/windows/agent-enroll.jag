@@ -36,23 +36,10 @@ if (platform != "Windows Phone") {
     if (!authenticatedUser) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
-        var getResource = function (resourcePath) {
-            var file = new File(resourcePath);
-            var resource = null;
-            try {
-                file.open("r");
-                resource = file.readAll();
-            } catch (e) {
-                log.error("Error in reading resource", e);
-            } finally {
-                file.close();
-            }
-            return resource;
-        };
-
+        var enrollmentUtils = require("/modules/enrollments/util/utils.js")["methods"];
         var Handlebars = require("/lib/handlebars-v2.0.0.js")["Handlebars"];
-        var template = Handlebars.
-                compile(getResource("/modules/enrollments/windows/config/workplace-switch-request-template.hbs"));
+        var template = Handlebars.compile(enrollmentUtils.
+                getResource("/modules/enrollments/windows/config/workplace-switch-request-template.hbs"));
 
         var windowsWorkplaceAppID = session.get("windowsWorkplaceAppID");
         var windowsBinaryToken = session.get("windowsBinaryToken");
