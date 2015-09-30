@@ -311,9 +311,20 @@ deviceModule = function () {
         }
     };
 
-    publicMethods.getLicense = function () {
-        var deviceManagementService = utility.getDeviceManagementService();
-        return deviceManagementService.getLicense(constants["PLATFORM_IOS"], constants["LANGUAGE_US"]);
+    publicMethods.getLicense = function (deviceType, languageCode) {
+        var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.send();
+
+        if (xhr.status == 200 && xhr.readyState == 4) {
+            var responsePayload = parse(xhr.responseText);
+            return responsePayload["responseContent"];
+        } else {
+            var errorMsg = "Cannot find a license for the '" + deviceType + "' device type.";
+            log.error(errorMsg);
+            return null;
+        }
     };
 
     return publicMethods;

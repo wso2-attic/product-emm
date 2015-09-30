@@ -21,9 +21,9 @@ function onRequest (context) {
     log.debug("calling license-box-agent-unit backend js");
 
     var deviceModule = require("/modules/device.js")["deviceModule"];
-    var license = deviceModule.getLicense();
+    var license = deviceModule.getLicense("ios", "en_US");
     if (license) {
-        context.license = license.text;
+        context.license = license;
     } else {
         context.license = "ERROR: Unable to retrieve License Text.";
     }
