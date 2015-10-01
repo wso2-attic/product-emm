@@ -23,6 +23,11 @@ function onRequest (context) {
     var mdmProps = require('/config/mdm-props.js').config();
     context["deviceOwner"] = session.get("enrolledUser");
     context["serverURL"] = mdmProps["httpsURL"] + mdmProps["appContext"];
-
+    var companyProps = session.get("COMPANY_DETAILS");
+    if (!companyProps) {
+        context.companyName = mdmProps.generalConfig.companyName;
+    } else {
+        context.companyName = companyProps.companyName;
+    }
     return context;
 }

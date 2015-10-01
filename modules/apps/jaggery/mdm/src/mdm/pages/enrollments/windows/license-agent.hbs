@@ -27,7 +27,10 @@ under the License. --}}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Windows Phone Enrollment | Accept End User License Agreement
+    {{
+        unit "title"
+        pageTitle = "Windows Phone Enrollment | Accept End User License Agreement"
+    }}
 {{/zone}}
 {{#zone "header"}}
     Windows Phone Enrollment
@@ -43,6 +46,8 @@ under the License. --}}
     }}
     {{
         unit "license-box-agent"
+        platform = "Windows Phone"
+        languageCode = "en_US"
         licenseAcceptActionURL = "/mdm/enrollment/windows/enroll"
     }}
 {{/zone}}

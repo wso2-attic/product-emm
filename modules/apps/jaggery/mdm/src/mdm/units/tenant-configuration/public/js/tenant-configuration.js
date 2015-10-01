@@ -59,6 +59,8 @@ var configParams = {
     "NOTIFIER_FREQUENCY": "notifierFrequency",
     "GCM_API_KEY": "gcmAPIKey",
     "GCM_SENDER_ID": "gcmSenderId",
+    "ANDROID_EULA": "androidEula",
+    "IOS_EULA": "iosEula",
     "CONFIG_COUNTRY": "configCountry",
     "CONFIG_STATE": "configState",
     "CONFIG_LOCALITY": "configLocality",
@@ -80,8 +82,20 @@ var configParams = {
 
 $(document).ready(function () {
     $("#gcm-inputs").hide();
+    tinymce.init({
+        selector: "textarea",
+        theme: "modern",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime image table contextmenu paste"
+        ],
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+
     var getAndroidConfigAPI = "/mdm-android-agent/configuration";
     var getGeneralConfigAPI = "/mdm-admin/configuration";
+    var getIosConfigAPI = "/ios/configuration";
 
     /**
      * Following requests would execute
@@ -110,6 +124,8 @@ $(document).ready(function () {
                         $("input#android-config-gcm-api-key").val(config.value);
                     } else if(config.name == configParams["GCM_SENDER_ID"]){
                         $("input#android-config-gcm-sender-id").val(config.value);
+                    } else if(config.name == configParams["ANDROID_EULA"]){
+                        $("#android-eula").val(config.value);
                     }
                 }
             }
@@ -148,6 +164,48 @@ $(document).ready(function () {
         }
     );
 
+    invokerUtil.get(
+        getIosConfigAPI,
+
+        function (data) {
+
+            if (data != null && data.configuration != null) {
+                for (var i = 0; i < data.configuration.length; i++) {
+                    var config = data.configuration[i];
+                    if(config.name == configParams["CONFIG_COUNTRY"]){
+                        $("input#ios-config-country").val(config.value);
+                    } else if(config.name == configParams["CONFIG_STATE"]){
+                        $("input#ios-config-state").val(config.value);
+                    } else if(config.name == configParams["CONFIG_LOCALITY"]){
+                        $("input#ios-config-locality").val(config.value);
+                    } else if(config.name == configParams["CONFIG_ORGANIZATION"]){
+                        $("input#ios-config-organization").val(config.value);
+                    } else if(config.name == configParams["CONFIG_ORGANIZATION_UNIT"]){
+                        $("input#ios-config-organization-unit").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT_PASSWORD"]){
+                        $("input#ios-config-mdm-certificate-password").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT_TOPIC_ID"]){
+                        $("input#ios-config-mdm-certificate-topic-id").val(config.value);
+                    } else if(config.name == configParams["APNS_CERT_PASSWORD"]){
+                        $("input#ios-config-apns-certificate-password").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT"]){
+                        //$("input#email-config-template").val(config.value);
+                    } else if(config.name == configParams["APNS_CERT"]){
+                        //$("input#email-config-template").val(config.value);
+                    } else if(config.name == configParams["ORG_DISPLAY_NAME"]){
+                        $("input#ios-org-display-name").val(config.value);
+                    } else if(config.name == configParams["IOS_EULA"]){
+                        $("#ios-eula").val(config.value);
+                    }
+                }
+            }
+
+        }, function () {
+
+        }
+    );
+
+
     $("select.select2[multiple=multiple]").select2({
         tags : true
     });
@@ -172,6 +230,7 @@ $(document).ready(function () {
         var notifierFrequency = $("input#android-config-notifier-frequency").val();
         var gcmAPIKey = $("input#android-config-gcm-api-key").val();
         var gcmSenderId = $("input#android-config-gcm-sender-id").val();
+        var androidLicense = tinymce.get('android-eula').getContent();
 
         var errorMsgWrapper = "#android-config-error-msg";
         var errorMsg = "#android-config-error-msg span";
@@ -216,8 +275,15 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var androidEula = {
+                "name": configParams["ANDROID_EULA"],
+                "value": androidLicense,
+                "contentType": "text"
+            };
+
             configList.push(type);
             configList.push(frequency);
+            configList.push(androidEula);
             if (notifierType == notifierTypeConstants["GCM"]) {
                 configList.push(gcmKey);
                 configList.push(gcmId);
@@ -433,6 +499,7 @@ $(document).ready(function () {
         var MDMCertTopicID = $("#ios-config-mdm-certificate-topic-id").val();
         var APNSCertPassword = $("#ios-config-apns-certificate-password").val();
         var configOrgDisplayName = $("#ios-org-display-name").val();
+        var iosLicense = tinymce.get('ios-eula').getContent();
 
         if (!configCountry) {
             $(errorMsg).text("SCEP country is a required field. It cannot be empty.");
@@ -547,6 +614,12 @@ $(document).ready(function () {
             "contentType": "text"
         };
 
+        var iosEula = {
+            "name": configParams["IOS_EULA"],
+            "value": iosLicense,
+            "contentType": "text"
+        };
+
         configList.push(configCountry);
         configList.push(configState);
         configList.push(configLocality);
@@ -558,6 +631,7 @@ $(document).ready(function () {
         configList.push(paramBase64MDMCert);
         configList.push(paramBase64APNSCert);
         configList.push(paramOrganizationDisplayName);
+        configList.push(iosEula);
 
         addConfigFormData.type = platformTypeConstants["IOS"];
         addConfigFormData.configuration = configList;

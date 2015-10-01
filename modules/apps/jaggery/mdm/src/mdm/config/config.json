@@ -1,22 +1,21 @@
 {
-  "appContext" : "/mdm/",
-  "apiContext" : "api",
-  "httpsURL" : "%https.ip%",
-  "httpURL" : "%http.ip%",
-  "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
-  "iOSAPIRoot" : "%https.ip%/ios/",
-  "device" : {
-    "ios" : {
-      "location" : "%http.ip%/mdm/public/asset-download-agent-ios/asset/ios-agent.ipa",
-      "bundleID" : "org.wso2.carbon.emm.iOSMDMAgent",
-      "version" : "1.0",
-      "appName" : "EMM iOS Agent"
-    }
-  },
-  "androidAgentApp" : "android-agent.apk",
-
-  "windowsConfigRoot" : "%http.ip%/mdm-windows-agent/services/federated/bst/authentication",
-  "ssoConfiguration" : {
+    "appContext" : "/mdm/",
+    "apiContext" : "api",
+    "httpsURL" : "%https.ip%",
+    "httpURL" : "%http.ip%",
+    "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
+    "iOSAPIRoot" : "%https.ip%/ios/",
+    "device" : {
+        "ios" : {
+            "location" : "%http.ip%/mdm/public/asset-download-agent-ios/asset/ios-agent.ipa",
+            "bundleID" : "org.wso2.carbon.emm.iOSMDMAgent",
+            "version" : "1.0",
+            "appName" : "EMM iOS Agent"
+        }
+    },
+    "androidAgentApp" : "android-agent.apk",
+    "windowsConfigRoot" : "%http.ip%/mdm-windows-agent/services/federated/bst/authentication",
+    "ssoConfiguration" : {
         "enabled" : false,
         "issuer" : "mdm",
         "appName" : "mdm",
@@ -25,6 +24,10 @@
         "keyStorePassword" : "wso2carbon",
         "identityAlias" : "wso2carbon",
         "keyStoreName" : "/repository/resources/security/wso2carbon.jks"
-
-  }
+    },
+    "generalConfig" : {
+        "companyName" : "WSO2 Enterprise Mobility Manager",
+        "browserTitle" : "WSO2 EMM",
+        "copyrightText" : "\u00A9 %date-year%, WSO2 Inc. (http://www.wso2.org) All Rights Reserved."
+    }
 }

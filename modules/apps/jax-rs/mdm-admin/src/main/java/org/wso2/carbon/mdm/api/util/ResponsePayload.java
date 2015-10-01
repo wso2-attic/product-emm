@@ -54,4 +54,53 @@ public class ResponsePayload {
         this.responseContent = responseContent;
     }
 
+    private ResponsePayload.ResponsePayloadBuilder getBuilder() {
+        return new ResponsePayload.ResponsePayloadBuilder();
+    }
+
+    public static ResponsePayload.ResponsePayloadBuilder statusCode(int statusCode) {
+        ResponsePayload message = new ResponsePayload();
+        return message.getBuilder().statusCode(statusCode);
+    }
+
+    public static ResponsePayload.ResponsePayloadBuilder messageFromServer(String messageFromServer) {
+        ResponsePayload message = new ResponsePayload();
+        return message.getBuilder().messageFromServer(messageFromServer);
+    }
+
+    public static ResponsePayload.ResponsePayloadBuilder responseContent(String responseContent) {
+        ResponsePayload message = new ResponsePayload();
+        return message.getBuilder().responseContent(responseContent);
+    }
+
+    public class ResponsePayloadBuilder {
+
+        private int statusCode;
+        private String messageFromServer;
+        private Object responseContent;
+
+        public ResponsePayloadBuilder statusCode(int statusCode) {
+            this.statusCode = statusCode;
+            return this;
+        }
+
+        public ResponsePayloadBuilder messageFromServer(String messageFromServer) {
+            this.messageFromServer = messageFromServer;
+            return this;
+        }
+
+        public ResponsePayloadBuilder responseContent(String responseContent) {
+            this.responseContent = responseContent;
+            return this;
+        }
+
+        public ResponsePayload build() {
+            ResponsePayload payload = new ResponsePayload();
+            payload.setStatusCode(statusCode);
+            payload.setMessageFromServer(messageFromServer);
+            payload.setResponseContent(responseContent);
+            return payload;
+        }
+    }
+
 }

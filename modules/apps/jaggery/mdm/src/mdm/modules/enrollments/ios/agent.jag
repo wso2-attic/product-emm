@@ -29,22 +29,10 @@ var userAgentIsiPodTouch = (userAgent.indexOf("iPod Touch") > -1);
 if (!userAgentIsiPhone && !userAgentIsiPad && !userAgentIsiPodTouch) {
     response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
 } else {
-    var getResource = function (resourcePath) {
-        var file = new File(resourcePath);
-        var resource = null;
-        try {
-            file.open("r");
-            resource = file.readAll();
-        } catch (e) {
-            log.error("Error in reading resource", e);
-        } finally {
-            file.close();
-        }
-        return resource;
-    };
-
+    var enrollmentUtils = require("/modules/enrollments/util/utils.js")["methods"];
     var Handlebars = require("/lib/handlebars-v2.0.0.js")["Handlebars"];
-    var template = Handlebars.compile(getResource("/modules/enrollments/ios/config/ios-manifest-template.hbs"));
+    var template = Handlebars.compile(enrollmentUtils.
+            getResource("/modules/enrollments/ios/config/ios-manifest-template.hbs"));
 
     var iOSManifest = template({
         "url" : mdmProps["device"]["ios"]["location"],
