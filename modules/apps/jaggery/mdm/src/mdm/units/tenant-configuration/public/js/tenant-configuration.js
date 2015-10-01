@@ -70,7 +70,9 @@ var configParams = {
     "MDM_CERT_TOPIC_ID": "MDMCertTopicID",
     "APNS_CERT_PASSWORD": "APNSCertPassword",
     "MDM_CERT": "MDMCert",
+    "MDM_CERT_NAME": "MDMCertName",
     "APNS_CERT": "APNSCert",
+    "APNS_CERT_NAME": "APNSCertName",
     "ORG_DISPLAY_NAME": "organizationDisplayName",
     "GENERAL_EMAIL_HOST": "emailHost",
     "GENERAL_EMAIL_PORT": "emailPort",
@@ -188,10 +190,10 @@ $(document).ready(function () {
                         $("input#ios-config-mdm-certificate-topic-id").val(config.value);
                     } else if(config.name == configParams["APNS_CERT_PASSWORD"]){
                         $("input#ios-config-apns-certificate-password").val(config.value);
-                    } else if(config.name == configParams["MDM_CERT"]){
-                        //$("input#email-config-template").val(config.value);
-                    } else if(config.name == configParams["APNS_CERT"]){
-                        //$("input#email-config-template").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT_NAME"]){
+                        $("#mdm-cert-file-name").html(config.value);
+                    } else if(config.name == configParams["APNS_CERT_NAME"]){
+                        $("#apns-cert-file-name").html(config.value);
                     } else if(config.name == configParams["ORG_DISPLAY_NAME"]){
                         $("input#ios-org-display-name").val(config.value);
                     } else if(config.name == configParams["IOS_EULA"]){
@@ -305,6 +307,8 @@ $(document).ready(function () {
                         $(errorMsg).text("Exception occurred at backend.");
                     } else if (data == 403) {
                         $(errorMsg).text("Action was not permitted.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
                     }
 
                     $(errorMsgWrapper).removeClass("hidden");
@@ -412,6 +416,8 @@ $(document).ready(function () {
                         $(errorMsg).text("Exception occurred at backend.");
                     } else if (data == 403) {
                         $(errorMsg).text("Action was not permitted.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
                     }
 
                     $(errorMsgWrapper).removeClass("hidden");
@@ -430,10 +436,12 @@ $(document).ready(function () {
 
     var base64MDMCert = "";
     var fileInputMDMCert = $('#ios-config-mdm-certificate');
+    var fileNameMDMCert = "";
     var invalidFormatMDMCert = false;
 
     var base64APNSCert = "";
-    var fileInputAPNSCert = $('#ios-config-mdm-certificate');
+    var fileInputAPNSCert = $('#ios-config-apns-certificate');
+    var fileNameAPNSCert = "";
     var invalidFormatAPNSCert = false;
 
     $( fileInputMDMCert).change(function() {
@@ -446,8 +454,9 @@ $(document).ready(function () {
         }
 
         var file = fileInputMDMCert[0].files[0];
+        fileNameMDMCert = file.name;
         var extension = file.name.split('.').pop().toLowerCase(),
-            isSuccess = fileTypes.indexOf(extension) > -1;
+        isSuccess = fileTypes.indexOf(extension) > -1;
 
         if (isSuccess) {
             var fileReader = new FileReader();
@@ -472,8 +481,9 @@ $(document).ready(function () {
         }
 
         var file = fileInputAPNSCert[0].files[0];
+        fileNameAPNSCert = file.name;
         var extension = file.name.split('.').pop().toLowerCase(),
-            isSuccess = fileTypes.indexOf(extension) > -1;
+        isSuccess = fileTypes.indexOf(extension) > -1;
 
         if (isSuccess) {
             var fileReader = new FileReader();
@@ -602,9 +612,21 @@ $(document).ready(function () {
             "contentType": "text"
         };
 
+        var MDMCertName = {
+            "name": configParams["MDM_CERT_NAME"],
+            "value": fileNameMDMCert,
+            "contentType": "text"
+        };
+
         var paramBase64APNSCert = {
             "name": configParams["APNS_CERT"],
             "value": base64APNSCert,
+            "contentType": "text"
+        };
+
+        var APNSCertName = {
+            "name": configParams["APNS_CERT_NAME"],
+            "value": fileNameAPNSCert,
             "contentType": "text"
         };
 
@@ -629,7 +651,9 @@ $(document).ready(function () {
         configList.push(MDMCertTopicID);
         configList.push(APNSCertPassword);
         configList.push(paramBase64MDMCert);
+        configList.push(MDMCertName);
         configList.push(paramBase64APNSCert);
+        configList.push(APNSCertName);
         configList.push(paramOrganizationDisplayName);
         configList.push(iosEula);
 
@@ -649,6 +673,8 @@ $(document).ready(function () {
                     $(errorMsg).text("Exception occurred at backend.");
                 } else if (data == 400) {
                     $(errorMsg).text("Configurations cannot be empty.");
+                } else {
+                    $(errorMsg).text("An unexpected error occurred.");
                 }
 
                 $(errorMsgWrapper).removeClass("hidden");
