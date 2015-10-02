@@ -65,6 +65,12 @@
     <!--<param-value>true</param-value>-->
     <!--</context-param>-->
 
+    <!-- This variable is used to enable authorization for the webapp -->
+    <!--context-param>
+        <param-name>authorization-enabled</param-name>
+        <param-value>true</param-value>
+    </context-param-->
+
     <!-- Below configuration is used to redirect http requests to https -->
     <security-constraint>
         <web-resource-collection>
