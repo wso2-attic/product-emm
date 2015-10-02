@@ -101,6 +101,7 @@ public class SyncmlParser {
         Target target = null;
         Source source = null;
         Credential credential = null;
+        int hexaSessionId;
 
         for (int i = 0 ; i < headerElements.getLength() ; i++) {
             Node node = headerElements.item(i);
@@ -127,7 +128,8 @@ public class SyncmlParser {
         }
         SyncmlHeader header = new SyncmlHeader();
         header.setMsgID(Integer.valueOf(messageID));
-        header.setSessionId(Integer.valueOf(sessionID));
+        hexaSessionId = Integer.valueOf(sessionID,16);
+        header.setSessionId(hexaSessionId);
         header.setTarget(target);
         header.setSource(source);
         header.setCredential(credential);

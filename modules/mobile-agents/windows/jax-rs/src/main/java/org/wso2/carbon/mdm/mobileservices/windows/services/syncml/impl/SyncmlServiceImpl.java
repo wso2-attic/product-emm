@@ -426,6 +426,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 operation.getId() == status.getCommandReference()) {
                             operation.setStatus(Operation.Status.COMPLETED);
                         }
+                        if (operation.getCode().equals("MONITOR") &&
+                                operation.getId() == status.getCommandReference()) {
+                            operation.setStatus(Operation.Status.COMPLETED);
+                        }
                     }
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
                 } else {
@@ -434,6 +438,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                     for (int y = 0; y < pendingDataOperation.size(); y++) {
                         Operation operation = pendingDataOperation.get(y);
                         if (operation.getCode().equals("POLICY_BUNDLE") &&
+                                operation.getId() == status.getCommandReference()) {
+                            operation.setStatus(Operation.Status.ERROR);
+                        }
+                        if (operation.getCode().equals("MONITOR") &&
                                 operation.getId() == status.getCommandReference()) {
                             operation.setStatus(Operation.Status.ERROR);
                         }
@@ -459,7 +467,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                     Profile cameraProfile = new Profile();
                     cameraProfile.setFeatureCode("CAMERA");
                     cameraProfile.setData(item.getData());
-                    if (item.getData().equals("0")) {
+                    if (item.getData().equals("1")) {
                         cameraProfile.setEnable(false);
                     } else {
                         cameraProfile.setEnable(true);
@@ -472,18 +480,19 @@ public class SyncmlServiceImpl implements SyncmlService {
                     encryptStorage.setFeatureCode("ENCRYPT_STORAGE");
                     encryptStorage.setData(item.getData());
                     if (item.getData().equals("1")) {
-                        encryptStorage.setEnable(false);
-                    } else {
                         encryptStorage.setEnable(true);
+                    } else {
+                        encryptStorage.setEnable(false);
                     }
                     profiles.add(encryptStorage);
                 }
                 if (item.getSource().getLocURI().equals
                         ("./Vendor/MSFT/PolicyManager/Device/DeviceLock/DevicePasswordEnabled")) {
+
                     Profile encryptStorage = new Profile();
-                    encryptStorage.setFeatureCode("DEVICE_PASSWORD_ENABLE");
+                    encryptStorage.setFeatureCode("PASSCODE_POLICY");
                     encryptStorage.setData(item.getData());
-                    if (item.getData().equals("1")) {
+                    if (item.getData().equals("0")) {
                         encryptStorage.setEnable(true);
                     } else {
                         encryptStorage.setEnable(false);
@@ -533,30 +542,40 @@ public class SyncmlServiceImpl implements SyncmlService {
                             } else {
                                 deviceFeature.setCompliance(isCompliance);
                             }
+                            ComplianceFeature complianceFeature = new ComplianceFeature();
+                            complianceFeature.setFeature(activeFeature);
+                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
+                            complianceFeature.setCompliance(deviceFeature.isCompliance());
+                            complianceFeatures.add(complianceFeature);
                         }
                         if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
                                 deviceFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
-                            if (policyContent.getBoolean("enabled") == (deviceFeature.isEnable())) {
+                            if (policyContent.getBoolean("encrypted") == (deviceFeature.isEnable())) {
                                 isCompliance = true;
                                 deviceFeature.setCompliance(isCompliance);
                             } else {
                                 deviceFeature.setCompliance(isCompliance);
                             }
+                            ComplianceFeature complianceFeature = new ComplianceFeature();
+                            complianceFeature.setFeature(activeFeature);
+                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
+                            complianceFeature.setCompliance(deviceFeature.isCompliance());
+                            complianceFeatures.add(complianceFeature);
                         }
                         if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                deviceFeature.getFeatureCode().equals("DEVICE_PASSWORD_ENABLE")) {
-                            if (policyContent.getBoolean("enabled") == (deviceFeature.isEnable())) {
+                                deviceFeature.getFeatureCode().equals("PASSCODE_POLICY")) {
+                            if (policyContent.getBoolean("enablePassword") == (deviceFeature.isEnable())) {
                                 isCompliance = true;
                                 deviceFeature.setCompliance(isCompliance);
                             } else {
                                  deviceFeature.setCompliance(isCompliance);
                             }
+                            ComplianceFeature complianceFeature = new ComplianceFeature();
+                            complianceFeature.setFeature(activeFeature);
+                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
+                            complianceFeature.setCompliance(deviceFeature.isCompliance());
+                            complianceFeatures.add(complianceFeature);
                         }
-                        ComplianceFeature complianceFeature = new ComplianceFeature();
-                        complianceFeature.setFeature(activeFeature);
-                        complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
-                        complianceFeature.setCompliance(deviceFeature.isCompliance());
-                        complianceFeatures.add(complianceFeature);
                     }
                 }
                 WindowsAPIUtils.getPolicyManagerService().CheckPolicyCompliance(deviceIdentifier, complianceFeatures);

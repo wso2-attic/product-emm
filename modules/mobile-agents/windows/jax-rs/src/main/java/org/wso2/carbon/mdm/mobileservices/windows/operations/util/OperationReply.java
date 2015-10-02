@@ -83,7 +83,9 @@ public class OperationReply {
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
         SyncmlHeader header = new SyncmlHeader();
         header.setMsgID(sourceHeader.getMsgID());
-        header.setSessionId(sourceHeader.getSessionId());
+        String hexSessionId = Integer.toHexString(sourceHeader.getSessionId());
+        header.setHexSessionId(hexSessionId);
+        //header.setSessionId(sourceHeader.getSessionId());
         Target target = new Target();
         target.setLocURI(sourceHeader.getSource().getLocURI());
         header.setTarget(target);
@@ -211,6 +213,8 @@ public class OperationReply {
         Replace replaceElement = new Replace();
         List<Item> replaceItem = new ArrayList<>();
         Alert alert = new Alert();
+        Sequence monitorSequence = new Sequence();
+
 
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
@@ -265,9 +269,13 @@ public class OperationReply {
                         }
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                                 .OperationCodes.MONITOR)) {
+                            Get monitorGetElement = new Get();
+                            List<Item>monitotItems = new ArrayList<>();
                             if (this.syncmlDocument.getBody().getAlert() != null) {
                                 if (this.syncmlDocument.getBody().getAlert().getData().equals
                                         (Constants.INITIAL_ALERT_DATA)) {
+
+                                    monitorSequence.setCommandId(operation.getId());
 
                                     DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                                             syncmlDocument.getHeader().getSource().getLocURI());
@@ -278,7 +286,6 @@ public class OperationReply {
                                     } catch (FeatureManagementException e) {
                                         e.printStackTrace();
                                     }
-
                                     for (int y = 0; y < profileFeatures.size(); y++) {
                                         ProfileFeature profileFeature = profileFeatures.get(y);
 
@@ -288,7 +295,9 @@ public class OperationReply {
                                             operationcode.setCode(opCode);
 
                                             Item item = appendGetInfo(operationcode);
-                                            itemsGet.add(item);
+//                                            itemsGet.add(item);
+                                            monitotItems.add(item);
+
                                         }
                                         if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
                                             String encryptCode = "ENCRYPT_STORAGE_STATUS";
@@ -296,17 +305,25 @@ public class OperationReply {
                                             storageOperatonCode.setCode(encryptCode);
 
                                             Item storageStatusItem = appendGetInfo(storageOperatonCode);
-                                            itemsGet.add(storageStatusItem);
+                                            //itemsGet.add(storageStatusItem);
+                                            monitotItems.add(storageStatusItem);
                                         }
                                         if (profileFeature.getFeatureCode().equals("PASSCODE_POLICY")) {
                                             String passcode = "DEVICE_PASSWORD_STATUS";
                                             Operation storageOperatonCode = new Operation();
                                             storageOperatonCode.setCode(passcode);
 
-                                            Item storageStatusItem = appendGetInfo(storageOperatonCode);
-                                            itemsGet.add(storageStatusItem);
+                                            Item passCodeStatusItem = appendGetInfo(storageOperatonCode);
+                                            //itemsGet.add(storageStatusItem);
+                                            monitotItems.add(passCodeStatusItem);
                                         }
                                     }
+                                    if (!monitotItems.isEmpty()) {
+                                        monitorGetElement.setCommandId(operation.getId());
+                                        monitorGetElement.setItems(monitotItems);
+                                    }
+                                    monitorSequence.setGet(monitorGetElement);
+                                    syncmlBody.setSequence(monitorSequence);
                                 }
                             }
                         }
