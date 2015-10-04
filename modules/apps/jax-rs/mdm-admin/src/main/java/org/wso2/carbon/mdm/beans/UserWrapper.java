@@ -62,8 +62,12 @@ public class UserWrapper {
         this.emailAddress = emailAddress;
     }
 
+    /*
+        Giving a clone of the array since arrays are mutable
+     */
     public String[] getRoles() {
-        return roles;
+        String[] copiedRoles = roles.clone();
+        return copiedRoles;
     }
 
     public void setRoles(String[] roles) {
