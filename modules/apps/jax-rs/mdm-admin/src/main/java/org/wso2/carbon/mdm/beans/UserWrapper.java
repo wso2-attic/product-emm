@@ -21,6 +21,10 @@ package org.wso2.carbon.mdm.beans;
 public class UserWrapper {
 
     private String username;
+    /*
+        Base64 encoded password
+     */
+    private String password;
     private String firstname;
     private String lastname;
     private String emailAddress;
@@ -64,5 +68,13 @@ public class UserWrapper {
 
     public void setRoles(String[] roles) {
         this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
