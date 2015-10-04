@@ -38,6 +38,7 @@ import org.apache.commons.codec.binary.Base64;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -159,7 +160,8 @@ public class User {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{username}")
-	public Response updateUser(UserWrapper userWrapper, @PathParam("username") String username) throws MDMAPIException {
+	public Response updateUser(UserWrapper userWrapper, @PathParam("username") String username)
+			throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
 		ResponsePayload responsePayload = new ResponsePayload();
 		try {
@@ -167,11 +169,14 @@ public class User {
 				Map<String, String> defaultUserClaims =
 						buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
 						                       userWrapper.getEmailAddress());
-				//TODO: return correct error codes
-				// Decoding Base64 encoded password
-				byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
-				userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(), new String(decodedBytes));
-
+				if (StringUtils.isNotEmpty(userWrapper.getPassword())) {
+					//TODO: return correct error codes Eg:- password policy not complied
+					//TODO: use the base64 string directly
+					// Decoding Base64 encoded password
+					byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
+					userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(), new String(decodedBytes,  "UTF-8"));
+					log.debug("User credential of username: " + userWrapper.getUsername() + " has been changed");
+				}
 				final String[] existingRoles = userStoreManager.getRoleListOfUser(userWrapper.getUsername());
 				/*
 					Use the Set theory to find the roles to delete and roles to add
@@ -185,7 +190,6 @@ public class User {
 				final TreeSet<String> newRolesSet = new TreeSet<String>();
 				Collections.addAll(newRolesSet, userWrapper.getRoles());
 
-
 				existingRolesSet.removeAll(newRolesSet);
 				// Now we have the roles to delete
 				String[] rolesToDelete = existingRolesSet.toArray(new String[existingRolesSet.size()]);
@@ -193,7 +197,7 @@ public class User {
 				// Clearing and re-initializing the set
 				existingRolesSet.clear();
 				Collections.addAll(existingRolesSet, existingRoles);
-				
+
 				newRolesSet.removeAll(existingRolesSet);
 				// Now we have the roles to add
 				String[] rolesToAdd = newRolesSet.toArray(new String[newRolesSet.size()]);
@@ -227,6 +231,10 @@ public class User {
 			String errorMsg = "Exception in trying to update user by username: " + userWrapper.getUsername();
 			log.error(errorMsg, e);
 			throw new MDMAPIException(errorMsg, e);
+		} catch (UnsupportedEncodingException e) {
+			String errorMsg = "Exception in trying to update user by username: " + userWrapper.getUsername();
+			log.error(errorMsg, e);
+			throw new MDMAPIException(errorMsg, e);
 		}
 	}
 
@@ -244,18 +252,19 @@ public class User {
 		String lowerCaseCharset = "abcdefghijklmnopqrstuvwxyz";
 		String upperCaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String numericCharset = "0123456789";
-
+		Random randomGenerator = new Random();
 		String totalCharset = lowerCaseCharset + upperCaseCharset + numericCharset;
 		int totalCharsetLength = totalCharset.length();
 
-		String initialUserPassword = "";
+		StringBuffer initialUserPassword = new StringBuffer();
 		for (int i = 0; i < passwordLength; i++) {
-			initialUserPassword += totalCharset.charAt((int) (Math.random() * totalCharsetLength));
+
+			initialUserPassword.append(totalCharset.charAt((randomGenerator.nextInt() * totalCharsetLength)));
 		}
 		if (log.isDebugEnabled()) {
 			log.debug("Initial user password is created for new user: " + initialUserPassword);
 		}
-		return initialUserPassword;
+		return initialUserPassword.toString();
 	}
 
 	/**

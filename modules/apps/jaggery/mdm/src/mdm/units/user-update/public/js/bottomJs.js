@@ -37,7 +37,6 @@ $(document).ready(function () {
         var password = $("input#password").val();
         var emailAddress = $("input#emailAddress").val();
         var roles = $("select#roles").val();
-
         var errorMsgWrapper = "#user-create-error-msg";
         var errorMsg = "#user-create-error-msg span";
         if (!username) {
@@ -46,7 +45,7 @@ $(document).ready(function () {
         } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, username)) {
             $(errorMsg).text("Provided username is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[\S]{5,30}$/, password)) {
+        } else if (password != "" && !inputIsValid(/^[\S]{5,30}$/, password)) {
             $(errorMsg).text("Provided password doesn't conform to the password policy. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
@@ -75,6 +74,7 @@ $(document).ready(function () {
             addUserFormData.lastname = lastname;
             addUserFormData.emailAddress = emailAddress;
             // Base64 encode the password
+            //TODO: use CryptoJS for this
             addUserFormData.password = window.btoa(password);;
             addUserFormData.roles = roles;
 
