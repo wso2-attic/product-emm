@@ -19,6 +19,7 @@
 package org.wso2.carbon.mdm.api;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -32,6 +33,7 @@ import org.wso2.carbon.mdm.beans.UserWrapper;
 import org.wso2.carbon.mdm.util.Constants;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -147,6 +149,89 @@ public class User {
 	}
 
 	/**
+	 * Update user in user store
+	 *
+	 * @param userWrapper Wrapper object representing input json payload
+	 * @return {Response} Status of the request wrapped inside Response object
+	 * @throws MDMAPIException
+	 */
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Path("{username}")
+	public Response updateUser(UserWrapper userWrapper, @PathParam("username") String username) throws MDMAPIException {
+		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+		ResponsePayload responsePayload = new ResponsePayload();
+		try {
+			if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
+				Map<String, String> defaultUserClaims =
+						buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
+						                       userWrapper.getEmailAddress());
+				//TODO: return correct error codes
+				// Decoding Base64 encoded password
+				byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
+				userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(), new String(decodedBytes));
+
+				final String[] existingRoles = userStoreManager.getRoleListOfUser(userWrapper.getUsername());
+				/*
+					Use the Set theory to find the roles to delete and roles to add
+
+                    The difference of roles in existingRolesSet and newRolesSet needed to be deleted
+                    new roles to add = newRolesSet - The intersection of roles in existingRolesSet and newRolesSet
+				 */
+				final TreeSet<String> existingRolesSet = new TreeSet<String>();
+				Collections.addAll(existingRolesSet, existingRoles);
+
+				final TreeSet<String> newRolesSet = new TreeSet<String>();
+				Collections.addAll(newRolesSet, userWrapper.getRoles());
+
+
+				existingRolesSet.removeAll(newRolesSet);
+				// Now we have the roles to delete
+				String[] rolesToDelete = existingRolesSet.toArray(new String[existingRolesSet.size()]);
+
+				// Clearing and re-initializing the set
+				existingRolesSet.clear();
+				Collections.addAll(existingRolesSet, existingRoles);
+				
+				newRolesSet.removeAll(existingRolesSet);
+				// Now we have the roles to add
+				String[] rolesToAdd = newRolesSet.toArray(new String[newRolesSet.size()]);
+
+				userStoreManager.updateRoleListOfUser(userWrapper.getUsername(), rolesToDelete, rolesToAdd);
+
+				//TODO: find what happens when the profileName is null
+				userStoreManager.setUserClaimValues(userWrapper.getUsername(), defaultUserClaims, null);
+
+				// Outputting debug message upon successful addition of user
+				if (log.isDebugEnabled()) {
+					log.debug("User by username: " + userWrapper.getUsername() + " was successfully updated.");
+				}
+				// returning response with success state
+				responsePayload.setStatusCode(HttpStatus.SC_CREATED);
+				responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
+				                                     " was successfully updated.");
+				return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
+			} else {
+				if (log.isDebugEnabled()) {
+					log.debug("User by username: " + userWrapper.getUsername() +
+					          " doesn't exists. Therefore, request made to update user was refused.");
+				}
+				// returning response with bad request state
+				responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
+				responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
+				                                     " doesn't  exists. Therefore, request made to update user was refused.");
+				return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
+			}
+		} catch (UserStoreException e) {
+			String errorMsg = "Exception in trying to update user by username: " + userWrapper.getUsername();
+			log.error(errorMsg, e);
+			throw new MDMAPIException(errorMsg, e);
+		}
+	}
+
+
+	/**
 	 * Private method to be used by addUser() to
 	 * generate an initial user password for a user.
 	 * This will be the password used by a user for his initial login to the system.
@@ -235,6 +320,53 @@ public class User {
 			throw new MDMAPIException(errorMsg, e);
 		}
 	}
+
+	/**
+	 * Get user's roles by username
+	 *
+	 * @param username Username of the user
+	 * @return {Response} Status of the request wrapped inside Response object
+	 * @throws MDMAPIException
+	 */
+	@GET
+	@Path("{username}/roles")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getRoles(@PathParam("username") String username) throws MDMAPIException {
+		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+		ResponsePayload responsePayload = new ResponsePayload();
+		try {
+			if (userStoreManager.isExistingUser(username)) {
+
+				String[] roleListOfUser = userStoreManager.getRoleListOfUser(username);
+
+				responsePayload.setResponseContent(Arrays.asList(roleListOfUser));
+				// Outputting debug message upon successful removal of user
+				if (log.isDebugEnabled()) {
+					log.debug("User by username: " + username + " was successfully removed.");
+				}
+				// returning response with success state
+				responsePayload.setStatusCode(HttpStatus.SC_OK);
+				responsePayload.setMessageFromServer(
+						"User roles obtained for user " + username);
+				return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+			} else {
+				// Outputting debug message upon trying to remove non-existing user
+				if (log.isDebugEnabled()) {
+					log.debug("User by username: " + username + " does not exist for role retrieval.");
+				}
+				// returning response with bad request state
+				responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+				responsePayload.setMessageFromServer(
+						"User by username: " + username + " does not exist for role retrieval.");
+				return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
+			}
+		} catch (UserStoreException e) {
+			String errorMsg = "Exception in trying to retrieve roles for user by username: " + username;
+			log.error(errorMsg, e);
+			throw new MDMAPIException(errorMsg, e);
+		}
+	}
+
 
 	/**
 	 * Get the list of all users with all user-related info.
@@ -363,7 +495,7 @@ public class User {
 		        emailMessageProperties.setUserName(usernames.get(i));
 		        String[] mailAddress = new String[1];
 		        mailAddress[0] = getClaimValue(usernames.get(i), Constants.USER_CLAIM_EMAIL_ADDRESS);
-		        if(mailAddress != null && mailAddress.length > 0) {
+		        if(StringUtils.isNotEmpty(mailAddress[0])) {
 			        emailMessageProperties.setMailTo(mailAddress);
 			        deviceManagementProviderService.sendEnrolmentInvitation(emailMessageProperties);
 		        }
@@ -409,15 +541,14 @@ public class User {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("{type}/{id}")
-	public List<String> getUserRoles() throws MDMAPIException {
+	@Path("{type}/{id}") public List<String> getUserRoles(@PathParam("type") String type, @PathParam("id") String id)
+			throws MDMAPIException {
 		try {
 			String[] roles = MDMAPIUtils.getUserStoreManager().getRoleNames();
 			return Arrays.asList(roles);
 		} catch (UserStoreException e) {
 			throw new MDMAPIException(
-					"Error occurred while retrieving list of roles created within the current " +
-					"tenant", e);
+					"Error occurred while retrieving list of roles created within the current " + "tenant", e);
 		}
 	}
 
