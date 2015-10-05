@@ -22,7 +22,7 @@ var util = function () {
     var String = Packages.java.lang.String;
     var log = new Log();
 
-    module.getDyanmicCredentials = function(owner){
+    module.getDyanmicCredentials = function(owner){ 
         var payload = {
             "callbackUrl": "http://localhost:9763/mdm-admin",
             "clientName": "mdm",
@@ -57,6 +57,10 @@ var util = function () {
         return new String(Base64.encodeBase64(new String(payload).getBytes()));
     }
 
+    function decode(payload){
+        return new String(Base64.decodeBase64(new String(payload).getBytes()));
+    }
+
     /**
      * Get an AccessToken pair based on username and password
      * @param username
@@ -88,16 +92,21 @@ var util = function () {
         return tokenPair;
     };
     module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {
+
+        var assertionXML = new XML(decode(assertion) + "");
+        var extractedAssertion = assertionXML..*::["Assertion"].toXMLString();
+        var encodedExtractedAssertion = encode(extractedAssertion);
+
         var xhr = new XMLHttpRequest();
         var tokenEndpoint = "https://localhost:9443/oauth2/token";
         var encodedClientKeys = encode(clientId + ":" + clientSecret);
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
-        xhr.send("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + encodeURIComponent(assertion) + "&scope=" + scope);
+        xhr.send("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + encodeURIComponent(encodedExtractedAssertion) + "&scope=" + scope);
 
         log.error(encodedClientKeys);
-        log.error("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + encodeURIComponent(assertion) + "&scope=" + scope);
+        log.error("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + encodeURIComponent(encodedExtractedAssertion) + "&scope=" + scope);
         log.error(xhr.responseText);
 
         var tokenPair = {};
