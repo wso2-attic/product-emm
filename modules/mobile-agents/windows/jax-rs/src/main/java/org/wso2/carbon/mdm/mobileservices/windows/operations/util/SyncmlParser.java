@@ -95,14 +95,13 @@ public class SyncmlParser {
      */
     private static SyncmlHeader generateSyncmlHeader(Node syncHeader) {
 
-        NodeList headerElements = syncHeader.getChildNodes();
         String sessionID = null;
         String messageID = null;
         Target target = null;
         Source source = null;
         Credential credential = null;
-        int hexaSessionId;
 
+        NodeList headerElements = syncHeader.getChildNodes();
         for (int i = 0 ; i < headerElements.getLength() ; i++) {
             Node node = headerElements.item(i);
 
@@ -128,8 +127,8 @@ public class SyncmlParser {
         }
         SyncmlHeader header = new SyncmlHeader();
         header.setMsgID(Integer.valueOf(messageID));
-        hexaSessionId = Integer.valueOf(sessionID,16);
-        header.setSessionId(hexaSessionId);
+        // Syncml message contains a sessionID which is Hexadecimal value.Hexadecimal sessionID parse as a integer value.
+        header.setSessionId(Integer.valueOf(sessionID,16));
         header.setTarget(target);
         header.setSource(source);
         header.setCredential(credential);
@@ -143,11 +142,11 @@ public class SyncmlParser {
      */
     private static SyncmlBody generateSyncmlBody(Node syncBody) {
 
-        NodeList bodyElements = syncBody.getChildNodes();
         Alert alert = null;
         Replace replace = null;
         Results results = null;
         List<Status> status = new ArrayList<Status>();
+        NodeList bodyElements = syncBody.getChildNodes();
 
         for (int i = 0 ; i < bodyElements.getLength() ; i++) {
             Node node = bodyElements.item(i);

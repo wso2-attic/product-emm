@@ -51,8 +51,10 @@ public class OperationReply {
 
     private SyncmlDocument syncmlDocument;
     private SyncmlDocument replySyncmlDocument;
-    private static final int HEADER_STATUS_ID = 0;
     private int headerCommandId = 1;
+    private String policyAllowData = "1";
+    private String policyDisallowData = "0";
+    private static final int HEADER_STATUS_ID = 0;
     private static final String RESULTS_COMMAND_TEXT = "Results";
     private static final String HEADER_COMMAND_TEXT = "SyncHdr";
     private static final String ALERT_COMMAND_TEXT = "Alert";
@@ -83,9 +85,7 @@ public class OperationReply {
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
         SyncmlHeader header = new SyncmlHeader();
         header.setMsgID(sourceHeader.getMsgID());
-        String hexSessionId = Integer.toHexString(sourceHeader.getSessionId());
-        header.setHexSessionId(hexSessionId);
-        //header.setSessionId(sourceHeader.getSessionId());
+        header.setHexadecimalSessionId(Integer.toHexString(sourceHeader.getSessionId()));
         Target target = new Target();
         target.setLocURI(sourceHeader.getSource().getLocURI());
         header.setTarget(target);
@@ -135,7 +135,7 @@ public class OperationReply {
     private SyncmlBody generateStatuses() {
         SyncmlBody sourceSyncmlBody = syncmlDocument.getBody();
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
-        Status headerStatus = null;
+        Status headerStatus;
         SyncmlBody syncmlBodyReply = new SyncmlBody();
         List<Status> status = new ArrayList<Status>();
         List<Status> sourceStatus = sourceSyncmlBody.getStatus();
@@ -189,8 +189,7 @@ public class OperationReply {
                 Exec exec = execIterator.next();
                 Status execStatus = new Status(execCommandId, sourceHeader.getMsgID(),
                         exec.getCommandId(), GET_COMMAND_TEXT, null,
-                        String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED)
-                );
+                        String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
                 status.add(execStatus);
             }
         }
@@ -212,20 +211,22 @@ public class OperationReply {
         List<Add> addsAtomic = new ArrayList<Add>();
         Replace replaceElement = new Replace();
         List<Item> replaceItem = new ArrayList<>();
-        Alert alert = new Alert();
         Sequence monitorSequence = new Sequence();
-
 
         if (operations != null) {
             for (int x = 0; x < operations.size(); x++) {
                 Operation operation = operations.get(x);
                 Operation.Type type = operation.getType();
-
                 switch (type) {
                     case POLICY:
-                        Sequence policySequence = new Sequence();
-                        policySequence = buildSequence(operation, policySequence);
-                        syncmlBody.setSequence(policySequence);
+                        if (this.syncmlDocument.getBody().getAlert() != null) {
+                            if (this.syncmlDocument.getBody().getAlert().getData().equals
+                                    (Constants.INITIAL_ALERT_DATA)) {
+                                Sequence policySequence = new Sequence();
+                                policySequence = buildSequence(operation, policySequence);
+                                syncmlBody.setSequence(policySequence);
+                            }
+                        }
                         break;
                     case CONFIG:
                         List<Add> addConfig = appendAddConfiguration(operation);
@@ -234,7 +235,7 @@ public class OperationReply {
                         }
                         break;
                     case MESSAGE:
-                        ;
+
                         break;
                     case INFO:
                         Item itemGet = appendGetInfo(operation);
@@ -270,7 +271,7 @@ public class OperationReply {
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                                 .OperationCodes.MONITOR)) {
                             Get monitorGetElement = new Get();
-                            List<Item>monitotItems = new ArrayList<>();
+                            List<Item> monitorItems = new ArrayList<>();
                             if (this.syncmlDocument.getBody().getAlert() != null) {
                                 if (this.syncmlDocument.getBody().getAlert().getData().equals
                                         (Constants.INITIAL_ALERT_DATA)) {
@@ -295,8 +296,7 @@ public class OperationReply {
                                             operationcode.setCode(opCode);
 
                                             Item item = appendGetInfo(operationcode);
-//                                            itemsGet.add(item);
-                                            monitotItems.add(item);
+                                            monitorItems.add(item);
 
                                         }
                                         if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
@@ -305,8 +305,7 @@ public class OperationReply {
                                             storageOperatonCode.setCode(encryptCode);
 
                                             Item storageStatusItem = appendGetInfo(storageOperatonCode);
-                                            //itemsGet.add(storageStatusItem);
-                                            monitotItems.add(storageStatusItem);
+                                            monitorItems.add(storageStatusItem);
                                         }
                                         if (profileFeature.getFeatureCode().equals("PASSCODE_POLICY")) {
                                             String passcode = "DEVICE_PASSWORD_STATUS";
@@ -314,13 +313,12 @@ public class OperationReply {
                                             storageOperatonCode.setCode(passcode);
 
                                             Item passCodeStatusItem = appendGetInfo(storageOperatonCode);
-                                            //itemsGet.add(storageStatusItem);
-                                            monitotItems.add(passCodeStatusItem);
+                                            monitorItems.add(passCodeStatusItem);
                                         }
                                     }
-                                    if (!monitotItems.isEmpty()) {
+                                    if (!monitorItems.isEmpty()) {
                                         monitorGetElement.setCommandId(operation.getId());
-                                        monitorGetElement.setItems(monitotItems);
+                                        monitorGetElement.setItems(monitorItems);
                                     }
                                     monitorSequence.setGet(monitorGetElement);
                                     syncmlBody.setSequence(monitorSequence);
@@ -382,7 +380,8 @@ public class OperationReply {
                 item.setTarget(target);
             }
         }
-        if (operationCode.equals("LOCKRESET")) {
+        if (operationCode.equals(
+                org.wso2.carbon.mdm.mobileservices.windows.common.Constants.OperationCodes.LOCK_RESET)) {
             operation.setCode(org.wso2.carbon.mdm.mobileservices.windows.common.Constants.OperationCodes.PIN_CODE);
             for (Info getInfo : Info.values()) {
                 if (operation.getCode().equals(getInfo.name())) {
@@ -399,43 +398,45 @@ public class OperationReply {
         Item item = new Item();
         Target target = new Target();
         String operationCode = operation.getCode();
+        JSONObject payload = new JSONObject(operation.getPayLoad().toString());
         for (Command command : Command.values()) {
+
             if (operationCode != null && operationCode.equals(command.name())) {
                 target.setLocURI(command.getCode());
+
                 if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.CAMERA)) {
-                    JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+
                     if (payload.getBoolean("enabled")) {
                         Meta meta = new Meta();
                         meta.setFormat("int");
                         item.setTarget(target);
                         item.setMeta(meta);
-                        item.setData("1");
+                        item.setData(policyAllowData);
                     } else {
                         Meta meta = new Meta();
                         meta.setFormat("int");
                         item.setTarget(target);
                         item.setMeta(meta);
-                        item.setData("0");
+                        item.setData(policyDisallowData);
                     }
                 }
                 if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.ENCRYPT_STORAGE)) {
-                    JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+
                     if (payload.getBoolean("encrypted")) {
                         Meta meta = new Meta();
                         meta.setFormat("int");
                         item.setTarget(target);
                         item.setMeta(meta);
-                        item.setData("1");
+                        item.setData(policyAllowData);
                     } else {
                         Meta meta = new Meta();
                         meta.setFormat("int");
                         item.setTarget(target);
                         item.setMeta(meta);
-                        item.setData("0");
+                        item.setData(policyDisallowData);
                     }
-
                 }
             }
         }
@@ -445,14 +446,15 @@ public class OperationReply {
     private List<Add> appendAddInfo(Operation operation) throws WindowsOperationException {
 
         List<Add> addList = new ArrayList<>();
-
         Gson gson = new Gson();
-        String operationCode = operation.getCode();
-        if (operationCode.equals("PASSCODE_POLICY")) {
+
+        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                .OperationCodes.PASSCODE_POLICY) && operation.getCode() != null) {
             PasscodePolicy passcodeObject = gson.fromJson((String) operation.getPayLoad(), PasscodePolicy.class);
+
             for (Configure configure : Configure.values()) {
                 String maxAttempt = "PASSWORD_MAX_FAIL_ATTEMPTS";
-                if (operationCode != null && maxAttempt.equals(configure.name())) {
+                if (operation.getCode() != null && maxAttempt.equals(configure.name())) {
                     int maxFailedAttempts = passcodeObject.getMaxFailedAttempts();
                     String attempt = String.valueOf(maxFailedAttempts);
                     Add add = new Add();
@@ -471,7 +473,7 @@ public class OperationReply {
                     addList.add(add);
                 }
                 String allowPassword = "DEVICE_PASSWORD_ENABLE";
-                if (operationCode != null && allowPassword.equals(configure.name())) {
+                if (operation.getCode() != null && allowPassword.equals(configure.name())) {
                     List<Item> itemList = new ArrayList<>();
                     if (passcodeObject.isEnablePassword()) {
                         Add add = new Add();
@@ -506,7 +508,7 @@ public class OperationReply {
                     }
                 }
                 String passwordLength = "MIN_PASSWORD_LENGTH";
-                if (operationCode != null && passwordLength.equals(configure.name())) {
+                if (operation.getCode() != null && passwordLength.equals(configure.name())) {
                     int minLength = passcodeObject.getMinLength();
                     String attempt = String.valueOf(minLength);
                     Add add = new Add();
@@ -526,7 +528,7 @@ public class OperationReply {
                     addList.add(add);
                 }
                 String allowSimplePassword = "SIMPLE_PASSWORD";
-                if (operationCode != null && allowSimplePassword.equals(configure.name())) {
+                if (operation.getCode() != null && allowSimplePassword.equals(configure.name())) {
                     List<Item> itemList = new ArrayList<>();
                     if (passcodeObject.isAllowSimple()) {
                         Add add = new Add();
@@ -561,7 +563,7 @@ public class OperationReply {
                     }
                 }
                 String allowAlfaNumeric = "Alphanumeric_PASSWORD";
-                if (operationCode != null && allowAlfaNumeric.equals(configure.name())) {
+                if (operation.getCode() != null && allowAlfaNumeric.equals(configure.name())) {
                     Add add = new Add();
                     List<Item> itemList = new ArrayList<>();
                     if (passcodeObject.isRequireAlphanumeric()) {
@@ -595,7 +597,7 @@ public class OperationReply {
                     }
                 }
                 String passwordExpiteTime = "PASSWORD_EXPIRE";
-                if (operationCode != null && passwordExpiteTime.equals(configure.name())) {
+                if (operation.getCode() != null && passwordExpiteTime.equals(configure.name())) {
                     int minAgeDays = passcodeObject.getMaxPINAgeInDays();
                     String minAgeString = String.valueOf(minAgeDays);
                     Add add = new Add();
@@ -615,7 +617,7 @@ public class OperationReply {
                     addList.add(add);
                 }
                 String devicePasswordHistory = "PASSWORD_HISTORY";
-                if (operationCode != null && devicePasswordHistory.equals(configure.name())) {
+                if (operation.getCode() != null && devicePasswordHistory.equals(configure.name())) {
                     int pinHistory = passcodeObject.getPinHistory();
                     Add add = new Add();
                     String pinHistoryString = String.valueOf(pinHistory);
@@ -635,7 +637,7 @@ public class OperationReply {
                     addList.add(add);
                 }
                 String pinInactiveTime = "MAX_PASSWORD_INACTIVE_TIME";
-                if (operationCode != null && pinInactiveTime.equals(configure.name())) {
+                if (operation.getCode() != null && pinInactiveTime.equals(configure.name())) {
                     int pinInactive = passcodeObject.getMaxInactiveTime();
                     String pinInactiveString = String.valueOf(pinInactive);
                     Add add = new Add();
@@ -655,7 +657,7 @@ public class OperationReply {
                     addList.add(add);
                 }
                 String minpasswordComplexCharacters = "MIN_PASSWORD_COMPLEX_CHARACTERS";
-                if (operationCode != null && minpasswordComplexCharacters.equals(configure.name())) {
+                if (operation.getCode() != null && minpasswordComplexCharacters.equals(configure.name())) {
                     int complexChars = passcodeObject.getMinComplexChars();
                     String complexCharactersString = String.valueOf(complexChars);
                     Add add = new Add();
@@ -735,19 +737,13 @@ public class OperationReply {
         return execElement;
     }
 
-    public Sequence buildSequence(Operation operation, Sequence sequenceElement) {
+    public Sequence buildSequence(Operation operation, Sequence sequenceElement) throws WindowsOperationException {
 
         sequenceElement.setCommandId(operation.getId());
-        if (operation.getCode().equals("LOCKREST")) {
-            Exec execElement = new Exec();
-            execElement.setCommandId(operation.getId());
-            List<Item> itemsExec = new ArrayList<Item>();
-            Item itemExec = appendExecInfo(operation);
-            itemsExec.add(itemExec);
-            execElement.setItems(itemsExec);
-
-            sequenceElement.setExec(execElement);
-
+        List<Replace> replaceItems = new ArrayList<>();
+        if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                .OperationCodes.LOCK_RESET)) {
+            Exec execElement = executeCommand(operation);
             Get getElements = new Get();
             getElements.setCommandId(operation.getId());
             List<Item> getItems = new ArrayList<>();
@@ -755,15 +751,19 @@ public class OperationReply {
             getItems.add(itemGets);
             getElements.setItems(getItems);
 
+
+            sequenceElement.setExec(execElement);
             sequenceElement.setGet(getElements);
             return sequenceElement;
-        } else if (operation.getCode().equals("POLICY_BUNDLE")) {
+        } else if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                .OperationCodes.POLICY_BUNDLE)) {
 
             List<? extends Operation> operationList = (List<? extends Operation>) operation.getPayLoad();
 
             for (int y = 0; y < operationList.size(); y++) {
                 Operation policy = operationList.get(y);
-                if (policy.getCode().equals("CAMERA")) {
+                if (policy.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.CAMERA)) {
 
                     Replace replaceCameraConfig = new Replace();
                     Item cameraItem;
@@ -772,13 +772,18 @@ public class OperationReply {
                         cameraItem = appendReplaceInfo(policy);
                         cameraItems.add(cameraItem);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        String msg = "Error occurred while parsing payload object to json.";
+                        log.error(msg);
                     }
                     replaceCameraConfig.setCommandId(operation.getId());
                     replaceCameraConfig.setItems(cameraItems);
-                    sequenceElement.setReplace(replaceCameraConfig);
+                    replaceItems.add(replaceCameraConfig);
+//                    sequenceElement.setReplace(replaceCameraConfig);
+                    // sequenceElement.setReplaces();
                 }
-                if (policy.getCode().equals("ENCRYPT_STORAGE")) {
+                if (policy.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.ENCRYPT_STORAGE)) {
+
                     Replace replaceStorageConfig = new Replace();
                     Item storageItem;
                     List<Item> storageItems = new ArrayList<Item>();
@@ -786,26 +791,30 @@ public class OperationReply {
                         storageItem = appendReplaceInfo(policy);
                         storageItems.add(storageItem);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        throw new WindowsOperationException("Error occurred while parsing payload object to json.", e);
                     }
                     replaceStorageConfig.setCommandId(operation.getId());
                     replaceStorageConfig.setItems(storageItems);
-                    sequenceElement.setReplace(replaceStorageConfig);
+                    replaceItems.add(replaceStorageConfig);
+
                 }
-                if (policy.getCode().equals("PASSCODE_POLICY")) {
+                if (policy.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.PASSCODE_POLICY)) {
 
                     Atomic atomicElement = new Atomic();
-                    List<Add> addConfig = null;
+                    List<Add> addConfig;
                     try {
                         addConfig = appendAddInfo(policy);
+                        atomicElement.setAdds(addConfig);
+                        atomicElement.setCommandId(operation.getId());
+                        sequenceElement.setAtomic(atomicElement);
                     } catch (WindowsOperationException e) {
-                        e.printStackTrace();
+                        throw new WindowsOperationException("Error occurred while generating operation payload.", e);
                     }
-                    atomicElement.setAdds(addConfig);
-                    atomicElement.setCommandId(operation.getId());
-
-                    sequenceElement.setAtomic(atomicElement);
                 }
+            }
+            if (!replaceItems.isEmpty()) {
+                sequenceElement.setReplaces(replaceItems);
             }
             return sequenceElement;
 

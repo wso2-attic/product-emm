@@ -31,16 +31,15 @@ public class SyncmlHeader {
 	private Target target;
 	private Source source;
 	private Credential credential;
+	private String hexadecimalSessionId;
 
-	public String getHexSessionId() {
-		return hexSessionId;
+	public String getHexadecimalSessionId() {
+		return hexadecimalSessionId;
 	}
 
-	public void setHexSessionId(String hexSessionId) {
-		this.hexSessionId = hexSessionId;
+	public void setHexadecimalSessionId(String hexSessionId) {
+		this.hexadecimalSessionId = hexSessionId;
 	}
-
-	private String hexSessionId;
 
 	public Credential getCredential() {
 		return credential;
@@ -92,14 +91,9 @@ public class SyncmlHeader {
 		Element verProtocol = doc.createElement(Constants.VER_PROTOCOL);
 		verProtocol.appendChild(doc.createTextNode(Constants.VER_PROTOCOL_VALUE));
 		syncHdr.appendChild(verProtocol);
-//		if (getSessionId() != -1) {
-//			Element sessionId = doc.createElement(Constants.SESSION_ID);
-//			sessionId.appendChild(doc.createTextNode(String.valueOf(getSessionId())));
-//			syncHdr.appendChild(sessionId);
-//		}
-		if (getHexSessionId() != null) {
+		if (getHexadecimalSessionId() != null) {
 			Element sessionId = doc.createElement(Constants.SESSION_ID);
-			sessionId.appendChild(doc.createTextNode(getHexSessionId()));
+			sessionId.appendChild(doc.createTextNode(getHexadecimalSessionId()));
 			syncHdr.appendChild(sessionId);
 		}
 		if (getMsgID() != -1) {

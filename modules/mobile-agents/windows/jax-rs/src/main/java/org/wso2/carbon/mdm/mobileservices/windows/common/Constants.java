@@ -196,6 +196,7 @@ public final class Constants {
         public static final String PASSCODE_POLICY = "PASSCODE_POLICY";
         public static final String MONITOR = "MONITOR";
         public static final String CAMERA_STATUS = "CAMERA_STATUS";
+        public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
 
     }
 

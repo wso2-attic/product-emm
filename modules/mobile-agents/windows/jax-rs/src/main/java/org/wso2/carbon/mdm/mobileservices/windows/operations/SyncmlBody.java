@@ -50,14 +50,6 @@ public class SyncmlBody {
 
 	public void setSequence(Sequence sequence) { this.sequence = sequence; }
 
-	public Get getGetCommands() {
-		return getCommands;
-	}
-
-	public void setGetCommands(Get getCommands) {
-		this.getCommands = getCommands;
-	}
-
 	public List<Exec> getExec() { return exec; }
 
 	public void setExec(List<Exec> exec) { this.exec = exec; }

@@ -18,9 +18,12 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
-import org.w3c.dom.Document;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Sequence data that use to execute tag list
@@ -30,16 +33,26 @@ public class Sequence {
     int commandId;
     Exec exec;
     Get get;
-    Replace replace;
+//    Replace replace;
     Atomic atomic;
 
-    public Replace getReplace() {
-        return replace;
+    public List<Replace> getReplaces() {
+        return replaces;
     }
 
-    public void setReplace(Replace replace) {
-        this.replace = replace;
+    public void setReplaces(List<Replace> replaces) {
+        this.replaces = replaces;
     }
+
+    List<Replace> replaces;
+
+//    public Replace getReplace() {
+//        return replace;
+//    }
+//
+//    public void setReplace(Replace replace) {
+//        this.replace = replace;
+//    }
 
     public Atomic getAtomic() {
         return atomic;
@@ -87,8 +100,16 @@ public class Sequence {
         if (getGet() != null) {
             getGet().buildGetElement(doc, sequence);
         }
-        if (getReplace() != null) {
-            getReplace().buildReplaceElement(doc, sequence);
+//        if (getReplace() != null) {
+//            getReplace().buildReplaceElement(doc, sequence);
+//        }
+        if (getReplaces() != null) {
+            for (Iterator<Replace> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
+                Replace replace = replaceIterator.next();
+                if (replace != null) {
+                    replace.buildReplaceElement(doc, sequence);
+                }
+            }
         }
         if (getAtomic() != null) {
             getAtomic().buildAtomicElement(doc, sequence);
