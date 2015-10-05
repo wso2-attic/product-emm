@@ -27,7 +27,10 @@ under the License. --}}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Windows Phone Enrollment | Start Workplace
+    {{
+        unit "title"
+        pageTitle = "Windows Phone Enrollment | Start Workplace"
+    }}
 {{/zone}}
 {{#zone "header"}}
     Windows Phone Enrollment

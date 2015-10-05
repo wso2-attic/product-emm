@@ -27,5 +27,12 @@ function onRequest (context) {
     } else {
         context["license"] = "ERROR: Unable to retrieve License Text.";
     }
+    var companyProps = session.get("COMPANY_DETAILS");
+    var mdmProps = application.get("PINCH_CONFIG");
+    if (!companyProps) {
+        context.companyName = mdmProps.generalConfig.companyName;
+    } else {
+        context.companyName = companyProps.companyName;
+    }
     return context;
 }

@@ -19,7 +19,10 @@ under the License. --}}
 {{layout "fluid"}}
 {{!-- Inputting content into defined zones in fluid layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Dashboard
+    {{
+        unit "title"
+        pageTitle = "Dashboard"
+    }}
 {{/zone}}
 {{#zone "body"}}
 	{{unit "appbar" pageTitle="Dashboard"}}

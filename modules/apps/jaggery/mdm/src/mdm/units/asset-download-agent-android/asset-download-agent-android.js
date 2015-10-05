@@ -24,5 +24,11 @@ function onRequest (context) {
     // setting android agent download URL
     context["agentDownloadURL"] = mdmProps["httpURL"] + mdmProps["appContext"] +
         "public/asset-download-agent-android/asset/" + mdmProps["androidAgentApp"];
+    var companyProps = session.get("COMPANY_DETAILS");
+    if (!companyProps) {
+        context.companyName = mdmProps.generalConfig.companyName;
+    } else {
+        context.companyName = companyProps.companyName;
+    }
     return context;
 }

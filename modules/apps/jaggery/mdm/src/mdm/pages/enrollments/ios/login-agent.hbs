@@ -28,7 +28,10 @@ under the License. --}}
 {{/zone}}
 {{!-- Inputting content into defined zones in enrollment layout --}}
 {{#zone "title"}}
-    WSO2 EMM | iOS Enrollment | Login to Enterprise Mobility Manager
+    {{
+        unit "title"
+        pageTitle = "iOS Enrollment | Login to Enterprise Mobility Manager"
+    }}
 {{/zone}}
 {{#zone "header"}}
     iOS Enrollment
