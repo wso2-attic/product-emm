@@ -74,6 +74,7 @@ public class Constants {
 	public static final String CRED_FORMAT = "b64";
 	public static final String CRED_TYPE = "syncml:auth-md5";
 	public static final String SEQUENCE = "Sequence";
+	public static final String META_FORMAT_INT = "int";
 
 	/**
 	 * SynclML service related constants

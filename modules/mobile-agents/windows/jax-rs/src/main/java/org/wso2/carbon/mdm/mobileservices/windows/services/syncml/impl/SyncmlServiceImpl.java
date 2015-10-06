@@ -213,6 +213,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } catch (DeviceManagementException e) {
                         String msg = "Cannot access Device management service.";
                         log.error(msg);
+                    } catch (FeatureManagementException e) {
+                        e.printStackTrace();
+                    } catch (PolicyComplianceException e) {
+                        e.printStackTrace();
                     }
                 } else {
                     try {
@@ -246,6 +250,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                     String msg = "Cannot access Device management service.";
                     log.error(msg);
                     throw new WindowsOperationException(msg, e);
+                } catch (FeatureManagementException e) {
+                    e.printStackTrace();
+                } catch (PolicyComplianceException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -385,7 +393,7 @@ public class SyncmlServiceImpl implements SyncmlService {
     }
 
     public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
-            throws OperationManagementException, DeviceManagementException {
+            throws OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException {
 
         List<? extends Operation> pendingOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
@@ -576,11 +584,16 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
                 WindowsAPIUtils.getPolicyManagerService().CheckPolicyCompliance(deviceIdentifier, complianceFeatures);
             } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                e.printStackTrace();
+                String msg = "Error occurred while getting effective policy.";
+                log.error(msg);
+                throw new FeatureManagementException(msg, e);
             } catch (JSONException e) {
-                e.printStackTrace();
+                String msg = "Error occurred while parsing json object.";
+                log.error(msg);
             } catch (PolicyComplianceException e) {
-                e.printStackTrace();
+                String msg = "Error occurred while setting up policy compliance.";
+                log.error(msg);
+                throw new PolicyComplianceException(msg, e);
             }
         }
         pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);

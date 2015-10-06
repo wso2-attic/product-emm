@@ -105,6 +105,7 @@ public class OperationReply {
         }
         SyncmlBody sourcebody = syncmlDocument.getBody();
         List<Status> ststusList = sourcebody.getStatus();
+
         for (int i = 0; i < ststusList.size(); i++) {
             if (HEADER_COMMAND_TEXT.equals(ststusList.get(i).getCommand()) &&
                     ststusList.get(i).getChallenge() != null) {
@@ -127,6 +128,9 @@ public class OperationReply {
             throw new WindowsOperationException(message);
         } catch (PolicyManagementException e) {
             String message = "Error while retrieving policy operations.";
+            log.error(message);
+        } catch (FeatureManagementException e) {
+            String message = "Error while retrieving effective policy operations.";
             log.error(message);
         }
         replySyncmlDocument.setBody(syncmlBody);
@@ -203,7 +207,7 @@ public class OperationReply {
         return syncmlBodyReply;
     }
 
-    private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException, PolicyManagementException {
+    private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException, PolicyManagementException, FeatureManagementException {
         Get getElement = new Get();
         List<Item> itemsGet = new ArrayList<Item>();
         List<Exec> execList = new ArrayList<>();
@@ -270,52 +274,25 @@ public class OperationReply {
                         }
                         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                                 .OperationCodes.MONITOR)) {
+
                             Get monitorGetElement = new Get();
-                            List<Item> monitorItems = new ArrayList<>();
+                            List<Item> monitorItems;
+                            List<ProfileFeature> profileFeatures;
+
                             if (this.syncmlDocument.getBody().getAlert() != null) {
                                 if (this.syncmlDocument.getBody().getAlert().getData().equals
                                         (Constants.INITIAL_ALERT_DATA)) {
 
                                     monitorSequence.setCommandId(operation.getId());
-
                                     DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                                             syncmlDocument.getHeader().getSource().getLocURI());
-                                    List<ProfileFeature> profileFeatures = null;
                                     try {
                                         profileFeatures = WindowsAPIUtils.getPolicyManagerService().
                                                 getEffectiveFeatures(deviceIdentifier);
                                     } catch (FeatureManagementException e) {
-                                        e.printStackTrace();
+                                        throw new FeatureManagementException("Error in getting effective policy.", e);
                                     }
-                                    for (int y = 0; y < profileFeatures.size(); y++) {
-                                        ProfileFeature profileFeature = profileFeatures.get(y);
-
-                                        if (profileFeature.getFeatureCode().equals("CAMERA")) {
-                                            String opCode = "CAMERA_STATUS";
-                                            Operation operationcode = new Operation();
-                                            operationcode.setCode(opCode);
-
-                                            Item item = appendGetInfo(operationcode);
-                                            monitorItems.add(item);
-
-                                        }
-                                        if (profileFeature.getFeatureCode().equals("ENCRYPT_STORAGE")) {
-                                            String encryptCode = "ENCRYPT_STORAGE_STATUS";
-                                            Operation storageOperatonCode = new Operation();
-                                            storageOperatonCode.setCode(encryptCode);
-
-                                            Item storageStatusItem = appendGetInfo(storageOperatonCode);
-                                            monitorItems.add(storageStatusItem);
-                                        }
-                                        if (profileFeature.getFeatureCode().equals("PASSCODE_POLICY")) {
-                                            String passcode = "DEVICE_PASSWORD_STATUS";
-                                            Operation storageOperatonCode = new Operation();
-                                            storageOperatonCode.setCode(passcode);
-
-                                            Item passCodeStatusItem = appendGetInfo(storageOperatonCode);
-                                            monitorItems.add(passCodeStatusItem);
-                                        }
-                                    }
+                                    monitorItems = buildMonitorOperation(profileFeatures);
                                     if (!monitorItems.isEmpty()) {
                                         monitorGetElement.setCommandId(operation.getId());
                                         monitorGetElement.setItems(monitorItems);
@@ -409,13 +386,13 @@ public class OperationReply {
 
                     if (payload.getBoolean("enabled")) {
                         Meta meta = new Meta();
-                        meta.setFormat("int");
+                        meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
                         item.setData(policyAllowData);
                     } else {
                         Meta meta = new Meta();
-                        meta.setFormat("int");
+                        meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
                         item.setData(policyDisallowData);
@@ -426,13 +403,13 @@ public class OperationReply {
 
                     if (payload.getBoolean("encrypted")) {
                         Meta meta = new Meta();
-                        meta.setFormat("int");
+                        meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
                         item.setData(policyAllowData);
                     } else {
                         Meta meta = new Meta();
-                        meta.setFormat("int");
+                        meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
                         item.setData(policyDisallowData);
@@ -456,20 +433,21 @@ public class OperationReply {
                 String maxAttempt = "PASSWORD_MAX_FAIL_ATTEMPTS";
                 if (operation.getCode() != null && maxAttempt.equals(configure.name())) {
                     int maxFailedAttempts = passcodeObject.getMaxFailedAttempts();
-                    String attempt = String.valueOf(maxFailedAttempts);
-                    Add add = new Add();
-                    List<Item> itemList = new ArrayList<>();
-                    Item item = new Item();
-                    Target target = new Target();
-                    target.setLocURI(configure.getCode());
-                    Meta meta = new Meta();
-                    meta.setFormat("int");
-                    item.setTarget(target);
-                    item.setMeta(meta);
-                    item.setData(attempt);
-                    itemList.add(item);
-                    add.setCommandId(90);
-                    add.setItems(itemList);
+//                    String attempt = String.valueOf(maxFailedAttempts);
+//                    Add add = new Add();
+//                    List<Item> itemList = new ArrayList<>();
+//                    Item item = new Item();
+//                    Target target = new Target();
+//                    target.setLocURI(configure.getCode());
+//                    Meta meta = new Meta();
+//                    meta.setFormat("int");
+//                    item.setTarget(target);
+//                    item.setMeta(meta);
+//                    item.setData(attempt);
+//                    itemList.add(item);
+//                    add.setCommandId(90);
+//                    add.setItems(itemList);
+                    Add add = generatePasscodePolicyData(configure, maxFailedAttempts);
                     addList.add(add);
                 }
                 String allowPassword = "DEVICE_PASSWORD_ENABLE";
@@ -510,21 +488,23 @@ public class OperationReply {
                 String passwordLength = "MIN_PASSWORD_LENGTH";
                 if (operation.getCode() != null && passwordLength.equals(configure.name())) {
                     int minLength = passcodeObject.getMinLength();
-                    String attempt = String.valueOf(minLength);
-                    Add add = new Add();
-                    List<Item> itemList = new ArrayList<>();
-                    Item item = new Item();
-                    Target target = new Target();
-                    target.setLocURI(configure.getCode());
-                    Meta meta = new Meta();
-                    meta.setFormat("int");
-                    item.setTarget(target);
-                    item.setMeta(meta);
-                    item.setData(attempt);
-
-                    itemList.add(item);
-                    add.setCommandId(92);
-                    add.setItems(itemList);
+//                    String attempt = String.valueOf(minLength);
+//                    Add add = new Add();
+//                    List<Item> itemList = new ArrayList<>();
+//                    Item item = new Item();
+//                    Target target = new Target();
+//                    target.setLocURI(configure.getCode());
+//                    Meta meta = new Meta();
+//                    meta.setFormat("int");
+//                    item.setTarget(target);
+//                    item.setMeta(meta);
+//                    item.setData(attempt);
+//
+//                    itemList.add(item);
+//                    add.setCommandId(92);
+//                    add.setItems(itemList);
+//                    addList.add(add);
+                    Add add = generatePasscodePolicyData(configure, minLength);
                     addList.add(add);
                 }
                 String allowSimplePassword = "SIMPLE_PASSWORD";
@@ -599,81 +579,90 @@ public class OperationReply {
                 String passwordExpiteTime = "PASSWORD_EXPIRE";
                 if (operation.getCode() != null && passwordExpiteTime.equals(configure.name())) {
                     int minAgeDays = passcodeObject.getMaxPINAgeInDays();
-                    String minAgeString = String.valueOf(minAgeDays);
-                    Add add = new Add();
-                    List<Item> itemList = new ArrayList<>();
-                    Item item = new Item();
-                    Target target = new Target();
-                    target.setLocURI(configure.getCode());
-                    Meta meta = new Meta();
-                    meta.setFormat("int");
-                    item.setTarget(target);
-                    item.setMeta(meta);
-                    item.setData(minAgeString);
-
-                    itemList.add(item);
-                    add.setCommandId(95);
-                    add.setItems(itemList);
+//                    String minAgeString = String.valueOf(minAgeDays);
+//                    Add add = new Add();
+//                    List<Item> itemList = new ArrayList<>();
+//                    Item item = new Item();
+//                    Target target = new Target();
+//                    target.setLocURI(configure.getCode());
+//                    Meta meta = new Meta();
+//                    meta.setFormat("int");
+//                    item.setTarget(target);
+//                    item.setMeta(meta);
+//                    item.setData(minAgeString);
+//
+//                    itemList.add(item);
+//                    add.setCommandId(95);
+//                    add.setItems(itemList);
+//                    addList.add(add);
+                    Add add = generatePasscodePolicyData(configure, minAgeDays);
                     addList.add(add);
+
                 }
                 String devicePasswordHistory = "PASSWORD_HISTORY";
                 if (operation.getCode() != null && devicePasswordHistory.equals(configure.name())) {
                     int pinHistory = passcodeObject.getPinHistory();
-                    Add add = new Add();
-                    String pinHistoryString = String.valueOf(pinHistory);
-                    List<Item> itemList = new ArrayList<>();
-                    Item item = new Item();
-                    Target target = new Target();
-                    target.setLocURI(configure.getCode());
-                    Meta meta = new Meta();
-                    meta.setFormat("int");
-                    item.setTarget(target);
-                    item.setMeta(meta);
-                    item.setData(pinHistoryString);
-
-                    itemList.add(item);
-                    add.setCommandId(96);
-                    add.setItems(itemList);
+//                    Add add = new Add();
+//                    String pinHistoryString = String.valueOf(pinHistory);
+//                    List<Item> itemList = new ArrayList<>();
+//                    Item item = new Item();
+//                    Target target = new Target();
+//                    target.setLocURI(configure.getCode());
+//                    Meta meta = new Meta();
+//                    meta.setFormat("int");
+//                    item.setTarget(target);
+//                    item.setMeta(meta);
+//                    item.setData(pinHistoryString);
+//
+//                    itemList.add(item);
+//                    add.setCommandId(96);
+//                    add.setItems(itemList);
+//                    addList.add(add);
+                    Add add = generatePasscodePolicyData(configure, pinHistory);
                     addList.add(add);
                 }
                 String pinInactiveTime = "MAX_PASSWORD_INACTIVE_TIME";
                 if (operation.getCode() != null && pinInactiveTime.equals(configure.name())) {
                     int pinInactive = passcodeObject.getMaxInactiveTime();
-                    String pinInactiveString = String.valueOf(pinInactive);
-                    Add add = new Add();
-                    List<Item> itemList = new ArrayList<>();
-                    Item item = new Item();
-                    Target target = new Target();
-                    target.setLocURI(configure.getCode());
-                    Meta meta = new Meta();
-                    meta.setFormat("int");
-                    item.setTarget(target);
-                    item.setMeta(meta);
-                    item.setData(pinInactiveString);
-
-                    itemList.add(item);
-                    add.setCommandId(97);
-                    add.setItems(itemList);
+//                    String pinInactiveString = String.valueOf(pinInactive);
+//                    Add add = new Add();
+//                    List<Item> itemList = new ArrayList<>();
+//                    Item item = new Item();
+//                    Target target = new Target();
+//                    target.setLocURI(configure.getCode());
+//                    Meta meta = new Meta();
+//                    meta.setFormat("int");
+//                    item.setTarget(target);
+//                    item.setMeta(meta);
+//                    item.setData(pinInactiveString);
+//
+//                    itemList.add(item);
+//                    add.setCommandId(97);
+//                    add.setItems(itemList);
+//                    addList.add(add);
+                    Add add = generatePasscodePolicyData(configure, pinInactive);
                     addList.add(add);
                 }
                 String minpasswordComplexCharacters = "MIN_PASSWORD_COMPLEX_CHARACTERS";
                 if (operation.getCode() != null && minpasswordComplexCharacters.equals(configure.name())) {
                     int complexChars = passcodeObject.getMinComplexChars();
-                    String complexCharactersString = String.valueOf(complexChars);
-                    Add add = new Add();
-                    List<Item> itemList = new ArrayList<>();
-                    Item item = new Item();
-                    Target target = new Target();
-                    target.setLocURI(configure.getCode());
-                    Meta meta = new Meta();
-                    meta.setFormat("int");
-                    item.setTarget(target);
-                    item.setMeta(meta);
-                    item.setData(complexCharactersString);
-
-                    itemList.add(item);
-                    add.setCommandId(98);
-                    add.setItems(itemList);
+//                    String complexCharactersString = String.valueOf(complexChars);
+//                    Add add = new Add();
+//                    List<Item> itemList = new ArrayList<>();
+//                    Item item = new Item();
+//                    Target target = new Target();
+//                    target.setLocURI(configure.getCode());
+//                    Meta meta = new Meta();
+//                    meta.setFormat("int");
+//                    item.setTarget(target);
+//                    item.setMeta(meta);
+//                    item.setData(complexCharactersString);
+//
+//                    itemList.add(item);
+//                    add.setCommandId(98);
+//                    add.setItems(itemList);
+//                    addList.add(add);
+                    Add add = generatePasscodePolicyData(configure, complexChars);
                     addList.add(add);
                 }
 
@@ -743,6 +732,7 @@ public class OperationReply {
         List<Replace> replaceItems = new ArrayList<>();
         if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                 .OperationCodes.LOCK_RESET)) {
+
             Exec execElement = executeCommand(operation);
             Get getElements = new Get();
             getElements.setCommandId(operation.getId());
@@ -751,10 +741,10 @@ public class OperationReply {
             getItems.add(itemGets);
             getElements.setItems(getItems);
 
-
             sequenceElement.setExec(execElement);
             sequenceElement.setGet(getElements);
             return sequenceElement;
+
         } else if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                 .OperationCodes.POLICY_BUNDLE)) {
 
@@ -778,8 +768,6 @@ public class OperationReply {
                     replaceCameraConfig.setCommandId(operation.getId());
                     replaceCameraConfig.setItems(cameraItems);
                     replaceItems.add(replaceCameraConfig);
-//                    sequenceElement.setReplace(replaceCameraConfig);
-                    // sequenceElement.setReplaces();
                 }
                 if (policy.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.ENCRYPT_STORAGE)) {
@@ -821,6 +809,64 @@ public class OperationReply {
         } else {
             return null;
         }
+    }
+
+    public List<Item> buildMonitorOperation(List<ProfileFeature> effectiveMonitoringFeature) {
+        List<Item> monitorItems = new ArrayList<>();
+        Operation monitorOperation;
+        for (int y = 0; y < effectiveMonitoringFeature.size(); y++) {
+            ProfileFeature profileFeature = effectiveMonitoringFeature.get(y);
+
+            if (profileFeature.getFeatureCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                    .OperationCodes.CAMERA)) {
+                String cameraStatus = org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.CAMERA_STATUS;
+
+                monitorOperation = new Operation();
+                monitorOperation.setCode(cameraStatus);
+                Item item = appendGetInfo(monitorOperation);
+                monitorItems.add(item);
+            }
+            if (profileFeature.getFeatureCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                    .OperationCodes.ENCRYPT_STORAGE)) {
+                String encryptStorageStatus = org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.ENCRYPT_STORAGE_STATUS;
+
+                monitorOperation = new Operation();
+                monitorOperation.setCode(encryptStorageStatus);
+                Item item = appendGetInfo(monitorOperation);
+                monitorItems.add(item);
+            }
+            if (profileFeature.getFeatureCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                    .OperationCodes.PASSCODE_POLICY)) {
+                String passcodeStatus = org.wso2.carbon.mdm.mobileservices.windows.common.Constants
+                        .OperationCodes.DEVICE_PASSWORD_STATUS;
+
+                monitorOperation = new Operation();
+                monitorOperation.setCode(passcodeStatus);
+                Item item = appendGetInfo(monitorOperation);
+                monitorItems.add(item);
+            }
+        }
+        return monitorItems;
+    }
+
+    public Add generatePasscodePolicyData(Configure configure,int policyData) {
+        String attempt = String.valueOf(policyData);
+        Add add = new Add();
+        List<Item> itemList = new ArrayList<>();
+        Item item = new Item();
+        Target target = new Target();
+        target.setLocURI(configure.getCode());
+        Meta meta = new Meta();
+        meta.setFormat(Constants.META_FORMAT_INT);
+        item.setTarget(target);
+        item.setMeta(meta);
+        item.setData(attempt);
+        itemList.add(item);
+        add.setCommandId(90);
+        add.setItems(itemList);
+        return add;
     }
 }
 

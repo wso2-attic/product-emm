@@ -197,6 +197,8 @@ public final class Constants {
         public static final String MONITOR = "MONITOR";
         public static final String CAMERA_STATUS = "CAMERA_STATUS";
         public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
+        public static final String ENCRYPT_STORAGE_STATUS = "ENCRYPT_STORAGE_STATUS";
+        public static final String DEVICE_PASSWORD_STATUS = "DEVICE_PASSWORD_STATUS";
 
     }
 
