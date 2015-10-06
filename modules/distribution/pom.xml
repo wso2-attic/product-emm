@@ -406,6 +406,36 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <!-- Replace Datasource, Scope mpl classes and OAuth callback class in identity.xml -->
+                    <execution>
+                        <id>replace-for-identity</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity.xml</file>
+                            <replacements>
+                                <replacement>
+                                    <xpath>/Server/OAuth/OAuthCallbackHandlers/OAuthCallbackHandler</xpath>
+                                    <token>(org.wso2.carbon.identity.oauth.callback.DefaultCallbackHandler)</token>
+                                    <value>org.wso2.carbon.device.mgt.oauth.extensions.handlers.DeviceMgtOAuthCallbackHandler</value>
+                                </replacement>
+                                <replacement>
+                                    <xpath>/Server/JDBCPersistenceManager/DataSource/Name</xpath>
+                                    <token>(jdbc/WSO2CarbonDB)</token>
+                                    <value>jdbc/WSO2AM_DB</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!--   <plugin>
                    <groupId>org.apache.maven.plugins</groupId>
                    <artifactId>maven-clean-plugin</artifactId>
