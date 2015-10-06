@@ -161,7 +161,7 @@ public class Policy {
         }
     }
 
-    @POST
+    @PUT
     @Path("{id}")
     public ResponsePayload updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy, @PathParam("id") int policyId)
             throws MDMAPIException {
