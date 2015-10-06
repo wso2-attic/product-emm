@@ -176,7 +176,7 @@
     </Permission>
     <Permission>
         <name>Get user roles</name>
-        <path>/device-mgt/user/roles</path>
+        <path>/device-mgt/users/roles</path>
         <url>mdm-admin/1.0.0/users/*/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
@@ -339,14 +339,14 @@
     <!-- License related APIs -->
     <Permission>
         <name>Get license</name>
-        <path>/device-mgt/device/license/view</path>
+        <path>/device-mgt/license/view</path>
         <url>mdm-admin/1.0.0/license/*/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Add license</name>
-        <path>/device-mgt/device/license/add</path>
+        <path>/device-mgt/license/add</path>
         <url>mdm-admin/1.0.0/license</url>
         <method>POST</method>
         <scope>emm_admin</scope>

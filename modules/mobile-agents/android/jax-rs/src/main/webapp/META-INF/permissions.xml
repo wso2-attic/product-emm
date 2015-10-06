@@ -242,7 +242,7 @@
     <!-- Enrollment related permissions -->
     <Permission>
         <name>Enroll device</name>
-        <path>/device-mgt/android/enroll</path>
+        <path>/device-mgt/android/devices/enroll</path>
         <url>mdm-android-agent/1.0.0/enrollment</url>
         <method>POST</method>
         <scope>emm_android_agent</scope>
@@ -250,7 +250,7 @@
 
     <Permission>
         <name>Get Enrollment Status</name>
-        <path>/device-mgt/android/enroll</path>
+        <path>/device-mgt/android/devices/enroll</path>
         <url>mdm-android-agent/1.0.0/enrollment/*</url>
         <method>GET</method>
         <scope>emm_android_agent</scope>
@@ -258,7 +258,7 @@
 
     <Permission>
         <name>Update Enrollment</name>
-        <path>/device-mgt/android/enroll</path>
+        <path>/device-mgt/android/devices/enroll</path>
         <url>mdm-android-agent/1.0.0/enrollment/*</url>
         <method>PUT</method>
         <scope>emm_user,emm_admin</scope>
@@ -266,7 +266,7 @@
 
     <Permission>
         <name>Disenroll device</name>
-        <path>/device-mgt/android/enroll</path>
+        <path>/device-mgt/android/devices/enroll</path>
         <url>mdm-android-agent/1.0.0/enrollment/*</url>
         <method>DELETE</method>
         <scope>emm_user,emm_admin</scope>
