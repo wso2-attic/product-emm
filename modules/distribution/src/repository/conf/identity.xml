@@ -144,7 +144,7 @@
         <OAuthCallbackHandlers>
             <OAuthCallbackHandler Class="org.wso2.carbon.device.mgt.oauth.extensions.handlers.DeviceMgtOAuthCallbackHandler"/>
         </OAuthCallbackHandlers>
-        <OAuthScopeValidator class="org.wso2.carbon.device.mgt.oauth.extensions.validators.ScopeValidator"/>
+        <OAuthScopeValidator class="org.wso2.carbon.device.mgt.oauth.extensions.validators.PermissionBasedScopeValidator"/>
         <TokenValidators>
             <TokenValidator type="bearer" class="org.wso2.carbon.identity.oauth2.validators.DefaultOAuth2TokenValidator"/>
         </TokenValidators>
