@@ -121,8 +121,27 @@ public class ConfigurationMgtService {
 			throws AndroidAgentException {
 		String msg;
 		Message responseMsg = new Message();
+		ConfigurationEntry licenseEntry = null;
 		try {
 			configuration.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+			List<ConfigurationEntry> configs = configuration.getConfiguration();
+			for(ConfigurationEntry entry : configs){
+				if(AndroidConstants.TenantConfigProperties.LICENSE_KEY.equals(entry.getName())){
+					License license = new License();
+					license.setName(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+					license.setLanguage(AndroidConstants.TenantConfigProperties.LANGUAGE_US);
+					license.setVersion("1.0.0");
+					license.setText(entry.getValue().toString());
+					AndroidAPIUtils.getDeviceManagementService().addLicense(DeviceManagementConstants.
+							                                                        MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
+					licenseEntry = entry;
+				}
+			}
+
+			if(licenseEntry != null) {
+				configs.remove(licenseEntry);
+			}
+			configuration.setConfiguration(configs);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
 			Response.status(Response.Status.CREATED);
 			responseMsg.setResponseMessage("Android platform configuration succeeded");

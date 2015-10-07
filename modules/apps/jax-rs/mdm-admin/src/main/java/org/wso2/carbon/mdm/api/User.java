@@ -156,7 +156,7 @@ public class User {
 	 * @return {Response} Status of the request wrapped inside Response object
 	 * @throws MDMAPIException
 	 */
-	@POST
+	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("{username}")
