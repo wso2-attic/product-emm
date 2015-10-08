@@ -2,7 +2,12 @@
     {{#defineZone "device-detail-top"}}
         <div class="row wr-device-board">
             <div class="col-lg-12 wr-secondary-bar">
-                <label>Device {{device.name}} <span class="lbl-device"> ( {{device.viewModel.vendor}} {{device.viewModel.model}} )</span></label>
+                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
+                    Device {{device.name}}
+                    <span class="lbl-device">
+                        ( {{device.viewModel.vendor}} {{device.viewModel.model}} )
+                    </span>
+                </label>
             </div>
         </div>
     {{/defineZone}}
