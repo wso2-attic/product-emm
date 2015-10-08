@@ -41,7 +41,9 @@ public class DeviceStateICS implements DeviceState{
 	private Context context;
 	private DeviceInfo info;
 	private File dataDirectory;
-	private StatFs directoryStatus;
+	private File externalStorageDirectory;
+	private StatFs dataDirectoryStatus;
+	private StatFs externalDirectoryStatus;
 	private static final int DEFAULT_LEVEL = -1;
 	private static final float PRECENTAGE_MULTIPLIER = 100.0f;
 	private static final int SCALE = 2;
@@ -53,7 +55,11 @@ public class DeviceStateICS implements DeviceState{
 		this.context = context;
 		this.info = new DeviceInfo(context);
 		this.dataDirectory = Environment.getDataDirectory();
-		this.directoryStatus = new StatFs(dataDirectory.getPath());
+		this.dataDirectoryStatus = new StatFs(dataDirectory.getPath());
+		if (externalMemoryAvailable()) {
+			this.externalStorageDirectory = Environment.getExternalStorageDirectory();
+			this.externalDirectoryStatus = new StatFs(externalStorageDirectory.getPath());
+		}
 	}
 	
 	@Override
@@ -66,8 +72,8 @@ public class DeviceStateICS implements DeviceState{
 	@Override
 	public double getAvailableInternalMemorySize() {
 		double blockSize, availableBlocks;
-		blockSize = directoryStatus.getBlockSize();
-		availableBlocks = directoryStatus.getAvailableBlocks();
+		blockSize = dataDirectoryStatus.getBlockSize();
+		availableBlocks = dataDirectoryStatus.getAvailableBlocks();
 
 		return formatSizeInGb(availableBlocks * blockSize);
 	}
@@ -76,8 +82,8 @@ public class DeviceStateICS implements DeviceState{
 	@Override
 	public double getTotalInternalMemorySize() {
 		double blockSize, totalBlocks;	
-		blockSize = directoryStatus.getBlockSize();
-		totalBlocks = directoryStatus.getBlockCount();
+		blockSize = dataDirectoryStatus.getBlockSize();
+		totalBlocks = dataDirectoryStatus.getBlockCount();
 		
 		return formatSizeInGb(totalBlocks * blockSize);
 	}
@@ -87,8 +93,8 @@ public class DeviceStateICS implements DeviceState{
 	public double getAvailableExternalMemorySize() {
 		double blockSize, availableBlocks;
 		if (externalMemoryAvailable()) {
-			blockSize = directoryStatus.getBlockSize();
-			availableBlocks = directoryStatus.getAvailableBlocks();
+			blockSize = externalDirectoryStatus.getBlockSize();
+			availableBlocks = externalDirectoryStatus.getAvailableBlocks();
 			
 			return formatSizeInGb(availableBlocks * blockSize);
 		} else {
@@ -101,8 +107,8 @@ public class DeviceStateICS implements DeviceState{
 	public double getTotalExternalMemorySize() {
 		double blockSize, totalBlocks;
 		if (externalMemoryAvailable()) {		
-			blockSize = directoryStatus.getBlockSize();
-			totalBlocks = directoryStatus.getBlockCount();
+			blockSize = externalDirectoryStatus.getBlockSize();
+			totalBlocks = externalDirectoryStatus.getBlockCount();
 			
 			return formatSizeInGb(totalBlocks * blockSize);
 		} else {
