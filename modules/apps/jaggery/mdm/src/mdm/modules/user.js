@@ -389,7 +389,11 @@ var userModule = function () {
             utility.endTenantFlow();
         }
     };
-
+    /**
+     * TODO: comment
+     * @param username
+     * @returns {*}
+     */
     publicMethods.getRolesByUsername = function (username) {
         var carbonUser = privateMethods.getCarbonUser();
         try {

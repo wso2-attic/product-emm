@@ -105,6 +105,14 @@ stepForwardFrom["policy-platform"] = function (policyPayloadObj) {
                 $(".wr-advance-operations li.grouped-input").each(function () {
                     updateGroupedInputVisibility(this);
                 });
+                var configuredOperations = operationModule.populateProfile(policy["platform"], policyPayloadObj["profile"]["profileFeaturesList"]);
+                for (var i = 0; i < configuredOperations.length; ++i) {
+                    var configuredOperation = configuredOperations[i];
+                    $(".operation-data").filterByData("operation-code", configuredOperation).find(".panel-title .switch input[type=checkbox]").each(function(){
+                        $(this).click();
+                        $(this).attr("checked", "checked");
+                    });
+                }
             });
         },
         250 // time delayed for the execution of above function, 250 milliseconds
@@ -1614,7 +1622,7 @@ var savePolicy = function (policy) {
     console.log(JSON.stringify(payload));
 
     invokerUtil.post(
-        "/mdm-admin/policies/inactive-policy",
+        "/mdm-admin/policies/" + getParameterByName("id"),
         payload,
         function () {
             $(".policy-message").removeClass("hidden");
