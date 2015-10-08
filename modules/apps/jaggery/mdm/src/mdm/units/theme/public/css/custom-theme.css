@@ -249,13 +249,6 @@ a.ctrl-filter-category:hover {
 }
 
 .panel-default > .panel-heading {
-	color: #fff;
-	background-color: #999;
-	border-color: #e4e4e4;
-}
-
-.panel-default > .panel-heading {
-	color: #fff;
 	background-color: #999;
 	border-color: #e4e4e4;
 }
@@ -484,9 +477,9 @@ b, strong {
     margin-left: 0;
 }
 
-.row.no-gutter [class*='col-']:not(:first-child), .row.no-gutter [class*='col-']:not(:last-child) {
-    padding-right:0;
-    padding-left:0;
+.row.no-gutter > [class*='col-']:not(:first-child), .row.no-gutter > [class*='col-']:not(:last-child) {
+    padding-right: 0;
+    padding-left: 0;
 }
 
 .table tr.row.no-gutter > td {
