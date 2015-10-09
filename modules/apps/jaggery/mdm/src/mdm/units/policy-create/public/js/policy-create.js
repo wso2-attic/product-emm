@@ -1661,6 +1661,53 @@ var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
             $(paneSelector).removeClass("expanded");
         }
         $(paneSelector).slideUp();
+        /** now follows the code to reinitialize all inputs of the slidable pane */
+        // reinitializing input fields into the defaults
+        $(paneSelector + " input").each(
+            function () {
+                if ($(this).is("input:text")) {
+                    $(this).val($(this).data("default"));
+                } else if ($(this).is("input:password")) {
+                    $(this).val("");
+                } else if ($(this).is("input:checkbox")) {
+                    $(this).prop("checked", $(this).data("default"));
+                    // if this checkbox is the parent input of a grouped-input
+                    if ($(this).hasClass("parent-input")) {
+                        var groupedInput = $(this).parent().parent().parent();
+                        updateGroupedInputVisibility(groupedInput);
+                    }
+                }
+            }
+        );
+        // reinitializing select fields into the defaults
+        $(paneSelector + " select").each(
+            function () {
+                var defaultOption = $(this).data("default");
+                $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
+            }
+        );
+        // collapsing expanded-panes (upon the selection of html-select-options) if any
+        $(paneSelector + " .expanded").each(
+            function () {
+                if ($(this).hasClass("expanded")) {
+                    $(this).removeClass("expanded");
+                }
+                $(this).slideUp();
+            }
+        );
+        // removing all entries of grid-input elements if exist
+        $(paneSelector + " .grouped-array-input").each(
+            function () {
+                var gridInputs = $(this).find("[data-add-form-clone]");
+                if (gridInputs.length > 0) {
+                    gridInputs.remove();
+                }
+                var helpTexts = $(this).find("[data-help-text=add-form]");
+                if (helpTexts.length > 0) {
+                    helpTexts.show();
+                }
+            }
+        );
     }
 };
 // End of HTML embedded invoke methods
