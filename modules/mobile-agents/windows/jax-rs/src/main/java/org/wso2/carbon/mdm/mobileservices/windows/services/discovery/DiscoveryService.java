@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.discovery;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryResponse;
 import javax.jws.WebMethod;
@@ -36,20 +36,20 @@ import javax.xml.ws.soap.SOAPBinding;
 /**
  * Interface for Discovery service related operations.
  */
-@WebService(targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE,
+@WebService(targetNamespace = PluginConstants.DISCOVERY_SERVICE_TARGET_NAMESPACE,
 		name = "IDiscoveryService")
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public interface DiscoveryService {
 
 	@POST
-	@RequestWrapper(localName = "Discover", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@RequestWrapper(localName = "Discover", targetNamespace = PluginConstants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 	@WebMethod(operationName = "Discover")
-	@ResponseWrapper(localName = "DiscoverResponse", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@ResponseWrapper(localName = "DiscoverResponse", targetNamespace = PluginConstants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 	void discover(
-	@WebParam(name = "request", targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+	@WebParam(name = "request", targetNamespace = PluginConstants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 	DiscoveryRequest request,
 	@WebParam(mode = WebParam.Mode.OUT, name = "DiscoverResult",
-			targetNamespace = Constants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
+			targetNamespace = PluginConstants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<DiscoveryResponse> response
 	);
 

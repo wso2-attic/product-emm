@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -60,7 +60,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 	 */
 	@Override
 	public Set<QName> getHeaders() {
-		QName securityHeader = new QName(Constants.WS_SECURITY_TARGET_NAMESPACE, Constants.SECURITY);
+		QName securityHeader = new QName(PluginConstants.WS_SECURITY_TARGET_NAMESPACE, PluginConstants.SECURITY);
 		HashSet<QName> headers = new HashSet<QName>();
 		headers.add(securityHeader);
 		return headers;
@@ -102,8 +102,8 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				Response.serverError().entity("Cannot get an instance of SOAP factory.").build();
 			}
 
-			QName qNamesSecurity = new QName(Constants.WS_SECURITY_TARGET_NAMESPACE,
-			                                 Constants.CertificateEnrolment.SECURITY);
+			QName qNamesSecurity = new QName(PluginConstants.WS_SECURITY_TARGET_NAMESPACE,
+			                                 PluginConstants.CertificateEnrolment.SECURITY);
 			SOAPHeaderElement Security = null;
 			Name attributeName = null;
 			try {
@@ -112,23 +112,23 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				}
 				if (soapFactory != null) {
 					attributeName =
-							soapFactory.createName(Constants.CertificateEnrolment.TIMESTAMP_ID,
-							                       Constants.CertificateEnrolment.TIMESTAMP_U,
-							                       Constants.CertificateEnrolment
+							soapFactory.createName(PluginConstants.CertificateEnrolment.TIMESTAMP_ID,
+							                       PluginConstants.CertificateEnrolment.TIMESTAMP_U,
+							                       PluginConstants.CertificateEnrolment
 									                       .WSS_SECURITY_UTILITY);
 				}
 			} catch (SOAPException e) {
 				Response.serverError().entity("Security header cannot be added.").build();
 			}
 
-			QName qNameTimestamp = new QName(Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
-			                                 Constants.CertificateEnrolment.TIMESTAMP);
+			QName qNameTimestamp = new QName(PluginConstants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+			                                 PluginConstants.CertificateEnrolment.TIMESTAMP);
 			SOAPHeaderElement timestamp = null;
 			try {
 				if (header != null) {
 					timestamp = header.addHeaderElement(qNameTimestamp);
 					timestamp.addAttribute(attributeName,
-					                       Constants.CertificateEnrolment.TIMESTAMP_0);
+					                       PluginConstants.CertificateEnrolment.TIMESTAMP_0);
 				}
 			} catch (SOAPException e) {
 				Response.serverError().entity("Exception while adding timestamp header.").build();
@@ -145,8 +145,8 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			                                          expiredISOTime.length() -
 			                                          TIMESTAMP_END_INDEX);
 			expiredISOTime = expiredISOTime + TIME_ZONE;
-			QName qNameCreated = new QName(Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
-			                               Constants.CertificateEnrolment.CREATED);
+			QName qNameCreated = new QName(PluginConstants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+			                               PluginConstants.CertificateEnrolment.CREATED);
 			SOAPHeaderElement SOAPHeaderCreated = null;
 
 			try {
@@ -157,8 +157,8 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 			} catch (SOAPException e) {
 				Response.serverError().entity("Exception while creating SOAP header.").build();
 			}
-			QName qNameExpires = new QName(Constants.CertificateEnrolment.WSS_SECURITY_UTILITY,
-			                               Constants.CertificateEnrolment.EXPIRES);
+			QName qNameExpires = new QName(PluginConstants.CertificateEnrolment.WSS_SECURITY_UTILITY,
+			                               PluginConstants.CertificateEnrolment.EXPIRES);
 			SOAPHeaderElement SOAPHeaderExpires = null;
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			String messageString = null;
@@ -175,7 +175,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 				message.saveChanges();
 				message.writeTo(outputStream);
 				messageString = new String(outputStream.toByteArray(),
-				                           Constants.CertificateEnrolment.UTF_8);
+				                           PluginConstants.CertificateEnrolment.UTF_8);
 			} catch (SOAPException e) {
 				Response.serverError().entity("Exception while creating timestamp SOAP header.")
 				        .build();
@@ -188,7 +188,7 @@ public class MessageHandler implements SOAPHandler<SOAPMessageContext> {
 					(Map<String, List<String>>) context.get(MessageContext.HTTP_REQUEST_HEADERS);
 			headers = new HashMap<String, List<String>>();
 			if (messageString != null) {
-				headers.put(Constants.CONTENT_LENGTH, Arrays.asList(String.valueOf(
+				headers.put(PluginConstants.CONTENT_LENGTH, Arrays.asList(String.valueOf(
 						messageString.length())));
 			}
 			context.put(MessageContext.HTTP_REQUEST_HEADERS, headers);

@@ -19,10 +19,10 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common;
 
 /**
- * Constants class for Windows plugin. This class has inner classes for containing constants for
+ * PluginConstants class for Windows plugin. This class has inner classes for containing constants for
  * each service.
  */
-public final class Constants {
+public final class PluginConstants {
 
     //Service endpoints
     public static final String DISCOVERY_SERVICE_ENDPOINT =
@@ -88,7 +88,6 @@ public final class Constants {
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
         public static final String WAB_URL = "/mdm/enrollments/windows/login-agent";
-        //public static final String WAB_URL = "/mdm/enrollment
 
     }
 
@@ -194,11 +193,21 @@ public final class Constants {
         public static final String PIN_CODE = "LOCK_PIN";
         public static final String CAMERA = "CAMERA";
         public static final String PASSCODE_POLICY = "PASSCODE_POLICY";
+        public static final String PASSWORD_EXPIRE = "PASSWORD_EXPIRE";
+        public static final String PASSWORD_HISTORY = "PASSWORD_HISTORY";
+        public static final String MAX_PASSWORD_INACTIVE_TIME = "MAX_PASSWORD_INACTIVE_TIME";
+        public static final String MIN_PASSWORD_COMPLEX_CHARACTERS = "MIN_PASSWORD_COMPLEX_CHARACTERS";
+        public static final String ALPHANUMERIC_PASSWORD = "ALPHANUMERIC_PASSWORD";
+        public static final String SIMPLE_PASSWORD = "SIMPLE_PASSWORD";
+        public static final String MIN_PASSWORD_LENGTH = "MIN_PASSWORD_LENGTH";
+        public static final String DEVICE_PASSWORD_ENABLE = "DEVICE_PASSWORD_ENABLE";
+        public static final String PASSWORD_MAX_FAIL_ATTEMPTS = "PASSWORD_MAX_FAIL_ATTEMPTS";
         public static final String MONITOR = "MONITOR";
         public static final String CAMERA_STATUS = "CAMERA_STATUS";
         public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
         public static final String ENCRYPT_STORAGE_STATUS = "ENCRYPT_STORAGE_STATUS";
         public static final String DEVICE_PASSWORD_STATUS = "DEVICE_PASSWORD_STATUS";
+        public static final String WIFI = "WIFI";
 
     }
 

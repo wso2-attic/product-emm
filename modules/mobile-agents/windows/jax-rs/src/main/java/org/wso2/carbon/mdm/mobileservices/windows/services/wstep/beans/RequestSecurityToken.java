@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,13 +26,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RequestedSecurityToken", namespace = Constants.WS_TRUST_TARGET_NAMESPACE,
+@XmlType(name = "RequestedSecurityToken", namespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE,
 		propOrder = { "binarySecurityToken" })
 @SuppressWarnings("unused")
 public class RequestSecurityToken {
 
 	@XmlElement(name = "BinarySecurityToken", required = true,
-			namespace = Constants.WS_SECURITY_TARGET_NAMESPACE)
+			namespace = PluginConstants.WS_SECURITY_TARGET_NAMESPACE)
 
 	protected BinarySecurityToken binarySecurityToken;
 
