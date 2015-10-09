@@ -17,6 +17,7 @@
  */
 
 var validateStep = {};
+var skipStep = {};
 var stepForwardFrom = {};
 var stepBackFrom = {};
 var policy = {};
@@ -86,11 +87,12 @@ var updateGroupedInputVisibility = function (domElement) {
     }
 };
 
-stepForwardFrom["policy-platform"] = function (policyPayloadObj) {
+skipStep["policy-platform"] = function (policyPayloadObj) {
+    policy["name"] = policyPayloadObj["policyName"];
     policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
     policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
     // updating next-page wizard title with selected platform
-    $("#policy-profile-page-wizard-title").text("View/Edit " + policy["platform"] + " POLICY");
+    $("#policy-profile-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 
     var deviceType = policy["platform"];
     var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
@@ -105,10 +107,12 @@ stepForwardFrom["policy-platform"] = function (policyPayloadObj) {
                 $(".wr-advance-operations li.grouped-input").each(function () {
                     updateGroupedInputVisibility(this);
                 });
-                var configuredOperations = operationModule.populateProfile(policy["platform"], policyPayloadObj["profile"]["profileFeaturesList"]);
+                var configuredOperations = operationModule.
+                    populateProfile(policy["platform"], policyPayloadObj["profile"]["profileFeaturesList"]);
                 for (var i = 0; i < configuredOperations.length; ++i) {
                     var configuredOperation = configuredOperations[i];
-                    $(".operation-data").filterByData("operation-code", configuredOperation).find(".panel-title .switch input[type=checkbox]").each(function(){
+                    $(".operation-data").filterByData("operation-code", configuredOperation).
+                        find(".panel-title .switch input[type=checkbox]").each(function(){
                         $(this).click();
                         $(this).attr("checked", "checked");
                     });
@@ -1491,7 +1495,7 @@ validateStep["policy-profile"] = function () {
 stepForwardFrom["policy-profile"] = function () {
     policy["profile"] = operationModule.generateProfile(policy["platform"], configuredOperations);
     // updating next-page wizard title with selected platform
-    $("#policy-criteria-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
+    $("#policy-criteria-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 };
 
 stepBackFrom["policy-profile"] = function () {
@@ -1528,7 +1532,7 @@ stepForwardFrom["policy-criteria"] = function () {
     policy["selectedNonCompliantAction"] = $("#action-input").find(":selected").data("action");
     policy["selectedOwnership"] = $("#ownership-input").val();
     // updating next-page wizard title with selected platform
-    $("#policy-naming-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
+    $("#policy-naming-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 };
 
 /**
@@ -1716,7 +1720,6 @@ var getParameterByName = function (name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
-
 $(document).ready(function () {
 
     // Adding initial state of wizard-steps.
@@ -1725,11 +1728,13 @@ $(document).ready(function () {
     var policyPayloadObj;
     invokerUtil.get(
         "/mdm-admin/policies/" + getParameterByName("id"),
+        // on success
         function (data) {
-            console.log(JSON.stringify(data["responseContent"]));
+            console.log(JSON.stringify(data));
             policyPayloadObj = data["responseContent"];
-            stepForwardFrom["policy-platform"](policyPayloadObj);
+            skipStep["policy-platform"](policyPayloadObj);
         },
+        // on error
         function () {
             console.log("error");
         }
