@@ -19,11 +19,12 @@
 var apiWrapperUtil = function () {
     var module = {};
     var tokenUtil = require("/modules/util.js").util;
+    var log = new Log();
+
     module.refreshToken = function () {
         var tokenPair = session.get("accessTokenPair");
         var clientData = tokenUtil.getDyanmicCredentials();
         var clientData = {};
-        new Log().info(tokenPair);
         tokenPair = tokenUtil.refreshToken(tokenPair, clientData.clientId, clientData.clientSecret);
         session.put("accessTokenPair", tokenPair);
         var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge' : -1,'path' : "/mdm/"};
@@ -32,12 +33,13 @@ var apiWrapperUtil = function () {
     };
     module.setupAccessTokenPair = function (type, properties) {
         var tokenPair;
-        var clientData = tokenUtil.getDyanmicCredentials();
-        var clientData = {};
+        var clientData = tokenUtil.getDyanmicCredentials(properties.loggedInUser);
+
         if (type == "password") {
             tokenPair = tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, clientData.clientId, clientData.clientSecret);
-        } else if (type == "saml") {
-
+        } else if (type == "saml") {log.error(clientData);
+            var scope = "admin";log.error("samltoken >>>>>>>>>> " + properties.samlToken);
+            tokenPair = tokenUtil.getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, scope);
         }
         session.put("accessTokenPair", tokenPair);
         var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge' : -1,'path' : "/mdm/"};

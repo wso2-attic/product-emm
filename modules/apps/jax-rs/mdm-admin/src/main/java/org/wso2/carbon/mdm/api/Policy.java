@@ -127,6 +127,33 @@ public class Policy {
     }
 
     @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("{id}")
+    public Response getPolicy(@PathParam("id") int policyId) throws MDMAPIException {
+        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+        final org.wso2.carbon.policy.mgt.common.Policy policy;
+        try {
+            PolicyAdministratorPoint policyAdministratorPoint = policyManagementService.getPAP();
+            policy = policyAdministratorPoint.getPolicy(policyId);
+        } catch (PolicyManagementException e) {
+            String error = "Policy Management related exception";
+            log.error(error, e);
+            throw new MDMAPIException(error, e);
+        }
+        if (policy == null){
+            ResponsePayload responsePayload = new ResponsePayload();
+            responsePayload.setStatusCode(HttpStatus.SC_NOT_FOUND);
+            responsePayload.setMessageFromServer("Policy for ID " + policyId + " not found.");
+            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("Sending all retrieved device policies.");
+        responsePayload.setResponseContent(policy);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    @GET
     @Path("count")
     public int getPolicyCount() throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
@@ -140,7 +167,7 @@ public class Policy {
         }
     }
 
-    @POST
+    @PUT
     @Path("{id}")
     public ResponsePayload updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy, @PathParam("id") int policyId)
             throws MDMAPIException {
@@ -148,8 +175,8 @@ public class Policy {
         ResponsePayload responseMsg = new ResponsePayload();
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            policy.setProfile(pap.getProfile(policy.getProfileId()));
             org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
+            policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
             policy.setPolicyName(previousPolicy.getPolicyName());
             pap.updatePolicy(policy);
             Response.status(HttpStatus.SC_OK);

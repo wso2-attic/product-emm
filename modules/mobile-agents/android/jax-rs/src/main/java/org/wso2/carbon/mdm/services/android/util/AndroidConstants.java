@@ -94,4 +94,13 @@ public final class AndroidConstants {
 		public static final int MULTI_STATUS_HTTP_CODE = 207;
 	}
 
+	public final class TenantConfigProperties{
+		private TenantConfigProperties(){
+			throw new AssertionError();
+		}
+		public static final String LICENSE_KEY = "androidEula";
+		public static final String LANGUAGE_US = "en_US";
+		public static final String CONTENT_TYPE_TEXT = "text";
+	}
+
 }

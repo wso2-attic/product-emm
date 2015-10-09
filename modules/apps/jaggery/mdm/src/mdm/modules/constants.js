@@ -38,7 +38,7 @@ var FEATURE_DESCRIPTION = "featureDescription";
 var PLATFORM_ANDROID = "android";
 var PLATFORM_IOS = "ios";
 
-var LANGUAGE_US = "en_us";
+var LANGUAGE_US = "en_US";
 
 var VENDOR_APPLE = "Apple";
 var ERRORS = {

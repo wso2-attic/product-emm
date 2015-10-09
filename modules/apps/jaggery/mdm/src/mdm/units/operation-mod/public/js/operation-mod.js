@@ -73,6 +73,179 @@ var operationModule = function () {
         };
         return "/ios/operation/" + featureMap[operationCode];
     };
+    /**
+     * Convert the ios platform specific code to the generic payload.
+     * TODO: think of the possiblity to follow a pattern to the key name (namespace?)
+     * @param operationCode
+     * @param operationPayload
+     * @returns {"cameraEnabled":true}
+     */
+    privateMethods.generateGenericPayloadFromiOSPayload = function(operationCode, operationPayload){
+        var payload = {};
+        operationPayload = JSON.parse(operationPayload);
+        switch (operationCode) {
+            case iosOperationConstants["AIRPLAY_OPERATION_CODE"]:
+                payload = {
+                    "airplayDestinations": operationPayload["airPlayDestinations"],
+                    "airplayCredentials": operationPayload["airPlayCredentials"]
+                };
+                break;
+            case iosOperationConstants["WIFI_OPERATION_CODE"]:
+                payload = {
+                    "wifiHiddenNetwork": operationPayload["hiddenNetwork"],
+                    "wifiSSID": operationPayload["ssid"],
+                    "wifiAutoJoin": operationPayload["autoJoin"],
+                    "wifiProxyType": operationPayload["proxyType"],
+                    "wifiEncryptionType": operationPayload["encryptionType"],
+                    "wifiIsHotSpot": operationPayload["hotspot"],
+                    "wifiDomainName": operationPayload["domainNasme"],
+                    "wifiServiceProviderRoamingEnabled": operationPayload["serviceProviderRoamingEnabled"],
+                    "wifiDisplayedOperatorName": operationPayload["displayedOperatorName"],
+                    "wifiRoamingConsortiumOIs": operationPayload["roamingConsortiumOIs"],
+                    "wifiPassword": operationPayload["password"],
+                    "wifiPayloadCertUUID": operationPayload["payloadCertificateUUID"],
+                    "wifiProxyServer": operationPayload["proxyServer"],
+                    "wifiProxyPort": operationPayload["proxyPort"],
+                    "wifiProxyUsername": operationPayload["proxyUsername"],
+                    "wifiProxyPassword": operationPayload["proxyPassword"],
+                    "wifiProxyPACURL": operationPayload["proxyPACURL"],
+                    "wifiProxyPACFallbackAllowed": operationPayload["proxyPACFallbackAllowed"],
+                    "wifiNAIRealmNames": operationPayload["nairealmNames"],
+                    "wifiMCCAndMNCs": operationPayload["mccandMNCs"],
+                    "wifiEAPUsername": operationPayload.clientConfiguration["username"],
+                    "wifiAcceptedEAPTypes": operationPayload.clientConfiguration["acceptEAPTypes"],
+                    "wifiEAPPassword": operationPayload.clientConfiguration["userPassword"],
+                    "wifiEAPOneTimePassword": operationPayload.clientConfiguration["oneTimePassword"],
+                    "wifiPayloadCertificateAnchorUUIDs": operationPayload.clientConfiguration["payloadCertificateAnchorUUID"],
+                    "wifiEAPOuterIdentity": operationPayload.clientConfiguration["outerIdentity"],
+                    "wifiTLSTrustedServerNames": operationPayload.clientConfiguration["tlstrustedServerNames"],
+                    "wifiEAPTLSAllowTrustExceptions": operationPayload.clientConfiguration["tlsallowTrustExceptions"],
+                    "wifiEAPTLSCertIsRequired": operationPayload.clientConfiguration["tlscertificateIsRequired"],
+                    "wifiEAPTLSInnerAuthType": operationPayload.clientConfiguration["ttlsinnerAuthentication"],
+                    "wifiEAPFastUsePAC": operationPayload.clientConfiguration["eapfastusePAC"],
+                    "wifiEAPFastProvisionPAC": operationPayload.clientConfiguration["eapfastprovisionPAC"],
+                    "wifiEAPFastProvisionPACAnonymously": operationPayload.clientConfiguration["eapfastprovisionPACAnonymously"],
+                    "wifiEAPSIMNoOfRands": operationPayload.clientConfiguration["eapsimnumberOfRANDs"]
+                };
+                break;
+            case iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
+                payload = {
+                    "passcodePolicyForcePIN": operationPayload["forcePIN"],
+                    "passcodePolicyAllowSimple": operationPayload["allowSimple"],
+                    "passcodePolicyRequireAlphanumeric": operationPayload["requireAlphanumeric"],
+                    "passcodePolicyMinLength": operationPayload["minLength"],
+                    "passcodePolicyMinComplexChars": operationPayload["minComplexChars"],
+                    "passcodePolicyMaxPasscodeAgeInDays": operationPayload["maxPINAgeInDays"],
+                    "passcodePolicyPasscodeHistory": operationPayload["pinHistory"],
+                    "passcodePolicyMaxAutoLock": operationPayload["maxInactivity"],
+                    "passcodePolicyGracePeriod": operationPayload["maxGracePeriod"],
+                    "passcodePolicyMaxFailedAttempts": operationPayload["maxFailedAttempts"]
+                };
+                break;
+            case iosOperationConstants["RESTRICTIONS_OPERATION_CODE"]:
+                payload =
+                {
+                    "restrictionsAllowAccountModification": operationPayload["allowAccountModification"],
+                    "restrictionsAllowAddingGameCenterFriends": operationPayload["allowAddingGameCenterFriends"],
+                    "restrictionsAllowAirDrop": operationPayload["allowAirDrop"],
+                    "restrictionsAllowAppCellularDataModification": operationPayload["allowAppCellularDataModification"],
+                    "restrictionsAllowAppInstallation": operationPayload["allowAppInstallation"],
+                    "restrictionsAllowAppRemoval": operationPayload["allowAppRemoval"],
+                    "restrictionsAllowAssistant": operationPayload["allowAssistant"],
+                    "restrictionsAllowAssistantUserGeneratedContent": operationPayload["allowAssistantUserGeneratedContent"],
+                    "restrictionsAllowAssistantWhileLocked": operationPayload["allowAssistantWhileLocked"],
+                    "restrictionsAllowBookstore": operationPayload["allowBookstore"],
+                    "restrictionsAllowBookstoreErotica": operationPayload["allowBookstoreErotica"],
+                    "restrictionsAllowCamera": operationPayload["allowCamera"],
+                    "restrictionsAllowChat": operationPayload["allowChat"],
+                    "restrictionsAllowCloudBackup": operationPayload["allowCloudBackup"],
+                    "restrictionsAllowCloudDocumentSync": operationPayload["allowCloudDocumentSync"],
+                    "restrictionsAllowCloudKeychainSync": operationPayload["allowCloudKeychainSync"],
+                    "restrictionsAllowDiagnosticSubmission": operationPayload["allowDiagnosticSubmission"],
+                    "restrictionsAllowExplicitContent": operationPayload["allowExplicitContent"],
+                    "restrictionsAllowFindMyFriendsModification": operationPayload["allowFindMyFriendsModification"],
+                    "restrictionsAllowFingerprintForUnlock": operationPayload["allowFingerprintForUnlock"],
+                    "restrictionsAllowGameCenter": operationPayload["allowGameCenter"],
+                    "restrictionsAllowGlobalBackgroundFetchWhenRoaming": operationPayload["allowGlobalBackgroundFetchWhenRoaming"],
+                    "restrictionsAllowInAppPurchases": operationPayload["allowInAppPurchases"],
+                    "restrictionsAllowLockScreenControlCenter": operationPayload["allowLockScreenControlCenter"],
+                    "restrictionsAllowHostPairing": operationPayload["allowHostPairing"],
+                    "restrictionsAllowLockScreenNotificationsView": operationPayload["allowLockScreenNotificationsView"],
+                    "restrictionsAllowLockScreenTodayView": operationPayload["allowLockScreenTodayView"],
+                    "restrictionsAllowMultiplayerGaming": operationPayload["allowMultiplayerGaming"],
+                    "restrictionsAllowOpenFromManagedToUnmanaged": operationPayload["allowOpenFromManagedToUnmanaged"],
+                    "restrictionsAllowOpenFromUnmanagedToManaged": operationPayload["allowOpenFromUnmanagedToManaged"],
+                    "restrictionsAllowOTAPKIUpdates": operationPayload["allowOTAPKIUpdates"],
+                    "restrictionsAllowPassbookWhileLocked": operationPayload["allowPassbookWhileLocked"],
+                    "restrictionsAllowPhotoStream": operationPayload["allowPhotoStream"],
+                    "restrictionsAllowSafari": operationPayload["allowSafari"],
+                    "restrictionsSafariAllowAutoFill": operationPayload["safariAllowAutoFill"],
+                    "restrictionsSafariForceFraudWarning": operationPayload["safariForceFraudWarning"],
+                    "restrictionsSafariAllowJavaScript": operationPayload["safariAllowJavaScript"],
+                    "restrictionsSafariAllowPopups": operationPayload["safariAllowPopups"],
+                    "restrictionsAllowScreenShot": operationPayload["allowScreenShot"],
+                    "restrictionsAllowSharedStream": operationPayload["allowSharedStream"],
+                    "restrictionsAllowUIConfigurationProfileInstallation": operationPayload["allowUIConfigurationProfileInstallation"],
+                    "restrictionsAllowUntrustedTLSPrompt": operationPayload["allowUntrustedTLSPrompt"],
+                    "restrictionsAllowVideoConferencing": operationPayload["allowVideoConferencing"],
+                    "restrictionsAllowVoiceDialing": operationPayload["allowVoiceDialing"],
+                    "restrictionsAllowYouTube": operationPayload["allowYouTube"],
+                    "restrictionsAllowITunes": operationPayload["allowiTunes"],
+                    "restrictionsForceAssistantProfanityFilter": operationPayload["forceAssistantProfanityFilter"],
+                    "restrictionsForceEncryptedBackup": operationPayload["forceEncryptedBackup"],
+                    "restrictionsForceITunesStorePasswordEntry": operationPayload["forceITunesStorePasswordEntry"],
+                    "restrictionsForceLimitAdTracking": operationPayload["forceLimitAdTracking"],
+                    "restrictionsForceAirPlayOutgoingRequestsPairingPassword": operationPayload["forceAirPlayOutgoingRequestsPairingPassword"],
+                    "restrictionsForceAirPlayIncomingRequestsPairingPassword": operationPayload["forceAirPlayIncomingRequestsPairingPassword"],
+                    "restrictionsAllowManagedAppsCloudSync": operationPayload["allowManagedAppsCloudSync"],
+                    "restrictionsAllowEraseContentAndSettings": operationPayload["allowEraseContentAndSettings"],
+                    "restrictionsAllowSpotlightInternetResults": operationPayload["allowSpotlightInternetResults"],
+                    "restrictionsAllowEnablingRestrictions": operationPayload["allowEnablingRestrictions"],
+                    "restrictionsAllowActivityContinuation": operationPayload["allowActivityContinuation"],
+                    "restrictionsAllowEnterpriseBookBackup": operationPayload["allowEnterpriseBookBackup"],
+                    "restrictionsAllowEnterpriseBookMetadataSync": operationPayload["allowEnterpriseBookMetadataSync"],
+                    "restrictionsAllowPodcasts": operationPayload["allowPodcasts"],
+                    "restrictionsAllowDefinitionLookup": operationPayload["allowDefinitionLookup"],
+                    "restrictionsAllowPredictiveKeyboard": operationPayload["allowPredictiveKeyboard"],
+                    "restrictionsAllowAutoCorrection": operationPayload["allowAutoCorrection"],
+                    "restrictionsAllowSpellCheck": operationPayload["allowSpellCheck"],
+                    "restrictionsSafariAcceptCookies": operationPayload["safariAcceptCookies"],
+                    "restrictionsAutonomousSingleAppModePermittedAppIDs": operationPayload["autonomousSingleAppModePermittedAppIDs"]
+                };
+                break;
+            case iosOperationConstants["EMAIL_OPERATION_CODE"]:
+                payload = {
+                    "emailAccountDescription":  operationPayload["emailAccountDescription"],
+                    "emailAccountName":  operationPayload["emailAccountName"],
+                    "emailAccountType":  operationPayload["emailAccountType"],
+                    "emailAddress":  operationPayload["emailAddress"],
+                    "emailIncomingMailServerAuthentication":  operationPayload["incomingMailServerAuthentication"],
+                    "emailIncomingMailServerHostname":  operationPayload["incomingMailServerHostName"],
+                    "emailIncomingMailServerPort":  operationPayload["incomingMailServerPortNumber"],
+                    "emailIncomingUseSSL":  operationPayload["incomingMailServerUseSSL"],
+                    "emailIncomingMailServerUsername":  operationPayload["incomingMailServerUsername"],
+                    "emailIncomingMailServerPassword":  operationPayload["incomingPassword"],
+                    "emailOutgoingMailServerPassword":  operationPayload["outgoingPassword"],
+                    "emailOutgoingPasswordSameAsIncomingPassword":  operationPayload["outgoingPasswordSameAsIncomingPassword"],
+                    "emailOutgoingMailServerAuthentication":  operationPayload["outgoingMailServerAuthentication"],
+                    "emailOutgoingMailServerHostname":  operationPayload["outgoingMailServerHostName"],
+                    "emailOutgoingMailServerPort":  operationPayload["outgoingMailServerPortNumber"],
+                    "emailOutgoingUseSSL":  operationPayload["outgoingMailServerUseSSL"],
+                    "emailOutgoingMailServerUsername":  operationPayload["outgoingMailServerUsername"],
+                    "emailPreventMove":  operationPayload["preventMove"],
+                    "emailPreventAppSheet":  operationPayload["preventAppSheet"],
+                    "emailDisableMailRecentSyncing":  operationPayload["disableMailRecentSyncing"],
+                    "emailIncomingMailServerIMAPPathPrefix":  operationPayload["incomingMailServerIMAPPathPrefix"],
+                    "emailSMIMEEnabled":  operationPayload["smimeenabled"],
+                    "emailSMIMESigningCertificateUUID":  operationPayload["smimesigningCertificateUUID"],
+                    "emailSMIMEEncryptionCertificateUUID":  operationPayload["smimeencryptionCertificateUUID"],
+                    "emailSMIMEEnablePerMessageSwitch":  operationPayload["smimeenablePerMessageSwitch"]
+                };
+                break;
+        }
+
+        return payload;
+    };
 
     privateMethods.generateIOSOperationPayload = function (operationCode, operationData, deviceList) {
         var payload;
@@ -322,6 +495,36 @@ var operationModule = function () {
             payload["deviceIDs"] = deviceList;
         }
 
+        return payload;
+    };
+    /**
+     * Convert the android platform specific code to the generic payload.
+     * TODO: think of the possiblity to follow a pattern to the key name (namespace?)
+     * @param operationCode
+     * @param operationPayload
+     * @returns {"cameraEnabled":true}
+     */
+    privateMethods.generateGenericPayloadFromAndroidPayload = function(operationCode, operationPayload){
+        var payload = {};
+        operationPayload = JSON.parse(operationPayload);
+        switch (operationCode) {
+            case androidOperationConstants["CAMERA_OPERATION_CODE"]:
+                payload = {
+                    "cameraEnabled": operationPayload["enabled"]
+                };
+                break;
+            case androidOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"]:;
+                payload = {
+                    "encryptStorageEnabled": operationPayload["encrypted"]
+                };
+                break;
+            case androidOperationConstants["WIFI_OPERATION_CODE"]:
+                payload = {
+                    "wifiSSID": operationPayload["ssid"],
+                    "wifiPassword": operationPayload["password"]
+                };
+                break;
+        }
         return payload;
     };
 
@@ -631,6 +834,146 @@ var operationModule = function () {
     };
 
     /**
+     * Method to populate the Platform specific operation payload.
+     *
+     * @param platformType Platform Type of the profile
+     * @param operationCode Operation Codes to generate the profile from
+     * @param operationPayload payload
+     * @returns {*}
+     */
+    publicMethods.populateUI = function (platformType, operationCode, operationPayload) {
+        var payload;
+        var operationData = {};
+        switch (platformType) {
+            case platformTypeConstants["ANDROID"]:
+                payload = privateMethods.generateGenericPayloadFromAndroidPayload(operationCode, operationPayload);
+                break;
+            case platformTypeConstants["IOS"]:
+                payload = privateMethods.generateGenericPayloadFromiOSPayload(operationCode, operationPayload);
+                break;
+        }
+        // capturing form input data designated by .operationDataKeys
+        $(".operation-data").filterByData("operation-code", operationCode).find(".operationDataKeys").each(
+            function () {
+                var operationDataObj = $(this);
+                var key = operationDataObj.data("key");
+                //mutate the key
+                var value = payload[key];
+                //var complexType;
+                /*
+                    Finding the complexType from the dataModel. If the object looks like below - it's a
+                    multi-column-joined-input-array"
+                 {
+                     "airPlayDestinations": ["00:00:00:00:00:00"]
+                 }
+
+                    If it looks like below it's multi-column-key-value-pair-array
+                 {
+                     "airPlayCredentials": [
+                         {
+                             "deviceName": "dsf",
+                             "password": "24234"
+                         }
+                     ]
+                 }
+                // */
+                //if (Object.prototype.toString.call( value ) === '[object Array]' ) {
+                //    var check = value[0];
+                //    if (Object.prototype.toString.call( check ) === '[object Object]'){
+                //        complexType = "multi-column-key-value-pair-array";
+                //    }else{
+                //        complexType = "multi-column-joined-input-array";
+                //    }
+                //}
+
+
+                if (operationDataObj.is(":text") || operationDataObj.is("textarea") ||
+                    operationDataObj.is(":password")) {
+                    operationDataObj.val(value);
+                } else if (operationDataObj.is(":checkbox")) {
+                    operationDataObj.prop('checked', value);
+                } else if (operationDataObj.is("select")) {
+                    operationDataObj.val(value);
+                    operationDataObj.trigger("change");
+                } else if (operationDataObj.hasClass("grouped-array-input")) {
+                    var childInput;
+                    var childInputValue;
+                    if (operationDataObj.hasClass("one-column-input-array")) {
+                        for (var i = 0; i < value.length; ++i) {
+                            operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                        }
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            var index = childInput.parent().parent().find(".index").html();
+                            index = Number(index) - 1;
+                            var childValue = value[index];
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
+                                childInput.val(childValue);
+                            } else if (childInput.is(":checkbox")) {
+                                operationDataObj.prop('checked', childValue);
+                            } else if (childInput.is("select")) {
+                                childInput.find("option:selected").attr("value", childValue);
+                            }
+                        });
+                    } else if (operationDataObj.hasClass("valued-check-box-array")) {
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            if (value.indexOf(childInput.data("value")) != -1){
+                                childInput.prop('checked', true);
+                            }
+                        });
+                    } else if (operationDataObj.hasClass("multi-column-joined-input-array")) {
+                        for (var i = 0; i < value.length; ++i) {
+                            operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                        }
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            var index = childInput.parent().parent().find(".index").html();
+                            index = Number(index) - 1;
+                            var childValue = value[index];
+                            var inputNumber = Number(childInput.data("input"));
+                            var inputValue;
+                            if (inputNumber == 1){
+                                inputValue = childValue.substring(3,0)
+                            }else if (inputNumber == 2){
+                                inputValue = childValue.substring(3);
+                            }
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
+                                childInput.val(inputValue);
+                            } else if (childInput.is(":checkbox")) {
+                                operationDataObj.prop('checked', inputValue);
+                            } else if (childInput.is("select")) {
+                                childInput.find("option:selected").attr("value", inputValue);
+                            }
+                        });
+                    } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
+                        for (var i = 0; i < value.length; ++i) {
+                            operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                        }
+                        $(".child-input", this).each(function () {
+                            childInput = $(this);
+                            var index = childInput.parent().parent().find(".index").html();
+                            index = Number(index) - 1;
+                            var childKey = childInput.data("child-key");
+                            var childValue = value[index][childKey];
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
+                                childInput.val(childValue);
+                            } else if (childInput.is(":checkbox")) {
+                                operationDataObj.prop('checked', childValue);
+                            } else if (childInput.is("select")) {
+                                childInput.find("option:selected").attr("value", childValue);
+                            }
+                        });
+                    }
+                }
+                operationData[key] = value;
+            }
+        );
+
+        return payload;
+    };
+
+    /**
      * generateProfile method is only used for policy-creation UIs.
      *
      * @param platformType Platform Type of the profile
@@ -647,6 +990,26 @@ var operationModule = function () {
         return generatedProfile;
     };
 
-    return publicMethods;
+    /**
+     * populateProfile method is used to populate the html ui with saved payload
+     *
+     * @param platformType Platform Type of the profile
+     * @param payload List of profileFeatures
+     * @returns [] configuredOperations array
+     */
+    publicMethods.populateProfile = function (platformType, payload) {
+        var configuredOperations = [];
+        for (var i = 0; i < payload.length; ++i) {
+            var configuredFeature = payload[i];
+            var featureCode = configuredFeature["featureCode"];
+            var operationPayload = configuredFeature["content"];
+            //push the feature-code to the configuration array
+            configuredOperations.push(featureCode);
 
+            publicMethods.populateUI(platformType, featureCode, operationPayload);
+        }
+        return configuredOperations;
+    };
+
+    return publicMethods;
 }();

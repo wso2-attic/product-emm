@@ -99,15 +99,15 @@
                                             <input id="email-config-sender-email" type="text" class="form-control" placeholder="[ Required Field ]">
                                         </div>
 
-                                        <div class="wr-input-control">
+                                        <!--<div class="wr-input-control">
                                             <label class="wr-input-label" for="email-config-template">
                                                 Email Template
                                                 <span class="helper" title="Email Template to be used in invitation email">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="email-config-template" type="text" class="form-control">
-                                        </div>
+                                            <textarea id="email-config-template" type="textarea" class="form-control"></textarea>
+                                        </div>-->
 
                                         <div class="wr-input-control wr-btn-grp">
                                             <button id="save-general-btn" class="wr-btn">
@@ -175,7 +175,18 @@
                                                 <input id="android-config-gcm-sender-id" type="text" class="form-control" placeholder="[ Required Field ]">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div id="wifi-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            End User License Agreement (EULA)
+                                            <hr>
+                                        </h2>
+                                    </div>
 
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
+                                        <div class="wr-input-control">
+                                            <textarea id="android-eula" type="text" class="form-control"></textarea>
+                                        </div>
                                         <div class="wr-input-control wr-btn-grp">
                                             <button id="save-android-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
                                         </div>
@@ -291,6 +302,8 @@
                                                 <span class="helper" title="Upload MDM Certificate">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
+                                            </label><br>
+                                            <label class="wr-input-label" id="mdm-cert-file-name">
                                             </label>
                                             <input id="ios-config-mdm-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
                                         </div>
@@ -302,7 +315,7 @@
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-mdm-certificate-password" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-mdm-certificate-password" type="password" class="form-control" placeholder="[ Required Field ]">
                                         </div>
 
                                         <div class="wr-input-control">
@@ -346,6 +359,8 @@
                                                 <span class="helper" title="Upload APNS Certificate">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
+                                            </label><br>
+                                            <label class="wr-input-label" id="apns-cert-file-name">
                                             </label>
                                             <input id="ios-config-apns-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
                                         </div>
@@ -357,7 +372,7 @@
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-apns-certificate-password" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-apns-certificate-password" type="password" class="form-control" placeholder="[ Required Field ]">
                                         </div>
 
                                         <div class="wr-input-control">
@@ -372,7 +387,18 @@
                                                 <option value="2">Developer</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div id="wifi-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            End User License Agreement (EULA)
+                                            <hr>
+                                        </h2>
+                                    </div>
 
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
+                                        <div class="wr-input-control">
+                                            <textarea id="ios-eula" type="text" class="form-control"></textarea>
+                                        </div>
                                         <div class="wr-input-control wr-btn-grp">
                                             <button id="save-ios-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
                                         </div>

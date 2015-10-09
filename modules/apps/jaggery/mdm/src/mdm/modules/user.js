@@ -39,6 +39,49 @@ var userModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
+    /**
+     *  Get the carbon user object from the session. If not found - it will throw a user not found error.
+     * @returns {carbon user object}
+     */
+    privateMethods.getCarbonUser = function() {
+        var statusCode, carbon = require('carbon');
+        var carbonUser = session.get(constants.USER_SESSION_KEY);
+        var utility = require('/modules/utility.js').utility;
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants.ERRORS.USER_NOT_FOUND;
+        }
+        return carbonUser;
+    }
+    /**
+     *
+     * @param url - URL to call the backend without the host
+     * @param method - HTTP Method (GET, POST)
+     * @returns {
+     *  'status': 'success'|'error',
+     *  'content': {}
+     * }
+     */
+    privateMethods.callBackend = function(url, method) {
+        var url = mdmProps["httpsURL"] + url;
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.send();
+
+        var response = {};
+        if (xhr.status == 200 && xhr.readyState == 4) {
+            var responsePayload = parse(xhr.responseText);
+            response.content = responsePayload["responseContent"];
+            response.status = "success";
+            return response;
+        } else {
+            response.content = xhr.responseText;
+            response["status"] = "error";
+            return response;
+        }
+    }
+
+
     /*
      @Deprecated
      */
@@ -319,6 +362,51 @@ var userModule = function () {
             utility.endTenantFlow();
         }
     };
+
+    /**
+     * Return a User object from the backend by calling the JAX-RS
+     * @param username
+     * @returns {
+     *  'status': 'success'|'error',
+     *  'content': {
+            "username": "abc",
+            "firstname": "abc",
+            "lastname": "efj",
+            "emailAddress": "abc@abc.com"
+        }
+     * }
+     */
+    publicMethods.getUser = function (username) {
+        var carbonUser = privateMethods.getCarbonUser();
+        try {
+            utility.startTenantFlow(carbonUser);
+            var url = "/mdm-admin/users/" + username;
+            var response = privateMethods.callBackend(url, "GET");
+            return response;
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+    /**
+     * TODO: comment
+     * @param username
+     * @returns {*}
+     */
+    publicMethods.getRolesByUsername = function (username) {
+        var carbonUser = privateMethods.getCarbonUser();
+        try {
+            utility.startTenantFlow(carbonUser);
+            var url = "/mdm-admin/users/" + username + "/roles";
+            var response = privateMethods.callBackend(url, "GET");
+            return response;
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    }
 
     /*
      @NewlyAdded

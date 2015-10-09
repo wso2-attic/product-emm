@@ -22,28 +22,28 @@ var util = function () {
     var String = Packages.java.lang.String;
     var log = new Log();
 
-    module.getDyanmicCredentials = function(){
+    module.getDyanmicCredentials = function(owner){ 
         var payload = {
             "callbackUrl": "http://localhost:9763/mdm-admin",
-            "clientName": "MDM-app",
+            "clientName": "mdm",
             "tokenScope": "admin",
-            "owner": "MDM-app",
-            "grantType": "password"
+            "owner": owner,
+            "grantType": "urn:ietf:params:oauth:grant-type:saml2-bearer"
         };
         var xhr = new XMLHttpRequest();
-        var tokenEndpoint = "http://localhost:9763/dynamic-client-manager/register/";
+        var tokenEndpoint = "http://localhost:9763/dynamic-client-web/register/";
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(payload);
-        var clientData;
-        if (xhr.status == 200) {
+        var clientData = {};
+        if (xhr.status == 201) {
             var data = parse(xhr.responseText);
-            clientData.clientId = data.clientId;
-            clientData.clientSecret = data.clientSecret;
-        } else if (xhr.status == 403) {
-            throw "Error in obtaining token with Password Grant Type";
+            clientData.clientId = data.client_id;
+            clientData.clientSecret = data.client_secret;
+        } else if (xhr.status == 400) {
+            throw "Invalid client meta data";
         } else {
-            throw "Error in obtaining token with Password Grant Type";
+            throw "Error in obtaining client id and secret";
         }
         return clientData;
     };
@@ -55,6 +55,10 @@ var util = function () {
      */
     function encode(payload){
         return new String(Base64.encodeBase64(new String(payload).getBytes()));
+    }
+
+    function decode(payload){
+        return new String(Base64.decodeBase64(new String(payload).getBytes()));
     }
 
     /**
@@ -81,14 +85,43 @@ var util = function () {
             tokenPair.refreshToken = data.refresh_token;
             tokenPair.accessToken = data.access_token;
         } else if (xhr.status == 403) {
-            throw "Error in obtaining token with Password Grant Type";
+            throw "Error in obtaining token with Password grant type";
         } else {
-            throw "Error in obtaining token with Password Grant Type";
+            throw "Error in obtaining token with Password grant type";
         }
         return tokenPair;
     };
-    module.getTokenWithSAMLGrantType = function () {
+    module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {
 
+        var assertionXML = new XML(decode(assertion) + "");
+        var extractedAssertion = assertionXML..*::["Assertion"].toXMLString();
+        var encodedExtractedAssertion = encode(extractedAssertion);
+
+        var xhr = new XMLHttpRequest();
+        var tokenEndpoint = "https://localhost:9443/oauth2/token";
+        var encodedClientKeys = encode(clientId + ":" + clientSecret);
+        xhr.open("POST", tokenEndpoint, false);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
+        xhr.send("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + encodeURIComponent(encodedExtractedAssertion) + "&scope=" + scope);
+
+        log.error(encodedClientKeys);
+        log.error("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + encodeURIComponent(encodedExtractedAssertion) + "&scope=" + scope);
+        log.error(xhr.responseText);
+
+        var tokenPair = {};
+        if (xhr.status == 200) {
+            var data = parse(xhr.responseText);
+            tokenPair.refreshToken = data.refresh_token;
+            tokenPair.accessToken = data.access_token;
+            log.error("data.access_token >>>>>>> " + data.access_token);
+            log.error("data.refresh_token >>>>>>> " + data.refresh_token);
+        } else if (xhr.status == 403) {
+            throw "Error in obtaining token with SAML extension grant type";
+        } else {
+            throw "Error in obtaining token with SAML extension grant type";
+        }
+        return tokenPair;
     };
     module.refreshToken = function(tokenPair,clientId, clientSecret, scope){
         var xhr = new XMLHttpRequest();

@@ -21,11 +21,18 @@ function onRequest (context) {
     log.debug("calling license-box-agent-unit backend js");
 
     var deviceModule = require("/modules/device.js")["deviceModule"];
-    var license = deviceModule.getLicense();
+    var license = deviceModule.getLicense(context["platform"], context["languageCode"]);
     if (license) {
-        context.license = license.text;
+        context["license"] = license;
     } else {
-        context.license = "ERROR: Unable to retrieve License Text.";
+        context["license"] = "ERROR: Unable to retrieve License Text.";
+    }
+    var companyProps = session.get("COMPANY_DETAILS");
+    var mdmProps = application.get("PINCH_CONFIG");
+    if (!companyProps) {
+        context.companyName = mdmProps.generalConfig.companyName;
+    } else {
+        context.companyName = companyProps.companyName;
     }
     return context;
 }

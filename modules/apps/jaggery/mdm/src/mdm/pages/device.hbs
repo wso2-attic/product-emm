@@ -19,7 +19,10 @@ under the License. --}}
 {{layout "fluid"}}
 {{!-- Inputting content into defined zones in fluid layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Device View
+    {{
+        unit "title"
+        pageTitle = "Device View"
+    }}
 {{/zone}}
 {{#zone "body"}}
     {{unit "appbar" pageTitle="Device View" enableBack=true}}
