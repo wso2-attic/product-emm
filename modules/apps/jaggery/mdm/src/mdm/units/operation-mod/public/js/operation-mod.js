@@ -994,7 +994,7 @@ var operationModule = function () {
      * populateProfile method is used to populate the html ui with saved payload
      *
      * @param platformType Platform Type of the profile
-     * @param List of profileFeatures -
+     * @param payload List of profileFeatures
      * @returns [] configuredOperations array
      */
     publicMethods.populateProfile = function (platformType, payload) {
@@ -1003,7 +1003,7 @@ var operationModule = function () {
             var configuredFeature = payload[i];
             var featureCode = configuredFeature["featureCode"];
             var operationPayload = configuredFeature["content"];
-            //push the featurecode to the configuration array
+            //push the feature-code to the configuration array
             configuredOperations.push(featureCode);
 
             publicMethods.populateUI(platformType, featureCode, operationPayload);
@@ -1012,5 +1012,4 @@ var operationModule = function () {
     };
 
     return publicMethods;
-
 }();
