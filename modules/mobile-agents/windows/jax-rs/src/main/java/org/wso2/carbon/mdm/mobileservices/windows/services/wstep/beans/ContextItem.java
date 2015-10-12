@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,11 +26,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ContextItem", namespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE,
+@XmlType(name = "ContextItem", namespace = PluginConstants.SOAP_AUTHORIZATION_TARGET_NAMESPACE,
 		propOrder = { "Value" })
 public class ContextItem {
 
-	@XmlElement(required = true, namespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
+	@XmlElement(required = true, namespace = PluginConstants.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
 	protected String Value;
 
 	public String getValue() {
