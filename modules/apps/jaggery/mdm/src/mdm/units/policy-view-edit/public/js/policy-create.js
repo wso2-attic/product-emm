@@ -17,6 +17,7 @@
  */
 
 var validateStep = {};
+var skipStep = {};
 var stepForwardFrom = {};
 var stepBackFrom = {};
 var policy = {};
@@ -86,7 +87,8 @@ var updateGroupedInputVisibility = function (domElement) {
     }
 };
 
-stepForwardFrom["policy-platform"] = function (policyPayloadObj) {
+skipStep["policy-platform"] = function (policyPayloadObj) {
+    policy["name"] = policyPayloadObj["policyName"];
     policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
     policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
     var userRoleInput = $("#user-roles-input");
@@ -98,7 +100,7 @@ stepForwardFrom["policy-platform"] = function (policyPayloadObj) {
     ownershipInput.val(policyPayloadObj.ownershipType);
     actionInput.val(policyPayloadObj.compliance);
     // updating next-page wizard title with selected platform
-    $("#policy-profile-page-wizard-title").text("View/Edit " + policy["platform"] + " POLICY");
+    $("#policy-profile-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 
     var deviceType = policy["platform"];
     var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
@@ -109,14 +111,20 @@ stepForwardFrom["policy-platform"] = function (policyPayloadObj) {
         function () {
             $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
                 var content = template();
+                // pushing profile feature input elements
                 $(".wr-advance-operations").html(content);
+                // populating values and getting the list of configured features
+                var configuredOperations = operationModule.
+                    populateProfile(policy["platform"], policyPayloadObj["profile"]["profileFeaturesList"]);
+                // updating grouped input visibility accordingly
                 $(".wr-advance-operations li.grouped-input").each(function () {
                     updateGroupedInputVisibility(this);
                 });
-                var configuredOperations = operationModule.populateProfile(policy["platform"], policyPayloadObj["profile"]["profileFeaturesList"]);
+                // enabling configured options
                 for (var i = 0; i < configuredOperations.length; ++i) {
                     var configuredOperation = configuredOperations[i];
-                    $(".operation-data").filterByData("operation-code", configuredOperation).find(".panel-title .switch input[type=checkbox]").each(function(){
+                    $(".operation-data").filterByData("operation-code", configuredOperation).
+                        find(".panel-title .switch input[type=checkbox]").each(function () {
                         $(this).click();
                         $(this).attr("checked", "checked");
                     });
@@ -1499,7 +1507,7 @@ validateStep["policy-profile"] = function () {
 stepForwardFrom["policy-profile"] = function () {
     policy["profile"] = operationModule.generateProfile(policy["platform"], configuredOperations);
     // updating next-page wizard title with selected platform
-    $("#policy-criteria-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
+    $("#policy-criteria-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 };
 
 stepBackFrom["policy-profile"] = function () {
@@ -1536,7 +1544,7 @@ stepForwardFrom["policy-criteria"] = function () {
     policy["selectedNonCompliantAction"] = $("#action-input").find(":selected").data("action");
     policy["selectedOwnership"] = $("#ownership-input").val();
     // updating next-page wizard title with selected platform
-    $("#policy-naming-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
+    $("#policy-naming-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 };
 
 /**
@@ -1677,6 +1685,53 @@ var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
             $(paneSelector).removeClass("expanded");
         }
         $(paneSelector).slideUp();
+        /** now follows the code to reinitialize all inputs of the slidable pane */
+        // reinitializing input fields into the defaults
+        $(paneSelector + " input").each(
+            function () {
+                if ($(this).is("input:text")) {
+                    $(this).val($(this).data("default"));
+                } else if ($(this).is("input:password")) {
+                    $(this).val("");
+                } else if ($(this).is("input:checkbox")) {
+                    $(this).prop("checked", $(this).data("default"));
+                    // if this checkbox is the parent input of a grouped-input
+                    if ($(this).hasClass("parent-input")) {
+                        var groupedInput = $(this).parent().parent().parent();
+                        updateGroupedInputVisibility(groupedInput);
+                    }
+                }
+            }
+        );
+        // reinitializing select fields into the defaults
+        $(paneSelector + " select").each(
+            function () {
+                var defaultOption = $(this).data("default");
+                $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
+            }
+        );
+        // collapsing expanded-panes (upon the selection of html-select-options) if any
+        $(paneSelector + " .expanded").each(
+            function () {
+                if ($(this).hasClass("expanded")) {
+                    $(this).removeClass("expanded");
+                }
+                $(this).slideUp();
+            }
+        );
+        // removing all entries of grid-input elements if exist
+        $(paneSelector + " .grouped-array-input").each(
+            function () {
+                var gridInputs = $(this).find("[data-add-form-clone]");
+                if (gridInputs.length > 0) {
+                    gridInputs.remove();
+                }
+                var helpTexts = $(this).find("[data-help-text=add-form]");
+                if (helpTexts.length > 0) {
+                    helpTexts.show();
+                }
+            }
+        );
     }
 };
 // End of HTML embedded invoke methods
@@ -1724,7 +1779,6 @@ var getParameterByName = function (name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
-
 $(document).ready(function () {
 
     // Adding initial state of wizard-steps.
@@ -1733,13 +1787,15 @@ $(document).ready(function () {
     var policyPayloadObj;
     invokerUtil.get(
         "/mdm-admin/policies/" + getParameterByName("id"),
+        // on success
         function (data) {
-            console.log(JSON.stringify(data["responseContent"]));
+            // console.log("success: " + JSON.stringify(data));
             policyPayloadObj = data["responseContent"];
-            stepForwardFrom["policy-platform"](policyPayloadObj);
+            skipStep["policy-platform"](policyPayloadObj);
         },
+        // on error
         function () {
-            console.log("error");
+            // should be redirected to an error page
         }
     );
 
