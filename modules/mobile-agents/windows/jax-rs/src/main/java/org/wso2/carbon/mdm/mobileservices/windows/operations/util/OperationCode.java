@@ -27,6 +27,7 @@ public class OperationCode {
         DEVICE_PASSCODE_DELETE("./Vendor/MSFT/PolicyManager/My/DeviceLock");
 
 
+
         private final String code;
 
         Info(String code) {

@@ -394,10 +394,14 @@ public class SyncmlServiceImpl implements SyncmlService {
 
     public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
 <<<<<<< HEAD
+<<<<<<< HEAD
             throws OperationManagementException, DeviceManagementException, FeatureManagementException,
             PolicyComplianceException, NotificationManagementException {
         String policyAllow = "1";
         String policyDisallow = "0";
+=======
+            throws OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException {
+>>>>>>> parent of 77ffe07... refactored syncml engine
 =======
             throws OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException {
 >>>>>>> parent of 77ffe07... refactored syncml engine
@@ -472,6 +476,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
 
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
             for (Item item : results) {
                 for (OperationCode.Info info : OperationCode.Info.values()) {
@@ -565,6 +570,44 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } else {
                         encryptStorage.setEnable(false);
                     }
+=======
+            for (int y = 0; y < results.size(); y++) {
+                Item item = results.get(y);
+                if (item.getSource().getLocURI().equals("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera")) {
+                    Profile cameraProfile = new Profile();
+                    cameraProfile.setFeatureCode("CAMERA");
+                    cameraProfile.setData(item.getData());
+                    if (item.getData().equals("1")) {
+                        cameraProfile.setEnable(true);
+                    } else {
+                        cameraProfile.setEnable(false);
+                    }
+                    profiles.add(cameraProfile);
+                }
+                if (item.getSource().getLocURI().equals
+                        ("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption")) {
+                    Profile encryptStorage = new Profile();
+                    encryptStorage.setFeatureCode("ENCRYPT_STORAGE");
+                    encryptStorage.setData(item.getData());
+                    if (item.getData().equals("1")) {
+                        encryptStorage.setEnable(true);
+                    } else {
+                        encryptStorage.setEnable(false);
+                    }
+                    profiles.add(encryptStorage);
+                }
+                if (item.getSource().getLocURI().equals
+                        ("./Vendor/MSFT/PolicyManager/Device/DeviceLock/DevicePasswordEnabled")) {
+
+                    Profile encryptStorage = new Profile();
+                    encryptStorage.setFeatureCode("PASSCODE_POLICY");
+                    encryptStorage.setData(item.getData());
+                    if (item.getData().equals("0")) {
+                        encryptStorage.setEnable(true);
+                    } else {
+                        encryptStorage.setEnable(false);
+                    }
+>>>>>>> parent of 77ffe07... refactored syncml engine
                     profiles.add(encryptStorage);
                 }
                 if (!item.getData().equals(null) && item.getSource().getLocURI().equals(lockUri)) {
@@ -579,6 +622,9 @@ public class SyncmlServiceImpl implements SyncmlService {
                         if (log.isDebugEnabled()) {
                             String msg = "Lock Reset Pin code " + pinValue;
                             log.info(msg);
+<<<<<<< HEAD
+>>>>>>> parent of 77ffe07... refactored syncml engine
+=======
 >>>>>>> parent of 77ffe07... refactored syncml engine
                         }
                     } catch (NotificationManagementException e) {
@@ -594,6 +640,9 @@ public class SyncmlServiceImpl implements SyncmlService {
 =======
         if (profiles.size() != 0) {
             ProfileFeature activeFeature;
+<<<<<<< HEAD
+>>>>>>> parent of 77ffe07... refactored syncml engine
+=======
 >>>>>>> parent of 77ffe07... refactored syncml engine
             try {
                 List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
