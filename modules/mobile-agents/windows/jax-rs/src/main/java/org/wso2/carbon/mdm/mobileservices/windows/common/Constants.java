@@ -200,9 +200,12 @@ public final class Constants {
         public static final String ENCRYPT_STORAGE_STATUS = "ENCRYPT_STORAGE_STATUS";
         public static final String DEVICE_PASSWORD_STATUS = "DEVICE_PASSWORD_STATUS";
 <<<<<<< HEAD:modules/mobile-agents/windows/jax-rs/src/main/java/org/wso2/carbon/mdm/mobileservices/windows/common/Constants.java
+<<<<<<< HEAD:modules/mobile-agents/windows/jax-rs/src/main/java/org/wso2/carbon/mdm/mobileservices/windows/common/Constants.java
 <<<<<<< HEAD:modules/mobile-agents/windows/jax-rs/src/main/java/org/wso2/carbon/mdm/mobileservices/windows/common/PluginConstants.java
         public static final String WIFI = "WIFI";
         public static final String DEVICE_PASSCODE_DELETE = "DEVICE_PASSCODE_DELETE";
+=======
+>>>>>>> parent of 77ffe07... refactored syncml engine:modules/mobile-agents/windows/jax-rs/src/main/java/org/wso2/carbon/mdm/mobileservices/windows/common/Constants.java
 =======
 >>>>>>> parent of 77ffe07... refactored syncml engine:modules/mobile-agents/windows/jax-rs/src/main/java/org/wso2/carbon/mdm/mobileservices/windows/common/Constants.java
 =======
