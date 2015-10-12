@@ -25,7 +25,7 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsOperationsException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.Message;
@@ -60,7 +60,7 @@ public class OperationsImpl implements Operations {
         Message message = new Message();
         try {
             CommandOperation operation = new CommandOperation();
-            operation.setCode(PluginConstants.OperationCodes.DEVICE_LOCK);
+            operation.setCode(Constants.OperationCodes.DEVICE_LOCK);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(true);
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
@@ -87,7 +87,7 @@ public class OperationsImpl implements Operations {
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
         CommandOperation operation = new CommandOperation();
-        operation.setCode(PluginConstants.OperationCodes.DISENROLL);
+        operation.setCode(Constants.OperationCodes.DISENROLL);
         operation.setType(Operation.Type.COMMAND);
         operation.setEnabled(true);
         try {
@@ -118,7 +118,7 @@ public class OperationsImpl implements Operations {
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
         CommandOperation operation = new CommandOperation();
-        operation.setCode(PluginConstants.OperationCodes.WIPE_DATA);
+        operation.setCode(Constants.OperationCodes.WIPE_DATA);
         operation.setType(Operation.Type.COMMAND);
         try {
             return WindowsAPIUtils.getOperationResponse(deviceids, operation, message, responseMediaType);
@@ -149,7 +149,7 @@ public class OperationsImpl implements Operations {
         Message message = new Message();
         try {
             CommandOperation operation = new CommandOperation();
-            operation.setCode(PluginConstants.OperationCodes.DEVICE_RING);
+            operation.setCode(Constants.OperationCodes.DEVICE_RING);
             operation.setType(Operation.Type.COMMAND);
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
         } catch (OperationManagementException e) {
@@ -183,7 +183,7 @@ public class OperationsImpl implements Operations {
                 throw new OperationManagementException("Encrypt bean is empty");
             }
             CommandOperation operation = new CommandOperation();
-            operation.setCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
+            operation.setCode(Constants.OperationCodes.ENCRYPT_STORAGE);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(encrypt.isEncrypted());
             return WindowsAPIUtils.getOperationResponse(encryptBeanWrapper.getDeviceIDs(), operation, message,
@@ -215,7 +215,7 @@ public class OperationsImpl implements Operations {
         Message message = new Message();
         try {
             CommandOperation operation = new CommandOperation();
-            operation.setCode(PluginConstants.OperationCodes.LOCK_RESET);
+            operation.setCode(Constants.OperationCodes.LOCK_RESET);
             operation.setType(Operation.Type.COMMAND);
             return WindowsAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);
         } catch (OperationManagementException e) {

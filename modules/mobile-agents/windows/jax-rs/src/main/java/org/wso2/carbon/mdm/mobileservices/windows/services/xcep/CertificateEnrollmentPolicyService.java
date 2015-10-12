@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.xcep;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.CACollection;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Client;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.OIDCollection;
@@ -39,31 +39,31 @@ import javax.xml.ws.soap.SOAPBinding;
 /**
  * Interface for MS-XCEP implementation.
  */
-@WebService(targetNamespace = PluginConstants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE,
+@WebService(targetNamespace = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE,
 		name = "IPolicy")
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 @XmlSeeAlso({ ObjectFactory.class })
 public interface CertificateEnrollmentPolicyService {
 
-	@RequestWrapper(localName = "GetPolicies", targetNamespace = PluginConstants.
-			ENROLLMENT_POLICY_TARGET_NAMESPACE, className = PluginConstants.REQUEST_WRAPPER_CLASS_NAME)
+	@RequestWrapper(localName = "GetPolicies", targetNamespace = Constants.
+			ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.REQUEST_WRAPPER_CLASS_NAME)
 	@WebMethod(operationName = "GetPolicies")
-	@ResponseWrapper(localName = "GetPoliciesResponse", targetNamespace = PluginConstants.
-			ENROLLMENT_POLICY_TARGET_NAMESPACE, className = PluginConstants.
+	@ResponseWrapper(localName = "GetPoliciesResponse", targetNamespace = Constants.
+			ENROLLMENT_POLICY_TARGET_NAMESPACE, className = Constants.
 			RESPONSE_WRAPPER_CLASS_NAME) void getPolicies(
-			@WebParam(name = "client", targetNamespace = PluginConstants.
+			@WebParam(name = "client", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			Client client,
-			@WebParam(name = "requestFilter", targetNamespace = PluginConstants.
+			@WebParam(name = "requestFilter", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			RequestFilter requestFilter,
-			@WebParam(mode = WebParam.Mode.OUT, name = "response", targetNamespace = PluginConstants.
+			@WebParam(mode = WebParam.Mode.OUT, name = "response", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			Holder<Response> response,
-			@WebParam(mode = WebParam.Mode.OUT, name = "cAs", targetNamespace = PluginConstants.
+			@WebParam(mode = WebParam.Mode.OUT, name = "cAs", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			Holder<CACollection> caCollection,
-			@WebParam(mode = WebParam.Mode.OUT, name = "oIDs", targetNamespace = PluginConstants.
+			@WebParam(mode = WebParam.Mode.OUT, name = "oIDs", targetNamespace = Constants.
 					ENROLLMENT_POLICY_TARGET_NAMESPACE)
 			Holder<OIDCollection> oidCollection
 	);

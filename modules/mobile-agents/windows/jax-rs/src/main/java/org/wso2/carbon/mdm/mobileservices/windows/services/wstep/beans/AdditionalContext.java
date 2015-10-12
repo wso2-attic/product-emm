@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +28,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OIDCollection", namespace = PluginConstants.SOAP_AUTHORIZATION_TARGET_NAMESPACE,
+@XmlType(name = "OIDCollection", namespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE,
 		propOrder = { "contextitem" })
 @SuppressWarnings("unused")
 public class AdditionalContext {
 
 	@XmlElement(name = "ContextItem", required = true,
-			namespace = PluginConstants.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
+			namespace = Constants.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
 
 	protected List<ContextItem> contextitem;
 

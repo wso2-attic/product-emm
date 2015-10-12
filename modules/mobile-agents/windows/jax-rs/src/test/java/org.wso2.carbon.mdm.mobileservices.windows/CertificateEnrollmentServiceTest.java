@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.impl.CertificateEnrollmentServiceImpl;
@@ -42,7 +42,7 @@ public class CertificateEnrollmentServiceTest {
     public void jksReadingTest(){
 
         File propertyFile = new File(getClass().getClassLoader().getResource(
-                PluginConstants.CertificateEnrolment.PROPERTIES_XML).getFile());
+                Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
         Document document = null;

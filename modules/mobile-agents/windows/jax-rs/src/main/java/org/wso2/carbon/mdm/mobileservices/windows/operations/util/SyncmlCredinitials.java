@@ -26,6 +26,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * class for generate security token for client and server.
  */
+
 public class SyncmlCredinitials {
 
     private static Log log = LogFactory.getLog(SyncmlCredinitials.class);

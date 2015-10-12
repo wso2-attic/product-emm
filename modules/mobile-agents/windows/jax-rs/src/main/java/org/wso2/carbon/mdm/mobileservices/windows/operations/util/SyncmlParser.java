@@ -18,14 +18,14 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -36,9 +36,8 @@ public class SyncmlParser {
     private static String commandId;
     private static String messageReference;
     private static String commandReference;
-    private static final String SYNC_HEADER = "SyncHdr";
+    private static final String SYNC_HDR = "SyncHdr";
     private static final String SYNC_BODY = "SyncBody";
-
     private enum SyncMLHeaderParameter {
         MSG_ID("MsgID"),
         SESSION_ID("SessionID"),
@@ -46,61 +45,51 @@ public class SyncmlParser {
         SOURCE("Source"),
         CRED("Cred");
         private final String parameterName;
-
-        SyncMLHeaderParameter(final String parameterName) {
+        private SyncMLHeaderParameter(final String parameterName) {
             this.parameterName = parameterName;
         }
-
         public String getValue() {
             return this.parameterName;
         }
     }
-
-    private enum SycMLCommandType {
+    private enum SycMLCommandType{
         ALERT("Alert"),
         REPLACE("Replace"),
         STATUS("Status"),
         RESULTS("Results");
         private final String commandName;
-
-        SycMLCommandType(final String commandName) {
+        private SycMLCommandType(final String commandName){
             this.commandName = commandName;
         }
-
         public String getValue() {
             return this.commandName;
         }
     }
+    private static Log log = LogFactory.getLog(SyncmlParser.class);
 
     /**
      * Parses the raw SyncML payload and generates a SyncmlDocument object using the parsed XML contents.
-     *
      * @param syncmlPayload - Received SyncML XML payload
      * @return - SyncmlDocument object generated from the received payload
      */
     public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws WindowsOperationException {
+
+        NodeList syncHeaderList = syncmlPayload.getElementsByTagName(SYNC_HDR);
+        Node syncHeader = syncHeaderList.item(0);
+        SyncmlHeader header = generateSyncmlHeader(syncHeader);
+
+        NodeList syncBodyList = syncmlPayload.getElementsByTagName(SYNC_BODY);
+        Node syncBody = syncBodyList.item(0);
+        SyncmlBody body = generateSyncmlBody(syncBody);
+
         SyncmlDocument syncmlDocument = new SyncmlDocument();
-
-        if (syncmlPayload.getElementsByTagName(SYNC_HEADER) == null) {
-            throw new IllegalFormatCodePointException(2);
-        }
-            NodeList syncHeaderList = syncmlPayload.getElementsByTagName(SYNC_HEADER);
-            Node syncHeader = syncHeaderList.item(0);
-            SyncmlHeader header = generateSyncmlHeader(syncHeader);
-
-            NodeList syncBodyList = syncmlPayload.getElementsByTagName(SYNC_BODY);
-            Node syncBody = syncBodyList.item(0);
-            SyncmlBody body = generateSyncmlBody(syncBody);
-
-            syncmlDocument.setHeader(header);
-            syncmlDocument.setBody(body);
-
-            return syncmlDocument;
+        syncmlDocument.setHeader(header);
+        syncmlDocument.setBody(body);
+        return syncmlDocument;
     }
 
     /**
      * Generates SyncmlHeader object by extracting properties of passed XML node.
-     *
      * @param syncHeader - XML node which represents SyncML header
      * @return - SyncmlHeader object
      */
@@ -111,60 +100,43 @@ public class SyncmlParser {
         Target target = null;
         Source source = null;
         Credential credential = null;
-        SyncmlHeader header = new SyncmlHeader();
 
         NodeList headerElements = syncHeader.getChildNodes();
-        for (int i = 0; i < headerElements.getLength(); i++) {
+        for (int i = 0 ; i < headerElements.getLength() ; i++) {
             Node node = headerElements.item(i);
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 String nodeName = node.getNodeName();
 
                 if (SyncMLHeaderParameter.MSG_ID.getValue().equals(nodeName)) {
-                    if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
-                    } else {
-                        messageID = node.getTextContent().trim();
-                    }
-                } else if (SyncMLHeaderParameter.SESSION_ID.getValue().equals(nodeName)) {
-                    if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
-                    } else {
-                        sessionID = node.getTextContent().trim();
-                    }
-                } else if (SyncMLHeaderParameter.TARGET.getValue().equals(nodeName)) {
-                    if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
-                    } else {
-                        target = generateTarget(node);
-                    }
-                } else if (SyncMLHeaderParameter.SOURCE.getValue().equals(nodeName)) {
-                    if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
-                    } else {
-                        source = generateSource(node);
-                    }
-                } else if (SyncMLHeaderParameter.CRED.getValue().equals(nodeName)) {
-                    if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
-                    } else {
-                        credential = generateCredential(node);
-                    }
+                    messageID = node.getTextContent().trim();
+                }
+                else if(SyncMLHeaderParameter.SESSION_ID.getValue().equals(nodeName)){
+                    sessionID = node.getTextContent().trim();
+                }
+                else if (SyncMLHeaderParameter.TARGET.getValue().equals(nodeName)) {
+                    target = generateTarget(node);
+                }
+                else if (SyncMLHeaderParameter.SOURCE.getValue().equals(nodeName)) {
+                    source = generateSource(node);
+                }
+                else if (SyncMLHeaderParameter.CRED.getValue().equals(nodeName)) {
+                    credential = generateCredential(node);
                 }
             }
         }
-            header.setMsgID(Integer.valueOf(messageID));
-            // Syncml message contains a sessionID which is Hexadecimal value.Hexadecimal sessionID parse as a integer value.
-            header.setSessionId(Integer.valueOf(sessionID, 16));
-            header.setTarget(target);
-            header.setSource(source);
-            header.setCredential(credential);
-            return header;
+        SyncmlHeader header = new SyncmlHeader();
+        header.setMsgID(Integer.valueOf(messageID));
+        // Syncml message contains a sessionID which is Hexadecimal value.Hexadecimal sessionID parse as a integer value.
+        header.setSessionId(Integer.valueOf(sessionID,16));
+        header.setTarget(target);
+        header.setSource(source);
+        header.setCredential(credential);
+        return header;
     }
 
     /**
      * Generates SyncmlBody object by extracting properties of passed XML node.
-     *
      * @param syncBody - XML node which represents SyncML body
      * @return - SyncmlBody object
      */
@@ -173,22 +145,25 @@ public class SyncmlParser {
         Alert alert = null;
         Replace replace = null;
         Results results = null;
-        List<Status> status = new ArrayList<>();
+        List<Status> status = new ArrayList<Status>();
         NodeList bodyElements = syncBody.getChildNodes();
 
-        for (int i = 0; i < bodyElements.getLength(); i++) {
+        for (int i = 0 ; i < bodyElements.getLength() ; i++) {
             Node node = bodyElements.item(i);
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 String nodeName = node.getNodeName();
 
-                if (SycMLCommandType.ALERT.getValue().equals(nodeName)) {
+                if(SycMLCommandType.ALERT.getValue().equals(nodeName)){
                     alert = generateAlert(node);
-                } else if (SycMLCommandType.REPLACE.getValue().equals(nodeName)) {
+                }
+                else if(SycMLCommandType.REPLACE.getValue().equals(nodeName)){
                     replace = generateReplace(node);
-                } else if (SycMLCommandType.STATUS.getValue().equals(nodeName)) {
+                }
+                else if(SycMLCommandType.STATUS.getValue().equals(nodeName)){
                     status.add(generateStatus(node));
-                } else if (SycMLCommandType.RESULTS.getValue().equals(nodeName)) {
+                }
+                else if(SycMLCommandType.RESULTS.getValue().equals(nodeName)){
                     results = generateResults(node);
                 }
             }
@@ -203,7 +178,6 @@ public class SyncmlParser {
 
     /**
      * Generates Source object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Source
      * @return - Source object
      */
@@ -215,10 +189,10 @@ public class SyncmlParser {
         String sourceURI = null;
         String sourceName = null;
 
-        if (sourceURIItem != null) {
+        if(sourceURIItem != null) {
             sourceURI = sourceURIItem.getTextContent().trim();
         }
-        if (sourceNameItem != null) {
+        if(sourceNameItem != null) {
             sourceName = sourceNameItem.getTextContent().trim();
         }
         source.setLocURI(sourceURI);
@@ -228,7 +202,6 @@ public class SyncmlParser {
 
     /**
      * Generates Target object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Target
      * @return - Target object
      */
@@ -240,10 +213,10 @@ public class SyncmlParser {
         String targetURI = null;
         String targetName = null;
 
-        if (targetURIItem != null) {
+        if(targetURIItem != null) {
             targetURI = targetURIItem.getTextContent().trim();
         }
-        if (targetNameItem != null) {
+        if(targetNameItem != null) {
             targetName = targetNameItem.getTextContent().trim();
         }
         target.setLocURI(targetURI);
@@ -253,14 +226,13 @@ public class SyncmlParser {
 
     /**
      * Generates Results object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Results
      * @return - Results object
      */
     private static Results generateResults(Node node) {
 
         Results results = new Results();
-        List<Item> item = new ArrayList<>();
+        List<Item> item = new ArrayList<Item>();
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
 
@@ -292,7 +264,6 @@ public class SyncmlParser {
 
     /**
      * Generates Status object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Status
      * @return - Status object
      */
@@ -301,19 +272,19 @@ public class SyncmlParser {
         Status status = new Status();
         for (int x = 0; x < node.getChildNodes().getLength(); x++) {
             String nodeName = node.getChildNodes().item(x).getNodeName();
-            if (nodeName.equals(PluginConstants.SyncML.SYNCML_CMD_ID)) {
+            if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD_ID) {
                 String commandId = node.getChildNodes().item(x).getTextContent().trim();
                 status.setCommandId(Integer.valueOf(commandId));
-            } else if (nodeName.equals(PluginConstants.SyncML.SYNCML_MESSAGE_REF)) {
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_MESSAGE_REF) {
                 String messageReference = node.getChildNodes().item(x).getTextContent().trim();
                 status.setMessageReference(Integer.valueOf(messageReference));
-            } else if (nodeName.equals(PluginConstants.SyncML.SYNCML_CMD_REF)) {
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD_REF) {
                 String commandReference = node.getChildNodes().item(x).getTextContent().trim();
                 status.setCommandReference(Integer.valueOf(commandReference));
-            } else if (nodeName.equals(PluginConstants.SyncML.SYNCML_CMD)) {
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD) {
                 String command = node.getChildNodes().item(x).getTextContent().trim();
                 status.setCommand(command);
-            } else if (nodeName.equals(PluginConstants.SyncML.SYNCML_CHAL)) {
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CHAL) {
                 NodeList chalNodes = node.getChildNodes().item(x).getChildNodes();
                 Meta meta = new Meta();
                 Chal chal = new Chal();
@@ -325,11 +296,13 @@ public class SyncmlParser {
                 meta.setNextNonce(nonce);
                 chal.setMeta(meta);
                 status.setChallenge(chal);
-            } else if (nodeName.equals(PluginConstants.SyncML.SYNCML_DATA)) {
+            }
+            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_DATA) {
                 String data = node.getChildNodes().item(x).getTextContent().trim();
                 status.setData(data);
-            } else if (nodeName.equals(PluginConstants.SyncML.SYNCML_TARGET_REF)) {
-                String targetReference = node.getChildNodes().item(x).getTextContent().trim();
+            }
+            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_TARGET_REF) {
+                String targetReference =node.getChildNodes().item(x).getTextContent().trim();
                 status.setTargetReference(targetReference);
             }
         }
@@ -338,7 +311,6 @@ public class SyncmlParser {
 
     /**
      * Generates Replace object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Replace
      * @return - Replace object
      */
@@ -346,9 +318,9 @@ public class SyncmlParser {
 
         Replace replace = new Replace();
         String commandId = node.getChildNodes().item(0).getTextContent().trim();
-        List<Item> items = new ArrayList<>();
-        for (int i = 0; i < node.getChildNodes().getLength() - 1; i++) {
-            items.add(generateItem(node.getChildNodes().item(i + 1)));
+        List<Item> items = new ArrayList<Item>();
+        for(int i=0 ; i<node.getChildNodes().getLength()-1 ; i++){
+            items.add(generateItem(node.getChildNodes().item(i+1)));
         }
         replace.setCommandId(Integer.valueOf(commandId));
         replace.setItems(items);
@@ -357,7 +329,6 @@ public class SyncmlParser {
 
     /**
      * Generates Alert object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Alert
      * @return - Alert object
      */
@@ -372,24 +343,23 @@ public class SyncmlParser {
 
     /**
      * Generates Item object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Item
      * @return - Item object
      */
-    private static Item generateItem(Node node) {
+    private static Item generateItem(Node node){
         Item item = new Item();
         Source source = new Source();
         String data;
         for (int x = 0; x < node.getChildNodes().getLength(); x++) {
             String nodeName = node.getChildNodes().item(x).getNodeName();
-            if (nodeName.equals(PluginConstants.SyncML.SYNCML_SOURCE)) {
+            if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_SOURCE) {
                 String childNodeName = node.getChildNodes().item(x).getChildNodes().item(x).getNodeName();
-                if (childNodeName.equals(PluginConstants.SyncML.SYNCML_LOCATION_URI)) {
+                if (childNodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_LOCATION_URI) {
                     String LocUri = node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim();
                     source.setLocURI(LocUri);
                     item.setSource(source);
                 }
-            } else if (nodeName.equals(PluginConstants.SyncML.SYNCML_DATA)) {
+            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_DATA) {
                 data = node.getChildNodes().item(x).getTextContent().trim();
                 item.setData(data);
             }
@@ -399,7 +369,6 @@ public class SyncmlParser {
 
     /**
      * Generates Credential object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Credential
      * @return - Credential object
      */
@@ -414,11 +383,10 @@ public class SyncmlParser {
 
     /**
      * Generates Meta object by extracting properties of passed XML node.
-     *
      * @param node - XML node which represents Meta
      * @return - Meta object
      */
-    private static Meta generateMeta(Node node) {
+    private static Meta generateMeta(Node node){
         Meta meta = new Meta();
         String format = node.getChildNodes().item(0).getTextContent().trim();
         String type = node.getChildNodes().item(1).getTextContent().trim();

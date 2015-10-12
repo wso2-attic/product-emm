@@ -58,6 +58,7 @@ public class BSTProviderImpl implements BSTProvider {
     public Response getBST(Credentials credentials) throws WindowsDeviceEnrolmentException {
 
         String domainUser = credentials.getUsername();
+        String userEmail = credentials.getEmail();
 //        String[] domainUserArray = domainUser.split(DELIMITER);
 //        String user = domainUserArray[USER_SEGMENT];
 //        String domain = domainUserArray[DOMAIN_SEGMENT];

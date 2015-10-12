@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.xcep.impl;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.CertificateEnrollmentPolicyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,8 +42,8 @@ import javax.xml.ws.soap.SOAPBinding;
 /**
  * Implementation class for CertificateEnrollmentPolicyService.
  */
-@WebService(endpointInterface = PluginConstants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT,
-		    targetNamespace = PluginConstants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE)
+@WebService(endpointInterface = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT,
+		    targetNamespace = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE)
 @Addressing(enabled = true, required = true)
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnrollmentPolicyService {
@@ -79,13 +79,13 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		PrivateKeyAttributes privateKeyAttributeElement = new PrivateKeyAttributes();
 
 		privateKeyAttributeElement.
-				setMinimalKeyLength(PluginConstants.CertificateEnrolmentPolicy.MINIMAL_KEY_LENGTH);
+				setMinimalKeyLength(Constants.CertificateEnrolmentPolicy.MINIMAL_KEY_LENGTH);
 
-		attributeElement.setPolicySchema(PluginConstants.CertificateEnrolmentPolicy.POLICY_SCHEMA);
+		attributeElement.setPolicySchema(Constants.CertificateEnrolmentPolicy.POLICY_SCHEMA);
 		attributeElement.setPrivateKeyAttributes(privateKeyAttributeElement);
-		attributeElement.setHashAlgorithmOIDReference(PluginConstants.CertificateEnrolmentPolicy.
+		attributeElement.setHashAlgorithmOIDReference(Constants.CertificateEnrolmentPolicy.
 				                                              HASH_ALGORITHM_OID_REFERENCE);
-		certEnrollmentPolicyElement.setPolicyOIDReference(PluginConstants.CertificateEnrolmentPolicy.
+		certEnrollmentPolicyElement.setPolicyOIDReference(Constants.CertificateEnrolmentPolicy.
 				                                              OID_REFERENCE);
 		certEnrollmentPolicyElement.setAttributes(attributeElement);
 		policyCollectionElement.getPolicy().add(certEnrollmentPolicyElement);
@@ -93,10 +93,10 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		response.value = responseElement;
 
 		OID oidElement = new OID();
-		oidElement.setValue(PluginConstants.CertificateEnrolmentPolicy.OID);
-		oidElement.setGroup(PluginConstants.CertificateEnrolmentPolicy.OID_GROUP);
-		oidElement.setOIDReferenceID(PluginConstants.CertificateEnrolmentPolicy.OID_REFERENCE_ID);
-		oidElement.setDefaultName(PluginConstants.CertificateEnrolmentPolicy.OID_DEFAULT_NAME);
+		oidElement.setValue(Constants.CertificateEnrolmentPolicy.OID);
+		oidElement.setGroup(Constants.CertificateEnrolmentPolicy.OID_GROUP);
+		oidElement.setOIDReferenceID(Constants.CertificateEnrolmentPolicy.OID_REFERENCE_ID);
+		oidElement.setDefaultName(Constants.CertificateEnrolmentPolicy.OID_DEFAULT_NAME);
 
 		oidCollectionElement.getOID().add(oidElement);
 		caCollection.value = caCollectionElement;

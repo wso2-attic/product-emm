@@ -17,7 +17,7 @@
  */
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestSecurityTokenResponse;
@@ -33,28 +33,28 @@ import javax.xml.ws.soap.SOAPBinding;
 /**
  * Interface of WSTEP implementation.
  */
-@WebService(targetNamespace = PluginConstants.DEVICE_ENROLLMENT_SERVICE_TARGET_NAMESPACE, name = "wstep")
+@WebService(targetNamespace = Constants.DEVICE_ENROLLMENT_SERVICE_TARGET_NAMESPACE, name = "wstep")
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public interface CertificateEnrollmentService {
 
-	@RequestWrapper(localName = "RequestSecurityToken", targetNamespace = PluginConstants
+	@RequestWrapper(localName = "RequestSecurityToken", targetNamespace = Constants
 			.WS_TRUST_TARGET_NAMESPACE)
 	@WebMethod(operationName = "RequestSecurityToken")
 	@ResponseWrapper(localName = "RequestSecurityTokenResponseCollection", targetNamespace =
-			PluginConstants.WS_TRUST_TARGET_NAMESPACE)
+			Constants.WS_TRUST_TARGET_NAMESPACE)
 	public void requestSecurityToken(
-			@WebParam(name = "TokenType", targetNamespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE)
+			@WebParam(name = "TokenType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			String tokenType,
-			@WebParam(name = "RequestType", targetNamespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE)
+			@WebParam(name = "RequestType", targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			String requestType,
-			@WebParam(name = "BinarySecurityToken", targetNamespace = PluginConstants
+			@WebParam(name = "BinarySecurityToken", targetNamespace = Constants
 					.WS_SECURITY_TARGET_NAMESPACE)
 			String binarySecurityToken,
-			@WebParam(name = "AdditionalContext", targetNamespace = PluginConstants
+			@WebParam(name = "AdditionalContext", targetNamespace = Constants
 					.SOAP_AUTHORIZATION_TARGET_NAMESPACE)
 			AdditionalContext additionalContext,
 			@WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse",
-					targetNamespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE)
+					targetNamespace = Constants.WS_TRUST_TARGET_NAMESPACE)
 			javax.xml.ws.Holder<RequestSecurityTokenResponse> response) throws
 	                                                          WindowsDeviceEnrolmentException;
 }

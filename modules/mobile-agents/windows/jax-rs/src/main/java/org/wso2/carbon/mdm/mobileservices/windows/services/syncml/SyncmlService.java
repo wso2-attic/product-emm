@@ -18,17 +18,11 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml;
 
-import org.json.JSONException;
 import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.FeatureManagementException;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
-import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
-import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -45,10 +39,8 @@ public interface SyncmlService {
 
 	@Path("/request")
 	@POST
-	@Consumes({PluginConstants.SYNCML_MEDIA_TYPE, MediaType.APPLICATION_XML})
-	@Produces(PluginConstants.SYNCML_MEDIA_TYPE)
-	Response getResponse(Document request) throws WindowsDeviceEnrolmentException,
-			WindowsOperationException, NotificationManagementException, OperationManagementException,
-			DeviceManagementException, FeatureManagementException, PolicyComplianceException, JSONException, PolicyManagementException;
+	@Consumes({Constants.SYNCML_MEDIA_TYPE, MediaType.APPLICATION_XML})
+	@Produces(Constants.SYNCML_MEDIA_TYPE)
+	Response getResponse(Document request) throws WindowsDeviceEnrolmentException, WindowsOperationException, NotificationManagementException;
 
 }

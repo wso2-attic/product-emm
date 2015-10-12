@@ -20,7 +20,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.DiscoveryService;
@@ -41,7 +41,7 @@ import javax.xml.ws.soap.SOAPBinding;
  * Implementation class of Discovery Request. This class implements the first two services
  * of device enrolment stage.
  */
-@WebService(endpointInterface = PluginConstants.DISCOVERY_SERVICE_ENDPOINT, targetNamespace = PluginConstants
+@WebService(endpointInterface = Constants.DISCOVERY_SERVICE_ENDPOINT, targetNamespace = Constants
 		.DISCOVERY_SERVICE_TARGET_NAMESPACE)
 @Addressing(enabled = true, required = true)
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
@@ -64,24 +64,24 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
 		ServletContext ctx = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
 		WindowsPluginProperties windowsPluginProperties = (WindowsPluginProperties)ctx.getAttribute(
-				PluginConstants.WINDOWS_PLUGIN_PROPERTIES);
+				Constants.WINDOWS_PLUGIN_PROPERTIES);
 
 		DiscoveryResponse discoveryResponse = new DiscoveryResponse();
 		if(FEDERATED.equals(windowsPluginProperties.getAuthPolicy())) {
 			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
-			discoveryResponse.setEnrollmentPolicyServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-					windowsPluginProperties.getDomain() + PluginConstants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
-			discoveryResponse.setEnrollmentServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-					windowsPluginProperties.getDomain() + PluginConstants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
-			discoveryResponse.setAuthenticationServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-					windowsPluginProperties.getDomain() + PluginConstants.Discovery.WAB_URL);
+			discoveryResponse.setEnrollmentPolicyServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
+			discoveryResponse.setEnrollmentServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
+			discoveryResponse.setAuthenticationServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.WAB_URL);
 		}
 		else{
 			discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
-			discoveryResponse.setEnrollmentPolicyServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-					windowsPluginProperties.getDomain() + PluginConstants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY);
-			discoveryResponse.setEnrollmentServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-					windowsPluginProperties.getDomain() + PluginConstants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL);
+			discoveryResponse.setEnrollmentPolicyServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY);
+			discoveryResponse.setEnrollmentServiceUrl(Constants.Discovery.ENROLL_SUBDOMAIN +
+					windowsPluginProperties.getDomain() + Constants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL);
 			discoveryResponse.setAuthenticationServiceUrl(null);
 		}
 		response.value = discoveryResponse;

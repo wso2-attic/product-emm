@@ -29,7 +29,7 @@ import org.apache.cxf.message.Message;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.w3c.dom.*;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
@@ -77,8 +77,8 @@ import java.util.List;
  * Implementation class of CertificateEnrollmentService interface. This class implements MS-WSTEP
  * protocol.
  */
-@WebService(endpointInterface = PluginConstants.CERTIFICATE_ENROLLMENT_SERVICE_ENDPOINT,
-		targetNamespace = PluginConstants.DEVICE_ENROLLMENT_SERVICE_TARGET_NAMESPACE)
+@WebService(endpointInterface = Constants.CERTIFICATE_ENROLLMENT_SERVICE_ENDPOINT,
+		targetNamespace = Constants.DEVICE_ENROLLMENT_SERVICE_TARGET_NAMESPACE)
 @Addressing(enabled = true, required = true)
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentService {
@@ -112,10 +112,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	                                 WindowsDeviceEnrolmentException {
 
 		String headerBinarySecurityToken = null;
-		List<Header> headers = getHeaders();
-		for (Header headerElement : headers) {
+		List<Header> ls = getHeaders();
+		for (int i = 0; i < ls.size(); i++) {
+			Header headerElement = ls.get(i);
 			String nodeName = headerElement.getName().getLocalPart();
-			if (nodeName.equals(PluginConstants.SECURITY)) {
+			if (nodeName.equals(Constants.SECURITY)) {
 				Element element = (Element) headerElement.getObject();
 				headerBinarySecurityToken = element.getFirstChild().getNextSibling().getFirstChild().getTextContent();
 			}
@@ -123,17 +124,17 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		ServletContext ctx =
 				(ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
-		File wapProvisioningFile = (File) ctx.getAttribute(PluginConstants.CONTEXT_WAP_PROVISIONING_FILE);
+		File wapProvisioningFile = (File) ctx.getAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE);
 
 		WindowsPluginProperties windowsPluginProperties = (WindowsPluginProperties)ctx.getAttribute(
-				                                               PluginConstants.WINDOWS_PLUGIN_PROPERTIES);
+				                                               Constants.WINDOWS_PLUGIN_PROPERTIES);
 		String keyStorePassword = windowsPluginProperties.getKeyStorePassword();
 		String privateKeyPassword = windowsPluginProperties.getPrivateKeyPassword();
 		String commonName = windowsPluginProperties.getCommonName();
 		int notBeforeDate = windowsPluginProperties.getNotBeforeDays();
 		int notAfterDate = windowsPluginProperties.getNotAfterDays();
 
-		List<java.io.Serializable> certPropertyList = new ArrayList<>();
+		List<java.io.Serializable> certPropertyList = new ArrayList<java.io.Serializable>();
 		certPropertyList.add(commonName);
 		certPropertyList.add(notBeforeDate);
 		certPropertyList.add(notAfterDate);
@@ -154,7 +155,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		String wapProvisioningFilePath = wapProvisioningFile.getPath();
 		RequestSecurityTokenResponse requestSecurityTokenResponse =
 				                                                 new RequestSecurityTokenResponse();
-		requestSecurityTokenResponse.setTokenType(PluginConstants.CertificateEnrolment.TOKEN_TYPE);
+		requestSecurityTokenResponse.setTokenType(Constants.CertificateEnrolment.TOKEN_TYPE);
 		String encodedWap;
 		try {
 			encodedWap = prepareWapProvisioningXML(binarySecurityToken, certPropertyList,
@@ -169,8 +170,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		}
 		RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
 		BinarySecurityToken binarySecToken = new BinarySecurityToken();
-		binarySecToken.setValueType(PluginConstants.CertificateEnrolment.VALUE_TYPE);
-		binarySecToken.setEncodingType(PluginConstants.CertificateEnrolment.ENCODING_TYPE);
+		binarySecToken.setValueType(Constants.CertificateEnrolment.VALUE_TYPE);
+		binarySecToken.setEncodingType(Constants.CertificateEnrolment.ENCODING_TYPE);
 		binarySecToken.setToken(encodedWap);
 		requestedSecurityToken.setBinarySecurityToken(binarySecToken);
 		requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
@@ -207,7 +208,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	                              CertificateGenerationException {
 
 		File jksFile = new File(getClass().getClassLoader().getResource(
-				PluginConstants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
+				Constants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
 		String jksFilePath = jksFile.getPath();
 		KeyStore securityJKS;
 		try {
@@ -228,7 +229,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
 		try {
 			privateKey = (PrivateKey) securityJKS
-					.getKey(PluginConstants.CertificateEnrolment.CA_CERT, keyPassword.toCharArray());
+					.getKey(Constants.CertificateEnrolment.CA_CERT, keyPassword.toCharArray());
 		} catch (java.security.KeyStoreException e) {
 			String msg = "Cannot generate private key due to Key store error.";
 			log.error(msg, e);
@@ -247,9 +248,9 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		ByteArrayInputStream byteArrayInputStream;
 		CertificateFactory certificateFactory;
 		try {
-			caCertificate = securityJKS.getCertificate(PluginConstants.CertificateEnrolment.CA_CERT);
+			caCertificate = securityJKS.getCertificate(Constants.CertificateEnrolment.CA_CERT);
 			certificateFactory =
-					CertificateFactory.getInstance(PluginConstants.CertificateEnrolment.X_509);
+					CertificateFactory.getInstance(Constants.CertificateEnrolment.X_509);
 			byteArrayInputStream = new ByteArrayInputStream(caCertificate.getEncoded());
 		} catch (CertificateEncodingException e) {
 			String msg = "Error occurred while encoding CA certificate.";
@@ -329,11 +330,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		try {
 			builder = domFactory.newDocumentBuilder();
 			Document document = builder.parse(wapProvisioningFilePath);
-			NodeList wapParm = document.getElementsByTagName(PluginConstants.CertificateEnrolment.PARM);
+			NodeList wapParm = document.getElementsByTagName(Constants.CertificateEnrolment.PARM);
 			Node caCertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
 
 			//Adding SHA1 CA certificate finger print to wap-provisioning xml.
-			caCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
+			caCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.
 					            CertificateEnrolment.TYPE).setTextContent(String.valueOf(
 					DigestUtils.sha1Hex(rootCACertificate.getEncoded())).toUpperCase());
 
@@ -341,7 +342,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			// characters.
 			NamedNodeMap rootCertAttributes = caCertificatePosition.getAttributes();
 			Node rootCertNode =
-					rootCertAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+					rootCertAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
 			rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
 			rootCertNode.setTextContent(rootCertEncodedString);
 
@@ -352,7 +353,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
 
 			//Adding SHA1 signed certificate finger print to wap-provisioning xml.
-			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
+			signedCertificatePosition.getParentNode().getAttributes().getNamedItem(Constants.
 					            CertificateEnrolment.TYPE).setTextContent(String.valueOf(
 					DigestUtils.sha1Hex(signedCertificate.getEncoded())).toUpperCase());
 
@@ -360,7 +361,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			// characters.
 			NamedNodeMap clientCertAttributes = signedCertificatePosition.getAttributes();
 			Node clientEncodedNode =
-					clientCertAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+					clientCertAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
 			signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
 			clientEncodedNode.setTextContent(signedCertEncodedString);
 
@@ -371,7 +372,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			// Adding user name auth token to wap-provisioning xml
 			Node userNameAuthPosition = wapParm.item(APPAUTH_USERNAME_POSITION);
 			NamedNodeMap appSrvAttributes = userNameAuthPosition.getAttributes();
-			Node aAUTHNAMENode = appSrvAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+			Node aAUTHNAMENode = appSrvAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
 			CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(decodedBST);
 			String username = cacheentry.getUsername();
 			aAUTHNAMENode.setTextContent(cacheentry.getUsername());
@@ -379,7 +380,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 			String password = DeviceUtil.generateRandomToken();
 			Node passwordAuthPosition = wapParm.item(APPAUTH_PASSWORD_POSITION);
 			NamedNodeMap appSrvPasswordAttribute = passwordAuthPosition.getAttributes();
-			Node aAUTHPasswordNode = appSrvPasswordAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+			Node aAUTHPasswordNode = appSrvPasswordAttribute.getNamedItem(Constants.CertificateEnrolment.VALUE);
 			aAUTHPasswordNode.setTextContent(password);
 			String rstr = new SyncmlCredinitials().generateRST(username, password);
 			DeviceUtil.persistChallengeToken(rstr, "", username);
@@ -396,7 +397,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 //			}
 //			Node numberOfFirstRetries = wapParm.item(POLLING_FREQUENCY_POSITION);
 //			NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
-//			Node pollvalue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+//			Node pollvalue = pollingAttributes.getNamedItem(Constants.CertificateEnrolment.VALUE);
 //			pollvalue.setTextContent(pollingFrequency);
 			////////////////////////////////////////////////////////////////////////////////
 			if (log.isDebugEnabled()) {
@@ -419,13 +420,12 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	 * @return Header object type,soap header tag list
 	 */
 	private List<Header> getHeaders() {
-		List<Header> headers;
 		MessageContext messageContext = context.getMessageContext();
 		if (messageContext == null || !(messageContext instanceof WrappedMessageContext)) {
 			return null;
 		}
 		Message message = ((WrappedMessageContext) messageContext).getWrappedMessage();
-		headers = CastUtils.cast((List<?>) message.get(Header.HEADER_LIST));
+		List<Header> headers = CastUtils.cast((List<?>) message.get(Header.HEADER_LIST));
 		return headers;
 	}
 }

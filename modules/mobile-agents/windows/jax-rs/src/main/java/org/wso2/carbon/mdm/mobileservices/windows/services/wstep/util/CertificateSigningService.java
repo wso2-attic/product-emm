@@ -33,7 +33,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException;
 
@@ -117,11 +117,11 @@ public class CertificateSigningService {
 			certificateBuilder.addExtension(Extension.basicConstraints, true,
 			                                new BasicConstraints(false));
 
-			signer = new JcaContentSignerBuilder(PluginConstants.CertificateEnrolment.ALGORITHM).
-					 setProvider(PluginConstants.CertificateEnrolment.PROVIDER).build(privateKey);
+			signer = new JcaContentSignerBuilder(Constants.CertificateEnrolment.ALGORITHM).
+					 setProvider(Constants.CertificateEnrolment.PROVIDER).build(privateKey);
 
 			signedCertificate = new JcaX509CertificateConverter().setProvider(
-					PluginConstants.CertificateEnrolment.PROVIDER).getCertificate(
+					Constants.CertificateEnrolment.PROVIDER).getCertificate(
 					certificateBuilder.build(signer));
 		} catch (InvalidKeyException e) {
 			throw new CertificateGenerationException("CSR's public key is invalid", e);

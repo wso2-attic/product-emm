@@ -18,10 +18,10 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGenerationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class KeyStoreGenerator {
 	 */
 	public static KeyStore getKeyStore() throws KeyStoreGenerationException {
 		try {
-			return KeyStore.getInstance(PluginConstants.CertificateEnrolment.JKS);
+			return KeyStore.getInstance(Constants.CertificateEnrolment.JKS);
 		} catch (KeyStoreException e) {
 			String msg = "KeyStore error while creating new JKS.";
 			log.error(msg, e);
