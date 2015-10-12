@@ -748,6 +748,7 @@ public class OperationReply {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         } else if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE)) {
             List<? extends Operation> policyOperations;
             try {
@@ -758,6 +759,8 @@ public class OperationReply {
             for (Operation policy : policyOperations) {
                 if (policy.getCode().equals(PluginConstants.OperationCodes.CAMERA)) {
 =======
+=======
+>>>>>>> parent of 77ffe07... refactored syncml engine
 =======
 >>>>>>> parent of 77ffe07... refactored syncml engine
 =======
@@ -774,6 +777,9 @@ public class OperationReply {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 77ffe07... refactored syncml engine
+=======
 >>>>>>> parent of 77ffe07... refactored syncml engine
 =======
 >>>>>>> parent of 77ffe07... refactored syncml engine
@@ -814,10 +820,13 @@ public class OperationReply {
                         .OperationCodes.PASSCODE_POLICY)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                     DeleteTag deleteItem = new DeleteTag();
                     deleteItem.setCommandId(operation.getId());
                     deleteItem.setItems(buildDeleteInfo(policy));
+=======
+>>>>>>> parent of 77ffe07... refactored syncml engine
 =======
 >>>>>>> parent of 77ffe07... refactored syncml engine
 =======
@@ -889,6 +898,7 @@ public class OperationReply {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public List<Item> buildDeleteInfo(Operation operation) {
         List<Item> deleteItems = new ArrayList<>();
         Item deleteItem = new Item();
@@ -908,6 +918,9 @@ public class OperationReply {
     }
 
     public Add generatePasscodePolicyData(Configure configure, int policyData) {
+=======
+    public Add generatePasscodePolicyData(Configure configure,int policyData) {
+>>>>>>> parent of 77ffe07... refactored syncml engine
 =======
     public Add generatePasscodePolicyData(Configure configure,int policyData) {
 >>>>>>> parent of 77ffe07... refactored syncml engine
