@@ -393,26 +393,8 @@ public class SyncmlServiceImpl implements SyncmlService {
     }
 
     public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            throws OperationManagementException, DeviceManagementException, FeatureManagementException,
-            PolicyComplianceException, NotificationManagementException {
-        String policyAllow = "1";
-        String policyDisallow = "0";
-=======
             throws OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException {
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
-            throws OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException {
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
-            throws OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException {
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
-            throws OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException {
->>>>>>> parent of 77ffe07... refactored syncml engine
+
 
         List<? extends Operation> pendingOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
@@ -484,66 +466,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
 
             }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            for (Item item : results) {
-                for (OperationCode.Info info : OperationCode.Info.values()) {
-                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.CAMERA_STATUS)) {
-                        Profile cameraProfile = new Profile();
-                        cameraProfile.setFeatureCode(PluginConstants.OperationCodes.CAMERA);
-                        cameraProfile.setData(item.getData());
-                        if (item.getData().equals(policyAllow)) {
-                            cameraProfile.setEnable(true);
-                        } else {
-                            cameraProfile.setEnable(false);
-                        }
-                        profiles.add(cameraProfile);
-                    }
-                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.ENCRYPT_STORAGE_STATUS)) {
-                        Profile encryptStorage = new Profile();
-                        encryptStorage.setFeatureCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
-                        encryptStorage.setData(item.getData());
-                        if (item.getData().equals(policyAllow)) {
-                            encryptStorage.setEnable(true);
-                        } else {
-                            encryptStorage.setEnable(false);
-                        }
-                        profiles.add(encryptStorage);
-                    }
-                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.DEVICE_PASSWORD_STATUS)) {
-                        Profile encryptStorage = new Profile();
-                        encryptStorage.setFeatureCode(PluginConstants.OperationCodes.PASSCODE_POLICY);
-                        encryptStorage.setData(item.getData());
-                        if (item.getData().equals(policyDisallow)) {
-                            encryptStorage.setEnable(true);
-                        } else {
-                            encryptStorage.setEnable(false);
-                        }
-                        profiles.add(encryptStorage);
-                    }
-                    if (!item.getData().isEmpty() && item.getSource().getLocURI().equals(lockUri)) {
-                        String pinValue = item.getData();
-                        NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
-                        Notification notification = new Notification();
-                        notification.setDescription(pinValue);
-                        notification.setOperationId(result.getCommandReference());
-                        notification.setDeviceIdentifier(deviceIdentifier);
-                        try {
-                            nmService.addNotification(notification);
-                            if (log.isDebugEnabled()) {
-                                String msg = "Lock Reset Pin code " + pinValue;
-                                log.info(msg);
-                            }
-                        } catch (NotificationManagementException e) {
-                            String msg = "Failure Occurred in getting notification service.";
-                            log.error(msg);
-                            throw new NotificationManagementException(msg, e);
-=======
+
             for (int y = 0; y < results.size(); y++) {
                 Item item = results.get(y);
                 if (item.getSource().getLocURI().equals("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera")) {
@@ -580,7 +503,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } else {
                         encryptStorage.setEnable(false);
                     }
-=======
+                }
+            }
             for (int y = 0; y < results.size(); y++) {
                 Item item = results.get(y);
                 if (item.getSource().getLocURI().equals("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera")) {
@@ -617,8 +541,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } else {
                         encryptStorage.setEnable(false);
                     }
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
+                }
+            }
             for (int y = 0; y < results.size(); y++) {
                 Item item = results.get(y);
                 if (item.getSource().getLocURI().equals("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera")) {
@@ -655,8 +579,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } else {
                         encryptStorage.setEnable(false);
                     }
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
+                }
+            }
             for (int y = 0; y < results.size(); y++) {
                 Item item = results.get(y);
                 if (item.getSource().getLocURI().equals("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera")) {
@@ -693,7 +617,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } else {
                         encryptStorage.setEnable(false);
                     }
->>>>>>> parent of 77ffe07... refactored syncml engine
+
                     profiles.add(encryptStorage);
                 }
                 if (!item.getData().equals(null) && item.getSource().getLocURI().equals(lockUri)) {
@@ -708,16 +632,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                         if (log.isDebugEnabled()) {
                             String msg = "Lock Reset Pin code " + pinValue;
                             log.info(msg);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
+
                         }
                     } catch (NotificationManagementException e) {
                         String msg = "Failure Occurred in getting notification service.";
@@ -727,21 +642,9 @@ public class SyncmlServiceImpl implements SyncmlService {
             }
         }
         boolean isCompliance = false;
-<<<<<<< HEAD
-        if (!profiles.isEmpty()) {
-=======
+
         if (profiles.size() != 0) {
             ProfileFeature activeFeature;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
             try {
                 List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
                         deviceIdentifier);
@@ -798,7 +701,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                         }
                     }
                 }
-                WindowsAPIUtils.getPolicyManagerService().CheckPolicyCompliance(deviceIdentifier, complianceFeatures);
+                WindowsAPIUtils.getPolicyManagerService().checkCompliance(deviceIdentifier, complianceFeatures);
             } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                 String msg = "Error occurred while getting effective policy.";
                 log.error(msg);

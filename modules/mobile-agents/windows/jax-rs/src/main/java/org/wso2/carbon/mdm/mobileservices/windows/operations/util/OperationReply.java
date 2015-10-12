@@ -745,26 +745,6 @@ public class OperationReply {
             sequenceElement.setGet(getElements);
             return sequenceElement;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        } else if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE)) {
-            List<? extends Operation> policyOperations;
-            try {
-                policyOperations = (List<? extends Operation>) operation.getPayLoad();
-            }catch (ClassCastException e) {
-                throw new ClassCastException();
-            }
-            for (Operation policy : policyOperations) {
-                if (policy.getCode().equals(PluginConstants.OperationCodes.CAMERA)) {
-=======
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
         } else if (operation.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                 .OperationCodes.POLICY_BUNDLE)) {
 
@@ -775,16 +755,6 @@ public class OperationReply {
                 if (policy.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.CAMERA)) {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
                     Replace replaceCameraConfig = new Replace();
                     Item cameraItem;
                     List<Item> cameraItems = new ArrayList<Item>();
@@ -818,19 +788,7 @@ public class OperationReply {
                 }
                 if (policy.getCode().equals(org.wso2.carbon.mdm.mobileservices.windows.common.Constants
                         .OperationCodes.PASSCODE_POLICY)) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-                    DeleteTag deleteItem = new DeleteTag();
-                    deleteItem.setCommandId(operation.getId());
-                    deleteItem.setItems(buildDeleteInfo(policy));
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
->>>>>>> parent of 77ffe07... refactored syncml engine
 
                     Atomic atomicElement = new Atomic();
                     List<Add> addConfig;
@@ -838,7 +796,6 @@ public class OperationReply {
                         addConfig = appendAddInfo(policy);
                         atomicElement.setAdds(addConfig);
                         atomicElement.setCommandId(operation.getId());
-                        sequenceElement.setDeleteTag(deleteItem);
                         sequenceElement.setAtomic(atomicElement);
                     } catch (WindowsOperationException e) {
                         throw new WindowsOperationException("Error occurred while generating operation payload.", e);
@@ -895,41 +852,7 @@ public class OperationReply {
         return monitorItems;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public List<Item> buildDeleteInfo(Operation operation) {
-        List<Item> deleteItems = new ArrayList<>();
-        Item deleteItem = new Item();
-        Target target = new Target();
-        String operationCode = operation.getCode();
-        if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
-            operation.setCode(PluginConstants.OperationCodes.DEVICE_PASSCODE_DELETE);
-            for (Command command : Command.values()) {
-
-                if (operationCode != null && operationCode.equals(command.name())) {
-                    target.setLocURI(command.getCode());
-                    deleteItem.setTarget(target);
-                }
-            }
-        }
-        return deleteItems;
-    }
-
-    public Add generatePasscodePolicyData(Configure configure, int policyData) {
-=======
     public Add generatePasscodePolicyData(Configure configure,int policyData) {
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
-    public Add generatePasscodePolicyData(Configure configure,int policyData) {
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
-    public Add generatePasscodePolicyData(Configure configure,int policyData) {
->>>>>>> parent of 77ffe07... refactored syncml engine
-=======
-    public Add generatePasscodePolicyData(Configure configure,int policyData) {
->>>>>>> parent of 77ffe07... refactored syncml engine
         String attempt = String.valueOf(policyData);
         Add add = new Add();
         List<Item> itemList = new ArrayList<>();
