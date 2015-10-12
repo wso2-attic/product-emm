@@ -543,8 +543,12 @@ public class OperationReply {
             return sequenceElement;
 
         } else if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE)) {
-            List<? extends Operation> policyOperations = (List<? extends Operation>) operation.getPayLoad();
-
+            List<? extends Operation> policyOperations;
+            try {
+                policyOperations = (List<? extends Operation>) operation.getPayLoad();
+            }catch (ClassCastException e) {
+                throw new ClassCastException();
+            }
             for (Operation policy : policyOperations) {
                 if (policy.getCode().equals(PluginConstants.OperationCodes.CAMERA)) {
                     Replace replaceCameraConfig = new Replace();
@@ -578,22 +582,21 @@ public class OperationReply {
                 }
                 if (policy.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
 
+                    DeleteTag deleteItem = new DeleteTag();
+                    deleteItem.setCommandId(operation.getId());
+                    deleteItem.setItems(buildDeleteInfo(policy));
+
                     Atomic atomicElement = new Atomic();
                     List<Add> addConfig;
                     try {
                         addConfig = appendAddInfo(policy);
                         atomicElement.setAdds(addConfig);
                         atomicElement.setCommandId(operation.getId());
+                        sequenceElement.setDeleteTag(deleteItem);
                         sequenceElement.setAtomic(atomicElement);
                     } catch (WindowsOperationException e) {
                         throw new WindowsOperationException("Error occurred while generating operation payload.", e);
                     }
-                }
-                if (policy.getCode().equals(PluginConstants.OperationCodes.WIFI)) {
-                    Atomic wifiAtomicElement = new Atomic();
-                    List<Add> wifiaddtags;
-
-
                 }
             }
             if (!replaceItems.isEmpty()) {
@@ -643,6 +646,24 @@ public class OperationReply {
             }
         }
         return monitorItems;
+    }
+
+    public List<Item> buildDeleteInfo(Operation operation) {
+        List<Item> deleteItems = new ArrayList<>();
+        Item deleteItem = new Item();
+        Target target = new Target();
+        String operationCode = operation.getCode();
+        if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
+            operation.setCode(PluginConstants.OperationCodes.DEVICE_PASSCODE_DELETE);
+            for (Command command : Command.values()) {
+
+                if (operationCode != null && operationCode.equals(command.name())) {
+                    target.setLocURI(command.getCode());
+                    deleteItem.setTarget(target);
+                }
+            }
+        }
+        return deleteItems;
     }
 
     public Add generatePasscodePolicyData(Configure configure, int policyData) {

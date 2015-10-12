@@ -208,6 +208,7 @@ public final class PluginConstants {
         public static final String ENCRYPT_STORAGE_STATUS = "ENCRYPT_STORAGE_STATUS";
         public static final String DEVICE_PASSWORD_STATUS = "DEVICE_PASSWORD_STATUS";
         public static final String WIFI = "WIFI";
+        public static final String DEVICE_PASSCODE_DELETE = "DEVICE_PASSCODE_DELETE";
 
     }
 

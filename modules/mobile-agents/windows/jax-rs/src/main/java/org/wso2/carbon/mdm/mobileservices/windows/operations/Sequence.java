@@ -33,8 +33,17 @@ public class Sequence {
     int commandId;
     Exec exec;
     Get get;
-//    Replace replace;
+    DeleteTag deleteTag;
     Atomic atomic;
+    List<Replace> replaces;
+
+    public DeleteTag getDeleteTag() {
+        return deleteTag;
+    }
+
+    public void setDeleteTag(DeleteTag deleteTag) {
+        this.deleteTag = deleteTag;
+    }
 
     public List<Replace> getReplaces() {
         return replaces;
@@ -43,16 +52,6 @@ public class Sequence {
     public void setReplaces(List<Replace> replaces) {
         this.replaces = replaces;
     }
-
-    List<Replace> replaces;
-
-//    public Replace getReplace() {
-//        return replace;
-//    }
-//
-//    public void setReplace(Replace replace) {
-//        this.replace = replace;
-//    }
 
     public Atomic getAtomic() {
         return atomic;
@@ -100,9 +99,6 @@ public class Sequence {
         if (getGet() != null) {
             getGet().buildGetElement(doc, sequence);
         }
-//        if (getReplace() != null) {
-//            getReplace().buildReplaceElement(doc, sequence);
-//        }
         if (getReplaces() != null) {
             for (Iterator<Replace> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
                 Replace replace = replaceIterator.next();
@@ -113,6 +109,9 @@ public class Sequence {
         }
         if (getAtomic() != null) {
             getAtomic().buildAtomicElement(doc, sequence);
+        }
+        if (getDeleteTag() != null) {
+            getDeleteTag().buildDeleteElement(doc, sequence);
         }
     }
 }

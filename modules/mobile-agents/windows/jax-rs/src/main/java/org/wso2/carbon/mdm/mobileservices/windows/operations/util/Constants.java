@@ -40,6 +40,7 @@ public class Constants {
 	public static final String ADD = "Add";
 	public static final String COMMAND_ID = "CmdID";
 	public static final String GET = "Get";
+	public static final String DELETE = "Delete";
 	public static final String ITEM = "Item";
 	public static final String SOURCE = "Source";
 	public static final String LOC_URI = "LocURI";

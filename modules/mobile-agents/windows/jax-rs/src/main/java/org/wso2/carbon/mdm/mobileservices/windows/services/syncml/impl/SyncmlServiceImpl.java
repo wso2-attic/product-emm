@@ -458,6 +458,8 @@ public class SyncmlServiceImpl implements SyncmlService {
     public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
             throws OperationManagementException, DeviceManagementException, FeatureManagementException,
             PolicyComplianceException, NotificationManagementException {
+        String policyAllow = "1";
+        String policyDisallow = "0";
 
         List<? extends Operation> pendingOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
@@ -535,32 +537,31 @@ public class SyncmlServiceImpl implements SyncmlService {
                         Profile cameraProfile = new Profile();
                         cameraProfile.setFeatureCode(PluginConstants.OperationCodes.CAMERA);
                         cameraProfile.setData(item.getData());
-                        if (item.getData().equals("1")) {
+                        if (item.getData().equals(policyAllow)) {
                             cameraProfile.setEnable(true);
                         } else {
                             cameraProfile.setEnable(false);
                         }
                         profiles.add(cameraProfile);
                     }
-                    if (item.getSource().getLocURI().equals
-                            ("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption")) {
+                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
+                            PluginConstants.OperationCodes.ENCRYPT_STORAGE_STATUS)) {
                         Profile encryptStorage = new Profile();
-                        encryptStorage.setFeatureCode("ENCRYPT_STORAGE");
+                        encryptStorage.setFeatureCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
                         encryptStorage.setData(item.getData());
-                        if (item.getData().equals("1")) {
+                        if (item.getData().equals(policyAllow)) {
                             encryptStorage.setEnable(true);
                         } else {
                             encryptStorage.setEnable(false);
                         }
                         profiles.add(encryptStorage);
                     }
-                    if (item.getSource().getLocURI().equals
-                            ("./Vendor/MSFT/PolicyManager/Device/DeviceLock/DevicePasswordEnabled")) {
-
+                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
+                            PluginConstants.OperationCodes.DEVICE_PASSWORD_STATUS)) {
                         Profile encryptStorage = new Profile();
-                        encryptStorage.setFeatureCode("PASSCODE_POLICY");
+                        encryptStorage.setFeatureCode(PluginConstants.OperationCodes.PASSCODE_POLICY);
                         encryptStorage.setData(item.getData());
-                        if (item.getData().equals("0")) {
+                        if (item.getData().equals(policyDisallow)) {
                             encryptStorage.setEnable(true);
                         } else {
                             encryptStorage.setEnable(false);
@@ -583,13 +584,14 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (NotificationManagementException e) {
                             String msg = "Failure Occurred in getting notification service.";
                             log.error(msg);
+                            throw new NotificationManagementException(msg, e);
                         }
                     }
                 }
             }
         }
         boolean isCompliance = false;
-        if (profiles.size() != 0) {
+        if (!profiles.isEmpty()) {
             try {
                 List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
                         deviceIdentifier);
