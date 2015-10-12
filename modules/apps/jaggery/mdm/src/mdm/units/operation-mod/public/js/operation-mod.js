@@ -883,9 +883,8 @@ var operationModule = function () {
                         // traversing through each child input
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            // var index = childInput.parent().parent().find(".index").html();
-                            // index = Number(index) - 1;
                             var childValue = value[childInputIndex];
+                            // populating extracted value in the UI according to the input type
                             if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
                                 childInput.val(childValue);
                             } else if (childInput.is(":checkbox")) {
@@ -918,15 +917,11 @@ var operationModule = function () {
                             // traversing through each child input
                             $(".child-input", this).each(function () {
                                 childInput = $(this);
-                                // var index = childInput.parent().parent().find(".index").html();
-                                // index = Number(index) - 1;
-                                var multiColumnJoinedInput;
+                                var multiColumnJoinedInput = value[multiColumnJoinedInputArrayIndex];
                                 var childInputValue;
-                                if (childInputIndex % columnCount == 0) {
-                                    multiColumnJoinedInput = value[multiColumnJoinedInputArrayIndex];
+                                if ((childInputIndex % columnCount) == 0) {
                                     childInputValue = multiColumnJoinedInput.substring(3, 0)
                                 } else {
-                                    multiColumnJoinedInput = value[multiColumnJoinedInputArrayIndex];
                                     childInputValue = multiColumnJoinedInput.substring(3);
                                     // incrementing childInputIndex
                                     multiColumnJoinedInputArrayIndex++;
@@ -946,29 +941,37 @@ var operationModule = function () {
                             });
                         }
                     } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
+                        // generating input fields to populate complex value
                         for (i = 0; i < value.length; ++i) {
                             operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
                         }
+                        columnCount = operationDataObj.data("column-count");
+                        var multiColumnKeyValuePairArrayIndex = 0;
+                        // traversing through each child input
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            var index = childInput.parent().parent().find(".index").html();
-                            index = Number(index) - 1;
-                            var childKey = childInput.data("child-key");
-                            var childValue = value[index][childKey];
+                            var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
+                            var childInputKey = childInput.data("child-key");
+                            var childInputValue = multiColumnKeyValuePair[childInputKey];
+                            // populating extracted value in the UI according to the input type
                             if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
-                                childInput.val(childValue);
+                                childInput.val(childInputValue);
                             } else if (childInput.is(":checkbox")) {
-                                operationDataObj.prop('checked', childValue);
+                                operationDataObj.prop("checked", childInputValue);
                             } else if (childInput.is("select")) {
-                                childInput.find("option:selected").attr("value", childValue);
+                                childInput.find("option:selected").attr("value", childInputValue);
                             }
+                            // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
+                            if ((childInputIndex % columnCount) == (columnCount - 1)) {
+                                multiColumnKeyValuePairArrayIndex++;
+                            }
+                            // incrementing childInputIndex
+                            childInputIndex++;
                         });
                     }
                 }
-                // operationData[key] = value;
             }
         );
-        // return payload;
     };
 
     /**
@@ -996,14 +999,13 @@ var operationModule = function () {
      * @returns [] configuredOperations array
      */
     publicMethods.populateProfile = function (platformType, payload) {
-        var configuredOperations = [];
-        for (var i = 0; i < payload.length; ++i) {
+        var i, configuredOperations = [];
+        for (i = 0; i < payload.length; ++i) {
             var configuredFeature = payload[i];
             var featureCode = configuredFeature["featureCode"];
             var operationPayload = configuredFeature["content"];
             //push the feature-code to the configuration array
             configuredOperations.push(featureCode);
-
             publicMethods.populateUI(platformType, featureCode, operationPayload);
         }
         return configuredOperations;
