@@ -3638,3 +3638,94 @@ ul.tiles .icon {
         padding: 0 15px !important;
     }
 }
+
+/* ========================================================================
+ * asset details styles
+ * ======================================================================== */
+.asset-image {
+    max-width: 150px;
+    background: #11375B;
+    float: none !important;
+}
+.asset-desc .asset-name {
+    font-size: 24px;
+    margin-bottom: 0;
+}
+.asset-desc .asset-publisher {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.media-body {
+    width: 10000px;
+}
+
+.list-group {
+    list-style: none;
+}
+
+/* ========================================================================
+ * list group styles
+ * ======================================================================== */
+.list-group-item:first-child,
+.list-group-item:last-child {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.list-group-item:hover a {
+    text-decoration: none;
+}
+.list-group-item.active,
+.list-group-item.active:focus,
+.list-group-item.active:hover {
+    background: #11375B;
+    border-color: #11375B;
+    color:#fff;
+}
+.list-group-item.active a {
+    color:#fff;
+    text-decoration: none;
+}
+
+/* ========================================================================
+ * panel styles
+ * ======================================================================== */
+.panel-group .panel,
+.panel-heading,
+.panel-footer,
+.panel-body {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    padding: 0;
+}
+.panel {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+.panel-default > .panel-heading {
+    background: transparent;
+    font-size: 24px;
+    font-weight: 300;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* ========================================================================
+ * icon styles
+ * ======================================================================== */
+.icon-success {
+    color: #A4C639;
+}
+.icon-info {
+    color: #009da7;
+}
+.icon-warning {
+    color: #f0ad4e;
+}
+.icon-danger {
+    color: #d9534f;
+}

@@ -2,5 +2,5 @@
   "grantType" : "password",
   "saasApp" : true,
   "tokenScope": "admin",
-  "requireDynamicClientRegistration" : true
+  "requireDynamicClientRegistration" : false
 }

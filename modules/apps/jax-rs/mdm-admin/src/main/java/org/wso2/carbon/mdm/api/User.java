@@ -264,6 +264,7 @@ public class User {
 		if (log.isDebugEnabled()) {
 			log.debug("Initial user password is created for new user: " + initialUserPassword);
 		}
+		//TODO: Use a byte array
 		return initialUserPassword.toString();
 	}
 

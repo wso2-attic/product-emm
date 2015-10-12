@@ -4,15 +4,15 @@
 
             <div class="wr-steps hidden">
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz itm-wiz-current" data-step="policy-profile"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Configure Profile</span></div></div>
+                    <div class="itm-wiz itm-wiz-current" data-step="policy-profile"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Edit Current Profile</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">2</div><div class="wiz-lbl hidden-xs"><span>Assign to Groups</span></div></div>
+                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">2</div><div class="wiz-lbl hidden-xs"><span>Edit Assignment Groups</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-naming"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Publish to Devices</span></div></div>
+                    <div class="itm-wiz" data-step="policy-naming"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Republish to Devices</span></div></div>
                     <br class="c-both" />
                 </div>
             </div>
@@ -38,13 +38,13 @@
 
             <div class="container col-centered wr-content policy-naming hidden">
                 <div class="wr-form">
-                    <h1 id="policy-naming-page-wizard-title" class="page-sub-title">ADD POLICY</h1>
+                    <h1 id="policy-naming-page-wizard-title" class="page-sub-title">EDIT POLICY</h1>
                     <hr>
                     <div id="policy-naming-wizard-steps" class="row wr-wizard"></div>
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 4: Publish to Devices</h4>
+                            <h4>Step 3: Republish to Devices</h4>
                             <br>
                             <div id="policy-naming-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -85,13 +85,13 @@
 
             <div class="container col-centered wr-content policy-criteria hidden">
                 <div class="wr-form">
-                    <h1 id="policy-criteria-page-wizard-title" class="page-sub-title">ADD POLICY</h1>
+                    <h1 id="policy-criteria-page-wizard-title" class="page-sub-title">EDIT POLICY</h1>
                     <hr>
                     <div id="policy-criteria-wizard-steps" class="row wr-wizard"></div>
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 3: Assign to Groups</h4>
+                            <h4>Step 2: Edit Assignment Groups</h4>
                             <br>
                             <div>
                                 <label class="wr-input-label">
@@ -173,13 +173,13 @@
 
             <div class="container col-centered wr-content policy-profile">
                 <div class="wr-form">
-                    <h1 id="policy-profile-page-wizard-title" class="page-sub-title">ADD POLICY</h1>
+                    <h1 id="policy-profile-page-wizard-title" class="page-sub-title">EDIT POLICY</h1>
                     <hr>
                     <div id="policy-profile-wizard-steps" class="row wr-wizard"></div>
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 2: Configure Profile</h4>
+                            <h4>Step 1: Edit Current Profile</h4>
                             <br>
                             <div id="policy-profile-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -196,10 +196,7 @@
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
-                                <a href="#" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-profile" data-next="policy-platform">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
-                                </a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-next="policy-criteria"  data-validate="true">
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-next="policy-criteria" data-validate="true">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Continue&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
                             </div>

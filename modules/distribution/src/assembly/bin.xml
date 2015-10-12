@@ -327,7 +327,8 @@
                 <exclude>styles-layout.css</exclude>
             </excludes>
         </fileSet>
-        <!-- Copying synapse-config directory -->
+        
+	<!-- Copying synapse-config directory -->
         <fileSet>
             <directory>src/repository/resources</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server</outputDirectory>
@@ -335,6 +336,12 @@
                 <exclude>**/empty.txt</exclude>
                 <exclude>**/styles/**</exclude>
             </excludes>
+        </fileSet>
+
+	<!-- Copying RXTs corresponding API management related components -->
+	<fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/rxts</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/rxts</outputDirectory>
         </fileSet>
     </fileSets>
 

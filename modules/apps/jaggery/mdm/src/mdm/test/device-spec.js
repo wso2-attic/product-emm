@@ -58,6 +58,8 @@ describe('Device Module', function () {
         mobileDB.query("delete from mbl_device where mobile_device_id='4892813d-0b18-4a02-b7b1-61775257488e'");
         mobileDB.query("delete from mbl_device where mobile_device_id='4892813d-0b18-4a02-b7b1-61775257488F'");
     }
+    /*
+    Not testable since the functionality moved to front end
 
     it('List all Devices - Device Module', function () {
         try {
@@ -97,4 +99,5 @@ describe('Device Module', function () {
             tearDown();
         }
     });
+    */
 });
