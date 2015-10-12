@@ -177,7 +177,7 @@ public class Policy {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
             policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
-            policy.setPolicyName(previousPolicy.getPolicyName());
+            policy.setId(previousPolicy.getId());
             pap.updatePolicy(policy);
             Response.status(HttpStatus.SC_OK);
             responseMsg.setMessageFromServer("Policy has been updated successfully.");
