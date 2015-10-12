@@ -89,6 +89,14 @@ var updateGroupedInputVisibility = function (domElement) {
 stepForwardFrom["policy-platform"] = function (policyPayloadObj) {
     policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
     policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
+    var userRoleInput = $("#user-roles-input");
+    var ownershipInput = $("#ownership-input");
+    var userInput = $("#users-select-field");
+    var actionInput = $("#action-input");
+    userRoleInput.val(policyPayloadObj.roles);
+    userInput.val(policyPayloadObj.users);
+    ownershipInput.val(policyPayloadObj.ownershipType);
+    actionInput.val(policyPayloadObj.compliance);
     // updating next-page wizard title with selected platform
     $("#policy-profile-page-wizard-title").text("View/Edit " + policy["platform"] + " POLICY");
 
@@ -1621,7 +1629,7 @@ var savePolicy = function (policy) {
 
     console.log(JSON.stringify(payload));
 
-    invokerUtil.post(
+    invokerUtil.put(
         "/mdm-admin/policies/" + getParameterByName("id"),
         payload,
         function () {
