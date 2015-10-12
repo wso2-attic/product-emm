@@ -47,6 +47,8 @@ public interface SyncmlService {
 	@POST
 	@Consumes({PluginConstants.SYNCML_MEDIA_TYPE, MediaType.APPLICATION_XML})
 	@Produces(PluginConstants.SYNCML_MEDIA_TYPE)
-	Response getResponse(Document request) throws WindowsDeviceEnrolmentException, WindowsOperationException, NotificationManagementException, OperationManagementException, DeviceManagementException, FeatureManagementException, PolicyComplianceException, JSONException, PolicyManagementException;
+	Response getResponse(Document request) throws WindowsDeviceEnrolmentException, WindowsOperationException,
+			NotificationManagementException, OperationManagementException, DeviceManagementException,
+			FeatureManagementException, PolicyComplianceException, JSONException, PolicyManagementException;
 
 }
