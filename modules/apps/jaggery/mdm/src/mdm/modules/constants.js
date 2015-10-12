@@ -31,6 +31,8 @@ var DEVICE_MODEL = "model";
 var DEVICE_PRODUCT = "PRODUCT";
 var DEVICE_OS_VERSION = "osVersion";
 var DEVICE_PROPERTIES = "properties";
+var DEVICE_ENROLLMENT_INFO = "enrolmentInfo";
+var DEVICE_STATUS = "status";
 
 var FEATURE_NAME = "featureName";
 var FEATURE_DESCRIPTION = "featureDescription";

@@ -842,14 +842,14 @@ var operationModule = function () {
      * @returns {*}
      */
     publicMethods.populateUI = function (platformType, operationCode, operationPayload) {
-        var payload;
-        var operationData = {};
+        var uiPayload;
+        // var operationData = {};
         switch (platformType) {
             case platformTypeConstants["ANDROID"]:
-                payload = privateMethods.generateGenericPayloadFromAndroidPayload(operationCode, operationPayload);
+                uiPayload = privateMethods.generateGenericPayloadFromAndroidPayload(operationCode, operationPayload);
                 break;
             case platformTypeConstants["IOS"]:
-                payload = privateMethods.generateGenericPayloadFromiOSPayload(operationCode, operationPayload);
+                uiPayload = privateMethods.generateGenericPayloadFromiOSPayload(operationCode, operationPayload);
                 break;
         }
         // capturing form input data designated by .operationDataKeys
@@ -857,56 +857,34 @@ var operationModule = function () {
             function () {
                 var operationDataObj = $(this);
                 var key = operationDataObj.data("key");
-                //mutate the key
-                var value = payload[key];
-                //var complexType;
-                /*
-                    Finding the complexType from the dataModel. If the object looks like below - it's a
-                    multi-column-joined-input-array"
-                 {
-                     "airPlayDestinations": ["00:00:00:00:00:00"]
-                 }
-
-                    If it looks like below it's multi-column-key-value-pair-array
-                 {
-                     "airPlayCredentials": [
-                         {
-                             "deviceName": "dsf",
-                             "password": "24234"
-                         }
-                     ]
-                 }
-                // */
-                //if (Object.prototype.toString.call( value ) === '[object Array]' ) {
-                //    var check = value[0];
-                //    if (Object.prototype.toString.call( check ) === '[object Object]'){
-                //        complexType = "multi-column-key-value-pair-array";
-                //    }else{
-                //        complexType = "multi-column-joined-input-array";
-                //    }
-                //}
-
-
+                // retrieve corresponding input value associated with the key
+                var value = uiPayload[key];
+                // populating input value according to the type of input
                 if (operationDataObj.is(":text") || operationDataObj.is("textarea") ||
                     operationDataObj.is(":password")) {
                     operationDataObj.val(value);
                 } else if (operationDataObj.is(":checkbox")) {
-                    operationDataObj.prop('checked', value);
+                    operationDataObj.prop("checked", value);
                 } else if (operationDataObj.is("select")) {
                     operationDataObj.val(value);
+                    /* trigger a change of value, so that if slidable panes exist,
+                    make them slide-down or slide-up accordingly */
                     operationDataObj.trigger("change");
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
-                    var childInput;
-                    var childInputValue;
+                    // then value is complex
+                    var i, childInput;
+                    var childInputIndex = 0;
+                    // var childInputValue;
                     if (operationDataObj.hasClass("one-column-input-array")) {
-                        for (var i = 0; i < value.length; ++i) {
+                        // generating input fields to populate complex value
+                        for (i = 0; i < value.length; ++i) {
                             operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
                         }
+                        // traversing through each child input
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            var index = childInput.parent().parent().find(".index").html();
-                            index = Number(index) - 1;
-                            var childValue = value[index];
+                            var childValue = value[childInputIndex];
+                            // populating extracted value in the UI according to the input type
                             if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
                                 childInput.val(childValue);
                             } else if (childInput.is(":checkbox")) {
@@ -914,63 +892,86 @@ var operationModule = function () {
                             } else if (childInput.is("select")) {
                                 childInput.find("option:selected").attr("value", childValue);
                             }
+                            // incrementing childInputIndex
+                            childInputIndex++;
                         });
                     } else if (operationDataObj.hasClass("valued-check-box-array")) {
+                        // traversing through each child input
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            if (value.indexOf(childInput.data("value")) != -1){
-                                childInput.prop('checked', true);
+                            // check if corresponding value of current checkbox exists in the array of values
+                            if (value.indexOf(childInput.data("value")) != -1) {
+                                // if YES, set checkbox as checked
+                                childInput.prop("checked", true);
                             }
                         });
                     } else if (operationDataObj.hasClass("multi-column-joined-input-array")) {
-                        for (var i = 0; i < value.length; ++i) {
+                        // generating input fields to populate complex value
+                        for (i = 0; i < value.length; ++i) {
                             operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
                         }
-                        $(".child-input", this).each(function () {
-                            childInput = $(this);
-                            var index = childInput.parent().parent().find(".index").html();
-                            index = Number(index) - 1;
-                            var childValue = value[index];
-                            var inputNumber = Number(childInput.data("input"));
-                            var inputValue;
-                            if (inputNumber == 1){
-                                inputValue = childValue.substring(3,0)
-                            }else if (inputNumber == 2){
-                                inputValue = childValue.substring(3);
-                            }
-                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
-                                childInput.val(inputValue);
-                            } else if (childInput.is(":checkbox")) {
-                                operationDataObj.prop('checked', inputValue);
-                            } else if (childInput.is("select")) {
-                                childInput.find("option:selected").attr("value", inputValue);
-                            }
-                        });
+                        var columnCount = operationDataObj.data("column-count");
+                        var multiColumnJoinedInputArrayIndex = 0;
+                        // handling scenarios specifically
+                        if (operationDataObj.attr("id") == "wifi-mcc-and-mncs") {
+                            // traversing through each child input
+                            $(".child-input", this).each(function () {
+                                childInput = $(this);
+                                var multiColumnJoinedInput = value[multiColumnJoinedInputArrayIndex];
+                                var childInputValue;
+                                if ((childInputIndex % columnCount) == 0) {
+                                    childInputValue = multiColumnJoinedInput.substring(3, 0)
+                                } else {
+                                    childInputValue = multiColumnJoinedInput.substring(3);
+                                    // incrementing childInputIndex
+                                    multiColumnJoinedInputArrayIndex++;
+                                }
+                                // populating extracted value in the UI according to the input type
+                                if (childInput.is(":text") ||
+                                    childInput.is("textarea") ||
+                                    childInput.is(":password")) {
+                                    childInput.val(childInputValue);
+                                } else if (childInput.is(":checkbox")) {
+                                    operationDataObj.prop("checked", childInputValue);
+                                } else if (childInput.is("select")) {
+                                    childInput.find("option:selected").attr("value", childInputValue);
+                                }
+                                // incrementing childInputIndex
+                                childInputIndex++;
+                            });
+                        }
                     } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
-                        for (var i = 0; i < value.length; ++i) {
+                        // generating input fields to populate complex value
+                        for (i = 0; i < value.length; ++i) {
                             operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
                         }
+                        columnCount = operationDataObj.data("column-count");
+                        var multiColumnKeyValuePairArrayIndex = 0;
+                        // traversing through each child input
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            var index = childInput.parent().parent().find(".index").html();
-                            index = Number(index) - 1;
-                            var childKey = childInput.data("child-key");
-                            var childValue = value[index][childKey];
+                            var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
+                            var childInputKey = childInput.data("child-key");
+                            var childInputValue = multiColumnKeyValuePair[childInputKey];
+                            // populating extracted value in the UI according to the input type
                             if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
-                                childInput.val(childValue);
+                                childInput.val(childInputValue);
                             } else if (childInput.is(":checkbox")) {
-                                operationDataObj.prop('checked', childValue);
+                                operationDataObj.prop("checked", childInputValue);
                             } else if (childInput.is("select")) {
-                                childInput.find("option:selected").attr("value", childValue);
+                                childInput.find("option:selected").attr("value", childInputValue);
                             }
+                            // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
+                            if ((childInputIndex % columnCount) == (columnCount - 1)) {
+                                multiColumnKeyValuePairArrayIndex++;
+                            }
+                            // incrementing childInputIndex
+                            childInputIndex++;
                         });
                     }
                 }
-                operationData[key] = value;
             }
         );
-
-        return payload;
     };
 
     /**
@@ -998,14 +999,13 @@ var operationModule = function () {
      * @returns [] configuredOperations array
      */
     publicMethods.populateProfile = function (platformType, payload) {
-        var configuredOperations = [];
-        for (var i = 0; i < payload.length; ++i) {
+        var i, configuredOperations = [];
+        for (i = 0; i < payload.length; ++i) {
             var configuredFeature = payload[i];
             var featureCode = configuredFeature["featureCode"];
             var operationPayload = configuredFeature["content"];
             //push the feature-code to the configuration array
             configuredOperations.push(featureCode);
-
             publicMethods.populateUI(platformType, featureCode, operationPayload);
         }
         return configuredOperations;

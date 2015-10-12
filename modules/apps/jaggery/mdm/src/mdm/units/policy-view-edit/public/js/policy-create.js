@@ -66,7 +66,9 @@ var iosOperationConstants = {
 };
 
 /**
- * Method to update the visibility of grouped input.
+ * Method to update the visibility (i.e. disabled or enabled view)
+ * of grouped input according to the values
+ * that they currently possess.
  * @param domElement HTML grouped-input element with class name "grouped-input"
  */
 var updateGroupedInputVisibility = function (domElement) {
@@ -91,6 +93,14 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     policy["name"] = policyPayloadObj["policyName"];
     policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
     policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
+    var userRoleInput = $("#user-roles-input");
+    var ownershipInput = $("#ownership-input");
+    var userInput = $("#users-select-field");
+    var actionInput = $("#action-input");
+    userRoleInput.val(policyPayloadObj.roles);
+    userInput.val(policyPayloadObj.users);
+    ownershipInput.val(policyPayloadObj.ownershipType);
+    actionInput.val(policyPayloadObj.compliance);
     // updating next-page wizard title with selected platform
     $("#policy-profile-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 
@@ -112,13 +122,12 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
                 $(".wr-advance-operations li.grouped-input").each(function () {
                     updateGroupedInputVisibility(this);
                 });
-                // enabling configured options
+                // enabling previously configured options of last update
                 for (var i = 0; i < configuredOperations.length; ++i) {
                     var configuredOperation = configuredOperations[i];
                     $(".operation-data").filterByData("operation-code", configuredOperation).
-                        find(".panel-title .switch input[type=checkbox]").each(function () {
-                        $(this).click();
-                        $(this).attr("checked", "checked");
+                        find(".panel-title .wr-input-control.switch input[type=checkbox]").each(function () {
+                            $(this).click();
                     });
                 }
             });
@@ -1502,25 +1511,6 @@ stepForwardFrom["policy-profile"] = function () {
     $("#policy-criteria-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 };
 
-stepBackFrom["policy-profile"] = function () {
-    // reinitialize configuredOperations
-    configuredOperations = [];
-    // clearing already-loaded platform specific hidden-operations html content from the relevant div
-    // so that, the wrong content would not be shown at the first glance, in case
-    // the user selects a different platform
-    $(".wr-advance-operations").html(
-        "<div class='wr-advance-operations-init'>" +
-            "<br>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-            "<i class='fw fw-settings fw-spin fw-2x'></i>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;" +
-            "Loading Platform Features . . ." +
-            "<br>" +
-            "<br>" +
-            "</div>"
-    );
-};
-
 stepForwardFrom["policy-criteria"] = function () {
     $("input[type='radio'].select-users-radio").each(function () {
         if ($(this).is(':radio')) {
@@ -1588,11 +1578,11 @@ validateStep["policy-naming"] = function () {
 stepForwardFrom["policy-naming"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
     policy["policyDescription"] = $("#policy-description-input").val();
-    //All data is collected. Policy can now be created.
-    savePolicy(policy);
+    //All data is collected. Policy can now be updated.
+    updatePolicy(policy);
 };
 
-var savePolicy = function (policy) {
+var updatePolicy = function (policy) {
     var profilePayloads = [];
     // traverses key by key in policy["profile"]
     var key;
@@ -1629,13 +1619,15 @@ var savePolicy = function (policy) {
 
     console.log(JSON.stringify(payload));
 
-    invokerUtil.post(
+    invokerUtil.put(
         "/mdm-admin/policies/" + getParameterByName("id"),
         payload,
+        // on success
         function () {
             $(".policy-message").removeClass("hidden");
             $(".add-policy").addClass("hidden");
         },
+        // on error
         function () {
 
         }
@@ -1760,7 +1752,7 @@ var showHideHelpText = function (addFormContainer) {
 // End of functions related to grid-input-view
 
 /**
- * This method will return query parameter value given its name
+ * This method will return query parameter value given its name.
  * @param name Query parameter name
  * @returns {string} Query parameter value
  */
@@ -1813,12 +1805,12 @@ $(document).ready(function () {
     $("#users-input, #user-roles-input").select2({
         "tags": true
     }).on("select2:select", function (e) {
-            if (e.params.data.id == "ANY") {
-                $(this).val("ANY").trigger("change");
-            } else {
-                $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
-            }
-        });
+        if (e.params.data.id == "ANY") {
+            $(this).val("ANY").trigger("change");
+        } else {
+            $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
+        }
+    });
 
     // Maintains an array of configured features of the profile
     var advanceOperations = ".wr-advance-operations";

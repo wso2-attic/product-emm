@@ -19,10 +19,12 @@ under the License. --}}
 {{layout "fluid"}}
 {{!-- Inputting content into defined zones in fluid layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Edit Policy
+    {{
+        unit "title"
+        pageTitle = "Device Management"
+    }}
 {{/zone}}
 {{#zone "body"}}
-    {{unit "operation-mod"}}
-    {{unit "appbar" pageTitle="Edit Policy" enableBack=true}}
-    {{unit "policy-view-edit"}}
+    {{unit "appbar" pageTitle="Notifications" pageLink="device-mgt"}}
+    {{unit "notification-listing"}}
 {{/zone}}

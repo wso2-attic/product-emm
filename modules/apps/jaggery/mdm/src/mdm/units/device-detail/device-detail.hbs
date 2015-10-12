@@ -38,8 +38,10 @@
                                 <tr role="row" class="even">
                                     <td class="sorting_1" style="padding:10px 15px;">Status</td>
                                     <td style="padding:10px 15px;">
-                                        <span><i class="fw fw-ok icon-success"></i> Enrolled</span>
-                                        <span><i class="fw fw-ok icon-success"></i> Compliant</span>
+                                        {{#equal device.status "ACTIVE"}}<span><i class="fw fw-ok icon-success"></i> Active</span>{{/equal}}
+                                        {{#equal device.status "INACTIVE"}}<span><i class="fw fw-warning icon-warning"></i> Inactive</span>{{/equal}}
+                                        {{#equal device.status "BLOCKED"}}<span><i class="fw fw-remove icon-danger"></i> Blocked</span>{{/equal}}
+                                        {{#equal device.status "REMOVED"}}<span><i class="fw fw-delete icon-danger"></i> Removed</span>{{/equal}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -58,6 +60,7 @@
                             <li class="active"><a class="list-group-item" href="#device_details" role="tab" data-toggle="tab" aria-controls="device_details">Device Details</a></li>
                             <li><a class="list-group-item" href="#device_location" role="tab" data-toggle="tab" aria-controls="device_location">Device Location</a></li>
                             <li><a class="list-group-item" href="#installed_applications" role="tab" data-toggle="tab" aria-controls="installed_applications">Installed Applications</a></li>
+                            <li><a class="list-group-item" href="#event_log" role="tab" data-toggle="tab" aria-controls="event_log">Event Log</a></li>
                         </ul>
                     </div>
                     {{#defineZone "device-detail-properties"}}
@@ -130,6 +133,19 @@
                                     <div class="panel-heading">Installed Applications</div>
                                     <div class="panel-body">
                                         <div class="wr-app-listing">
+                                            <ul class="thumbnail-list">
+
+                                            </ul>
+                                        </div>
+                                        <div class="panel-body">
+                                            Not available yet
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default tab-pane" id="event_log" role="tabpanel" aria-labelledby="event_log">
+                                    <div class="panel-heading">Event Log</div>
+                                    <div class="panel-body">
+                                        <div class="wr-event-log">
                                             <ul class="thumbnail-list">
 
                                             </ul>
