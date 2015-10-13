@@ -39,7 +39,6 @@
         if (document.getElementById('device-location')){
             loadMap();
         }
-
     });
     function loadMap(){
         var map;
