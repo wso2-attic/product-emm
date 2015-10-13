@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,19 +27,19 @@ import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RequestSecurityTokenResponse", namespace = Constants.WS_TRUST_TARGET_NAMESPACE,
+@XmlType(name = "RequestSecurityTokenResponse", namespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE,
 		propOrder = { "TokenType", "RequestedSecurityToken", "RequestID" })
 @SuppressWarnings("unused")
 public class RequestSecurityTokenResponse implements Serializable {
 
-	@XmlElement(name = "TokenType", namespace = Constants.WS_TRUST_TARGET_NAMESPACE)
+	@XmlElement(name = "TokenType", namespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE)
 	private String TokenType;
 
 	@XmlElement(name = "RequestedSecurityToken", required = true,
-			    namespace = Constants.WS_TRUST_TARGET_NAMESPACE)
+			    namespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE)
 	private RequestedSecurityToken RequestedSecurityToken;
 
-	@XmlElement(name = "RequestID", namespace = Constants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
+	@XmlElement(name = "RequestID", namespace = PluginConstants.ENROLLMENT_POLICY_TARGET_NAMESPACE)
 	private int RequestID;
 
 	public String getTokenType() {

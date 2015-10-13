@@ -18,9 +18,12 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
-import org.w3c.dom.Document;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Sequence data that use to execute tag list
@@ -30,6 +33,33 @@ public class Sequence {
     int commandId;
     Exec exec;
     Get get;
+    DeleteTag deleteTag;
+    Atomic atomic;
+    List<Replace> replaces;
+
+    public DeleteTag getDeleteTag() {
+        return deleteTag;
+    }
+
+    public void setDeleteTag(DeleteTag deleteTag) {
+        this.deleteTag = deleteTag;
+    }
+
+    public List<Replace> getReplaces() {
+        return replaces;
+    }
+
+    public void setReplaces(List<Replace> replaces) {
+        this.replaces = replaces;
+    }
+
+    public Atomic getAtomic() {
+        return atomic;
+    }
+
+    public void setAtomic(Atomic atomic) {
+        this.atomic = atomic;
+    }
 
     public Exec getExec() {
         return exec;
@@ -68,6 +98,20 @@ public class Sequence {
         }
         if (getGet() != null) {
             getGet().buildGetElement(doc, sequence);
+        }
+        if (getReplaces() != null) {
+            for (Iterator<Replace> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
+                Replace replace = replaceIterator.next();
+                if (replace != null) {
+                    replace.buildReplaceElement(doc, sequence);
+                }
+            }
+        }
+        if (getAtomic() != null) {
+            getAtomic().buildAtomicElement(doc, sequence);
+        }
+        if (getDeleteTag() != null) {
+            getDeleteTag().buildDeleteElement(doc, sequence);
         }
     }
 }

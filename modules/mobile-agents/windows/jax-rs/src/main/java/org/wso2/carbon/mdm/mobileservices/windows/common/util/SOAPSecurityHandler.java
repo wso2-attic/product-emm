@@ -19,7 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import javax.xml.namespace.QName;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
@@ -35,7 +35,7 @@ public class SOAPSecurityHandler implements SOAPHandler<SOAPMessageContext> {
      */
     @Override
     public Set<QName> getHeaders() {
-        QName securityHeader = new QName(Constants.WS_SECURITY_TARGET_NAMESPACE, Constants.SECURITY);
+        QName securityHeader = new QName(PluginConstants.WS_SECURITY_TARGET_NAMESPACE, PluginConstants.SECURITY);
         HashSet<QName> headers = new HashSet<QName>();
         headers.add(securityHeader);
         return headers;

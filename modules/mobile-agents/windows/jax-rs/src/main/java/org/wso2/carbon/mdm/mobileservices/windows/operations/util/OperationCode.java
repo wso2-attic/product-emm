@@ -20,7 +20,16 @@ public class OperationCode {
         CHANNEL_URI("./Vendor/MSFT/DMClient/Provider/MobiCDMServer/Push/ChannelURI"),
         LOCK_PIN("./Vendor/MSFT/RemoteLock/NewPINValue"),
         LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
-        CAMERA("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera");
+        CAMERA("./Vendor/MSFT/PolicyManager/My/Camera/AllowCamera"),
+        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
+        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption"),
+        DEVICE_PASSWORD_STATUS("./Vendor/MSFT/PolicyManager/Device/DeviceLock/DevicePasswordEnabled"),
+        DEVICE_PASSCODE_DELETE("./Vendor/MSFT/PolicyManager/My/DeviceLock");
+
+
+
+
+
 
         private final String code;
 
@@ -41,9 +50,10 @@ public class OperationCode {
         DISENROLL("./Vendor/MSFT/DMClient/Unenroll"),
         LOCKRESET("./Vendor/MSFT/RemoteLock/LockAndResetPIN"),
         CAMERA("./Vendor/MSFT/PolicyManager/My/Camera/AllowCamera"),
-        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
         ENCRYPT_STORAGE("./Vendor/MSFT/PolicyManager/My/Security/RequireDeviceEncryption"),
-        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption");
+        CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
+        ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption"),
+        DEVICE_PASSWORD_ENABLE("./Vendor/MSFT/PolicyManager/My/DeviceLock/DevicePasswordEnabled");
 
         private final String code;
 
@@ -63,15 +73,15 @@ public class OperationCode {
         CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
         ENCRYPT_STORAGE("./Vendor/MSFT/PolicyManager/My/Security/RequireDeviceEncryption"),
         ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption"),
-        PASSWORD_MAX_FAIL_ATTEMPTS("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MaxDevicePasswordFailedAttempts"),
-        DEVICE_PASSWORD_ENABLE("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordEnabled"),
-        SIMPLE_PASSWORD("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/AllowSimpleDevicePassword"),
-        MIN_PASSWORD_LENGTH("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MinDevicePasswordLength"),
-        Alphanumeric_PASSWORD("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/AlphanumericDevicePasswordRequired"),
-        PASSWORD_EXPIRE("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordExpiration"),
-        PASSWORD_HISTORY("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/DevicePasswordHistory"),
-        MAX_PASSWORD_INACTIVE_TIME("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MaxInactivityTimeDeviceLock"),
-        MIN_PASSWORD_COMPLEX_CHARACTERS("./Vendor/MSFT/DeviceLock/Provider/MobiCDMServer/MinDevicePasswordComplexCharacters");
+        PASSWORD_MAX_FAIL_ATTEMPTS("./Vendor/MSFT/PolicyManager/My/DeviceLock/MaxDevicePasswordFailedAttempts"),
+        DEVICE_PASSWORD_ENABLE("./Vendor/MSFT/PolicyManager/My/DeviceLock/DevicePasswordEnabled"),
+        SIMPLE_PASSWORD("./Vendor/MSFT/PolicyManager/My/DeviceLock/AllowSimpleDevicePassword"),
+        MIN_PASSWORD_LENGTH("./Vendor/MSFT/PolicyManager/My/DeviceLock/MinDevicePasswordLength"),
+        Alphanumeric_PASSWORD("./Vendor/MSFT/PolicyManager/My/DeviceLock/AlphanumericDevicePasswordRequired"),
+        PASSWORD_EXPIRE("./Vendor/MSFT/PolicyManager/My/DeviceLock/DevicePasswordExpiration"),
+        PASSWORD_HISTORY("./Vendor/MSFT/PolicyManager/My/DeviceLock/DevicePasswordHistory"),
+        MAX_PASSWORD_INACTIVE_TIME("./Vendor/MSFT/PolicyManager/My/DeviceLock/MaxInactivityTimeDeviceLock"),
+        MIN_PASSWORD_COMPLEX_CHARACTERS("./Vendor/MSFT/PolicyManager/My/DeviceLock/MinDevicePasswordComplexCharacters");
 
         private final String code;
 

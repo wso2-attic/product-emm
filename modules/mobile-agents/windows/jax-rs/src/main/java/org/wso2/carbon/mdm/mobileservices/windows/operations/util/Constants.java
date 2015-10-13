@@ -28,6 +28,7 @@ public class Constants {
 	public static final String SERVER_SECRET = "dummy";
 	public static final String INITIAL_NONCE = "ZHVtbXk=";
 	public static final String DISENROLL_ALERT_DATA = "1226";
+	public static final String INITIAL_ALERT_DATA ="1201";
 
 	public static final String SYNCML_ROOT_ELEMENT_NAME = "SyncML";
 	public static final String XMLNS_SYNCML = "SYNCML:SYNCML1.2";
@@ -39,6 +40,7 @@ public class Constants {
 	public static final String ADD = "Add";
 	public static final String COMMAND_ID = "CmdID";
 	public static final String GET = "Get";
+	public static final String DELETE = "Delete";
 	public static final String ITEM = "Item";
 	public static final String SOURCE = "Source";
 	public static final String LOC_URI = "LocURI";
@@ -73,6 +75,7 @@ public class Constants {
 	public static final String CRED_FORMAT = "b64";
 	public static final String CRED_TYPE = "syncml:auth-md5";
 	public static final String SEQUENCE = "Sequence";
+	public static final String META_FORMAT_INT = "int";
 
 	/**
 	 * SynclML service related constants

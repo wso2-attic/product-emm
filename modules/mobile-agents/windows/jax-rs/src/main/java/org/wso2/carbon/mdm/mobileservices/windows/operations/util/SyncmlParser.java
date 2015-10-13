@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
@@ -95,13 +96,13 @@ public class SyncmlParser {
      */
     private static SyncmlHeader generateSyncmlHeader(Node syncHeader) {
 
-        NodeList headerElements = syncHeader.getChildNodes();
         String sessionID = null;
         String messageID = null;
         Target target = null;
         Source source = null;
         Credential credential = null;
 
+        NodeList headerElements = syncHeader.getChildNodes();
         for (int i = 0 ; i < headerElements.getLength() ; i++) {
             Node node = headerElements.item(i);
 
@@ -127,7 +128,8 @@ public class SyncmlParser {
         }
         SyncmlHeader header = new SyncmlHeader();
         header.setMsgID(Integer.valueOf(messageID));
-        header.setSessionId(Integer.valueOf(sessionID));
+        // Syncml message contains a sessionID which is Hexadecimal value.Hexadecimal sessionID parse as a integer value.
+        header.setSessionId(Integer.valueOf(sessionID,16));
         header.setTarget(target);
         header.setSource(source);
         header.setCredential(credential);
@@ -141,11 +143,11 @@ public class SyncmlParser {
      */
     private static SyncmlBody generateSyncmlBody(Node syncBody) {
 
-        NodeList bodyElements = syncBody.getChildNodes();
         Alert alert = null;
         Replace replace = null;
         Results results = null;
         List<Status> status = new ArrayList<Status>();
+        NodeList bodyElements = syncBody.getChildNodes();
 
         for (int i = 0 ; i < bodyElements.getLength() ; i++) {
             Node node = bodyElements.item(i);
@@ -271,19 +273,19 @@ public class SyncmlParser {
         Status status = new Status();
         for (int x = 0; x < node.getChildNodes().getLength(); x++) {
             String nodeName = node.getChildNodes().item(x).getNodeName();
-            if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD_ID) {
+            if (nodeName == PluginConstants.SyncML.SYNCML_CMD_ID) {
                 String commandId = node.getChildNodes().item(x).getTextContent().trim();
                 status.setCommandId(Integer.valueOf(commandId));
-            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_MESSAGE_REF) {
+            } else if (nodeName == PluginConstants.SyncML.SYNCML_MESSAGE_REF) {
                 String messageReference = node.getChildNodes().item(x).getTextContent().trim();
                 status.setMessageReference(Integer.valueOf(messageReference));
-            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD_REF) {
+            } else if (nodeName == PluginConstants.SyncML.SYNCML_CMD_REF) {
                 String commandReference = node.getChildNodes().item(x).getTextContent().trim();
                 status.setCommandReference(Integer.valueOf(commandReference));
-            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CMD) {
+            } else if (nodeName == PluginConstants.SyncML.SYNCML_CMD) {
                 String command = node.getChildNodes().item(x).getTextContent().trim();
                 status.setCommand(command);
-            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_CHAL) {
+            } else if (nodeName == PluginConstants.SyncML.SYNCML_CHAL) {
                 NodeList chalNodes = node.getChildNodes().item(x).getChildNodes();
                 Meta meta = new Meta();
                 Chal chal = new Chal();
@@ -296,11 +298,11 @@ public class SyncmlParser {
                 chal.setMeta(meta);
                 status.setChallenge(chal);
             }
-            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_DATA) {
+            else if (nodeName == PluginConstants.SyncML.SYNCML_DATA) {
                 String data = node.getChildNodes().item(x).getTextContent().trim();
                 status.setData(data);
             }
-            else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_TARGET_REF) {
+            else if (nodeName == PluginConstants.SyncML.SYNCML_TARGET_REF) {
                 String targetReference =node.getChildNodes().item(x).getTextContent().trim();
                 status.setTargetReference(targetReference);
             }
@@ -351,14 +353,14 @@ public class SyncmlParser {
         String data;
         for (int x = 0; x < node.getChildNodes().getLength(); x++) {
             String nodeName = node.getChildNodes().item(x).getNodeName();
-            if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_SOURCE) {
+            if (nodeName == PluginConstants.SyncML.SYNCML_SOURCE) {
                 String childNodeName = node.getChildNodes().item(x).getChildNodes().item(x).getNodeName();
-                if (childNodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_LOCATION_URI) {
+                if (childNodeName == PluginConstants.SyncML.SYNCML_LOCATION_URI) {
                     String LocUri = node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim();
                     source.setLocURI(LocUri);
                     item.setSource(source);
                 }
-            } else if (nodeName == org.wso2.carbon.mdm.mobileservices.windows.common.Constants.SyncML.SYNCML_DATA) {
+            } else if (nodeName == PluginConstants.SyncML.SYNCML_DATA) {
                 data = node.getChildNodes().item(x).getTextContent().trim();
                 item.setData(data);
             }

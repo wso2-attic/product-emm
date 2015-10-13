@@ -28,7 +28,7 @@ import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagement
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -118,7 +118,7 @@ public class WindowsAPIUtils {
                 message, responseMediaType);
         getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
         if (!deviceIDHolder.getErrorDeviceIdList().isEmpty()) {
-            return javax.ws.rs.core.Response.status(Constants.StatusCodes.
+            return javax.ws.rs.core.Response.status(PluginConstants.StatusCodes.
                     MULTI_STATUS_HTTP_CODE).type(
                     responseMediaType).entity(deviceUtils.
                     convertErrorMapIntoErrorMessage(deviceIDHolder.getErrorDeviceIdList())).build();

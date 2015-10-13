@@ -23,13 +23,36 @@ package org.wso2.carbon.mdm.mobileservices.windows.operations;
  */
 public class WindowsOperationException extends Exception {
 
-	private static final long serialVersionUID = 5435636243242623629L;
+    private static final long serialVersionUID = 5435636243242623629L;
+    private String errorMessage;
 
-	public WindowsOperationException(String errorMessage) {
-		super(errorMessage);
-	}
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
-	public WindowsOperationException(String errorMessage, Throwable throwable) {
-		super(errorMessage, throwable);
-	}
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public WindowsOperationException(String errorMessage) {
+        super(errorMessage);
+    }
+
+    public WindowsOperationException(String errorMessage, Throwable throwable) {
+        super(errorMessage, throwable);
+        setErrorMessage(errorMessage);
+    }
+
+    public WindowsOperationException(String msg, Exception nestedEx) {
+        super(msg, nestedEx);
+        setErrorMessage(msg);
+    }
+
+    public WindowsOperationException() {
+        super();
+    }
+
+    public WindowsOperationException(Throwable throwable) {
+        super(throwable);
+    }
 }

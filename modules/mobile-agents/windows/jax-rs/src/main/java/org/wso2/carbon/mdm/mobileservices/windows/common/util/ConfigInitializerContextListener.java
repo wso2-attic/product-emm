@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 import org.xml.sax.SAXException;
 
@@ -70,7 +70,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
 
         ServletContext servletContext = servletContextEvent.getServletContext();
         File propertyFile = new File(getClass().getClassLoader().getResource(
-                Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
+                PluginConstants.CertificateEnrolment.PROPERTIES_XML).getFile());
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
         Document document = null;
@@ -121,11 +121,11 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         properties.setNotAfterDays(signedCertNotAfterDate);
         properties.setAuthPolicy(authPolicy);
         properties.setDomain(domain);
-        servletContext.setAttribute(Constants.WINDOWS_PLUGIN_PROPERTIES, properties);
+        servletContext.setAttribute(PluginConstants.WINDOWS_PLUGIN_PROPERTIES, properties);
 
         File wapProvisioningFile = new File(getClass().getClassLoader().getResource(
-                Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
-        servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
+                PluginConstants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
+        servletContext.setAttribute(PluginConstants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
     }
 
     @Override
