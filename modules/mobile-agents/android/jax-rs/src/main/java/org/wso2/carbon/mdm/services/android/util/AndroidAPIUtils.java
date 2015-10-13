@@ -20,7 +20,6 @@ package org.wso2.carbon.mdm.services.android.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -127,7 +126,7 @@ public class AndroidAPIUtils {
             if (log.isDebugEnabled()) {
                 log.info("Received compliance status from MONITOR operation ID: " + operation.getId());
             }
-            getPolicyManagerService().CheckPolicyCompliance(deviceIdentifier, operation.getOperationResponse());
+            getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, operation.getOperationResponse());
         }
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
