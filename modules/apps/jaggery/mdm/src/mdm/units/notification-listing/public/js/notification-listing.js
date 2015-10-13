@@ -65,7 +65,7 @@ $(document).ready(function () {
 
 });
 
-function loadNotifications(searchType, searchParam){
+function loadNotifications(){
     var deviceListing = $("#notification-listing");
     var deviceListingSrc = deviceListing.attr("src");
     var currentUser = deviceListing.data("currentUser");
@@ -84,6 +84,8 @@ function loadNotifications(searchType, searchParam){
             if(data.length > 0){
                 var content = template(viewModel);
                 $("#ast-container").html(content);
+                $('#unread-notifications').datatables_extended();
+                $('#all-notifications').datatables_extended();
             }
 
         };

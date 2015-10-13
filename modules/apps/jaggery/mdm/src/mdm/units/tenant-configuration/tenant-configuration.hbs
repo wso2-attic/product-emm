@@ -32,6 +32,12 @@
                                 </span>
                                 iOS Configurations
                             </a>
+                            <a href="javascript:void(0)" onclick="showAdvanceOperation('windows', this)">
+                                <span class="wr-hidden-operations-icon fw-stack">
+                                    <i class="fw fw-windows fw-stack-2x"></i>
+                                </span>
+                                Windows Configurations
+                            </a>
                         </div>
 
                         <div class="wr-hidden-operations-content col-lg-8">
@@ -406,6 +412,47 @@
                                 </div>
                             </div>
                             <!-- /ios -->
+
+                            <!-- windows -->
+                            <div class="wr-hidden-operation" data-operation="windows">
+                                <div class="panel panel-default">
+                                    <div id="windows-config-body" class="panel-collapse panel-body" role="tabpanel">
+                                        <div id="windows-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+
+                                        <div id="local-inputs">
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-label" for="windows-config-notifier-frequency">
+                                                    Notifier Frequency
+                                                    <span class="helper" title="Notifier frequency for the agent to contact EMM server">
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                    </span>
+                                                    <br>
+                                                    ( Should be in milliseconds )
+                                                </label>
+                                                <input id="windows-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="wifi-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            End User License Agreement (EULA)
+                                            <hr>
+                                        </h2>
+                                    </div>
+
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
+                                        <div class="wr-input-control">
+                                            <textarea id="windows-eula" type="text" class="form-control"></textarea>
+                                        </div>
+                                        <div class="wr-input-control wr-btn-grp">
+                                            <button id="save-windows-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /windows -->
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,12 @@
             </div>
 
             <table class="table table-striped table-hover table-bordered display data-table" id="unread-notifications">
+                <thead style="display: none;">
+                <tr class="sort-row">
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
                 <tbody>
                 {{#each notifications}}
                     {{#equal "NEW" status }}
@@ -40,6 +46,12 @@
             </div>
 
             <table class="table table-striped table-hover table-bordered display data-table" id="all-notifications">
+                <thead style="display: none;">
+                <tr class="sort-row">
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
                 <tbody>
                 {{#each notifications}}
                     <tr data-type="selectable" data-id="{{notificationId}}">
