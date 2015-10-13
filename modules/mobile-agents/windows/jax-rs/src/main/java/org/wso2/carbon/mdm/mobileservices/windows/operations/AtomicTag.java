@@ -28,9 +28,9 @@ import java.util.List;
 /**
  * Wrapper for other SyncML elements.
  */
-public class Atomic {
+public class AtomicTag {
     int commandId = -1;
-    List<Add> adds;
+    List<AddTag> adds;
     List<Replace> replaces;
 
     public List<Replace> getReplaces() {
@@ -41,11 +41,11 @@ public class Atomic {
         this.replaces = replaces;
     }
 
-    public List<Add> getAdds() {
+    public List<AddTag> getAdds() {
         return adds;
     }
 
-    public void setAdds(List<Add> adds) {
+    public void setAdds(List<AddTag> adds) {
         this.adds = adds;
     }
 
@@ -66,8 +66,8 @@ public class Atomic {
                 commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
                 atomic.appendChild(commandId);
             }
-            for (Iterator<Add> addIterator = getAdds().iterator(); addIterator.hasNext(); ) {
-                Add add = addIterator.next();
+            for (Iterator<AddTag> addIterator = getAdds().iterator(); addIterator.hasNext(); ) {
+                AddTag add = addIterator.next();
                 if (add != null) {
                     add.buildAddElement(doc, atomic);
                 }

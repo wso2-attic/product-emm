@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  WSO2 Inc. licenses this file to you under the Apache License,
  *  Version 2.0 (the "License"); you may not use this file except
@@ -21,17 +21,13 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.carbon.device.mgt.common.notification.mgt.Notification;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
@@ -39,11 +35,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
-import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Profile;
-import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.common.ProfileFeature;
-import org.wso2.carbon.policy.mgt.common.monitor.ComplianceFeature;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 
 import javax.ws.rs.core.Response;
@@ -78,8 +70,6 @@ public class SyncmlServiceImpl implements SyncmlService {
     private static final String IMEI = "IMEI";
     private static final String VENDOR = "VENDER";
     private static final String MODEL = "DEVICE_MODEL";
-
-    List<? extends Operation> pendingDataOperation;
 
     private static Log log = LogFactory.getLog(SyncmlServiceImpl.class);
 
@@ -164,6 +154,8 @@ public class SyncmlServiceImpl implements SyncmlService {
         SyncmlDocument syncmlDocument;
         List<Operation> deviceInfoOperations;
         List<? extends Operation> pendingOperations;
+        OperationUtils operationUtils = new OperationUtils();
+        DeviceInfo deviceInfo = new DeviceInfo();
 
         if (SyncmlParser.parseSyncmlPayload(request) != null) {
             syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
@@ -182,16 +174,18 @@ public class SyncmlServiceImpl implements SyncmlService {
                 if (cacheToken.getUsername().equals(user)) {
 
                     if (enrollDevice(request)) {
-                        deviceInfoOperations = getDeviceInfo();
+                        deviceInfoOperations = deviceInfo.getDeviceInfo();
                         try {
                             response = generateReply(syncmlDocument, deviceInfoOperations);
                             return Response.status(Response.Status.OK).entity(response).build();
                         } catch (JSONException e) {
                             throw new JSONException("Error occurred in while parsing json object.");
                         } catch (PolicyManagementException e) {
-                            throw new PolicyManagementException("Error occurred in while getting effective policy.", e);
+                            throw new PolicyManagementException("Error occurred in while getting effective" +
+                                    " policy.", e);
                         } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                            throw new FeatureManagementException("Error occurred in while getting effective feature", e);
+                            throw new FeatureManagementException("Error occurred in while getting effective " +
+                                    "feature", e);
                         }
 
                     } else {
@@ -226,7 +220,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 if ((syncmlDocument.getBody().getAlert() != null)) {
                     if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
                         try {
-                            pendingOperations = getPendingOperations(syncmlDocument);
+                            pendingOperations = operationUtils.getPendingOperations(syncmlDocument);
                             String gen = generateReply(syncmlDocument, pendingOperations);
                             //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
                             //	pendingOperations)).build();
@@ -251,11 +245,14 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (JSONException e) {
                             throw new JSONException("Error occurred in while parsing json object.");
                         } catch (PolicyManagementException e) {
-                            throw new PolicyManagementException("Error occurred in while getting effective policy.", e);
+                            throw new PolicyManagementException("Error occurred in while getting effective" +
+                                    " policy.", e);
                         } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                            throw new FeatureManagementException("Error occurred in while getting effective feature", e);
+                            throw new FeatureManagementException("Error occurred in while getting effective " +
+                                    "feature", e);
                         } catch (NotificationManagementException e) {
-                            throw new NotificationManagementException("Error occurred in while getting notification service ", e);
+                            throw new NotificationManagementException("Error occurred in while getting notification " +
+                                    "service ", e);
                         }
                     } else {
                         try {
@@ -274,14 +271,16 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (JSONException e) {
                             throw new JSONException("Error occurred in while parsing json object.");
                         } catch (PolicyManagementException e) {
-                            throw new PolicyManagementException("Error occurred in while getting effective policy.", e);
+                            throw new PolicyManagementException("Error occurred in while getting" +
+                                    " effective policy.", e);
                         } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                            throw new FeatureManagementException("Error occurred in while getting effective feature", e);
+                            throw new FeatureManagementException("Error occurred in while getting " +
+                                    "effective feature", e);
                         }
                     }
                 } else {
                     try {
-                        pendingOperations = getPendingOperations(syncmlDocument);
+                        pendingOperations = operationUtils.getPendingOperations(syncmlDocument);
                         String replygen = generateReply(syncmlDocument, pendingOperations);
                         //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations))
                         //.build();
@@ -310,7 +309,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                         throw new FeatureManagementException("Error occurred in while getting effective feature", e);
                     } catch (NotificationManagementException e) {
-                        throw new NotificationManagementException("Error occurred in while getting notification " + "service ", e);
+                        throw new NotificationManagementException("Error occurred in while getting notification "
+                                + "service ", e);
                     }
                 }
             } else {
@@ -321,6 +321,14 @@ public class SyncmlServiceImpl implements SyncmlService {
         }
         return null;
     }
+
+    /**
+     * Enroll phone device
+     * @param request
+     * @return enroll state
+     * @throws WindowsDeviceEnrolmentException
+     * @throws WindowsOperationException
+     */
     private boolean enrollDevice(Document request) throws WindowsDeviceEnrolmentException, WindowsOperationException {
 
         String osVersion;
@@ -439,6 +447,16 @@ public class SyncmlServiceImpl implements SyncmlService {
         return lsSerializer.writeToString(doc);
     }
 
+    /**
+     * Generate Device payloads.
+     * @param syncmlDocument
+     * @param lsDeviceInfo
+     * @return String type syncml payload
+     * @throws WindowsOperationException
+     * @throws JSONException
+     * @throws PolicyManagementException
+     * @throws org.wso2.carbon.policy.mgt.common.FeatureManagementException
+     */
     public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> lsDeviceInfo)
             throws WindowsOperationException, JSONException, PolicyManagementException,
             org.wso2.carbon.policy.mgt.common.FeatureManagementException {
@@ -454,404 +472,4 @@ public class SyncmlServiceImpl implements SyncmlService {
         generator = new SyncmlGenerator();
         return generator.generatePayload(syncmlResponse);
     }
-
-    public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
-            throws OperationManagementException, DeviceManagementException, FeatureManagementException,
-            PolicyComplianceException, NotificationManagementException {
-
-
-        List<? extends Operation> pendingOperations;
-        DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
-                syncmlDocument.getHeader().getSource().getLocURI());
-        List<Status> statuses = syncmlDocument.getBody().getStatus();
-        String lockUri = null;
-        Results result = syncmlDocument.getBody().getResults();
-
-        for (Status status : statuses) {
-
-            if (status.getCommand().equals(Constants.EXECUTE)) {
-                if (status.getTargetReference() == null) {
-                    updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
-                } else {
-                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_LOCK)) {
-                        lock(status, syncmlDocument, deviceIdentifier);
-                    }
-                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_RING)) {
-                        ring(status, syncmlDocument, deviceIdentifier);
-                    }
-                    if (status.getTargetReference().equals(OperationCode.Command.WIPE_DATA)) {
-                        dataWipe(status, syncmlDocument, deviceIdentifier);
-                    }
-                }
-            }
-            if (status.getCommand().equals(Constants.SEQUENCE)) {
-                if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-
-                    pendingDataOperation = SyncmlUtils.getDeviceManagementService()
-                            .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-                    for (Operation operation : pendingDataOperation) {
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE) &&
-                                operation.getId() == status.getCommandReference()) {
-                            operation.setStatus(Operation.Status.COMPLETED);
-                        }
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.MONITOR) &&
-                                operation.getId() == status.getCommandReference()) {
-                            operation.setStatus(Operation.Status.COMPLETED);
-                        }
-                    }
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
-                } else {
-                    pendingDataOperation = SyncmlUtils.getDeviceManagementService()
-                            .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-                    for (Operation operation : pendingDataOperation) {
-
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE) &&
-                                operation.getId() == status.getCommandReference()) {
-                            operation.setStatus(Operation.Status.ERROR);
-                        }
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.MONITOR) &&
-                                operation.getId() == status.getCommandReference()) {
-                            operation.setStatus(Operation.Status.ERROR);
-                        }
-                    }
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
-                }
-            }
-        }
-
-        List<Profile> profiles = new ArrayList<>();
-        if (result != null) {
-            List<Item> results = result.getItem();
-            for (OperationCode.Info info : OperationCode.Info.values()) {
-                if (PluginConstants.OperationCodes.PIN_CODE.equals(info
-                        .name())) {
-                    lockUri = info.getCode();
-                }
-
-            }
-            for (Item item : results) {
-                for (OperationCode.Info info : OperationCode.Info.values()) {
-                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.CAMERA_STATUS)) {
-                        Profile cameraProfile = new Profile();
-                        cameraProfile.setFeatureCode(PluginConstants.OperationCodes.CAMERA);
-                        cameraProfile.setData(item.getData());
-                        if (item.getData().equals("1")) {
-                            cameraProfile.setEnable(true);
-                        } else {
-                            cameraProfile.setEnable(false);
-                        }
-                        profiles.add(cameraProfile);
-                    }
-                    if (item.getSource().getLocURI().equals
-                            ("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption")) {
-                        Profile encryptStorage = new Profile();
-                        encryptStorage.setFeatureCode("ENCRYPT_STORAGE");
-                        encryptStorage.setData(item.getData());
-                        if (item.getData().equals("1")) {
-                            encryptStorage.setEnable(true);
-                        } else {
-                            encryptStorage.setEnable(false);
-                        }
-                        profiles.add(encryptStorage);
-                    }
-                    if (item.getSource().getLocURI().equals
-                            ("./Vendor/MSFT/PolicyManager/Device/DeviceLock/DevicePasswordEnabled")) {
-
-                        Profile encryptStorage = new Profile();
-                        encryptStorage.setFeatureCode("PASSCODE_POLICY");
-                        encryptStorage.setData(item.getData());
-                        if (item.getData().equals("0")) {
-                            encryptStorage.setEnable(true);
-                        } else {
-                            encryptStorage.setEnable(false);
-                        }
-                        profiles.add(encryptStorage);
-                    }
-                    if (!item.getData().isEmpty() && item.getSource().getLocURI().equals(lockUri)) {
-                        String pinValue = item.getData();
-                        NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
-                        Notification notification = new Notification();
-                        notification.setDescription(pinValue);
-                        notification.setOperationId(result.getCommandReference());
-                        notification.setDeviceIdentifier(deviceIdentifier);
-                        try {
-                            nmService.addNotification(notification);
-                            if (log.isDebugEnabled()) {
-                                String msg = "Lock Reset Pin code " + pinValue;
-                                log.info(msg);
-                            }
-                        } catch (NotificationManagementException e) {
-                            String msg = "Failure Occurred in getting notification service.";
-                            log.error(msg);
-                        }
-                    }
-                }
-            }
-        }
-        boolean isCompliance = false;
-        if (profiles.size() != 0) {
-            try {
-                List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
-                        deviceIdentifier);
-                List<ComplianceFeature> complianceFeatures = new ArrayList<>();
-                for (ProfileFeature activeFeature : profileFeatures) {
-                    JSONObject policyContent = new JSONObject(activeFeature.getContent().toString());
-
-                    for (Profile deviceFeature : profiles) {
-
-                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.CAMERA)) {
-                            if (policyContent.getBoolean("enabled") == (deviceFeature.isEnable())) {
-                                isCompliance = true;
-                                deviceFeature.setCompliance(isCompliance);
-                            } else {
-                                deviceFeature.setCompliance(isCompliance);
-                            }
-                            ComplianceFeature complianceFeature = new ComplianceFeature();
-                            complianceFeature.setFeature(activeFeature);
-                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
-                            complianceFeature.setCompliance(deviceFeature.isCompliance());
-                            complianceFeatures.add(complianceFeature);
-                        }
-                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.ENCRYPT_STORAGE)) {
-                            if (policyContent.getBoolean("encrypted") == (deviceFeature.isEnable())) {
-                                isCompliance = true;
-                                deviceFeature.setCompliance(isCompliance);
-                            } else {
-                                deviceFeature.setCompliance(isCompliance);
-                            }
-                            ComplianceFeature complianceFeature = new ComplianceFeature();
-                            complianceFeature.setFeature(activeFeature);
-                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
-                            complianceFeature.setCompliance(deviceFeature.isCompliance());
-                            complianceFeatures.add(complianceFeature);
-                        }
-                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
-                            if (policyContent.getBoolean("enablePassword") == (deviceFeature.isEnable())) {
-                                isCompliance = true;
-                                deviceFeature.setCompliance(isCompliance);
-                            } else {
-                                deviceFeature.setCompliance(isCompliance);
-                            }
-                            ComplianceFeature complianceFeature = new ComplianceFeature();
-                            complianceFeature.setFeature(activeFeature);
-                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
-                            complianceFeature.setCompliance(deviceFeature.isCompliance());
-                            complianceFeatures.add(complianceFeature);
-                        }
-                    }
-                }
-                WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, complianceFeatures);
-            } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                String msg = "Error occurred while getting effective policy.";
-                log.error(msg);
-                throw new FeatureManagementException(msg, e);
-            } catch (JSONException e) {
-                String msg = "Error occurred while parsing json object.";
-                log.error(msg);
-            } catch (PolicyComplianceException e) {
-                String msg = "Error occurred while setting up policy compliance.";
-                log.error(msg);
-                throw new PolicyComplianceException(msg, e);
-            }
-        }
-        pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
-        return pendingOperations;
-    }
-
-    public void updateOperations(String deviceId,
-                                 List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
-            throws OperationManagementException {
-
-        for (Operation operation : operations) {
-            WindowsAPIUtils.updateOperation(deviceId, operation);
-            if (log.isDebugEnabled()) {
-                log.debug("Updating operation '" + operation.toString() + "'");
-            }
-        }
-    }
-
-    public void lock(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException, NotificationManagementException {
-
-        pendingDataOperation = SyncmlUtils.getDeviceManagementService()
-                .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-            for (int z = 0; z < pendingDataOperation.size(); z++) {
-                Operation operation = pendingDataOperation.get(z);
-                if (pendingDataOperation.get(z).getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode())
-                        && operation.getId() == status.getCommandReference()) {
-                    operation.setStatus(Operation.Status.COMPLETED);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
-                }
-            }
-        }
-        if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
-            for (Operation operation : pendingDataOperation) {
-
-                if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode()) &&
-                        operation.getId() == status.getCommandReference()) {
-                    operation.setStatus(Operation.Status.ERROR);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
-                    try {
-                        NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
-                        Notification lockResetNotification = new Notification();
-                        lockResetNotification.setOperationId(status.getCommandReference());
-                        lockResetNotification.setStatus("Error");
-                        lockResetNotification.setDeviceIdentifier(deviceIdentifier);
-                        lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
-
-                        service.addNotification(lockResetNotification);
-                    } catch (NotificationManagementException e) {
-                        String msg = "Failure occurred in getting notification service";
-                        log.error(msg);
-                        throw new NotificationManagementException(msg, e);
-                    }
-                }
-            }
-        }
-    }
-
-    public void ring(Status status, SyncmlDocument syncmlDocument,
-                     DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException {
-
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-            pendingDataOperation = SyncmlUtils.getDeviceManagementService()
-                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-            for (int z = 0; z < pendingDataOperation.size(); z++) {
-                Operation operation = pendingDataOperation.get(z);
-                if (operation.getCode().equals(OperationCode.Command.DEVICE_RING) &&
-                        (operation.getId() == status.getCommandReference())) {
-                    operation.setStatus(Operation.Status.COMPLETED);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
-                }
-            }
-        }
-    }
-
-    public void dataWipe(Status status, SyncmlDocument syncmlDocument,
-                         DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException {
-
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-            pendingDataOperation = SyncmlUtils.getDeviceManagementService()
-                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-            for (Operation operation : pendingDataOperation) {
-
-                if (operation.getCode().equals(OperationCode.Command.WIPE_DATA) &&
-                        (operation.getId() == status.getCommandReference())) {
-                    operation.setStatus(Operation.Status.COMPLETED);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
-                            pendingDataOperation);
-                }
-            }
-        }
-    }
-
-    public void updateDeviceOperations(Status status, SyncmlDocument syncmlDocument,
-                                       DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException {
-
-        pendingDataOperation = SyncmlUtils.getDeviceManagementService()
-                .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED) || status.getData().equals
-                (Constants.SyncMLResponseCodes.ACCEPTED_FOR_PROCESSING)) {
-            for (Operation operation : pendingDataOperation) {
-                if (operation.getId() == status.getCommandReference()) {
-                    operation.setStatus(Operation.Status.COMPLETED);
-                }
-            }
-            updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
-        } else if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
-            for (int x = 0; x < pendingDataOperation.size(); x++) {
-                Operation operation = pendingDataOperation.get(x);
-                if (operation.getId() == status.getCommandReference() && pendingDataOperation.get(x).
-                        getCode().equals(String.valueOf(OperationCode.Command.DEVICE_LOCK))) {
-                    operation.setStatus(Operation.Status.ERROR);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperation);
-                    try {
-                        NotificationManagementService service =
-                                WindowsAPIUtils.getNotificationManagementService();
-                        Notification lockResetNotification = new Notification();
-                        lockResetNotification.setOperationId(status.getCommandReference());
-                        lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
-                        lockResetNotification.setDeviceIdentifier(deviceIdentifier);
-                        lockResetNotification.setDescription(
-                                Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
-                        service.addNotification(lockResetNotification);
-                    } catch (NotificationManagementException e) {
-                        String msg = "Failure occurred in getting notification service";
-                        log.error(msg);
-                    }
-                }
-            }
-        }
-    }
-
-    public List<Operation> getDeviceInfo() {
-
-        List<Operation> deviceInfoOperations = new ArrayList<>();
-
-        Operation osVersion = new Operation();
-        osVersion.setCode("SOFTWARE_VERSION");
-        osVersion.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(osVersion);
-
-        Operation imsi = new Operation();
-        imsi.setCode("IMSI");
-        imsi.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(imsi);
-
-        Operation imei = new Operation();
-        imei.setCode("IMEI");
-        imei.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(imei);
-
-        Operation deviceID = new Operation();
-        deviceID.setCode("DEV_ID");
-        deviceID.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(deviceID);
-
-        Operation manufacturer = new Operation();
-        manufacturer.setCode("MANUFACTURER");
-        manufacturer.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(manufacturer);
-
-        Operation model = new Operation();
-        model.setCode("MODEL");
-        model.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(model);
-
-        Operation language = new Operation();
-        language.setCode("LANGUAGE");
-        language.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(language);
-
-        Operation vender = new Operation();
-        vender.setCode("VENDER");
-        vender.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(vender);
-
-        Operation macaddress = new Operation();
-        macaddress.setCode("MAC_ADDRESS");
-        macaddress.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(macaddress);
-
-        Operation resolution = new Operation();
-        resolution.setCode("RESOLUTION");
-        resolution.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(resolution);
-
-        Operation deviceName = new Operation();
-        deviceName.setCode("DEVICE_NAME");
-        deviceName.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(deviceName);
-
-        return deviceInfoOperations;
-    }
-
 }

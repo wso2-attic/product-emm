@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Configurations that needs to be added on the device.
  */
-public class Add {
+public class AddTag {
 	int commandId = -1;
 	List<Item> items;
 

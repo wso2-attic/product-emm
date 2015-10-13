@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -19,12 +19,14 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
-import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.Source;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlBody;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlHeader;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

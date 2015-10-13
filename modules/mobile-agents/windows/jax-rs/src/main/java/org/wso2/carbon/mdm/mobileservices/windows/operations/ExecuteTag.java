@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Commands that needs to be executed on the device.
  */
-public class Exec {
+public class ExecuteTag {
     int commandId = -1;
     List<Item> items;
 

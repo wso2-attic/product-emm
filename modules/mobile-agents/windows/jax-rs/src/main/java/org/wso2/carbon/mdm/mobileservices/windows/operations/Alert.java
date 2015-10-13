@@ -26,6 +26,9 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
  * Inform an event occurred from device to server.
  */
 public class Alert {
+
+	int commandId = -1;
+	String data;
 	public int getCommandId() {
 		return commandId;
 	}
@@ -41,9 +44,6 @@ public class Alert {
 	public void setData(String data) {
 		this.data = data;
 	}
-
-	int commandId = -1;
-	String data;
 
 	public void buildAlertElement(Document doc, Element rootElement) {
 		Element alert = doc.createElement(Constants.ALERT);

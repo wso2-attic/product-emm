@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -86,7 +86,8 @@ public class Constants {
 		public static final String PIN_NOTFOUND = "405";
 		public static final String COMMAND_FAIL = "500";
 		public static final String ACCEPTED_FOR_PROCESSING = "202";
-		public static final String LOCKRESET_NOTIFICATION = "Please Reset device lock.";
+		public static final String LOCKRESET_NOTIFICATION = "Error occurred in Lock Operation." +
+				"Please Reset device lock.";
 	}
 
 }

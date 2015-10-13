@@ -31,13 +31,13 @@ public class Item {
 	Target target;
 	Source source;
 	String data;
-	Meta meta;
+	MetaTag meta;
 
-	public Meta getMeta() {
+	public MetaTag getMeta() {
 		return meta;
 	}
 
-	public void setMeta(Meta meta) {
+	public void setMeta(MetaTag meta) {
 		this.meta = meta;
 	}
 

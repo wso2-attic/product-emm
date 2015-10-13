@@ -30,29 +30,29 @@ import java.util.List;
  */
 public class SyncmlBody {
 	Get getCommands;
-	List<Exec> exec;
+	List<ExecuteTag> exec;
 	List<Status> status;
 	Alert alert;
 	Replace replace;
 	Results results;
 	Sequence sequence;
-	Atomic atomic;
+	AtomicTag atomicTag;
 
-	public Atomic getAtomic() {
-		return atomic;
+	public AtomicTag getAtomicTag() {
+		return atomicTag;
 	}
 
-	public void setAtomic(Atomic atomic) {
-		this.atomic = atomic;
+	public void setAtomicTag(AtomicTag atomicTag) {
+		this.atomicTag = atomicTag;
 	}
 
 	public Sequence getSequence() { return sequence; }
 
 	public void setSequence(Sequence sequence) { this.sequence = sequence; }
 
-	public List<Exec> getExec() { return exec; }
+	public List<ExecuteTag> getExec() { return exec; }
 
-	public void setExec(List<Exec> exec) { this.exec = exec; }
+	public void setExec(List<ExecuteTag> exec) { this.exec = exec; }
 
 	public Results getResults() {
 		return results;
@@ -114,8 +114,8 @@ public class SyncmlBody {
 			getReplace().buildReplaceElement(doc, syncBody);
 		}
 		if (getExec() != null) {
-			for (Iterator<Exec> execIterator = getExec().iterator(); execIterator.hasNext(); ) {
-				Exec exec = execIterator.next();
+			for (Iterator<ExecuteTag> execIterator = getExec().iterator(); execIterator.hasNext(); ) {
+				ExecuteTag exec = execIterator.next();
 				if (exec != null) {
 					exec.buildExecElement(doc, syncBody);
 				}
@@ -124,8 +124,8 @@ public class SyncmlBody {
 		if (getSequence() != null) {
 			getSequence().buildSequenceElement(doc, syncBody);
 		}
-		if (getAtomic() != null) {
-			getAtomic().buildAtomicElement(doc, syncBody);
+		if (getAtomicTag() != null) {
+			getAtomicTag().buildAtomicElement(doc, syncBody);
 		}
 		syncBody.appendChild(doc.createElement(Constants.FINAL));
 	}

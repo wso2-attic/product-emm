@@ -26,14 +26,14 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
  * Credentials passed between the device and the server for security purposes.
  */
 public class Credential {
-	Meta meta;
+	MetaTag meta;
 	String data;
 
-	public Meta getMeta() {
+	public MetaTag getMeta() {
 		return meta;
 	}
 
-	public void setMeta(Meta meta) {
+	public void setMeta(MetaTag meta) {
 		this.meta = meta;
 	}
 

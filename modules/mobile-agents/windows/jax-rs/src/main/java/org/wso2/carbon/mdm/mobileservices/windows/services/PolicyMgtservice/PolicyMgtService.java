@@ -30,6 +30,9 @@ import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+/**
+ * Interface for Enforce Effective Policy.
+ */
 @WebService
 @Produces({"application/json", "application/xml"})
 @Consumes({"application/json", "application/xml"})

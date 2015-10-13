@@ -112,9 +112,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 	                                 WindowsDeviceEnrolmentException {
 
 		String headerBinarySecurityToken = null;
-		List<Header> ls = getHeaders();
-		for (int i = 0; i < ls.size(); i++) {
-			Header headerElement = ls.get(i);
+		List<Header> headers = getHeaders();
+		for (Header headerElement : headers) {
 			String nodeName = headerElement.getName().getLocalPart();
 			if (nodeName.equals(PluginConstants.SECURITY)) {
 				Element element = (Element) headerElement.getObject();
@@ -134,7 +133,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 		int notBeforeDate = windowsPluginProperties.getNotBeforeDays();
 		int notAfterDate = windowsPluginProperties.getNotAfterDays();
 
-		List<java.io.Serializable> certPropertyList = new ArrayList<java.io.Serializable>();
+		List<java.io.Serializable> certPropertyList = new ArrayList<>();
 		certPropertyList.add(commonName);
 		certPropertyList.add(notBeforeDate);
 		certPropertyList.add(notAfterDate);

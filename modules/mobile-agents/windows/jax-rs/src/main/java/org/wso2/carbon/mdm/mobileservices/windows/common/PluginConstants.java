@@ -156,7 +156,7 @@ public final class PluginConstants {
         public static final String SYNCML_SOURCE = "Source";
         public static final String SYNCML_DATA = "Data";
         public static final String SYNCML_CMD = "Cmd";
-        public static final String SYNCML_CHAL = "Chal";
+        public static final String SYNCML_CHAL = "ChallengeTag";
         public static final String SYNCML_CMD_ID = "CmdID";
         public static final String SYNCML_CMD_REF = "CmdRef";
         public static final String SYNCML_MESSAGE_REF = "MsgRef";

@@ -32,7 +32,7 @@ public class Status {
 	String command;
 	String targetReference;
 	String data;
-	Chal challenge;
+	ChallengeTag challenge;
 
 	public Status(int commandId, int messageReference, int commandReference, String command,
 	              String targetReference, String data) {
@@ -45,9 +45,9 @@ public class Status {
 	}
 	public Status(){}
 
-	public Chal getChallenge() { return challenge; }
+	public ChallengeTag getChallenge() { return challenge; }
 
-	public void setChallenge(Chal challenge) {
+	public void setChallenge(ChallengeTag challenge) {
 		this.challenge = challenge;
 	}
 

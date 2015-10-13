@@ -25,9 +25,9 @@ import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
 /**
- * Meta data related to credentials.
+ * MetaTag data related to credentials.
  */
-public class Meta {
+public class MetaTag {
 
 	String format;
 	String type;
