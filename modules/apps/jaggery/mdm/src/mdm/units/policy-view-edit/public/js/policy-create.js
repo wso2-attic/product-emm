@@ -118,7 +118,7 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
                 // populating values and getting the list of configured features
                 var configuredOperations = operationModule.
                     populateProfile(policy["platform"], policyPayloadObj["profile"]["profileFeaturesList"]);
-                // updating grouped input visibility accordingly
+                // updating grouped input visibility according to the populated values
                 $(".wr-advance-operations li.grouped-input").each(function () {
                     updateGroupedInputVisibility(this);
                 });
