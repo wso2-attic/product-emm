@@ -5,6 +5,10 @@
     "httpURL" : "%http.ip%",
     "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
     "iOSAPIRoot" : "%https.ip%/ios/",
+	"carbonServer":"%https.ip%",
+    "idPServer":"%https.ip%",
+    "callBackUrl":"%https.ip%/mdm-admin",
+    "adminUser":"admin",
     "device" : {
         "ios" : {
             "location" : "%http.ip%/mdm/public/asset-download-agent-ios/asset/ios-agent.ipa",
