@@ -123,7 +123,7 @@
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/target/tobeCopied/</outputDirectory>
-                                    <includes>**/*.jks,**/*.mar,**/axis2_client.xml</includes>
+                                    <includes>**/*.jks,**/*.mar</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -180,27 +180,6 @@
                                     </directory>
                                     <includes>
                                         <include>**/*.jks</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-axis2files</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/axis2config
-                            </outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>
-                                        ${basedir}/target/tobeCopied/wso2mdm-${mdm.version}/repository/conf/axis2/
-                                    </directory>
-                                    <includes>
-                                        <include>**/*.xml</include>
                                     </includes>
                                 </resource>
                             </resources>

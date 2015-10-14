@@ -172,7 +172,7 @@
         -->
         <productGroup name="MDM" clusteringEnabled="false" default="true">
 
-            <instance name="greg001" type="standalone" nonBlockingTransportEnabled="false">
+            <instance name="mdm" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
                     <host type="default">localhost</host>
                 </hosts>
