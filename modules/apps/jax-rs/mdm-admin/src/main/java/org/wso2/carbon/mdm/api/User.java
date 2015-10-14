@@ -258,8 +258,8 @@ public class User {
 
 		StringBuffer initialUserPassword = new StringBuffer();
 		for (int i = 0; i < passwordLength; i++) {
-
-			initialUserPassword.append(totalCharset.charAt((randomGenerator.nextInt() * totalCharsetLength)));
+			initialUserPassword
+					.append(totalCharset.charAt(randomGenerator.nextInt(totalCharsetLength)));
 		}
 		if (log.isDebugEnabled()) {
 			log.debug("Initial user password is created for new user: " + initialUserPassword);
@@ -472,6 +472,7 @@ public class User {
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(username);
+	    //TODO: move this to a config
         emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
         emailMessageProperties.setPassword(generateInitialUserPassword());

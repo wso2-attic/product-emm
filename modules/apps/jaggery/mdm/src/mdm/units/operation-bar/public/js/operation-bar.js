@@ -58,34 +58,6 @@ var operations = '.wr-operations',
 //}
 
 /*
- * set popup maximum height function.
- */
-function setPopupMaxHeight() {
-    var maxHeight = "max-height";
-    var marginTop = "margin-top";
-    var body = "body";
-    $(modalPopupContent).css(maxHeight, ($(body).height() - ($(body).height()/100 * 30)));
-    $(modalPopupContainer).css(marginTop, (-($(modalPopupContainer).height()/2)));
-}
-
-/*
- * show popup function.
- */
-function showPopup() {
-    $(modalPopup).show();
-    setPopupMaxHeight();
-}
-
-/*
- * hide popup function.
- */
-function hidePopup() {
-    $(modalPopupContent).html("");
-    $(modalPopupContent).removeClass("operation-data");
-    $(modalPopup).hide();
-}
-
-/*
  * Function to get selected devices ID's
  */
 function getSelectedDeviceIds() {
