@@ -34,7 +34,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * General Tenant Configuration REST-API implementation.
- * All end points supports JSON, XMl with content negotiation.
+ * All end points support JSON, XMl with content negotiation.
  */
 @WebService
 @Produces({ "application/json", "application/xml" })
@@ -81,7 +81,7 @@ public class Configuration {
 			MDMAPIUtils.getTenantConfigurationManagementService().saveConfiguration(configuration,
                                     MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
 			Response.status(HttpStatus.SC_CREATED);
-			responseMsg.setMessageFromServer("Tenant configuration updated successfully");
+			responseMsg.setMessageFromServer("Tenant configuration updated successfully.");
 			responseMsg.setStatusCode(HttpStatus.SC_CREATED);
 			return responseMsg;
 		} catch (ConfigurationManagementException e) {

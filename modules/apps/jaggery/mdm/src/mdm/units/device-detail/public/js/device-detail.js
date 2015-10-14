@@ -39,9 +39,10 @@
         if (document.getElementById('device-location')){
             loadMap();
         }
-
+        loadOperationsLog();
     });
-    function loadMap(){
+
+    function loadMap() {
         var map;
         function initialize() {
             var mapOptions = {
@@ -72,5 +73,31 @@
 
         }
         google.maps.event.addDomListener(window, 'load', initialize);
+    }
+
+    function loadOperationsLog() {
+        var operationsLog = $("#operations-log");
+        var deviceListingSrc = operationsLog.attr("src");
+        var deviceId = operationsLog.data("device-id");
+        var deviceType = operationsLog.data("device-type");
+
+        $.template("operations-log", deviceListingSrc, function (template) {
+            var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId;
+
+            var successCallback = function (data) {
+                var viewModel = {};
+                viewModel.operations = data;
+                if(data.length > 0){
+                    var content = template(viewModel);
+                    $("#operations-log-container").html(content);
+                    $('#operations-log-table').datatables_extended();
+                }
+
+            };
+            invokerUtil.get(serviceURL,
+                successCallback, function(message){
+                    console.log(message);
+            });
+        });
     }
 }());

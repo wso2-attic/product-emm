@@ -180,12 +180,6 @@
                                     org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.core.feature:${carbon.api.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.publisher.feature:${carbon.api.mgt.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.store.feature:${carbon.api.mgt.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
                                     org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.gateway.feature:${carbon.api.mgt.version}
                                 </featureArtifactDef>
                                 <!-- End of API Management Features -->
@@ -391,6 +385,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.mediation:org.wso2.carbon.task.server.feature:${carbon.mediation.version}
                                 </featureArtifactDef>
+				<featureArtifactDef>
+				    org.wso2.carbon.mediation:org.wso2.carbon.mediation.ui.feature:${carbon.mediation.version}
+				</featureArtifactDef>
                                 <!-- End of Mediation Features -->
                             </featureArtifacts>
                         </configuration>
@@ -446,7 +443,7 @@
                                     <id>org.wso2.carbon.dynamic.client.registration.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
-				                <feature>
+				<feature>
                                     <id>org.wso2.carbon.apimgt.webapp.publisher.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
@@ -512,14 +509,6 @@
                                     <version>${carbon.api.mgt.version}</version>
                                 </feature>
                                 <!-- API Manager Publisher and Store Features -->
-                                <feature>
-                                    <id>org.wso2.carbon.apimgt.publisher.feature.group</id>
-                                    <version>${carbon.api.mgt.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.apimgt.store.feature.group</id>
-                                    <version>${carbon.api.mgt.version}</version>
-                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.apimgt.gateway.feature.group</id>
                                     <version>${carbon.api.mgt.version}</version>
@@ -781,6 +770,10 @@
                                     <id>org.wso2.carbon.task.server.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
+				<feature>
+				    <id>org.wso2.carbon.mediation.ui.feature.group</id>
+				    <version>${carbon.mediation.version}</version>
+				</feature>
                                 <!-- End of Mediation Features -->
                             </features>
                         </configuration>
