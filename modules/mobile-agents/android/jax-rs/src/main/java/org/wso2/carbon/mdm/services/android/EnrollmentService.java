@@ -58,8 +58,6 @@ public class EnrollmentService {
 			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -87,8 +85,6 @@ public class EnrollmentService {
 			msg = "Error occurred while enrollment of the device.";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -117,8 +113,6 @@ public class EnrollmentService {
 			msg = "Error occurred while modifying enrollment of the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -146,8 +140,6 @@ public class EnrollmentService {
 			msg = "Error occurred while dis enrolling the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}

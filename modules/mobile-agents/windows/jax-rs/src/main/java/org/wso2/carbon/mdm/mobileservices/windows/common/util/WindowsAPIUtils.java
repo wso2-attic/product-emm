@@ -53,25 +53,15 @@ public class WindowsAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
-        DeviceManagementProviderService dmService;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        dmService =
-                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-        return dmService;
+        return (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
     }
 
     public static UserStoreManager getUserStoreManager() throws MDMAPIException {
         RealmService realmService;
         UserStoreManager userStoreManager;
         try {
-            PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
             if (realmService == null) {
                 String msg = "Realm service not initialized";
@@ -82,22 +72,13 @@ public class WindowsAPIUtils {
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving current user store manager";
             throw new MDMAPIException(msg, e);
-        } finally {
-            PrivilegedCarbonContext.endTenantFlow();
         }
         return userStoreManager;
     }
 
     public static NotificationManagementService getNotificationManagementService() {
-        NotificationManagementService nmService;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        nmService =
-                (NotificationManagementService) ctx.getOSGiService(NotificationManagementService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-        return nmService;
+        return (NotificationManagementService) ctx.getOSGiService(NotificationManagementService.class, null);
     }
 
     public static MediaType getResponseMediaType(String acceptHeader) {
@@ -128,15 +109,8 @@ public class WindowsAPIUtils {
     }
 
     public static PolicyManagerService getPolicyManagerService() {
-        PolicyManagerService policyManager;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        policyManager =
-                (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-        return policyManager;
+        return (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
     }
 
     public static void updateOperation(String deviceId, Operation operation)

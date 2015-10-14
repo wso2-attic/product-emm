@@ -54,12 +54,8 @@ public class AndroidAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
-        DeviceManagementProviderService dmService;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        dmService =
-                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-        return dmService;
+        return (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
     }
 
     public static MediaType getResponseMediaType(String acceptHeader) {
@@ -96,25 +92,13 @@ public class AndroidAPIUtils {
 
 
     public static PolicyManagerService getPolicyManagerService() {
-
-        PolicyManagerService policyManager;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        policyManager =
-                (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-
-        return policyManager;
+        return (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
     }
 
     public static ApplicationManagementProviderService getApplicationManagerService() {
-
-        ApplicationManagementProviderService applicationManagementProviderService;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        applicationManagementProviderService =
-                (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-
-        return applicationManagementProviderService;
+        return (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
     }
 
     public static void updateOperation(String deviceId, Operation operation)

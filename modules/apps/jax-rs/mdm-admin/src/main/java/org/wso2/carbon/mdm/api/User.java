@@ -540,7 +540,7 @@ public class User {
             throws MDMAPIException {
         DeviceManagementProviderService dmService;
         try {
-            dmService = MDMAPIUtils.getDeviceManagementService(tenantDomain);
+            dmService = MDMAPIUtils.getDeviceManagementService();
             return dmService.getDevicesOfUser(username);
         } catch (DeviceManagementException e) {
             String errorMsg = "Device management error";

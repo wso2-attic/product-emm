@@ -221,6 +221,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.mgt.core.feature:${carbon.multitenancy.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.mgt.server.feature:${carbon.multitenancy.version}
+                                </featureArtifactDef>
                                 <!-- End of Carbon Multi-tenancy Features -->
 
                                 <!-- Identity Features -->
@@ -443,7 +446,7 @@
                                     <id>org.wso2.carbon.dynamic.client.registration.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
-				<feature>
+				                 <feature>
                                     <id>org.wso2.carbon.apimgt.webapp.publisher.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
@@ -557,6 +560,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.tenant.common.server.feature.group</id>
+                                    <version>${carbon.multitenancy.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.tenant.mgt.server.feature.group</id>
                                     <version>${carbon.multitenancy.version}</version>
                                 </feature>
                                 <feature>
