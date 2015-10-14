@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl;
@@ -51,6 +51,7 @@ public class BSTProviderImpl implements BSTProvider {
     /**
      * This method validates the device user, checking passed credentials and returns the corresponding
      * binary security token which is used in XCEP and WSTEP stages for authentication.
+     *
      * @param credentials - Credential object passes from the wab page
      * @return - Response with binary security token
      */
@@ -62,7 +63,7 @@ public class BSTProviderImpl implements BSTProvider {
 //        String[] domainUserArray = domainUser.split(DELIMITER);
 //        String user = domainUserArray[USER_SEGMENT];
 //        String domain = domainUserArray[DOMAIN_SEGMENT];
-          String  domain = "";
+        String domain = "";
         String password = credentials.getPassword();
 
         try {
@@ -81,7 +82,7 @@ public class BSTProviderImpl implements BSTProvider {
         } catch (AuthenticationException e) {
             String msg = "Failure occurred in user authentication process.";
             log.error(msg);
-           throw new WindowsDeviceEnrolmentException(msg);
+            throw new WindowsDeviceEnrolmentException(msg);
         } catch (DeviceManagementException e) {
             String msg = "Failure occurred in generating challenge token.";
             log.error(msg);
@@ -91,6 +92,7 @@ public class BSTProviderImpl implements BSTProvider {
 
     /**
      * This method authenticate the user checking the carbon default user store.
+     *
      * @param username     - Username in username token
      * @param password     - Password in username token
      * @param tenantDomain - Tenant domain is extracted from the username
@@ -98,7 +100,7 @@ public class BSTProviderImpl implements BSTProvider {
      * @throws AuthenticationException
      */
     private boolean authenticate(String username, String password, String tenantDomain) throws
-                                 AuthenticationException {
+            AuthenticationException {
 
         try {
             PrivilegedCarbonContext.startTenantFlow();

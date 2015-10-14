@@ -1,19 +1,19 @@
 /*
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
@@ -28,6 +28,7 @@ import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
@@ -39,6 +40,8 @@ import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,27 +52,27 @@ import static org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIU
  */
 public class SyncmlServiceImpl implements SyncmlService {
 
-    private static final int SYNCML_FIRST_MESSAGE_ID = 1;
-    private static final int SYNCML_SECOND_MESSAGE_ID = 2;
-    private static final int SYNCML_FIRST_SESSION_ID = 1;
-    private static final int SYNCML_SECOND_SESSION_ID = 2;
-    private static final int OSVERSION_POSITION = 0;
-    private static final int DEVICE_ID_POSITION = 0;
-    private static final int DEVICE_MODE_POSITION = 2;
-    private static final int DEVICE_MAN_POSITION = 1;
-    private static final int DEVICE_MOD_VER_POSITION = 3;
-    private static final int DEVICE_LANG_POSITION = 4;
-    private static final int IMSI_POSITION = 1;
-    private static final int IMEI_POSITION = 2;
-    private static final int VENDER_POSITION = 7;
-    private static final int MACADDRESS_POSITION = 8;
-    private static final int RESOLUTION_POSITION = 9;
-    private static final int DEVICE_NAME_POSITION = 10;
-    private static final String OS_VERSION = "OS_VERSION";
-    private static final String IMSI = "IMSI";
-    private static final String IMEI = "IMEI";
-    private static final String VENDOR = "VENDER";
-    private static final String MODEL = "DEVICE_MODEL";
+//    private static final int SYNCML_FIRST_MESSAGE_ID = 1;
+//    private static final int SYNCML_SECOND_MESSAGE_ID = 2;
+//    private static final int SYNCML_FIRST_SESSION_ID = 1;
+//    private static final int SYNCML_SECOND_SESSION_ID = 2;
+//    private static final int OSVERSION_POSITION = 0;
+//    private static final int DEVICE_ID_POSITION = 0;
+//    private static final int DEVICE_MODE_POSITION = 2;
+//    private static final int DEVICE_MAN_POSITION = 1;
+//    private static final int DEVICE_MOD_VER_POSITION = 3;
+//    private static final int DEVICE_LANG_POSITION = 4;
+//    private static final int IMSI_POSITION = 1;
+//    private static final int IMEI_POSITION = 2;
+//    private static final int VENDER_POSITION = 7;
+//    private static final int MACADDRESS_POSITION = 8;
+//    private static final int RESOLUTION_POSITION = 9;
+//    private static final int DEVICE_NAME_POSITION = 10;
+//    private static final String OS_VERSION = "OS_VERSION";
+//    private static final String IMSI = "IMSI";
+//    private static final String IMEI = "IMEI";
+//    private static final String VENDOR = "VENDER";
+//    private static final String MODEL = "DEVICE_MODEL";
 
     private static Log log = LogFactory.getLog(SyncmlServiceImpl.class);
 
@@ -91,23 +94,23 @@ public class SyncmlServiceImpl implements SyncmlService {
         Device generatedDevice = new Device();
 
         Device.Property OSVersionProperty = new Device.Property();
-        OSVersionProperty.setName(OS_VERSION);
+        OSVersionProperty.setName(PluginConstants.SyncML.OS_VERSION);
         OSVersionProperty.setValue(osVersion);
 
         Device.Property IMSEIProperty = new Device.Property();
-        IMSEIProperty.setName(SyncmlServiceImpl.IMSI);
+        IMSEIProperty.setName(PluginConstants.SyncML.IMSI);
         IMSEIProperty.setValue(imsi);
 
         Device.Property IMEIProperty = new Device.Property();
-        IMEIProperty.setName(SyncmlServiceImpl.IMEI);
+        IMEIProperty.setName(PluginConstants.SyncML.IMEI);
         IMEIProperty.setValue(imei);
 
         Device.Property DevManProperty = new Device.Property();
-        DevManProperty.setName(VENDOR);
+        DevManProperty.setName(PluginConstants.SyncML.VENDOR);
         DevManProperty.setValue(manufacturer);
 
         Device.Property DevModProperty = new Device.Property();
-        DevModProperty.setName(MODEL);
+        DevModProperty.setName(PluginConstants.SyncML.MODEL);
         DevModProperty.setValue(model);
 
         List<Device.Property> propertyList = new ArrayList<>();
@@ -167,7 +170,8 @@ public class SyncmlServiceImpl implements SyncmlService {
             DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlHeader.getSource()
                     .getLocURI());
             msgID = syncmlHeader.getMsgID();
-            if (SYNCML_FIRST_MESSAGE_ID == msgID && SYNCML_FIRST_SESSION_ID == sessionId) {
+            if (PluginConstants.SyncML.SYNCML_FIRST_MESSAGE_ID == msgID &&
+                    PluginConstants.SyncML.SYNCML_FIRST_SESSION_ID == sessionId) {
                 token = syncmlHeader.getCredential().getData();
                 CacheEntry cacheToken = (CacheEntry) DeviceUtil.getCacheEntry(token);
 
@@ -186,6 +190,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                             throw new FeatureManagementException("Error occurred in while getting effective " +
                                     "feature", e);
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
                         }
 
                     } else {
@@ -198,7 +206,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                     log.error(msg);
                     return Response.status(Response.Status.UNAUTHORIZED).entity(msg).build();
                 }
-            } else if (SYNCML_SECOND_MESSAGE_ID == msgID && SYNCML_FIRST_SESSION_ID == sessionId) {
+            } else if (PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID == msgID &&
+                    PluginConstants.SyncML.SYNCML_FIRST_SESSION_ID == sessionId) {
 
                 if (enrollDevice(request)) {
                     try {
@@ -209,6 +218,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                         throw new PolicyManagementException("Error occurred in while getting effective policy.", e);
                     } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                         throw new FeatureManagementException("Error occurred in while getting effective feature", e);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
                     }
 
                 } else {
@@ -216,7 +229,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                     log.error(msg);
                     return Response.status(Response.Status.NOT_MODIFIED).entity(msg).build();
                 }
-            } else if (sessionId >= SYNCML_SECOND_SESSION_ID) {
+            } else if (sessionId >= PluginConstants.SyncML.SYNCML_SECOND_SESSION_ID) {
                 if ((syncmlDocument.getBody().getAlert() != null)) {
                     if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
                         try {
@@ -253,6 +266,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (NotificationManagementException e) {
                             throw new NotificationManagementException("Error occurred in while getting notification " +
                                     "service ", e);
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
                         }
                     } else {
                         try {
@@ -276,6 +293,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                             throw new FeatureManagementException("Error occurred in while getting " +
                                     "effective feature", e);
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
                         }
                     }
                 } else {
@@ -311,6 +332,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } catch (NotificationManagementException e) {
                         throw new NotificationManagementException("Error occurred in while getting notification "
                                 + "service ", e);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
                     }
                 }
             } else {
@@ -324,7 +349,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 
     /**
      * Enroll phone device
-     * @param request
+     *
+     * @param request Device syncml request for the server side.
      * @return enroll state
      * @throws WindowsDeviceEnrolmentException
      * @throws WindowsOperationException
@@ -351,14 +377,14 @@ public class SyncmlServiceImpl implements SyncmlService {
         try {
             syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
             msgID = syncmlDocument.getHeader().getMsgID();
-            if (msgID == SYNCML_FIRST_MESSAGE_ID) {
+            if (msgID == PluginConstants.SyncML.SYNCML_FIRST_MESSAGE_ID) {
                 Replace replace = syncmlDocument.getBody().getReplace();
                 List<Item> itemList = replace.getItems();
-                devID = itemList.get(DEVICE_ID_POSITION).getData();
-                devMan = itemList.get(DEVICE_MAN_POSITION).getData();
-                devMod = itemList.get(DEVICE_MODE_POSITION).getData();
-                modVersion = itemList.get(DEVICE_MOD_VER_POSITION).getData();
-                devLang = itemList.get(DEVICE_LANG_POSITION).getData();
+                devID = itemList.get(PluginConstants.SyncML.DEVICE_ID_POSITION).getData();
+                devMan = itemList.get(PluginConstants.SyncML.DEVICE_MAN_POSITION).getData();
+                devMod = itemList.get(PluginConstants.SyncML.DEVICE_MODE_POSITION).getData();
+                modVersion = itemList.get(PluginConstants.SyncML.DEVICE_MOD_VER_POSITION).getData();
+                devLang = itemList.get(PluginConstants.SyncML.DEVICE_LANG_POSITION).getData();
                 user = syncmlDocument.getHeader().getSource().getLocName();
 
                 if (log.isDebugEnabled()) {
@@ -371,15 +397,15 @@ public class SyncmlServiceImpl implements SyncmlService {
                 status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(generateDevice);
                 return status;
 
-            } else if (msgID == SYNCML_SECOND_MESSAGE_ID) {
+            } else if (msgID == PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID) {
                 List<Item> itemList = syncmlDocument.getBody().getResults().getItem();
-                osVersion = itemList.get(OSVERSION_POSITION).getData();
-                imsi = itemList.get(IMSI_POSITION).getData();
-                imei = itemList.get(IMEI_POSITION).getData();
-                vender = itemList.get(VENDER_POSITION).getData();
-                macAddress = itemList.get(MACADDRESS_POSITION).getData();
-                resolution = itemList.get(RESOLUTION_POSITION).getData();
-                deviceName = itemList.get(DEVICE_NAME_POSITION).getData();
+                osVersion = itemList.get(PluginConstants.SyncML.OSVERSION_POSITION).getData();
+                imsi = itemList.get(PluginConstants.SyncML.IMSI_POSITION).getData();
+                imei = itemList.get(PluginConstants.SyncML.IMEI_POSITION).getData();
+                vender = itemList.get(PluginConstants.SyncML.VENDER_POSITION).getData();
+                macAddress = itemList.get(PluginConstants.SyncML.MACADDRESS_POSITION).getData();
+                resolution = itemList.get(PluginConstants.SyncML.RESOLUTION_POSITION).getData();
+                deviceName = itemList.get(PluginConstants.SyncML.DEVICE_NAME_POSITION).getData();
                 DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlDocument.getHeader().getSource()
                         .getLocURI());
                 Device existingDevice = WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
@@ -388,37 +414,37 @@ public class SyncmlServiceImpl implements SyncmlService {
                     List<Device.Property> existingProperties = new ArrayList<>();
 
                     Device.Property imeiProperty = new Device.Property();
-                    imeiProperty.setName("IMEI");
+                    imeiProperty.setName(PluginConstants.SyncML.IMEI);
                     imeiProperty.setValue(imei);
                     existingProperties.add(imeiProperty);
 
                     Device.Property osVersionProperty = new Device.Property();
-                    osVersionProperty.setName("OS_VERSION");
+                    osVersionProperty.setName(PluginConstants.SyncML.OS_VERSION);
                     osVersionProperty.setValue(osVersion);
                     existingProperties.add(osVersionProperty);
 
                     Device.Property imsiProperty = new Device.Property();
-                    imsiProperty.setName("IMSI");
+                    imsiProperty.setName(PluginConstants.SyncML.IMSI);
                     imsiProperty.setValue(imsi);
                     existingProperties.add(imsiProperty);
 
                     Device.Property venderProperty = new Device.Property();
-                    venderProperty.setName("VENDOR");
+                    venderProperty.setName(PluginConstants.SyncML.VENDOR);
                     venderProperty.setValue(vender);
                     existingProperties.add(venderProperty);
 
                     Device.Property macAddressProperty = new Device.Property();
-                    macAddressProperty.setName("MAC_ADDRESS");
+                    macAddressProperty.setName(PluginConstants.SyncML.MAC_ADDRESS);
                     macAddressProperty.setValue(macAddress);
                     existingProperties.add(macAddressProperty);
 
                     Device.Property resolutionProperty = new Device.Property();
-                    resolutionProperty.setName("DEVICE_INFO");
+                    resolutionProperty.setName(PluginConstants.SyncML.DEVICE_INFO);
                     resolutionProperty.setValue(resolution);
                     existingProperties.add(resolutionProperty);
 
                     Device.Property deviceNameProperty = new Device.Property();
-                    deviceNameProperty.setName("DEVICE_NAME");
+                    deviceNameProperty.setName(PluginConstants.SyncML.DEVICE_NAME);
                     deviceNameProperty.setValue(deviceName);
                     existingProperties.add(deviceNameProperty);
 
@@ -441,6 +467,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         return status;
     }
 
+    // Only for testing
     public static String getStringFromDoc(org.w3c.dom.Document doc) {
         DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
         LSSerializer lsSerializer = domImplementation.createLSSerializer();
@@ -449,24 +476,26 @@ public class SyncmlServiceImpl implements SyncmlService {
 
     /**
      * Generate Device payloads.
-     * @param syncmlDocument
-     * @param lsDeviceInfo
-     * @return String type syncml payload
+     *
+     * @param syncmlDocument parsed suncml payload from the syncml engine.
+     * @param operations     operations for generate payload.
+     * @return String type syncml payload.
      * @throws WindowsOperationException
      * @throws JSONException
      * @throws PolicyManagementException
      * @throws org.wso2.carbon.policy.mgt.common.FeatureManagementException
      */
-    public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> lsDeviceInfo)
+    public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> operations)
             throws WindowsOperationException, JSONException, PolicyManagementException,
-            org.wso2.carbon.policy.mgt.common.FeatureManagementException {
+            org.wso2.carbon.policy.mgt.common.FeatureManagementException, UnsupportedEncodingException,
+            NoSuchAlgorithmException {
         OperationReply operationReply;
         SyncmlGenerator generator;
         SyncmlDocument syncmlResponse;
-        if (lsDeviceInfo == null) {
+        if (operations == null) {
             operationReply = new OperationReply(syncmlDocument);
         } else {
-            operationReply = new OperationReply(syncmlDocument, lsDeviceInfo);
+            operationReply = new OperationReply(syncmlDocument, operations);
         }
         syncmlResponse = operationReply.generateReply();
         generator = new SyncmlGenerator();

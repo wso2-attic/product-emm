@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.common;
@@ -29,10 +29,10 @@ public final class PluginConstants {
             "org.wso2.carbon.mdm.mobileservices.windows.services.discovery.DiscoveryService";
     public static final String CERTIFICATE_ENROLLMENT_SERVICE_ENDPOINT =
             "org.wso2.carbon.mdm.mobileservices.windows.services.wstep" +
-            ".CertificateEnrollmentService";
+                    ".CertificateEnrollmentService";
     public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT =
             "org.wso2.carbon.mdm.mobileservices.windows.services.xcep" +
-            ".CertificateEnrollmentPolicyService";
+                    ".CertificateEnrollmentPolicyService";
 
     //Services' target namespaces
     public static final String DISCOVERY_SERVICE_TARGET_NAMESPACE =
@@ -73,18 +73,20 @@ public final class PluginConstants {
      * Discovery service related other constants
      */
     public final class Discovery {
-        private Discovery() { throw new AssertionError(); }
+        private Discovery() {
+            throw new AssertionError();
+        }
 
         public static final String ENROLL_SUBDOMAIN = "https://EnterpriseEnrollment.";
         public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL =
                 "/ENROLLMENTSERVER/PolicyEnrollmentWebservice" +
-                ".svc";
+                        ".svc";
         public static final String CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/DeviceEnrollmentWebservice" +
-                ".svc";
+                        ".svc";
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY =
                 "/ENROLLMENTSERVER/ONPREMISE/" +
-                "PolicyEnrollmentWebservice.svc";
+                        "PolicyEnrollmentWebservice.svc";
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
         public static final String WAB_URL = "/mdm/enrollments/windows/login-agent";
@@ -96,7 +98,9 @@ public final class PluginConstants {
      * Certificate enrolment policy service related constants
      */
     public final class CertificateEnrolmentPolicy {
-        private CertificateEnrolmentPolicy() { throw new AssertionError(); }
+        private CertificateEnrolmentPolicy() {
+            throw new AssertionError();
+        }
 
         public static final int MINIMAL_KEY_LENGTH = 2048;
         public static final int POLICY_SCHEMA = 3;
@@ -112,20 +116,22 @@ public final class PluginConstants {
      * Certificate enrollment Service related constants
      */
     public final class CertificateEnrolment {
-        private CertificateEnrolment () { throw new AssertionError(); }
+        private CertificateEnrolment() {
+            throw new AssertionError();
+        }
 
         public static final String TOKEN_TYPE =
                 "http://schemas.microsoft.com/5.0.0" +
-                ".0/ConfigurationManager/Enrollment/DeviceEnrollmentToken";
+                        ".0/ConfigurationManager/Enrollment/DeviceEnrollmentToken";
         public static final String PARM = "parm";
         public static final String TYPE = "type";
         public static final String VALUE = "value";
         public static final String VALUE_TYPE =
                 "http://schemas.microsoft.com/5.0.0" +
-                ".0/ConfigurationManager/Enrollment/DeviceEnrollmentProvisionDoc";
+                        ".0/ConfigurationManager/Enrollment/DeviceEnrollmentProvisionDoc";
         public static final String ENCODING_TYPE =
                 "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0" +
-                ".xsd#base64binary";
+                        ".xsd#base64binary";
         public static final String WSO2_MDM_JKS_FILE = "wso2mdm.jks";
         public static final String CA_CERT = "cacert";
         public static final String X_509 = "X.509";
@@ -137,7 +143,7 @@ public final class PluginConstants {
         public static final String SECURITY = "Security";
         public static final String WSS_SECURITY_UTILITY =
                 "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0" +
-                ".xsd";
+                        ".xsd";
         public static final String TIMESTAMP_ID = "Id";
         public static final String TIMESTAMP_U = "u";
         public static final String TIMESTAMP = "Timestamp";
@@ -151,7 +157,9 @@ public final class PluginConstants {
      * SynclML service related constants
      */
     public final class SyncML {
-        private SyncML() { throw new AssertionError(); }
+        private SyncML() {
+            throw new AssertionError();
+        }
 
         public static final String SYNCML_SOURCE = "Source";
         public static final String SYNCML_DATA = "Data";
@@ -162,6 +170,32 @@ public final class PluginConstants {
         public static final String SYNCML_MESSAGE_REF = "MsgRef";
         public static final String SYNCML_LOCATION_URI = "LocURI";
         public static final String SYNCML_TARGET_REF = "TargetRef";
+
+        public static final int SYNCML_FIRST_MESSAGE_ID = 1;
+        public static final int SYNCML_SECOND_MESSAGE_ID = 2;
+        public static final int SYNCML_FIRST_SESSION_ID = 1;
+        public static final int SYNCML_SECOND_SESSION_ID = 2;
+        public static final int OSVERSION_POSITION = 0;
+        public static final int DEVICE_ID_POSITION = 0;
+        public static final int DEVICE_MODE_POSITION = 2;
+        public static final int DEVICE_MAN_POSITION = 1;
+        public static final int DEVICE_MOD_VER_POSITION = 3;
+        public static final int DEVICE_LANG_POSITION = 4;
+        public static final int IMSI_POSITION = 1;
+        public static final int IMEI_POSITION = 2;
+        public static final int VENDER_POSITION = 7;
+        public static final int MACADDRESS_POSITION = 8;
+        public static final int RESOLUTION_POSITION = 9;
+        public static final int DEVICE_NAME_POSITION = 10;
+        public static final String OS_VERSION = "OS_VERSION";
+        public static final String IMSI = "IMSI";
+        public static final String IMEI = "IMEI";
+        public static final String VENDOR = "VENDER";
+        public static final String MODEL = "DEVICE_MODEL";
+        public static final String MAC_ADDRESS = "MAC_ADDRESS";
+        public static final String DEVICE_INFO = "DEVICE_INFO";
+        public static final String DEVICE_NAME = "DEVICE_NAME";
+
     }
 
     /**

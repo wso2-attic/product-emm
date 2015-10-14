@@ -6,16 +6,16 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * /
  */
+
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
 import org.apache.commons.logging.Log;
@@ -57,8 +57,9 @@ public class OperationUtils {
 
     /**
      * Update the operations using device status payload.
-     * @param status Client side status for the specific operations
-     * @param syncmlDocument syncml payload for operation status which parse through  the syncml engine
+     *
+     * @param status           Client side status for the specific operations
+     * @param syncmlDocument   syncml payload for operation status which parse through  the syncml engine
      * @param deviceIdentifier specific device identifier for each device
      * @throws OperationManagementException
      * @throws DeviceManagementException
@@ -66,7 +67,6 @@ public class OperationUtils {
     public void updateDeviceOperations(Status status, SyncmlDocument syncmlDocument,
                                        DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException, NotificationManagementException {
-
 
 
         pendingDataOperations = SyncmlUtils.getDeviceManagementService()
@@ -106,7 +106,8 @@ public class OperationUtils {
 
     /**
      * Update operation statuses
-     * @param deviceId specific device Id
+     *
+     * @param deviceId   specific device Id
      * @param operations operation list to be update
      * @throws OperationManagementException
      */
@@ -293,7 +294,7 @@ public class OperationUtils {
                         profiles.add(cameraProfile);
                     }
                     if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.ENCRYPT_STORAGE_STATUS)){
+                            PluginConstants.OperationCodes.ENCRYPT_STORAGE_STATUS)) {
                         Profile encryptStorage = new Profile();
                         encryptStorage.setFeatureCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
                         encryptStorage.setData(item.getData());
@@ -305,7 +306,7 @@ public class OperationUtils {
                         profiles.add(encryptStorage);
                     }
                     if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.DEVICE_PASSWORD_STATUS)){
+                            PluginConstants.OperationCodes.DEVICE_PASSWORD_STATUS)) {
                         Profile encryptStorage = new Profile();
                         encryptStorage.setFeatureCode(PluginConstants.OperationCodes.PASSCODE_POLICY);
                         encryptStorage.setData(item.getData());

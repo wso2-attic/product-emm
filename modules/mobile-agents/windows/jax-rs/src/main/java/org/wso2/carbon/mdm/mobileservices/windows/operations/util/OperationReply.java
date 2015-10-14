@@ -6,15 +6,14 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
@@ -34,6 +33,8 @@ import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.common.ProfileFeature;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,13 +71,13 @@ public class OperationReply {
     }
 
     public SyncmlDocument generateReply() throws WindowsOperationException, PolicyManagementException,
-            FeatureManagementException, JSONException {
+            FeatureManagementException, JSONException, UnsupportedEncodingException, NoSuchAlgorithmException {
         generateHeader();
         generateBody();
         return replySyncmlDocument;
     }
 
-    private void generateHeader() {
+    private void generateHeader() throws UnsupportedEncodingException, NoSuchAlgorithmException {
         String nextnonceValue = Constants.INITIAL_NONCE;
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
         SyncmlHeader header = new SyncmlHeader();
@@ -108,7 +109,7 @@ public class OperationReply {
                 nextnonceValue = status.getChallenge().getMeta().getNextNonce();
             }
         }
-        cred.setData(new SyncmlCredinitials().generateCredData(nextnonceValue));
+        cred.setData(new SyncmlCredentials().generateCredData(nextnonceValue));
         header.setCredential(cred);
 
         replySyncmlDocument.setHeader(header);

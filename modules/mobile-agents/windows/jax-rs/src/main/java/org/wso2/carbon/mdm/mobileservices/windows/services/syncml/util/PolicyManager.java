@@ -1,10 +1,13 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
- * you may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -30,6 +33,7 @@ import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 public class PolicyManager {
 
     private static Log log = LogFactory.getLog(PolicyManager.class);
+
     public Policy getEffectivePolicy(DeviceIdentifier deviceIdentifier) throws WindowsConfigurationException {
         Policy policy;
         PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
@@ -37,8 +41,7 @@ public class PolicyManager {
             policy = policyManagerService.getEffectivePolicy(deviceIdentifier);
             if (policy != null) {
                 return policy;
-            }
-            else {
+            } else {
                 return null;
             }
         } catch (PolicyManagementException e) {

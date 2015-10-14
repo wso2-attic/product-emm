@@ -6,15 +6,14 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * /
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
@@ -41,61 +40,61 @@ import java.io.StringWriter;
  */
 public class SyncmlGenerator {
 
-	private static Log log = LogFactory.getLog(SyncmlGenerator.class);
+    private static Log log = LogFactory.getLog(SyncmlGenerator.class);
 
-	public String generatePayload(SyncmlDocument syncmlDocument) throws WindowsOperationException {
-		Document doc = generateDocument();
-		Element rootElement = createRootElement(doc);
-		SyncmlHeader header= syncmlDocument.getHeader();
-		header.buildSyncmlHeaderElement(doc, rootElement);
-		SyncmlBody body= syncmlDocument.getBody();
-		body.buildBodyElement(doc,rootElement);
-		return transformDocument(doc);
-	}
+    public String generatePayload(SyncmlDocument syncmlDocument) throws WindowsOperationException {
+        Document doc = generateDocument();
+        Element rootElement = createRootElement(doc);
+        SyncmlHeader header = syncmlDocument.getHeader();
+        header.buildSyncmlHeaderElement(doc, rootElement);
+        SyncmlBody body = syncmlDocument.getBody();
+        body.buildBodyElement(doc, rootElement);
+        return transformDocument(doc);
+    }
 
-	private static Document generateDocument() throws WindowsOperationException {
-		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder;
-		try {
-			docBuilder = documentFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			String message = "Error while generating a new document of syncml";
-			log.error(message);
-			throw new WindowsOperationException(message);
-		}
-		return docBuilder.newDocument();
-	}
+    private static Document generateDocument() throws WindowsOperationException {
+        DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder;
+        try {
+            docBuilder = documentFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            String message = "Error while generating a new document of syncml";
+            log.error(message);
+            throw new WindowsOperationException(message);
+        }
+        return docBuilder.newDocument();
+    }
 
-	private static Element createRootElement(Document document) {
-		Element rootElement = document.createElementNS(Constants.XMLNS_SYNCML,
-		                                               Constants.SYNCML_ROOT_ELEMENT_NAME);
-		document.appendChild(rootElement);
-		return rootElement;
-	}
+    private static Element createRootElement(Document document) {
+        Element rootElement = document.createElementNS(Constants.XMLNS_SYNCML,
+                Constants.SYNCML_ROOT_ELEMENT_NAME);
+        document.appendChild(rootElement);
+        return rootElement;
+    }
 
-	private String transformDocument(Document document) throws WindowsOperationException {
-		DOMSource domSource = new DOMSource(document);
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = null;
-		try {
-			transformer = transformerFactory.newTransformer();
-		} catch (TransformerConfigurationException e) {
-			String message = "Error while retrieving a new transformer";
-			log.error(message);
-			throw new WindowsOperationException(message);
-		}
-		transformer.setOutputProperty(OutputKeys.ENCODING, Constants.UTF_8);
-		transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
+    private String transformDocument(Document document) throws WindowsOperationException {
+        DOMSource domSource = new DOMSource(document);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer;
+        try {
+            transformer = transformerFactory.newTransformer();
+        } catch (TransformerConfigurationException e) {
+            String message = "Error while retrieving a new transformer";
+            log.error(message);
+            throw new WindowsOperationException(message);
+        }
+        transformer.setOutputProperty(OutputKeys.ENCODING, Constants.UTF_8);
+        transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
 
-		StringWriter stringWriter = new StringWriter();
-		StreamResult streamResult = new StreamResult(stringWriter);
-		try {
-			transformer.transform(domSource, streamResult);
-		} catch (TransformerException e) {
-			String message = "Error while transforming document to a string";
-			log.error(message);
-			throw new WindowsOperationException(message);
-		}
+        StringWriter stringWriter = new StringWriter();
+        StreamResult streamResult = new StreamResult(stringWriter);
+        try {
+            transformer.transform(domSource, streamResult);
+        } catch (TransformerException e) {
+            String message = "Error while transforming document to a string";
+            log.error(message);
+            throw new WindowsOperationException(message);
+        }
         return stringWriter.toString();
-	}
+    }
 }

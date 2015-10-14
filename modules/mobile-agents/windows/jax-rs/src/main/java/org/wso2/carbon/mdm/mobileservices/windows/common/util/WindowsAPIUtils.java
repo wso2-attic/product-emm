@@ -41,7 +41,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
- * class for Windows API utilities.
+ * Class for get Windows API utilities.
  */
 public class WindowsAPIUtils {
 
