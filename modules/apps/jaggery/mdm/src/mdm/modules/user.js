@@ -553,11 +553,17 @@ var userModule = function () {
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
             permissions["LIST_USERS"] = true;
         }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/roles/list")) {
+            permissions["LIST_ROLES"] = true;
+        }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
             permissions["LIST_POLICIES"] = true;
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
             permissions["ADD_USER"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/roles/add")) {
+            permissions["ADD_ROLE"] = true;
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
             permissions["ADD_POLICY"] = true;
@@ -565,6 +571,7 @@ var userModule = function () {
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
             permissions["VIEW_DASHBOARD"] = true;
         }
+
         return permissions;
     };
 
