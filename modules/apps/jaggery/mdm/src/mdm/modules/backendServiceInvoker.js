@@ -25,7 +25,7 @@ var backendServiceInvoker = function () {
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
     var constants = require("/modules/constants.js");
-    var log = new Log();
+    var log = new Log("modules/backendServiceInvoker.js");
 
     /**
      * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
@@ -36,26 +36,22 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     function initialteXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
-        var execute = function () {
-            var XMLHttpRequest = new XMLHttpRequest();
-            XMLHttpRequest.open(method, url);
-            XMLHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
-            XMLHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
-            if (IS_OAUTH_ENABLED) {
-                var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-                if (!accessToken) {
-                    XMLHttpRequest.setRequestHeader(
-                        constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
-                } else {
-                    execute();
-                }
+        var XMLHttpRequest = new XMLHttpRequest();
+        XMLHttpRequest.open(method, url);
+        XMLHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+        XMLHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
+        if (IS_OAUTH_ENABLED) {
+            var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
+            if (!accessToken) {
+                XMLHttpRequest.setRequestHeader(
+                    constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
-            XMLHttpRequest.send(stringify(payload));
-            if (XMLHttpRequest.status == 200) {
-                successCallback(parse(XMLHttpRequest["responseText"]));
-            } else {
-                errorCallback(parse(XMLHttpRequest["responseText"]));
-            }
+        }
+        XMLHttpRequest.send(stringify(payload));
+        if (XMLHttpRequest.status == 200) {
+            successCallback(parse(XMLHttpRequest["responseText"]));
+        } else {
+            errorCallback(parse(XMLHttpRequest["responseText"]));
         }
     }
 
@@ -138,7 +134,6 @@ var backendServiceInvoker = function () {
      * @param soapVersion soapVersion which need to used.
      */
     function initialteWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion) {
-        log.error("WE are here");
         var ws = require('ws');
         var wsRequest = new ws.WSRequest();
         var options = [];
@@ -156,9 +151,7 @@ var backendServiceInvoker = function () {
             wsResponse = wsRequest.responseE4X;
         } catch (e) {
             errorCallback(e);
-            log.error("oops");
         }
-        log.error("complete");
         successCallback(wsResponse);
     }
 
@@ -214,7 +207,7 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      * @param soapVersion soapVersion which need to used.
      */
-    publicWSInvokers.soapReqwest = function (action, endpoint, payload, successCallback, errorCallback, soapVersion) {
+    publicWSInvokers.soapRequest = function (action, endpoint, payload, successCallback, errorCallback, soapVersion) {
         initialteWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion);
     };
 

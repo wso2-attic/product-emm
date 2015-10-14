@@ -25,7 +25,7 @@ var userModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
     var mdmProps = require('/config/mdm-props.js').config();
-    var serviceInvokers = require("/modules/backendServiceInvoker.js").publicInvokers;
+    var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
 
     /* Initializing user manager */
     var carbon = require('carbon');
@@ -44,7 +44,7 @@ var userModule = function () {
      *  Get the carbon user object from the session. If not found - it will throw a user not found error.
      * @returns {carbon user object}
      */
-    privateMethods.getCarbonUser = function() {
+    privateMethods.getCarbonUser = function () {
         var statusCode, carbon = require('carbon');
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
@@ -63,7 +63,7 @@ var userModule = function () {
      *  'content': {}
      * }
      */
-    privateMethods.callBackend = function(url, method) {
+    privateMethods.callBackend = function (url, method) {
         var url = mdmProps["httpsURL"] + url;
         var xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -130,7 +130,7 @@ var userModule = function () {
             return statusCode;
         } catch (e) {
             throw e;
-        } finally{
+        } finally {
             utility.endTenantFlow();
         }
     };
@@ -276,21 +276,21 @@ var userModule = function () {
     /*
      @Deprecated
      */
-    privateMethods.getEmail = function(username, userManager) {
+    privateMethods.getEmail = function (username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/emailaddress", null)
     };
 
     /*
      @Deprecated
      */
-    privateMethods.getFirstName = function(username, userManager) {
+    privateMethods.getFirstName = function (username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/givenname", null)
     };
 
     /*
      @Deprecated
      */
-    privateMethods.getLastName = function(username, userManager) {
+    privateMethods.getLastName = function (username, userManager) {
         return userManager.getClaim(username, "http://wso2.org/claims/lastname", null)
     };
 
@@ -545,7 +545,7 @@ var userModule = function () {
         }
     };
 
-    publicMethods.getUIPermissions = function(){
+    publicMethods.getUIPermissions = function () {
         var permissions = {};
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
             publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
@@ -577,7 +577,7 @@ var userModule = function () {
     };
 
     publicMethods.addPermissions = function (permissionList, path, init) {
-        var registry,carbon = require("carbon");
+        var registry, carbon = require("carbon");
         var carbonServer = application.get("carbonServer");
         var utility = require('/modules/utility.js').utility;
         var options = {system: true};
@@ -598,13 +598,13 @@ var userModule = function () {
                 for (i = 0; i < permissionList.length; i++) {
                     permission = permissionList[i];
                     resource = {
-                        collection : true,
-                        name : permission.name,
-                        properties : {
-                            name : permission.name
+                        collection: true,
+                        name: permission.name,
+                        properties: {
+                            name: permission.name
                         }
                     };
-                    if(path != ""){
+                    if (path != "") {
                         registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
                     } else {
                         registry.put("/_system/governance/permission/admin/" + permission.key, resource);
@@ -621,13 +621,13 @@ var userModule = function () {
             for (i = 0; i < permissionList.length; i++) {
                 permission = permissionList[i];
                 resource = {
-                    collection : true,
-                    name : permission.name,
-                    properties : {
-                        name : permission.name
+                    collection: true,
+                    name: permission.name,
+                    properties: {
+                        name: permission.name
                     }
                 };
-                if(path != ""){
+                if (path != "") {
                     registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
                 } else {
                     registry.put("/_system/governance/permission/admin/" + permission.key, resource);
@@ -644,24 +644,20 @@ var userModule = function () {
      * @returns {string array} Array of secondary user stores.
      */
     publicMethods.getSecondaryUserStores = function () {
-        log.error("nice nice");
         var returnVal = [];
         var endpoint = mdmProps.carbonServer + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
-        log.error("Almost");
-        serviceInvokers.ws.soapReqwest("urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function(wsResponse) {
+        serviceInvokers.WS.soapRequest("urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
             var domainIDs = stringify(wsResponse. *::['return']. *::domainId.text());
             if (domainIDs != "\"\"") {
                 var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
                 domainIDs = domainIDs.replace(regExpForSearch, "");
                 returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
             }
-        }, function(e){
-            log.error("Error retrieving secondary user stores",e);
+        }, function (e) {
+            log.error("Error retrieving secondary user stores", e);
         }, constants.SOAP_VERSION);
-        log.error(returnVal);
         return returnVal;
     };
-
     return publicMethods;
 }();
