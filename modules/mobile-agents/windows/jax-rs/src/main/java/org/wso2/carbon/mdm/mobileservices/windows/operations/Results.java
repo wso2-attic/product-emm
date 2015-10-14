@@ -85,12 +85,10 @@ public class Results {
             results.appendChild(messageReference);
         }
         if (getItem() != null) {
-            for (int x = 0; x < getItem().size(); x++) {
-                for (Iterator<Item> itemIterator = getItem().iterator(); itemIterator.hasNext(); ) {
-                    Item item = itemIterator.next();
-                    if (item != null) {
-                        item.buildItemElement(doc, results);
-                    }
+            for (Iterator<Item> itemIterator = getItem().iterator(); itemIterator.hasNext(); ) {
+                Item item = itemIterator.next();
+                if (item != null) {
+                    item.buildItemElement(doc, results);
                 }
             }
         }
