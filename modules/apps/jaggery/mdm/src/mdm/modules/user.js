@@ -25,6 +25,7 @@ var userModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
     var mdmProps = require('/config/mdm-props.js').config();
+    var serviceInvokers = require("/modules/backendServiceInvoker.js").publicInvokers;
 
     /* Initializing user manager */
     var carbon = require('carbon');
@@ -633,6 +634,33 @@ var userModule = function () {
                 }
             }
         }
+    };
+
+    /**
+     * Private method to be used by addUser() to
+     * retrieve secondary user stores.
+     * This needs Authentication since the method access admin services.
+     *
+     * @returns {string array} Array of secondary user stores.
+     */
+    publicMethods.getSecondaryUserStores = function () {
+        log.error("nice nice");
+        var returnVal = [];
+        var endpoint = mdmProps.carbonServer + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
+        var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
+        log.error("Almost");
+        serviceInvokers.ws.soapReqwest("urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function(wsResponse) {
+            var domainIDs = stringify(wsResponse. *::['return']. *::domainId.text());
+            if (domainIDs != "\"\"") {
+                var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
+                domainIDs = domainIDs.replace(regExpForSearch, "");
+                returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
+            }
+        }, function(e){
+            log.error("Error retrieving secondary user stores",e);
+        }, constants.SOAP_VERSION);
+        log.error(returnVal);
+        return returnVal;
     };
 
     return publicMethods;

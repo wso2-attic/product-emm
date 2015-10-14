@@ -64,8 +64,8 @@ function onRequest(context) {
             }
         }
         context.device = device;
-    } else {
-        response.sendError(404);
-    }
+    //} else {
+    //    response.sendError(404);
+    //}
     return context;
 }
