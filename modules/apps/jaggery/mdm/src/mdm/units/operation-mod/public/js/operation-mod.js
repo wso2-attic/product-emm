@@ -714,49 +714,15 @@ var operationModule = function () {
         return featureMap[operationCode];
     };
 
-    privateMethods.createTemperatureControllerPayload = function (operationCode, operationData, deviceList) {
-        var payload;
-        var operationType;
-        if (operationCode == "BUZZER") {
-            operationType = operationTypeConstants["PROFILE"];
-            payload = {
-                "operation": {
-                    "enabled" : operationData["enableBuzzer"]
-                }
-            };
-        } else {
-            operationType = operationTypeConstants["COMMAND"];
-            payload = deviceList;
-        }
-        if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
-            payload["deviceIDs"] = deviceList;
-        }
-        return payload;
-    };
-
-    publicMethods.getTemperatureControllerServiceEndpoint = function (operationCode) {
-        var featureMap = {
-            "BUZZER": "buzzer"
-        };
-        return "/temp-controller-agent/operations/" + featureMap[operationCode];
-    };
-
-    publicMethods.getTemperatureControllerIconForFeature = function (operationCode) {
-        var featureMap = {
-            "BUZZER": "fw-dial-up"
-        };
-        return featureMap[operationCode];
-    };
-
     /**
-     * Filter a list by a data attribute
+     * Filter a list by a data attribute.
      * @param prop
      * @param val
      * @returns {Array}
      */
     $.fn.filterByData = function (prop, val) {
         return this.filter(
-            function () { return $(this).data(prop) == val; }
+            function () {return $(this).data(prop) == val;}
         );
     };
 
