@@ -64,7 +64,6 @@
 
     <Permission>
         <name>Clear Passcode</name>
-        <path>/device-mgt/android/operations/clear-password</path>
         <url>/operation/clear-password/</url>
         <method>POST</method>
         <scope>emm_admin</scope>

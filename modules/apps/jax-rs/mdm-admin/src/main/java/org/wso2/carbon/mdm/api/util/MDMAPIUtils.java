@@ -29,6 +29,7 @@ import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagement
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+import org.wso2.carbon.user.api.AuthorizationManager;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
@@ -78,6 +79,31 @@ public class MDMAPIUtils {
             throw new MDMAPIException(msg, e);
         }
         return userStoreManager;
+    }
+    public static AuthorizationManager getAuthorizationManager() throws MDMAPIException {
+        RealmService realmService;
+        AuthorizationManager authorizationManager;
+        try {
+            PrivilegedCarbonContext.startTenantFlow();
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+            if (realmService == null) {
+                String msg = "Realm service not initialized";
+                log.error(msg);
+                throw new MDMAPIException(msg);
+            }
+            int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            authorizationManager = realmService.getTenantUserRealm(tenantId).getAuthorizationManager();
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving current Authorization manager";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
+        }
+        return authorizationManager;
     }
 
     public static DeviceIdentifier instantiateDeviceIdentifier(String deviceType, String deviceId) {

@@ -18,6 +18,7 @@
 package org.wso2.mdm.integration.device.enrollment;
 
 import junit.framework.Assert;
+import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
@@ -36,13 +37,13 @@ public class WindowsEnrollment extends TestBase {
     @BeforeClass(alwaysRun = true, groups = { Constants.Enrollment.ANDROID_ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
-        client = new RestClient(backendURL);
+        client = new RestClient(backendURL, Constants.APPLICATION_JSON);
     }
 
-    @Test(groups = Constants.Enrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test an Windows device enrollment.")
-    public void testAndroidEnrollment() throws Exception {
+    @Test(groups = Constants.Enrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows device enrollment.")
+    public void testEnrollment() throws Exception {
         HttpResponse response = client.get("/mdm-windows-agent/services/discovery/get");
         client.setHttpHeader("Content-Type", "application/soap+xml; charset=utf-8");
-        Assert.assertEquals(response.getResponseCode(), Constants.SUCCESS_CODE);
+        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
     }
 }

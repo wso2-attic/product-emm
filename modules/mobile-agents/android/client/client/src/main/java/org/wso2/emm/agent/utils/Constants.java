@@ -36,7 +36,8 @@ public class Constants {
 	public static final String API_VERSION = "1.0.0/";
 	public static final String API_SERVER_PORT = "9763";
 
-	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/" + API_VERSION;
+	// TODO: Add API_VERSION to server endpoint
+	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
@@ -48,7 +49,7 @@ public class Constants {
 	public static final String UNREGISTER_ENDPOINT =  REGISTER_ENDPOINT;
 	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
-	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-manager/register";
+	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
@@ -76,9 +77,9 @@ public class Constants {
 	public static final String OWNERSHIP_BYOD = "BYOD";
 	public static final String OWNERSHIP_COPE = "COPE";
 	public static final String DEVICE_TYPE = "deviceType";
-	public static final String CLIENT_ID = "clientId";
-	public static final String CLIENT_SECRET = "clientSecret";
-	public static final String CLIENT_NAME = "clientName";
+	public static final String CLIENT_ID = "client_id";
+	public static final String CLIENT_SECRET = "client_secret";
+	public static final String CLIENT_NAME = "client_name";
 	public static final String IP = "ip";
 	public static final String GRANT_TYPE = "password";
 	public static final String TOKEN_SCOPE = "production";
@@ -131,6 +132,7 @@ public class Constants {
 			throw new AssertionError();
 		}
 		public static final String SUCCESSFUL = "200";
+		public static final String CREATED = "201";
 		public static final String ACCEPT = "202";
 		public static final String AUTHENTICATION_FAILED = "400";
 		public static final String INTERNAL_SERVER_ERROR = "500";
