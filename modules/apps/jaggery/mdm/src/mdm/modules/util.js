@@ -89,15 +89,12 @@ var util = function () {
         } else {
             throw "Error in obtaining token with Password grant type";
         }
-        log.error("oauth token " + tokenPair.accessToken);
         return tokenPair;
     };
     module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {
 
         var assertionXML = new XML(decode(assertion) + "");
-        var extractedAssertion = assertionXML.. *
-        ::
-        ["Assertion"].toXMLString();
+        var extractedAssertion = assertionXML.. *::["Assertion"].toXMLString();
         var encodedExtractedAssertion = encode(extractedAssertion);
 
         var xhr = new XMLHttpRequest();
@@ -113,8 +110,6 @@ var util = function () {
             var data = parse(xhr.responseText);
             tokenPair.refreshToken = data.refresh_token;
             tokenPair.accessToken = data.access_token;
-            log.error("data.access_token >>>>>>> " + data.access_token);
-            log.error("data.refresh_token >>>>>>> " + data.refresh_token);
         } else if (xhr.status == 403) {
             throw "Error in obtaining token with SAML extension grant type";
         } else {

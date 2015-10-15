@@ -19,7 +19,6 @@
 var apiWrapperUtil = function () {
     var module = {};
     var tokenUtil = require("/modules/util.js").util;
-    var log = new Log();
 
     module.refreshToken = function () {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
@@ -34,7 +33,6 @@ var apiWrapperUtil = function () {
         var tokenPair;
         var clientData = tokenUtil.getDyanmicCredentials(properties);
         var encodedClientKeys = tokenUtil.encode(clientData.clientId + ":" + clientData.clientSecret);
-        log.error(encodedClientKeys + " cliend data");
         session.put(constants.ENCODED_CLIENT_KEYS_IDENTIFIER, encodedClientKeys);
         if (type == "password") {
             tokenPair =
