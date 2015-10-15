@@ -15,7 +15,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+var modalPopup = '.wr-modalpopup',
+    modalPopupContainer = modalPopup + ' .modalpopup-container',
+    modalPopupContent = modalPopup + ' .modalpopup-content';
 function openCollapsedNav(){
     $(".wr-hidden-nav-toggle-btn").addClass("active");
     $("#hiddenNav").slideToggle("slideDown", function () {
@@ -24,3 +26,70 @@ function openCollapsedNav(){
         }
     });
 }
+
+
+/*
+ * set popup maximum height function.
+ */
+function setPopupMaxHeight() {
+    var maxHeight = "max-height";
+    var marginTop = "margin-top";
+    var body = "body";
+    $(modalPopupContent).css(maxHeight, ($(body).height() - ($(body).height()/100 * 30)));
+    $(modalPopupContainer).css(marginTop, (-($(modalPopupContainer).height()/2)));
+}
+
+/*
+ * show popup function.
+ */
+function showPopup() {
+    $(modalPopup).show();
+    setPopupMaxHeight();
+}
+
+/*
+ * hide popup function.
+ */
+function hidePopup() {
+    $(modalPopupContent).html("");
+    $(modalPopupContent).removeClass("operation-data");
+    $(modalPopup).hide();
+}
+
+
+function generateQRCode(qrCodeClass){
+    var enrollmentURL = $("#qr-code-modal").data("enrollment-url");
+    $(qrCodeClass).qrcode({
+        text	: enrollmentURL,
+        width: 200,
+        height: 200
+    });
+}
+
+function toggleEnrollment(){
+    $(".modalpopup-content").html($("#qr-code-modal").html());
+    generateQRCode(".modalpopup-content .qr-code");
+    showPopup();
+}
+
+function loadNotifications(){
+
+    var serviceURL = "/mdm-admin/notifications/NEW";
+
+    var successCallback = function (data) {
+
+        if(data.length > 0){
+            $("#notification-bubble").html(data.length);
+        }
+
+    };
+
+    invokerUtil.get(serviceURL,
+        successCallback, function(message){
+            console.log(message);
+    });
+}
+
+$(document).ready(function () {
+    loadNotifications();
+});

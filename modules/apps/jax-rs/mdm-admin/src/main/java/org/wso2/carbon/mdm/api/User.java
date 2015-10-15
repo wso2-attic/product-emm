@@ -31,6 +31,7 @@ import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.UserWrapper;
 import org.wso2.carbon.mdm.util.Constants;
+import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.apache.commons.codec.binary.Base64;
@@ -258,8 +259,8 @@ public class User {
 
 		StringBuffer initialUserPassword = new StringBuffer();
 		for (int i = 0; i < passwordLength; i++) {
-
-			initialUserPassword.append(totalCharset.charAt((randomGenerator.nextInt() * totalCharsetLength)));
+			initialUserPassword
+					.append(totalCharset.charAt(randomGenerator.nextInt(totalCharsetLength)));
 		}
 		if (log.isDebugEnabled()) {
 			log.debug("Initial user password is created for new user: " + initialUserPassword);
@@ -472,6 +473,7 @@ public class User {
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(username);
+	    //TODO: move this to a config
         emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
         emailMessageProperties.setPassword(generateInitialUserPassword());
@@ -578,5 +580,39 @@ public class User {
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
 		}
+	}
+
+	/**
+	 * API is used to update roles of a user
+	 * @param username
+	 * @param userList
+	 * @return
+	 * @throws MDMAPIException
+	 */
+	@PUT
+	@Path("{roleName}/users")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response updateRoles(@PathParam("username") String username, List<String> userList)
+			throws MDMAPIException {
+		final UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+		try {
+			if (log.isDebugEnabled()) {
+				log.debug("Updating the roles of a user");
+			}
+			SetReferenceTransformer transformer = new SetReferenceTransformer();
+			transformer.transform(Arrays.asList(userStoreManager.getRoleListOfUser(username)),
+			                      userList);
+			final String[] rolesToAdd = (String [])
+					transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
+			final String[] rolesToDelete = (String [])
+					transformer.getObjectsToRemove().toArray(new String[transformer.getObjectsToRemove().size()]);
+
+			userStoreManager.updateRoleListOfUser(username, rolesToDelete, rolesToAdd);
+		} catch (UserStoreException e) {
+			String msg = "Error occurred while saving the roles for user: " + username;
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return Response.status(HttpStatus.SC_OK).build();
 	}
 }

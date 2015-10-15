@@ -5,7 +5,7 @@
             <!-- content -->
             <div id="user-create-form" class="container col-centered wr-content">
                 <div class="wr-form">
-                    <p class="page-sub-title">Add User</p>
+                    <p class="page-sub-title">Add Role</p>
                     <p>Please note that * sign represents required fields of data.</p>
                     <hr />
                     <div class="row">
@@ -13,60 +13,43 @@
                             <div id="user-create-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
+                            <label class="wr-input-label">Domain</label>
+                            <div class="wr-input-control">
+                                <input type="text" id="domain" class="form-control" placeholder="[ Required field ]"/>
+                            </div>
                             <label class="wr-input-label">
-                                User Name * <br>
+                                Role Name * <br>
                                 ( should be in minimum 3 characters long, lower-case and not include any whitespaces )
                             </label>
                             <div class="wr-input-control">
-                                <input type="text" id="username" class="form-control" placeholder="[ Required field ]"/>
-                            </div>
-                            <label class="wr-input-label">First Name *</label>
-                            <div class="wr-input-control">
-                                <input type="text" id="firstname" class="form-control" placeholder="[ Required field ]"/>
-                            </div>
-                            <label class="wr-input-label">Last Name *</label>
-                            <div class="wr-input-control">
-                                <input type="text" id="lastname" class="form-control" placeholder="[ Required field ]"/>
+                                <input type="text" id="rolename" class="form-control" placeholder="[ Required field ]"/>
                             </div>
                             <label class="wr-input-label">
-                                Email Address * <br>
-                                ( ex: sam@gmail.com )
+                                User list*
                             </label>
                             <div class="wr-input-control">
-                                <input type="email" id="emailAddress" class="form-control" placeholder="[ Required field ]"/>
-                            </div>
-                            <label class="wr-input-label" title="Optional field that can have 0-to-many roles for the user">
-                                User Roles
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </label>
-                            <div class="wr-input-control">
-                                <select id="roles" class="form-control select2" multiple="multiple">
-                                    {{#each roles}}
-                                        <option>{{this}}</option>
-                                    {{/each}}
+                                <select id="users" class="form-control select2" multiple="multiple">
                                 </select>
                             </div>
                         </div>
                     </div>
                     <br>
-                    <button id="add-user-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Add User&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <button id="add-role-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Add Role&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
             </div>
-            <div id="user-created-msg" class="container col-centered wr-content hidden">
+            <div id="role-created-msg" class="container col-centered wr-content hidden">
                 <div class="wr-form">
-                    <p class="page-sub-title">User was added successfully.</p>
-                    <br>
-                    An invitation mail will also be sent to this user to initiate a device enrollment.
-                    <br>Please click <b>"Add Another User"</b>, if you wish to add another user or click
-                    <b>"View User List"</b> to complete the process and go back to the user list.
+                    <p class="page-sub-title">Role was added successfully.</p>
+                    <br>Please click <b>"Add Another Role"</b>, if you wish to add another role or click
+                    <b>"View Role List"</b> to complete the process and go back to the role list.
                     <hr />
-                    <button class="wr-btn" onclick="window.location.href='/mdm/users'">View User List</button>
-                    <a href="/mdm/users/add-user" class="cu-btn-inner">
+                    <button class="wr-btn" onclick="window.location.href='/mdm/roles'">View Role List</button>
+                    <a href="/mdm/roles/add-role" class="cu-btn-inner">
                         <span class="fw-stack">
                             <i class="fw fw-ring fw-stack-2x"></i>
                             <i class="fw fw-add fw-stack-1x"></i>
                         </span>
-                        Add Another User
+                        Add Another Role
                     </a>
                 </div>
             </div>

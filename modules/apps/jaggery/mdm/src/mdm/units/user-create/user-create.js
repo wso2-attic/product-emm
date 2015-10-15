@@ -10,5 +10,7 @@ function onRequest(context) {
     if (response["status"] == "success") {
         context["roles"] = response["content"];
     }
+    var userStores = userModule.getSecondaryUserStores();
+    context["userStores"] = userStores;
     return context;
 }

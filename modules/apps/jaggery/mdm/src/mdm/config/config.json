@@ -3,8 +3,14 @@
     "apiContext" : "api",
     "httpsURL" : "%https.ip%",
     "httpURL" : "%http.ip%",
+    "enrollmentURL": "%https.ip%/mdm/enrollment",
     "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
     "iOSAPIRoot" : "%https.ip%/ios/",
+    "dynamicClientRegistrationEndPoint":"%https.ip%/dynamic-client-web/register/",
+    "adminService":"%https.ip%",
+    "idPServer":"%https.ip%",
+    "callBackUrl":"%https.ip%/mdm-admin",
+    "adminUser":"admin",
     "device" : {
         "ios" : {
             "location" : "%http.ip%/mdm/public/asset-download-agent-ios/asset/ios-agent.ipa",

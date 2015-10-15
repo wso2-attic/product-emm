@@ -19,30 +19,30 @@
 var apiWrapperUtil = function () {
     var module = {};
     var tokenUtil = require("/modules/util.js").util;
-    var log = new Log();
 
     module.refreshToken = function () {
-        var tokenPair = session.get("accessTokenPair");
-        var clientData = tokenUtil.getDyanmicCredentials();
-        var clientData = {};
+        var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
+        var clientData = session.get(constants.ENCODED_CLIENT_KEYS_IDENTIFIER);
         tokenPair = tokenUtil.refreshToken(tokenPair, clientData.clientId, clientData.clientSecret);
-        session.put("accessTokenPair", tokenPair);
-        var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge' : -1,'path' : "/mdm/"};
+        session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
+        var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};
         response.addCookie(tokenCookie);
         return tokenCookie;
     };
     module.setupAccessTokenPair = function (type, properties) {
         var tokenPair;
-        var clientData = tokenUtil.getDyanmicCredentials(properties.loggedInUser);
-
+        var clientData = tokenUtil.getDyanmicCredentials(properties);
+        var encodedClientKeys = tokenUtil.encode(clientData.clientId + ":" + clientData.clientSecret);
+        session.put(constants.ENCODED_CLIENT_KEYS_IDENTIFIER, encodedClientKeys);
         if (type == "password") {
-            tokenPair = tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, clientData.clientId, clientData.clientSecret);
-        } else if (type == "saml") {log.error(clientData);
-            var scope = "admin";log.error("samltoken >>>>>>>>>> " + properties.samlToken);
-            tokenPair = tokenUtil.getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, scope);
+            tokenPair =
+                tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, encodedClientKeys);
+        } else if (type == "saml") {
+            tokenPair = tokenUtil.
+                getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, scope);
         }
-        session.put("accessTokenPair", tokenPair);
-        var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge' : -1,'path' : "/mdm/"};
+        session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
+        var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};
         response.addCookie(tokenCookie);
     };
     return module;

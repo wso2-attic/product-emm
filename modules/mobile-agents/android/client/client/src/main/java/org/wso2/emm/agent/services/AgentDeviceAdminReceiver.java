@@ -66,7 +66,9 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		Toast.makeText(context, R.string.device_admin_enabled,
 				Toast.LENGTH_LONG).show();
 		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
-		if(notifier.equals(Constants.NOTIFIER_LOCAL)) {
+		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
+			LocalNotification.startPolling(context);
+		} else if(notifier == null) {
 			LocalNotification.startPolling(context);
 		}
 	}

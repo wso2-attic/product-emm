@@ -73,61 +73,18 @@ var operationModule = function () {
         };
         return "/ios/operation/" + featureMap[operationCode];
     };
+
     /**
      * Convert the ios platform specific code to the generic payload.
-     * TODO: think of the possiblity to follow a pattern to the key name (namespace?)
+     * TODO: think of the possibility to follow a pattern to the key name (namespace?)
      * @param operationCode
      * @param operationPayload
-     * @returns {"cameraEnabled":true}
+     * @returns {{}}
      */
-    privateMethods.generateGenericPayloadFromiOSPayload = function(operationCode, operationPayload){
+    privateMethods.generateGenericPayloadFromIOSPayload = function (operationCode, operationPayload) {
         var payload = {};
         operationPayload = JSON.parse(operationPayload);
         switch (operationCode) {
-            case iosOperationConstants["AIRPLAY_OPERATION_CODE"]:
-                payload = {
-                    "airplayDestinations": operationPayload["airPlayDestinations"],
-                    "airplayCredentials": operationPayload["airPlayCredentials"]
-                };
-                break;
-            case iosOperationConstants["WIFI_OPERATION_CODE"]:
-                payload = {
-                    "wifiHiddenNetwork": operationPayload["hiddenNetwork"],
-                    "wifiSSID": operationPayload["ssid"],
-                    "wifiAutoJoin": operationPayload["autoJoin"],
-                    "wifiProxyType": operationPayload["proxyType"],
-                    "wifiEncryptionType": operationPayload["encryptionType"],
-                    "wifiIsHotSpot": operationPayload["hotspot"],
-                    "wifiDomainName": operationPayload["domainNasme"],
-                    "wifiServiceProviderRoamingEnabled": operationPayload["serviceProviderRoamingEnabled"],
-                    "wifiDisplayedOperatorName": operationPayload["displayedOperatorName"],
-                    "wifiRoamingConsortiumOIs": operationPayload["roamingConsortiumOIs"],
-                    "wifiPassword": operationPayload["password"],
-                    "wifiPayloadCertUUID": operationPayload["payloadCertificateUUID"],
-                    "wifiProxyServer": operationPayload["proxyServer"],
-                    "wifiProxyPort": operationPayload["proxyPort"],
-                    "wifiProxyUsername": operationPayload["proxyUsername"],
-                    "wifiProxyPassword": operationPayload["proxyPassword"],
-                    "wifiProxyPACURL": operationPayload["proxyPACURL"],
-                    "wifiProxyPACFallbackAllowed": operationPayload["proxyPACFallbackAllowed"],
-                    "wifiNAIRealmNames": operationPayload["nairealmNames"],
-                    "wifiMCCAndMNCs": operationPayload["mccandMNCs"],
-                    "wifiEAPUsername": operationPayload.clientConfiguration["username"],
-                    "wifiAcceptedEAPTypes": operationPayload.clientConfiguration["acceptEAPTypes"],
-                    "wifiEAPPassword": operationPayload.clientConfiguration["userPassword"],
-                    "wifiEAPOneTimePassword": operationPayload.clientConfiguration["oneTimePassword"],
-                    "wifiPayloadCertificateAnchorUUIDs": operationPayload.clientConfiguration["payloadCertificateAnchorUUID"],
-                    "wifiEAPOuterIdentity": operationPayload.clientConfiguration["outerIdentity"],
-                    "wifiTLSTrustedServerNames": operationPayload.clientConfiguration["tlstrustedServerNames"],
-                    "wifiEAPTLSAllowTrustExceptions": operationPayload.clientConfiguration["tlsallowTrustExceptions"],
-                    "wifiEAPTLSCertIsRequired": operationPayload.clientConfiguration["tlscertificateIsRequired"],
-                    "wifiEAPTLSInnerAuthType": operationPayload.clientConfiguration["ttlsinnerAuthentication"],
-                    "wifiEAPFastUsePAC": operationPayload.clientConfiguration["eapfastusePAC"],
-                    "wifiEAPFastProvisionPAC": operationPayload.clientConfiguration["eapfastprovisionPAC"],
-                    "wifiEAPFastProvisionPACAnonymously": operationPayload.clientConfiguration["eapfastprovisionPACAnonymously"],
-                    "wifiEAPSIMNoOfRands": operationPayload.clientConfiguration["eapsimnumberOfRANDs"]
-                };
-                break;
             case iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 payload = {
                     "passcodePolicyForcePIN": operationPayload["forcePIN"],
@@ -143,8 +100,7 @@ var operationModule = function () {
                 };
                 break;
             case iosOperationConstants["RESTRICTIONS_OPERATION_CODE"]:
-                payload =
-                {
+                payload = {
                     "restrictionsAllowAccountModification": operationPayload["allowAccountModification"],
                     "restrictionsAllowAddingGameCenterFriends": operationPayload["allowAddingGameCenterFriends"],
                     "restrictionsAllowAirDrop": operationPayload["allowAirDrop"],
@@ -213,6 +169,44 @@ var operationModule = function () {
                     "restrictionsAutonomousSingleAppModePermittedAppIDs": operationPayload["autonomousSingleAppModePermittedAppIDs"]
                 };
                 break;
+            case iosOperationConstants["WIFI_OPERATION_CODE"]:
+                payload = {
+                    "wifiHiddenNetwork": operationPayload["hiddenNetwork"],
+                    "wifiSSID": operationPayload["ssid"],
+                    "wifiAutoJoin": operationPayload["autoJoin"],
+                    "wifiProxyType": operationPayload["proxyType"],
+                    "wifiEncryptionType": operationPayload["encryptionType"],
+                    "wifiIsHotSpot": operationPayload["hotspot"],
+                    "wifiDomainName": operationPayload["domainName"],
+                    "wifiServiceProviderRoamingEnabled": operationPayload["serviceProviderRoamingEnabled"],
+                    "wifiDisplayedOperatorName": operationPayload["displayedOperatorName"],
+                    "wifiRoamingConsortiumOIs": operationPayload["roamingConsortiumOIs"],
+                    "wifiPassword": operationPayload["password"],
+                    "wifiPayloadCertUUID": operationPayload["payloadCertificateUUID"],
+                    "wifiProxyServer": operationPayload["proxyServer"],
+                    "wifiProxyPort": operationPayload["proxyPort"],
+                    "wifiProxyUsername": operationPayload["proxyUsername"],
+                    "wifiProxyPassword": operationPayload["proxyPassword"],
+                    "wifiProxyPACURL": operationPayload["proxyPACURL"],
+                    "wifiProxyPACFallbackAllowed": operationPayload["proxyPACFallbackAllowed"],
+                    "wifiNAIRealmNames": operationPayload["nairealmNames"],
+                    "wifiMCCAndMNCs": operationPayload["mccandMNCs"],
+                    "wifiEAPUsername": operationPayload.clientConfiguration["username"],
+                    "wifiAcceptedEAPTypes": operationPayload.clientConfiguration["acceptEAPTypes"],
+                    "wifiEAPPassword": operationPayload.clientConfiguration["userPassword"],
+                    "wifiEAPOneTimePassword": operationPayload.clientConfiguration["oneTimePassword"],
+                    "wifiPayloadCertificateAnchorUUIDs": operationPayload.clientConfiguration["payloadCertificateAnchorUUID"],
+                    "wifiEAPOuterIdentity": operationPayload.clientConfiguration["outerIdentity"],
+                    "wifiTLSTrustedServerNames": operationPayload.clientConfiguration["tlstrustedServerNames"],
+                    "wifiEAPTLSAllowTrustExceptions": operationPayload.clientConfiguration["tlsallowTrustExceptions"],
+                    "wifiEAPTLSCertIsRequired": operationPayload.clientConfiguration["tlscertificateIsRequired"],
+                    "wifiEAPTLSInnerAuthType": operationPayload.clientConfiguration["ttlsinnerAuthentication"],
+                    "wifiEAPFastUsePAC": operationPayload.clientConfiguration["eapfastusePAC"],
+                    "wifiEAPFastProvisionPAC": operationPayload.clientConfiguration["eapfastprovisionPAC"],
+                    "wifiEAPFastProvisionPACAnonymously": operationPayload.clientConfiguration["eapfastprovisionPACAnonymously"],
+                    "wifiEAPSIMNoOfRands": operationPayload.clientConfiguration["eapsimnumberOfRANDs"]
+                };
+                break;
             case iosOperationConstants["EMAIL_OPERATION_CODE"]:
                 payload = {
                     "emailAccountDescription":  operationPayload["emailAccountDescription"],
@@ -242,8 +236,57 @@ var operationModule = function () {
                     "emailSMIMEEnablePerMessageSwitch":  operationPayload["smimeenablePerMessageSwitch"]
                 };
                 break;
+            case iosOperationConstants["AIRPLAY_OPERATION_CODE"]:
+                payload = {
+                    "airplayDestinations": operationPayload["airPlayDestinations"],
+                    "airplayCredentials": operationPayload["airPlayCredentials"]
+                };
+                break;
+            case iosOperationConstants["LDAP_OPERATION_CODE"]:
+                payload = {
+                    "ldapAccountDescription": operationPayload["accountDescription"],
+                    "ldapAccountHostname": operationPayload["accountHostName"],
+                    "ldapUseSSL": operationPayload["accountUseSSL"],
+                    "ldapAccountUsername": operationPayload["accountUsername"],
+                    "ldapAccountPassword": operationPayload["accountPassword"],
+                    "ldapSearchSettings": operationPayload["ldapSearchSettings"]
+                };
+                break;
+            case iosOperationConstants["CALENDAR_OPERATION_CODE"]:
+                payload = {
+                    "calendarAccountDescription": operationPayload["accountDescription"],
+                    "calendarAccountHostname": operationPayload["hostName"],
+                    "calendarAccountUsername": operationPayload["username"],
+                    "calendarAccountPassword": operationPayload["password"],
+                    "calendarUseSSL": operationPayload["useSSL"],
+                    "calendarAccountPort": operationPayload["port"],
+                    "calendarPrincipalURL": operationPayload["principalURL"]
+                };
+                break;
+            case iosOperationConstants["CALENDAR_SUBSCRIPTION_OPERATION_CODE"]:
+                payload = {
+                    "calendarSubscriptionDescription": operationPayload["accountDescription"],
+                    "calendarSubscriptionHostname": operationPayload["hostName"],
+                    "calendarSubscriptionUsername": operationPayload["username"],
+                    "calendarSubscriptionPassword": operationPayload["password"],
+                    "calendarSubscriptionUseSSL": operationPayload["useSSL"]
+                };
+                break;
+            case iosOperationConstants["APN_OPERATION_CODE"]:
+                payload = {
+                    "apnConfigurations": operationPayload["apnConfigurations"]
+                };
+                break;
+            case iosOperationConstants["CELLULAR_OPERATION_CODE"]:
+                payload = {
+                    "cellularAttachAPNName": operationPayload["attachAPNName"],
+                    "cellularAuthenticationType": operationPayload["authenticationType"],
+                    "cellularUsername": operationPayload["username"],
+                    "cellularPassword": operationPayload["password"],
+                    "cellularAPNConfigurations": operationPayload["apnConfigurations"]
+                };
+                break;
         }
-
         return payload;
     };
 
@@ -494,26 +537,37 @@ var operationModule = function () {
         if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
             payload["deviceIDs"] = deviceList;
         }
-
         return payload;
     };
+
     /**
      * Convert the android platform specific code to the generic payload.
-     * TODO: think of the possiblity to follow a pattern to the key name (namespace?)
+     * TODO: think of the possibility to follow a pattern to the key name (namespace?)
      * @param operationCode
      * @param operationPayload
-     * @returns {"cameraEnabled":true}
+     * @returns {{}}
      */
-    privateMethods.generateGenericPayloadFromAndroidPayload = function(operationCode, operationPayload){
+    privateMethods.generateGenericPayloadFromAndroidPayload = function (operationCode, operationPayload) {
         var payload = {};
         operationPayload = JSON.parse(operationPayload);
         switch (operationCode) {
+            case androidOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
+                payload = {
+                    "passcodePolicyAllowSimple": operationPayload["allowSimple"],
+                    "passcodePolicyRequireAlphanumeric": operationPayload["requireAlphanumeric"],
+                    "passcodePolicyMinLength": operationPayload["minLength"],
+                    "passcodePolicyMinComplexChars": operationPayload["minComplexChars"],
+                    "passcodePolicyMaxPasscodeAgeInDays": operationPayload["maxPINAgeInDays"],
+                    "passcodePolicyPasscodeHistory": operationPayload["pinHistory"],
+                    "passcodePolicyMaxFailedAttempts": operationPayload["maxFailedAttempts"]
+                };
+                break;
             case androidOperationConstants["CAMERA_OPERATION_CODE"]:
                 payload = {
                     "cameraEnabled": operationPayload["enabled"]
                 };
                 break;
-            case androidOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"]:;
+            case androidOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"]:
                 payload = {
                     "encryptStorageEnabled": operationPayload["encrypted"]
                 };
@@ -660,49 +714,15 @@ var operationModule = function () {
         return featureMap[operationCode];
     };
 
-    privateMethods.createTemperatureControllerPayload = function (operationCode, operationData, deviceList) {
-        var payload;
-        var operationType;
-        if (operationCode == "BUZZER") {
-            operationType = operationTypeConstants["PROFILE"];
-            payload = {
-                "operation": {
-                    "enabled" : operationData["enableBuzzer"]
-                }
-            };
-        } else {
-            operationType = operationTypeConstants["COMMAND"];
-            payload = deviceList;
-        }
-        if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
-            payload["deviceIDs"] = deviceList;
-        }
-        return payload;
-    };
-
-    publicMethods.getTemperatureControllerServiceEndpoint = function (operationCode) {
-        var featureMap = {
-            "BUZZER": "buzzer"
-        };
-        return "/temp-controller-agent/operations/" + featureMap[operationCode];
-    };
-
-    publicMethods.getTemperatureControllerIconForFeature = function (operationCode) {
-        var featureMap = {
-            "BUZZER": "fw-dial-up"
-        };
-        return featureMap[operationCode];
-    };
-
     /**
-     * Filter a list by a data attribute
+     * Filter a list by a data attribute.
      * @param prop
      * @param val
      * @returns {Array}
      */
     $.fn.filterByData = function (prop, val) {
         return this.filter(
-            function () { return $(this).data(prop) == val; }
+            function () {return $(this).data(prop) == val;}
         );
     };
 
@@ -843,13 +863,12 @@ var operationModule = function () {
      */
     publicMethods.populateUI = function (platformType, operationCode, operationPayload) {
         var uiPayload;
-        // var operationData = {};
         switch (platformType) {
             case platformTypeConstants["ANDROID"]:
                 uiPayload = privateMethods.generateGenericPayloadFromAndroidPayload(operationCode, operationPayload);
                 break;
             case platformTypeConstants["IOS"]:
-                uiPayload = privateMethods.generateGenericPayloadFromiOSPayload(operationCode, operationPayload);
+                uiPayload = privateMethods.generateGenericPayloadFromIOSPayload(operationCode, operationPayload);
                 break;
         }
         // capturing form input data designated by .operationDataKeys
@@ -860,7 +879,8 @@ var operationModule = function () {
                 // retrieve corresponding input value associated with the key
                 var value = uiPayload[key];
                 // populating input value according to the type of input
-                if (operationDataObj.is(":text") || operationDataObj.is("textarea") ||
+                if (operationDataObj.is(":text") ||
+                    operationDataObj.is("textarea") ||
                     operationDataObj.is(":password")) {
                     operationDataObj.val(value);
                 } else if (operationDataObj.is(":checkbox")) {
@@ -883,14 +903,15 @@ var operationModule = function () {
                         // traversing through each child input
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            var childValue = value[childInputIndex];
+                            var childInputValue = value[childInputIndex];
                             // populating extracted value in the UI according to the input type
-                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
-                                childInput.val(childValue);
+                            if (childInput.is(":text") ||
+                                childInput.is("textarea") ||
+                                childInput.is(":password") ||
+                                childInput.is("select")) {
+                                childInput.val(childInputValue);
                             } else if (childInput.is(":checkbox")) {
-                                operationDataObj.prop('checked', childValue);
-                            } else if (childInput.is("select")) {
-                                childInput.find("option:selected").attr("value", childValue);
+                                operationDataObj.prop("checked", childInputValue);
                             }
                             // incrementing childInputIndex
                             childInputIndex++;
@@ -929,12 +950,11 @@ var operationModule = function () {
                                 // populating extracted value in the UI according to the input type
                                 if (childInput.is(":text") ||
                                     childInput.is("textarea") ||
-                                    childInput.is(":password")) {
+                                    childInput.is(":password") ||
+                                    childInput.is("select")) {
                                     childInput.val(childInputValue);
                                 } else if (childInput.is(":checkbox")) {
                                     operationDataObj.prop("checked", childInputValue);
-                                } else if (childInput.is("select")) {
-                                    childInput.find("option:selected").attr("value", childInputValue);
                                 }
                                 // incrementing childInputIndex
                                 childInputIndex++;
@@ -954,12 +974,13 @@ var operationModule = function () {
                             var childInputKey = childInput.data("child-key");
                             var childInputValue = multiColumnKeyValuePair[childInputKey];
                             // populating extracted value in the UI according to the input type
-                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
+                            if (childInput.is(":text") ||
+                                childInput.is("textarea") ||
+                                childInput.is(":password") ||
+                                childInput.is("select")) {
                                 childInput.val(childInputValue);
                             } else if (childInput.is(":checkbox")) {
                                 operationDataObj.prop("checked", childInputValue);
-                            } else if (childInput.is("select")) {
-                                childInput.find("option:selected").attr("value", childInputValue);
                             }
                             // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
                             if ((childInputIndex % columnCount) == (columnCount - 1)) {
@@ -992,7 +1013,7 @@ var operationModule = function () {
     };
 
     /**
-     * populateProfile method is used to populate the html ui with saved payload
+     * populateProfile method is used to populate the html ui with saved payload.
      *
      * @param platformType Platform Type of the profile
      * @param payload List of profileFeatures

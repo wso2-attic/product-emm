@@ -13,6 +13,18 @@
                             <div id="user-create-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
+                            <label class="wr-input-label" title="List of available secondary user stores">
+                            User Stores
+                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </label>
+                            <div class="wr-input-control">
+                                <select id="userStore" class="form-control select" >
+                                    <option>PRIMARY</option>
+                                    {{#each userStores}}
+                                    <option>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
                             <label class="wr-input-label">
                                 User Name * <br>
                                 ( should be in minimum 3 characters long, lower-case and not include any whitespaces )
@@ -57,6 +69,13 @@
                     <p class="page-sub-title">User was added successfully.</p>
                     <br>
                     An invitation mail will also be sent to this user to initiate a device enrollment.
+                    Below QR code can be used to enroll a device.
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="qr-code col-lg-5 col-md-6 col-centered"></div>
+                        </div>
+                    </div>
                     <br>Please click <b>"Add Another User"</b>, if you wish to add another user or click
                     <b>"View User List"</b> to complete the process and go back to the user list.
                     <hr />

@@ -184,8 +184,8 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				responseStatus = result.get(Constants.STATUS);
 				Preference.putString(context, resources.getString(R.string.shared_pref_regId), info.getDeviceId());
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					if (Preference.getString(context, context.getResources().
-							getString(R.string.shared_pref_notifier)).trim().equals(Constants.NOTIFIER_GCM)) {
+					if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, context.getResources().
+							getString(R.string.shared_pref_notifier)))) {
 						registerGCM();
 					} else {
 						getEffectivePolicy();

@@ -20,7 +20,7 @@
 
 var invokerUtil = function () {
     var module = {};
-    var flagAuth = false; // A flag to be used to test without oAuth
+    var flagAuth = true; // A flag to be used to test without oAuth
     function requestAccessToken (successCallback, errorCallback) {
         $.ajax({
             url: "/mdm/token",
