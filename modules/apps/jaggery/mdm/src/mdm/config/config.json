@@ -6,7 +6,7 @@
     "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
     "iOSAPIRoot" : "%https.ip%/ios/",
     "dynamicClientRegistrationEndPoint":"%https.ip%/dynamic-client-web/register/",
-	"adminService":"%https.ip%",
+    "adminService":"%https.ip%",
     "idPServer":"%https.ip%",
     "callBackUrl":"%https.ip%/mdm-admin",
     "adminUser":"admin",
