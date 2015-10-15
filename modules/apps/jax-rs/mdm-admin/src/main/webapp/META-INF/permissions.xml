@@ -28,7 +28,7 @@
     it will result 403 error at the runtime.
 -->
 <PermissionConfiguration>
-    <APIVersion></APIVersion>
+    <APIVersion>1.0.0</APIVersion>
     <!-- Device related APIs -->
     <Permission>
         <name>Get all devices</name>

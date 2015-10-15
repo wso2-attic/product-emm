@@ -18,54 +18,63 @@
 package org.wso2.emm.agent.proxy.beans;
 
 /**
- * This class represents credential information required when invoking 
+ * This class represents credential information required when invoking
  * OAuth token end-point.
  */
 public class CredentialInfo {
-	private String username = null;
-	private String password = null;
-	private String clientID = null;
-	private String clientSecret = null;
-	private String tokenEndPoint = null;
+    private String username = null;
+    private String password = null;
+    private String clientID = null;
+    private String clientSecret = null;
+    private String tokenEndPoint = null;
+    private String tenantDomain = null;
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getClientID() {
-		return clientID;
-	}
+    public String getClientID() {
+        return clientID;
+    }
 
-	public void setClientID(String clientID) {
-		this.clientID = clientID;
-	}
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
+    }
 
-	public String getClientSecret() {
-		return clientSecret;
-	}
+    public String getClientSecret() {
+        return clientSecret;
+    }
 
-	public void setClientSecret(String clientSecret) {
-		this.clientSecret = clientSecret;
-	}
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
 
-	public String getTokenEndPoint() {
-		return tokenEndPoint;
-	}
+    public String getTokenEndPoint() {
+        return tokenEndPoint;
+    }
 
-	public void setTokenEndPoint(String tokenEndPoint) {
-		this.tokenEndPoint = tokenEndPoint;
-	}
+    public void setTokenEndPoint(String tokenEndPoint) {
+        this.tokenEndPoint = tokenEndPoint;
+    }
+
+    public String getTenantDomain() {
+        return tenantDomain;
+    }
+
+    public void setTenantDomain(String tenantDomain) {
+        this.tenantDomain = tenantDomain;
+    }
 
 }

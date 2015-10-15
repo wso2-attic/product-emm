@@ -435,13 +435,89 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div id="wifi-heading" class="panel-heading" role="tab">
+                                        <h2 class="sub-title panel-title">
+                                            Windows MDM Configurations
+                                            <hr>
+                                        </h2>
+                                    </div>
+
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
+                                        <div id="windows-mdm-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="windows-config-mdm-certificate">
+                                                MDM Certificate
+                                                <span class="helper" title="Upload MDM Certificate">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label><br>
+                                            <label class="wr-input-label" id="windows-mdm-cert-file-name">
+                                            </label>
+                                            <input id="windows-config-mdm-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="windows-config-mdm-cn">
+                                                Common Name
+                                                <span class="helper" title="MDM Certificate Common Name">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="windows-config-mdm-cn" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="windows-config-mdm-keystore-password">
+                                                Keystore Password
+                                                <span class="helper" title="MDM Certificate Keystore Password">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="windows-config-mdm-keystore-password" type="password" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="windows-config-mdm-pk-password">
+                                                Private Key Password
+                                                <span class="helper" title="MDM Certificate Private Key Password">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="windows-config-mdm-pk-password" type="password" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="windows-config-before-expire">
+                                                Before days to expire
+                                                <span class="helper" title="Time before which the certificate is not valid (in days)">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="windows-config-before-expire" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+                                        <div class="wr-input-control">
+                                            <label class="wr-input-label" for="windows-config-after-expire">
+                                                After days to expire
+                                                <span class="helper" title="Time after which the certificate is not valid (in days)">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                            </label>
+                                            <input id="windows-config-after-expire" type="text" class="form-control" placeholder="[ Required Field ]">
+                                        </div>
+
+
+                                    </div>
+
                                     <div id="wifi-heading" class="panel-heading" role="tab">
                                         <h2 class="sub-title panel-title">
                                             End User License Agreement (EULA)
                                             <hr>
                                         </h2>
                                     </div>
-
                                     <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
                                         <div class="wr-input-control">
                                             <textarea id="windows-eula" type="text" class="form-control"></textarea>

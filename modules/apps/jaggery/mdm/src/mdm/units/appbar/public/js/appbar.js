@@ -71,3 +71,25 @@ function toggleEnrollment(){
     generateQRCode(".modalpopup-content .qr-code");
     showPopup();
 }
+
+function loadNotifications(){
+
+    var serviceURL = "/mdm-admin/notifications/NEW";
+
+    var successCallback = function (data) {
+
+        if(data.length > 0){
+            $("#notification-bubble").html(data.length);
+        }
+
+    };
+
+    invokerUtil.get(serviceURL,
+        successCallback, function(message){
+            console.log(message);
+    });
+}
+
+$(document).ready(function () {
+    loadNotifications();
+});

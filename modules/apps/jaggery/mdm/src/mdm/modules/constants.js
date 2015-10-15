@@ -46,3 +46,28 @@ var VENDOR_APPLE = "Apple";
 var ERRORS = {
         "USER_NOT_FOUND": "USER_NOT_FOUND"
     };
+
+var USER_STORES_NOISY_CHAR = "\"";
+var USER_STORES_SPLITTING_CHAR = "\n";
+var USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT =
+    "/services/UserStoreConfigAdminService.UserStoreConfigAdminServiceHttpsSoap12Endpoint/";
+
+var SOAP_VERSION = 1.2;
+var WEB_SERVICE_ADDRESSING_VERSION = 1.0;
+var ACCESS_TOKEN_PAIR_IDENTIFIER = "accessTokenPair";
+var ENCODED_CLIENT_KEYS_IDENTIFIER = "encodedClientKey";
+var CONTENT_TYPE_IDENTIFIER = "Content-Type";
+var APPLICATION_JSON = "application/json";
+var ACCEPT_IDENTIFIER = "Accept";
+var AUTHORIZATION_HEADER= "Authorization";
+var BEARER_PREFIX = "Bearer ";
+var HTTP_GET = "GET";
+var HTTP_POST = "POST";
+var HTTP_PUT = "PUT";
+var HTTP_DELETE = "DELETE";
+
+
+
+
+
+

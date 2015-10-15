@@ -23,9 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
+import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -84,10 +84,7 @@ public class MDMAPIUtils {
         RealmService realmService;
         AuthorizationManager authorizationManager;
         try {
-            PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
             if (realmService == null) {
                 String msg = "Realm service not initialized";
@@ -100,8 +97,6 @@ public class MDMAPIUtils {
             String msg = "Error occurred while retrieving current Authorization manager";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
-        } finally {
-            PrivilegedCarbonContext.endTenantFlow();
         }
         return authorizationManager;
     }
@@ -113,14 +108,9 @@ public class MDMAPIUtils {
         return deviceIdentifier;
     }
 
-    public static ApplicationManager getAppManagementService(String tenantDomain)
-            throws MDMAPIException {
+    public static ApplicationManagementProviderService getAppManagementService() throws MDMAPIException {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        return (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
-    }
-
-    public static ApplicationManager getAppManagementService() throws MDMAPIException {
-        return getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        return (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
     }
 
     public static PolicyManagerService getPolicyManagementService(String tenantDomain)
