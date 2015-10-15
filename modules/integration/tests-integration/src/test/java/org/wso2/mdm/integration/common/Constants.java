@@ -23,8 +23,9 @@ package org.wso2.mdm.integration.common;
 public final class Constants {
 
 	public static final int SUCCESS_CODE = 200;
-    public static final int CREATED_CODE = 201;
     public static final String DEVICE_ID="1234";
+    public static final String AUTOMATION_CONTEXT="MDM";
+    public static final String APPLICATION_JSON = "application/json";
 
 	public static final class Enrollment {
 		private Enrollment() {

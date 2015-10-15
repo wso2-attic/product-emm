@@ -25,6 +25,7 @@ function onRequest(context) {
 
     var links = {
         "user-mgt": [],
+        "role-mgt": [],
         "policy-mgt": [],
         "device-mgt": []
     };
@@ -34,6 +35,13 @@ function onRequest(context) {
             "title": "Add User",
             "icon": "fw-add",
             "url": "/mdm/users/add-user"
+        });
+    }
+    if (uiPermissions["ADD_ROLE"]) {
+        links["role-mgt"].push({
+            "title": "Add ROLE",
+            "icon": "fw-add",
+            "url": "/mdm/roles/add-role"
         });
     }
 
