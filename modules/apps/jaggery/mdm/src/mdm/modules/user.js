@@ -547,6 +547,9 @@ var userModule = function () {
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
             permissions["LIST_POLICIES"] = true;
         }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/priority")) {
+            permissions["CHANGE_POLICY_PRIORITY"] = true;
+        }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
             permissions["ADD_USER"] = true;
         }

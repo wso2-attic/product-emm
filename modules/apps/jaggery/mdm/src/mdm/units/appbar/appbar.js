@@ -53,6 +53,14 @@ function onRequest(context) {
         });
     }
 
+    if (uiPermissions["CHANGE_POLICY_PRIORITY"]) {
+        links["policy-mgt"].push({
+            "title": "Policy Priority",
+            "icon": "fw-throttling-policy",
+            "url": "/mdm/policies/priority"
+        });
+    }
+
     // following context.link value comes here based on the value passed at the point
     // where units are attached to a page zone.
     // eg: {{unit "appbar" pageLink="users" title="User Management"}}
