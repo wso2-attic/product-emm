@@ -117,23 +117,14 @@ public class Operation {
 			@PathParam("type") String type,
 			@PathParam("id") String id)
 			throws MDMAPIException {
-		List<Application> applications=new ArrayList<Application>();
+		List<Application> applications;
 		ApplicationManagementProviderService appManagerConnector;
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
 		try {
 			deviceIdentifier.setType(type);
 			deviceIdentifier.setId(id);
 			appManagerConnector = MDMAPIUtils.getAppManagementService();
-			//applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
-			for(int i=0; i<100;i++) {
-				Application app = new Application();
-				app.setId(i);
-				app.setType("android");
-				app.setApplicationIdentifier("com.abc.def" + i);
-				app.setName("My App" + i);
-				app.setPlatform("android");
-				applications.add(app);
-			}
+			applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
 		} catch (Exception e) {
 			String msg = "Error occurred while fetching the operations for the device.";
 			log.error(msg, e);
