@@ -279,12 +279,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(serverIP);
 		String serverURL = utils.getServerURL() + Constants.OAUTH_ENDPOINT;
-		
-		if (etDomain.getText() != null && !etDomain.getText().toString().trim().isEmpty()) {
+		Editable tenantDomain = etDomain.getText();
+
+		if (tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
 			username =
 					etUsername.getText().toString().trim() +
 					context.getResources().getString(R.string.intent_extra_at) +
-					etDomain.getText().toString().trim();
+					tenantDomain.toString().trim();
 
 		} else {
 			username = etUsername.getText().toString().trim();
@@ -299,6 +300,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		info.setUsername(username);
 		info.setPassword(passwordVal);
 		info.setTokenEndPoint(serverURL);
+		if(tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
+			info.setTenantDomain(tenantDomain.toString().trim());
+		}
 		
 		IdentityProxy.getInstance().init(info, AuthenticationActivity.this, this.getApplicationContext());
 	}

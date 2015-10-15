@@ -42,7 +42,6 @@ var backendServiceInvoker = function () {
         xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
         if (IS_OAUTH_ENABLED) {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-            log.error("==  "+accessToken);
             if (!(!accessToken.trim())) {
                 xmlHttpRequest.setRequestHeader(
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
