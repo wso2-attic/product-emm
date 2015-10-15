@@ -1597,6 +1597,7 @@ var updatePolicy = function (policy) {
     }
     var payload = {
         "policyName": policy["policyName"],
+        "description": policy["policyDescription"],
         "compliance": policy["selectedNonCompliantAction"],
         "ownershipType": policy["selectedOwnership"],
         "profile": {
