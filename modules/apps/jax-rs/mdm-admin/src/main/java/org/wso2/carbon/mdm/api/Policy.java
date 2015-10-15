@@ -407,10 +407,6 @@ public class Policy {
             DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             return policyManagementService.getDeviceCompliance(deviceIdentifier);
-        } catch (MDMAPIException e) {
-            String error = "Error occurred while getting the policy management service.";
-            log.error(error, e);
-            throw new MDMAPIException(error, e);
         } catch (PolicyComplianceException e) {
             String error = "Error occurred while getting the compliance data.";
             log.error(error, e);
