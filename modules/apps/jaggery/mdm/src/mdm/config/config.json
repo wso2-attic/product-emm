@@ -3,6 +3,7 @@
     "apiContext" : "api",
     "httpsURL" : "%https.ip%",
     "httpURL" : "%http.ip%",
+    "enrollmentURL": "%https.ip%/mdm/enrollment",
     "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
     "iOSAPIRoot" : "%https.ip%/ios/",
     "device" : {

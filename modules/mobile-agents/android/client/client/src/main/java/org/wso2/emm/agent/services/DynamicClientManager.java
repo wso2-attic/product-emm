@@ -69,7 +69,7 @@ public class DynamicClientManager {
 
             if (responseParams != null) {
                 String statusCode = responseParams.get(Constants.STATUS);
-                if (Constants.Status.ACCEPT.equalsIgnoreCase(statusCode)) {
+                if (Constants.Status.CREATED.equalsIgnoreCase(statusCode)) {
                     response = responseParams.get(Constants.RESPONSE);
                 }
             }

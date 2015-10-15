@@ -67,6 +67,28 @@ public class Operation {
         return operations;
     }
 
+	@GET
+	@Path("{type}/{id}")
+	public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getDeviceOperations(
+			@PathParam("type") String type,
+			@PathParam("id") String id)
+			throws MDMAPIException {
+		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+		DeviceManagementProviderService dmService;
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		try {
+			deviceIdentifier.setType(type);
+			deviceIdentifier.setId(id);
+			dmService = MDMAPIUtils.getDeviceManagementService();
+			operations = dmService.getOperations(deviceIdentifier);
+		} catch (Exception e) {
+			String msg = "Error occurred while fetching the operations for the device.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return operations;
+	}
+
     @POST
     public ResponsePayload addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
         DeviceManagementProviderService dmService;

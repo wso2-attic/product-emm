@@ -21,11 +21,10 @@ under the License. --}}
 {{#zone "title"}}
     {{
         unit "title"
-        pageTitle = "Device Management"
+        pageTitle = "Policy Management"
     }}
 {{/zone}}
 {{#zone "body"}}
-    {{unit "appbar" pageTitle="Notifications" pageLink="device-mgt"}}
-    {{unit "datatables"}}
-    {{unit "notification-listing"}}
+    {{unit "appbar" pageTitle="Policy Management" pageLink="policy-mgt" enableBack=true}}
+    {{unit "policy-priority"}}
 {{/zone}}
