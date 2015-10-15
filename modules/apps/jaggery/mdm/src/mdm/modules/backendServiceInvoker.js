@@ -49,7 +49,6 @@ var backendServiceInvoker = function () {
         }
         xmlHttpRequest.send(stringify(payload));
         if (xmlHttpRequest.status == 200) {
-            log.error(parse(xmlHttpRequest["responseText"]));
             return successCallback(parse(xmlHttpRequest["responseText"]));
         } else {
             return errorCallback(parse(xmlHttpRequest["responseText"]));

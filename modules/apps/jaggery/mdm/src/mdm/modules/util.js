@@ -32,7 +32,7 @@ var util = function () {
             "grantType": "urn:ietf:params:oauth:grant-type:password"
         };
         var xhr = new XMLHttpRequest();
-        var tokenEndpoint = mdmProps.carbonServer + "/dynamic-client-web/register/";
+        var tokenEndpoint = mdmProps.dynamicClientRegistrationEndPoint;
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(payload);
