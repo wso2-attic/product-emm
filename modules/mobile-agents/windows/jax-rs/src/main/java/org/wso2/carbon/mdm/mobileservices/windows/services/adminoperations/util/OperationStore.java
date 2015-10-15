@@ -46,7 +46,7 @@ public class OperationStore {
 
     public static boolean storeOperation(OperationRequest operationRequest, Operation.Type type,
                                          String commandType) throws
-            WindowsDeviceEnrolmentException {
+                                                             WindowsDeviceEnrolmentException {
 
         List<Device> devices = operationRequest.getDeviceList();
         List<DeviceIdentifier> deviceIdentifiers = new ArrayList<DeviceIdentifier>();
@@ -77,27 +77,20 @@ public class OperationStore {
     }
 
     private static DeviceManagementProviderService getDeviceManagementServiceProvider() {
-        try {
-            DeviceManagementProviderService deviceManager;
-            PrivilegedCarbonContext.startTenantFlow();
-            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-            deviceManager =
-                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        DeviceManagementProviderService deviceManager;
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        deviceManager =
+                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
 
-            if (deviceManager == null) {
-                String msg = "Device management service is not initialized.";
-                log.error(msg);
-            }
-            return deviceManager;
-        } finally {
-            PrivilegedCarbonContext.endTenantFlow();
+        if (deviceManager == null) {
+            String msg = "Device management service is not initialized.";
+            log.error(msg);
         }
+        return deviceManager;
     }
 
     private static Operation transformBasicOperation(OperationRequest operationRequest, Operation.Type type,
-            String commandType) throws WindowsDeviceEnrolmentException {
+                                                     String commandType) throws WindowsDeviceEnrolmentException {
 
         Operation operation = new Operation();
         operation.setCode(commandType);
@@ -113,7 +106,7 @@ public class OperationStore {
             Wifi wifiObject = (Wifi) operationRequest.getBasicOperation();
             operation.setPayLoad(gson.toJson(wifiObject));
         } else {
-//            no operation.....
+            //            no operation.....
         }
 
         return operation;
