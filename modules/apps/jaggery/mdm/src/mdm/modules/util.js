@@ -95,13 +95,7 @@ var util = function () {
     module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {
 
         var assertionXML = new XML(decode(assertion) + "");
-<<<<<<< HEAD
-        var extractedAssertion = assertionXML.. *
-        ::
-        ["Assertion"].toXMLString();
-=======
         var extractedAssertion = assertionXML.. *::["Assertion"].toXMLString();
->>>>>>> 74de89a76faa6cc4ab14b6503cf107a8003615b4
         var encodedExtractedAssertion = encode(extractedAssertion);
 
         var xhr = new XMLHttpRequest();
