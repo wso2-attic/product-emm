@@ -89,6 +89,7 @@ utility = function () {
         userModule.addPermissions([{key: "policies/list", name: "List Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/edit", name: "Edit Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/remove", name: "Remove Policy"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "policies/priority", name: "Policy Priority"}], "device-mgt/emm-admin", type);
 
         // adding permission definitions for device-mgt/user
         userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/user", type);

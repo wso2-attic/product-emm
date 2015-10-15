@@ -145,10 +145,6 @@ var backendServiceInvoker = function () {
             }
 
         }
-        if (IS_OAUTH_ENABLED) {
-            var headers = [{name: "Authorization", value: "Basic YWRtaW46YWRtaW4="}];
-            options.HTTPHeaders = headers;
-        }
         options.useSOAP = soapVersion;
         options.useWSA = constants.WEB_SERVICE_ADDRESSING_VERSION;
         options.action = action;

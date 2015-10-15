@@ -32,7 +32,7 @@ var util = function () {
             "grantType": "urn:ietf:params:oauth:grant-type:password"
         };
         var xhr = new XMLHttpRequest();
-        var tokenEndpoint = mdmProps.dynamicClientRegistrationEndPoint;
+        var tokenEndpoint = mdmProps.carbonServer + "/dynamic-client-web/register/";
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(payload);
@@ -89,12 +89,19 @@ var util = function () {
         } else {
             throw "Error in obtaining token with Password grant type";
         }
+        log.error("oauth token " + tokenPair.accessToken);
         return tokenPair;
     };
     module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {
 
         var assertionXML = new XML(decode(assertion) + "");
+<<<<<<< HEAD
+        var extractedAssertion = assertionXML.. *
+        ::
+        ["Assertion"].toXMLString();
+=======
         var extractedAssertion = assertionXML.. *::["Assertion"].toXMLString();
+>>>>>>> 74de89a76faa6cc4ab14b6503cf107a8003615b4
         var encodedExtractedAssertion = encode(extractedAssertion);
 
         var xhr = new XMLHttpRequest();
