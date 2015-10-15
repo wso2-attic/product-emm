@@ -132,13 +132,11 @@
                                 <div class="panel panel-default tab-pane" id="installed_applications" role="tabpanel" aria-labelledby="installed_applications">
                                     <div class="panel-heading">Installed Applications</div>
                                     <div class="panel-body">
-                                        <div class="wr-app-listing">
-                                            <ul class="thumbnail-list">
-
-                                            </ul>
-                                        </div>
-                                        <div class="panel-body">
-                                            Not available yet
+                                        <div id="applications-list-container">
+                                            <div class="panel-body">
+                                                Not available yet
+                                            </div>
+                                            <br class="c-both" />
                                         </div>
                                     </div>
                                 </div>
@@ -165,6 +163,7 @@
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script id="applications-list"  src="{{self.publicURL}}/templates/applications-list.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script id="operations-log"  src="{{self.publicURL}}/templates/operations-log.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/device-detail.js"></script>
 {{/zone}}
