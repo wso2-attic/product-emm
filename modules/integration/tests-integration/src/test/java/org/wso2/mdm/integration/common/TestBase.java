@@ -24,16 +24,19 @@ import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 
 import javax.xml.xpath.XPathExpressionException;
 
+/**
+ * This is the base test class that provides common details necessary for other test cases.
+ */
 public class TestBase {
 	protected AutomationContext automationContext;
 	protected String backendURL;
 
 	protected void init(TestUserMode userMode) throws Exception {
-		automationContext = new AutomationContext("MDM", userMode);
+		automationContext = new AutomationContext(Constants.AUTOMATION_CONTEXT, userMode);
 		backendURL = automationContext.getContextUrls().getWebAppURLHttps();
 	}
 
-	protected void initPublisher(String productGroupName, String instanceName, TestUserMode userMode, String userKey)
+	protected void initPublisher(String productGroupName, String instanceName, TestUserMode userMode)
 			throws XPathExpressionException {
 		automationContext = new AutomationContext(productGroupName, instanceName, userMode);
 		backendURL = automationContext.getContextUrls().getBackEndUrl();
