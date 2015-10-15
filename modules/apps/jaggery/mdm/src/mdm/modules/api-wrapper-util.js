@@ -40,9 +40,6 @@ var apiWrapperUtil = function () {
             tokenPair =
                 tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, encodedClientKeys);
         } else if (type == "saml") {
-            log.error(clientData);
-            var scope = "admin";
-            log.error("samltoken >>>>>>>>>> " + properties.samlToken);
             tokenPair = tokenUtil.
                 getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, scope);
         }

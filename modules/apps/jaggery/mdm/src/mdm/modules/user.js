@@ -67,21 +67,17 @@ var userModule = function () {
         switch (method) {
             case constants.HTTP_GET:
                 var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                                                               log.error("here u go : " + stringify(responsePayload["responseContent"]));
                                                                var response = {};
                                                                response.content = responsePayload["responseContent"];
                                                                response.status = "success";
-                                                               log.error(stringify(response));
                                                                return response;
                                                            },
                                                            function (responsePayload) {
-                                                               log.error("err");
                                                                var response = {};
                                                                response.content = responsePayload;
                                                                response.status = "error";
                                                                return response;
                                                            });
-                log.error("aliyeeeee  :" + stringify(response));
                 return response;
                 break;
             case constants.HTTP_POST:
@@ -437,11 +433,8 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            log.error("here")
             var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username";
-            log.error("hmmmm");
             var response = privateMethods.callBackend(url, constants.HTTP_GET)
-            log.error("wow");
             return response;
         } catch (e) {
             throw e;
@@ -625,7 +618,7 @@ var userModule = function () {
      */
     publicMethods.getSecondaryUserStores = function () {
         var returnVal = [];
-        var endpoint = mdmProps.carbonServer + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
+        var endpoint = mdmProps.adminService + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
             "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
