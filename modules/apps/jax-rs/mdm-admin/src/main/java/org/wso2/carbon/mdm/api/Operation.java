@@ -23,9 +23,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.Platform;
+import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.context.DeviceOperationContext;
@@ -108,6 +110,37 @@ public class Operation {
             throw new MDMAPIException(msg, e);
         }
     }
+
+	@GET
+	@Path("{type}/{id}/apps")
+	public List<? extends Application> getInstalledApps(
+			@PathParam("type") String type,
+			@PathParam("id") String id)
+			throws MDMAPIException {
+		List<Application> applications=new ArrayList<Application>();
+		ApplicationManagementProviderService appManagerConnector;
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		try {
+			deviceIdentifier.setType(type);
+			deviceIdentifier.setId(id);
+			appManagerConnector = MDMAPIUtils.getAppManagementService();
+			//applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
+			for(int i=0; i<100;i++) {
+				Application app = new Application();
+				app.setId(i);
+				app.setType("android");
+				app.setApplicationIdentifier("com.abc.def" + i);
+				app.setName("My App" + i);
+				app.setPlatform("android");
+				applications.add(app);
+			}
+		} catch (Exception e) {
+			String msg = "Error occurred while fetching the operations for the device.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return applications;
+	}
 
     @POST
     @Path("installApp/{tenantDomain}")
