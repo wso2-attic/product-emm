@@ -1,0 +1,36 @@
+{{#each roles}}
+    <tr data-type="selectable" data-id="role-{{this}}">
+        <td class="remove-padding icon-only content-fill">
+            <div class="thumbnail icon">
+                <i class="square-element text fw fw-user"></i>
+            </div>
+        </td>
+        <td class="fade-edge remove-padding-top" >{{this}}</td>
+        <td class="text-right content-fill text-left-on-grid-view no-wrap">
+            <a href="/mdm/roles/edit-role/{{this}}" data-role="{{this}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-role-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-edit fw-stack-1x"></i>
+                            </span>
+                <span class="hidden-xs hidden-on-grid-view">Edit</span>
+            </a>
+            <a href="/mdm/roles/edit-permission/{{this}}" data-role="{{this}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-permission-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-edit fw-stack-1x"></i>
+                            </span>
+                <span class="hidden-xs hidden-on-grid-view">Edit Permission</span>
+            </a>
+
+            {{#unequal "admin" username }}
+                <a href="#" data-role="{{role}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-role-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-delete fw-stack-1x"></i>
+                            </span>
+                    <span class="hidden-xs hidden-on-grid-view">Remove</span>
+                </a>
+            {{/unequal}}
+        </td>
+    </tr>
+{{/each}}

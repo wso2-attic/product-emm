@@ -68,6 +68,8 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
 			LocalNotification.startPolling(context);
+		} else if(notifier == null) {
+			LocalNotification.startPolling(context);
 		}
 	}
 

@@ -57,6 +57,7 @@ utility = function () {
 
     publicMethods.insertAppPermissions = function (userModule, type) {
         userModule.addPermissions([{key: "device-mgt", name: "Device Management"}], "", type);
+        // Below are the 2 types of users:- Normal users and Admins
         userModule.addPermissions([{key: "emm-admin", name: "Device Management Admin"}], "device-mgt", type);
         userModule.addPermissions([{key: "user", name: "Device Management User"}], "device-mgt", type);
 
@@ -75,11 +76,20 @@ utility = function () {
         userModule.addPermissions([{key: "users/list", name: "List Users"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "users/remove", name: "Remove Users"}], "device-mgt/emm-admin", type);
 
+        userModule.addPermissions([{key: "roles", name: "Roles"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "roles/add", name: "Add New Roles"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "roles/invite", name: "Invite Roles"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "roles/list", name: "List Roles"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "roles/remove", name: "Remove Roles"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "roles/permission", name: "Update Role Permission"}], "device-mgt/emm-admin", type);
+
+
         userModule.addPermissions([{key: "policies", name: "Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/add", name: "Add Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/list", name: "List Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/edit", name: "Edit Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/remove", name: "Remove Policy"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "policies/priority", name: "Policy Priority"}], "device-mgt/emm-admin", type);
 
         // adding permission definitions for device-mgt/user
         userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/user", type);

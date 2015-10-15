@@ -25,6 +25,7 @@ function onRequest(context) {
 
     var links = {
         "user-mgt": [],
+        "role-mgt": [],
         "policy-mgt": [],
         "device-mgt": []
     };
@@ -36,12 +37,27 @@ function onRequest(context) {
             "url": "/mdm/users/add-user"
         });
     }
+    if (uiPermissions["ADD_ROLE"]) {
+        links["role-mgt"].push({
+            "title": "Add ROLE",
+            "icon": "fw-add",
+            "url": "/mdm/roles/add-role"
+        });
+    }
 
     if (uiPermissions["ADD_POLICY"]) {
         links["policy-mgt"].push({
             "title": "Add Policy",
             "icon": "fw-add",
             "url": "/mdm/policies/add-policy"
+        });
+    }
+
+    if (uiPermissions["CHANGE_POLICY_PRIORITY"]) {
+        links["policy-mgt"].push({
+            "title": "Policy Priority",
+            "icon": "fw-throttling-policy",
+            "url": "/mdm/policies/priority"
         });
     }
 

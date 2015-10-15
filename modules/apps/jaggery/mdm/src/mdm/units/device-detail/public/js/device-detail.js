@@ -40,6 +40,7 @@
             loadMap();
         }
         loadOperationsLog();
+        loadApplicationsList();
     });
 
     function loadMap() {

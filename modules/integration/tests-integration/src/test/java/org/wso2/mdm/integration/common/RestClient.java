@@ -24,16 +24,17 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is the rest client that is used to calls to APIs.
+ */
 public class RestClient {
     private String backEndUrl;
     private Map<String, String> requestHeaders = new HashMap<String, String>();
-    public static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_TYPE = "Content-Type";
 
-    public RestClient(String backEndUrl) {
+    public RestClient(String backEndUrl, String contentType) {
         this.backEndUrl = backEndUrl;
-        if (requestHeaders.get(CONTENT_TYPE) == null) {
-            this.requestHeaders.put(CONTENT_TYPE, "application/json");
-        }
+        this.requestHeaders.put(CONTENT_TYPE, contentType);
     }
 
     public void setHttpHeader(String headerName, String value) {

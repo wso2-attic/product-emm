@@ -14,10 +14,16 @@
                 <div class="wr-list-group wr-sortable policy-list">
                     {{#each policyListToView}}
                         <span class="list-group-item" id="{{id}}">
-                            <div class="row">
+                            <div class="row no-gutter">
                                 <div class="col-lg-3 clearfix">
                                     <span class="wr-sortable-icon"><i class="fw fw-sort"></i></span>
-                                    <span class="wr-sort-index"><i>{{priorityId}}</i></span>
+                                    <span class="editable-text wr-sort-index">
+                                        <input type="text" id="dd" class="index">
+                                        <span class="icon fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="fw fw-edit fw-stack-1x"></i>
+                                        </span>
+                                    </span>
                                     <span class="wr-list-icon">
                                         {{#equal platform "android"}}
                                             <i class=" fw fw-android"></i>
@@ -57,31 +63,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <span class="list-group-item-actions">
-                                        <a href="#" class="cu-btn-inner policy-view-link" data-id="{{id}}">
-                                            <span class="fw-stack">
-                                                <i class="fw fw-ring fw-stack-2x"></i>
-                                                <i class="fw fw-view fw-stack-1x"></i>
-                                            </span>
-                                            View
-                                        </a>
-                                        <a href="#" class="cu-btn-inner policy-update-link" data-id="{{id}}">
-                                            <span class="fw-stack">
-                                                <i class="fw fw-ring fw-stack-2x"></i>
-                                                <i class="fw fw-settings fw-stack-1x"></i>
-                                            </span>
-                                            Re-Configure
-                                        </a>
-                                        <a href="#" class="cu-btn-inner policy-remove-link" data-id="{{id}}">
-                                            <span class="fw-stack">
-                                                <i class="fw fw-ring fw-stack-2x"></i>
-                                                <i class="fw fw-delete fw-stack-1x"></i>
-                                            </span>
-                                            Remove
-                                        </a>
-                                    </span>
                                 </div>
                             </div>
                         </span>
@@ -178,4 +159,5 @@
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/policy-priority.js"></script>
+    <script src="{{self.publicURL}}/js/sortable-list.js"></script>
 {{/zone}}

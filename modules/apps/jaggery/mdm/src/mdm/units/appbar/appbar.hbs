@@ -30,12 +30,12 @@
                         {{title}}
                     </a><!--
              -->{{/each}}
-                <a href="javascript:toggleNotificationbar()" class="cu-btn wr-notification-toggle-btn">
+                <a href="/mdm/notification-listing" class="cu-btn wr-notification-toggle-btn">
                     <span class="fw-stack-md">
                         <i class="fw fw-bell fw-stack-1-5x"></i>
                     </span>
                     &nbsp;
-                    <span class="wr-notification-bubble">0</span>
+                    <span class="wr-notification-bubble" id="notification-bubble">0</span>
                 </a>
                 <a href="javascript:toggleEnrollment()" class="cu-btn wr-notification-toggle-btn">
                     <span class="fw-stack-md">
@@ -65,7 +65,7 @@
             {{#if permissions.LIST_USERS}}
                 <li><a href="/mdm/users"><i class="fw fw-user"></i>User Management</a></li>
             {{/if}}
-            <li><a href="/mdm/"><i class="fw fw-bookmark"></i>Role Management</a></li>
+            <li><a href="/mdm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
             {{#if permissions.LIST_POLICIES}}
                 <li><a href="/mdm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
             {{/if}}
