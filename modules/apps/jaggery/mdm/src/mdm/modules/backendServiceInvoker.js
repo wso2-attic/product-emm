@@ -35,23 +35,25 @@ var backendServiceInvoker = function () {
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
-    function initialteXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
-        var XMLHttpRequest = new XMLHttpRequest();
-        XMLHttpRequest.open(method, url);
-        XMLHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
-        XMLHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
+    function initiateXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open(method, url);
+        xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+        xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
         if (IS_OAUTH_ENABLED) {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-            if (!accessToken) {
-                XMLHttpRequest.setRequestHeader(
+            log.error("==  "+accessToken);
+            if (!(!accessToken.trim())) {
+                xmlHttpRequest.setRequestHeader(
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
         }
-        XMLHttpRequest.send(stringify(payload));
-        if (XMLHttpRequest.status == 200) {
-            successCallback(parse(XMLHttpRequest["responseText"]));
+        xmlHttpRequest.send(stringify(payload));
+        if (xmlHttpRequest.status == 200) {
+            log.error(parse(xmlHttpRequest["responseText"]));
+            return successCallback(parse(xmlHttpRequest["responseText"]));
         } else {
-            errorCallback(parse(XMLHttpRequest["responseText"]));
+            return errorCallback(parse(xmlHttpRequest["responseText"]));
         }
     }
 
@@ -63,9 +65,8 @@ var backendServiceInvoker = function () {
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
-    function initialteHTTPClientRequest(method, url, payload, successCallback, errorCallback) {
+    function initiateHTTPClientRequest(method, url, payload, successCallback, errorCallback) {
         var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
-
         var methodObject;
         switch (method) {
             case constants.HTTP_POST:
@@ -98,7 +99,7 @@ var backendServiceInvoker = function () {
         methodObject.addRequestHeader(header);
         if (IS_OAUTH_ENABLED) {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-            if (!accessToken) {
+            if (!(!accessToken.trim())) {
                 header = new Header();
                 header.setName(constants.AUTHORIZATION_HEADER);
                 header.setValue(constants.BEARER_PREFIX + accessToken);
@@ -113,12 +114,12 @@ var backendServiceInvoker = function () {
             client.executeMethod(methodObject);
             var status = methodObject.getStatusCode();
             if (status == 200) {
-                successCallback(response);
+                return successCallback(response);
             } else {
-                errorCallback(response);
+                return errorCallback(response);
             }
         } catch (e) {
-            errorCallback(response);
+            return errorCallback(response);
         } finally {
             method.releaseConnection();
         }
@@ -133,10 +134,18 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      * @param soapVersion soapVersion which need to used.
      */
-    function initialteWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion) {
+    function initiateWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion) {
         var ws = require('ws');
         var wsRequest = new ws.WSRequest();
         var options = [];
+        if (IS_OAUTH_ENABLED) {
+            var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
+            if (!(!accessToken.trim())) {
+                var headers = [{name: constants.AUTHORIZATION_HEADER, value: constants.BEARER_PREFIX + accessToken}];
+                options.HTTPHeaders = headers;
+            }
+
+        }
         if (IS_OAUTH_ENABLED) {
             var headers = [{name: "Authorization", value: "Basic YWRtaW46YWRtaW4="}];
             options.HTTPHeaders = headers;
@@ -150,57 +159,57 @@ var backendServiceInvoker = function () {
             wsRequest.send(payload);
             wsResponse = wsRequest.responseE4X;
         } catch (e) {
-            errorCallback(e);
+            return errorCallback(e);
         }
-        successCallback(wsResponse);
+        return successCallback(wsResponse);
     }
 
     /**
-     * This method invokes initiateXMLHttpRequest for get calls
+     * This method invokes return initiateXMLHttpRequest for get calls
      * @param url target url.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicXMLHTTPInvokers.get = function (url, successCallback, errorCallback) {
         var payload = null;
-        initialteXMLHTTPRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
+        return initiateXMLHTTPRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
     };
 
     /**
-     * This method invokes initiateXMLHttpRequest for post calls
+     * This method invokes return initiateXMLHttpRequest for post calls
      * @param url target url.
      * @param payload payload/data which need to be send.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicXMLHTTPInvokers.post = function (url, payload, successCallback, errorCallback) {
-        initialteXMLHTTPRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
+        return initiateXMLHTTPRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
     };
 
     /**
-     * This method invokes initiateXMLHttpRequest for put calls
+     * This method invokes return initiateXMLHttpRequest for put calls
      * @param url target url.
      * @param payload payload/data which need to be send.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicXMLHTTPInvokers.put = function (url, payload, successCallback, errorCallback) {
-        initialteXMLHTTPRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
+        return initiateXMLHTTPRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
     };
 
     /**
-     * This method invokes initiateXMLHttpRequest for delete calls
+     * This method invokes return initiateXMLHttpRequest for delete calls
      * @param url target url.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicXMLHTTPInvokers.delete = function (url, successCallback, errorCallback) {
         var payload = null;
-        initialteXMLHTTPRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
+        return initiateXMLHTTPRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
     };
 
     /**
-     * This method invokes initiateWSRequest for soap calls
+     * This method invokes return initiateWSRequest for soap calls
      * @param endpoint service end point to be triggered.
      * @param payload soap payload which need to be send.
      * @param successCallback a function to be called if the respond if successful.
@@ -208,52 +217,52 @@ var backendServiceInvoker = function () {
      * @param soapVersion soapVersion which need to used.
      */
     publicWSInvokers.soapRequest = function (action, endpoint, payload, successCallback, errorCallback, soapVersion) {
-        initialteWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion);
+        return initiateWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion);
     };
 
 
     /**
-     * This method invokes initiateHTTPClientRequest for get calls
+     * This method invokes return initiateHTTPClientRequest for get calls
      * @param url target url.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.get = function (url, successCallback, errorCallback) {
         var payload = null;
-        initialteHTTPClientRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
+        return initiateHTTPClientRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
     };
 
     /**
-     * This method invokes initiateHTTPClientRequest for post calls
+     * This method invokes return initiateHTTPClientRequest for post calls
      * @param url target url.
      * @param payload payload/data which need to be send.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.post = function (url, payload, successCallback, errorCallback) {
-        initialteHTTPClientRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
+        return initiateHTTPClientRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
     };
 
     /**
-     * This method invokes initiateHTTPClientRequest for put calls
+     * This method invokes return initiateHTTPClientRequest for put calls
      * @param url target url.
      * @param payload payload/data which need to be send.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.put = function (url, payload, successCallback, errorCallback) {
-        initialteHTTPClientRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
+        return initiateHTTPClientRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
     };
 
     /**
-     * This method invokes initiateHTTPClientRequest for delete calls
+     * This method invokes return initiateHTTPClientRequest for delete calls
      * @param url target url.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.delete = function (url, successCallback, errorCallback) {
         var payload = null;
-        initialteHTTPClientRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
+        return initiateHTTPClientRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
     };
 
     var publicInvokers = {};
