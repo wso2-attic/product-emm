@@ -37,6 +37,14 @@
                     &nbsp;
                     <span class="wr-notification-bubble">0</span>
                 </a>
+                <a href="javascript:toggleEnrollment()" class="cu-btn wr-notification-toggle-btn">
+                    <span class="fw-stack-md">
+                        <i class="fw fw-bpmn fw-stack-1-5x"></i>
+                    </span>
+                    &nbsp;
+                    Enroll Device
+                    <!--<span class="wr-notification-bubble">0</span>-->
+                </a>
             </div>
         </div>
     </div>
@@ -65,7 +73,30 @@
         </ul>
     </div>
     <!-- /common navigation -->
+
+    <div id="qr-code-modal" data-enrollment-url="{{enrollmentURL}}" class="hidden">
+
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                        Scan QR code to start enrollment
+                    </h3>
+                    <h4>
+                        Please select a device or a list of devices to perform an operation.
+                    </h4>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body col-centered ">
+                            <div class="qr-code"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/appbar.js"></script>
+    <script src="{{self.publicURL}}/js/jquery.qrcode.min.js"></script>
 {{/zone}}

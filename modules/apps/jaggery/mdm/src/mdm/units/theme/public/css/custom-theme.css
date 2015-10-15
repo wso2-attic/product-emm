@@ -561,3 +561,7 @@ select.select2 {
 * html .ui-autocomplete {
 	height: 400px;
 }
+
+.qr-code canvas{
+	border: 2px solid white;
+}

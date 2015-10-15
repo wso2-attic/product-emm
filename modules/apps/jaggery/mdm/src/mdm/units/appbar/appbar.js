@@ -19,6 +19,7 @@
 function onRequest(context) {
     // var log = new Log("units/appbar/appbar.js");
     var userModule = require("/modules/user.js").userModule;
+    var mdmProps = require('/config/mdm-props.js').config();
     var uiPermissions = userModule.getUIPermissions();
     context["permissions"] = uiPermissions;
 
@@ -48,6 +49,6 @@ function onRequest(context) {
     // where units are attached to a page zone.
     // eg: {{unit "appbar" pageLink="users" title="User Management"}}
     context["currentActions"] = links[context["pageLink"]];
-
+    context["enrollmentURL"] = mdmProps.enrollmentURL;
     return context;
 }
