@@ -23,9 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
+import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -132,12 +132,12 @@ public class MDMAPIUtils {
         return deviceIdentifier;
     }
 
-    public static ApplicationManager getAppManagementService(String tenantDomain) throws MDMAPIException {
+    public static ApplicationManagementProviderService getAppManagementService(String tenantDomain) throws MDMAPIException {
         // until complete login this is use to load super tenant context
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         int tenantId;
-        ApplicationManager appService;
+	    ApplicationManagementProviderService appService;
         if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
             tenantId = MultitenantConstants.SUPER_TENANT_ID;
         } else {
@@ -145,12 +145,12 @@ public class MDMAPIUtils {
         }
         ctx.setTenantDomain(tenantDomain);
         ctx.setTenantId(tenantId);
-        appService = (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
+        appService = (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
         return appService;
     }
 
-    public static ApplicationManager getAppManagementService() throws MDMAPIException {
+    public static ApplicationManagementProviderService getAppManagementService() throws MDMAPIException {
         return getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
     }
 
