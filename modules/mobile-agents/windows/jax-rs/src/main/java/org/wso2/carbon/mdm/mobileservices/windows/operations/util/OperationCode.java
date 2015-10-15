@@ -42,7 +42,9 @@ public class OperationCode {
         CAMERA_STATUS("./Vendor/MSFT/PolicyManager/Device/Camera/AllowCamera"),
         ENCRYPT_STORAGE_STATUS("./Vendor/MSFT/PolicyManager/Device/Security/RequireDeviceEncryption"),
         DEVICE_PASSWORD_STATUS("./Vendor/MSFT/PolicyManager/Device/DeviceLock/DevicePasswordEnabled"),
-        DEVICE_PASSCODE_DELETE("./Vendor/MSFT/PolicyManager/My/DeviceLock");
+        DEVICE_PASSCODE_DELETE("./Vendor/MSFT/PolicyManager/My/DeviceLock"),
+        LONGITUDE("./Vendor/MSFT/RemoteFind/Location/Longitude"),
+        LATITUDE("./Vendor/MSFT/RemoteFind/Location/Latitude");
 
         private final String code;
 

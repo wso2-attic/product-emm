@@ -87,7 +87,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
     private static final int APPAUTH_PASSWORD_POSITION = 22;
     //Polling frequency position is for futhure purposes.Currently polling frequency is hardcoded.But planned to
     //get its value from tenant configuration.
-    private static final int POLLING_FREQUENCY_POSITION = 27;
+   // private static final int POLLING_FREQUENCY_POSITION = 27;
     private static Log log = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
     private PrivateKey privateKey;
     private X509Certificate rootCACertificate;
@@ -206,20 +206,19 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
      */
     public void setRootCertAndKey(
             String storePassword, String keyPassword) throws KeyStoreGenerationException,
-            CertificateGenerationException, FileNotFoundException {
-
-        File jksFile = new File(getClass().getClassLoader().getResource(
-                PluginConstants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
-        String jksFilePath = jksFile.getPath();
+            CertificateGenerationException, IOException {
+        String jksFilePath;
         KeyStore securityJKS;
         try {
+            File jksFile = new File(getClass().getClassLoader().getResource(
+                    PluginConstants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
+            jksFilePath = jksFile.getPath();
             securityJKS = KeyStoreGenerator.getKeyStore();
         } catch (KeyStoreGenerationException e) {
             String msg = "Cannot retrieve the MDM key store.";
             log.error(msg, e);
             throw new KeyStoreGenerationException(msg, e);
         }
-
         try {
             KeyStoreGenerator.loadToStore(securityJKS, storePassword.toCharArray(), jksFilePath);
         } catch (KeyStoreGenerationException e) {
@@ -387,23 +386,22 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             String rstr = new SyncmlCredentials().generateRST(username, password);
             DeviceUtil.persistChallengeToken(rstr, "", username);
 
-            // get device polling frequency from the tenant ConfigurationsA
-//			String pollingFrequency = null;
-//			TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
-//			List<ConfigurationEntry>config = configuration.getConfiguration();
-//			for (int x = 0; x < config.size(); x++) {
-//				ConfigurationEntry configvalue = config.get(x);
-//				if (configvalue.getName().equals("notifierFrequency")) {
-//					pollingFrequency = configvalue.getValue().toString();
-//				}
-//			}
-//			Node numberOfFirstRetries = wapParm.item(POLLING_FREQUENCY_POSITION);
-//			NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
-//			Node pollvalue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-//			pollvalue.setTextContent(pollingFrequency);
-            if (log.isDebugEnabled()) {
-                log.debug("Username: " + username + "Password: " + rstr);
-            }
+            // get device polling frequency from the tenant Configurations.
+//            String pollingFrequency = null;
+//            TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
+//            List<ConfigurationEntry> configurations = configuration.getConfiguration();
+//            for (ConfigurationEntry configvalue : configurations) {
+//                if (configvalue.getName().equals("notifierFrequency")) {
+//                    pollingFrequency = configvalue.getValue().toString();
+//                }
+//            }
+//            Node numberOfFirstRetries = wapParm.item(POLLING_FREQUENCY_POSITION);
+//            NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
+//            Node pollvalue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+//            pollvalue.setTextContent(pollingFrequency);
+//            if (log.isDebugEnabled()) {
+//                log.debug("Username: " + username + "Password: " + rstr);
+//            }
             wapProvisioningString = convertDocumentToString(document);
 
             //Generic exception is caught here as there is no need of taking different actions for
@@ -427,7 +425,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             return null;
         }
         Message message = ((WrappedMessageContext) messageContext).getWrappedMessage();
-        List<Header> headers = CastUtils.cast((List<?>) message.get(Header.HEADER_LIST));
-        return headers;
+        return CastUtils.cast((List<?>) message.get(Header.HEADER_LIST));
     }
 }

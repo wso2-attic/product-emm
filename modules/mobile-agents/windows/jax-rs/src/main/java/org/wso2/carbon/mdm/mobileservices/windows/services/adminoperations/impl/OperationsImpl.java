@@ -31,8 +31,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsOpera
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.Message;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.StorageEncryption;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.wrapper.EncryptBeanWrapper;
 
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -53,7 +51,7 @@ public class OperationsImpl implements Operations {
      * REST endpoint for the Device Lock operation
      *
      * @param acceptHeader header value of the request POST message.
-     * @param deviceIDs    list of device ids to be add device lock operation.
+     * @param deviceIDs    list of device ids to be add device lockOperationUpdate operation.
      * @return Response object for client.
      * @throws WindowsDeviceEnrolmentException
      */
@@ -62,7 +60,7 @@ public class OperationsImpl implements Operations {
     public Response lock(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
         if (log.isDebugEnabled()) {
-            log.debug("Invoking windows device lock operation");
+            log.debug("Invoking windows device lockOperationUpdate operation");
         }
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
@@ -199,51 +197,15 @@ public class OperationsImpl implements Operations {
         }
     }
 
-    @POST
-    @Path("/storage-encrypt")
-    public Response encryptStorage(@HeaderParam("Accept") String acceptHeader,
-                                   EncryptBeanWrapper encryptBeanWrapper) {
-
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking windows device encrypt storage operation");
-        }
-        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
-        Message message = new Message();
-        try {
-            StorageEncryption encrypt = encryptBeanWrapper.getOperation();
-            if (encrypt == null) {
-                throw new OperationManagementException("Encrypt bean is empty");
-            }
-            CommandOperation operation = new CommandOperation();
-            operation.setCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
-            operation.setType(Operation.Type.COMMAND);
-            operation.setEnabled(encrypt.isEncrypted());
-            return WindowsAPIUtils.getOperationResponse(encryptBeanWrapper.getDeviceIDs(), operation, message,
-                    responseMediaType);
-        } catch (OperationManagementException e) {
-            String errorMessage = "Issue in retrieving operation management service instance";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new WindowsOperationsException(message, responseMediaType);
-        } catch (DeviceManagementException e) {
-            String errorMessage = "Issue in retrieving device management service instance";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new WindowsOperationsException(message, responseMediaType);
-        }
-    }
-
     /**
-     * REST endpoint for the device lock reset.
-     * Lock reset have to be done, when device user does not set PIN for the lock screen.
-     * Admin set lock operation for the specific device,If the device is in above scenario, admin will be notified.since
-     * admin have to set lock reset operation to the device so that automatically generate PIN value for the
-     * lock screen.
+     * REST endpoint for the device lockOperationUpdate reset.
+     * Lock reset have to be done, when device user does not set PIN for the lockOperationUpdate screen.
+     * Admin set lockOperationUpdate operation for the specific device,If the device is in above scenario, admin will be notified.since
+     * admin have to set lockOperationUpdate reset operation to the device so that automatically generate PIN value for the
+     * lockOperationUpdate screen.
      *
      * @param acceptHeader POST message header value.
-     * @param deviceIDs    Device ids to be lock reset.
+     * @param deviceIDs    Device ids to be lockOperationUpdate reset.
      * @return Response object for the client.
      * @throws WindowsDeviceEnrolmentException
      */

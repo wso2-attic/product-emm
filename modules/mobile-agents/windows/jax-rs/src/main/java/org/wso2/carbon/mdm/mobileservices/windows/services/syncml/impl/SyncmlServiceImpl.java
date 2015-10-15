@@ -52,28 +52,6 @@ import static org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIU
  */
 public class SyncmlServiceImpl implements SyncmlService {
 
-//    private static final int SYNCML_FIRST_MESSAGE_ID = 1;
-//    private static final int SYNCML_SECOND_MESSAGE_ID = 2;
-//    private static final int SYNCML_FIRST_SESSION_ID = 1;
-//    private static final int SYNCML_SECOND_SESSION_ID = 2;
-//    private static final int OSVERSION_POSITION = 0;
-//    private static final int DEVICE_ID_POSITION = 0;
-//    private static final int DEVICE_MODE_POSITION = 2;
-//    private static final int DEVICE_MAN_POSITION = 1;
-//    private static final int DEVICE_MOD_VER_POSITION = 3;
-//    private static final int DEVICE_LANG_POSITION = 4;
-//    private static final int IMSI_POSITION = 1;
-//    private static final int IMEI_POSITION = 2;
-//    private static final int VENDER_POSITION = 7;
-//    private static final int MACADDRESS_POSITION = 8;
-//    private static final int RESOLUTION_POSITION = 9;
-//    private static final int DEVICE_NAME_POSITION = 10;
-//    private static final String OS_VERSION = "OS_VERSION";
-//    private static final String IMSI = "IMSI";
-//    private static final String IMEI = "IMEI";
-//    private static final String VENDOR = "VENDER";
-//    private static final String MODEL = "DEVICE_MODEL";
-
     private static Log log = LogFactory.getLog(SyncmlServiceImpl.class);
 
     /**
@@ -146,7 +124,7 @@ public class SyncmlServiceImpl implements SyncmlService {
     public Response getResponse(Document request)
             throws WindowsDeviceEnrolmentException, WindowsOperationException, OperationManagementException,
             DeviceManagementException, FeatureManagementException, PolicyComplianceException, JSONException,
-            PolicyManagementException, NotificationManagementException {
+            PolicyManagementException, NotificationManagementException, NoSuchAlgorithmException, UnsupportedEncodingException {
 
         String val = SyncmlServiceImpl.getStringFromDoc(request);
         int msgID;
@@ -191,9 +169,13 @@ public class SyncmlServiceImpl implements SyncmlService {
                             throw new FeatureManagementException("Error occurred in while getting effective " +
                                     "feature", e);
                         } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
+                            String msg = "Error occurred in while generating hash value.";
+                            log.error(msg);
+                            throw new NoSuchAlgorithmException(msg, e);
                         } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                            String msg = "Error occurred in while encoding hash value.";
+                            log.error(msg);
+                            throw new UnsupportedEncodingException(msg);
                         }
 
                     } else {
@@ -219,9 +201,13 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                         throw new FeatureManagementException("Error occurred in while getting effective feature", e);
                     } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
+                        String msg = "Error occurred in while generating hash value.";
+                        log.error(msg);
+                        throw new NoSuchAlgorithmException(msg, e);
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        String msg = "Error occurred in while encoding hash value.";
+                        log.error(msg);
+                        throw new UnsupportedEncodingException(msg);
                     }
 
                 } else {
@@ -267,9 +253,13 @@ public class SyncmlServiceImpl implements SyncmlService {
                             throw new NotificationManagementException("Error occurred in while getting notification " +
                                     "service ", e);
                         } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
+                            String msg = "Error occurred in while generating hash value.";
+                            log.error(msg);
+                            throw new NoSuchAlgorithmException(msg, e);
                         } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                            String msg = "Error occurred in while encoding hash value.";
+                            log.error(msg);
+                            throw new UnsupportedEncodingException(msg);
                         }
                     } else {
                         try {
@@ -294,9 +284,13 @@ public class SyncmlServiceImpl implements SyncmlService {
                             throw new FeatureManagementException("Error occurred in while getting " +
                                     "effective feature", e);
                         } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
+                            String msg = "Error occurred in while generating hash value.";
+                            log.error(msg);
+                            throw new NoSuchAlgorithmException(msg, e);
                         } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                            String msg = "Error occurred in while encoding hash value.";
+                            log.error(msg);
+                            throw new UnsupportedEncodingException(msg);
                         }
                     }
                 } else {
@@ -324,18 +318,29 @@ public class SyncmlServiceImpl implements SyncmlService {
                         log.error(msg);
                         throw new PolicyComplianceException(msg, e);
                     } catch (JSONException e) {
-                        throw new JSONException("Error occurred in while parsing json object.");
+                        String msg = "Error occurred in while parsing json object.";
+                        log.error(msg);
+                        throw new JSONException(msg);
                     } catch (PolicyManagementException e) {
-                        throw new PolicyManagementException("Error occurred in while getting effective policy.", e);
+                        String msg = "Error occurred in while getting effective policy.";
+                        log.error(msg);
+                        throw new PolicyManagementException(msg, e);
                     } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                        throw new FeatureManagementException("Error occurred in while getting effective feature", e);
+                        String msg = "Error occurred in while getting effective feature";
+                        log.error(msg);
+                        throw new FeatureManagementException(msg, e);
                     } catch (NotificationManagementException e) {
-                        throw new NotificationManagementException("Error occurred in while getting notification "
-                                + "service ", e);
+                        String msg = "Error occurred in while getting notification service";
+                        log.error(msg);
+                        throw new NotificationManagementException(msg, e);
                     } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
+                        String msg = "Error occurred in while generating hash value.";
+                        log.error(msg);
+                        throw new NoSuchAlgorithmException(msg, e);
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        String msg = "Error occurred in while encoding hash value.";
+                        log.error(msg);
+                        throw new UnsupportedEncodingException(msg);
                     }
                 }
             } else {
@@ -368,6 +373,8 @@ public class SyncmlServiceImpl implements SyncmlService {
         String macAddress;
         String resolution;
         String modVersion;
+        String longitude;
+        String latitude;
         boolean status = false;
         String user;
         String deviceName;
@@ -382,7 +389,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 List<Item> itemList = replace.getItems();
                 devID = itemList.get(PluginConstants.SyncML.DEVICE_ID_POSITION).getData();
                 devMan = itemList.get(PluginConstants.SyncML.DEVICE_MAN_POSITION).getData();
-                devMod = itemList.get(PluginConstants.SyncML.DEVICE_MODE_POSITION).getData();
+                devMod = itemList.get(PluginConstants.SyncML.DEVICE_MODEL_POSITION).getData();
                 modVersion = itemList.get(PluginConstants.SyncML.DEVICE_MOD_VER_POSITION).getData();
                 devLang = itemList.get(PluginConstants.SyncML.DEVICE_LANG_POSITION).getData();
                 user = syncmlDocument.getHeader().getSource().getLocName();

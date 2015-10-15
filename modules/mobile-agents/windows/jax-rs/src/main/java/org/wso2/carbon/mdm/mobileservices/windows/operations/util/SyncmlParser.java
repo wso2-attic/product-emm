@@ -277,7 +277,6 @@ public class SyncmlParser {
                         break;
                     case Constants.COMMAND_REFERENCE:
                         commandReference = node.getChildNodes().item(i).getTextContent().trim();
-
                         break;
                     case Constants.ITEM:
                         item.add(generateItem(node.getChildNodes().item(i)));

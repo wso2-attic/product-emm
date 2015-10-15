@@ -177,25 +177,30 @@ public final class PluginConstants {
         public static final int SYNCML_SECOND_SESSION_ID = 2;
         public static final int OSVERSION_POSITION = 0;
         public static final int DEVICE_ID_POSITION = 0;
-        public static final int DEVICE_MODE_POSITION = 2;
+        public static final int DEVICE_MODEL_POSITION = 2;
         public static final int DEVICE_MAN_POSITION = 1;
         public static final int DEVICE_MOD_VER_POSITION = 3;
         public static final int DEVICE_LANG_POSITION = 4;
         public static final int IMSI_POSITION = 1;
         public static final int IMEI_POSITION = 2;
-        public static final int VENDER_POSITION = 7;
-        public static final int MACADDRESS_POSITION = 8;
-        public static final int RESOLUTION_POSITION = 9;
-        public static final int DEVICE_NAME_POSITION = 10;
+        public static final int VENDER_POSITION = 4;
+        public static final int MACADDRESS_POSITION = 6;
+        public static final int RESOLUTION_POSITION = 7;
+        public static final int DEVICE_NAME_POSITION = 8;
+        public static final int DEV_MODEL_POSITION = 6;
         public static final String OS_VERSION = "OS_VERSION";
         public static final String IMSI = "IMSI";
         public static final String IMEI = "IMEI";
-        public static final String VENDOR = "VENDER";
+        public static final String VENDOR = "VENDOR";
         public static final String MODEL = "DEVICE_MODEL";
         public static final String MAC_ADDRESS = "MAC_ADDRESS";
         public static final String DEVICE_INFO = "DEVICE_INFO";
         public static final String DEVICE_NAME = "DEVICE_NAME";
-
+        public static final String SOFTWARE_VERSION = "SOFTWARE_VERSION";
+        public static final String DEV_ID = "DEV_ID";
+        public static final String MANUFACTURER = "MANUFACTURER";
+        public static final String LANGUAGE = "LANGUAGE";
+        public static final String RESOLUTION = "RESOLUTION";
     }
 
     /**

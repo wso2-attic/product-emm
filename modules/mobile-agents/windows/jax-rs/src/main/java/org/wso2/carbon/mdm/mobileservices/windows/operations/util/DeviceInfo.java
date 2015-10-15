@@ -19,6 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,57 +33,57 @@ public class DeviceInfo {
         List<Operation> deviceInfoOperations = new ArrayList<>();
 
         Operation osVersion = new Operation();
-        osVersion.setCode("SOFTWARE_VERSION");
+        osVersion.setCode(PluginConstants.SyncML.SOFTWARE_VERSION);
         osVersion.setType(Operation.Type.INFO);
         deviceInfoOperations.add(osVersion);
 
         Operation imsi = new Operation();
-        imsi.setCode("IMSI");
+        imsi.setCode(PluginConstants.SyncML.IMSI);
         imsi.setType(Operation.Type.INFO);
         deviceInfoOperations.add(imsi);
 
         Operation imei = new Operation();
-        imei.setCode("IMEI");
+        imei.setCode(PluginConstants.SyncML.IMEI);
         imei.setType(Operation.Type.INFO);
         deviceInfoOperations.add(imei);
 
         Operation deviceID = new Operation();
-        deviceID.setCode("DEV_ID");
+        deviceID.setCode(PluginConstants.SyncML.DEV_ID);
         deviceID.setType(Operation.Type.INFO);
         deviceInfoOperations.add(deviceID);
 
         Operation manufacturer = new Operation();
-        manufacturer.setCode("MANUFACTURER");
+        manufacturer.setCode(PluginConstants.SyncML.MANUFACTURER);
         manufacturer.setType(Operation.Type.INFO);
         deviceInfoOperations.add(manufacturer);
 
         Operation model = new Operation();
-        model.setCode("MODEL");
+        model.setCode(PluginConstants.SyncML.MODEL);
         model.setType(Operation.Type.INFO);
         deviceInfoOperations.add(model);
 
         Operation language = new Operation();
-        language.setCode("LANGUAGE");
+        language.setCode(PluginConstants.SyncML.LANGUAGE);
         language.setType(Operation.Type.INFO);
         deviceInfoOperations.add(language);
 
-        Operation vender = new Operation();
-        vender.setCode("VENDER");
-        vender.setType(Operation.Type.INFO);
-        deviceInfoOperations.add(vender);
+        Operation vendor = new Operation();
+        vendor.setCode(PluginConstants.SyncML.VENDOR);
+        vendor.setType(Operation.Type.INFO);
+        deviceInfoOperations.add(vendor);
 
         Operation macaddress = new Operation();
-        macaddress.setCode("MAC_ADDRESS");
+        macaddress.setCode(PluginConstants.SyncML.MAC_ADDRESS);
         macaddress.setType(Operation.Type.INFO);
         deviceInfoOperations.add(macaddress);
 
         Operation resolution = new Operation();
-        resolution.setCode("RESOLUTION");
+        resolution.setCode(PluginConstants.SyncML.RESOLUTION);
         resolution.setType(Operation.Type.INFO);
         deviceInfoOperations.add(resolution);
 
         Operation deviceName = new Operation();
-        deviceName.setCode("DEVICE_NAME");
+        deviceName.setCode(PluginConstants.SyncML.DEVICE_NAME);
         deviceName.setType(Operation.Type.INFO);
         deviceInfoOperations.add(deviceName);
 

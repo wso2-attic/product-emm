@@ -318,7 +318,6 @@ public class OperationReply {
         syncmlBody.setExec(execList);
         syncmlBody.setAtomicTag(atomicTagElement);
         syncmlBody.setReplace(replaceElement);
-
     }
 
     private Item appendExecInfo(Operation operation) {
@@ -331,7 +330,7 @@ public class OperationReply {
                 if (operation.getCode().equals(PluginConstants
                         .OperationCodes.DISENROLL)) {
                     MetaTag meta = new MetaTag();
-                    meta.setFormat("chr");
+                    meta.setFormat(Constants.META_FORMAT_CHARACTER);
                     item.setMeta(meta);
                     item.setData(Constants.PROVIDER_ID);
                 }
@@ -494,7 +493,7 @@ public class OperationReply {
                     "&lt;/keyMaterial&gt;&lt;/sharedKey&gt;&lt;/security&gt;&lt;/MSM&gt;&lt;/WLANProfile&gt;";
 
             MetaTag meta = new MetaTag();
-            meta.setFormat("chr");
+            meta.setFormat(Constants.META_FORMAT_CHARACTER);
             List<Item> items = new ArrayList<>();
 
             for (Configure configure : Configure.values()) {

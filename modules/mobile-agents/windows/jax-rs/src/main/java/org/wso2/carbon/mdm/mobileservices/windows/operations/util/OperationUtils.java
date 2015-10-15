@@ -68,7 +68,6 @@ public class OperationUtils {
                                        DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException, NotificationManagementException {
 
-
         pendingDataOperations = SyncmlUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED) || status.getData().equals
@@ -80,9 +79,8 @@ public class OperationUtils {
             }
             updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
         } else if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
-            for (int x = 0; x < pendingDataOperations.size(); x++) {
-                Operation operation = pendingDataOperations.get(x);
-                if (operation.getId() == status.getCommandReference() && pendingDataOperations.get(x).
+            for (Operation operation : pendingDataOperations) {
+                if (operation.getId() == status.getCommandReference() && operation.
                         getCode().equals(String.valueOf(OperationCode.Command.DEVICE_LOCK))) {
                     operation.setStatus(Operation.Status.ERROR);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
@@ -123,15 +121,24 @@ public class OperationUtils {
         }
     }
 
-    public void lock(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+    /**
+     * Update Status of the lock operation.
+     *
+     * @param status           Status of the operation.
+     * @param syncmlDocument   parsed syncml payload.
+     * @param deviceIdentifier Device Id.
+     * @throws OperationManagementException
+     * @throws DeviceManagementException
+     * @throws NotificationManagementException
+     */
+    public void lockOperationUpdate(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException, NotificationManagementException {
 
         pendingDataOperations = SyncmlUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-            for (int z = 0; z < pendingDataOperations.size(); z++) {
-                Operation operation = pendingDataOperations.get(z);
-                if (pendingDataOperations.get(z).getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode())
+            for (Operation operation : pendingDataOperations) {
+                if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode())
                         && operation.getId() == status.getCommandReference()) {
                     operation.setStatus(Operation.Status.COMPLETED);
                     new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
@@ -151,7 +158,7 @@ public class OperationUtils {
                         NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
-                        lockResetNotification.setStatus("Error");
+                        lockResetNotification.setStatus(Constants.ERROR);
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
 
@@ -166,6 +173,15 @@ public class OperationUtils {
         }
     }
 
+    /***
+     * Update status of the ring operation.
+     *
+     * @param status           Ring status of the device.
+     * @param syncmlDocument   Parsed syncml payload from the syncml engine.
+     * @param deviceIdentifier specific device id to be update.
+     * @throws OperationManagementException
+     * @throws DeviceManagementException
+     */
     public void ring(Status status, SyncmlDocument syncmlDocument,
                      DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException {
@@ -173,8 +189,7 @@ public class OperationUtils {
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
             pendingDataOperations = SyncmlUtils.getDeviceManagementService()
                     .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-            for (int z = 0; z < pendingDataOperations.size(); z++) {
-                Operation operation = pendingDataOperations.get(z);
+            for (Operation operation : pendingDataOperations) {
                 if (operation.getCode().equals(OperationCode.Command.DEVICE_RING) &&
                         (operation.getId() == status.getCommandReference())) {
                     operation.setStatus(Operation.Status.COMPLETED);
@@ -185,6 +200,15 @@ public class OperationUtils {
         }
     }
 
+    /***
+     * Update the status of the DataWipe operation.
+     *
+     * @param status           Status of the datawipe.
+     * @param syncmlDocument   Parsed syncml payload from the syncml engine.
+     * @param deviceIdentifier specific device id to be wiped.
+     * @throws OperationManagementException
+     * @throws DeviceManagementException
+     */
     public void dataWipe(Status status, SyncmlDocument syncmlDocument,
                          DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException {
@@ -204,6 +228,17 @@ public class OperationUtils {
         }
     }
 
+    /**
+     * Get pending operations.
+     *
+     * @param syncmlDocument SyncmlDocument object which creates from the syncml engine using syncml payload
+     * @return Return list of pending operations.
+     * @throws OperationManagementException
+     * @throws DeviceManagementException
+     * @throws FeatureManagementException
+     * @throws PolicyComplianceException
+     * @throws NotificationManagementException
+     */
     public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
             throws OperationManagementException, DeviceManagementException, FeatureManagementException,
             PolicyComplianceException, NotificationManagementException {
@@ -224,7 +259,7 @@ public class OperationUtils {
                     operationUtils.updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
                 } else {
                     if (status.getTargetReference().equals(OperationCode.Command.DEVICE_LOCK)) {
-                        operationUtils.lock(status, syncmlDocument, deviceIdentifier);
+                        operationUtils.lockOperationUpdate(status, syncmlDocument, deviceIdentifier);
                     }
                     if (status.getTargetReference().equals(OperationCode.Command.DEVICE_RING)) {
                         operationUtils.ring(status, syncmlDocument, deviceIdentifier);
@@ -277,7 +312,6 @@ public class OperationUtils {
                         .name())) {
                     lockUri = info.getCode();
                 }
-
             }
             for (Item item : results) {
                 for (OperationCode.Info info : OperationCode.Info.values()) {
@@ -333,13 +367,15 @@ public class OperationUtils {
                         } catch (NotificationManagementException e) {
                             String msg = "Failure Occurred in getting notification service.";
                             log.error(msg);
+                            throw new NotificationManagementException(msg, e);
+
                         }
                     }
                 }
             }
         }
         boolean isCompliance = false;
-        if (profiles.size() != 0) {
+        if (profiles.size() != Constants.EMPTY) {
             try {
                 List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
                         deviceIdentifier);
@@ -357,10 +393,7 @@ public class OperationUtils {
                             } else {
                                 deviceFeature.setCompliance(isCompliance);
                             }
-                            ComplianceFeature complianceFeature = new ComplianceFeature();
-                            complianceFeature.setFeature(activeFeature);
-                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
-                            complianceFeature.setCompliance(deviceFeature.isCompliance());
+                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
                             complianceFeatures.add(complianceFeature);
                         }
                         if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
@@ -371,10 +404,7 @@ public class OperationUtils {
                             } else {
                                 deviceFeature.setCompliance(isCompliance);
                             }
-                            ComplianceFeature complianceFeature = new ComplianceFeature();
-                            complianceFeature.setFeature(activeFeature);
-                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
-                            complianceFeature.setCompliance(deviceFeature.isCompliance());
+                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
                             complianceFeatures.add(complianceFeature);
                         }
                         if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
@@ -385,10 +415,7 @@ public class OperationUtils {
                             } else {
                                 deviceFeature.setCompliance(isCompliance);
                             }
-                            ComplianceFeature complianceFeature = new ComplianceFeature();
-                            complianceFeature.setFeature(activeFeature);
-                            complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
-                            complianceFeature.setCompliance(deviceFeature.isCompliance());
+                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
                             complianceFeatures.add(complianceFeature);
                         }
                     }
@@ -409,5 +436,20 @@ public class OperationUtils {
         }
         pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
         return pendingOperations;
+    }
+
+    /**
+     * Set compliance of the feature according to the device status for the specific feature.
+     *
+     * @param activeFeature
+     * @param deviceFeature
+     * @return Returns setting up compliance feature.
+     */
+    public ComplianceFeature setComplianceFeatures(ProfileFeature activeFeature, Profile deviceFeature) {
+        ComplianceFeature complianceFeature = new ComplianceFeature();
+        complianceFeature.setFeature(activeFeature);
+        complianceFeature.setFeatureCode(activeFeature.getFeatureCode());
+        complianceFeature.setCompliance(deviceFeature.isCompliance());
+        return complianceFeature;
     }
 }

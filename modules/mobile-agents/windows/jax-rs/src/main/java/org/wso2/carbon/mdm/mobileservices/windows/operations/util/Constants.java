@@ -28,12 +28,14 @@ public class Constants {
     public static final String INITIAL_NONCE = "ZHVtbXk=";
     public static final String DISENROLL_ALERT_DATA = "1226";
     public static final String INITIAL_ALERT_DATA = "1201";
+    public static final int EMPTY = 0;
 
     public static final String SYNCML_ROOT_ELEMENT_NAME = "SyncML";
     public static final String XMLNS_SYNCML = "SYNCML:SYNCML1.2";
     public static final String UTF_8 = "UTF-8";
     public static final String MD5 = "MD5";
     public static final String YES = "yes";
+    public static final String ERROR = "Error";
 
     public static final String EXECUTE = "Exec";
     public static final String ATOMIC = "Atomic";
@@ -87,7 +89,7 @@ public class Constants {
         public static final String PIN_NOTFOUND = "405";
         public static final String ACCEPTED_FOR_PROCESSING = "202";
         public static final String LOCKRESET_NOTIFICATION = "Error occurred in Lock Operation." +
-                "Please Reset device lock.";
+                "Please Reset device lockOperationUpdate.";
     }
 
 }

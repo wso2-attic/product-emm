@@ -36,6 +36,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Interface for Syncml message flow.
@@ -49,6 +51,7 @@ public interface SyncmlService {
     @Produces(PluginConstants.SYNCML_MEDIA_TYPE)
     Response getResponse(Document request) throws WindowsDeviceEnrolmentException, WindowsOperationException,
             NotificationManagementException, OperationManagementException, DeviceManagementException,
-            FeatureManagementException, PolicyComplianceException, JSONException, PolicyManagementException;
+            FeatureManagementException, PolicyComplianceException, JSONException, PolicyManagementException,
+            NoSuchAlgorithmException, UnsupportedEncodingException;
 
 }
