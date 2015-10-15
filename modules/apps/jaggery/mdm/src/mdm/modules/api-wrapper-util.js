@@ -37,12 +37,14 @@ var apiWrapperUtil = function () {
         log.error(encodedClientKeys + " cliend data");
         session.put(constants.ENCODED_CLIENT_KEYS_IDENTIFIER, encodedClientKeys);
         if (type == "password") {
-            tokenPair = tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, encodedClientKeys);
+            tokenPair =
+                tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, encodedClientKeys);
         } else if (type == "saml") {
             log.error(clientData);
             var scope = "admin";
             log.error("samltoken >>>>>>>>>> " + properties.samlToken);
-            tokenPair = tokenUtil.getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, scope);
+            tokenPair = tokenUtil.
+                getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, scope);
         }
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
         var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};
