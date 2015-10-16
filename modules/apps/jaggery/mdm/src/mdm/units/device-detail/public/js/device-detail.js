@@ -36,45 +36,10 @@
     }
     $(document).ready(function(){
         loadOperationBar(deviceType);
-        if (document.getElementById('device-location')){
-            loadMap();
-        }
         loadOperationsLog();
         loadApplicationsList();
+        loadPolicyCompliance();
     });
-
-    function loadMap() {
-        var map;
-        function initialize() {
-            var mapOptions = {
-                zoom: 18
-            };
-
-                var lat = $("#device-location").data("lat");
-                var long = $("#device-location").data("long");
-
-                if(lat != null && lat != undefined && lat != "" && long != null && long != undefined && long != "") {
-                    $("#map-error").hide();
-                    $("#device-location").show();
-                    map = new google.maps.Map(document.getElementById('device-location'),
-                        mapOptions);
-
-                    var pos = new google.maps.LatLng(lat,
-                        long);
-                    var marker = new google.maps.Marker({
-                        position: pos,
-                        map: map
-                    });
-
-                    map.setCenter(pos);
-                }else{
-                    $("#device-location").hide();
-                    $("#map-error").show();
-                }
-
-        }
-        google.maps.event.addDomListener(window, 'load', initialize);
-    }
 
     function loadOperationsLog() {
         var operationsLog = $("#operations-log");
@@ -101,4 +66,77 @@
             });
         });
     }
+
+    function loadApplicationsList() {
+        var applicationsList = $("#applications-list");
+        var deviceListingSrc = applicationsList.attr("src");
+        var deviceId = applicationsList.data("device-id");
+        var deviceType = applicationsList.data("device-type");
+
+        $.template("application-list", deviceListingSrc, function (template) {
+            var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
+
+            var successCallback = function (data) {
+                var viewModel = {};
+                viewModel.applications = data;
+                viewModel.deviceType = deviceType;
+                if(data.length > 0){
+                    var content = template(viewModel);
+                    $("#applications-list-container").html(content);
+                }
+
+            };
+            invokerUtil.get(serviceURL,
+                successCallback, function(message){
+                    console.log(message);
+            });
+        });
+    }
+
+    function loadPolicyCompliance() {
+        var policyCompliance = $("#policy-view");
+        var policySrc = policyCompliance.attr("src");
+        var deviceId = policyCompliance.data("device-id");
+        var deviceType = policyCompliance.data("device-type");
+        var activePolicy = null;
+
+        $.template("policy-view", policySrc, function (template) {
+            var serviceURLPolicy ="/mdm-admin/policies/"+deviceType+"/"+deviceId+"/active-policy"
+            var serviceURLCompliance = "/mdm-admin/policies/"+deviceType+"/"+deviceId;
+
+            var successCallbackCompliance = function (data) {
+                var viewModel = {};
+                viewModel.policy = activePolicy;
+                viewModel.deviceType = deviceType;
+                if(data != null && data.complianceFeatures.length > 0) {
+                    viewModel.compliance = "NON-COMPLIANT";
+                    viewModel.complianceFeatures = data.complianceFeatures;
+                    var content = template(viewModel);
+                    $("#policy-list-container").html(content);
+                } else {
+                    viewModel.compliance = "COMPLIANT";
+                    var content = template(viewModel);
+                    $("#policy-list-container").html(content);
+                }
+
+            };
+
+            var successCallbackPolicy = function (data) {
+                if(data != null && data.active == true){
+                    activePolicy = data;
+                    invokerUtil.get(serviceURLCompliance,
+                        successCallbackCompliance, function(message){
+                            console.log(message);
+                    });
+                }
+            };
+
+            invokerUtil.get(serviceURLPolicy,
+                successCallbackPolicy, function(message){
+                    console.log(message);
+            });
+        });
+
+    }
+
 }());
