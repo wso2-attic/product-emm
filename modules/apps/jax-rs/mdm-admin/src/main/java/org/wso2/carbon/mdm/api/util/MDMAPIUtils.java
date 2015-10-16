@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
@@ -32,6 +33,8 @@ import org.wso2.carbon.user.api.AuthorizationManager;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
+
+import java.util.List;
 
 /**
  * MDMAPIUtils class provides utility function used by CDM REST-API classes.
@@ -159,5 +162,14 @@ public class MDMAPIUtils {
             throw new IllegalStateException(msg);
         }
         return notificationManagementService;
+    }
+
+    public static PaginationResult getPagingResponse(int recordsTotal, int recordsFiltered, int draw, List<?> data) {
+        PaginationResult pagingResponse = new PaginationResult();
+        pagingResponse.setRecordsTotal(recordsTotal);
+        pagingResponse.setRecordsFiltered(recordsFiltered);
+        pagingResponse.setDraw(draw);
+        pagingResponse.setData(data);
+        return pagingResponse;
     }
 }

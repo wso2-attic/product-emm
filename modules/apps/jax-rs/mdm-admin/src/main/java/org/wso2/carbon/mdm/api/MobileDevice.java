@@ -21,10 +21,7 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -48,21 +45,34 @@ public class MobileDevice {
      * @throws MDMAPIException
      */
     @GET
-    public List<Device> getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
-                                      @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status) throws MDMAPIException {
+    public Object getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
+                                      @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status,
+                                        @QueryParam("start") int startIdx, @QueryParam("length") int length) throws MDMAPIException {
         try {
             DeviceManagementProviderService service = MDMAPIUtils.getDeviceManagementService();
-            List<Device> allDevices;
-            if (type != null) {
-                allDevices = service.getAllDevices(type);
-            } else if (user != null) {
+            List<Device> allDevices = null;
+            PaginationResult paginationResult = null;
+            if ((type != null) && !type.isEmpty()) {
+                if (length > 0) {
+                    paginationResult = service.getAllDevices(type, startIdx, length);
+                } else {
+                    allDevices = service.getAllDevices(type);
+                }
+            } else if ((user != null) && !user.isEmpty()) {
                 allDevices = service.getDevicesOfUser(user);
-            } else if (role != null) {
+            } else if ((role != null) && !role.isEmpty()) {
                 allDevices = service.getAllDevicesOfRole(role);
             } else if (status != null) {
                 allDevices = service.getDevicesByStatus(status);
             } else {
-                allDevices = service.getAllDevices();
+                if (length > 0) {
+                    paginationResult = service.getAllDevices(type, startIdx, length);
+                } else {
+                    allDevices = service.getAllDevices(type);
+                }
+            }
+            if(paginationResult != null) {
+                return paginationResult;
             }
             return allDevices;
         } catch (DeviceManagementException e) {
