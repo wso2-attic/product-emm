@@ -2,7 +2,7 @@
     <div class="row wr-device-board">
         <div class="col-lg-12 wr-secondary-bar">
             <span class="page-sub-title">
-                &nbsp;&nbsp;Policy List by priority order
+                &nbsp;&nbsp;Policy List
             </span>
         </div>
     </div>
@@ -58,6 +58,9 @@
                             {{#equal platform "ios"}}
                                 <i class="square-element text fw fw-apple"></i>
                             {{/equal}}
+                            {{#equal platform "windows"}}
+                                <i class="square-element text fw fw-windows"></i>
+                            {{/equal}}
                         </div>
                     </td>
                     <td class="fade-edge" data-search="{{name}}" data-display="{{name}}">
@@ -77,7 +80,7 @@
                             </span>
                             <span class="hidden-xs hidden-on-grid-view">View</span>
                         </a>
-                        <a href="#" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-update-link">
+                        <a href="/mdm/policies/view-edit-policy?id={{id}}" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-update-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
                                 <i class="fw fw-settings fw-stack-1x"></i>
