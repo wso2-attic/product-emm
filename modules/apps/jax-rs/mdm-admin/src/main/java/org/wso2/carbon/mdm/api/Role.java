@@ -78,6 +78,52 @@ public class Role {
     }
 
     /**
+     * TODO:- change this to a different endpoint since it clashes with the role get
+     *
+     * @return list of permissions
+     * @throws MDMAPIException
+     */
+    @Deprecated
+    @GET
+    @Path("permissions")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public ResponsePayload getPermissions() throws MDMAPIException {
+        final UserRealm userRealm = MDMAPIUtils.getUserRealm();
+        org.wso2.carbon.user.core.UserRealm userRealmCore = null;
+        final UIPermissionNode rolePermissions;
+        if (userRealm instanceof org.wso2.carbon.user.core.UserRealm){
+            userRealmCore = (org.wso2.carbon.user.core.UserRealm) userRealm;
+        }
+
+        try {
+            final UserRealmProxy userRealmProxy = new UserRealmProxy(userRealmCore);
+            rolePermissions = userRealmProxy.getAllUIPermissions(MDMAPIUtils.getTenantId());
+            UIPermissionNode[] deviceMgtPermissions = new UIPermissionNode[2];
+
+            for (UIPermissionNode permissionNode : rolePermissions.getNodeList()) {
+                if (permissionNode.getResourcePath().equals("/permission/admin")){
+                    for (UIPermissionNode node : permissionNode.getNodeList()) {
+                        if (node.getResourcePath().equals("/permission/admin/device-mgt")){
+                            deviceMgtPermissions[0] = node;
+                        } else if (node.getResourcePath().equals("/permission/admin/login")){
+                            deviceMgtPermissions[1] = node;
+                        }
+                    }
+                }
+            }
+            rolePermissions.setNodeList(deviceMgtPermissions);
+        }  catch (UserAdminException e) {
+            String msg = "Error occurred while retrieving the user role";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All permissions retrieved");
+        responsePayload.setResponseContent(rolePermissions);
+        return responsePayload;
+    }
+    /**
      * Get user role of the system
      *
      * @return user role
@@ -120,7 +166,11 @@ public class Role {
                     }
                 }
                 rolePermissions.setNodeList(deviceMgtPermissions);
+                ArrayList<String> permList = new ArrayList<String>();
+                iteratePermissions(rolePermissions, permList);
                 roleWrapper.setPermissionList(rolePermissions);
+                String [] permListAr = new String[permList.size()];
+                roleWrapper.setPermissions(permList.toArray(permListAr));
             }
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving the user role";
@@ -186,25 +236,28 @@ public class Role {
             if (log.isDebugEnabled()) {
                 log.debug("Updating the role to user store");
             }
-            if (!roleName.equals(roleWrapper.getRoleName())){
+            if (roleWrapper.getRoleName() != null && !roleName.equals(roleWrapper.getRoleName())){
                 userStoreManager.updateRoleName(roleName, roleWrapper.getRoleName());
             }
-            SetReferenceTransformer transformer = new SetReferenceTransformer();
-            transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(roleName)),
-                                  Arrays.asList(roleWrapper.getUsers()));
-            final String[] usersToAdd = (String [])
-                    transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
-            final String[] usersToDelete = (String [])
-                    transformer.getObjectsToRemove().toArray(new String[transformer.getObjectsToRemove().size()]);
+            if (roleWrapper.getUsers() != null) {
+                SetReferenceTransformer transformer = new SetReferenceTransformer();
+                transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(roleName)),
+                                      Arrays.asList(roleWrapper.getUsers()));
+                final String[] usersToAdd = (String [])
+                        transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
+                final String[] usersToDelete = (String [])
+                        transformer.getObjectsToRemove().toArray(new String[transformer.getObjectsToRemove().size()]);
 
-            userStoreManager.updateUserListOfRole(roleName, usersToDelete, usersToAdd);
-
-            // Delete all authorizations for the current role before authorizing the permission tree
-            authorizationManager.clearRoleAuthorization(roleName);
-            if (roleWrapper.getPermissions() != null && roleWrapper.getPermissions().length > 0){
-                for (int i = 0; i < roleWrapper.getPermissions().length; i++) {
-                    String permission = roleWrapper.getPermissions()[i];
-                    authorizationManager.authorizeRole(roleName, permission, CarbonConstants.UI_PERMISSION_ACTION);
+                userStoreManager.updateUserListOfRole(roleName, usersToDelete, usersToAdd);
+            }
+            if(roleWrapper.getPermissions() != null){
+                // Delete all authorizations for the current role before authorizing the permission tree
+                authorizationManager.clearRoleAuthorization(roleName);
+                if (roleWrapper.getPermissions() != null && roleWrapper.getPermissions().length > 0){
+                    for (int i = 0; i < roleWrapper.getPermissions().length; i++) {
+                        String permission = roleWrapper.getPermissions()[i];
+                        authorizationManager.authorizeRole(roleName, permission, CarbonConstants.UI_PERMISSION_ACTION);
+                    }
                 }
             }
         } catch (UserStoreException e) {
@@ -274,5 +327,15 @@ public class Role {
             throw new MDMAPIException(msg, e);
         }
         return Response.status(HttpStatus.SC_OK).build();
+    }
+
+    public ArrayList<String> iteratePermissions(UIPermissionNode uiPermissionNode, ArrayList<String> list){
+        for (UIPermissionNode permissionNode : uiPermissionNode.getNodeList()) {
+            list.add(permissionNode.getResourcePath());
+            if (permissionNode.getNodeList() != null && permissionNode.getNodeList().length > 0){
+                iteratePermissions(permissionNode, list);
+            }
+        }
+        return list;
     }
 }
