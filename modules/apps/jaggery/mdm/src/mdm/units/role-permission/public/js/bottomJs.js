@@ -55,7 +55,8 @@ $.fn.toggleAttr = function (attr, val, val2) {
 $(document).ready(function () {
     var listPartialSrc = $("#list-partial").attr("src");
     var treeTemplateSrc = $("#tree-template").attr("src");
-    var serviceUrl = "/mdm-admin/roles/abcuu";
+    var roleName = $("#permissionList").data("currentrole");
+    var serviceUrl = "/mdm-admin/roles/" + roleName;
     $.registerPartial("list", listPartialSrc, function(){
         $.template("treeTemplate", treeTemplateSrc, function (template) {
             invokerUtil.get(serviceUrl,
