@@ -83,7 +83,7 @@ public class Operation {
 			deviceIdentifier.setId(id);
 			dmService = MDMAPIUtils.getDeviceManagementService();
 			operations = dmService.getOperations(deviceIdentifier);
-		} catch (Exception e) {
+		} catch (OperationManagementException e) {
 			String msg = "Error occurred while fetching the operations for the device.";
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
@@ -125,8 +125,8 @@ public class Operation {
 			deviceIdentifier.setId(id);
 			appManagerConnector = MDMAPIUtils.getAppManagementService();
 			applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
-		} catch (Exception e) {
-			String msg = "Error occurred while fetching the operations for the device.";
+		} catch (ApplicationManagementException e) {
+			String msg = "Error occurred while fetching the apps of the device.";
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
 		}

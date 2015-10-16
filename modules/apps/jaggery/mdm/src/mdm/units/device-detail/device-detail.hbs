@@ -58,6 +58,7 @@
                     <div class="media-left col-xs-12 col-sm-2 col-md-2 col-lg-2">
                         <ul class="list-group" role="tablist">
                             <li class="active"><a class="list-group-item" href="#device_details" role="tab" data-toggle="tab" aria-controls="device_details">Device Details</a></li>
+                            <li><a class="list-group-item" href="#policy_compliance" role="tab" data-toggle="tab" aria-controls="policy_compliance">Policy Compliance</a></li>
                             <li><a class="list-group-item" href="#device_location" role="tab" data-toggle="tab" aria-controls="device_location">Device Location</a></li>
                             <li><a class="list-group-item" href="#installed_applications" role="tab" data-toggle="tab" aria-controls="installed_applications">Installed Applications</a></li>
                             <li><a class="list-group-item" href="#event_log" role="tab" data-toggle="tab" aria-controls="event_log">Operations Log</a></li>
@@ -118,6 +119,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="panel panel-default tab-pane" id="policy_compliance" role="tabpanel" aria-labelledby="policy_compliance">
+                                    <div class="panel-heading">Policy Compliance</div>
+                                    <div class="panel-body">
+                                        <div id="policy-list-container">
+
+                                        </div>
+                                        <div id = "map-error" class="panel-body">
+                                            Not available yet
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="panel panel-default tab-pane" id="device_location" role="tabpanel" aria-labelledby="device_location">
                                     <div class="panel-heading">Device Location</div>
                                     <div class="panel-body">
@@ -163,6 +175,7 @@
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script id="policy-view"  src="{{self.publicURL}}/templates/policy-compliance.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script id="applications-list"  src="{{self.publicURL}}/templates/applications-list.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script id="operations-log"  src="{{self.publicURL}}/templates/operations-log.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/device-detail.js"></script>
