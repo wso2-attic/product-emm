@@ -1,5 +1,7 @@
 package org.wso2.carbon.mdm.beans;
 
+import org.wso2.carbon.user.mgt.common.UIPermissionNode;
+
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -21,6 +23,7 @@ public class RoleWrapper {
 	private String roleName;
 	private String[] permissions;
 	private String[] users;
+	private UIPermissionNode permissionList;
 
 	public String getRoleName() {
 		return roleName;
@@ -44,5 +47,13 @@ public class RoleWrapper {
 
 	public void setUsers(String[] users) {
 		this.users = users;
+	}
+
+	public UIPermissionNode getPermissionList() {
+		return permissionList;
+	}
+
+	public void setPermissionList(UIPermissionNode permissionList) {
+		this.permissionList = permissionList;
 	}
 }

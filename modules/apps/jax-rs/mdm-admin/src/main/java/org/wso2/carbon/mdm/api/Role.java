@@ -27,10 +27,10 @@ import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.RoleWrapper;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
-import org.wso2.carbon.user.api.AuthorizationManager;
-import org.wso2.carbon.user.api.Permission;
-import org.wso2.carbon.user.api.UserStoreException;
-import org.wso2.carbon.user.api.UserStoreManager;
+import org.wso2.carbon.user.api.*;
+import org.wso2.carbon.user.mgt.UserRealmProxy;
+import org.wso2.carbon.user.mgt.common.UIPermissionNode;
+import org.wso2.carbon.user.mgt.common.UserAdminException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -78,6 +78,67 @@ public class Role {
     }
 
     /**
+     * Get user role of the system
+     *
+     * @return user role
+     * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
+     */
+    @GET
+    @Path("{roleName}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public ResponsePayload getRole(@PathParam("roleName") String roleName) throws MDMAPIException {
+        final UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        final UserRealm userRealm = MDMAPIUtils.getUserRealm();
+        org.wso2.carbon.user.core.UserRealm userRealmCore = null;
+        if (userRealm instanceof org.wso2.carbon.user.core.UserRealm){
+            userRealmCore = (org.wso2.carbon.user.core.UserRealm) userRealm;
+        }
+
+        RoleWrapper roleWrapper = new RoleWrapper();
+        try {
+            final UserRealmProxy userRealmProxy = new UserRealmProxy(userRealmCore);
+            if (log.isDebugEnabled()) {
+                log.debug("Getting the list of user roles");
+            }
+            if (userStoreManager.isExistingRole(roleName)){
+                roleWrapper.setRoleName(roleName);
+                roleWrapper.setUsers(userStoreManager.getUserListOfRole(roleName));
+                // Get the permission nodes and hand picking only device management and login perms
+                final UIPermissionNode rolePermissions =
+                        userRealmProxy.getRolePermissions(roleName, MDMAPIUtils.getTenantId());
+                UIPermissionNode[] deviceMgtPermissions = new UIPermissionNode[2];
+
+                for (UIPermissionNode permissionNode : rolePermissions.getNodeList()) {
+                    if (permissionNode.getResourcePath().equals("/permission/admin")){
+                        for (UIPermissionNode node : permissionNode.getNodeList()) {
+                            if (node.getResourcePath().equals("/permission/admin/device-mgt")){
+                                deviceMgtPermissions[0] = node;
+                            } else if (node.getResourcePath().equals("/permission/admin/login")){
+                                deviceMgtPermissions[1] = node;
+                            }
+                        }
+                    }
+                }
+                rolePermissions.setNodeList(deviceMgtPermissions);
+                roleWrapper.setPermissionList(rolePermissions);
+            }
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the user role";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        } catch (UserAdminException e) {
+            String msg = "Error occurred while retrieving the user role";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All user roles were successfully retrieved.");
+        responsePayload.setResponseContent(roleWrapper);
+        return responsePayload;
+    }
+
+    /**
      * API is used to persist a new Role
      * @param roleWrapper
      * @return
@@ -106,7 +167,7 @@ public class Role {
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        return Response.status(HttpStatus.SC_OK).build();
+        return Response.status(HttpStatus.SC_CREATED).build();
     }
 
     /**
@@ -125,7 +186,9 @@ public class Role {
             if (log.isDebugEnabled()) {
                 log.debug("Updating the role to user store");
             }
-            userStoreManager.updateRoleName(roleName, roleWrapper.getRoleName());
+            if (!roleName.equals(roleWrapper.getRoleName())){
+                userStoreManager.updateRoleName(roleName, roleWrapper.getRoleName());
+            }
             SetReferenceTransformer transformer = new SetReferenceTransformer();
             transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(roleName)),
                                   Arrays.asList(roleWrapper.getUsers()));
