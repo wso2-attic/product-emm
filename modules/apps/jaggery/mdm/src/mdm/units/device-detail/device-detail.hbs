@@ -123,10 +123,10 @@
                                     <div class="panel-heading">Policy Compliance</div>
                                     <div class="panel-body">
                                         <div id="policy-list-container">
-
-                                        </div>
-                                        <div id = "map-error" class="panel-body">
-                                            Not available yet
+                                            <div class="panel-body">
+                                                Not available yet
+                                            </div>
+                                            <br class="c-both" />
                                         </div>
                                     </div>
                                 </div>
@@ -139,6 +139,7 @@
                                         <div id = "map-error" class="panel-body">
                                             Not available yet
                                         </div>
+                                        <br class="c-both" />
                                     </div>
                                 </div>
                                 <div class="panel panel-default tab-pane" id="installed_applications" role="tabpanel" aria-labelledby="installed_applications">
@@ -174,9 +175,10 @@
 
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
     <script id="policy-view"  src="{{self.publicURL}}/templates/policy-compliance.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script id="applications-list"  src="{{self.publicURL}}/templates/applications-list.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script id="operations-log"  src="{{self.publicURL}}/templates/operations-log.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/device-detail.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script src="{{self.publicURL}}/js/load-map.js"></script>
 {{/zone}}
