@@ -165,6 +165,8 @@ $(document).ready(function () {
                         $("input#email-config-sender-email").val(config.value);
                     } else if(config.name == configParams["GENERAL_EMAIL_TEMPLATE"]){
                         $("input#email-config-template").val(config.value);
+                    } else if(config.name == configParams["NOTIFIER_FREQUENCY"]){
+                        $("input#monitoring-config-frequency").val(config.value);
                     }
                 }
             }
@@ -367,6 +369,7 @@ $(document).ready(function () {
      * on General tenant configuration page in WSO2 EMM Console.
      */
     $("button#save-general-btn").click(function() {
+        var notifierFrequency = $("input#monitoring-config-frequency").val();
         var emailHost = $("input#email-config-host").val();
         var emailPort = $("input#email-config-port").val();
         var emailUsername = $("input#email-config-username").val();
@@ -379,7 +382,13 @@ $(document).ready(function () {
         if (!emailHost) {
             $(errorMsg).text("Email Host is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!emailPort) {
+        } else if (!notifierFrequency) {
+            $(errorMsg).text("Monitoring frequency is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!$.isNumeric(notifierFrequency)) {
+            $(errorMsg).text("Provided monitoring frequency is invalid. It must be a number.");
+            $(errorMsgWrapper).removeClass("hidden");
+        }else if (!emailPort) {
             $(errorMsg).text("Email Port is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailUsername) {
@@ -398,6 +407,12 @@ $(document).ready(function () {
 
             var addConfigFormData = {};
             var configList = new Array();
+
+            var monitorFrequency = {
+                "name": configParams["NOTIFIER_FREQUENCY"],
+                "value": notifierFrequency,
+                "contentType": "text"
+            };
 
             var host = {
                 "name": configParams["GENERAL_EMAIL_HOST"],
@@ -435,6 +450,7 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            configList.push(monitorFrequency);
             configList.push(host);
             configList.push(port);
             configList.push(username);

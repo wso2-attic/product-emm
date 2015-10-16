@@ -75,58 +75,36 @@ function hidePopup() {
     $(modalPopup).hide();
 }
 
-/*
- * Function to get selected usernames.
- */
-function getSelectedUsernames() {
-    var usernameList = [];
-    var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
-    thisTable.api().rows().every(function(){
-        if($(this.node()).hasClass('DTTT_selected')){
-            usernameList.push($(thisTable.api().row(this).node()).data('id'));
-        }
-    });
-    return usernameList;
-}
 /**
  * Following click function would execute
  * when a user clicks on "Remove" link
- * on User Listing page in WSO2 MDM Console.
+ * on Role Listing page in WSO2 MDM Console.
  */
-$("a.remove-user-link").click(function () {
-    var username = $(this).data("username");
-    var removeUserAPI = "/mdm-admin/users/" + username;
+$("#role-grid").on("click", ".remove-role-link", function () {
+    var role = $(this).data("role");
+    var removeRoleAPI = "/mdm-admin/roles/" + role;
 
-    $(modalPopupContent).html($('#remove-user-modal-content').html());
+    $(modalPopupContent).html($('#remove-role-modal-content').html());
     showPopup();
 
-    $("a#remove-user-yes-link").click(function () {
+    $("a#remove-role-yes-link").click(function () {
         invokerUtil.delete(
-            removeUserAPI,
-            function (data) {
-                if (data["statusCode"] == 200) {
-                    $("#" + username).remove();
-                    // get new user-list-count
-                    var newUserListCount = $(".user-list > span").length;
-                    // update user-listing-status-msg with new user-count
-                    $("#user-listing-status-msg").text("Total number of Users found : " + newUserListCount);
-                    // update modal-content with success message
-                    $(modalPopupContent).html($('#remove-user-success-content').html());
-                    $("a#remove-user-success-link").click(function () {
+            removeRoleAPI,
+            function (data, status, jqXHR) {
+                if (jqXHR.status == 200) {
+                    $("#role-" + role).remove();
+                    $(modalPopupContent).html($('#remove-role-success-content').html());
+                    $("a#remove-role-success-link").click(function () {
                         hidePopup();
                     });
                 }
             },
             function () {
-                $(modalPopupContent).html($('#remove-user-error-content').html());
-                $("a#remove-user-error-link").click(function () {
+                $(modalPopupContent).html($('#remove-role-error-content').html());
+                $("a#remove-role-error-link").click(function () {
                     hidePopup();
                 });
             }
         );
-    });
-
-    $("a#remove-user-cancel-link").click(function () {
-        hidePopup();
     });
 });

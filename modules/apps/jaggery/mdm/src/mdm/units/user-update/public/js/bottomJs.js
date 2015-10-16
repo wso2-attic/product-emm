@@ -75,7 +75,10 @@ $(document).ready(function () {
             addUserFormData.emailAddress = emailAddress;
             // Base64 encode the password
             //TODO: use CryptoJS for this
-            addUserFormData.password = window.btoa(password);;
+            addUserFormData.password = window.btoa(password);
+            if (roles == null){
+                roles = [];
+            }
             addUserFormData.roles = roles;
 
             var addUserAPI = "/mdm-admin/users/" + username;
@@ -84,7 +87,7 @@ $(document).ready(function () {
                 addUserAPI,
                 addUserFormData,
                 function (data) {
-                    if (data["statusCode"] == 201) {
+                    if (data["statusCode"] == 200) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");

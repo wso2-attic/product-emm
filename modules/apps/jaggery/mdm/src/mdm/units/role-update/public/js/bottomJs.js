@@ -67,6 +67,8 @@ $(document).ready(function () {
         templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
     });
 
+
+
     /**
      * Following click function would execute
      * when a user clicks on "Add Role" button
@@ -74,6 +76,7 @@ $(document).ready(function () {
      */
     $("button#add-role-btn").click(function() {
         var roleName = $("input#rolename").val();
+        var currentRoleName = $("input#rolename").data("currentrole");
         var domain = $("#domain").val();
         var users = $("#users").val();
 
@@ -93,9 +96,7 @@ $(document).ready(function () {
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             var addRoleFormData = {};
-
             addRoleFormData.roleName = roleName;
-
             if (domain != "PRIMARY"){
                 addRoleFormData.roleName = domain + "/" + roleName;
             }
@@ -104,13 +105,13 @@ $(document).ready(function () {
             }
             addRoleFormData.users = users;
 
-            var addRoleAPI = "/mdm-admin/roles";
+            var addRoleAPI = "/mdm-admin/roles/" + currentRoleName;
 
-            invokerUtil.post(
+            invokerUtil.put(
                 addRoleAPI,
                 addRoleFormData,
                 function (data, status, jqXHR) {
-                    if (jqXHR.status == 201) {
+                    if (jqXHR.status == 200) {
                         // Clearing user input fields.
                         $("input#rolename").val("");
                         $("#domain").val("");

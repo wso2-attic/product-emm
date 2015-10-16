@@ -3816,3 +3816,98 @@ ul.tiles .icon {
     .wr-applist span { display:none; }
     .wr-applist .fw { font-size: 25px; }
 }
+
+
+/* ========================================================================
+* tree styles
+* ======================================================================== */
+.tree-view,
+.tree-view ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.tree-view ul {
+    margin-left: 0.7em;
+    position: relative;
+}
+.tree-view ul li {
+    display: none;
+}
+.tree-view li[aria-expanded=true] > ul > li {
+    display: list-item;
+}
+.tree-view li {
+    margin: 0;
+    padding: 0 2em;
+    line-height: 2em;
+    position: relative;
+}
+.tree-view .branch {
+    cursor: pointer;
+}
+.tree-view li > .icon {
+    font-family: 'font-wso2';
+    font-style: normal;
+    background: #2c313b;
+    color: #ffffff;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 10px;
+    display: inline-block;
+    margin-right: 10px;
+}
+.tree-view li > .icon:before {
+    content: "\e687";
+}
+.tree-view li[aria-expanded=true] > .icon:before {
+    content: "\e685";
+}
+.tree-view li a,
+.tree-view li a:hover {
+    text-decoration: none;
+}
+.tree-view li button:active,
+.tree-view li button:focus {
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.tree-view.tree-view-lines ul:before {
+    content: "";
+    display: block;
+    width: 0;
+    position: absolute;
+    top: 0;
+    bottom: 15px;
+    left: 0;
+    border-left: 1px solid;
+}
+.tree-view.tree-view-lines ul li:before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 0;
+    border-top: 1px solid;
+    margin-top: -1px;
+    position: absolute;
+    top: 1em;
+    left: 0;
+}
+.tree-view .checkbox,
+.tree-view .radio {
+    margin: 0;
+    display: inline-block;
+}
+.tree-view .checkbox input[type=checkbox],
+.tree-view .checkbox-inline input[type=checkbox],
+.tree-view .radio input[type=radio],
+.tree-view .radio-inline input[type=radio] {
+    margin-top: 6px;
+}
