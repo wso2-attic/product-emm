@@ -1680,20 +1680,53 @@ validateStep["policy-naming"] = function () {
     return wizardIsToBeContinued;
 };
 
+validateStep["policy-naming-publish"] = function () {
+    var validationStatus = {};
+
+    // taking values of inputs to be validated
+    var policyName = $("input#policy-name-input").val();
+    // starting validation process and updating validationStatus
+    if (!policyName) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] = "Policy name is empty. You cannot proceed.";
+    } else if (!inputIsValidAgainstLength(policyName, 1, 30)) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] =
+            "Policy name exceeds maximum allowed length. Please check.";
+    } else {
+        validationStatus["error"] = false;
+    }
+    // ending validation process
+
+    // start taking specific actions upon validation
+    var wizardIsToBeContinued;
+    if (validationStatus["error"]) {
+        wizardIsToBeContinued = false;
+        var mainErrorMsgWrapper = "#policy-naming-main-error-msg";
+        var mainErrorMsg = mainErrorMsgWrapper + " span";
+        $(mainErrorMsg).text(validationStatus["mainErrorMsg"]);
+        $(mainErrorMsgWrapper).removeClass("hidden");
+    } else {
+        wizardIsToBeContinued = true;
+    }
+
+    return wizardIsToBeContinued;
+};
+
 stepForwardFrom["policy-naming-publish"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
     policy["policyDescription"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
-    updatePolicy(policy, "publish");
+    savePolicy(policy, "publish");
 };
 stepForwardFrom["policy-naming"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
     policy["policyDescription"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
-    updatePolicy(policy, "save");
+    savePolicy(policy, "save");
 };
 
-var savePolicy = function (policy) {
+var savePolicy = function (policy, state) {
     var profilePayloads = [];
     // traverses key by key in policy["profile"]
     var key;
@@ -1729,7 +1762,6 @@ var savePolicy = function (policy) {
         payload["roles"] = [];
     }
 
-    console.log(JSON.stringify(payload));
     var serviceURL;
     if (state == "save"){
         serviceURL = "/mdm-admin/policies/inactive-policy"

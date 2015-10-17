@@ -64,6 +64,16 @@ policyModule = function () {
                     policyObjectToView["users"] = privateMethods.
                         getElementsInAString(policyObjectFromRestEndpoint["users"]);
                     policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
+
+                    if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == true) {
+                        policyObjectToView["status"] = "Active/Updated";
+                    } else if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == false) {
+                        policyObjectToView["status"] = "Active";
+                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == true) {
+                        policyObjectToView["status"] = "Inactive/Updated";
+                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == false) {
+                        policyObjectToView["status"] = "Inactive";
+                    }
                     // push view-objects to list
                     policyListToView.push(policyObjectToView);
                 }
