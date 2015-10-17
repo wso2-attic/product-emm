@@ -417,4 +417,24 @@ public class Policy {
             throw new MDMAPIException(error, e);
         }
     }
+
+	@GET
+	@Path("{type}/{id}/active-policy")
+	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("id") String id,
+	        @PathParam("type") String type)
+			throws MDMAPIException {
+		try {
+			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+			PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+			return policyManagementService.getAppliedPolicyToDevice(deviceIdentifier);
+		} catch (MDMAPIException e) {
+			String error = "Error occurred while getting the policy management service.";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		} catch (PolicyManagementException e) {
+			String error = "Error occurred while getting the current policy.";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		}
+	}
 }

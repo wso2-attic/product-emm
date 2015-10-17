@@ -74,9 +74,13 @@
                                 <a href="#" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-naming" data-next="policy-criteria">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-naming" data-next="policy-message" data-validate="true">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Publish&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-naming-publish" data-next="policy-message" data-validate="true">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Save & Publish&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
+                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-naming" data-next="policy-message" data-validate="true">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
+
                             </div>
                         </div>
                     </div>
@@ -150,9 +154,9 @@
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
                                         <select id="action-input" class="form-control">
-                                            <option data-action="enforce" selected>Enforce</option>
-                                            <option data-action="warn">Warn</option>
-                                            <option data-action="monitor">Monitor</option>
+                                            <option value="enforce" data-action="enforce" selected>Enforce</option>
+                                            <option value="warn" data-action="warn">Warn</option>
+                                            <option value="monitor" data-action="monitor">Monitor</option>
                                         </select>
                                     </div>
                                     <br class="c-both" />
@@ -213,6 +217,7 @@
 {{#zone "bottomJs"}}
     <script id="hidden-operations-ios" src="{{self.publicURL}}/templates/hidden-operations-ios.hbs" type="text/x-handlebars-template" ></script>
     <script id="hidden-operations-android" src="{{self.publicURL}}/templates/hidden-operations-android.hbs" type="text/x-handlebars-template" ></script>
+    <script id="hidden-operations-windows" src="{{self.publicURL}}/templates/hidden-operations-windows.hbs" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/policy-create.js"></script>
 {{/zone}}
 

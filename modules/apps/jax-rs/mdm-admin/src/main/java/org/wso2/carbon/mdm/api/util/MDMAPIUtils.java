@@ -30,6 +30,7 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.AuthorizationManager;
+import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
@@ -99,6 +100,38 @@ public class MDMAPIUtils {
         }
         return userStoreManager;
     }
+
+    /**
+     * Getting the current tenant's user relam
+     * @return
+     * @throws MDMAPIException
+     */
+    public static UserRealm getUserRealm() throws MDMAPIException {
+        RealmService realmService;
+        UserRealm realm;
+        try {
+            PrivilegedCarbonContext.startTenantFlow();
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+
+            if (realmService == null) {
+                String msg = "Realm service not initialized";
+                log.error(msg);
+                throw new MDMAPIException(msg);
+            }
+            int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            realm = realmService.getTenantUserRealm(tenantId);
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving current user realm";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
+        }
+        return realm;
+    }
     public static AuthorizationManager getAuthorizationManager() throws MDMAPIException {
         RealmService realmService;
         AuthorizationManager authorizationManager;
@@ -123,6 +156,20 @@ public class MDMAPIUtils {
             PrivilegedCarbonContext.endTenantFlow();
         }
         return authorizationManager;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static int getTenantId(){
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+        PrivilegedCarbonContext.endTenantFlow();
+        return tenantId;
     }
 
     public static DeviceIdentifier instantiateDeviceIdentifier(String deviceType, String deviceId) {

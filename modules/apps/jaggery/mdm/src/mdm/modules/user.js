@@ -67,18 +67,19 @@ var userModule = function () {
     privateMethods.callBackend = function (url, method) {
         switch (method) {
             case constants.HTTP_GET:
-                return serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                                                               var response = {};
-                                                               response.content = responsePayload["responseContent"];
-                                                               response.status = "success";
-                                                               return response;
-                                                           },
-                                                           function (responsePayload) {
-                                                               var response = {};
-                                                               response.content = responsePayload;
-                                                               response.status = "error";
-                                                               return response;
-                                                           });
+                var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
+                        var response = {};
+                        response.content = responsePayload["responseContent"];
+                        response.status = "success";
+                        return response;
+                    },
+                    function (responsePayload) {
+                        var response = {};
+                        response.content = responsePayload;
+                        response.status = "error";
+                        return response;
+                    });
+                return response;
                 break;
             case constants.HTTP_POST:
                 //todo
@@ -440,6 +441,31 @@ var userModule = function () {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/roles";
             return privateMethods.callBackend(url, constants.HTTP_GET);
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+    /*
+     @Updated
+     */
+    /**
+     * Get role
+     */
+    publicMethods.getRole = function (roleName) {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require('/modules/utility.js')["utility"];
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
+        }
+        try {
+            utility.startTenantFlow(carbonUser);
+            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/" + roleName;
+            log.info(url);
+            var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            return response;
         } catch (e) {
             throw e;
         } finally {

@@ -1,15 +1,12 @@
 <div class="wr-app-listing">
-    <ul class="tiles">
+    <div class="wr-applist">
         {{#each applications}}
-            <li class="square">
-                <a class="btn square-element">
-                    <span class="icon fw-stack">
-                        <i class="fw fw-ring fw-stack-2x"></i>
-                        <i class="fw fw-android fw-stack-1x"></i>
-                    </span>
-                    {{name}}
+                <a style="text-align: center;">
+                    {{#equal type "android"}}<i class="fw fw-android"></i>{{/equal}}
+                    {{#equal type "ios"}}<i class="fw fw-apple"></i>{{/equal}}
+                    {{#equal type "windows"}}<i class="fw fw-windows"></i>{{/equal}}
+                    <span>{{name}}</span>
                 </a>
-            </li>
         {{/each}}
-    </ul>
+    </div>
 </div>

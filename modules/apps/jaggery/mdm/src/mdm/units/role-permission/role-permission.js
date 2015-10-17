@@ -6,11 +6,14 @@
  */
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
-    var response = userModule.getRoles();
-    if (response["status"] == "success") {
-        context["roles"] = response["content"];
+    var uri = request.getRequestURI();
+    var uriMatcher = new URIMatcher(String(uri));
+    var isMatched = uriMatcher.match("/{context}/roles/edit-role-permission/{rolename}");
+
+    if (isMatched) {
+        var matchedElements = uriMatcher.elements();
+        var roleName = matchedElements.rolename;
+        context["roleName"] = roleName;
     }
-    var userStores = userModule.getSecondaryUserStores();
-    context["userStores"] = userStores;
     return context;
 }

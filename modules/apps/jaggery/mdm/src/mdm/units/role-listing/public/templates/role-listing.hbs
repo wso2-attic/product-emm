@@ -1,5 +1,5 @@
 {{#each roles}}
-    <tr data-type="selectable" data-id="role-{{this}}">
+    <tr data-type="selectable" id="role-{{this}}">
         <td class="remove-padding icon-only content-fill">
             <div class="thumbnail icon">
                 <i class="square-element text fw fw-user"></i>
@@ -14,7 +14,7 @@
                             </span>
                 <span class="hidden-xs hidden-on-grid-view">Edit</span>
             </a>
-            <a href="/mdm/roles/edit-permission/{{this}}" data-role="{{this}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-permission-link">
+            <a href="/mdm/roles/edit-role-permission/{{this}}" data-role="{{this}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-permission-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
                                 <i class="fw fw-edit fw-stack-1x"></i>
@@ -23,7 +23,7 @@
             </a>
 
             {{#unequal "admin" username }}
-                <a href="#" data-role="{{role}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-role-link">
+                <a data-role="{{this}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-role-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
                                 <i class="fw fw-delete fw-stack-1x"></i>
