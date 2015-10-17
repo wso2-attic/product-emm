@@ -67,7 +67,7 @@ var userModule = function () {
     privateMethods.callBackend = function (url, method) {
         switch (method) {
             case constants.HTTP_GET:
-                var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
+                return serviceInvokers.XMLHttp.get(url, function (responsePayload) {
                                                                var response = {};
                                                                response.content = responsePayload["responseContent"];
                                                                response.status = "success";
@@ -79,7 +79,6 @@ var userModule = function () {
                                                                response.status = "error";
                                                                return response;
                                                            });
-                return response;
                 break;
             case constants.HTTP_POST:
                 //todo
