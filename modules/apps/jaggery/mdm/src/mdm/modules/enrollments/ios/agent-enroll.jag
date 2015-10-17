@@ -21,6 +21,7 @@ var log = new Log("/modules/enrollments/ios/agent-enroll.jag");
 
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
 
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
@@ -38,47 +39,21 @@ if (platform != "iOS") {
     if (!authenticatedUser) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
-        var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
-        var PostMethod = Packages.org.apache.commons.httpclient.methods.PostMethod;
-        var Header = Packages.org.apache.commons.httpclient.Header;
-        var StringRequestEntity = Packages.org.apache.commons.httpclient.methods.StringRequestEntity;
         var ByteArrayInputStream = Packages.java.io.ByteArrayInputStream;
 
-        var client = new HttpClient();
         var enrollUrl = mdmProps["iOSConfigRoot"] + "enroll";
-        var method = new PostMethod(enrollUrl);
-        var header =  new Header();
-
-        header.setName("Content-Type");
-        header.setValue("application/json");
-        method.addRequestHeader(header);
-
         var username = authenticatedUser;
         var password = session.get("authenticatedUserPassword");
         var challengeToken = session.get("iOSChallengeToken");
-
         var inputs = {"username": username, "password": password, "challengeToken": challengeToken};
-        var stringRequestEntity = new StringRequestEntity(stringify(inputs));
-        method.setRequestEntity(stringRequestEntity);
-        try {
-            client.executeMethod(method);
-            var status = method.getStatusCode();
-            if (status == 200) {
-                session.put("enrolledUser", authenticatedUser);
-                var stream = method.getResponseBody();
-                var byteArrayInputStream = new ByteArrayInputStream(stream);
-                response.contentType = "application/x-apple-aspen-config";
-                print(new Stream(byteArrayInputStream));
-            } else {
-                // two visible possibilities would be server sending 401 and 500
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
-            }
-        } catch (e) {
-            log.error("Error occurred in enrolling ios device", e);
+        serviceInvokers.HttpClient.post(enrollUrl,inputs,function (stream) {
+            session.put("enrolledUser", authenticatedUser);
+            var byteArrayInputStream = new ByteArrayInputStream(stream);
+            response.contentType = "application/x-apple-aspen-config";
+            print(new Stream(byteArrayInputStream));
+        }, function (stream) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
-        } finally {
-            method.releaseConnection();
-        }
+        });
     }
 }
 %>

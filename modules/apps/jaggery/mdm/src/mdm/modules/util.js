@@ -89,7 +89,6 @@ var util = function () {
         } else {
             throw "Error in obtaining token with Password grant type";
         }
-        log.error("oauth token " + tokenPair.accessToken);
         return tokenPair;
     };
     module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {

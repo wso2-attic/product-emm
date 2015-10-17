@@ -54,6 +54,7 @@ var userModule = function () {
         }
         return carbonUser;
     }
+
     /**
      * Only GET method is implemented for now since there are no other type of methods used this method.
      * @param url - URL to call the backend without the host
@@ -350,25 +351,8 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-
             var url = mdmProps["httpsURL"] + "/mdm-admin/users";
-            var xhr = new XMLHttpRequest();
-            xhr.open(constants.HTTP_GET, url);
-            xhr.send();
-
-            var response = {};
-            if (xhr.status == 200 && xhr.readyState == 4) {
-                var responsePayload = parse(xhr.responseText);
-                var userList = responsePayload["responseContent"];
-                // generate response
-                response["status"] = "success";
-                response["content"] = userList;
-                return response;
-            } else {
-                // generate response
-                response["status"] = "error";
-                return response;
-            }
+            return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
         } finally {
@@ -394,8 +378,7 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = "/mdm-admin/users/" + username;
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
-            return response;
+            return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
         } finally {
@@ -412,8 +395,7 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = "/mdm-admin/users/" + username + "/roles";
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
-            return response;
+            return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
         } finally {
@@ -434,8 +416,7 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username";
-            var response = privateMethods.callBackend(url, constants.HTTP_GET)
-            return response;
+            return privateMethods.callBackend(url, constants.HTTP_GET)
         } catch (e) {
             throw e;
         } finally {
@@ -459,8 +440,7 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/roles";
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
-            return response;
+            return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
         } finally {
@@ -654,7 +634,7 @@ var userModule = function () {
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
             "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
-                var domainIDs = stringify(wsResponse. *::['return']. *::domainId.text());
+                var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {
                     var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
                     domainIDs = domainIDs.replace(regExpForSearch, "");
