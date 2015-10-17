@@ -25,6 +25,8 @@ var getParameterByName = function (name) {
 $(document).ready(function () {
     setTimeout(function () {
         var deviceID = getParameterByName("device-id");
+        // var accessToken = getParameterByName("access-token");
         window.location.href = "wso2agent://" + deviceID;
+        // window.location.href = "wso2agent://" + deviceID + "?access-token=" + accessToken;
     }, 1000);
 });

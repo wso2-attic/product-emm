@@ -9,35 +9,40 @@ function inputIsValid(regExp, inputString) {
     return regExp.test(inputString);
 }
 function formatRepo (user) {
+    if (user.loading) {
+        return user.text
+    }
+    if (!user.username){
+        return;
+    }
     var markup = '<div class="clearfix">' +
-        '<div class="col-sm-1">'  +
-        '</div>' +
         '<div clas="col-sm-8">' +
         '<div class="clearfix">' +
-        '<div class="col-sm-3">' + user.username + '</div>' +
-        '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + user.firstname + '</div>' +
-        '<div class="col-sm-2"><i class="fa fa-star"></i> ' + user.emailAddress + '</div>' +
-        '</div>';
-
+        '<div class="col-sm-3">' + user.username + '</div>';
+    if (user.firstname) {
+        markup +=  '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + user.firstname + '</div>';
+    }
+    if (user.emailAddress) {
+        markup += '<div class="col-sm-2"><i class="fa fa-star"></i> ' + user.emailAddress + '</div></div>';
+    }
     markup += '</div></div>';
-
     return markup;
 }
 
 function formatRepoSelection (user) {
-    return user.username ;
+    return user.username || user.text;;
 }
 
 $(document).ready(function () {
-    $("select.select2[multiple=multiple]").select2({
-        tags : true
-    });
 
     $("#users").select2({
+        multiple:true,
+        tags: true,
         ajax: {
             url: "/mdm-admin/users",
             dataType: 'json',
             delay: 250,
+            id: function(user){ return user.username; },
             data: function (params) {
                 return {
                     q: params.term, // search term
@@ -45,8 +50,13 @@ $(document).ready(function () {
                 };
             },
             processResults: function (data, page) {
+                var newData = [];
+                $.each(data.responseContent, function (index, value) {
+                    value.id = value.username;
+                    newData.push(value);
+                });
                 return {
-                    results: data.responseContent
+                    results: newData
                 };
             },
             cache: true
@@ -64,7 +74,8 @@ $(document).ready(function () {
      */
     $("button#add-role-btn").click(function() {
         var roleName = $("input#rolename").val();
-        var domain = $("input#domain").val();
+        var domain = $("#domain").val();
+        var users = $("#users").val();
 
         var errorMsgWrapper = "#role-create-error-msg";
         var errorMsg = "#role-create-error-msg span";
@@ -83,18 +94,26 @@ $(document).ready(function () {
         } else {
             var addRoleFormData = {};
 
-            addRoleFormData.roleName = domain + "/" + roleName;
+            addRoleFormData.roleName = roleName;
+
+            if (domain != "PRIMARY"){
+                addRoleFormData.roleName = domain + "/" + roleName;
+            }
+            if (users == null){
+                users = [];
+            }
+            addRoleFormData.users = users;
 
             var addRoleAPI = "/mdm-admin/roles";
 
             invokerUtil.post(
                 addRoleAPI,
                 addRoleFormData,
-                function (data) {
-                    if (data["statusCode"] == 201) {
+                function (data, status, jqXHR) {
+                    if (jqXHR.status == 201) {
                         // Clearing user input fields.
                         $("input#rolename").val("");
-                        $("input#domain").val("");
+                        $("#domain").val("");
                         // Refreshing with success message
                         $("#role-create-form").addClass("hidden");
                         $("#role-created-msg").removeClass("hidden");

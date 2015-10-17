@@ -68,7 +68,7 @@ policyModule = function () {
                         getElementsInAString(policyObjectFromRestEndpoint["roles"]);
                     policyObjectToView["users"] = privateMethods.
                         getElementsInAString(policyObjectFromRestEndpoint["users"]);
-                    policyObjectToView["compliance"] = policyObjectFromRestEndpoint["Compliance"];
+                    policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
                     // push view-objects to list
                     policyListToView.push(policyObjectToView);
                 }

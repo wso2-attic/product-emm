@@ -1671,7 +1671,7 @@ a.wr-side-panel-toggle-btn.selected {
 .wr-input-control.checkbox input[type="checkbox"]:checked + .helper:after {
     position: absolute;
     display: block;
-    content: "\e631";
+    content: "\e617";
     font-size: 7pt;
     height: 16px;
     width: 16px;
@@ -1684,7 +1684,7 @@ a.wr-side-panel-toggle-btn.selected {
     text-align: center;
     background: #526A84;
     color: #fff;
-    font-family: fontwso2;
+    font-family: font-wso2;
 }
 .wr-input-control.checkbox input[type="checkbox"]:not(:checked) + .helper:after {
     display: none;
@@ -3748,6 +3748,7 @@ ul.tiles .icon {
     background: transparent;
     font-size: 24px;
     font-weight: 300;
+    border-bottom: 1px solid #e4e4e4;
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -3766,4 +3767,147 @@ ul.tiles .icon {
 }
 .icon-danger {
     color: #d9534f;
+}
+
+.wr-applist-board {
+    background:#fafafa;
+    margin-bottom:10px;
+}
+
+.wr-applist-board:hover {
+    background:#f0f0f0;
+}
+
+/* ========================================================================
+ * app list styles
+ * ======================================================================== */
+
+.wr-applist {
+    clear:both;
+    margin-bottom:15px;
+    border-bottom:1px solid #f0f0f0;
+}
+
+.wr-applist a {
+    float: left;
+    text-align: center;
+    font-size:12px;
+    text-decoration: none;
+    margin-right:10px;
+    color:#526A84;
+    width:100px;
+    background:#fafafa;
+    padding:2px 10px 10px 10px;
+    margin-bottom:10px;
+}
+
+.wr-applist .fw {
+    margin:10px;
+    font-size: 28px;
+}
+
+.wr-applist span {
+    display:block;
+}
+
+@media (max-width:768px){
+    .wr-applist a { padding:0; min-width: inherit; margin-right:5px; }
+    .wr-applist img { width: 50px; }
+    .wr-applist span { display:none; }
+    .wr-applist .fw { font-size: 25px; }
+}
+
+
+/* ========================================================================
+* tree styles
+* ======================================================================== */
+.tree-view,
+.tree-view ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.tree-view ul {
+    margin-left: 0.7em;
+    position: relative;
+}
+.tree-view ul li {
+    display: none;
+}
+.tree-view li[aria-expanded=true] > ul > li {
+    display: list-item;
+}
+.tree-view li {
+    margin: 0;
+    padding: 0 2em;
+    line-height: 2em;
+    position: relative;
+}
+.tree-view .branch {
+    cursor: pointer;
+}
+.tree-view li > .icon {
+    font-family: 'font-wso2';
+    font-style: normal;
+    background: #2c313b;
+    color: #ffffff;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 10px;
+    display: inline-block;
+    margin-right: 10px;
+}
+.tree-view li > .icon:before {
+    content: "\e687";
+}
+.tree-view li[aria-expanded=true] > .icon:before {
+    content: "\e685";
+}
+.tree-view li a,
+.tree-view li a:hover {
+    text-decoration: none;
+}
+.tree-view li button:active,
+.tree-view li button:focus {
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.tree-view.tree-view-lines ul:before {
+    content: "";
+    display: block;
+    width: 0;
+    position: absolute;
+    top: 0;
+    bottom: 15px;
+    left: 0;
+    border-left: 1px solid;
+}
+.tree-view.tree-view-lines ul li:before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 0;
+    border-top: 1px solid;
+    margin-top: -1px;
+    position: absolute;
+    top: 1em;
+    left: 0;
+}
+.tree-view .checkbox,
+.tree-view .radio {
+    margin: 0;
+    display: inline-block;
+}
+.tree-view .checkbox input[type=checkbox],
+.tree-view .checkbox-inline input[type=checkbox],
+.tree-view .radio input[type=radio],
+.tree-view .radio-inline input[type=radio] {
+    margin-top: 6px;
 }
