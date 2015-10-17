@@ -135,14 +135,19 @@ var backendServiceInvoker = function () {
     function initiateWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion) {
         var ws = require('ws');
         var wsRequest = new ws.WSRequest();
-        var options = [];
+        var options = new Array();
         if (IS_OAUTH_ENABLED) {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-            if (!(!accessToken.trim())) {
-                var headers = [{name: constants.AUTHORIZATION_HEADER, value: constants.BEARER_PREFIX + accessToken}];
+            if (!(!accessToken)) {
+                var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
+                var authenticationHeaderValue =String(constants.BEARER_PREFIX + accessToken);
+                var headers = [];
+                var oAuthAuthenticationData = {};
+                oAuthAuthenticationData.name =  authenticationHeaderName;
+                oAuthAuthenticationData.value = authenticationHeaderValue;
+                headers.push(oAuthAuthenticationData);
                 options.HTTPHeaders = headers;
             }
-
         }
         options.useSOAP = soapVersion;
         options.useWSA = constants.WEB_SERVICE_ADDRESSING_VERSION;

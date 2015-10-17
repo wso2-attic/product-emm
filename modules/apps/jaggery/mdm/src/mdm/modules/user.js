@@ -609,7 +609,7 @@ var userModule = function () {
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
             "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
-                var domainIDs = stringify(wsResponse. *::['return']. *::domainId.text());
+                var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {
                     var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
                     domainIDs = domainIDs.replace(regExpForSearch, "");
