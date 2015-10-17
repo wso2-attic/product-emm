@@ -43,7 +43,7 @@
         <url>/mdm-admin/notifications/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
-    </Permission
+    </Permission>
 
     <Permission>
         <name>Get device</name>
