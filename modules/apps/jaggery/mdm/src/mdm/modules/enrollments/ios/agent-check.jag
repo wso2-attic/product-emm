@@ -54,6 +54,7 @@ if (platform != "iOS") {
             var deviceID = responseObject["deviceID"];
             response["status"] = 200;
             response["content"] = {"deviceID" : deviceID};
+            // response["content"] = {"deviceID" : deviceID, "accessToken" : session.get("accessToken")};
         } else {
             // server only returns 400 in case of bad request
             response["status"] = 200;
