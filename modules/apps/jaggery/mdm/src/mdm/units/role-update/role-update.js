@@ -1,6 +1,6 @@
 /**
- * Returns a context with the user object to be populated by the edit-user page.
- *
+ * Returns the dynamic state to be populated by add-user page.
+ * 
  * @param context Object that gets updated with the dynamic state of this page to be presented
  * @returns {*} A context object that returns the dynamic state of this page to be presented
  */
@@ -9,22 +9,18 @@ function onRequest(context) {
 
     var uri = request.getRequestURI();
     var uriMatcher = new URIMatcher(String(uri));
-    var isMatched = uriMatcher.match("/{context}/users/edit-user/{username}");
+    var isMatched = uriMatcher.match("/{context}/roles/edit-role/{rolename}");
 
     if (isMatched) {
         var matchedElements = uriMatcher.elements();
-        var username = matchedElements.username;
-        var response = userModule.getUser(username);
-
+        var roleName = matchedElements.rolename;
+        var response = userModule.getRole(roleName);
         if (response["status"] == "success") {
-            context["editUser"] = response["content"];
+            context["role"] = response["content"];
         }
-
-        response = userModule.getRolesByUsername(username);
-        if (response["status"] == "success") {
-            context["userRoles"] = response["content"];
-        }
-        log.info(context);
+        var userStores = userModule.getSecondaryUserStores();
+        context["userStores"] = userStores;
     }
+    //TODO: error scenario
     return context;
 }

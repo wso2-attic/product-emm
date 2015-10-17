@@ -134,7 +134,7 @@ function getDevicesByTypes (deviceList) {
     var deviceTypes = {};
     $.each(deviceList, function (index, item) {
         deviceTypes[item.type] = [];
-        if (item.type == "android" || item.type == "ios") {
+        if (item.type == "android" || item.type == "ios" || item.type == "windows") {
             deviceTypes[item.type].push(item.id);
         }
 //        if(item.type == "TemperatureController"){
@@ -179,6 +179,8 @@ function loadOperationBar (deviceType) {
                 var iconName;
                 if (deviceType == "android"){
                     iconName = operationModule.getAndroidIconForFeature(current.code);
+                } if (deviceType == "windows"){
+                    iconName = operationModule.getWindowsIconForFeature(current.code);
                 } else if (deviceType == "ios"){
                     iconName = operationModule.getIOSIconForFeature(current.code);
                 }
@@ -244,6 +246,10 @@ function runOperation (operationName) {
     if(list["android"]){
         payload = operationModule.generatePayload("android", operationName, list["android"]);
         serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
+    }
+    if(list["windows"]){
+        payload = operationModule.generatePayload("windows", operationName, list["windows"]);
+        serviceEndPoint = operationModule.getWindowsServiceEndpoint(operationName);
     }
 //    if(list["TemperatureController"]){
 //        payload = operationModule.generatePayload("TemperatureController", operationName, list["TemperatureController"]);
