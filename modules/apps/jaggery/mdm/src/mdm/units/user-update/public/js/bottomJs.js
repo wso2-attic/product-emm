@@ -83,11 +83,11 @@ $(document).ready(function () {
 
             var addUserAPI = "/mdm-admin/users/" + username;
 
-            invokerUtil.post(
+            invokerUtil.put(
                 addUserAPI,
                 addUserFormData,
                 function (data) {
-                    if (data["statusCode"] == 200) {
+                    if (data["statusCode"] == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");
