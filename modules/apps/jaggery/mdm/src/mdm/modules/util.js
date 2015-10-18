@@ -93,18 +93,31 @@ var util = function () {
     };
     module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {
 
-        var assertionXML = new XML(decode(assertion) + "");
-        var extractedAssertion = assertionXML.. *::["Assertion"].toXMLString();
-        var encodedExtractedAssertion = encode(extractedAssertion);
+        var assertionXML = this.decode(assertion) ;
+        var encodedExtractedAssertion;
+        var extractedAssertion;
+        //TODO: make assertion extraction with proper parsing. Since Jaggery XML parser seem to add formatting
+        //which causes signature verification to fail.
+        var assertionStartMarker = "<saml2:Assertion";
+        var assertionEndMarker = "<\/saml2:Assertion>";
+        var assertionStartIndex = assertionXML.indexOf(assertionStartMarker);
+        var assertionEndIndex = assertionXML.indexOf(assertionEndMarker);
+        if (assertionStartIndex != -1 && assertionEndIndex != -1) {
+            extractedAssertion = assertionXML.substring(assertionStartIndex, assertionEndIndex) + assertionEndMarker;
+        } else {
+            throw "Invalid SAML response. SAML response has no valid assertion string";
+        }
+
+        encodedExtractedAssertion = this.encode(extractedAssertion);
 
         var xhr = new XMLHttpRequest();
         var tokenEndpoint = mdmProps.idPServer + "/oauth2/token";
-        var encodedClientKeys = encode(clientId + ":" + clientSecret);
+        var encodedClientKeys = this.encode(clientId + ":" + clientSecret);
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
         xhr.send("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" +
-                 encodeURIComponent(encodedExtractedAssertion) + "&scope=" + scope);
+                 encodeURIComponent(encodedExtractedAssertion) + "&scope=" + "PRODUCTION");
         var tokenPair = {};
         if (xhr.status == 200) {
             var data = parse(xhr.responseText);

@@ -46,7 +46,7 @@ public class MobileDevice {
      */
     @GET
     public Object getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
-                                      @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status,
+                                    @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status,
                                         @QueryParam("start") int startIdx, @QueryParam("length") int length) throws MDMAPIException {
         try {
             DeviceManagementProviderService service = MDMAPIUtils.getDeviceManagementService();
@@ -66,9 +66,9 @@ public class MobileDevice {
                 allDevices = service.getDevicesByStatus(status);
             } else {
                 if (length > 0) {
-                    paginationResult = service.getAllDevices(type, startIdx, length);
+                    paginationResult = service.getAllDevices(startIdx, length);
                 } else {
-                    allDevices = service.getAllDevices(type);
+                    allDevices = service.getAllDevices();
                 }
             }
             if(paginationResult != null) {
