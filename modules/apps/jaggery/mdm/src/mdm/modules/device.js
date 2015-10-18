@@ -23,6 +23,7 @@ deviceModule = function () {
     var utility = require('/modules/utility.js').utility;
     var constants = require('/modules/constants.js');
     var mdmProps = require('/config/mdm-props.js').config();
+    var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
 
     var ArrayList = Packages.java.util.ArrayList;
     var Properties = Packages.java.util.Properties;
@@ -269,15 +270,8 @@ deviceModule = function () {
         var utility = require('/modules/utility.js')["utility"];
         try{
             utility.startTenantFlow(carbonUser);
-
             var url = mdmProps["httpsURL"] + "/mdm-admin/devices/" + deviceType + "/" + deviceId;
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", url);
-            xhr.send();
-
-            var response = {};
-            if (xhr.status == 200 && xhr.readyState == 4) {
-                var responsePayload = parse(xhr.responseText);
+            return serviceInvokers.XMLHttp.get(url,function(responsePayload){
                 var device = responsePayload["responseContent"];
                 if (device) {
                     var propertiesList = device["properties"];
@@ -301,10 +295,11 @@ deviceModule = function () {
                     deviceObject[constants["DEVICE_PROPERTIES"]] = properties;
                     return deviceObject;
                 }
-            } else {
-                response["status"] = "error";
-                return response;
-            }
+            }, function(responsePayload){
+                    var response = {};
+                    response["status"] = "error";
+                    return response;
+            });
         } catch (e) {
             throw e;
         } finally {
@@ -316,17 +311,12 @@ deviceModule = function () {
      @Updated
      */
     publicMethods.getLicense = function (deviceType, languageCode) {
-        var xhr = new XMLHttpRequest();
         var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
-        xhr.open("GET", url);
-        xhr.send();
-
-        if (xhr.status == 200 && xhr.readyState == 4) {
-            var responsePayload = parse(xhr.responseText);
+        return serviceInvokers.XMLHttp.get(url, function(responsePayload) {
             return responsePayload["responseContent"];
-        } else {
+        }, function(responsePayload) {
             return null;
-        }
+        });
     };
 
     return publicMethods;

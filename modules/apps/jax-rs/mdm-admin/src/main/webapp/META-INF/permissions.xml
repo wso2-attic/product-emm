@@ -38,6 +38,14 @@
     </Permission>
 
     <Permission>
+        <name>Get new notifications</name>
+        <path>/</path>
+        <url>/mdm-admin/notifications/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
         <name>Get device</name>
         <path>/device-mgt/devices/view</path>
         <url>mdm-admin/devices/*/*</url>

@@ -21,6 +21,7 @@ var log = new Log("/modules/enrollments/ios/agent-controller.jag");
 
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
 
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
@@ -44,23 +45,17 @@ if (platform != "iOS") {
         var authUrl = mdmProps["iOSConfigRoot"] + "authenticate";
         xhr.open("POST", authUrl);
         xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(stringify({"username": username, "password": password, "ownership": ownership}));
+        var payload = {"username": username, "password": password, "ownership": ownership};
 
-        if (xhr.status == 200 && xhr.readyState == 4) {
-            var responseContent = parse(xhr.responseText);
-
+        serviceInvokers.XMLHttp.post(authUrl, payload, function (responseContent) {
             session.put("authenticatedUser", username);
             session.put("authenticatedUserPassword", password);
             session.put("authenticatedUserDeviceOwnership", ownership);
             session.put("iOSChallengeToken", responseContent["challengeToken"]);
-
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/license-agent");
-        } else if (xhr.status == 401) {
+        }, function (responseContent) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=auth-failed");
-        } else {
-            // one visible possibility would be server sending 500
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
-        }
+        });
     }
 }
 %>

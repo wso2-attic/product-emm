@@ -84,8 +84,7 @@ var invokerUtil = function () {
     module.put = function(url, payload, successCallback, errorCallback){
         call("PUT", url, payload, successCallback, errorCallback);
     };
-    module.delete = function(url, successCallback, errorCallback){
-        var payload = null;
+    module.delete = function(url, payload, successCallback, errorCallback){
         call("DELETE", url, payload, successCallback, errorCallback);
     };
     return module;

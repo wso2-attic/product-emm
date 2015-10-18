@@ -90,6 +90,8 @@ $("#role-grid").on("click", ".remove-role-link", function () {
     $("a#remove-role-yes-link").click(function () {
         invokerUtil.delete(
             removeRoleAPI,
+            null,
+
             function (data, status, jqXHR) {
                 if (jqXHR.status == 200) {
                     $("#role-" + role).remove();

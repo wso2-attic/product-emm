@@ -70,23 +70,24 @@
                 </div>
                 <div id="save-new-priorities-button" class="wr-input-control wr-btn-grp hide" data-enabled="{{saveNewPrioritiesButtonEnabled}}">
                     <button class="wr-btn" id="sortUpdateBtn" data-policycount="{{policyCount}}" disabled>Save New Priority Order</button>
+                    <button class="wr-btn" id="applyChangesBtn" disabled>Apply Changes</button>
                 </div>
             </div>
             <!-- /content -->
         </div>
     </div>
 
-    <div id="remove-policy-modal-content" class="hide">
+    <div id="change-policy-modal-content" class="hide">
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
-                    <h3>Do you really want to remove this policy?</h3>
+                    <h3>Do you really want to apply changes to all policies?</h3>
                     <div class="buttons">
-                        <a href="#" id="remove-policy-yes-link" class="btn-operations">
+                        <a href="#" id="change-policy-yes-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                         &nbsp;&nbsp;
-                        <a href="#" id="remove-policy-cancel-link" class="btn-operations">
+                        <a href="#" id="change-policy-cancel-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </div>
@@ -95,13 +96,28 @@
         </div>
     </div>
 
-    <div id="remove-policy-success-content" class="hide">
+    <div id="change-policy-success-content" class="hide">
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
-                    <h3>Done. Selected policy was successfully removed.</h3>
+                    <h3>Done. Changes applied successfully.</h3>
                     <div class="buttons">
-                        <a href="#" id="remove-policy-success-link" class="btn-operations">
+                        <a href="#" id="change-policy-success-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-policy-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+                    <div class="buttons">
+                        <a href="#" id="change-policy-error-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </div>

@@ -117,6 +117,8 @@ $("a.remove-user-link").click(function () {
     $("a#remove-user-yes-link").click(function () {
         invokerUtil.delete(
             removeUserAPI,
+            null,
+
             function (data) {
                 if (data["statusCode"] == 200) {
                     $("#" + username).remove();

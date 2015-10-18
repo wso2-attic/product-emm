@@ -65,23 +65,23 @@ var backendServiceInvoker = function () {
      */
     function initiateHTTPClientRequest(method, url, payload, successCallback, errorCallback) {
         var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
-        var methodObject;
+        var httpMethodObject;
         switch (method) {
             case constants.HTTP_POST:
                 var PostMethod = Packages.org.apache.commons.httpclient.methods.PostMethod;
-                methodObject = new PostMethod(url);
+                httpMethodObject = new PostMethod(url);
                 break;
             case constants.HTTP_PUT:
                 var PutMethod = Packages.org.apache.commons.httpclient.methods.PutMethod;
-                methodObject = new PutMethod(url);
+                httpMethodObject = new PutMethod(url);
                 break;
             case constants.HTTP_GET:
                 var GetMethod = Packages.org.apache.commons.httpclient.methods.GetMethod;
-                methodObject = new GetMethod(url);
+                httpMethodObject = new GetMethod(url);
                 break;
             case constants.HTTP_DELETE:
                 var DeleteMethod = Packages.org.apache.commons.httpclient.methods.DeleteMethod;
-                methodObject = new DeleteMethod(url);
+                httpMethodObject = new DeleteMethod(url);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid HTTP request type: " + method);
@@ -90,31 +90,31 @@ var backendServiceInvoker = function () {
         var header = new Header();
         header.setName(constants.CONTENT_TYPE_IDENTIFIER);
         header.setValue(constants.APPLICATION_JSON);
-        methodObject.addRequestHeader(header);
+        httpMethodObject.addRequestHeader(header);
         header = new Header();
         header.setName(constants.ACCEPT_IDENTIFIER);
         header.setValue(constants.APPLICATION_JSON);
-        methodObject.addRequestHeader(header);
+        httpMethodObject.addRequestHeader(header);
         if (IS_OAUTH_ENABLED) {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
             if (!(!accessToken.trim())) {
                 header = new Header();
                 header.setName(constants.AUTHORIZATION_HEADER);
                 header.setValue(constants.BEARER_PREFIX + accessToken);
-                methodObject.addRequestHeader(header);
+                httpMethodObject.addRequestHeader(header);
             }
 
         }
         var stringRequestEntity = new StringRequestEntity(stringify(payload));
-        methodObject.setRequestEntity(stringRequestEntity);
+        httpMethodObject.setRequestEntity(stringRequestEntity);
         var client = new HttpClient();
         try {
-            client.executeMethod(methodObject);
-            var status = methodObject.getStatusCode();
+            client.executeMethod(httpMethodObject);
+            var status = httpMethodObject.getStatusCode();
             if (status == 200) {
-                return successCallback(response);
+                return successCallback(httpMethodObject.getResponseBody());
             } else {
-                return errorCallback(response);
+                return errorCallback(httpMethodObject.getResponseBody());
             }
         } catch (e) {
             return errorCallback(response);
@@ -135,14 +135,19 @@ var backendServiceInvoker = function () {
     function initiateWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion) {
         var ws = require('ws');
         var wsRequest = new ws.WSRequest();
-        var options = [];
+        var options = new Array();
         if (IS_OAUTH_ENABLED) {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-            if (!(!accessToken.trim())) {
-                var headers = [{name: constants.AUTHORIZATION_HEADER, value: constants.BEARER_PREFIX + accessToken}];
+            if (!(!accessToken)) {
+                var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
+                var authenticationHeaderValue =String(constants.BEARER_PREFIX + accessToken);
+                var headers = [];
+                var oAuthAuthenticationData = {};
+                oAuthAuthenticationData.name =  authenticationHeaderName;
+                oAuthAuthenticationData.value = authenticationHeaderValue;
+                headers.push(oAuthAuthenticationData);
                 options.HTTPHeaders = headers;
             }
-
         }
         options.useSOAP = soapVersion;
         options.useWSA = constants.WEB_SERVICE_ADDRESSING_VERSION;
