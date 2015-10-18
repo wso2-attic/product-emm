@@ -1,0 +1,113 @@
+<%
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+var uri = request.getRequestURI();
+var uriMatcher = new URIMatcher(String(uri));
+
+var log = new Log("api/invoker-api.jag");
+
+var constants = require("/modules/constants.js");
+var mdmProps = require('/config/mdm-props.js').config();
+var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
+var mdmProps = require('/config/mdm-props.js').config();
+
+var result;
+log.info("globle level respond data");
+log.info(stringify(request));
+
+if (uriMatcher.match("/{context}/api/invoker/execute/")) {
+    log.info("Start executing the invoker execute block : "+stringify(request.getContent()));
+    var method = request.getContent().actionMethod;
+    var targetURL = mdmProps.httpsURL + request.getContent().actionUrl;
+    var payload = request.getContent().actionPayload;
+    log.info("executing the following data :"+method+" : "+targetURL+" : "+payload);
+    try {
+        switch (method) {
+            case constants.HTTP_GET:
+                var response = serviceInvokers.XMLHttp.get(targetURL, function (responsePayload) {
+                                                               var response = {};
+                                                               response.content = responsePayload["responseContent"];
+                                                               response.status = "success";
+                                                               return response;
+                                                           },
+                                                           function (responsePayload) {
+                                                               var response = {};
+                                                               response.content = responsePayload;
+                                                               response.status = "error";
+                                                              result = response;
+                                                           });
+                result = response;
+                break;
+            case constants.HTTP_POST:
+                var response = serviceInvokers.XMLHttp.post(targetURL, payload, function (responsePayload) {
+                                                                var response = {};
+                                                                response.content = responsePayload["responseContent"];
+                                                                response.status = "success";
+                                                                return response;
+                                                            },
+                                                            function (responsePayload) {
+                                                                var response = {};
+                                                                response.content = responsePayload;
+                                                                response.status = "error";
+                                                                return response;
+                                                            });
+                result = response;
+                break;
+            case constants.HTTP_PUT:
+                var response = serviceInvokers.XMLHttp.put(targetURL, payload, function (responsePayload) {
+                                                               var response = {};
+                                                               response.content = responsePayload["responseContent"];
+                                                               response.status = "success";
+                                                               return response;
+                                                           },
+                                                           function (responsePayload) {
+                                                               var response = {};
+                                                               response.content = responsePayload;
+                                                               response.status = "error";
+                                                               return response;
+                                                           });
+                result = response;
+                break;
+            case constants.HTTP_DELETE:
+                var response = serviceInvokers.XMLHttp.delete(targetURL, function (responsePayload) {
+                                                                  var response = {};
+                                                                  response.content = responsePayload["responseContent"];
+                                                                  response.status = "success";
+                                                                  return response;
+                                                              },
+                                                              function (responsePayload) {
+                                                                  var response = {};
+                                                                  response.content = responsePayload;
+                                                                  response.status = "error";
+                                                                  return response;
+                                                              });
+                result = response;
+                break;
+        }
+    } catch (e) {
+        log.error("Exception occurred while accessing sevices", e);
+
+    }
+}
+log.info("new result is " + stringify(result));
+// returning the result.
+if (result) {
+    print(result);
+}
+%>

@@ -25,7 +25,7 @@ var backendServiceInvoker = function () {
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
     var constants = require("/modules/constants.js");
-    var log = new Log("modules/backendServiceInvoker.js");
+    var log = new Log("modules/backend-service-invoker.js");
 
     /**
      * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
@@ -36,6 +36,7 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     function initiateXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
+        log.info("executing "+url);
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.open(method, url);
         xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
@@ -43,6 +44,7 @@ var backendServiceInvoker = function () {
         if (IS_OAUTH_ENABLED) {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
             if (!(!accessToken.trim())) {
+                log.info("token ::::: "+accessToken);
                 xmlHttpRequest.setRequestHeader(
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
@@ -51,6 +53,7 @@ var backendServiceInvoker = function () {
         if (xmlHttpRequest.status == 200) {
             return successCallback(parse(xmlHttpRequest["responseText"]));
         } else {
+            log.error("returns :::: " + xmlHttpRequest.status);
             return errorCallback(parse(xmlHttpRequest["responseText"]));
         }
     }
@@ -157,6 +160,7 @@ var backendServiceInvoker = function () {
             wsRequest.open(options, endpoint, false);
             wsRequest.send(payload);
             wsResponse = wsRequest.responseE4X;
+            log.info("return value "+stringify(wsResponse));
         } catch (e) {
             return errorCallback(e);
         }
