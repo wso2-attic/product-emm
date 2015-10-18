@@ -26,7 +26,7 @@ public class PolicyWrapper {
     private int id;
     private Profile profile;
     private String policyName;
-	private String description;
+    private String description;
     private String compliance;
     private List<String> roles;
     private String ownershipType;
@@ -63,13 +63,13 @@ public class PolicyWrapper {
         return policyName;
     }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+	return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+	this.description = description;
+    }
 
     public void setPolicyName(String policyName) {
         this.policyName = policyName;
