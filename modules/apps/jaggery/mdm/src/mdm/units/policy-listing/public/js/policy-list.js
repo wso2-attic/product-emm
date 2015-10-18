@@ -101,7 +101,6 @@ function getSelectedPolicies() {
 
 $(document).ready(function () {
     sortElements();
-
     // Click functions related to Policy Listing
     $(sortUpdateBtn).click(function () {
         $(sortUpdateBtn).prop("disabled", true);
@@ -142,9 +141,86 @@ $(document).ready(function () {
         });
     });
 
+    $(".policy-unpublish-link").click(function () {
+        var policyList = getSelectedPolicies();
+        var serviceURL = "/mdm-admin/policies/inactivate";;
+        console.log(policyList);
+        if (policyList == 0) {
+            $(modalPopupContent).html($("#errorPolicyUnPublish").html());
+        } else {
+            $(modalPopupContent).html($('#unpublish-policy-modal-content').html());
+        }
+        showPopup();
+
+        $("a#unpublish-policy-yes-link").click(function () {
+            invokerUtil.put(
+                serviceURL,
+                policyList,
+                // on success
+                function () {
+                    $(modalPopupContent).html($('#unpublish-policy-success-content').html());
+                    $("a#unpublish-policy-success-link").click(function () {
+                        hidePopup();
+                        location.reload();
+                    });
+                },
+                // on error
+                function () {
+                    $(modalPopupContent).html($('#unpublish-policy-error-content').html());
+                    $("a#unpublish-policy-error-link").click(function () {
+                        hidePopup();
+                    });
+                }
+            );
+        });
+
+        $("a#unpublish-policy-cancel-link").click(function () {
+            hidePopup();
+        });
+    });
+
+
+    $(".policy-publish-link").click(function () {
+        var policyList = getSelectedPolicies();
+        var serviceURL = "/mdm-admin/policies/activate";;
+        console.log(policyList);
+        if (policyList == 0) {
+            $(modalPopupContent).html($("#errorPolicyPublish").html());
+        } else {
+            $(modalPopupContent).html($('#publish-policy-modal-content').html());
+        }
+        showPopup();
+
+        $("a#publish-policy-yes-link").click(function () {
+            invokerUtil.put(
+                serviceURL,
+                policyList,
+                // on success
+                function () {
+                    $(modalPopupContent).html($('#publish-policy-success-content').html());
+                    $("a#publish-policy-success-link").click(function () {
+                        hidePopup();
+                        location.reload();
+                    });
+                },
+                // on error
+                function () {
+                    $(modalPopupContent).html($('#publish-policy-error-content').html());
+                    $("a#publish-policy-error-link").click(function () {
+                        hidePopup();
+                    });
+                }
+            );
+        });
+
+        $("a#publish-policy-cancel-link").click(function () {
+            hidePopup();
+        });
+    });
+
     $(".policy-remove-link").click(function () {
         var policyList = getSelectedPolicies();
-        var deletePolicyAPI = "/mdm-admin/policies/";
+        var deletePolicyAPI = "/mdm-admin/policies";
         console.log(policyList);
         if (policyList == 0) {
             $(modalPopupContent).html($("#errorPolicy").html());
@@ -154,12 +230,11 @@ $(document).ready(function () {
         showPopup();
 
         $("a#remove-policy-yes-link").click(function () {
-            $.ajax({
-                type : "DELETE",
-                url : deletePolicyAPI,
-                contentType : "application/json",
-                data : JSON.stringify(policyList),
-                success : function () {
+            invokerUtil.delete(
+                deletePolicyAPI,
+                policyList,
+                // on success
+                function () {
                     $(modalPopupContent).html($('#remove-policy-success-content').html());
                     $("a#remove-policy-success-link").click(function () {
                         var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
@@ -167,13 +242,14 @@ $(document).ready(function () {
                         hidePopup();
                     });
                 },
-                error : function () {
+                // on error
+                function () {
                     $(modalPopupContent).html($('#remove-policy-error-content').html());
                     $("a#remove-policy-error-link").click(function () {
                         hidePopup();
                     });
                 }
-            });
+            );
         });
 
         $("a#remove-policy-cancel-link").click(function () {

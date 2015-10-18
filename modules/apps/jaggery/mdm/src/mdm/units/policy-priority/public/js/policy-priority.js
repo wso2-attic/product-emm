@@ -18,6 +18,7 @@
 
 /* sorting function */
 var sortUpdateBtn = "#sortUpdateBtn";
+var applyChangesBtn = "#applyChangesBtn";
 var sortedIDs;
 
 var saveNewPrioritiesButton = "#save-new-priorities-button";
@@ -101,6 +102,39 @@ $(document).ready(function () {
                     hidePopup();
                 });
             }
+        });
+    });
+
+    $(applyChangesBtn).click(function () {
+        var applyPolicyChangesAPI = "/mdm-admin/policies/apply-changes";
+        $(modalPopupContent).html($('#change-policy-modal-content').html());
+        showPopup();
+
+        $("a#change-policy-yes-link").click(function () {
+            invokerUtil.put(
+                applyPolicyChangesAPI,
+                null,
+                // on success
+                function () {
+                    $(modalPopupContent).html($('#change-policy-success-content').html());
+                    showPopup();
+                    $("a#change-policy-success-link").click(function () {
+                        hidePopup();
+                    });
+                },
+                // on error
+                function () {
+                    $(modalPopupContent).html($('#change-policy-error-content').html());
+                    showPopup();
+                    $("a#change-policy-error-link").click(function () {
+                        hidePopup();
+                    });
+                }
+            );
+        });
+
+        $("a#change-policy-cancel-link").click(function () {
+            hidePopup();
         });
     });
 

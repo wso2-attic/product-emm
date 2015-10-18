@@ -501,7 +501,7 @@ $(document).ready(function () {
     var fileNameAPNSCert = "";
     var invalidFormatAPNSCert = false;
 
-    $( fileInputMDMCert).change(function() {
+    $(fileInputMDMCert).change(function() {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");
@@ -528,7 +528,7 @@ $(document).ready(function () {
         }
     });
 
-    $( fileInputAPNSCert).change(function() {
+    $(fileInputAPNSCert).change(function() {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");
@@ -749,11 +749,11 @@ $(document).ready(function () {
     var notSupportedError = false;
 
     var base64WindowsMDMCert = "";
-    var fileInputWindowsMDMCert = $('#ios-config-mdm-certificate');
+    var fileInputWindowsMDMCert = $('#windows-config-mdm-certificate');
     var fileNameWindowsMDMCert = "";
     var invalidFormatWindowsMDMCert = false;
 
-    $( fileInputWindowsMDMCert).change(function() {
+    $(fileInputWindowsMDMCert).change(function() {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");

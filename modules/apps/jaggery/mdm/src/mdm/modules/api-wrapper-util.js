@@ -19,6 +19,7 @@
 var apiWrapperUtil = function () {
     var module = {};
     var tokenUtil = require("/modules/util.js").util;
+    var constants = require("/modules/constants.js");
 
     module.refreshToken = function () {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);

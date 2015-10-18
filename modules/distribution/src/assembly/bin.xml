@@ -257,6 +257,16 @@
             </includes>
         </fileSet>
 
+        <!-- Copying authenticators.xml-->
+        <fileSet>
+            <directory>src/repository/conf/security/</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+            <includes>
+                <include>authenticators.xml</include>
+            </includes>
+        </fileSet>
+
+
         <!-- Copying Device Management related dbscripts -->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm</directory>
@@ -751,6 +761,16 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/
             </outputDirectory>
             <filtered>false</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!-- Copying authenticators.xml -->
+        <file>
+            <source>
+                src/repository/conf/security/authenticators.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+            <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
 
