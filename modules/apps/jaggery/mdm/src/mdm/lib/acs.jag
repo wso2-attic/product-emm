@@ -46,7 +46,7 @@ sso.acs(
             var permissions = userModule.getUIPermissions();
             if (permissions.VIEW_DASHBOARD){
                 apiWrapperUtil.setupAccessTokenPair("saml", samlResponse);
-                response.sendRedirect(dataConfig.appContext + "/mdm");
+                response.sendRedirect(dataConfig.appContext);
             }
         }, function() {
             if(log.isDebugEnabled()){
