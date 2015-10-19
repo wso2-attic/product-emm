@@ -101,7 +101,7 @@ var sortableListFunction = (function(){
                 });
 
                 $(sortUpdateBtn).prop('disabled', false);
-                $(applyChangesBtn).prop('disabled', false);
+                //$(applyChangesBtn).prop('disabled', false);
                 addSortableIndexNumbers();
             }
             else{
@@ -123,7 +123,7 @@ var sortableListFunction = (function(){
                     sortedIDs = $(this).sortable('toArray');
                     addSortableIndexNumbers();
                     $(sortUpdateBtn).prop('disabled', false);
-                    $(applyChangesBtn).prop('disabled', false);
+                    //$(applyChangesBtn).prop('disabled', false);
                 }
             });
             $(sortableElem).disableSelection();

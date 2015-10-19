@@ -101,6 +101,7 @@ var updateGroupedInputVisibility = function (domElement) {
 };
 
 skipStep["policy-platform"] = function (policyPayloadObj) {
+    console.log(policyPayloadObj);
     policy["name"] = policyPayloadObj["policyName"];
     policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
     policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
@@ -117,7 +118,22 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     policyNameInput.val(policyPayloadObj["policyName"]);
     policyDescriptionInput.val(policyPayloadObj["description"]);
     // updating next-page wizard title with selected platform
-    $("#policy-profile-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
+    $("#policy-heading").text(policy["platform"].toUpperCase() + " POLICY - " + policy["name"].toUpperCase());
+    $("#policy-platform").text(policy["platform"].toUpperCase());
+    $("#policy-assignment").text(policyPayloadObj.ownershipType);
+    $("#policy-action").text(policyPayloadObj.compliance.toUpperCase());
+    $("#policy-description").text(policyPayloadObj["description"]);
+    var policyStatus = "Active";
+    if(policyPayloadObj["active"] == true &&  policyPayloadObj["updated"] == true) {
+        policyStatus = '<i class="fw fw-warning icon-success"></i> Active/Updated</span>';
+    } else if(policyPayloadObj["active"] == true &&  policyPayloadObj["updated"] == false) {
+        policyStatus = '<i class="fw fw-ok icon-success"></i> Active</span>';
+    } else if(policyPayloadObj["active"] == false &&  policyPayloadObj["updated"] == true) {
+        policyStatus = '<i class="fw fw-warning icon-warning"></i> Inactive/Updated</span>';
+    } else if(policyPayloadObj["active"] == false &&  policyPayloadObj["updated"] == false) {
+        policyStatus = '<i class="fw fw-error icon-danger"></i> Inactive</span>';
+    }
+    $("#policy-status").html(policyStatus);
 
     var deviceType = policy["platform"];
     var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
@@ -1624,7 +1640,7 @@ validateStep["policy-profile"] = function () {
 stepForwardFrom["policy-profile"] = function () {
     policy["profile"] = operationModule.generateProfile(policy["platform"], configuredOperations);
     // updating next-page wizard title with selected platform
-    $("#policy-criteria-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
+    $("#policy-criteria-page-wizard-title").text(policy["platform"] + " POLICY - " + policy["name"]);
 };
 
 stepForwardFrom["policy-criteria"] = function () {
@@ -1642,7 +1658,7 @@ stepForwardFrom["policy-criteria"] = function () {
     policy["selectedNonCompliantAction"] = $("#action-input").find(":selected").data("action");
     policy["selectedOwnership"] = $("#ownership-input").val();
     // updating next-page wizard title with selected platform
-    $("#policy-naming-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
+    $("#policy-naming-page-wizard-title").text(policy["platform"] + " POLICY - " + policy["name"]);
 };
 
 /**
@@ -1789,8 +1805,8 @@ var updatePolicy = function (policy, state) {
                     policyList,
                     // on success
                     function () {
-                        $(".add-policy").addClass("hidden");
                         $(".policy-message").removeClass("hidden");
+                        $(".add-policy").addClass("hidden");
                     },
                     // on error
                     function () {
@@ -1806,9 +1822,8 @@ var updatePolicy = function (policy, state) {
                     policyList,
                     // on success
                     function () {
-                        $(".add-policy").addClass("hidden");
-                        $(".policy-naming").addClass("hidden");
                         $(".policy-message").removeClass("hidden");
+                        $(".add-policy").addClass("hidden");
                     },
                     // on error
                     function () {

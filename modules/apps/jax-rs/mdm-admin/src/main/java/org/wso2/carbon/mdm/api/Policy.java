@@ -169,21 +169,53 @@ public class Policy {
 
     @PUT
     @Path("{id}")
-    public ResponsePayload updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy, @PathParam("id") int policyId)
+    public ResponsePayload updatePolicy(PolicyWrapper policyWrapper, @PathParam("id") int policyId)
             throws MDMAPIException {
+//        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+//        ResponsePayload responseMsg = new ResponsePayload();
+//        try {
+//            PolicyAdministratorPoint pap = policyManagementService.getPAP();
+//            org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
+//            policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
+//            policy.setId(previousPolicy.getId());
+//            pap.updatePolicy(policy);
+//            Response.status(HttpStatus.SC_OK);
+//            responseMsg.setMessageFromServer("Policy has been updated successfully.");
+//            return responseMsg;
+//        } catch (PolicyManagementException e) {
+//            String error = "Policy Management related exception";
+//            log.error(error, e);
+//            throw new MDMAPIException(error, e);
+//        }
+
+
+
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         ResponsePayload responseMsg = new ResponsePayload();
+        org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
+        policy.setPolicyName(policyWrapper.getPolicyName());
+        policy.setId(policyId);
+        policy.setProfileId(policyWrapper.getProfileId());
+        policy.setDescription(policyWrapper.getDescription());
+        policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
+        policy.setOwnershipType(policyWrapper.getOwnershipType());
+        policy.setRoles(policyWrapper.getRoles());
+        policy.setUsers(policyWrapper.getUsers());
+        policy.setTenantId(policyWrapper.getTenantId());
+        policy.setCompliance(policyWrapper.getCompliance());
+       // policy.setActive(true);
+
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
-            policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
-            policy.setId(previousPolicy.getId());
+//            pap.addPolicy(policy);
             pap.updatePolicy(policy);
+//            Response.status(HttpStatus.SC_CREATED);
             Response.status(HttpStatus.SC_OK);
+//            responseMsg.setMessageFromServer("Policy has been added successfully.");
             responseMsg.setMessageFromServer("Policy has been updated successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
+            String error = "Policy Management related exception in policy update.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }

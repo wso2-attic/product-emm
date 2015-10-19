@@ -169,6 +169,9 @@
                 <include>**/entitlement.properties</include>
                 <include>**/trusted-idp-config.xml</include>
             </includes>
+            <excludes>
+                <exclude>authenticators.xml</exclude>
+            </excludes>
         </fileSet>
 
         <!-- <fileSet>
@@ -768,7 +771,7 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!-- Copying authenticators.xml -->
+        <!--&lt;!&ndash; Copying authenticators.xml &ndash;&gt;-->
         <file>
             <source>
                 src/repository/conf/security/authenticators.xml
