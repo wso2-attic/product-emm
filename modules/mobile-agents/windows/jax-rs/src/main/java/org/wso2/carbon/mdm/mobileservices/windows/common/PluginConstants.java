@@ -131,7 +131,6 @@ public final class PluginConstants {
         public static final String ENCODING_TYPE =
                 "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0" +
                         ".xsd#base64binary";
-        public static final String WSO2_MDM_JKS_FILE = "wso2mdm.jks";
         public static final String CA_CERT = "cacert";
         public static final String X_509 = "X.509";
         public static final String PROPERTIES_XML = "properties.xml";
@@ -186,7 +185,6 @@ public final class PluginConstants {
         public static final int MACADDRESS_POSITION = 6;
         public static final int RESOLUTION_POSITION = 7;
         public static final int DEVICE_NAME_POSITION = 8;
-        public static final int DEV_MODEL_POSITION = 6;
         public static final String SYNCML_DATA_ONE = "1";
         public static final String SYNCML_DATA_ZERO = "0";
         public static final String OS_VERSION = "OS_VERSION";
@@ -248,7 +246,6 @@ public final class PluginConstants {
         public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
         public static final String ENCRYPT_STORAGE_STATUS = "ENCRYPT_STORAGE_STATUS";
         public static final String DEVICE_PASSWORD_STATUS = "DEVICE_PASSWORD_STATUS";
-        public static final String WIFI = "WIFI";
         public static final String DEVICE_PASSCODE_DELETE = "DEVICE_PASSCODE_DELETE";
     }
 

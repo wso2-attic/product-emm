@@ -22,8 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.w3c.dom.Document;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -127,7 +125,6 @@ public class SyncmlServiceImpl implements SyncmlService {
             throws WindowsDeviceEnrolmentException, WindowsOperationException, NotificationManagementException,
             WindowsConfigurationException {
 
-        String val = SyncmlServiceImpl.getStringFromDoc(request);
         int msgId;
         int sessionId;
         String user;
@@ -146,7 +143,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 } catch (SyncmlMessageFormatException e) {
                     String msg = "Error occurred due to bad syncml format";
                     log.error(msg, e);
-                    throw  new SyncmlMessageFormatException(msg, e);
+                    throw new SyncmlMessageFormatException(msg, e);
                 }
 
                 SyncmlHeader syncmlHeader = syncmlDocument.getHeader();
@@ -209,6 +206,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (JSONException e) {
                             String msg = "Error occurred in while parsing json object.";
                             log.error(msg, e);
+                            throw new WindowsOperationException(msg, e);
                         } catch (PolicyManagementException e) {
                             String msg = "Error occurred in while getting effective policy.";
                             log.error(msg, e);
@@ -220,9 +218,11 @@ public class SyncmlServiceImpl implements SyncmlService {
                         } catch (NoSuchAlgorithmException e) {
                             String msg = "Error occurred in while generating hash value.";
                             log.error(msg);
+                            throw new WindowsDeviceEnrolmentException(msg, e);
                         } catch (UnsupportedEncodingException e) {
                             String msg = "Error occurred in while encoding hash value.";
                             log.error(msg);
+                            throw new WindowsDeviceEnrolmentException(msg, e);
                         }
 
                     } else {
@@ -235,11 +235,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                         if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
                             try {
                                 pendingOperations = operationUtils.getPendingOperations(syncmlDocument);
-                                String gen = generateReply(syncmlDocument, pendingOperations);
-                                //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
-                                //	pendingOperations)).build();
-                                return Response.ok().entity(gen).build();
-
+                                return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
+                                        pendingOperations)).build();
                             } catch (OperationManagementException e) {
                                 String msg = "Cannot access operation management service.";
                                 log.error(msg);
@@ -317,11 +314,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                     } else {
                         try {
                             pendingOperations = operationUtils.getPendingOperations(syncmlDocument);
-                            String replygen = generateReply(syncmlDocument, pendingOperations);
-                            //return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)pendingOperations))
-                            //.build();
-                            return Response.ok().entity(replygen).build();
-
+                            return Response.ok().entity(generateReply(syncmlDocument, pendingOperations))
+                                    .build();
                         } catch (OperationManagementException e) {
                             String msg = "Cannot access operation management service.";
                             log.error(msg);
@@ -371,7 +365,9 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
             }
         } catch (SyncmlMessageFormatException e) {
-            e.printStackTrace();
+            String msg = "Error occurred in parsing syncml request.";
+            log.error(msg);
+            throw new WindowsOperationException(msg, e);
         }
         return null;
     }
@@ -398,8 +394,6 @@ public class SyncmlServiceImpl implements SyncmlService {
         String macAddress;
         String resolution;
         String modVersion;
-        String longitude;
-        String latitude;
         boolean status = false;
         String user;
         String deviceName;
@@ -496,13 +490,6 @@ public class SyncmlServiceImpl implements SyncmlService {
             throw new WindowsOperationException(msg, e);
         }
         return status;
-    }
-
-    // Only for testing
-    public static String getStringFromDoc(org.w3c.dom.Document doc) {
-        DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
-        LSSerializer lsSerializer = domImplementation.createLSSerializer();
-        return lsSerializer.writeToString(doc);
     }
 
     /**

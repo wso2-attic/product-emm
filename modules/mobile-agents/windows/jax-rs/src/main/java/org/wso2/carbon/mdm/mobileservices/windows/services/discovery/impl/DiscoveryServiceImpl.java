@@ -71,17 +71,21 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         if (FEDERATED.equals(windowsPluginProperties.getAuthPolicy())) {
             discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
             discoveryResponse.setEnrollmentPolicyServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
+                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.
+                    CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
             discoveryResponse.setEnrollmentServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.CERTIFICATE_ENROLLMENT_SERVICE_URL);
+                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.
+                    CERTIFICATE_ENROLLMENT_SERVICE_URL);
             discoveryResponse.setAuthenticationServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
                     windowsPluginProperties.getDomain() + PluginConstants.Discovery.WAB_URL);
         } else {
             discoveryResponse.setAuthPolicy(windowsPluginProperties.getAuthPolicy());
             discoveryResponse.setEnrollmentPolicyServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY);
+                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.
+                    ONPREMISE_CERTIFICATE_ENROLLMENT_POLICY);
             discoveryResponse.setEnrollmentServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
-                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL);
+                    windowsPluginProperties.getDomain() + PluginConstants.Discovery.
+                    ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL);
             discoveryResponse.setAuthenticationServiceUrl(null);
         }
         response.value = discoveryResponse;

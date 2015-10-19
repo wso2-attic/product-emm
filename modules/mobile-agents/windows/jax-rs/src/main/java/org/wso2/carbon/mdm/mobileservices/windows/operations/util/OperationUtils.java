@@ -31,11 +31,9 @@ import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagement
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.Item;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.Results;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.Status;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
+import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Profile;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
 import org.wso2.carbon.policy.mgt.common.ProfileFeature;
@@ -241,204 +239,16 @@ public class OperationUtils {
      */
     public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
             throws OperationManagementException, DeviceManagementException, FeatureManagementException,
-            PolicyComplianceException, NotificationManagementException {
+            PolicyComplianceException, NotificationManagementException, WindowsDeviceEnrolmentException,
+            WindowsOperationException {
 
 
         List<? extends Operation> pendingOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
-//        List<Status> statuses = syncmlDocument.getBody().getStatus();
-//        String lockUri = null;
-//        Results result = syncmlDocument.getBody().getResults();
-//        OperationUtils operationUtils = new OperationUtils();
-
-//        for (Status status : statuses) {
-//
-//            if (status.getCommand().equals(Constants.EXECUTE)) {
-//                if (status.getTargetReference() == null) {
-//                    operationUtils.updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
-//                } else {
-//                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_LOCK)) {
-//                        operationUtils.lockOperationUpdate(status, syncmlDocument, deviceIdentifier);
-//                    }
-//                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_RING)) {
-//                        operationUtils.ring(status, syncmlDocument, deviceIdentifier);
-//                    }
-//                    if (status.getTargetReference().equals(OperationCode.Command.WIPE_DATA)) {
-//                        operationUtils.dataWipe(status, syncmlDocument, deviceIdentifier);
-//                    }
-//                }
-//            }
-//            if (status.getCommand().equals(Constants.SEQUENCE)) {
-//                if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-//
-//                    pendingDataOperations = SyncmlUtils.getDeviceManagementService()
-//                            .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-//                    for (Operation operation : pendingDataOperations) {
-//                        if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE) &&
-//                                operation.getId() == status.getCommandReference()) {
-//                            operation.setStatus(Operation.Status.COMPLETED);
-//                        }
-//                        if (operation.getCode().equals(PluginConstants.OperationCodes.MONITOR) &&
-//                                operation.getId() == status.getCommandReference()) {
-//                            operation.setStatus(Operation.Status.COMPLETED);
-//                        }
-//                    }
-//                    operationUtils.updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
-//                } else {
-//                    pendingDataOperations = SyncmlUtils.getDeviceManagementService()
-//                            .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-//                    for (Operation operation : pendingDataOperations) {
-//
-//                        if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE) &&
-//                                operation.getId() == status.getCommandReference()) {
-//                            operation.setStatus(Operation.Status.ERROR);
-//                        }
-//                        if (operation.getCode().equals(PluginConstants.OperationCodes.MONITOR) &&
-//                                operation.getId() == status.getCommandReference()) {
-//                            operation.setStatus(Operation.Status.ERROR);
-//                        }
-//                    }
-//                    operationUtils.updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
-//                }
-//            }
-//        }
-
-//        List<Profile> profiles = new ArrayList<>();
-//        if (result != null) {
-//            List<Item> results = result.getItem();
-//            for (OperationCode.Info info : OperationCode.Info.values()) {
-//                if (PluginConstants.OperationCodes.PIN_CODE.equals(info
-//                        .name())) {
-//                    lockUri = info.getCode();
-//                }
-//            }
-//            for (Item item : results) {
-//                for (OperationCode.Info info : OperationCode.Info.values()) {
-//                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-//                            PluginConstants.OperationCodes.CAMERA_STATUS)) {
-//                        Profile cameraProfile = new Profile();
-//                        cameraProfile.setFeatureCode(PluginConstants.OperationCodes.CAMERA);
-//                        cameraProfile.setData(item.getData());
-//                        if (item.getData().equals("1")) {
-//                            cameraProfile.setEnable(true);
-//                        } else {
-//                            cameraProfile.setEnable(false);
-//                        }
-//                        profiles.add(cameraProfile);
-//                    }
-//                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-//                            PluginConstants.OperationCodes.ENCRYPT_STORAGE_STATUS)) {
-//                        Profile encryptStorage = new Profile();
-//                        encryptStorage.setFeatureCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
-//                        encryptStorage.setData(item.getData());
-//                        if (item.getData().equals("1")) {
-//                            encryptStorage.setEnable(true);
-//                        } else {
-//                            encryptStorage.setEnable(false);
-//                        }
-//                        profiles.add(encryptStorage);
-//                    }
-//                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-//                            PluginConstants.OperationCodes.DEVICE_PASSWORD_STATUS)) {
-//                        Profile encryptStorage = new Profile();
-//                        encryptStorage.setFeatureCode(PluginConstants.OperationCodes.PASSCODE_POLICY);
-//                        encryptStorage.setData(item.getData());
-//                        if (item.getData().equals("0")) {
-//                            encryptStorage.setEnable(true);
-//                        } else {
-//                            encryptStorage.setEnable(false);
-//                        }
-//                        profiles.add(encryptStorage);
-//                    }
-//                    if (!item.getData().isEmpty() && item.getSource().getLocURI().equals(lockUri)) {
-//                        String pinValue = item.getData();
-//                        NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
-//                        Notification notification = new Notification();
-//                        notification.setDescription(pinValue);
-//                        notification.setOperationId(result.getCommandReference());
-//                        notification.setDeviceIdentifier(deviceIdentifier);
-//                        try {
-//                            nmService.addNotification(notification);
-//                            if (log.isDebugEnabled()) {
-//                                String msg = "Lock Reset Pin code " + pinValue;
-//                                log.info(msg);
-//                            }
-//                        } catch (NotificationManagementException e) {
-//                            String msg = "Failure Occurred in getting notification service.";
-//                            log.error(msg);
-//                            throw new NotificationManagementException(msg, e);
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-        //////
         UpdateUriOperations(syncmlDocument);
         generateComplianceFeatureStatus(syncmlDocument);
-        //List<Profile> profiles = generateDeviceOperationStatusObject(syncmlDocument);
-        /////////
-//        boolean isCompliance = false;
-//        if (profiles.size() != Constants.EMPTY) {
-//            try {
-//                List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
-//                        deviceIdentifier);
-//                List<ComplianceFeature> complianceFeatures = new ArrayList<>();
-//                for (ProfileFeature activeFeature : profileFeatures) {
-//                    JSONObject policyContent = new JSONObject(activeFeature.getContent().toString());
-//
-//                    for (Profile deviceFeature : profiles) {
-//
-//                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-//                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.CAMERA)) {
-//                            if (policyContent.getBoolean("enabled") == (deviceFeature.isEnable())) {
-//                                isCompliance = true;
-//                                deviceFeature.setCompliance(isCompliance);
-//                            } else {
-//                                deviceFeature.setCompliance(isCompliance);
-//                            }
-//                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
-//                            complianceFeatures.add(complianceFeature);
-//                        }
-//                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-//                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.ENCRYPT_STORAGE)) {
-//                            if (policyContent.getBoolean("encrypted") == (deviceFeature.isEnable())) {
-//                                isCompliance = true;
-//                                deviceFeature.setCompliance(isCompliance);
-//                            } else {
-//                                deviceFeature.setCompliance(isCompliance);
-//                            }
-//                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
-//                            complianceFeatures.add(complianceFeature);
-//                        }
-//                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-//                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
-//                            if (policyContent.getBoolean("enablePassword") == (deviceFeature.isEnable())) {
-//                                isCompliance = true;
-//                                deviceFeature.setCompliance(isCompliance);
-//                            } else {
-//                                deviceFeature.setCompliance(isCompliance);
-//                            }
-//                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
-//                            complianceFeatures.add(complianceFeature);
-//                        }
-//                    }
-//                }
-//                WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, complianceFeatures);
-//            } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-//                String msg = "Error occurred while getting effective policy.";
-//                log.error(msg);
-//                throw new FeatureManagementException(msg, e);
-//            } catch (JSONException e) {
-//                String msg = "Error occurred while parsing json object.";
-//                log.error(msg);
-//            } catch (PolicyComplianceException e) {
-//                String msg = "Error occurred while setting up policy compliance.";
-//                log.error(msg);
-//                throw new PolicyComplianceException(msg, e);
-//            }
-//        }
+
         pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
         return pendingOperations;
     }
@@ -536,7 +346,7 @@ public class OperationUtils {
      * @throws NotificationManagementException
      */
     public List<Profile> generateDeviceOperationStatusObject(SyncmlDocument syncmlDocument) throws
-            NotificationManagementException {
+            NotificationManagementException, WindowsOperationException {
 
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
@@ -602,7 +412,7 @@ public class OperationUtils {
                         } catch (NotificationManagementException e) {
                             String msg = "Failure Occurred in getting notification service.";
                             log.error(msg);
-                            throw new NotificationManagementException(msg, e);
+                            throw new WindowsOperationException(msg, e);
                         }
                     }
                 }
@@ -620,7 +430,8 @@ public class OperationUtils {
      * @throws PolicyComplianceException
      */
     public void generateComplianceFeatureStatus(SyncmlDocument syncmlDocument) throws NotificationManagementException,
-            FeatureManagementException, PolicyComplianceException {
+            FeatureManagementException, PolicyComplianceException, WindowsDeviceEnrolmentException,
+            WindowsOperationException {
         List<Profile> profiles = generateDeviceOperationStatusObject(syncmlDocument);
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
@@ -682,6 +493,7 @@ public class OperationUtils {
             } catch (JSONException e) {
                 String msg = "Error occurred while parsing json object.";
                 log.error(msg);
+                throw new WindowsDeviceEnrolmentException(msg, e);
             } catch (PolicyComplianceException e) {
                 String msg = "Error occurred while setting up policy compliance.";
                 log.error(msg);

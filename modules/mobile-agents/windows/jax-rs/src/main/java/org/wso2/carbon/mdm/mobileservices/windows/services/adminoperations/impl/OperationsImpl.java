@@ -200,7 +200,8 @@ public class OperationsImpl implements Operations {
     /**
      * REST endpoint for the device lockOperationUpdate reset.
      * Lock reset have to be done, when device user does not set PIN for the lockOperationUpdate screen.
-     * Admin set lockOperationUpdate operation for the specific device,If the device is in above scenario, admin will be notified.since
+     * Admin set lockOperationUpdate operation for the specific device,If the device is in above scenario,
+     * admin will be notified.since
      * admin have to set lockOperationUpdate reset operation to the device so that automatically generate PIN value for the
      * lockOperationUpdate screen.
      *
