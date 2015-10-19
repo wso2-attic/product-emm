@@ -77,24 +77,22 @@ $("a.invite-user-link").click(function () {
     showPopup();
 
     $("a#invite-user-yes-link").click(function () {
-        $.ajax({
-            type : "POST",
-            url : inviteUserAPI,
-            contentType : "application/json",
-            data : JSON.stringify(usernameList),
-            success : function () {
+        invokerUtil.post(
+            inviteUserAPI,
+            usernameList,
+            function () {
                 $(modalPopupContent).html($('#invite-user-success-content').html());
                 $("a#invite-user-success-link").click(function () {
                     hidePopup();
                 });
             },
-            error : function (data) {
+            function () {
                 $(modalPopupContent).html($('#invite-user-error-content').html());
                 $("a#invite-user-error-link").click(function () {
                     hidePopup();
                 });
             }
-        });
+        );
     });
 
     $("a#invite-user-cancel-link").click(function () {
@@ -118,7 +116,6 @@ $("a.remove-user-link").click(function () {
         invokerUtil.delete(
             removeUserAPI,
             null,
-
             function (data) {
                 if (data["statusCode"] == 200) {
                     $("#" + username).remove();
