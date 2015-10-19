@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
 
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlGenerator;
@@ -44,7 +45,7 @@ public class SyncmlParserTest {
     private static Log log = LogFactory.getLog(SyncmlParser.class);
 
 	@Test
-	public void parseSyncML() throws IOException, WindowsOperationException {
+	public void parseSyncML() throws IOException, WindowsOperationException, SyncmlMessageFormatException {
 
 		SyncmlParser syncmlParser = new SyncmlParser();
 		File syncmlTestMessage = new File(getClass().getClassLoader().getResource("syncml-test-message.xml").getFile());
