@@ -100,7 +100,7 @@ public class WindowsAPIUtils {
         }
         return userStoreManager;
     }
-    
+
     public static NotificationManagementService getNotificationManagementService() {
         NotificationManagementService notificationManagementService;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();

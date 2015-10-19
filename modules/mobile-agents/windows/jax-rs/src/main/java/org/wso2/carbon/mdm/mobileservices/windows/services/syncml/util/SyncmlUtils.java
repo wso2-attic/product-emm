@@ -22,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
  * Class for generate Device object from the received data.
@@ -39,17 +38,9 @@ public class SyncmlUtils {
     public static DeviceManagementProviderService getDeviceManagementService() {
         try {
             PrivilegedCarbonContext context = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-<<<<<<< HEAD
-            context.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-            deviceManagementService =
-                    (DeviceManagementProviderService) context.getOSGiService(DeviceManagementProviderService.class,
-                            null);
-            return deviceManagementService;
-=======
+
             return (DeviceManagementProviderService) context.getOSGiService(DeviceManagementProviderService.class,
-                                                                             null);
->>>>>>> fdcc284f0b3538bbac92f04dd2d25a4474941d36
+                    null);
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
