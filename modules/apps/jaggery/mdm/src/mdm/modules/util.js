@@ -142,7 +142,6 @@ var util = function () {
         if (scope) {
             url = url + "&scope=" + scope
         }
-        log.info(url);
         xhr.send(url);
         delete password, delete clientSecret, delete encodedClientKeys;
         var tokenPair = {};
