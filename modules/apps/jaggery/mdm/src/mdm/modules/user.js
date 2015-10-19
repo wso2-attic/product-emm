@@ -396,14 +396,9 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-<<<<<<< HEAD
-            var url = mdmProps["httpsURL"] +"/mdm-admin/users/" + username + "/roles";
-            return privateMethods.callBackend(url, constants.HTTP_GET);
-=======
             var url = mdmProps["httpsURL"] + "/mdm-admin/users/" + username + "/roles";
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
             return response;
->>>>>>> bec9f06b1903781fa457e781f3810188b9332ddb
         } catch (e) {
             throw e;
         } finally {

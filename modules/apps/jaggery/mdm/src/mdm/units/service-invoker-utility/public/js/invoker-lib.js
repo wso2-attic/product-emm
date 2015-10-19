@@ -26,14 +26,15 @@ var invokerUtil = function () {
             url: "/mdm/token",
             type: "GET",
             success: function () {
-                console,log("Hureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                successCallback
+                console.log("Hureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                successCallback ();
             }
         }).fail(errorCallback);
     }
     function call(method, url, payload, successCallback, errorCallback){
         var accessToken = Cookies.get('accessToken');
         var execute = function () {
+            console.log("Execute");
             var data = {
                 url: url,
                 type: method,
