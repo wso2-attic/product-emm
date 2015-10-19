@@ -142,7 +142,7 @@ public class Operation {
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
         ArrayList<DeviceIdentifier> deviceIdentifiers;
         try {
-            appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            appManagerConnector = MDMAPIUtils.getAppManagementService();
             MobileApp mobileApp = applicationWrapper.getApplication();
 
             if (applicationWrapper.getDeviceIdentifiers() != null) {
@@ -175,7 +175,7 @@ public class Operation {
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
         ArrayList<DeviceIdentifier> deviceIdentifiers;
         try {
-            appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            appManagerConnector = MDMAPIUtils.getAppManagementService();
             MobileApp mobileApp = applicationWrapper.getApplication();
 
             if (applicationWrapper.getDeviceIdentifiers() != null) {

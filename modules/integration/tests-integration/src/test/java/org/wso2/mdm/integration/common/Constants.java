@@ -26,6 +26,23 @@ public final class Constants {
     public static final String DEVICE_ID="1234";
     public static final String AUTOMATION_CONTEXT="MDM";
     public static final String APPLICATION_JSON = "application/json";
+    public static final String APPLICATION_URL_ENCODED = "application/x-www-form-urlencoded";
+    public static final String OAUTH_CLIENT_ID = "client_id";
+    public static final String OAUTH_CLIENT_SECRET = "client_secret";
+    public static final String OAUTH_ACCESS_TOKEN = "access_token";
+
+    public static final class DynamicClientAuthentication {
+        private DynamicClientAuthentication() {
+            throw new AssertionError();
+        }
+        private static StringBuffer dynamicClientPayloadBuffer = new StringBuffer();
+        public static final String DYNAMIC_CLIENT_REGISTRATION_PAYLOAD = dynamicClientPayloadBuffer.append("{\"clientName\":").
+                append(" \"device\",\"owner\": \"admin\",\"grantType\": \"password\",\"callbackUrl\": \"www.google.lk\"," +
+                       "\"saasApp\": \"" + true + "\"}").toString();
+        public static final String REGISTRATION_ENDPOINT = "/dynamic-client-web/register";
+        public static final String TOKEN_ENDPOINT = "/oauth2/token";
+        public static final String OAUTH_TOKEN_PAYLOAD = "grant_type=password&username=admin&password=admin";
+    }
 
 	public static final class Enrollment {
 		private Enrollment() {
