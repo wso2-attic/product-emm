@@ -29,7 +29,7 @@ var util = function () {
             "clientName": "mdm",
             "tokenScope": "admin",
             "owner": mdmProps.adminUser,
-            "grantType": "urn:ietf:params:oauth:grant-type:password"
+            "grantType": "urn:ietf:params:oauth:grant-type:password",
             "saasApp" :true
         };
         var xhr = new XMLHttpRequest();
