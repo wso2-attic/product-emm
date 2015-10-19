@@ -30,6 +30,7 @@ var util = function () {
             "tokenScope": "admin",
             "owner": mdmProps.adminUser,
             "grantType": "urn:ietf:params:oauth:grant-type:password"
+            "saasApp" :true
         };
         var xhr = new XMLHttpRequest();
         var tokenEndpoint = mdmProps.dynamicClientRegistrationEndPoint;

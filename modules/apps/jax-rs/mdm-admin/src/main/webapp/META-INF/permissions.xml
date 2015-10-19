@@ -41,7 +41,7 @@
     <Permission>
         <name>Get new notifications</name>
         <path>/</path>
-        <url>/mdm-admin/notifications/*</url>
+        <url>/notifications/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
