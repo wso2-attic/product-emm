@@ -80,20 +80,17 @@ $(document).ready(function () {
         }
 
         var updatePolicyAPI = "/mdm-admin/policies/priorities";
-
-        $.ajax({
-            type : "PUT",
-            url : updatePolicyAPI,
-            contentType : "application/json",
-            data : JSON.stringify(newPolicyPriorityList),
-            success : function () {
+        invokerUtil.put(
+            updatePolicyAPI,
+            newPolicyPriorityList,
+            function () {
                 $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
                 showPopup();
                 $("a#save-policy-priorities-success-link").click(function () {
                     hidePopup();
                 });
             },
-            error : function (data) {
+            function () {
                 $("#save-policy-priorities-error-content").find(".message-from-server").html(
                     "Message From Server  :  " + data["statusText"]);
                 $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
@@ -102,7 +99,8 @@ $(document).ready(function () {
                     hidePopup();
                 });
             }
-        });
+        );
+        
     });
 
     $(applyChangesBtn).click(function () {
