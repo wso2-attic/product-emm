@@ -50,6 +50,7 @@ public class AccessTokenHandler extends Activity {
     private static final String TAG = "AccessTokenHandler";
     private static final String USERNAME_LABEL = "username";
     private static final String PASSWORD_LABEL = "password";
+    private static final String TENANT_DOMAIN_LABEL = "tenantDomain";
     private static final String COLON = ":";
     private static final DateFormat dateFormat =
             new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
@@ -77,6 +78,7 @@ public class AccessTokenHandler extends Activity {
             request_params.put(Constants.GRANT_TYPE, Constants.GRANT_TYPE_PASSWORD);
             request_params.put(USERNAME_LABEL, info.getUsername());
             request_params.put(PASSWORD_LABEL, info.getPassword());
+
             EndPointInfo endPointInfo = new EndPointInfo();
             endPointInfo.setEndPoint(info.getTokenEndPoint());
             endPointInfo.setHttpMethod(HTTP_METHODS.POST);

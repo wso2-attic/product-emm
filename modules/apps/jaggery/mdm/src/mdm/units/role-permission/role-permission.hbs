@@ -1,0 +1,49 @@
+{{#zone "main"}}
+    <!-- content/body -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- content -->
+            <div id="role-create-form" class="container col-centered wr-content">
+                <div class="wr-form">
+                    <p class="page-sub-title">Change Role permissions</p>
+                    <p>Please note that * sign represents required fields of data.</p>
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div id="role-create-error-msg" class="alert alert-danger hidden" role="alert">
+                                <i class="icon fw fw-error"></i><span></span>
+                            </div>
+                            <div id="permissionList" class="well" data-currentrole="{{roleName}}"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <button id="update-permissions-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Update Role Permissions&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+            </div>
+            <div id="role-created-msg" class="container col-centered wr-content hidden">
+                <div class="wr-form">
+                    <p class="page-sub-title">Permissions were assigned to the role successfully.</p>
+                    <br>Please click <b>"Add Another Role"</b>, if you wish to add another role or click
+                    <b>"View Role List"</b> to complete the process and go back to the role list.
+                    <hr />
+                    <button class="wr-btn" onclick="window.location.href='/mdm/roles'">View Role List</button>
+                    <a href="/mdm/roles/add-role" class="cu-btn-inner">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-add fw-stack-1x"></i>
+                        </span>
+                        Add Another Role
+                    </a>
+                </div>
+            </div>
+            <!-- /content -->
+        </div>
+    </div>
+    <!-- /content/body -->
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script id="list-partial" src="{{self.publicURL}}/templates/list-partial.hbs" type="text/x-handlebars-template" ></script>
+    <script id="tree-template" src="{{self.publicURL}}/templates/tree-template.hbs" type="text/x-handlebars-template" ></script>
+    <script src="{{self.publicURL}}/js/bottomJs.js"></script>
+{{/zone}}
+

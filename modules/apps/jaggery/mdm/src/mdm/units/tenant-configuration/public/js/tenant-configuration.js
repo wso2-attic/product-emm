@@ -45,7 +45,8 @@ var notifierTypeConstants = {
 // Constants to define platform types available
 var platformTypeConstants = {
     "ANDROID": "android",
-    "IOS": "ios"
+    "IOS": "ios",
+    "WINDOWS": "windows"
 };
 
 var responseCodes = {
@@ -79,7 +80,13 @@ var configParams = {
     "GENERAL_EMAIL_USERNAME": "emailUsername",
     "GENERAL_EMAIL_PASSWORD": "emailPassword",
     "GENERAL_EMAIL_SENDER_ADDRESS": "emailSender",
-    "GENERAL_EMAIL_TEMPLATE": "emailTemplate"
+    "GENERAL_EMAIL_TEMPLATE": "emailTemplate",
+    "COMMON_NAME": "commonName",
+    "KEYSTORE_PASSWORD": "keystorePassword",
+    "PRIVATE_KEY_PASSWORD": "privateKeyPassword",
+    "BEFORE_EXPIRE": "beforeExpire",
+    "AFTER_EXPIRE": "afterExpire",
+    "WINDOWS_EULA": "windowsLicense"
 };
 
 $(document).ready(function () {
@@ -98,6 +105,7 @@ $(document).ready(function () {
     var getAndroidConfigAPI = "/mdm-android-agent/configuration";
     var getGeneralConfigAPI = "/mdm-admin/configuration";
     var getIosConfigAPI = "/ios/configuration";
+    var getWindowsConfigAPI = "/mdm-windows-agent/services/configuration";
 
     /**
      * Following requests would execute
@@ -157,6 +165,8 @@ $(document).ready(function () {
                         $("input#email-config-sender-email").val(config.value);
                     } else if(config.name == configParams["GENERAL_EMAIL_TEMPLATE"]){
                         $("input#email-config-template").val(config.value);
+                    } else if(config.name == configParams["NOTIFIER_FREQUENCY"]){
+                        $("input#monitoring-config-frequency").val(config.value);
                     }
                 }
             }
@@ -198,6 +208,39 @@ $(document).ready(function () {
                         $("input#ios-org-display-name").val(config.value);
                     } else if(config.name == configParams["IOS_EULA"]){
                         $("#ios-eula").val(config.value);
+                    }
+                }
+            }
+
+        }, function () {
+
+        }
+    );
+
+    invokerUtil.get(
+        getWindowsConfigAPI,
+
+        function (data) {
+
+            if (data != null && data.configuration != null) {
+                for (var i = 0; i < data.configuration.length; i++) {
+                    var config = data.configuration[i];
+                    if(config.name == configParams["NOTIFIER_FREQUENCY"]){
+                        $("input#windows-config-notifier-frequency").val(config.value);
+                    } else if(config.name == configParams["COMMON_NAME"]){
+                        $("input#windows-config-mdm-cn").val(config.value);
+                    } else if(config.name == configParams["KEYSTORE_PASSWORD"]){
+                        $("input#windows-config-mdm-keystore-password").val(config.value);
+                    } else if(config.name == configParams["PRIVATE_KEY_PASSWORD"]){
+                        $("input#windows-config-mdm-pk-password").val(config.value);
+                    } else if(config.name == configParams["BEFORE_EXPIRE"]){
+                        $("input#windows-config-before-expire").val(config.value);
+                    } else if(config.name == configParams["MDM_CERT_NAME"]){
+                        $("#windows-mdm-cert-file-name").html(config.value);
+                    } else if(config.name == configParams["AFTER_EXPIRE"]){
+                        $("input#windows-config-after-expire").val(config.value);
+                    } else if(config.name == configParams["WINDOWS_EULA"]){
+                        $("#windows-eula").val(config.value);
                     }
                 }
             }
@@ -326,6 +369,7 @@ $(document).ready(function () {
      * on General tenant configuration page in WSO2 EMM Console.
      */
     $("button#save-general-btn").click(function() {
+        var notifierFrequency = $("input#monitoring-config-frequency").val();
         var emailHost = $("input#email-config-host").val();
         var emailPort = $("input#email-config-port").val();
         var emailUsername = $("input#email-config-username").val();
@@ -338,7 +382,13 @@ $(document).ready(function () {
         if (!emailHost) {
             $(errorMsg).text("Email Host is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!emailPort) {
+        } else if (!notifierFrequency) {
+            $(errorMsg).text("Monitoring frequency is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!$.isNumeric(notifierFrequency)) {
+            $(errorMsg).text("Provided monitoring frequency is invalid. It must be a number.");
+            $(errorMsgWrapper).removeClass("hidden");
+        }else if (!emailPort) {
             $(errorMsg).text("Email Port is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailUsername) {
@@ -357,6 +407,12 @@ $(document).ready(function () {
 
             var addConfigFormData = {};
             var configList = new Array();
+
+            var monitorFrequency = {
+                "name": configParams["NOTIFIER_FREQUENCY"],
+                "value": notifierFrequency,
+                "contentType": "text"
+            };
 
             var host = {
                 "name": configParams["GENERAL_EMAIL_HOST"],
@@ -394,6 +450,7 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            configList.push(monitorFrequency);
             configList.push(host);
             configList.push(port);
             configList.push(username);
@@ -444,7 +501,7 @@ $(document).ready(function () {
     var fileNameAPNSCert = "";
     var invalidFormatAPNSCert = false;
 
-    $( fileInputMDMCert).change(function() {
+    $(fileInputMDMCert).change(function() {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");
@@ -471,7 +528,7 @@ $(document).ready(function () {
         }
     });
 
-    $( fileInputAPNSCert).change(function() {
+    $(fileInputAPNSCert).change(function() {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");
@@ -661,6 +718,190 @@ $(document).ready(function () {
         addConfigFormData.configuration = configList;
 
         var addConfigAPI = "/ios/configuration";
+
+        invokerUtil.post(
+            addConfigAPI,
+            addConfigFormData,
+            function (data) {
+                if (data.responseCode == responseCodes["CREATED"]) {
+                    $("#config-save-form").addClass("hidden");
+                    $("#record-created-msg").removeClass("hidden");
+                } else if (data == 500) {
+                    $(errorMsg).text("Exception occurred at backend.");
+                } else if (data == 400) {
+                    $(errorMsg).text("Configurations cannot be empty.");
+                } else {
+                    $(errorMsg).text("An unexpected error occurred.");
+                }
+
+                $(errorMsgWrapper).removeClass("hidden");
+            }, function () {
+                $(errorMsg).text("An unexpected error occurred.");
+                $(errorMsgWrapper).removeClass("hidden");
+            }
+        );
+
+    });
+
+    var errorMsgWrapper = "#windows-config-error-msg";
+    var errorMsg = "#windows-config-error-msg span";
+    var fileTypes = ['jks'];
+    var notSupportedError = false;
+
+    var base64WindowsMDMCert = "";
+    var fileInputWindowsMDMCert = $('#windows-config-mdm-certificate');
+    var fileNameWindowsMDMCert = "";
+    var invalidFormatWindowsMDMCert = false;
+
+    $(fileInputWindowsMDMCert).change(function() {
+
+        if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+            $(errorMsg).text("The File APIs are not fully supported in this browser.");
+            $(errorMsgWrapper).removeClass("hidden");
+            notSupportedError = true;
+            return;
+        }
+
+        var file = fileInputWindowsMDMCert[0].files[0];
+        fileNameWindowsMDMCert = file.name;
+        var extension = file.name.split('.').pop().toLowerCase(),
+            isSuccess = fileTypes.indexOf(extension) > -1;
+
+        if (isSuccess) {
+            var fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                base64WindowsMDMCert = event.target.result;
+            };
+            fileReader.readAsDataURL(file);
+            invalidFormatWindowsMDMCert = false;
+        } else {
+            base64MDMCert = "";
+            invalidFormatWindowsMDMCert = true;
+        }
+    });
+
+    $("button#save-windows-btn").click(function() {
+
+        var notifierFrequency = $("#windows-config-notifier-frequency").val();
+        var commonName = $("#windows-config-mdm-cn").val();
+        var keystorePassword = $("#windows-config-mdm-keystore-password").val();
+        var privateKeyPassword = $("#windows-config-mdm-pk-password").val();
+        var beforeExpire = $("#windows-config-before-expire").val();
+        var afterExpire = $("#windows-config-after-expire").val();
+        var windowsLicense = tinymce.get('windows-eula').getContent();
+
+        if (!notifierFrequency) {
+            $(errorMsg).text("Notifier Frequency is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!commonName) {
+            $(errorMsg).text("Common Name is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!keystorePassword) {
+            $(errorMsg).text("Keystore Password is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!privateKeyPassword) {
+            $(errorMsg).text("Private Key Password is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!beforeExpire) {
+            $(errorMsg).text("Before days to expire is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!afterExpire) {
+            $(errorMsg).text("After days to expire is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!windowsLicense) {
+            $(errorMsg).text("License is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if(notSupportedError) {
+            $(errorMsg).text("The File APIs are not fully supported in this browser.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (invalidFormatWindowsMDMCert) {
+            $(errorMsg).text("MDM certificate needs to be in jks format.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (base64WindowsMDMCert == '') {
+            $(errorMsg).text("MDM certificate is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if(!$.isNumeric(beforeExpire)){
+            $(errorMsg).text("Provided Before days to expire is invalid. It must be a number.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if(!$.isNumeric(afterExpire)){
+            $(errorMsg).text("Provided After days to expire is invalid. It must be a number.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if(!$.isNumeric(notifierFrequency)){
+            $(errorMsg).text("Provided Notifier frequency is invalid. It must be a number.");
+            $(errorMsgWrapper).removeClass("hidden");
+        }
+
+        var addConfigFormData = {};
+        var configList = new Array();
+
+        var paramNotifierFrequency = {
+            "name": configParams["NOTIFIER_FREQUENCY"],
+            "value": notifierFrequency,
+            "contentType": "text"
+        };
+
+        var configCommonName = {
+            "name": configParams["COMMON_NAME"],
+            "value": commonName,
+            "contentType": "text"
+        };
+
+        var configKeystorePassword = {
+            "name": configParams["KEYSTORE_PASSWORD"],
+            "value": keystorePassword,
+            "contentType": "text"
+        };
+
+        var configPrivateKeyPassword = {
+            "name": configParams["PRIVATE_KEY_PASSWORD"],
+            "value": privateKeyPassword,
+            "contentType": "text"
+        };
+
+        var configBeforeExpire = {
+            "name": configParams["BEFORE_EXPIRE"],
+            "value": beforeExpire,
+            "contentType": "text"
+        };
+
+        var configAfterExpire = {
+            "name": configParams["AFTER_EXPIRE"],
+            "value": afterExpire,
+            "contentType": "text"
+        };
+
+        var paramBase64MDMCert = {
+            "name": configParams["MDM_CERT"],
+            "value": base64WindowsMDMCert,
+            "contentType": "text"
+        };
+
+        var MDMCertName = {
+            "name": configParams["MDM_CERT_NAME"],
+            "value": fileNameWindowsMDMCert,
+            "contentType": "text"
+        };
+
+        var windowsEula = {
+            "name": configParams["WINDOWS_EULA"],
+            "value": windowsLicense,
+            "contentType": "text"
+        };
+
+        configList.push(paramNotifierFrequency);
+        configList.push(configCommonName);
+        configList.push(configKeystorePassword);
+        configList.push(configPrivateKeyPassword);
+        configList.push(configBeforeExpire);
+        configList.push(configAfterExpire);
+        configList.push(paramBase64MDMCert);
+        configList.push(MDMCertName);
+        configList.push(windowsEula);
+
+        addConfigFormData.type = platformTypeConstants["WINDOWS"];
+        addConfigFormData.configuration = configList;
+
+        var addConfigAPI = "/mdm-windows-agent/services/configuration";
 
         invokerUtil.post(
             addConfigAPI,

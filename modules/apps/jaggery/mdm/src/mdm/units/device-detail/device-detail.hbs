@@ -58,6 +58,7 @@
                     <div class="media-left col-xs-12 col-sm-2 col-md-2 col-lg-2">
                         <ul class="list-group" role="tablist">
                             <li class="active"><a class="list-group-item" href="#device_details" role="tab" data-toggle="tab" aria-controls="device_details">Device Details</a></li>
+                            <li><a class="list-group-item" href="#policy_compliance" role="tab" data-toggle="tab" aria-controls="policy_compliance">Policy Compliance</a></li>
                             <li><a class="list-group-item" href="#device_location" role="tab" data-toggle="tab" aria-controls="device_location">Device Location</a></li>
                             <li><a class="list-group-item" href="#installed_applications" role="tab" data-toggle="tab" aria-controls="installed_applications">Installed Applications</a></li>
                             <li><a class="list-group-item" href="#event_log" role="tab" data-toggle="tab" aria-controls="event_log">Operations Log</a></li>
@@ -109,12 +110,23 @@
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">EXTERNAL STORAGE</div>
                                                         <div>
-                                                            <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                                            <div class="tile-icon"><i class="fw fw-usb-drive"></i></div>
                                                             <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}} GB Free</span></div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default tab-pane" id="policy_compliance" role="tabpanel" aria-labelledby="policy_compliance">
+                                    <div class="panel-heading">Policy Compliance</div>
+                                    <div class="panel-body">
+                                        <div id="policy-list-container">
+                                            <div class="panel-body">
+                                                Not available yet
+                                            </div>
+                                            <br class="c-both" />
                                         </div>
                                     </div>
                                 </div>
@@ -127,18 +139,17 @@
                                         <div id = "map-error" class="panel-body">
                                             Not available yet
                                         </div>
+                                        <br class="c-both" />
                                     </div>
                                 </div>
                                 <div class="panel panel-default tab-pane" id="installed_applications" role="tabpanel" aria-labelledby="installed_applications">
                                     <div class="panel-heading">Installed Applications</div>
                                     <div class="panel-body">
-                                        <div class="wr-app-listing">
-                                            <ul class="thumbnail-list">
-
-                                            </ul>
-                                        </div>
-                                        <div class="panel-body">
-                                            Not available yet
+                                        <div id="applications-list-container">
+                                            <div class="panel-body">
+                                                Not available yet
+                                            </div>
+                                            <br class="c-both" />
                                         </div>
                                     </div>
                                 </div>
@@ -164,7 +175,10 @@
 
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script id="policy-view"  src="{{self.publicURL}}/templates/policy-compliance.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
+    <script id="applications-list"  src="{{self.publicURL}}/templates/applications-list.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script id="operations-log"  src="{{self.publicURL}}/templates/operations-log.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/device-detail.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script src="{{self.publicURL}}/js/load-map.js"></script>
 {{/zone}}

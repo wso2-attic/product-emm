@@ -8,86 +8,115 @@
 function inputIsValid(regExp, inputString) {
     return regExp.test(inputString);
 }
+function formatRepo (user) {
+    if (user.loading) {
+        return user.text
+    }
+    if (!user.username){
+        return;
+    }
+    var markup = '<div class="clearfix">' +
+        '<div clas="col-sm-8">' +
+        '<div class="clearfix">' +
+        '<div class="col-sm-3">' + user.username + '</div>';
+    if (user.firstname) {
+        markup +=  '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + user.firstname + '</div>';
+    }
+    if (user.emailAddress) {
+        markup += '<div class="col-sm-2"><i class="fa fa-star"></i> ' + user.emailAddress + '</div></div>';
+    }
+    markup += '</div></div>';
+    return markup;
+}
 
-/**
- * Checks if an email address has the valid format or not.
- *
- * @param email Email address
- * @returns {boolean} true if email has the valid format, otherwise false.
- */
-function emailIsValid(email) {
-    var regExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return regExp.test(email);
+function formatRepoSelection (user) {
+    return user.username || user.text;;
 }
 
 $(document).ready(function () {
-    $("select.select2[multiple=multiple]").select2({
-        tags : true
+
+    $("#users").select2({
+        multiple:true,
+        tags: true,
+        ajax: {
+            url: "/mdm-admin/users",
+            dataType: 'json',
+            delay: 250,
+            id: function(user){ return user.username; },
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            processResults: function (data, page) {
+                var newData = [];
+                $.each(data.responseContent, function (index, value) {
+                    value.id = value.username;
+                    newData.push(value);
+                });
+                return {
+                    results: newData
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        minimumInputLength: 1,
+        templateResult: formatRepo, // omitted for brevity, see the source of this page
+        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
     });
 
     /**
      * Following click function would execute
-     * when a user clicks on "Add User" button
-     * on Add User page in WSO2 MDM Console.
+     * when a user clicks on "Add Role" button
+     * on Add Role page in WSO2 MDM Console.
      */
-    $("button#add-user-btn").click(function() {
-        var username = $("input#username").val();
-        var firstname = $("input#firstname").val();
-        var lastname = $("input#lastname").val();
-        var emailAddress = $("input#emailAddress").val();
-        var roles = $("select#roles").val();
+    $("button#add-role-btn").click(function() {
+        var roleName = $("input#rolename").val();
+        var domain = $("#domain").val();
+        var users = $("#users").val();
 
-        var errorMsgWrapper = "#user-create-error-msg";
-        var errorMsg = "#user-create-error-msg span";
-        if (!username) {
-            $(errorMsg).text("Username is a required field. It cannot be empty.");
+        var errorMsgWrapper = "#role-create-error-msg";
+        var errorMsg = "#role-create-error-msg span";
+        if (!roleName) {
+            $(errorMsg).text("Role name is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, username)) {
-            $(errorMsg).text("Provided username is invalid. Please check.");
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, roleName)) {
+            $(errorMsg).text("Provided role name is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!firstname) {
-            $(errorMsg).text("Firstname is a required field. It cannot be empty.");
+        } else if (!domain) {
+            $(errorMsg).text("Domain is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"0-9]{1,30}$/, firstname)) {
-            $(errorMsg).text("Provided firstname is invalid. Please check.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!lastname) {
-            $(errorMsg).text("Lastname is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>.,'"0-9]{1,30}$/, lastname)) {
-            $(errorMsg).text("Provided lastname is invalid. Please check.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!emailAddress) {
-            $(errorMsg).text("Email is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!emailIsValid(emailAddress)) {
-            $(errorMsg).text("Provided email is invalid. Please check.");
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"0-9]{1,30}$/, domain)) {
+            $(errorMsg).text("Provided domain is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
-            var addUserFormData = {};
+            var addRoleFormData = {};
 
-            addUserFormData.username = username;
-            addUserFormData.firstname = firstname;
-            addUserFormData.lastname = lastname;
-            addUserFormData.emailAddress = emailAddress;
-            addUserFormData.roles = roles;
+            addRoleFormData.roleName = roleName;
 
-            var addUserAPI = "/mdm-admin/users";
+            if (domain != "PRIMARY"){
+                addRoleFormData.roleName = domain + "/" + roleName;
+            }
+            if (users == null){
+                users = [];
+            }
+            addRoleFormData.users = users;
+
+            var addRoleAPI = "/mdm-admin/roles";
 
             invokerUtil.post(
-                addUserAPI,
-                addUserFormData,
-                function (data) {
-                    if (data["statusCode"] == 201) {
+                addRoleAPI,
+                addRoleFormData,
+                function (data, status, jqXHR) {
+                    if (jqXHR.status == 201) {
                         // Clearing user input fields.
-                        $("input#username").val("");
-                        $("input#firstname").val("");
-                        $("input#lastname").val("");
-                        $("input#email").val("");
-                        $("select#roles").select2("val", "");
+                        $("input#rolename").val("");
+                        $("#domain").val("");
                         // Refreshing with success message
-                        $("#user-create-form").addClass("hidden");
-                        $("#user-created-msg").removeClass("hidden");
+                        $("#role-create-form").addClass("hidden");
+                        $("#role-created-msg").removeClass("hidden");
                     }
                 }, function () {
                     $(errorMsg).text("An unexpected error occurred. Please try again later.");

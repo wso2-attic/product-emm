@@ -17,10 +17,8 @@
  */
 package org.wso2.mdm.integration.device.enrollment;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import junit.framework.Assert;
+import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
@@ -31,7 +29,7 @@ import org.wso2.mdm.integration.common.RestClient;
 import org.wso2.mdm.integration.common.TestBase;
 
 /**
- * This contains testing of Android device enrollment which is necessery to run prior to all other Android related
+ * This contains testing of Android device enrollment which is necessary to run prior to all other Android related
  * tests.
  */
 public class AndroidEnrollment extends TestBase {
@@ -40,17 +38,14 @@ public class AndroidEnrollment extends TestBase {
     @BeforeClass(alwaysRun = true, groups = { Constants.Enrollment.ANDROID_ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
-        client = new RestClient(backendURL);
+        client = new RestClient(backendURL, Constants.APPLICATION_JSON);
     }
 
     @Test(description = "Test an Android device enrollment.")
-    public void testAndroidEnrollment() throws Exception {
+    public void testEnrollment() throws Exception {
         HttpResponse response = client.post(Constants.Enrollment.ENROLLMENT_ENDPOINT,
                                             Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_PAYLOAD);
-        Assert.assertEquals(response.getResponseCode(), Constants.SUCCESS_CODE);
-        JsonElement jsonElement =
-                new JsonParser().parse((String) Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED);
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
         AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED,
                                       response.getData().toString(), true);
     }

@@ -56,6 +56,7 @@
                 <exclude>**/lib/httpmime*</exclude>
                 <exclude>**/lib/encoder*</exclude>
                 <exclude>**/plugins/jaxb*</exclude>
+                <exclude>**/src/repository/conf/security/authenticators.xml</exclude>
             </excludes>
         </fileSet>
 
@@ -144,16 +145,20 @@
                 <include>**/process/</include>
                 <include>**/uuid/</include>
                 <include>**/i18n/</include>
+                <include>**/ws/</include>
             </includes>
         </fileSet>
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
             <includes>
-                <!--include>**/api-manager.xml</include-->
-                <include>**/security/</include>
+                <include>**sso-sp-config.properties</include>
+                <!--<include>*/**</include>-->
                 <!-- <include>**/emm-config.xml</include>-->
             </includes>
+            <excludes>
+                <exclude>authenticators.xml</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <directory>
@@ -255,6 +260,16 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
+
+        <!-- Copying authenticators.xml-->
+        <fileSet>
+            <directory>src/repository/conf/security/</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+            <includes>
+                <include>authenticators.xml</include>
+            </includes>
+        </fileSet>
+
 
         <!-- Copying Device Management related dbscripts -->
         <fileSet>
@@ -750,6 +765,16 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/
             </outputDirectory>
             <filtered>false</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!-- Copying authenticators.xml -->
+        <file>
+            <source>
+                src/repository/conf/security/authenticators.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+            <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
 

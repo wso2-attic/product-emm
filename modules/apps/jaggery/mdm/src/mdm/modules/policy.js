@@ -26,6 +26,7 @@ policyModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
     var mdmProps = require('/config/mdm-props.js').config();
+    var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
 
     var publicMethods = {};
     var privateMethods = {};
@@ -42,15 +43,9 @@ policyModule = function () {
         var utility = require('/modules/utility.js')["utility"];
         try {
             utility.startTenantFlow(carbonUser);
-
             var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", url);
-            xhr.send();
-
-            var response = {};
-            if (xhr.status == 200 && xhr.readyState == 4) {
-                var responsePayload = parse(xhr.responseText);
+            var response = serviceInvokers.XMLHttp.get(url,function(responsePayload){
+                var response = {};
                 var policyListFromRestEndpoint = responsePayload["responseContent"];
                 var policyListToView = [];
                 var i, policyObjectFromRestEndpoint, policyObjectToView;
@@ -68,19 +63,30 @@ policyModule = function () {
                         getElementsInAString(policyObjectFromRestEndpoint["roles"]);
                     policyObjectToView["users"] = privateMethods.
                         getElementsInAString(policyObjectFromRestEndpoint["users"]);
-                    policyObjectToView["compliance"] = policyObjectFromRestEndpoint["Compliance"];
+                    policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
+
+                    if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == true) {
+                        policyObjectToView["status"] = "Active/Updated";
+                    } else if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == false) {
+                        policyObjectToView["status"] = "Active";
+                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == true) {
+                        policyObjectToView["status"] = "Inactive/Updated";
+                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == false) {
+                        policyObjectToView["status"] = "Inactive";
+                    }
                     // push view-objects to list
                     policyListToView.push(policyObjectToView);
                 }
                 // generate response
-                response["status"] = "success";
-                response["content"] = policyListToView;
+                response.status = "success";
+                response.content = policyListToView;
                 return response;
-            } else {
-                // generate response
-                response["status"] = "error";
+            },function(){
+                var response = {};
+                response.status = "error";
                 return response;
-            }
+            });
+            return response;
         } catch (e) {
             throw e;
         } finally {

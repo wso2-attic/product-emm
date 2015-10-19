@@ -10,12 +10,12 @@ function onRequest(context) {
         var deviceModule = require("/modules/device.js").deviceModule;
         var device = deviceModule.viewDevice(deviceType, deviceId);
 
-        if (device){
+        if (device) {
             var viewModel = {};
             var deviceInfo = device.properties.DEVICE_INFO;
-            if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0){
+            if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0) {
                 deviceInfo = parse(stringify(deviceInfo));
-                if (device.type == "ios"){
+                if (device.type == "ios") {
                     viewModel.imei = device.properties.IMEI;
                     viewModel.phoneNumber = deviceInfo.PhoneNumber;
                     viewModel.udid = deviceInfo.UDID;
@@ -25,8 +25,8 @@ function onRequest(context) {
                     viewModel.DeviceCapacityUsed = Math.round((viewModel.DeviceCapacity
                         - viewModel.AvailableDeviceCapacity) * 100) / 100;
                     viewModel.DeviceCapacityPercentage = Math.round(viewModel.DeviceCapacityUsed
-                        / viewModel.DeviceCapacity * 10000) /100;
-                }else if(device.type == "android") {
+                        / viewModel.DeviceCapacity * 10000) / 100;
+                } else if (device.type == "android") {
                     viewModel.imei = device.properties.IMEI;
                     viewModel.model = device.properties.DEVICE_MODEL;
                     viewModel.vendor = device.properties.VENDOR;
@@ -46,14 +46,14 @@ function onRequest(context) {
                     deviceInfo = info;
                     viewModel.BatteryLevel = deviceInfo.BATTERY_LEVEL;
                     viewModel.internal_memory.FreeCapacity = Math.round((deviceInfo.INTERNAL_TOTAL_MEMORY -
-                    deviceInfo.INTERNAL_AVAILABLE_MEMORY) * 100) / 100;
+                        deviceInfo.INTERNAL_AVAILABLE_MEMORY) * 100) / 100;
                     viewModel.internal_memory.DeviceCapacityPercentage = Math.round(deviceInfo.INTERNAL_AVAILABLE_MEMORY
                         / deviceInfo.INTERNAL_TOTAL_MEMORY * 10000) / 100;
                     viewModel.external_memory.FreeCapacity = Math.round((deviceInfo.EXTERNAL_TOTAL_MEMORY -
                         deviceInfo.EXTERNAL_AVAILABLE_MEMORY) * 100) / 100;
                     viewModel.external_memory.DeviceCapacityPercentage = Math.round(deviceInfo.EXTERNAL_AVAILABLE_MEMORY
-                        /deviceInfo.EXTERNAL_TOTAL_MEMORY * 10000) /100;
-                } else if(device.type == "TemperatureController"){
+                        / deviceInfo.EXTERNAL_TOTAL_MEMORY * 10000) / 100;
+                } else if (device.type == "TemperatureController") {
                     viewModel.system = device.properties.IMEI;
                     viewModel.machine = device.properties.DEVICE_MODEL;
                     viewModel.vendor = device.properties.VENDOR;
@@ -64,8 +64,9 @@ function onRequest(context) {
             }
         }
         context.device = device;
-    } else {
-        response.sendError(404);
+        //} else {
+        //    response.sendError(404);
+        //}
+        return context;
     }
-    return context;
 }

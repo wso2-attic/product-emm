@@ -21,6 +21,7 @@ var log = new Log("/modules/enrollments/ios/agent-check.jag");
 
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
 
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
@@ -40,25 +41,17 @@ if (platform != "iOS") {
         response["content"] = {"deviceID" : null};
     } else {
         var deviceCheckURL = mdmProps["iOSAPIRoot"] + "device/deviceid";
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", deviceCheckURL);
         var challengeToken = session.get("iOSChallengeToken");
         var inputs = {"challengeToken" : challengeToken};
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("Accept", "application/json");
-        xhr.send(stringify(inputs));
-
-        if (xhr.status == 200) {
-            var responseObject = parse(xhr["responseText"]);
+        serviceInvokers.XMLHttp.post(deviceCheckURL, inputs, function (responseObject) {
             var deviceID = responseObject["deviceID"];
             response["status"] = 200;
             response["content"] = {"deviceID" : deviceID};
-        } else {
+        }, function (responseObject) {
             // server only returns 400 in case of bad request
             response["status"] = 200;
             response["content"] = {"deviceID" : null};
-        }
+        });
     }
 }
 %>

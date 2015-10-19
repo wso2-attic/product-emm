@@ -26,6 +26,5 @@ function onRequest(context) {
         }
         log.info(context);
     }
-
     return context;
 }

@@ -21,6 +21,7 @@ var log = new Log("/modules/enrollments/windows/agent-controller.jag");
 
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
+var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
 
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
@@ -41,12 +42,13 @@ if (platform != "Windows Phone") {
     if (!username || !email || !password || !ownership) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
-        var xhr = new XMLHttpRequest();
+        var payload = {"credentials": {"username": username, "email": email,
+            "password": password, "ownership": ownership}};
         var authUrl = mdmProps["windowsConfigRoot"];
+        serviceInvokers.XMLHttp.post(authUrl, payload, function () {}, function () {});
         xhr.open("POST", authUrl);
         xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(stringify({"credentials": {"username": username, "email": email,
-            "password": password, "ownership": ownership}}));
+        xhr.send(stringify());
 
         if (xhr.status == 200 && xhr.readyState == 4) {
             session.put("authenticatedUser", username);

@@ -32,7 +32,15 @@
     <Permission>
         <name>Get all devices</name>
         <path>/device-mgt/devices/list</path>
-        <url>mdm-admin/1.0.0/devices</url>
+        <url>mdm-admin/devices</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get new notifications</name>
+        <path>/</path>
+        <url>/mdm-admin/notifications/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -40,7 +48,7 @@
     <Permission>
         <name>Get device</name>
         <path>/device-mgt/devices/view</path>
-        <url>mdm-admin/1.0.0/devices/*/*</url>
+        <url>mdm-admin/devices/*/*</url>
         <method>GET</method>
         <scope>emm_admin,emm_user</scope>
     </Permission>
@@ -48,7 +56,7 @@
     <Permission>
         <name>Get users' devices</name>
         <path>/device-mgt/devices/view</path>
-        <url>mdm-admin/1.0.0/devices/user/*/*</url>
+        <url>mdm-admin/devices/user/*/*</url>
         <method>GET</method>
         <scope>emm_admin,emm_user</scope>
     </Permission>
@@ -56,7 +64,7 @@
     <Permission>
         <name>Get device count</name>
         <path>/device-mgt/devices/count</path>
-        <url>mdm-admin/1.0.0/devices/count</url>
+        <url>mdm-admin/devices/count</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -64,7 +72,7 @@
     <Permission>
         <name>Get all users' devices</name>
         <path>/device-mgt/devices/list</path>
-        <url>mdm-admin/1.0.0/devices/name/*/*</url>
+        <url>mdm-admin/devices/name/*/*</url>
         <method>GET</method>
         <scope>emm_admin,emm_user</scope>
     </Permission>
@@ -74,7 +82,7 @@
     <Permission>
         <name>Get all operations</name>
         <path>/device-mgt/operations/view-all</path>
-        <url>mdm-admin/1.0.0/operations</url>
+        <url>mdm-admin/operations</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -82,7 +90,7 @@
     <Permission>
         <name>Add Operation</name>
         <path>/device-mgt/operations/add</path>
-        <url>mdm-admin/1.0.0/operations</url>
+        <url>mdm-admin/operations</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -90,7 +98,7 @@
     <Permission>
         <name>Install Application</name>
         <path>/device-mgt/operations/application/install</path>
-        <url>mdm-admin/1.0.0/operations/installApp/*</url>
+        <url>mdm-admin/operations/installApp/*</url>
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
     </Permission>
@@ -98,7 +106,7 @@
     <Permission>
         <name>Uninstall Application</name>
         <path>/device-mgt/operations/application/uninstall</path>
-        <url>mdm-admin/1.0.0/operations/uninstallApp/*</url>
+        <url>mdm-admin/operations/uninstallApp/*</url>
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
     </Permission>
@@ -108,7 +116,7 @@
     <Permission>
         <name>Get all features</name>
         <path>/device-mgt/features/view-all</path>
-        <url>mdm-admin/1.0.0/features/*</url>
+        <url>mdm-admin/features/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -118,7 +126,7 @@
     <Permission>
         <name>Get all roles</name>
         <path>/device-mgt/user/roles</path>
-        <url>mdm-admin/1.0.0/roles</url>
+        <url>mdm-admin/roles</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -128,77 +136,77 @@
     <Permission>
         <name>Get all users</name>
         <path>/device-mgt/users/view</path>
-        <url>mdm-admin/1.0.0/users</url>
+        <url>mdm-admin/users</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Add user</name>
         <path>/device-mgt/users/add</path>
-        <url>mdm-admin/1.0.0/users</url>
+        <url>mdm-admin/users</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get user</name>
         <path>/device-mgt/users/view</path>
-        <url>mdm-admin/1.0.0/users/*</url>
+        <url>mdm-admin/users/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update user</name>
         <path>/device-mgt/users/update</path>
-        <url>mdm-admin/1.0.0/users/*</url>
+        <url>mdm-admin/users/*</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Delete user</name>
         <path>/device-mgt/users/delete</path>
-        <url>mdm-admin/1.0.0/users/*</url>
+        <url>mdm-admin/users/*</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get user roles by name</name>
         <path>/device-mgt/users/roles</path>
-        <url>mdm-admin/1.0.0/users/*/roles</url>
+        <url>mdm-admin/users/*/roles</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get all devices of user</name>
         <path>/device-mgt/users/devices</path>
-        <url>mdm-admin/1.0.0/users/*/*/devices</url>
+        <url>mdm-admin/users/*/*/devices</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get user roles</name>
         <path>/device-mgt/users/roles</path>
-        <url>mdm-admin/1.0.0/users/*/*</url>
+        <url>mdm-admin/users/*/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get user count</name>
         <path>/device-mgt/users/view</path>
-        <url>mdm-admin/1.0.0/users/count/*</url>
+        <url>mdm-admin/users/count/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get all user names</name>
         <path>/device-mgt/users/view</path>
-        <url>mdm-admin/1.0.0/users/users-by-username</url>
+        <url>mdm-admin/users/users-by-username</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Send invitation</name>
         <path>/device-mgt/users/invite</path>
-        <url>mdm-admin/1.0.0/users/email-invitation</url>
+        <url>mdm-admin/users/email-invitation</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -208,105 +216,105 @@
     <Permission>
         <name>Add Policy</name>
         <path>/device-mgt/policies/add</path>
-        <url>mdm-admin/1.0.0/policies/inactive-policy</url>
+        <url>mdm-admin/policies/inactive-policy</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Add Active Policy</name>
         <path>/device-mgt/policies/add</path>
-        <url>mdm-admin/1.0.0/policies/active-policy</url>
+        <url>mdm-admin/policies/active-policy</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get Policies</name>
         <path>/device-mgt/policies/view</path>
-        <url>mdm-admin/1.0.0/policies</url>
+        <url>mdm-admin/policies</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get Policy</name>
         <path>/device-mgt/policies/view</path>
-        <url>mdm-admin/1.0.0/policies/*</url>
+        <url>mdm-admin/policies/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update Policy</name>
         <path>/device-mgt/policies/update</path>
-        <url>mdm-admin/1.0.0/policies/*</url>
+        <url>mdm-admin/policies/*</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Delete Policy</name>
         <path>/device-mgt/policies/delete</path>
-        <url>mdm-admin/1.0.0/policies/*</url>
+        <url>mdm-admin/policies/*</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Policy Count</name>
         <path>/device-mgt/policies/view</path>
-        <url>mdm-admin/1.0.0/policies/count</url>
+        <url>mdm-admin/policies/count</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Policy priorities</name>
         <path>/device-mgt/policies/update</path>
-        <url>mdm-admin/1.0.0/policies/priorities</url>
+        <url>mdm-admin/policies/priorities</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Activate Policy</name>
         <path>/device-mgt/policies/update</path>
-        <url>mdm-admin/1.0.0/policies/activate/{id}</url>
+        <url>mdm-admin/policies/activate/{id}</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Inactivate Policy</name>
         <path>/device-mgt/policies/update</path>
-        <url>mdm-admin/1.0.0/policies/inactivate/{id}</url>
+        <url>mdm-admin/policies/inactivate/{id}</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Apply Policy changes</name>
         <path>/device-mgt/policies/update</path>
-        <url>mdm-admin/1.0.0/policies/apply-changes</url>
+        <url>mdm-admin/policies/apply-changes</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Start Task</name>
         <path>/device-mgt/policies/task</path>
-        <url>mdm-admin/1.0.0/policies/start-task/*</url>
+        <url>mdm-admin/policies/start-task/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update Task</name>
         <path>/device-mgt/policies/task</path>
-        <url>mdm-admin/1.0.0/policies/update-task/*</url>
+        <url>mdm-admin/policies/update-task/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Stop Task</name>
         <path>/device-mgt/policies/task</path>
-        <url>mdm-admin/1.0.0/policies/stop-task</url>
+        <url>mdm-admin/policies/stop-task</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get Policy Compliance</name>
         <path>/device-mgt/policies/compliance</path>
-        <url>mdm-admin/1.0.0/policies/*/*</url>
+        <url>mdm-admin/policies/*/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -316,21 +324,21 @@
     <Permission>
         <name>Add profile</name>
         <path>/device-mgt/profiles/add</path>
-        <url>mdm-admin/1.0.0/profiles</url>
+        <url>mdm-admin/profiles</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update profile</name>
         <path>/device-mgt/profiles/update</path>
-        <url>mdm-admin/1.0.0/profiles/*</url>
+        <url>mdm-admin/profiles/*</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Add profile</name>
         <path>/device-mgt/profiles/delete</path>
-        <url>mdm-admin/1.0.0/profiles/*</url>
+        <url>mdm-admin/profiles/*</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -340,14 +348,14 @@
     <Permission>
         <name>Get license</name>
         <path>/device-mgt/license/view</path>
-        <url>mdm-admin/1.0.0/license/*/*</url>
+        <url>mdm-admin/license/*/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Add license</name>
         <path>/device-mgt/license/add</path>
-        <url>mdm-admin/1.0.0/license</url>
+        <url>mdm-admin/license</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -357,21 +365,21 @@
     <Permission>
         <name>Get configuration</name>
         <path>/device-mgt/tenant/configuration</path>
-        <url>mdm-admin/1.0.0/configuration</url>
+        <url>mdm-admin/configuration</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Add configuration</name>
         <path>/device-mgt/tenant/configuration</path>
-        <url>mdm-admin/1.0.0/configuration</url>
+        <url>mdm-admin/configuration</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update configuration</name>
         <path>/device-mgt/tenant/configuration</path>
-        <url>mdm-admin/1.0.0/configuration</url>
+        <url>mdm-admin/configuration</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>

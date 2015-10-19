@@ -60,6 +60,14 @@
                         </a>
                     </td>
                     <td class="text-right content-fill text-left-on-grid-view no-wrap">
+                        <a href="/mdm/users/profile/{{username}}" data-username="{{username}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view view-user-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-view fw-stack-1x"></i>
+                            </span>
+                            <span class="hidden-xs hidden-on-grid-view">View</span>
+                        </a>
+
                         <a href="/mdm/users/edit-user/{{username}}" data-username="{{username}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-user-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
@@ -223,17 +231,6 @@
 {{/zone}}
 {{#zone "common-navigation"}}
     <!--Later add the navigation menu from here-->
-{{/zone}}
-{{#zone "action-bar"}}
-    {{#if permissions.ADD_USER}}
-        <a href="/mdm/users/add-user" class="cu-btn">
-            <span class="fw-stack">
-                <i class="fw fw-ring fw-stack-2x"></i>
-                <i class="fw fw-add-user fw-stack-1x"></i>
-            </span>
-            Add User
-        </a>
-    {{/if}}
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/user-listing.js"></script>

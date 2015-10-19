@@ -26,7 +26,8 @@ var configuredOperations = [];
 // Constants to define platform types available
 var platformTypeConstants = {
     "ANDROID": "android",
-    "IOS": "ios"
+    "IOS": "ios",
+    "WINDOWS": "windows"
 };
 
 // Constants to define Android Operation Constants
@@ -39,6 +40,16 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
     "WIFI_OPERATION_CODE": "WIFI"
+};
+
+// Constants to define Android Operation Constants
+var windowsOperationConstants = {
+    "PASSCODE_POLICY_OPERATION": "passcode-policy",
+    "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
+    "CAMERA_OPERATION": "camera",
+    "CAMERA_OPERATION_CODE": "CAMERA",
+    "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
+    "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
 };
 
 // Constants to define iOS Operation Constants
@@ -97,10 +108,14 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     var ownershipInput = $("#ownership-input");
     var userInput = $("#users-select-field");
     var actionInput = $("#action-input");
+    var policyNameInput = $("#policy-name-input");
+    var policyDescriptionInput = $("#policy-description-input");
     userRoleInput.val(policyPayloadObj.roles);
     userInput.val(policyPayloadObj.users);
     ownershipInput.val(policyPayloadObj.ownershipType);
     actionInput.val(policyPayloadObj.compliance);
+    policyNameInput.val(policyPayloadObj["policyName"]);
+    policyDescriptionInput.val(policyPayloadObj["description"]);
     // updating next-page wizard title with selected platform
     $("#policy-profile-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
 
@@ -292,6 +307,107 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+        }
+    }
+    if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
+        if (configuredOperations.length == 0) {
+            // updating validationStatus
+            validationStatus = {
+                "error": true,
+                "mainErrorMsg": "You cannot continue. Zero configured features."
+            };
+            // updating validationStatusArray with validationStatus
+            validationStatusArray.push(validationStatus);
+        } else {
+            // validating each and every configured Operation
+            // Validating PASSCODE_POLICY
+            if ($.inArray(windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"], configuredOperations) != -1) {
+                // if PASSCODE_POLICY is configured
+                operation = windowsOperationConstants["PASSCODE_POLICY_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                var continueToCheckNextInputs = true;
+
+                // validating first input: passcodePolicyMaxPasscodeAgeInDays
+                var passcodePolicyMaxPasscodeAgeInDays = $("input#passcode-policy-max-passcode-age-in-days").val();
+                if (passcodePolicyMaxPasscodeAgeInDays) {
+                    if (!$.isNumeric(passcodePolicyMaxPasscodeAgeInDays)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Provided passcode age is not a number. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(passcodePolicyMaxPasscodeAgeInDays, 1, 730)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Provided passcode age is not " +
+                            "with in the range of 1-to-730. Please check.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+
+                // validating second and last input: passcodePolicyPasscodeHistory
+                if (continueToCheckNextInputs) {
+                    var passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
+                    if (passcodePolicyPasscodeHistory) {
+                        if (!$.isNumeric(passcodePolicyPasscodeHistory)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Provided passcode history is not a number. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (!inputIsValidAgainstRange(passcodePolicyPasscodeHistory, 1, 50)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Provided passcode history is not " +
+                                "with in the range of 1-to-50. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+            // Validating CAMERA
+            if ($.inArray(windowsOperationConstants["CAMERA_OPERATION_CODE"], configuredOperations) != -1) {
+                // if CAMERA is configured
+                operation = windowsOperationConstants["CAMERA_OPERATION"];
+                // updating validationStatus
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+            // Validating ENCRYPT_STORAGE
+            if ($.inArray(windowsOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"], configuredOperations) != -1) {
+                // if ENCRYPT_STORAGE is configured
+                operation = windowsOperationConstants["ENCRYPT_STORAGE_OPERATION"];
+                // updating validationStatus
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+
         }
     } else if (policy["platform"] == platformTypeConstants["IOS"]) {
         if (configuredOperations.length == 0) {
@@ -1575,14 +1691,53 @@ validateStep["policy-naming"] = function () {
     return wizardIsToBeContinued;
 };
 
-stepForwardFrom["policy-naming"] = function () {
-    policy["policyName"] = $("#policy-name-input").val();
-    policy["policyDescription"] = $("#policy-description-input").val();
-    //All data is collected. Policy can now be updated.
-    updatePolicy(policy);
+validateStep["policy-naming-publish"] = function () {
+    var validationStatus = {};
+
+    // taking values of inputs to be validated
+    var policyName = $("input#policy-name-input").val();
+    // starting validation process and updating validationStatus
+    if (!policyName) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] = "Policy name is empty. You cannot proceed.";
+    } else if (!inputIsValidAgainstLength(policyName, 1, 30)) {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] =
+            "Policy name exceeds maximum allowed length. Please check.";
+    } else {
+        validationStatus["error"] = false;
+    }
+    // ending validation process
+
+    // start taking specific actions upon validation
+    var wizardIsToBeContinued;
+    if (validationStatus["error"]) {
+        wizardIsToBeContinued = false;
+        var mainErrorMsgWrapper = "#policy-naming-main-error-msg";
+        var mainErrorMsg = mainErrorMsgWrapper + " span";
+        $(mainErrorMsg).text(validationStatus["mainErrorMsg"]);
+        $(mainErrorMsgWrapper).removeClass("hidden");
+    } else {
+        wizardIsToBeContinued = true;
+    }
+
+    return wizardIsToBeContinued;
 };
 
-var updatePolicy = function (policy) {
+stepForwardFrom["policy-naming-publish"] = function () {
+    policy["policyName"] = $("#policy-name-input").val();
+    policy["description"] = $("#policy-description-input").val();
+    //All data is collected. Policy can now be updated.
+    updatePolicy(policy, "publish");
+};
+stepForwardFrom["policy-naming"] = function () {
+    policy["policyName"] = $("#policy-name-input").val();
+    policy["description"] = $("#policy-description-input").val();
+    //All data is collected. Policy can now be updated.
+    updatePolicy(policy, "save");
+};
+
+var updatePolicy = function (policy, state) {
     var profilePayloads = [];
     // traverses key by key in policy["profile"]
     var key;
@@ -1597,6 +1752,7 @@ var updatePolicy = function (policy) {
     }
     var payload = {
         "policyName": policy["policyName"],
+        "description": policy["description"],
         "compliance": policy["selectedNonCompliantAction"],
         "ownershipType": policy["selectedOwnership"],
         "profile": {
@@ -1618,14 +1774,47 @@ var updatePolicy = function (policy) {
     }
 
     console.log(JSON.stringify(payload));
-
+    var serviceURL = "/mdm-admin/policies/" + getParameterByName("id");
     invokerUtil.put(
-        "/mdm-admin/policies/" + getParameterByName("id"),
+        serviceURL,
         payload,
         // on success
         function () {
-            $(".policy-message").removeClass("hidden");
-            $(".add-policy").addClass("hidden");
+            if (state == "save"){
+                var policyList = [];
+                policyList.push(getParameterByName("id"));
+                serviceURL = "/mdm-admin/policies/inactivate";
+                invokerUtil.put(
+                    serviceURL,
+                    policyList,
+                    // on success
+                    function () {
+                        $(".policy-message").removeClass("hidden");
+                        $(".add-policy").addClass("hidden");
+                    },
+                    // on error
+                    function () {
+
+                    }
+                );
+            }else if(state == "publish"){
+                var policyList = [];
+                policyList.push(getParameterByName("id"));
+                serviceURL = "/mdm-admin/policies/activate";
+                invokerUtil.put(
+                    serviceURL,
+                    policyList,
+                    // on success
+                    function () {
+                        $(".policy-message").removeClass("hidden");
+                        $(".add-policy").addClass("hidden");
+                    },
+                    // on error
+                    function () {
+
+                    }
+                );
+            }
         },
         // on error
         function () {

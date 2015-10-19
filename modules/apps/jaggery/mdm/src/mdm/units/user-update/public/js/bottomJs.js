@@ -75,12 +75,15 @@ $(document).ready(function () {
             addUserFormData.emailAddress = emailAddress;
             // Base64 encode the password
             //TODO: use CryptoJS for this
-            addUserFormData.password = window.btoa(password);;
+            addUserFormData.password = window.btoa(password);
+            if (roles == null){
+                roles = [];
+            }
             addUserFormData.roles = roles;
 
             var addUserAPI = "/mdm-admin/users/" + username;
 
-            invokerUtil.post(
+            invokerUtil.put(
                 addUserAPI,
                 addUserFormData,
                 function (data) {

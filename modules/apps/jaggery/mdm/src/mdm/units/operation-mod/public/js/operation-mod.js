@@ -23,7 +23,8 @@ var operationModule = function () {
     // Constants to define platform types available
     var platformTypeConstants = {
         "ANDROID": "android",
-        "IOS": "ios"
+        "IOS": "ios",
+        "WINDOWS": "windows"
     };
 
     // Constants to define operation types available
@@ -39,6 +40,15 @@ var operationModule = function () {
         "CAMERA_OPERATION_CODE": "CAMERA",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "WIFI_OPERATION_CODE": "WIFI",
+        "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
+        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE"
+    };
+
+    // Constants to define Windows Operation Constants
+    var windowsOperationConstants = {
+        "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
+        "CAMERA_OPERATION_CODE": "CAMERA",
+        "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE"
     };
@@ -680,6 +690,129 @@ var operationModule = function () {
     };
 
     /**
+     * Convert the windows platform specific code to the generic payload.
+     * TODO: think of the possibility to follow a pattern to the key name (namespace?)
+     * @param operationCode
+     * @param operationPayload
+     * @returns {{}}
+     */
+    privateMethods.generateGenericPayloadFromWindowsPayload = function (operationCode, operationPayload) {
+        var payload = {};
+        operationPayload = JSON.parse(operationPayload);
+        switch (operationCode) {
+            case windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
+                payload = {
+                    "passcodePolicyAllowSimple": operationPayload["allowSimple"],
+                    "passcodePolicyRequireAlphanumeric": operationPayload["requireAlphanumeric"],
+                    "passcodePolicyMinLength": operationPayload["minLength"],
+                    "passcodePolicyMinComplexChars": operationPayload["minComplexChars"],
+                    "passcodePolicyMaxPasscodeAgeInDays": operationPayload["maxPINAgeInDays"],
+                    "passcodePolicyPasscodeHistory": operationPayload["pinHistory"],
+                    "passcodePolicyMaxFailedAttempts": operationPayload["maxFailedAttempts"]
+                };
+                break;
+            case windowsOperationConstants["CAMERA_OPERATION_CODE"]:
+                payload = {
+                    "cameraEnabled": operationPayload["enabled"]
+                };
+                break;
+            case windowsOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"]:
+                payload = {
+                    "encryptStorageEnabled": operationPayload["encrypted"]
+                };
+                break;
+        }
+        return payload;
+    };
+
+    privateMethods.generateWindowsOperationPayload = function (operationCode, operationData, deviceList) {
+        var payload;
+        var operationType;
+        switch (operationCode) {
+            case windowsOperationConstants["CAMERA_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "enabled" : operationData["cameraEnabled"]
+                    }
+                };
+                break;
+            case windowsOperationConstants["CHANGE_LOCK_CODE_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "lockCode" : operationData["lockCode"]
+                    }
+                };
+                break;
+            case windowsOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "encrypted" : operationData["encryptStorageEnabled"]
+                    }
+                };
+                break;
+            case windowsOperationConstants["NOTIFICATION_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "message" : operationData["message"]
+                    }
+                };
+                break;
+            case windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "allowSimple": operationData["passcodePolicyAllowSimple"],
+                        "requireAlphanumeric": operationData["passcodePolicyRequireAlphanumeric"],
+                        "minLength": operationData["passcodePolicyMinLength"],
+                        "minComplexChars": operationData["passcodePolicyMinComplexChars"],
+                        "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
+                        "pinHistory": operationData["passcodePolicyPasscodeHistory"],
+                        "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
+                    }
+                };
+                break;
+            default:
+                // If the operation is neither of above, it is a command operation
+                operationType = operationTypeConstants["COMMAND"];
+                // Operation payload of a command operation is simply an array of device IDs
+                payload = deviceList;
+        }
+
+        if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
+            payload["deviceIDs"] = deviceList;
+        }
+
+        return payload;
+    };
+
+
+    publicMethods.getWindowsServiceEndpoint = function (operationCode) {
+        var featureMap = {
+            "CAMERA": "camera",
+            "DEVICE_LOCK": "lock",
+            "DEVICE_LOCATION": "location",
+            "CLEAR_PASSWORD": "clear-password",
+            "APPLICATION_LIST": "get-application-list",
+            "DEVICE_RING": "ring-device",
+            "DEVICE_MUTE": "mute",
+            "NOTIFICATION": "notification",
+            "ENCRYPT_STORAGE": "encrypt",
+            "CHANGE_LOCK_CODE": "change-lock-code",
+            "WEBCLIP": "webclip",
+            "INSTALL_APPLICATION": "install-application",
+            "UNINSTALL_APPLICATION": "uninstall-application",
+            "BLACKLIST_APPLICATIONS": "blacklist-applications",
+            "PASSCODE_POLICY": "password-policy",
+            "ENTERPRISE_WIPE": "enterprise-wipe",
+            "WIPE_DATA": "wipe-data"
+        };
+        return "/mdm-android-agent/operation/" + featureMap[operationCode];
+    };
+    /**
      * Get the icon for the featureCode
      * @param operationCode
      * @returns icon class
@@ -704,6 +837,25 @@ var operationModule = function () {
      * @param operationCode
      * @returns icon class
      */
+    publicMethods.getWindowsIconForFeature = function (operationCode) {
+        var featureMap = {
+            "DEVICE_LOCK": "fw-lock",
+            "DEVICE_LOCATION": "fw-map-location",
+            "CLEAR_PASSWORD": "fw-key",
+            "ENTERPRISE_WIPE": "fw-clean",
+            "DEVICE_RING": "fw-dial-up",
+            "DEVICE_MUTE": "fw-incoming-call",
+            "NOTIFICATION": "fw-message",
+            "CHANGE_LOCK_CODE": "fw-security"
+        };
+        return featureMap[operationCode];
+    };
+
+    /**
+     * Get the icon for the featureCode
+     * @param operationCode
+     * @returns icon class
+     */
     publicMethods.getIOSIconForFeature = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "fw-lock",
@@ -714,49 +866,15 @@ var operationModule = function () {
         return featureMap[operationCode];
     };
 
-    privateMethods.createTemperatureControllerPayload = function (operationCode, operationData, deviceList) {
-        var payload;
-        var operationType;
-        if (operationCode == "BUZZER") {
-            operationType = operationTypeConstants["PROFILE"];
-            payload = {
-                "operation": {
-                    "enabled" : operationData["enableBuzzer"]
-                }
-            };
-        } else {
-            operationType = operationTypeConstants["COMMAND"];
-            payload = deviceList;
-        }
-        if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
-            payload["deviceIDs"] = deviceList;
-        }
-        return payload;
-    };
-
-    publicMethods.getTemperatureControllerServiceEndpoint = function (operationCode) {
-        var featureMap = {
-            "BUZZER": "buzzer"
-        };
-        return "/temp-controller-agent/operations/" + featureMap[operationCode];
-    };
-
-    publicMethods.getTemperatureControllerIconForFeature = function (operationCode) {
-        var featureMap = {
-            "BUZZER": "fw-dial-up"
-        };
-        return featureMap[operationCode];
-    };
-
     /**
-     * Filter a list by a data attribute
+     * Filter a list by a data attribute.
      * @param prop
      * @param val
      * @returns {Array}
      */
     $.fn.filterByData = function (prop, val) {
         return this.filter(
-            function () { return $(this).data(prop) == val; }
+            function () {return $(this).data(prop) == val;}
         );
     };
 
@@ -883,6 +1001,9 @@ var operationModule = function () {
             case platformTypeConstants["IOS"]:
                 payload = privateMethods.generateIOSOperationPayload(operationCode, operationData, deviceList);
                 break;
+            case platformTypeConstants["WINDOWS"]:
+                payload = privateMethods.generateWindowsOperationPayload(operationCode, operationData, deviceList);
+                break;
         }
         return payload;
     };
@@ -904,11 +1025,16 @@ var operationModule = function () {
             case platformTypeConstants["IOS"]:
                 uiPayload = privateMethods.generateGenericPayloadFromIOSPayload(operationCode, operationPayload);
                 break;
+            case platformTypeConstants["WINDOWS"]:
+                uiPayload = privateMethods.generateGenericPayloadFromWindowsPayload(operationCode, operationPayload);
+                break;
         }
         // capturing form input data designated by .operationDataKeys
         $(".operation-data").filterByData("operation-code", operationCode).find(".operationDataKeys").each(
             function () {
                 var operationDataObj = $(this);
+                //TODO :remove
+                //operationDataObj.prop('disabled', true)
                 var key = operationDataObj.data("key");
                 // retrieve corresponding input value associated with the key
                 var value = uiPayload[key];

@@ -23,9 +23,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.Platform;
+import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.context.DeviceOperationContext;
@@ -81,7 +83,7 @@ public class Operation {
 			deviceIdentifier.setId(id);
 			dmService = MDMAPIUtils.getDeviceManagementService();
 			operations = dmService.getOperations(deviceIdentifier);
-		} catch (Exception e) {
+		} catch (OperationManagementException e) {
 			String msg = "Error occurred while fetching the operations for the device.";
 			log.error(msg, e);
 			throw new MDMAPIException(msg, e);
@@ -108,6 +110,28 @@ public class Operation {
             throw new MDMAPIException(msg, e);
         }
     }
+
+	@GET
+	@Path("{type}/{id}/apps")
+	public List<? extends Application> getInstalledApps(
+			@PathParam("type") String type,
+			@PathParam("id") String id)
+			throws MDMAPIException {
+		List<Application> applications;
+		ApplicationManagementProviderService appManagerConnector;
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		try {
+			deviceIdentifier.setType(type);
+			deviceIdentifier.setId(id);
+			appManagerConnector = MDMAPIUtils.getAppManagementService();
+			applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
+		} catch (ApplicationManagementException e) {
+			String msg = "Error occurred while fetching the apps of the device.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return applications;
+	}
 
     @POST
     @Path("installApp/{tenantDomain}")

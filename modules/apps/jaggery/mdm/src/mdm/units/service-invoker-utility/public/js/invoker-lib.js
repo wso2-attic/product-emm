@@ -20,7 +20,7 @@
 
 var invokerUtil = function () {
     var module = {};
-    var flagAuth = false; // A flag to be used to test without oAuth
+    var flagAuth = true; // A flag to be used to test without oAuth
     function requestAccessToken (successCallback, errorCallback) {
         $.ajax({
             url: "/mdm/token",
@@ -84,8 +84,7 @@ var invokerUtil = function () {
     module.put = function(url, payload, successCallback, errorCallback){
         call("PUT", url, payload, successCallback, errorCallback);
     };
-    module.delete = function(url, successCallback, errorCallback){
-        var payload = null;
+    module.delete = function(url, payload, successCallback, errorCallback){
         call("DELETE", url, payload, successCallback, errorCallback);
     };
     return module;
