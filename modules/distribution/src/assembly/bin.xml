@@ -56,6 +56,7 @@
                 <exclude>**/lib/httpmime*</exclude>
                 <exclude>**/lib/encoder*</exclude>
                 <exclude>**/plugins/jaxb*</exclude>
+                <exclude>**/src/repository/conf/security/authenticators.xml</exclude>
             </excludes>
         </fileSet>
 
@@ -148,13 +149,16 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
             <includes>
-                <!--include>**/api-manager.xml</include-->
-                <include>**/security/</include>
+                <include>**sso-sp-config.properties</include>
+                <!--<include>*/**</include>-->
                 <!-- <include>**/emm-config.xml</include>-->
             </includes>
+            <excludes>
+                <exclude>authenticators.xml</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <directory>

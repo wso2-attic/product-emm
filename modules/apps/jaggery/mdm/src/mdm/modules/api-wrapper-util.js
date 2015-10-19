@@ -40,7 +40,7 @@ var apiWrapperUtil = function () {
                 tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, encodedClientKeys);
         } else if (type == "saml") {
             tokenPair = tokenUtil.
-                getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, scope);
+                getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, "PRODUCTION");
         }
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
         var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};

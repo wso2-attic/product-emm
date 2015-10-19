@@ -1715,13 +1715,13 @@ validateStep["policy-naming-publish"] = function () {
 
 stepForwardFrom["policy-naming-publish"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
-    policy["policyDescription"] = $("#policy-description-input").val();
+    policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
     savePolicy(policy, "publish");
 };
 stepForwardFrom["policy-naming"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
-    policy["policyDescription"] = $("#policy-description-input").val();
+    policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
     savePolicy(policy, "save");
 };
@@ -1741,7 +1741,7 @@ var savePolicy = function (policy, state) {
     }
     var payload = {
         "policyName": policy["policyName"],
-        "description": policy["policyDescription"],
+        "description": policy["description"],
         "compliance": policy["selectedNonCompliantAction"],
         "ownershipType": policy["selectedOwnership"],
         "profile": {

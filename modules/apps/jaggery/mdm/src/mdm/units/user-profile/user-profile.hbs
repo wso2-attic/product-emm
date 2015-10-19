@@ -1,0 +1,76 @@
+{{#zone "main"}}
+    {{#defineZone "user-profile-top"}}
+        <div class="row wr-device-board">
+            <div class="col-lg-12 wr-secondary-bar">
+                <label class="device-id device-select" data-username="{{user.username}}">
+                    {{user.firstname}} {{user.lastname}}
+                </label>
+            </div>
+        </div>
+    {{/defineZone}}
+
+    <!-- #page-content-wrapper -->
+    <div class="page-content-wrapper">
+        <!-- content/body -->
+        <div class="container-fluid body-wrapper">
+            <div class="row no-gutter add-padding-5x add-margin-top-5x" style="border: 1px solid #e4e4e4;">
+                <div class="media">
+                    <div class="media-left media-middle asset-image col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                        <div class="thumbnail icon"><i class="square-element text fw fw-user"></i></div>
+                    </div>
+                    <div class="media-body asset-desc add-padding-left-5x">
+                        <div style="background: #11375B; color: #fff; padding: 10px; margin-bottom: 5px">Profile Overview</div>
+                        {{#defineZone "user-detail-properties"}}
+                            <table class="table table-responsive table-striped" id="members">
+                                <tbody>
+                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px; width: 7%;">Username</td><td style="padding:10px 15px;">{{user.username}}</td></tr>
+                                <tr role="row" class="odd"><td class="sorting_1" style="padding:10px 15px;">First Name</td><td style="padding:10px 15px;">{{user.firstname}}</td></tr>
+                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">Last Name</td><td style="padding:10px 15px;">{{user.lastname}}</td></tr>
+                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">Email</td><td style="padding:10px 15px;">{{user.emailAddress}}</td></tr>
+                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">Roles</td><td style="padding:10px 15px;">
+                                    {{#each userRoles}}
+                                        <option selected="selected">{{this}}</option>
+                                    {{/each}}
+                                </td></tr>
+                                </tbody>
+                            </table>
+                        {{/defineZone}}
+                    </div>
+                </div>
+                <div class="media">
+                    <button class="wr-btn" onclick="location.href='/mdm/users/edit-user/{{user.username}}';" id="sortUpdateBtn" style="width: 290px; background-color: #7fa030;"><span><i class="fw fw-edit"></i> Edit</span></button>
+                </div>
+                <div class="media">
+                    <div class="media-left col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                        <ul class="list-group" role="tablist">
+                            <li class="active"><a class="list-group-item" href="#enrolled_devices" role="tab" data-toggle="tab" aria-controls="enrolled_devices">Enrolled Devices</a></li>
+                        </ul>
+                    </div>
+                    {{#defineZone "user-enrolled-devices"}}
+                        <div class="media-body add-padding-left-5x remove-padding-xs tab-content">
+                            <div class="panel-group tab-content">
+                                <div class="panel panel-default tab-pane active" id="enrolled_devices" role="tabpanel" aria-labelledby="enrolled_devices">
+                                    <div class="panel-heading">Enrolled Devices by {{user.firstname}} {{user.lastname}}</div>
+                                    <div class="panel-body">
+                                        <div id="enrolled_devices-container">
+                                            <div class="panel-body">
+                                                Not available yet
+                                            </div>
+                                            <br class="c-both" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/defineZone}}
+                </div>
+            </div>
+        </div>
+        <!-- /content/body -->
+    </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/bottomJs.js"></script>
+    <script id="user-devices-view"  src="{{self.publicURL}}/templates/user-devices.hbs" data-username="{{user.username}}" data-domain="{{user.domain}}" type="text/x-handlebars-template" ></script>
+{{/zone}}
+
