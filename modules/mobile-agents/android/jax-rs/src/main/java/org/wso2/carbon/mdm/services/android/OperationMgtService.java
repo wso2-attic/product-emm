@@ -96,8 +96,6 @@ public class OperationMgtService {
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } finally {
-            AndroidAPIUtils.endTenantFlow();
         }
         return pendingOperations;
     }
@@ -132,8 +130,6 @@ public class OperationMgtService {
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } finally {
-            AndroidAPIUtils.endTenantFlow();
         }
         return response;
     }
@@ -277,8 +273,6 @@ public class OperationMgtService {
                     responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
             log.error(errorMessage, e);
             throw new AndroidOperationException(message, responseMediaType);
-        } finally {
-            AndroidAPIUtils.endTenantFlow();
         }
     }
 

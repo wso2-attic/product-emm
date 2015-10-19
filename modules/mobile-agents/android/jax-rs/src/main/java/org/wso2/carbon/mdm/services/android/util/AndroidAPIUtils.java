@@ -54,12 +54,15 @@ public class AndroidAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
-        DeviceManagementProviderService dmService;
-        PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        dmService =
+        DeviceManagementProviderService deviceManagementProviderService =
                 (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-        return dmService;
+        if (deviceManagementProviderService == null) {
+            String msg = "Device Management service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return deviceManagementProviderService;
     }
 
     public static MediaType getResponseMediaType(String acceptHeader) {
@@ -69,7 +72,6 @@ public class AndroidAPIUtils {
         } else {
             responseMediaType = MediaType.valueOf(acceptHeader);
         }
-
         return responseMediaType;
     }
 
@@ -80,40 +82,39 @@ public class AndroidAPIUtils {
         AndroidDeviceUtils deviceUtils = new AndroidDeviceUtils();
         DeviceIDHolder deviceIDHolder = deviceUtils.validateDeviceIdentifiers(deviceIDs,
                 message, responseMediaType);
-
         getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
-
         if (!deviceIDHolder.getErrorDeviceIdList().isEmpty()) {
             return javax.ws.rs.core.Response.status(AndroidConstants.StatusCodes.
                     MULTI_STATUS_HTTP_CODE).type(
                     responseMediaType).entity(deviceUtils.
                     convertErrorMapIntoErrorMessage(deviceIDHolder.getErrorDeviceIdList())).build();
         }
-
         return javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.CREATED).
                 type(responseMediaType).build();
     }
 
 
     public static PolicyManagerService getPolicyManagerService() {
-
-        PolicyManagerService policyManager;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        policyManager =
-                (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-
-        return policyManager;
+        PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                PolicyManagerService.class, null);
+        if (policyManagerService == null) {
+            String msg = "Policy Manager service has not initialized";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return policyManagerService;
     }
 
     public static ApplicationManagementProviderService getApplicationManagerService() {
-
-        ApplicationManagementProviderService applicationManagementProviderService;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        applicationManagementProviderService =
-                (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-
+        ApplicationManagementProviderService applicationManagementProviderService =
+            (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
+        if (applicationManagementProviderService == null) {
+            String msg = "Application Management provder service has not initialized";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
         return applicationManagementProviderService;
     }
 

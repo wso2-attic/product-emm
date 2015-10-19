@@ -38,15 +38,18 @@ public class SyncmlUtils {
      */
     public static DeviceManagementProviderService getDeviceManagementService() {
         try {
-            DeviceManagementProviderService deviceManagementService;
-            PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext context = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+<<<<<<< HEAD
             context.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
             context.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             deviceManagementService =
                     (DeviceManagementProviderService) context.getOSGiService(DeviceManagementProviderService.class,
                             null);
             return deviceManagementService;
+=======
+            return (DeviceManagementProviderService) context.getOSGiService(DeviceManagementProviderService.class,
+                                                                             null);
+>>>>>>> fdcc284f0b3538bbac92f04dd2d25a4474941d36
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
