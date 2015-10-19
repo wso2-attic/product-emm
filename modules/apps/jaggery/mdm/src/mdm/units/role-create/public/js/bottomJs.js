@@ -82,7 +82,7 @@ $(document).ready(function () {
         if (!roleName) {
             $(errorMsg).text("Role name is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, roleName)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "]{3,30}$/, roleName)) {
             $(errorMsg).text("Provided role name is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!domain) {
