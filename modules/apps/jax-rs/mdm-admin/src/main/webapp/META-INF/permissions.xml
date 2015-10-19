@@ -131,13 +131,13 @@
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
-    <!--<Permission>-->
-        <!--<name>Get all roles</name>-->
-        <!--<path>/device-mgt/user/roles</path>-->
-        <!--<url>mdm-admin/roles/*</url>-->
-        <!--<method>GET</method>-->
-        <!--<scope>emm_admin</scope>-->
-    <!--</Permission>-->
+    <Permission>
+        <name>Get User roles</name>
+        <path>/device-mgt/user/roles</path>
+        <url>/roles/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
     <!-- End of Role related APIs -->
 
     <!-- User related APIs -->
@@ -259,7 +259,7 @@
     <Permission>
         <name>Delete Policy</name>
         <path>/device-mgt/policies/delete</path>
-        <url>/policies/*</url>
+        <url>/policies</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>

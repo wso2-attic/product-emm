@@ -140,11 +140,9 @@ var util = function () {
         if (scope) {
             url = url + "&scope=" + scope
         }
-        log.info("infor url for refresh : "+url);
         xhr.send(url);
         delete clientData;
         var tokenPair = {};
-        log.info(stringify(xhr.status));
         if (xhr.status == 200) {
             var data = parse(xhr.responseText);
             tokenPair.refreshToken = data.refresh_token;

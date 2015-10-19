@@ -26,7 +26,6 @@ var invokerUtil = function () {
             url: "/mdm/token",
             type: "GET",
             success: function () {
-                console.log("Hureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
                 successCallback ();
             }
         }).fail(errorCallback);
@@ -34,7 +33,6 @@ var invokerUtil = function () {
     function call(method, url, payload, successCallback, errorCallback){
         var accessToken = Cookies.get('accessToken');
         var execute = function () {
-            console.log("Execute");
             var data = {
                 url: url,
                 type: method,
@@ -54,12 +52,9 @@ var invokerUtil = function () {
             }
             $.ajax(data).fail(function (jqXHR) {
                 if (jqXHR.status == "401"){
-                    console.log("Expired token 401 return");
                     requestAccessToken(function () {
-                        console.log("niyamayineee");
                         execute();
                     },function () {
-                        console.log("error da");
                         window.location.replace("/mdm");
                     });
 
