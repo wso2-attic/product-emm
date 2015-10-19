@@ -27,37 +27,37 @@ import org.w3c.dom.Element;
  */
 public class Source {
 
-	private String LocURI;
-	private String LocName;
+    private String LocURI;
+    private String LocName;
 
-	public String getLocURI() {
-		return LocURI;
-	}
+    public String getLocURI() {
+        return LocURI;
+    }
 
-	public void setLocURI(String locURI) {
-		LocURI = locURI;
-	}
+    public void setLocURI(String locURI) {
+        LocURI = locURI;
+    }
 
-	public String getLocName() {
-		return LocName;
-	}
+    public String getLocName() {
+        return LocName;
+    }
 
-	public void setLocName(String locName) {
-		LocName = locName;
-	}
+    public void setLocName(String locName) {
+        LocName = locName;
+    }
 
-	public void buildSourceElement(Document doc, Element rootElement) {
-		Element target = doc.createElement(Constants.SOURCE);
-		rootElement.appendChild(target);
-		if (getLocURI() != null) {
-			Element locURI = doc.createElement(Constants.LOC_URI);
-			locURI.appendChild(doc.createTextNode(getLocURI()));
-			target.appendChild(locURI);
-		}
-		if (getLocName() != null) {
-			Element locName = doc.createElement(Constants.LOC_NAME);
-			locName.appendChild(doc.createTextNode(getLocName()));
-			target.appendChild(locName);
-		}
-	}
+    public void buildSourceElement(Document doc, Element rootElement) {
+        Element target = doc.createElement(Constants.SOURCE);
+        rootElement.appendChild(target);
+        if (getLocURI() != null) {
+            Element locURI = doc.createElement(Constants.LOC_URI);
+            locURI.appendChild(doc.createTextNode(getLocURI()));
+            target.appendChild(locURI);
+        }
+        if (getLocName() != null) {
+            Element locName = doc.createElement(Constants.LOC_NAME);
+            locName.appendChild(doc.createTextNode(getLocName()));
+            target.appendChild(locName);
+        }
+    }
 }

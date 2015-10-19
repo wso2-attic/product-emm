@@ -1,19 +1,19 @@
 /*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations;
@@ -28,9 +28,9 @@ import java.util.List;
 /**
  * Wrapper for other SyncML elements.
  */
-public class Atomic {
+public class AtomicTag {
     int commandId = -1;
-    List<Add> adds;
+    List<AddTag> adds;
     List<Replace> replaces;
 
     public List<Replace> getReplaces() {
@@ -41,11 +41,11 @@ public class Atomic {
         this.replaces = replaces;
     }
 
-    public List<Add> getAdds() {
+    public List<AddTag> getAdds() {
         return adds;
     }
 
-    public void setAdds(List<Add> adds) {
+    public void setAdds(List<AddTag> adds) {
         this.adds = adds;
     }
 
@@ -66,8 +66,8 @@ public class Atomic {
                 commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
                 atomic.appendChild(commandId);
             }
-            for (Iterator<Add> addIterator = getAdds().iterator(); addIterator.hasNext(); ) {
-                Add add = addIterator.next();
+            for (Iterator<AddTag> addIterator = getAdds().iterator(); addIterator.hasNext(); ) {
+                AddTag add = addIterator.next();
                 if (add != null) {
                     add.buildAddElement(doc, atomic);
                 }

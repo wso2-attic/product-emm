@@ -25,14 +25,14 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 /**
  * Challenge data pass through the device and Device Management server for the security purpose.
  */
-public class Chal {
-    Meta meta;
+public class ChallengeTag {
+    MetaTag meta;
 
-    public Meta getMeta() {
+    public MetaTag getMeta() {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
+    public void setMeta(MetaTag meta) {
         this.meta = meta;
     }
 

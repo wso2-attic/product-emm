@@ -29,7 +29,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class for random token for XCEP and WSTEP
+ * Class for generate random token for XCEP and WSTEP
  */
 public class DeviceUtil {
 

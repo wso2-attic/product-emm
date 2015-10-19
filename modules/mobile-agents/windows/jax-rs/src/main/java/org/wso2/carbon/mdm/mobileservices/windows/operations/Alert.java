@@ -26,37 +26,38 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
  * Inform an event occurred from device to server.
  */
 public class Alert {
-	public int getCommandId() {
-		return commandId;
-	}
 
-	public void setCommandId(int commandId) {
-		this.commandId = commandId;
-	}
+    int commandId = -1;
+    String data;
 
-	public String getData() {
-		return data;
-	}
+    public int getCommandId() {
+        return commandId;
+    }
 
-	public void setData(String data) {
-		this.data = data;
-	}
+    public void setCommandId(int commandId) {
+        this.commandId = commandId;
+    }
 
-	int commandId = -1;
-	String data;
+    public String getData() {
+        return data;
+    }
 
-	public void buildAlertElement(Document doc, Element rootElement) {
-		Element alert = doc.createElement(Constants.ALERT);
-		rootElement.appendChild(alert);
-		if (getCommandId() != -1) {
-			Element commandId = doc.createElement(Constants.COMMAND_ID);
-			commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
-			alert.appendChild(commandId);
-		}
-		if (getData() != null) {
-			Element data = doc.createElement(Constants.DATA);
-			data.appendChild(doc.createTextNode(getData()));
-			alert.appendChild(data);
-		}
-	}
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public void buildAlertElement(Document doc, Element rootElement) {
+        Element alert = doc.createElement(Constants.ALERT);
+        rootElement.appendChild(alert);
+        if (getCommandId() != -1) {
+            Element commandId = doc.createElement(Constants.COMMAND_ID);
+            commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
+            alert.appendChild(commandId);
+        }
+        if (getData() != null) {
+            Element data = doc.createElement(Constants.DATA);
+            data.appendChild(doc.createTextNode(getData()));
+            alert.appendChild(data);
+        }
+    }
 }
