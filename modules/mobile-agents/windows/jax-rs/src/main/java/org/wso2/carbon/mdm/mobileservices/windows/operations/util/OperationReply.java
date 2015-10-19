@@ -25,6 +25,7 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.PasscodePolicy;
@@ -71,7 +72,8 @@ public class OperationReply {
     }
 
     public SyncmlDocument generateReply() throws WindowsOperationException, PolicyManagementException,
-            FeatureManagementException, JSONException, UnsupportedEncodingException, NoSuchAlgorithmException {
+            FeatureManagementException, JSONException, UnsupportedEncodingException, NoSuchAlgorithmException,
+            SyncmlMessageFormatException {
         generateHeader();
         generateBody();
         return replySyncmlDocument;
@@ -116,18 +118,16 @@ public class OperationReply {
     }
 
     private void generateBody() throws WindowsOperationException, PolicyManagementException, FeatureManagementException,
-            JSONException {
+            JSONException, SyncmlMessageFormatException {
         SyncmlBody syncmlBody = generateStatuses();
         try {
             appendOperations(syncmlBody);
-        } catch (WindowsOperationException e) {
-            throw new WindowsOperationException("Error occurred while generating operation of the syncml message.");
         } catch (PolicyManagementException e) {
             throw new PolicyManagementException("Error occurred while retrieving policy operations.", e);
         } catch (FeatureManagementException e) {
             throw new FeatureManagementException("Error occurred while retrieving effective policy operations.");
         } catch (JSONException e) {
-            throw new JSONException("Error Occurred while parsing operation object.");
+            throw new SyncmlMessageFormatException("Error Occurred while parsing operation object.");
         }
         replySyncmlDocument.setBody(syncmlBody);
     }
@@ -297,8 +297,6 @@ public class OperationReply {
                             }
                         }
                         break;
-                 //default:
-                    //throw new WindowsOperationException("Operation with no type found");
                 }
             }
         }
@@ -524,7 +522,8 @@ public class OperationReply {
         return execElement;
     }
 
-    public Sequence buildSequence(Operation operation, Sequence sequenceElement) throws WindowsOperationException, JSONException {
+    public Sequence buildSequence(Operation operation, Sequence sequenceElement) throws WindowsOperationException,
+            JSONException {
 
         sequenceElement.setCommandId(operation.getId());
         List<Replace> replaceItems = new ArrayList<>();
@@ -558,7 +557,7 @@ public class OperationReply {
                         cameraItem = appendReplaceInfo(policy);
                         cameraItems.add(cameraItem);
                     } catch (JSONException e) {
-                        throw new JSONException("Error occurred while parsing payload object to json.");
+                        throw new WindowsOperationException("Error occurred while parsing payload object to json.");
                     }
                     replaceCameraConfig.setCommandId(operation.getId());
                     replaceCameraConfig.setItems(cameraItems);

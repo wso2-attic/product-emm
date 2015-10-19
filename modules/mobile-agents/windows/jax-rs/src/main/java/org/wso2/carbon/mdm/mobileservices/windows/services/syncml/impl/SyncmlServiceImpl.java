@@ -506,7 +506,7 @@ public class SyncmlServiceImpl implements SyncmlService {
     public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> operations)
             throws WindowsOperationException, JSONException, PolicyManagementException,
             org.wso2.carbon.policy.mgt.common.FeatureManagementException, UnsupportedEncodingException,
-            NoSuchAlgorithmException {
+            NoSuchAlgorithmException, SyncmlMessageFormatException {
         OperationReply operationReply;
         SyncmlGenerator generator;
         SyncmlDocument syncmlResponse;

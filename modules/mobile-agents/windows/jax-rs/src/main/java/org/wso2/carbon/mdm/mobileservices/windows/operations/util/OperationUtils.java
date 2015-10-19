@@ -64,7 +64,8 @@ public class OperationUtils {
      */
     public void updateDeviceOperations(Status status, SyncmlDocument syncmlDocument,
                                        DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException, NotificationManagementException {
+            throws OperationManagementException, DeviceManagementException, NotificationManagementException,
+            WindowsOperationException {
 
         pendingDataOperations = SyncmlUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
@@ -93,7 +94,7 @@ public class OperationUtils {
                                 Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
                         service.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
-                        throw new NotificationManagementException("Failure occurred in getting notification service", e);
+                        throw new WindowsOperationException("Failure occurred in getting notification service", e);
                     }
                 }
             }
@@ -277,7 +278,7 @@ public class OperationUtils {
      * @throws OperationManagementException
      */
     public void UpdateUriOperations(SyncmlDocument syncmlDocument) throws DeviceManagementException,
-            NotificationManagementException, OperationManagementException {
+            NotificationManagementException, OperationManagementException, WindowsOperationException {
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
         List<Status> statuses = syncmlDocument.getBody().getStatus();
