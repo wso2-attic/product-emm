@@ -34,9 +34,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDevic
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.Device;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.OperationRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Wifi;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
