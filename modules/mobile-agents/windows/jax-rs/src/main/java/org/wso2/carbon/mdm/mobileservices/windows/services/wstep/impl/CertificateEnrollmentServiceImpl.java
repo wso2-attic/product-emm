@@ -29,6 +29,10 @@ import org.apache.cxf.message.Message;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.w3c.dom.*;
+import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementServiceImpl;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
@@ -37,6 +41,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.KeyStoreGene
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.SyncmlCredentials;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.CertificateEnrollmentService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
@@ -85,12 +90,12 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
     private static final int SIGNED_CERTIFICATE_POSITION = 1;
     private static final int APPAUTH_USERNAME_POSITION = 21;
     private static final int APPAUTH_PASSWORD_POSITION = 22;
-    //Polling frequency position is for futhure purposes.Currently polling frequency is hardcoded.But planned to
     //get its value from tenant configuration.
-   // private static final int POLLING_FREQUENCY_POSITION = 27;
+    private static final int POLLING_FREQUENCY_POSITION = 27;
     private static Log log = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
     private PrivateKey privateKey;
     private X509Certificate rootCACertificate;
+    //private File jksF;
 
     @Resource
     private WebServiceContext context;
@@ -127,6 +132,68 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
         WindowsPluginProperties windowsPluginProperties = (WindowsPluginProperties) ctx.getAttribute(
                 PluginConstants.WINDOWS_PLUGIN_PROPERTIES);
+        //////////////////////////////////////////////////////////////////////
+//        String kPasssword;
+//        int pollingFrequency;
+//        String cmName = null;
+//        String kStorePassword;
+//        String pkPassword = null;
+//        int notBefore = 0;
+//        int notafter = 0;
+//
+//        try {
+//            List<ConfigurationEntry> tenantConfigurations = getTenantConfiurationData();
+//            for (ConfigurationEntry configurationEntry : tenantConfigurations) {
+//                if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIERFREQUENCY)) {
+//                    Object o = configurationEntry.getName();
+//                    if (o instanceof Integer) {
+//                        pollingFrequency = (Integer) o;
+//                    } else {
+//                        throw new InvalidParameterException("Invalid value for Local polling time.");
+//                    }
+//                }
+//                if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.COMMONNAME)){
+//                    cmName = configurationEntry.getValue().toString();
+//                }
+//                if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.KEYSTOREPASSWORD)) {
+//                    kStorePassword = configurationEntry.getValue().toString();
+//                }
+//                if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.PRIVATEKEYPASSWORD)) {
+//                    pkPassword = configurationEntry.getValue().toString();
+//                }
+//                if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIERFREQUENCY)) {
+//                    Object o = configurationEntry.getName();
+//                    if (o instanceof Integer) {
+//                        notBefore = (Integer) o;
+//                    } else {
+//                        throw new InvalidParameterException("Invalid value for certification expire date");
+//                    }
+//                }
+//                if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIERFREQUENCY)) {
+//                    Object o = configurationEntry.getName();
+//                    if (o instanceof Integer) {
+//                        notafter = (Integer) o;
+//                    } else {
+//                        throw new InvalidParameterException("Invalid value for certification expire date");
+//                    }
+//                }
+//                if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.MDMCERT)) {
+//                    Object o = configurationEntry.getName();
+//                    if (o instanceof File) {
+//                        jksF = (File) o;
+//                    } else {
+//                        throw new InvalidParameterException("Invalid File");
+//                    }
+//                }
+//            }
+//            List<java.io.Serializable> certPropertyList = new ArrayList<>();
+//            certPropertyList.add(cmName);
+//            certPropertyList.add(notBefore);
+//            certPropertyList.add(notafter);
+//        } catch (DeviceManagementException e) {
+//            e.printStackTrace();
+//        }
+        /////////////////////////////////////////////////////////////////////
         String keyStorePassword = windowsPluginProperties.getKeyStorePassword();
         String privateKeyPassword = windowsPluginProperties.getPrivateKeyPassword();
         String commonName = windowsPluginProperties.getCommonName();
@@ -137,6 +204,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         certPropertyList.add(commonName);
         certPropertyList.add(notBeforeDate);
         certPropertyList.add(notAfterDate);
+
         try {
             setRootCertAndKey(keyStorePassword, privateKeyPassword);
         }
@@ -210,8 +278,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         String jksFilePath;
         KeyStore securityJKS;
         try {
+
             File jksFile = new File(getClass().getClassLoader().getResource(
                     PluginConstants.CertificateEnrolment.WSO2_MDM_JKS_FILE).getFile());
+
             jksFilePath = jksFile.getPath();
             securityJKS = KeyStoreGenerator.getKeyStore();
         } catch (KeyStoreGenerationException e) {
@@ -327,66 +397,87 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
-        String wapProvisioningString;
+        String wapProvisioningString = null;
         try {
-            builder = domFactory.newDocumentBuilder();
-            Document document = builder.parse(wapProvisioningFilePath);
-            NodeList wapParm = document.getElementsByTagName(PluginConstants.CertificateEnrolment.PARM);
-            Node caCertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
+            InputStream csp = new ByteArrayInputStream(binarySecurityToken.getBytes("UTF-8"));
+            CertificateManagementServiceImpl impl=  CertificateManagementServiceImpl.getInstance();
+           // byte[] encodedvaluesigncert = impl.getPKIMessageSCEP(csp);
 
-            //Adding SHA1 CA certificate finger print to wap-provisioning xml.
-            caCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
-                    CertificateEnrolment.TYPE).setTextContent(String.valueOf(
-                    DigestUtils.sha1Hex(rootCACertificate.getEncoded())).toUpperCase());
+           // String encSigncert = new String(encodedvaluesigncert);////////signed certificate
+
+            X509Certificate xxrootCertificate=  (X509Certificate)impl.getCACertificate(); //rootcertificate
+            String  xxrootCertEncodedString = base64Encoder.encodeAsString(xxrootCertificate.getEncoded());
+
+
+            X509Certificate xxsigncertificate = impl.getSignCertificateFromCSR(binarySecurityToken,
+                    rootCACertificate, certPropertyList);
+            String xxencodedSignString = base64Encoder.encodeAsString(xxsigncertificate .getEncoded());
+
+/////////////////////////////////////////////////
+        builder = domFactory.newDocumentBuilder();
+        Document document = builder.parse(wapProvisioningFilePath);
+        NodeList wapParm = document.getElementsByTagName(PluginConstants.CertificateEnrolment.PARM);
+        Node caCertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
+
+        //Adding SHA1 CA certificate finger print to wap-provisioning xml.
+        caCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
+                CertificateEnrolment.TYPE).setTextContent(String.valueOf(
+                //DigestUtils.sha1Hex(rootCACertificate.getEncoded())).toUpperCase());
+                DigestUtils.sha1Hex(xxrootCertificate.getEncoded())).toUpperCase());
 
             //Adding encoded CA certificate to wap-provisioning file after removing new line
             // characters.
             NamedNodeMap rootCertAttributes = caCertificatePosition.getAttributes();
-            Node rootCertNode =
-                    rootCertAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
-            rootCertNode.setTextContent(rootCertEncodedString);
+        Node rootCertNode =
+                rootCertAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+        rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
+  //rootCertNode.setTextContent(rootCertEncodedString);
+           rootCertNode.setTextContent(xxrootCertEncodedString);
 
-            if (log.isDebugEnabled()) {
-                log.debug("Root certificate: " + rootCertEncodedString);
-            }
+        if (log.isDebugEnabled()) {
+            log.debug("Root certificate: " + rootCertEncodedString);
+        }
 
-            Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
+        Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
 
-            //Adding SHA1 signed certificate finger print to wap-provisioning xml.
-            signedCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
-                    CertificateEnrolment.TYPE).setTextContent(String.valueOf(
-                    DigestUtils.sha1Hex(signedCertificate.getEncoded())).toUpperCase());
+        //Adding SHA1 signed certificate finger print to wap-provisioning xml.
+        signedCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
+                CertificateEnrolment.TYPE).setTextContent(String.valueOf(
+                // DigestUtils.sha1Hex(signedCertificate.getEncoded())).toUpperCase());
+                DigestUtils.sha1Hex(xxsigncertificate.getEncoded())).toUpperCase());
 
+            /////////////////////new ///////////////////////////////////////////////
             //Adding encoded signed certificate to wap-provisioning file after removing new line
             // characters.
             NamedNodeMap clientCertAttributes = signedCertificatePosition.getAttributes();
-            Node clientEncodedNode =
-                    clientCertAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
-            clientEncodedNode.setTextContent(signedCertEncodedString);
+        Node clientEncodedNode =
+                clientCertAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+        signedCertEncodedString = signedCertEncodedString.replaceAll("\n", "");
 
-            if (log.isDebugEnabled()) {
-                log.debug("Signed certificate: " + signedCertEncodedString);
-            }
+       // clientEncodedNode.setTextContent(signedCertEncodedString);
+            clientEncodedNode.setTextContent(xxencodedSignString);
 
-            // Adding user name auth token to wap-provisioning xml
-            Node userNameAuthPosition = wapParm.item(APPAUTH_USERNAME_POSITION);
-            NamedNodeMap appSrvAttributes = userNameAuthPosition.getAttributes();
-            Node aAUTHNAMENode = appSrvAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(decodedBST);
-            String username = cacheentry.getUsername();
-            aAUTHNAMENode.setTextContent(cacheentry.getUsername());
-            DeviceUtil.removeToken(decodedBST);
-            String password = DeviceUtil.generateRandomToken();
-            Node passwordAuthPosition = wapParm.item(APPAUTH_PASSWORD_POSITION);
-            NamedNodeMap appSrvPasswordAttribute = passwordAuthPosition.getAttributes();
-            Node aAUTHPasswordNode = appSrvPasswordAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            aAUTHPasswordNode.setTextContent(password);
-            String rstr = new SyncmlCredentials().generateRST(username, password);
-            DeviceUtil.persistChallengeToken(rstr, "", username);
+        if (log.isDebugEnabled()) {
+            log.debug("Signed certificate: " + signedCertEncodedString);
+        }
 
-            // get device polling frequency from the tenant Configurations.
+        // Adding user name auth token to wap-provisioning xml
+        Node userNameAuthPosition = wapParm.item(APPAUTH_USERNAME_POSITION);
+        NamedNodeMap appSrvAttributes = userNameAuthPosition.getAttributes();
+        Node aAUTHNAMENode = appSrvAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+        CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(decodedBST);
+        String username = cacheentry.getUsername();
+        aAUTHNAMENode.setTextContent(cacheentry.getUsername());
+        DeviceUtil.removeToken(decodedBST);
+        String password = DeviceUtil.generateRandomToken();
+        Node passwordAuthPosition = wapParm.item(APPAUTH_PASSWORD_POSITION);
+        NamedNodeMap appSrvPasswordAttribute = passwordAuthPosition.getAttributes();
+        Node aAUTHPasswordNode = appSrvPasswordAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+        aAUTHPasswordNode.setTextContent(password);
+        String rstr = new SyncmlCredentials().generateRST(username, password);
+        DeviceUtil.persistChallengeToken(rstr, "", username);
+
+        // get device polling frequency from the tenant Configurations.
 //            String pollingFrequency = null;
 //            TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
 //            List<ConfigurationEntry> configurations = configuration.getConfiguration();
@@ -402,15 +493,16 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 //            if (log.isDebugEnabled()) {
 //                log.debug("Username: " + username + "Password: " + rstr);
 //            }
-            wapProvisioningString = convertDocumentToString(document);
+        wapProvisioningString = convertDocumentToString(document);
 
-            //Generic exception is caught here as there is no need of taking different actions for
-            //different exceptions.
-        } catch (Exception e) {
-            String msg = "Problem occurred with wap-provisioning.xml file.";
-            log.error(msg, e);
-            throw new WAPProvisioningException(msg, e);
-        }
+        //Generic exception is caught here as there is no need of taking different actions for
+        //different exceptions.
+    } catch (Exception e) {
+        String msg = "Problem occurred with wap-provisioning.xml file.";
+        log.error(msg, e);
+        throw new WAPProvisioningException(msg, e);
+    }
+
         return base64Encoder.encodeAsString(wapProvisioningString.getBytes());
     }
 
@@ -426,5 +518,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         }
         Message message = ((WrappedMessageContext) messageContext).getWrappedMessage();
         return CastUtils.cast((List<?>) message.get(Header.HEADER_LIST));
+    }
+
+    private List<ConfigurationEntry> getTenantConfiurationData() throws DeviceManagementException {
+        TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
+        return configuration.getConfiguration();
     }
 }

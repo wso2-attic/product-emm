@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
+import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -50,6 +51,18 @@ public class WindowsAPIUtils {
         identifier.setId(deviceId);
         identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
         return identifier;
+    }
+
+    public static CertificateManagementService getCertificateManagementService() {
+        CertificateManagementService cmService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        cmService =
+                (CertificateManagementService)ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
+        return cmService;
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
@@ -151,4 +164,5 @@ public class WindowsAPIUtils {
         return getDeviceManagementService().getConfiguration(
                 DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
     }
+
 }

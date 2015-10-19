@@ -90,7 +90,6 @@ public final class PluginConstants {
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
         public static final String WAB_URL = "/mdm/enrollments/windows/login-agent";
-        //public static final String WAB_URL = "/mdm/enrollment
 
     }
 
@@ -188,6 +187,8 @@ public final class PluginConstants {
         public static final int RESOLUTION_POSITION = 7;
         public static final int DEVICE_NAME_POSITION = 8;
         public static final int DEV_MODEL_POSITION = 6;
+        public static final String SYNCML_DATA_ONE = "1";
+        public static final String SYNCML_DATA_ZERO = "0";
         public static final String OS_VERSION = "OS_VERSION";
         public static final String IMSI = "IMSI";
         public static final String IMEI = "IMEI";
@@ -204,7 +205,7 @@ public final class PluginConstants {
     }
 
     /**
-     * windows device constants
+     * Windows device constants.
      */
     public final class DeviceConstants {
         private DeviceConstants() {
@@ -217,7 +218,7 @@ public final class PluginConstants {
     }
 
     /**
-     * Device Operation codes
+     * Device Operation codes.
      */
     public final class OperationCodes {
         private OperationCodes() {
@@ -251,6 +252,9 @@ public final class PluginConstants {
         public static final String DEVICE_PASSCODE_DELETE = "DEVICE_PASSCODE_DELETE";
     }
 
+    /**
+     * Plugin response status code constants.
+     */
     public final class StatusCodes {
         private StatusCodes() {
             throw new AssertionError();
@@ -259,4 +263,36 @@ public final class PluginConstants {
         public static final int MULTI_STATUS_HTTP_CODE = 207;
     }
 
+    /**
+     * Tenant Configuration related constants.
+     */
+    public final class TenantConfigProperties {
+        private TenantConfigProperties() {
+            throw new AssertionError();
+        }
+
+        public static final String LICENSE_KEY = "windowsLicense";
+        public static final String LANGUAGE_US = "en_US";
+        public static final String CONTENT_TYPE_TEXT = "text";
+        public static final String NOTIFIERFREQUENCY = "notifierFrequency";
+        public static final String KEYSTOREPASSWORD = "keystorePassword";
+        public static final String PRIVATEKEYPASSWORD = "privateKeyPassword";
+        public static final String BEFOREEXPIRE = "beforeExpire";
+        public static final String AFTEREXPIRE = "afterExpire";
+        public static final String MDMCERT = "MDMCert";
+        public static final String COMMONNAME = "commonName";
+    }
+
+    /**
+     * Policy Configuration related constants.
+     */
+    public final class PolicyConfigProperties {
+        private PolicyConfigProperties() {
+            throw new AssertionError();
+        }
+
+        public static final String POLICY_ENABLE = "enabled";
+        public static final String ENCRYPTED_ENABLE = "encrypted";
+        public static final String ENABLE_PASSWORD = "enablePassword";
+    }
 }

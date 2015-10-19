@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
@@ -79,10 +80,10 @@ public class SyncmlParser {
      * @param syncmlPayload - Received SyncML XML payload
      * @return - SyncmlDocument object generated from the received payload
      */
-    public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws WindowsOperationException {
+    public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws SyncmlMessageFormatException {
         SyncmlDocument syncmlDocument = new SyncmlDocument();
         if (syncmlPayload.getElementsByTagName(SYNC_HEADER) == null) {
-            throw new IllegalFormatCodePointException(2);
+            throw new SyncmlMessageFormatException();
         }
         NodeList syncHeaderList = syncmlPayload.getElementsByTagName(SYNC_HEADER);
         Node syncHeader = syncHeaderList.item(0);

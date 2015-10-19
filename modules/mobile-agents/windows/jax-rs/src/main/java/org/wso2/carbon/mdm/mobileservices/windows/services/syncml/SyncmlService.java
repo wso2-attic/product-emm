@@ -18,17 +18,12 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml;
 
-import org.json.JSONException;
 import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.FeatureManagementException;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
-import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsConfigurationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
-import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -36,8 +31,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Interface for Syncml message flow.
@@ -50,8 +43,6 @@ public interface SyncmlService {
     @Consumes({PluginConstants.SYNCML_MEDIA_TYPE, MediaType.APPLICATION_XML})
     @Produces(PluginConstants.SYNCML_MEDIA_TYPE)
     Response getResponse(Document request) throws WindowsDeviceEnrolmentException, WindowsOperationException,
-            NotificationManagementException, OperationManagementException, DeviceManagementException,
-            FeatureManagementException, PolicyComplianceException, JSONException, PolicyManagementException,
-            NoSuchAlgorithmException, UnsupportedEncodingException;
+            NotificationManagementException, WindowsConfigurationException;
 
 }
