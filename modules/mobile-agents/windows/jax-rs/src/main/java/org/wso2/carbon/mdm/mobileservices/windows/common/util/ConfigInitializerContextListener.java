@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
@@ -21,7 +21,7 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.WindowsPluginProperties;
 import org.xml.sax.SAXException;
 
@@ -41,6 +41,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
 
     public static final int INITIAL_VALUE = 0;
     private static Log log = LogFactory.getLog(ConfigInitializerContextListener.class);
+
     private enum PropertyName {
         PROPERTY_SIGNED_CERT_CN("SignedCertCN"),
         PROPERTY_SIGNED_CERT_NOT_BEFORE("SignedCertNotBefore"),
@@ -51,9 +52,11 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         DOMAIN("domain");
 
         private final String propertyName;
-        private PropertyName(final String propertyName) {
+
+        PropertyName(final String propertyName) {
             this.propertyName = propertyName;
         }
+
         public String getValue() {
             return this.propertyName;
         }
@@ -70,7 +73,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
 
         ServletContext servletContext = servletContextEvent.getServletContext();
         File propertyFile = new File(getClass().getClassLoader().getResource(
-                Constants.CertificateEnrolment.PROPERTIES_XML).getFile());
+                PluginConstants.CertificateEnrolment.PROPERTIES_XML).getFile());
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
         Document document = null;
@@ -90,7 +93,7 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         String password = null;
         String privateKeyPassword = null;
         String signedCertCommonName = null;
-        String authPolicy=null;
+        String authPolicy = null;
         String domain = null;
         int signedCertNotBeforeDate = INITIAL_VALUE;
         int signedCertNotAfterDate = INITIAL_VALUE;
@@ -102,8 +105,8 @@ public class ConfigInitializerContextListener implements ServletContextListener 
                     item(0).getTextContent();
             signedCertCommonName =
                     document.getElementsByTagName(PropertyName.PROPERTY_SIGNED_CERT_CN.getValue()).item(0).
-                    getTextContent();
-            authPolicy=document.getElementsByTagName(PropertyName.AUTH_POLICY.getValue()).item(0).
+                            getTextContent();
+            authPolicy = document.getElementsByTagName(PropertyName.AUTH_POLICY.getValue()).item(0).
                     getTextContent();
             signedCertNotBeforeDate = Integer.valueOf(document.getElementsByTagName(
                     PropertyName.PROPERTY_SIGNED_CERT_NOT_BEFORE.getValue()).item(0).getTextContent());
@@ -121,11 +124,11 @@ public class ConfigInitializerContextListener implements ServletContextListener 
         properties.setNotAfterDays(signedCertNotAfterDate);
         properties.setAuthPolicy(authPolicy);
         properties.setDomain(domain);
-        servletContext.setAttribute(Constants.WINDOWS_PLUGIN_PROPERTIES, properties);
+        servletContext.setAttribute(PluginConstants.WINDOWS_PLUGIN_PROPERTIES, properties);
 
         File wapProvisioningFile = new File(getClass().getClassLoader().getResource(
-                Constants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
-        servletContext.setAttribute(Constants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
+                PluginConstants.CertificateEnrolment.WAP_PROVISIONING_XML).getFile());
+        servletContext.setAttribute(PluginConstants.CONTEXT_WAP_PROVISIONING_FILE, wapProvisioningFile);
     }
 
     @Override

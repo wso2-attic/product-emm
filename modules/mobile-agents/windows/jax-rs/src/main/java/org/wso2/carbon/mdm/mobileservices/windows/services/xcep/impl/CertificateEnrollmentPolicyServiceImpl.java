@@ -1,24 +1,24 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.xcep.impl;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.CertificateEnrollmentPolicyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,8 +42,8 @@ import javax.xml.ws.soap.SOAPBinding;
 /**
  * Implementation class for CertificateEnrollmentPolicyService.
  */
-@WebService(endpointInterface = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT,
-		    targetNamespace = Constants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE)
+@WebService(endpointInterface = PluginConstants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_ENDPOINT,
+		    targetNamespace = PluginConstants.CERTIFICATE_ENROLLMENT_POLICY_SERVICE_TARGET_NAMESPACE)
 @Addressing(enabled = true, required = true)
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnrollmentPolicyService {
@@ -79,13 +79,13 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		PrivateKeyAttributes privateKeyAttributeElement = new PrivateKeyAttributes();
 
 		privateKeyAttributeElement.
-				setMinimalKeyLength(Constants.CertificateEnrolmentPolicy.MINIMAL_KEY_LENGTH);
+				setMinimalKeyLength(PluginConstants.CertificateEnrolmentPolicy.MINIMAL_KEY_LENGTH);
 
-		attributeElement.setPolicySchema(Constants.CertificateEnrolmentPolicy.POLICY_SCHEMA);
+		attributeElement.setPolicySchema(PluginConstants.CertificateEnrolmentPolicy.POLICY_SCHEMA);
 		attributeElement.setPrivateKeyAttributes(privateKeyAttributeElement);
-		attributeElement.setHashAlgorithmOIDReference(Constants.CertificateEnrolmentPolicy.
+		attributeElement.setHashAlgorithmOIDReference(PluginConstants.CertificateEnrolmentPolicy.
 				                                              HASH_ALGORITHM_OID_REFERENCE);
-		certEnrollmentPolicyElement.setPolicyOIDReference(Constants.CertificateEnrolmentPolicy.
+		certEnrollmentPolicyElement.setPolicyOIDReference(PluginConstants.CertificateEnrolmentPolicy.
 				                                              OID_REFERENCE);
 		certEnrollmentPolicyElement.setAttributes(attributeElement);
 		policyCollectionElement.getPolicy().add(certEnrollmentPolicyElement);
@@ -93,10 +93,10 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		response.value = responseElement;
 
 		OID oidElement = new OID();
-		oidElement.setValue(Constants.CertificateEnrolmentPolicy.OID);
-		oidElement.setGroup(Constants.CertificateEnrolmentPolicy.OID_GROUP);
-		oidElement.setOIDReferenceID(Constants.CertificateEnrolmentPolicy.OID_REFERENCE_ID);
-		oidElement.setDefaultName(Constants.CertificateEnrolmentPolicy.OID_DEFAULT_NAME);
+		oidElement.setValue(PluginConstants.CertificateEnrolmentPolicy.OID);
+		oidElement.setGroup(PluginConstants.CertificateEnrolmentPolicy.OID_GROUP);
+		oidElement.setOIDReferenceID(PluginConstants.CertificateEnrolmentPolicy.OID_REFERENCE_ID);
+		oidElement.setDefaultName(PluginConstants.CertificateEnrolmentPolicy.OID_DEFAULT_NAME);
 
 		oidCollectionElement.getOID().add(oidElement);
 		caCollection.value = caCollectionElement;

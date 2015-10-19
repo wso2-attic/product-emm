@@ -18,8 +18,11 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.base.MultitenantConstants;
+import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -29,7 +32,7 @@ import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagement
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -41,7 +44,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
- * class for Windows API utilities.
+ * Class for get Windows API utilities.
  */
 public class WindowsAPIUtils {
 
@@ -52,6 +55,18 @@ public class WindowsAPIUtils {
         identifier.setId(deviceId);
         identifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
         return identifier;
+    }
+
+    public static CertificateManagementService getCertificateManagementService() {
+        CertificateManagementService cmService;
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        cmService =
+                (CertificateManagementService)ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        PrivilegedCarbonContext.endTenantFlow();
+        return cmService;
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
@@ -65,6 +80,7 @@ public class WindowsAPIUtils {
         }
         return deviceManagementProviderService;
     }
+
 
     public static UserStoreManager getUserStoreManager() throws MDMAPIException {
         RealmService realmService;
@@ -116,7 +132,7 @@ public class WindowsAPIUtils {
                 message, responseMediaType);
         getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
         if (!deviceIDHolder.getErrorDeviceIdList().isEmpty()) {
-            return javax.ws.rs.core.Response.status(Constants.StatusCodes.
+            return javax.ws.rs.core.Response.status(PluginConstants.StatusCodes.
                     MULTI_STATUS_HTTP_CODE).type(
                     responseMediaType).entity(deviceUtils.
                     convertErrorMapIntoErrorMessage(deviceIDHolder.getErrorDeviceIdList())).build();
@@ -149,4 +165,5 @@ public class WindowsAPIUtils {
         return getDeviceManagementService().getConfiguration(
                 DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
     }
+
 }

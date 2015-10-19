@@ -18,14 +18,12 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsOperation;
-
 import java.io.Serializable;
 
 /**
  * This class represents the information of encrypt operation.
  */
-public class StorageEncryption extends WindowsOperation implements Serializable {
+public class StorageEncryption implements Serializable {
     private boolean encrypted;
 
     public boolean isEncrypted() {
