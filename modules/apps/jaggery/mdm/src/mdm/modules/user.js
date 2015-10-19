@@ -563,6 +563,9 @@ var userModule = function () {
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
             permissions["VIEW_DASHBOARD"] = true;
         }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/tenant-configs/view")) {
+            permissions["TENANT_CONFIGURATION"] = true;
+        }
 
         return permissions;
     };
