@@ -99,7 +99,7 @@ public class ConfigurationMgtService {
 			License license = AndroidAPIUtils.getDeviceManagementService().getLicense(
 					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, AndroidConstants.
 							                                             TenantConfigProperties.LANGUAGE_US);
-			if(license != null) {
+			if(license != null && configs != null) {
 				entry.setContentType(AndroidConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
 				entry.setName(AndroidConstants.TenantConfigProperties.LICENSE_KEY);
 				entry.setValue(license.getText());
