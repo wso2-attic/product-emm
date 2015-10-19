@@ -29,20 +29,31 @@ import javax.xml.xpath.XPathExpressionException;
  */
 public class TestBase {
 	protected AutomationContext automationContext;
-	protected String backendURL;
+	protected String backendHTTPSURL;
+    protected String backendHTTPURL;
+    static String accessToken;
 
 	protected void init(TestUserMode userMode) throws Exception {
 		automationContext = new AutomationContext(Constants.AUTOMATION_CONTEXT, userMode);
-		backendURL = automationContext.getContextUrls().getWebAppURLHttps();
+		backendHTTPSURL = automationContext.getContextUrls().getWebAppURLHttps();
+		backendHTTPURL = automationContext.getContextUrls().getWebAppURL();
 	}
 
 	protected void initPublisher(String productGroupName, String instanceName, TestUserMode userMode)
 			throws XPathExpressionException {
 		automationContext = new AutomationContext(productGroupName, instanceName, userMode);
-		backendURL = automationContext.getContextUrls().getBackEndUrl();
+		backendHTTPSURL = automationContext.getContextUrls().getBackEndUrl();
 	}
 
-	protected String getBackendURL() throws XPathExpressionException {
+	public String getBackendHTTPURL() {
+		return backendHTTPURL;
+	}
+
+	public void setBackendHTTPURL(String backendHTTPURL) {
+		this.backendHTTPURL = backendHTTPURL;
+	}
+
+	protected String getBackendHTTPSURL() throws XPathExpressionException {
 		return automationContext.getContextUrls().getBackEndUrl();
 	}
 

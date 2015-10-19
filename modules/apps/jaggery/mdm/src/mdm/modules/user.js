@@ -377,8 +377,10 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = "/mdm-admin/users/" + username;
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users/" + username;
+            var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            response["userDomain"] = carbonUser.domain;
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -394,8 +396,9 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = "/mdm-admin/users/" + username + "/roles";
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users/" + username + "/roles";
+            var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -553,6 +556,9 @@ var userModule = function () {
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
             permissions["ADD_POLICY"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/priority")) {
+            permissions["CHANGE_POLICY_PRIORITY"] = true;
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
             permissions["VIEW_DASHBOARD"] = true;

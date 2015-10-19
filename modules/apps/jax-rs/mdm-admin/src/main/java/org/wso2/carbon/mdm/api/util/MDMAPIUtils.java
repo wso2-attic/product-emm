@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
@@ -36,6 +37,8 @@ import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import java.util.List;
+
 /**
  * MDMAPIUtils class provides utility function used by CDM REST-API classes.
  */
@@ -43,26 +46,16 @@ public class MDMAPIUtils {
 
     private static Log log = LogFactory.getLog(MDMAPIUtils.class);
 
-    public static DeviceManagementProviderService getDeviceManagementService(
-            String tenantDomain) throws MDMAPIException {
-        // until complete login this is use to load super tenant context
-        PrivilegedCarbonContext.startTenantFlow();
+    public static DeviceManagementProviderService getDeviceManagementService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        int tenantId;
-        DeviceManagementProviderService dmService;
-        if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
-            tenantId = MultitenantConstants.SUPER_TENANT_ID;
-        } else {
-            tenantId = getTenantId(tenantDomain);
+        DeviceManagementProviderService deviceManagementProviderService =
+                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        if (deviceManagementProviderService == null) {
+            String msg = "Device Management provider service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
         }
-        ctx.setTenantDomain(tenantDomain);
-        ctx.setTenantId(tenantId);
-        dmService = (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-        return dmService;
-    }
-
-    public static DeviceManagementProviderService getDeviceManagementService() throws MDMAPIException {
-        return getDeviceManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        return deviceManagementProviderService;
     }
 
     public static int getTenantId(String tenantDomain) throws MDMAPIException {
@@ -71,7 +64,8 @@ public class MDMAPIUtils {
         try {
             return realmService.getTenantManager().getTenantId(tenantDomain);
         } catch (UserStoreException e) {
-            throw new MDMAPIException("Error obtaining tenant id from tenant domain " + tenantDomain);
+            throw new MDMAPIException(
+                    "Error obtaining tenant id from tenant domain " + tenantDomain);
         }
     }
 
@@ -79,24 +73,19 @@ public class MDMAPIUtils {
         RealmService realmService;
         UserStoreManager userStoreManager;
         try {
-            PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
             if (realmService == null) {
-                String msg = "Realm service not initialized";
+                String msg = "Realm service has not initialized.";
                 log.error(msg);
-                throw new MDMAPIException(msg);
+                throw new IllegalStateException(msg);
             }
-            int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            int tenantId = ctx.getTenantId();
             userStoreManager = realmService.getTenantUserRealm(tenantId).getUserStoreManager();
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving current user store manager";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
-        } finally {
-            PrivilegedCarbonContext.endTenantFlow();
         }
         return userStoreManager;
     }
@@ -136,24 +125,19 @@ public class MDMAPIUtils {
         RealmService realmService;
         AuthorizationManager authorizationManager;
         try {
-            PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
             if (realmService == null) {
-                String msg = "Realm service not initialized";
+                String msg = "Realm service has not initialized.";
                 log.error(msg);
-                throw new MDMAPIException(msg);
+                throw new IllegalStateException(msg);
             }
-            int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            int tenantId = ctx.getTenantId();
             authorizationManager = realmService.getTenantUserRealm(tenantId).getAuthorizationManager();
         } catch (UserStoreException e) {
-            String msg = "Error occurred while retrieving current Authorization manager";
+            String msg = "Error occurred while retrieving current Authorization manager.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
-        } finally {
-            PrivilegedCarbonContext.endTenantFlow();
         }
         return authorizationManager;
     }
@@ -179,69 +163,62 @@ public class MDMAPIUtils {
         return deviceIdentifier;
     }
 
-    public static ApplicationManagementProviderService getAppManagementService(String tenantDomain) throws MDMAPIException {
-        // until complete login this is use to load super tenant context
-        PrivilegedCarbonContext.startTenantFlow();
+    public static ApplicationManagementProviderService getAppManagementService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        int tenantId;
-	    ApplicationManagementProviderService appService;
-        if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
-            tenantId = MultitenantConstants.SUPER_TENANT_ID;
-        } else {
-            tenantId = getTenantId(tenantDomain);
-        }
-        ctx.setTenantDomain(tenantDomain);
-        ctx.setTenantId(tenantId);
-        appService = (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-        return appService;
-    }
-
-    public static ApplicationManagementProviderService getAppManagementService() throws MDMAPIException {
-        return getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-    }
-
-    public static PolicyManagerService getPolicyManagementService(String tenantDomain) throws MDMAPIException {
-        PolicyManagerService policyManagementService;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        int tenantId;
-        if (tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
-            tenantId = MultitenantConstants.SUPER_TENANT_ID;
-        } else {
-            tenantId = getTenantId(tenantDomain);
-        }
-        ctx.setTenantDomain(tenantDomain);
-        ctx.setTenantId(tenantId);
-        policyManagementService = (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
-
-        if (policyManagementService == null) {
-            String msg = "Policy Management service not initialized";
+        ApplicationManagementProviderService applicationManagementProviderService =
+             (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
+        if (applicationManagementProviderService == null) {
+            String msg = "Application management service has not initialized.";
             log.error(msg);
-            throw new MDMAPIException(msg);
+            throw new IllegalStateException(msg);
         }
-        PrivilegedCarbonContext.endTenantFlow();
+        return applicationManagementProviderService;
+    }
+
+    public static PolicyManagerService getPolicyManagementService() {
+        PolicyManagerService policyManagementService;
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        policyManagementService =
+                (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
+        if (policyManagementService == null) {
+            String msg = "Policy Management service not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
         return policyManagementService;
     }
 
-	public static TenantConfigurationManagementService getTenantConfigurationManagementService() {
-		TenantConfigurationManagementService tenantConfigService;
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		tenantConfigService =
-				(TenantConfigurationManagementService) ctx.getOSGiService(TenantConfigurationManagementService.class, null);
-		return tenantConfigService;
-	}
-
-	public static NotificationManagementService getNotificationManagementService() {
-		NotificationManagementService notificationManagementService;
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		notificationManagementService = (NotificationManagementService) ctx.
-				                          getOSGiService(NotificationManagementService.class, null);
-		return  notificationManagementService;
-	}
-
-    public static PolicyManagerService getPolicyManagementService() throws MDMAPIException {
-        return getPolicyManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+    public static TenantConfigurationManagementService getTenantConfigurationManagementService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        TenantConfigurationManagementService tenantConfigurationManagementService =
+             (TenantConfigurationManagementService) ctx.getOSGiService(TenantConfigurationManagementService.class, null);
+        if (tenantConfigurationManagementService == null) {
+            String msg = "Tenant configuration Management service not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return tenantConfigurationManagementService;
     }
 
+    public static NotificationManagementService getNotificationManagementService() {
+        NotificationManagementService notificationManagementService;
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
+                                                                        NotificationManagementService.class, null);
+        if (notificationManagementService == null) {
+            String msg = "Notification Management service not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return notificationManagementService;
+    }
+
+    public static PaginationResult getPagingResponse(int recordsTotal, int recordsFiltered, int draw, List<?> data) {
+        PaginationResult pagingResponse = new PaginationResult();
+        pagingResponse.setRecordsTotal(recordsTotal);
+        pagingResponse.setRecordsFiltered(recordsFiltered);
+        pagingResponse.setDraw(draw);
+        pagingResponse.setData(data);
+        return pagingResponse;
+    }
 }

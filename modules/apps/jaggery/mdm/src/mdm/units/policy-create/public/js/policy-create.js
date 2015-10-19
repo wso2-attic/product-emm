@@ -1772,8 +1772,9 @@ var savePolicy = function (policy, state) {
         serviceURL,
         payload,
         function () {
-            $(".policy-message").removeClass("hidden");
             $(".add-policy").addClass("hidden");
+            $(".policy-naming").addClass("hidden");
+            $(".policy-message").removeClass("hidden");
         },
         function () {
 

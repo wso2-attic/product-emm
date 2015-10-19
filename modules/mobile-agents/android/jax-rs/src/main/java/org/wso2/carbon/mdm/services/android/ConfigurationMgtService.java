@@ -33,6 +33,7 @@ import org.wso2.carbon.mdm.services.android.util.Message;
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,8 +82,6 @@ public class ConfigurationMgtService {
 			msg = "Error occurred while configuring the android platform";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -91,15 +90,23 @@ public class ConfigurationMgtService {
 	public TenantConfiguration getConfiguration() throws AndroidAgentException {
 		String msg;
 		TenantConfiguration tenantConfiguration;
+        List<ConfigurationEntry> configs;
 		try {
 			tenantConfiguration = AndroidAPIUtils.getDeviceManagementService().
 					getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-			List<ConfigurationEntry> configs = tenantConfiguration.getConfiguration();
+			if(tenantConfiguration != null) {
+                configs = tenantConfiguration.getConfiguration();
+            } else {
+                tenantConfiguration = new TenantConfiguration();
+                configs = new ArrayList<ConfigurationEntry>();
+            }
+
 			ConfigurationEntry entry = new ConfigurationEntry();
 			License license = AndroidAPIUtils.getDeviceManagementService().getLicense(
 					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, AndroidConstants.
 							                                             TenantConfigProperties.LANGUAGE_US);
-			if(license != null) {
+
+			if(license != null && configs != null) {
 				entry.setContentType(AndroidConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
 				entry.setName(AndroidConstants.TenantConfigProperties.LICENSE_KEY);
 				entry.setValue(license.getText());
@@ -110,8 +117,6 @@ public class ConfigurationMgtService {
 			msg = "Error occurred while retrieving the Android tenant configuration";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return tenantConfiguration;
 	}
@@ -150,8 +155,6 @@ public class ConfigurationMgtService {
 			msg = "Error occurred while modifying configuration settings of Android platform";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}

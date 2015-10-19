@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.Constants;
+import org.wso2.mdm.integration.common.OAuthUtil;
 import org.wso2.mdm.integration.common.RestClient;
 import org.wso2.mdm.integration.common.TestBase;
 
@@ -36,7 +37,8 @@ public class AndroidOperation extends TestBase {
     @BeforeTest(alwaysRun = true, groups = { Constants.Enrollment.ANDROID_ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
-        client = new RestClient(backendURL, Constants.APPLICATION_JSON);
+        String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
+        this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     @Test(groups = Constants.Operations.OPERATIONS_GROUP, description = "Test Android device lock operation.")

@@ -66,8 +66,6 @@ public class PolicyMgtService {
             String msg = "Error occurred while getting the policy.";
             log.error(msg, e);
             throw new AndroidAgentException(msg, e);
-        } finally {
-            AndroidAPIUtils.endTenantFlow();
         }
         return responseMessage;
     }
@@ -88,8 +86,6 @@ public class PolicyMgtService {
             String msg = "Error occurred while getting the features.";
             log.error(msg, e);
             throw new AndroidAgentException(msg, e);
-        } finally {
-            AndroidAPIUtils.endTenantFlow();
         }
         return profileFeatures;
     }
