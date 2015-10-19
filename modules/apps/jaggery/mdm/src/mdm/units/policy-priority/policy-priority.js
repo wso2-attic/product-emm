@@ -2,7 +2,6 @@ function onRequest(context) {
     // var log = new Log("policy-listing.js");
     var policyModule = require("/modules/policy.js")["policyModule"];
     var response = policyModule.getAllPolicies();
-    log.info(response);
     if (response["status"] == "success") {
         var policyListToView = response["content"];
         context["policyListToView"] = policyListToView;
