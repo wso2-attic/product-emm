@@ -130,6 +130,13 @@
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
+    <!--<Permission>-->
+        <!--<name>Get all roles</name>-->
+        <!--<path>/device-mgt/user/roles</path>-->
+        <!--<url>mdm-admin/roles/*</url>-->
+        <!--<method>GET</method>-->
+        <!--<scope>emm_admin</scope>-->
+    <!--</Permission>-->
     <!-- End of Role related APIs -->
 
     <!-- User related APIs -->

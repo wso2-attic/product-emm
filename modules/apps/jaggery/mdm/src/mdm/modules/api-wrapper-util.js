@@ -20,14 +20,18 @@ var apiWrapperUtil = function () {
     var module = {};
     var tokenUtil = require("/modules/util.js").util;
     var constants = require("/modules/constants.js");
+    log = new Log("KAMIDU");
 
     module.refreshToken = function () {
+        log.info("REFRESH");
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
         var clientData = session.get(constants.ENCODED_CLIENT_KEYS_IDENTIFIER);
-        tokenPair = tokenUtil.refreshToken(tokenPair, clientData.clientId, clientData.clientSecret);
+        log.info(stringify(tokenPair));
+        tokenPair = tokenUtil.refreshToken(tokenPair, clientData);
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
         var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};
         response.addCookie(tokenCookie);
+        log.info("retuning ");
         return tokenCookie;
     };
     module.setupAccessTokenPair = function (type, properties) {

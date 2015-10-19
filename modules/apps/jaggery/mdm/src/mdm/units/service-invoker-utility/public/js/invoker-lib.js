@@ -26,6 +26,7 @@ var invokerUtil = function () {
             url: "/mdm/token",
             type: "GET",
             success: function () {
+                console,log("Hureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
                 successCallback
             }
         }).fail(errorCallback);
@@ -52,7 +53,15 @@ var invokerUtil = function () {
             }
             $.ajax(data).fail(function (jqXHR) {
                 if (jqXHR.status == "401"){
-                    window.location.replace("/mdm");
+                    console.log("Expired token 401 return");
+                    requestAccessToken(function () {
+                        console.log("niyamayineee");
+                        execute();
+                    },function () {
+                        console.log("error da");
+                        window.location.replace("/mdm");
+                    });
+
                 } else {
                     errorCallback(jqXHR);
                 }

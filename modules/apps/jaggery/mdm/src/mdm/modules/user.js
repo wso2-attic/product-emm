@@ -377,8 +377,10 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = "/mdm-admin/users/" + username;
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] +"/mdm-admin/users/" + username;
+            var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            response["userDomain"] = carbonUser.domain;
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -394,7 +396,7 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = "/mdm-admin/users/" + username + "/roles";
+            var url = mdmProps["httpsURL"] +"/mdm-admin/users/" + username + "/roles";
             return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
