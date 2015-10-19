@@ -64,11 +64,17 @@
             {{#if permissions.LIST_USERS}}
                 <li><a href="/mdm/users"><i class="fw fw-user"></i>User Management</a></li>
             {{/if}}
-            <li><a href="/mdm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
+
+            {{#if permissions.LIST_ROLES}}
+                <li><a href="/mdm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
+            {{/if}}
             {{#if permissions.LIST_POLICIES}}
                 <li><a href="/mdm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
             {{/if}}
-            <li><a href="/mdm/tenant-configuration"><i class="fw fw-settings"></i>Tenant Configurations</a></li>
+            {{#if permissions.TENANT_CONFIGURATION}}
+                <li><a href="/mdm/tenant-configuration"><i class="fw fw-settings"></i>Tenant Configurations</a></li>
+            {{/if}}
+
         </ul>
     </div>
     <!-- /common navigation -->
