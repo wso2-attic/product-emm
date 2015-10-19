@@ -822,7 +822,7 @@ var operationModule = function () {
             "DEVICE_LOCK": "fw-lock",
             "DEVICE_LOCATION": "fw-map-location",
             "CLEAR_PASSWORD": "fw-key",
-            "ENTERPRISE_WIPE": "fw-clean",
+            "ENTERPRISE_WIPE": "fw-clear",
             "WIPE_DATA": "fw-database",
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_MUTE": "fw-incoming-call",
