@@ -31,10 +31,10 @@ import java.util.List;
 public class Sequence {
 
     int commandId;
-    Exec exec;
+    ExecuteTag exec;
     Get get;
     DeleteTag deleteTag;
-    Atomic atomic;
+    AtomicTag atomicTag;
     List<Replace> replaces;
 
     public DeleteTag getDeleteTag() {
@@ -53,19 +53,19 @@ public class Sequence {
         this.replaces = replaces;
     }
 
-    public Atomic getAtomic() {
-        return atomic;
+    public AtomicTag getAtomicTag() {
+        return atomicTag;
     }
 
-    public void setAtomic(Atomic atomic) {
-        this.atomic = atomic;
+    public void setAtomicTag(AtomicTag atomicTag) {
+        this.atomicTag = atomicTag;
     }
 
-    public Exec getExec() {
+    public ExecuteTag getExec() {
         return exec;
     }
 
-    public void setExec(Exec exec) {
+    public void setExec(ExecuteTag exec) {
         this.exec = exec;
     }
 
@@ -107,8 +107,8 @@ public class Sequence {
                 }
             }
         }
-        if (getAtomic() != null) {
-            getAtomic().buildAtomicElement(doc, sequence);
+        if (getAtomicTag() != null) {
+            getAtomicTag().buildAtomicElement(doc, sequence);
         }
         if (getDeleteTag() != null) {
             getDeleteTag().buildDeleteElement(doc, sequence);

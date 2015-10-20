@@ -184,9 +184,9 @@
           class="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.MessageHandler"/>
     <bean id="jsonProvider" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.GsonMessageBodyHandler"/>
     <bean id="configurationServiceBean"
-          class="org.wso2.carbon.mdm.mobileservices.windows.services.ConfigurationMgtService.ConfigurationMgtService"/>
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.configurationmgtservice.ConfigurationMgtService"/>
     <bean id="policyServiceBean"
-          class="org.wso2.carbon.mdm.mobileservices.windows.services.PolicyMgtservice.PolicyMgtService"/>
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.policymgtservice.PolicyMgtService"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.ErrorHandler"/>
 </beans>
 

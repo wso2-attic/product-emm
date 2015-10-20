@@ -29,104 +29,116 @@ import java.util.List;
  * Represents the body details of a syncml.
  */
 public class SyncmlBody {
-	Get getCommands;
-	List<Exec> exec;
-	List<Status> status;
-	Alert alert;
-	Replace replace;
-	Results results;
-	Sequence sequence;
-	Atomic atomic;
+    Get getCommands;
+    List<ExecuteTag> exec;
+    List<Status> status;
+    Alert alert;
+    Replace replace;
+    Results results;
+    Sequence sequence;
+    AtomicTag atomicTag;
 
-	public Atomic getAtomic() {
-		return atomic;
-	}
+    public AtomicTag getAtomicTag() {
+        return atomicTag;
+    }
 
-	public void setAtomic(Atomic atomic) {
-		this.atomic = atomic;
-	}
+    public void setAtomicTag(AtomicTag atomicTag) {
+        this.atomicTag = atomicTag;
+    }
 
-	public Sequence getSequence() { return sequence; }
+    public Sequence getSequence() {
+        return sequence;
+    }
 
-	public void setSequence(Sequence sequence) { this.sequence = sequence; }
+    public void setSequence(Sequence sequence) {
+        this.sequence = sequence;
+    }
 
-	public List<Exec> getExec() { return exec; }
+    public List<ExecuteTag> getExec() {
+        return exec;
+    }
 
-	public void setExec(List<Exec> exec) { this.exec = exec; }
+    public void setExec(List<ExecuteTag> exec) {
+        this.exec = exec;
+    }
 
-	public Results getResults() {
-		return results;
-	}
+    public Results getResults() {
+        return results;
+    }
 
-	public void setResults(Results results) {
-		this.results = results;
-	}
+    public void setResults(Results results) {
+        this.results = results;
+    }
 
-	public Replace getReplace() { return replace; }
+    public Replace getReplace() {
+        return replace;
+    }
 
-	public void setReplace(Replace replace) { this.replace = replace; }
+    public void setReplace(Replace replace) {
+        this.replace = replace;
+    }
 
-	public List<Status> getStatus() {
-		return status;
-	}
+    public List<Status> getStatus() {
+        return status;
+    }
 
-	public void setStatus(List<Status> status) {
-		this.status = status;
-	}
+    public void setStatus(List<Status> status) {
+        this.status = status;
+    }
 
-	public Alert getAlert() {
-		return alert;
-	}
+    public Alert getAlert() {
+        return alert;
+    }
 
-	public void setAlert(Alert alert) {
-		this.alert = alert;
-	}
+    public void setAlert(Alert alert) {
+        this.alert = alert;
+    }
 
-	public Get getGet() {
-		return getCommands;
-	}
+    public Get getGet() {
+        return getCommands;
+    }
 
-	public void setGet(Get get) {
-		this.getCommands = get;
-	}
+    public void setGet(Get get) {
+        this.getCommands = get;
+    }
 
-	public void buildBodyElement(Document doc, Element rootElement) {
+    public void buildBodyElement(Document doc, Element rootElement) {
 
-		Element syncBody = doc.createElement(Constants.SYNC_BODY);
-		rootElement.appendChild(syncBody);
-		if (getStatus() != null) {
-			for (int x = 0; x < getStatus().size(); x++) {
-				if (getStatus().get(x) != null) {
-					getStatus().get(x).buildStatusElement(doc, syncBody);
-				}
-			}
-		}
-		if (getAlert() != null) {
-			getAlert().buildAlertElement(doc, syncBody);
-		}
-		if (getResults() != null) {
-			getResults().buildResultElement(doc, syncBody);
-		}
-		if (getGet() != null) {
-			getGet().buildGetElement(doc, syncBody);
-		}
-		if (getReplace() != null) {
-			getReplace().buildReplaceElement(doc, syncBody);
-		}
-		if (getExec() != null) {
-			for (Iterator<Exec> execIterator = getExec().iterator(); execIterator.hasNext(); ) {
-				Exec exec = execIterator.next();
-				if (exec != null) {
-					exec.buildExecElement(doc, syncBody);
-				}
-			}
-		}
-		if (getSequence() != null) {
-			getSequence().buildSequenceElement(doc, syncBody);
-		}
-		if (getAtomic() != null) {
-			getAtomic().buildAtomicElement(doc, syncBody);
-		}
-		syncBody.appendChild(doc.createElement(Constants.FINAL));
-	}
+        Element syncBody = doc.createElement(Constants.SYNC_BODY);
+        rootElement.appendChild(syncBody);
+        if (getStatus() != null) {
+            for (int x = 0; x < getStatus().size(); x++) {
+                if (getStatus().get(x) != null) {
+                    getStatus().get(x).buildStatusElement(doc, syncBody);
+                }
+            }
+        }
+        if (getAlert() != null) {
+            getAlert().buildAlertElement(doc, syncBody);
+        }
+        if (getResults() != null) {
+            getResults().buildResultElement(doc, syncBody);
+        }
+        if (getGet() != null) {
+            getGet().buildGetElement(doc, syncBody);
+        }
+        if (getReplace() != null) {
+            getReplace().buildReplaceElement(doc, syncBody);
+        }
+        if (getExec() != null) {
+            for (Iterator<ExecuteTag> execIterator = getExec().iterator(); execIterator.hasNext(); ) {
+                ExecuteTag exec = execIterator.next();
+                if (exec != null) {
+                    exec.buildExecElement(doc, syncBody);
+                }
+            }
+        }
+        if (getSequence() != null) {
+            getSequence().buildSequenceElement(doc, syncBody);
+        }
+        if (getAtomicTag() != null) {
+            getAtomicTag().buildAtomicElement(doc, syncBody);
+        }
+        syncBody.appendChild(doc.createElement(Constants.FINAL));
+    }
 }

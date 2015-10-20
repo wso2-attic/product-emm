@@ -26,7 +26,7 @@ var invokerUtil = function () {
             url: "/mdm/token",
             type: "GET",
             success: function () {
-                successCallback
+                successCallback ();
             }
         }).fail(errorCallback);
     }
@@ -52,7 +52,12 @@ var invokerUtil = function () {
             }
             $.ajax(data).fail(function (jqXHR) {
                 if (jqXHR.status == "401"){
-                    window.location.replace("/mdm");
+                    requestAccessToken(function () {
+                        execute();
+                    },function () {
+                        window.location.replace("/mdm");
+                    });
+
                 } else {
                     errorCallback(jqXHR);
                 }

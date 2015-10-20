@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl;
@@ -31,8 +31,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsOpera
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.Message;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.Operations;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.StorageEncryption;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.wrapper.EncryptBeanWrapper;
 
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -49,12 +47,20 @@ public class OperationsImpl implements Operations {
 
     private static Log log = LogFactory.getLog(OperationImpl.class);
 
+    /**
+     * REST endpoint for the Device Lock operation
+     *
+     * @param acceptHeader header value of the request POST message.
+     * @param deviceIDs    list of device ids to be add device lockOperationUpdate operation.
+     * @return Response object for client.
+     * @throws WindowsDeviceEnrolmentException
+     */
     @POST
     @Path("/devicelock")
     public Response lock(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
         if (log.isDebugEnabled()) {
-            log.debug("Invoking windows device lock operation");
+            log.debug("Invoking windows device lockOperationUpdate operation");
         }
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
@@ -79,6 +85,14 @@ public class OperationsImpl implements Operations {
         }
     }
 
+    /**
+     * REST end point for device dis-enrollment.
+     *
+     * @param acceptHeader POST message header value.
+     * @param deviceIDs    device ids to be dis-enrolled.
+     * @return Response object to the client.
+     * @throws WindowsDeviceEnrolmentException
+     */
     @POST
     @Path("/devicedisenroll")
     public Response disenroll(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
@@ -107,6 +121,14 @@ public class OperationsImpl implements Operations {
         }
     }
 
+    /**
+     * REST Endpoint for the Device wipe.
+     *
+     * @param acceptHeader POST message header value.
+     * @param deviceids    device ids to be wiped.
+     * @return Response object for the client.
+     * @throws WindowsDeviceEnrolmentException
+     */
     @POST
     @Path("/devicewipe")
     public Response wipe(@HeaderParam("Accept") String acceptHeader, List<String> deviceids)
@@ -137,6 +159,14 @@ public class OperationsImpl implements Operations {
         }
     }
 
+    /**
+     * REST end point for the device ring.
+     *
+     * @param acceptHeader post message header value.
+     * @param deviceIDs    device ids to be ring.
+     * @return Response object for the client.
+     * @throws WindowsDeviceEnrolmentException
+     */
     @POST
     @Path("/devicering")
     public Response ring(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
@@ -167,42 +197,19 @@ public class OperationsImpl implements Operations {
         }
     }
 
-    @POST
-    @Path("/storage-encrypt")
-    public Response encryptStorage(@HeaderParam("Accept") String acceptHeader,
-                                   EncryptBeanWrapper encryptBeanWrapper) {
-
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking windows device encrypt storage operation");
-        }
-        MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
-        Message message = new Message();
-        try {
-            StorageEncryption encrypt = encryptBeanWrapper.getOperation();
-            if (encrypt == null) {
-                throw new OperationManagementException("Encrypt bean is empty");
-            }
-            CommandOperation operation = new CommandOperation();
-            operation.setCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
-            operation.setType(Operation.Type.COMMAND);
-            operation.setEnabled(encrypt.isEncrypted());
-            return WindowsAPIUtils.getOperationResponse(encryptBeanWrapper.getDeviceIDs(), operation, message,
-                    responseMediaType);
-        } catch (OperationManagementException e) {
-            String errorMessage = "Issue in retrieving operation management service instance";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new WindowsOperationsException(message, responseMediaType);
-        } catch (DeviceManagementException e) {
-            String errorMessage = "Issue in retrieving device management service instance";
-            message.setResponseMessage(errorMessage);
-            message.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-            log.error(errorMessage, e);
-            throw new WindowsOperationsException(message, responseMediaType);
-        }
-    }
-
+    /**
+     * REST endpoint for the device lockOperationUpdate reset.
+     * Lock reset have to be done, when device user does not set PIN for the lockOperationUpdate screen.
+     * Admin set lockOperationUpdate operation for the specific device,If the device is in above scenario,
+     * admin will be notified.since
+     * admin have to set lockOperationUpdate reset operation to the device so that automatically generate PIN value for the
+     * lockOperationUpdate screen.
+     *
+     * @param acceptHeader POST message header value.
+     * @param deviceIDs    Device ids to be lockOperationUpdate reset.
+     * @return Response object for the client.
+     * @throws WindowsDeviceEnrolmentException
+     */
     @POST
     @Path("/lockreset")
     public Response lockReset(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)

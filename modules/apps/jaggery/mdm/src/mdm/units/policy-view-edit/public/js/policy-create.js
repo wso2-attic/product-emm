@@ -1789,8 +1789,8 @@ var updatePolicy = function (policy, state) {
                     policyList,
                     // on success
                     function () {
-                        $(".policy-message").removeClass("hidden");
                         $(".add-policy").addClass("hidden");
+                        $(".policy-message").removeClass("hidden");
                     },
                     // on error
                     function () {
@@ -1806,8 +1806,9 @@ var updatePolicy = function (policy, state) {
                     policyList,
                     // on success
                     function () {
-                        $(".policy-message").removeClass("hidden");
                         $(".add-policy").addClass("hidden");
+                        $(".policy-naming").addClass("hidden");
+                        $(".policy-message").removeClass("hidden");
                     },
                     // on error
                     function () {

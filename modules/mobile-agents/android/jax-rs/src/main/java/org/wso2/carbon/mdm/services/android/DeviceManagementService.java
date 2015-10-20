@@ -66,8 +66,6 @@ public class DeviceManagementService {
 			msg = "Error occurred while fetching the device list.";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return devices;
 	}
@@ -97,8 +95,6 @@ public class DeviceManagementService {
 			msg = "Error occurred while fetching the device information.";
 			log.error(msg, deviceMgtEx);
 			throw new AndroidAgentException(msg, deviceMgtEx);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return device;
 	}
@@ -137,8 +133,6 @@ public class DeviceManagementService {
 			msg = "Error occurred while modifying the device information.";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMessage;
 	}
@@ -163,8 +157,6 @@ public class DeviceManagementService {
 			String msg = "Error occurred while modifying the application list.";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMessage;
 	}

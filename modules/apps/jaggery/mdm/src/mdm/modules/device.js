@@ -52,7 +52,7 @@ deviceModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var deviceManagementService = utility.getDeviceManagementService();
             var devices = deviceManagementService.getAllDevices();
@@ -90,7 +90,7 @@ deviceModule = function () {
                 deviceList.push(deviceObject);
             }
             return deviceList;
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -107,7 +107,7 @@ deviceModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var deviceManagementService = utility.getDeviceManagementService();
             var devices = deviceManagementService.getDeviceListOfUser(username);
@@ -145,7 +145,7 @@ deviceModule = function () {
                 deviceList.push(deviceObject);
             }
             return deviceList;
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -165,7 +165,7 @@ deviceModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var deviceManagementService = utility.getDeviceManagementService();
             var features = deviceManagementService.getFeatureManager(deviceType).getFeatures();
@@ -181,7 +181,7 @@ deviceModule = function () {
                 }
             }
             return featuresConverted;
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -198,7 +198,7 @@ deviceModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var deviceManagementService = utility.getDeviceManagementService();
             var operationInstance;
@@ -227,7 +227,7 @@ deviceModule = function () {
                 deviceList.add(deviceIdentifier);
             }
             deviceManagementService.addOperation(operationInstance, deviceList);
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -244,14 +244,14 @@ deviceModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var deviceManagementService = utility.getDeviceManagementService();
             var deviceIdentifier = new DeviceIdentifier();
             deviceIdentifier.setType(type);
             deviceIdentifier.setId(deviceId);
             return deviceManagementService.getDevice(deviceIdentifier);
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -268,38 +268,44 @@ deviceModule = function () {
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         var utility = require('/modules/utility.js')["utility"];
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/" + deviceType + "/" + deviceId;
-            return serviceInvokers.XMLHttp.get(url,function(responsePayload){
-                var device = responsePayload["responseContent"];
-                if (device) {
-                    var propertiesList = device["properties"];
-                    var properties = {};
-                    for(var i = 0; i < propertiesList.length; i++){
-                        properties[propertiesList[i]["name"]] = propertiesList[i]["value"];
-                    }
 
-                    var deviceObject = {};
-                    deviceObject[constants["DEVICE_IDENTIFIER"]] = device["deviceIdentifier"];
-                    deviceObject[constants["DEVICE_NAME"]] = device["name"];
-                    deviceObject[constants["DEVICE_OWNERSHIP"]] = device["enrolmentInfo"]["ownership"];
-                    deviceObject[constants["DEVICE_OWNER"]] = device["enrolmentInfo"]["owner"];
-                    deviceObject[constants["DEVICE_STATUS"]] = device["enrolmentInfo"]["status"];
-                    deviceObject[constants["DEVICE_TYPE"]] = device["type"];
-                    if (device["type"] == constants["PLATFORM_IOS"]) {
-                        properties[constants["DEVICE_MODEL"]] = properties[constants["DEVICE_PRODUCT"]];
-                        delete properties[constants["DEVICE_PRODUCT"]];
-                        properties[constants["DEVICE_VENDOR"]] = constants["VENDOR_APPLE"];
+            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/" + deviceType + "/" + deviceId;
+            var dataNew = serviceInvokers.XMLHttp.get(
+                url, function (responsePayload) {
+                    var device = responsePayload.responseContent;
+                    if (device) {
+                        var propertiesList = device["properties"];
+                        var properties = {};
+                        for (var i = 0; i < propertiesList.length; i++) {
+                            properties[propertiesList[i]["name"]] =
+                                propertiesList[i]["value"];
+                        }
+                        var deviceObject = {};
+                        deviceObject[constants["DEVICE_IDENTIFIER"]] = device["deviceIdentifier"];
+                        deviceObject[constants["DEVICE_NAME"]] = device["name"];
+                        deviceObject[constants["DEVICE_OWNERSHIP"]] = device["enrolmentInfo"]["ownership"];
+                        deviceObject[constants["DEVICE_OWNER"]] = device["enrolmentInfo"]["owner"];
+                        deviceObject[constants["DEVICE_STATUS"]] = device["enrolmentInfo"]["status"];
+                        deviceObject[constants["DEVICE_TYPE"]] = device["type"];
+                        if (device["type"] == constants["PLATFORM_IOS"]) {
+                            properties[constants["DEVICE_MODEL"]] = properties[constants["DEVICE_PRODUCT"]];
+                            delete properties[constants["DEVICE_PRODUCT"]];
+                            properties[constants["DEVICE_VENDOR"]] = constants["VENDOR_APPLE"];
+                        }
+                        deviceObject[constants["DEVICE_PROPERTIES"]] = properties;
+                        return deviceObject;
                     }
-                    deviceObject[constants["DEVICE_PROPERTIES"]] = properties;
-                    return deviceObject;
                 }
-            }, function(responsePayload){
+                ,
+                function (responsePayload) {
                     var response = {};
                     response["status"] = "error";
                     return response;
-            });
+                }
+            );
+            return dataNew;
         } catch (e) {
             throw e;
         } finally {
@@ -312,9 +318,9 @@ deviceModule = function () {
      */
     publicMethods.getLicense = function (deviceType, languageCode) {
         var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
-        return serviceInvokers.XMLHttp.get(url, function(responsePayload) {
-            return responsePayload["responseContent"];
-        }, function(responsePayload) {
+        serviceInvokers.XMLHttp.get(url, function (responsePayload) {
+            return responsePayload.responseContent;
+        }, function (responsePayload) {
             return null;
         });
     };

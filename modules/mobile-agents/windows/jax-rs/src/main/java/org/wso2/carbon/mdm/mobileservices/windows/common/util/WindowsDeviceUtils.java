@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class for windows device utilities.
+ * Class for get windows device utilities.
  */
 public class WindowsDeviceUtils {
 

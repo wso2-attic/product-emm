@@ -466,7 +466,6 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/roles/" + roleName;
-            log.info(url);
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
             return response;
         } catch (e) {
@@ -475,8 +474,6 @@ var userModule = function () {
             utility.endTenantFlow();
         }
     };
-
-    /////////////////////////////////////////////////////////////////////////
 
     /**
      * Authenticate a user when he or she attempts to login to MDM.
@@ -562,6 +559,9 @@ var userModule = function () {
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
             permissions["VIEW_DASHBOARD"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/tenant-configs/view")) {
+            permissions["TENANT_CONFIGURATION"] = true;
         }
 
         return permissions;

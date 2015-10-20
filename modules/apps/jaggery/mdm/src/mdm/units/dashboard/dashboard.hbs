@@ -5,14 +5,15 @@
         </div>
     </div>
     <div class="wr-content">
-        <div class="row wr-stats-board">
-            <div class="col-md-4">
-                <div class="wr-stats-board-tile">
-                    <div class="tile-name">Devices</div>
-                    <div>
-                        <div class="tile-icon"><i class="fw fw-mobile"></i></div>
-                        <div class="tile-stats">
-                            <span id="device-count">Loading...</span>
+        {{#if permissions.VIEW_DASHBOARD}}
+            <div class="row wr-stats-board">
+                <div class="col-md-4">
+                    <div class="wr-stats-board-tile">
+                        <div class="tile-name">Devices</div>
+                        <div>
+                            <div class="tile-icon"><i class="fw fw-mobile"></i></div>
+                            <div class="tile-stats">
+                                <span id="device-count">Loading...</span>
                             <span class="tile-stats-free">
                                 <a href="#">
                                     <span class="fw-stack">
@@ -37,19 +38,19 @@
                                     Add
                                 </a>
                             </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row wr-stats-board">
-            <div class="col-md-4">
-                <div class="wr-stats-board-tile">
-                    <div class="tile-name">Users</div>
-                    <div>
-                        <div class="tile-icon"><i class="fw fw-user"></i></div>
-                        <div class="tile-stats">
-                            <span id="user-count">Loading...</span>
+            <div class="row wr-stats-board">
+                <div class="col-md-4">
+                    <div class="wr-stats-board-tile">
+                        <div class="tile-name">Users</div>
+                        <div>
+                            <div class="tile-icon"><i class="fw fw-user"></i></div>
+                            <div class="tile-stats">
+                                <span id="user-count">Loading...</span>
                             <span class="tile-stats-free">
                                 <a href="#">
                                     <span class="fw-stack">
@@ -74,19 +75,19 @@
                                     Add
                                 </a>
                             </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row wr-stats-board">
-            <div class="col-md-4">
-                <div class="wr-stats-board-tile">
-                    <div class="tile-name">Policies</div>
-                    <div>
-                        <div class="tile-icon"><i class="fw fw-policy"></i></div>
-                        <div class="tile-stats">
-                            <span id="policy-count">Loading...</span>
+            <div class="row wr-stats-board">
+                <div class="col-md-4">
+                    <div class="wr-stats-board-tile">
+                        <div class="tile-name">Policies</div>
+                        <div>
+                            <div class="tile-icon"><i class="fw fw-policy"></i></div>
+                            <div class="tile-stats">
+                                <span id="policy-count">Loading...</span>
                             <span class="tile-stats-free">
                                 <a href="#">
                                     <span class="fw-stack">
@@ -111,11 +112,15 @@
                                     Add
                                 </a>
                             </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            {{else}}
+            Permission denied
+            {{/if}}
+
     </div>
 {{/zone}}
 {{#zone "bottomJs"}}

@@ -66,7 +66,10 @@ public class UserWrapper {
         Giving a clone of the array since arrays are mutable
      */
     public String[] getRoles() {
-        String[] copiedRoles = roles.clone();
+        String[] copiedRoles = roles;
+        if (roles != null){
+            copiedRoles = roles.clone();
+        }
         return copiedRoles;
     }
 

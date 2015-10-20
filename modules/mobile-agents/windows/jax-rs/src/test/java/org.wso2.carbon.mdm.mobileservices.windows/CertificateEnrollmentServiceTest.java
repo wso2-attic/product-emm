@@ -75,8 +75,10 @@ public class CertificateEnrollmentServiceTest {
         Assert.fail("Test failure when loading MDM key store.", e);
     } catch (CertificateGenerationException e) {
         Assert.fail("Test failure when retrieving private key from key store.", e);
+    } catch (IOException e) {
+        Assert.fail("Test failure when getting the JKS file.", e);
     }
-    Assert.assertTrue(true, "Test of JKS file reading is successful.");
+        Assert.assertTrue(true, "Test of JKS file reading is successful.");
 }
 
 }

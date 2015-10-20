@@ -19,7 +19,6 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.beans.wrapper.EncryptBeanWrapper;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -50,11 +49,6 @@ public interface Operations {
     @POST
     @Path("/devicering")
     Response ring(@HeaderParam("Accept") String headerParam, List<String> deviceids) throws WindowsDeviceEnrolmentException;
-
-    @POST
-    @Path("/storage-encrypt")
-    Response encryptStorage(@HeaderParam("Accept") String acceptHeader,
-                            EncryptBeanWrapper encryptBeanWrapper) throws WindowsDeviceEnrolmentException;
 
     @POST
     @Path("/lockreset")

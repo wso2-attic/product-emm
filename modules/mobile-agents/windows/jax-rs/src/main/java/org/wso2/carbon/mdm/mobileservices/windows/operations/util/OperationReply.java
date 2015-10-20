@@ -6,15 +6,14 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
@@ -26,6 +25,7 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.PasscodePolicy;
@@ -34,6 +34,8 @@ import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.common.ProfileFeature;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class OperationReply {
     private static final String ALERT_COMMAND_TEXT = "Alert";
     private static final String REPLACE_COMMAND_TEXT = "Replace";
     private static final String GET_COMMAND_TEXT = "Get";
-    private static final String EXEC_COMMAND_TEXT = "Exec";
+    private static final String EXEC_COMMAND_TEXT = "ExecuteTag";
     private List<? extends Operation> operations;
     Gson gson = new Gson();
 
@@ -70,13 +72,14 @@ public class OperationReply {
     }
 
     public SyncmlDocument generateReply() throws WindowsOperationException, PolicyManagementException,
-            FeatureManagementException, JSONException {
+            FeatureManagementException, JSONException, UnsupportedEncodingException, NoSuchAlgorithmException,
+            SyncmlMessageFormatException {
         generateHeader();
         generateBody();
         return replySyncmlDocument;
     }
 
-    private void generateHeader() {
+    private void generateHeader() throws UnsupportedEncodingException, NoSuchAlgorithmException {
         String nextnonceValue = Constants.INITIAL_NONCE;
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
         SyncmlHeader header = new SyncmlHeader();
@@ -92,7 +95,7 @@ public class OperationReply {
 
         Credential cred = new Credential();
         if (sourceHeader.getCredential() == null) {
-            Meta meta = new Meta();
+            MetaTag meta = new MetaTag();
             meta.setFormat(Constants.CRED_FORMAT);
             meta.setType(Constants.CRED_TYPE);
             cred.setMeta(meta);
@@ -108,25 +111,23 @@ public class OperationReply {
                 nextnonceValue = status.getChallenge().getMeta().getNextNonce();
             }
         }
-        cred.setData(new SyncmlCredinitials().generateCredData(nextnonceValue));
+        cred.setData(new SyncmlCredentials().generateCredData(nextnonceValue));
         header.setCredential(cred);
 
         replySyncmlDocument.setHeader(header);
     }
 
     private void generateBody() throws WindowsOperationException, PolicyManagementException, FeatureManagementException,
-            JSONException {
+            JSONException, SyncmlMessageFormatException {
         SyncmlBody syncmlBody = generateStatuses();
         try {
             appendOperations(syncmlBody);
-        } catch (WindowsOperationException e) {
-            throw new WindowsOperationException("Error occurred while generating operation of the syncml message.");
         } catch (PolicyManagementException e) {
             throw new PolicyManagementException("Error occurred while retrieving policy operations.", e);
         } catch (FeatureManagementException e) {
             throw new FeatureManagementException("Error occurred while retrieving effective policy operations.");
         } catch (JSONException e) {
-            throw new JSONException("Error Occurred while parsing operation object.");
+            throw new SyncmlMessageFormatException("Error Occurred while parsing operation object.");
         }
         replySyncmlDocument.setBody(syncmlBody);
     }
@@ -181,8 +182,8 @@ public class OperationReply {
             statuses.add(replaceStatus);
         }
         if (sourceSyncmlBody.getExec() != null) {
-            List<Exec> Executes = sourceSyncmlBody.getExec();
-            for (Exec exec : Executes) {
+            List<ExecuteTag> Executes = sourceSyncmlBody.getExec();
+            for (ExecuteTag exec : Executes) {
                 int execCommandId = ++headerCommandId;
                 Status execStatus = new Status(execCommandId, sourceHeader.getMsgID(),
                         exec.getCommandId(), GET_COMMAND_TEXT, null,
@@ -204,9 +205,9 @@ public class OperationReply {
             FeatureManagementException, JSONException {
         Get getElement = new Get();
         List<Item> itemsGet = new ArrayList<>();
-        List<Exec> execList = new ArrayList<>();
-        Atomic atomicElement = new Atomic();
-        List<Add> addsAtomic = new ArrayList<>();
+        List<ExecuteTag> execList = new ArrayList<>();
+        AtomicTag atomicTagElement = new AtomicTag();
+        List<AddTag> addsAtomic = new ArrayList<>();
         Replace replaceElement = new Replace();
         List<Item> replaceItem = new ArrayList<>();
         Sequence monitorSequence = new Sequence();
@@ -226,8 +227,8 @@ public class OperationReply {
                         }
                         break;
                     case CONFIG:
-                        List<Add> addConfig = appendAddConfiguration(operation);
-                        for (Add addConfiguration : addConfig) {
+                        List<AddTag> addConfig = appendAddConfiguration(operation);
+                        for (AddTag addConfiguration : addConfig) {
                             addsAtomic.add(addConfiguration);
                         }
                         break;
@@ -241,22 +242,22 @@ public class OperationReply {
                     case COMMAND:
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.DEVICE_LOCK)) {
-                            Exec execElement = executeCommand(operation);
+                            ExecuteTag execElement = executeCommand(operation);
                             execList.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.DEVICE_RING)) {
-                            Exec execElement = executeCommand(operation);
+                            ExecuteTag execElement = executeCommand(operation);
                             execList.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.DISENROLL)) {
-                            Exec execElement = executeCommand(operation);
+                            ExecuteTag execElement = executeCommand(operation);
                             execList.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.WIPE_DATA)) {
-                            Exec execElement = executeCommand(operation);
+                            ExecuteTag execElement = executeCommand(operation);
                             execList.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
@@ -296,8 +297,6 @@ public class OperationReply {
                             }
                         }
                         break;
-//                    default:
-//                        throw new WindowsOperationException("Operation with no type found");
                 }
             }
         }
@@ -310,14 +309,13 @@ public class OperationReply {
             getElement.setItems(itemsGet);
         }
         if (!addsAtomic.isEmpty()) {
-            atomicElement.setCommandId(400);
-            atomicElement.setAdds(addsAtomic);
+            atomicTagElement.setCommandId(400);
+            atomicTagElement.setAdds(addsAtomic);
         }
         syncmlBody.setGet(getElement);
         syncmlBody.setExec(execList);
-        syncmlBody.setAtomic(atomicElement);
+        syncmlBody.setAtomicTag(atomicTagElement);
         syncmlBody.setReplace(replaceElement);
-
     }
 
     private Item appendExecInfo(Operation operation) {
@@ -329,8 +327,8 @@ public class OperationReply {
                 target.setLocURI(command.getCode());
                 if (operation.getCode().equals(PluginConstants
                         .OperationCodes.DISENROLL)) {
-                    Meta meta = new Meta();
-                    meta.setFormat("chr");
+                    MetaTag meta = new MetaTag();
+                    meta.setFormat(Constants.META_FORMAT_CHARACTER);
                     item.setMeta(meta);
                     item.setData(Constants.PROVIDER_ID);
                 }
@@ -380,13 +378,13 @@ public class OperationReply {
                         .OperationCodes.CAMERA)) {
 
                     if (payload.getBoolean("enabled")) {
-                        Meta meta = new Meta();
+                        MetaTag meta = new MetaTag();
                         meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
                         item.setData(policyAllowData);
                     } else {
-                        Meta meta = new Meta();
+                        MetaTag meta = new MetaTag();
                         meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
@@ -397,13 +395,13 @@ public class OperationReply {
                         .OperationCodes.ENCRYPT_STORAGE)) {
 
                     if (payload.getBoolean("encrypted")) {
-                        Meta meta = new Meta();
+                        MetaTag meta = new MetaTag();
                         meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
                         item.setData(policyAllowData);
                     } else {
-                        Meta meta = new Meta();
+                        MetaTag meta = new MetaTag();
                         meta.setFormat(Constants.META_FORMAT_INT);
                         item.setTarget(target);
                         item.setMeta(meta);
@@ -415,9 +413,9 @@ public class OperationReply {
         return item;
     }
 
-    private List<Add> appendAddInfo(Operation operation) throws WindowsOperationException {
+    private List<AddTag> appendAddInfo(Operation operation) throws WindowsOperationException {
 
-        List<Add> addList = new ArrayList<>();
+        List<AddTag> addList = new ArrayList<>();
         Gson gson = new Gson();
 
         if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
@@ -428,41 +426,41 @@ public class OperationReply {
 
                 if (operation.getCode() != null && PluginConstants.OperationCodes.PASSWORD_MAX_FAIL_ATTEMPTS.
                         equals(configure.name())) {
-                    Add add = generatePasscodePolicyData(configure, passcodeObject.getMaxFailedAttempts());
+                    AddTag add = generatePasscodePolicyData(configure, passcodeObject.getMaxFailedAttempts());
                     addList.add(add);
                 }
                 if (operation.getCode() != null && (PluginConstants.OperationCodes.DEVICE_PASSWORD_ENABLE.
                         equals(configure.name()) || PluginConstants.OperationCodes.SIMPLE_PASSWORD.
                         equals(configure.name()) || PluginConstants.OperationCodes.ALPHANUMERIC_PASSWORD.
                         equals(configure.name()))) {
-                    Add add = generatePasscodeBooleanData(operation, configure);
+                    AddTag add = generatePasscodeBooleanData(operation, configure);
                     addList.add(add);
                 }
                 if (operation.getCode() != null && PluginConstants.OperationCodes.MIN_PASSWORD_LENGTH.
                         equals(configure.name())) {
-                    Add add = generatePasscodePolicyData(configure, passcodeObject.getMinLength());
+                    AddTag add = generatePasscodePolicyData(configure, passcodeObject.getMinLength());
                     addList.add(add);
                 }
                 if (operation.getCode() != null && PluginConstants.OperationCodes.PASSWORD_EXPIRE.
                         equals(configure.name())) {
-                    Add add = generatePasscodePolicyData(configure, passcodeObject.getMaxPINAgeInDays());
+                    AddTag add = generatePasscodePolicyData(configure, passcodeObject.getMaxPINAgeInDays());
                     addList.add(add);
                 }
                 if (operation.getCode() != null && PluginConstants.OperationCodes.PASSWORD_HISTORY.
                         equals(configure.name())) {
                     int pinHistory = passcodeObject.getPinHistory();
-                    Add add = generatePasscodePolicyData(configure, pinHistory);
+                    AddTag add = generatePasscodePolicyData(configure, pinHistory);
                     addList.add(add);
                 }
                 if (operation.getCode() != null && PluginConstants.OperationCodes.MAX_PASSWORD_INACTIVE_TIME.
                         equals(configure.name())) {
-                    Add add = generatePasscodePolicyData(configure, passcodeObject.getMaxInactiveTime());
+                    AddTag add = generatePasscodePolicyData(configure, passcodeObject.getMaxInactiveTime());
                     addList.add(add);
                 }
                 if (operation.getCode() != null && PluginConstants.OperationCodes.MIN_PASSWORD_COMPLEX_CHARACTERS.
                         equals(configure.name())) {
                     int complexChars = passcodeObject.getMinComplexChars();
-                    Add add = generatePasscodePolicyData(configure, complexChars);
+                    AddTag add = generatePasscodePolicyData(configure, complexChars);
                     addList.add(add);
                 }
             }
@@ -470,13 +468,13 @@ public class OperationReply {
         return addList;
     }
 
-    private List<Add> appendAddConfiguration(Operation operation) throws WindowsOperationException {
+    private List<AddTag> appendAddConfiguration(Operation operation) throws WindowsOperationException {
 
-        List<Add> addList = new ArrayList<>();
+        List<AddTag> addList = new ArrayList<>();
         Gson gson = new Gson();
 
         if (SyncmlCommandType.WIFI.getValue().equals(operation.getCode())) {
-            Add add = new Add();
+            AddTag add = new AddTag();
             String operationCode = operation.getCode();
             Wifi wifiObject = gson.fromJson((String) operation.getPayLoad(), Wifi.class);
             String data = "&lt;?xml version=&quot;1.0&quot;?&gt;&lt;WLANProfile" +
@@ -492,8 +490,8 @@ public class OperationReply {
                     "&lt;/protected&gt;&lt;keyMaterial&gt;" + wifiObject.getKeyMaterial() +
                     "&lt;/keyMaterial&gt;&lt;/sharedKey&gt;&lt;/security&gt;&lt;/MSM&gt;&lt;/WLANProfile&gt;";
 
-            Meta meta = new Meta();
-            meta.setFormat("chr");
+            MetaTag meta = new MetaTag();
+            meta.setFormat(Constants.META_FORMAT_CHARACTER);
             List<Item> items = new ArrayList<>();
 
             for (Configure configure : Configure.values()) {
@@ -514,8 +512,8 @@ public class OperationReply {
         return null;
     }
 
-    public Exec executeCommand(Operation operation) {
-        Exec execElement = new Exec();
+    public ExecuteTag executeCommand(Operation operation) {
+        ExecuteTag execElement = new ExecuteTag();
         execElement.setCommandId(operation.getId());
         List<Item> itemsExec = new ArrayList<>();
         Item itemExec = appendExecInfo(operation);
@@ -524,13 +522,14 @@ public class OperationReply {
         return execElement;
     }
 
-    public Sequence buildSequence(Operation operation, Sequence sequenceElement) throws WindowsOperationException, JSONException {
+    public Sequence buildSequence(Operation operation, Sequence sequenceElement) throws WindowsOperationException,
+            JSONException {
 
         sequenceElement.setCommandId(operation.getId());
         List<Replace> replaceItems = new ArrayList<>();
 
         if (operation.getCode().equals(PluginConstants.OperationCodes.LOCK_RESET)) {
-            Exec execElement = executeCommand(operation);
+            ExecuteTag execElement = executeCommand(operation);
             Get getElements = new Get();
             getElements.setCommandId(operation.getId());
             List<Item> getItems = new ArrayList<>();
@@ -558,7 +557,7 @@ public class OperationReply {
                         cameraItem = appendReplaceInfo(policy);
                         cameraItems.add(cameraItem);
                     } catch (JSONException e) {
-                        throw new JSONException("Error occurred while parsing payload object to json.");
+                        throw new WindowsOperationException("Error occurred while parsing payload object to json.");
                     }
                     replaceCameraConfig.setCommandId(operation.getId());
                     replaceCameraConfig.setItems(cameraItems);
@@ -586,14 +585,14 @@ public class OperationReply {
                     delete.setCommandId(operation.getId());
                     delete.setItems(buildDeleteInfo(policy));
 
-                    Atomic atomicElement = new Atomic();
-                    List<Add> addConfig;
+                    AtomicTag atomicTagElement = new AtomicTag();
+                    List<AddTag> addConfig;
                     try {
                         addConfig = appendAddInfo(policy);
-                        atomicElement.setAdds(addConfig);
-                        atomicElement.setCommandId(operation.getId());
+                        atomicTagElement.setAdds(addConfig);
+                        atomicTagElement.setCommandId(operation.getId());
 
-                        sequenceElement.setAtomic(atomicElement);
+                        sequenceElement.setAtomicTag(atomicTagElement);
                     } catch (WindowsOperationException e) {
                         throw new WindowsOperationException("Error occurred while generating operation payload.", e);
                     }
@@ -666,14 +665,14 @@ public class OperationReply {
         return deleteItems;
     }
 
-    public Add generatePasscodePolicyData(Configure configure, int policyData) {
+    public AddTag generatePasscodePolicyData(Configure configure, int policyData) {
         String attempt = String.valueOf(policyData);
-        Add add = new Add();
+        AddTag add = new AddTag();
         List<Item> itemList = new ArrayList<>();
         Item item = new Item();
         Target target = new Target();
         target.setLocURI(configure.getCode());
-        Meta meta = new Meta();
+        MetaTag meta = new MetaTag();
         meta.setFormat(Constants.META_FORMAT_INT);
         item.setTarget(target);
         item.setMeta(meta);
@@ -684,10 +683,10 @@ public class OperationReply {
         return add;
     }
 
-    public Add generatePasscodeBooleanData(Operation operation, Configure configure) {
+    public AddTag generatePasscodeBooleanData(Operation operation, Configure configure) {
         Target target = new Target();
-        Meta meta = new Meta();
-        Add add = new Add();
+        MetaTag meta = new MetaTag();
+        AddTag add = new AddTag();
 
         PasscodePolicy passcodePolicy = gson.fromJson((String) operation.getPayLoad(), PasscodePolicy.class);
         if (operation.getCode() != null && (PluginConstants.OperationCodes.DEVICE_PASSWORD_ENABLE.

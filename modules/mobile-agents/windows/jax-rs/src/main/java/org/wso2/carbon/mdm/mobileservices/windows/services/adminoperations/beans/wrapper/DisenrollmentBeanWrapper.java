@@ -31,12 +31,20 @@ public class DisenrollmentBeanWrapper {
 
     private List<String> deviceId;
 
-    public Disenrollment getOperation() { return operation; }
+    public Disenrollment getOperation() {
+        return operation;
+    }
 
-    public void setOperation(Disenrollment operation) { this.operation = operation; }
+    public void setOperation(Disenrollment operation) {
+        this.operation = operation;
+    }
 
-    public List<String> getDeviceId() { return deviceId; }
+    public List<String> getDeviceId() {
+        return deviceId;
+    }
 
-    public void setDeviceId(List<String> deviceId) { this.deviceId = deviceId; }
+    public void setDeviceId(List<String> deviceId) {
+        this.deviceId = deviceId;
+    }
 
 }
