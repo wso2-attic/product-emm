@@ -12,6 +12,8 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
                 if(data.length > 0){
                     var content = template(data.viewModel);
                     $(objectGridContainer).html(content);
+                    $('#role-grid').datatables_extended();
+                    $(".icon .text").res_text(0.2);
                 }
                 //$(objectGridId).datatables_extended();
             }, function(message){
@@ -48,8 +50,7 @@ var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
 var dataTableSelection = '.DTTT_selected';
-$('#role-grid').datatables_extended();
-$(".icon .text").res_text(0.2);
+
 
 /*
  * set popup maximum height function.

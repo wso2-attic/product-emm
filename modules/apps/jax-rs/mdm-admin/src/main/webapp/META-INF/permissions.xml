@@ -214,6 +214,20 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Get user roles by name</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/roles</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user roles by name</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/roles</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Get all devices of user</name>
         <path>/device-mgt/users/devices</path>
         <url>/users/*/*/devices</url>
