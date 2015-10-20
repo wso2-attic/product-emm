@@ -111,13 +111,43 @@
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
     </Permission>
+
+    <Permission>
+        <name>Get Applications For Devices</name>
+        <path>/device-mgt/operations/application/view-all</path>
+        <url>/operations/*/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+    <Permission>
+        <name>Get Device Operations</name>
+        <path>/device-mgt/operations/view</path>
+        <url>/operations/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get Applications For Device Type</name>
+        <path>/device-mgt/operations/application/view-all</path>
+        <url>/operations/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
     <!-- End of Operations related APIs -->
 
     <!-- Feature related APIs -->
     <Permission>
-        <name>Get all features</name>
+        <name>Get features</name>
         <path>/device-mgt/features/view-all</path>
         <url>/features/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get all features</name>
+        <path>/device-mgt/features/view-all</path>
+        <url>/features</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -128,6 +158,13 @@
         <name>Get all roles</name>
         <path>/device-mgt/user/roles</path>
         <url>/roles</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get User roles</name>
+        <path>/device-mgt/user/roles</path>
+        <url>/roles/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -222,6 +259,20 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Get Policy For Device</name>
+        <path>/device-mgt/policies/view</path>
+        <url>/policies/*/*</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get Policy For Device By Type</name>
+        <path>/device-mgt/policies/view</path>
+        <url>/policies/*/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Add Active Policy</name>
         <path>/device-mgt/policies/add</path>
         <url>/policies/active-policy</url>
@@ -252,7 +303,7 @@
     <Permission>
         <name>Delete Policy</name>
         <path>/device-mgt/policies/delete</path>
-        <url>/policies/*</url>
+        <url>/policies</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>

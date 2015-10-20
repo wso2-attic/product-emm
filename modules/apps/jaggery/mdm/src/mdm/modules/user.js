@@ -475,8 +475,6 @@ var userModule = function () {
         }
     };
 
-    /////////////////////////////////////////////////////////////////////////
-
     /**
      * Authenticate a user when he or she attempts to login to MDM.
      *
