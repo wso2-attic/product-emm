@@ -168,6 +168,34 @@
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
+    <Permission>
+        <name>Update User roles</name>
+        <path>/device-mgt/user/roles</path>
+        <url>/roles</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update User roles</name>
+        <path>/device-mgt/user/roles</path>
+        <url>/roles/*/users</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Save User roles</name>
+        <path>/device-mgt/user/roles</path>
+        <url>/roles</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Delete User roles</name>
+        <path>/device-mgt/user/roles</path>
+        <url>/roles</url>
+        <method>DELETE</method>
+        <scope>emm_admin</scope>
+    </Permission>
     <!-- End of Role related APIs -->
 
     <!-- User related APIs -->
@@ -211,6 +239,20 @@
         <path>/device-mgt/users/roles</path>
         <url>/users/*/roles</url>
         <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user roles by name</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/roles</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user roles by name</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/roles</url>
+        <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
