@@ -272,36 +272,38 @@ deviceModule = function () {
             utility.startTenantFlow(carbonUser);
 
             var url = mdmProps["httpsURL"] + "/mdm-admin/devices/" + deviceType + "/" + deviceId;
-            var dataNew =  serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                                            var device = responsePayload.responseContent;
-                                            if (device) {
-                                                var propertiesList = device["properties"];
-                                                var properties = {};
-                                                for (var i = 0; i < propertiesList.length; i++) {
-                                                    properties[propertiesList[i]["name"]] = propertiesList[i]["value"];
-                                                }
-                                                var deviceObject = {};
-                                                deviceObject[constants["DEVICE_IDENTIFIER"]] = device["deviceIdentifier"];
-                                                deviceObject[constants["DEVICE_NAME"]] = device["name"];
-                                                deviceObject[constants["DEVICE_OWNERSHIP"]] = device["enrolmentInfo"]["ownership"];
-                                                deviceObject[constants["DEVICE_OWNER"]] = device["enrolmentInfo"]["owner"];
-                                                deviceObject[constants["DEVICE_STATUS"]] = device["enrolmentInfo"]["status"];
-                                                deviceObject[constants["DEVICE_TYPE"]] = device["type"];
-                                                if (device["type"] == constants["PLATFORM_IOS"]) {
-                                                    properties[constants["DEVICE_MODEL"]] = properties[constants["DEVICE_PRODUCT"]];
-                                                    delete properties[constants["DEVICE_PRODUCT"]];
-                                                    properties[constants["DEVICE_VENDOR"]] = constants["VENDOR_APPLE"];
-                                                }
-                                                deviceObject[constants["DEVICE_PROPERTIES"]] = properties;
-                                                return deviceObject;
-                                            }
-                                        }
+            var dataNew = serviceInvokers.XMLHttp.get(
+                url, function (responsePayload) {
+                    var device = responsePayload.responseContent;
+                    if (device) {
+                        var propertiesList = device["properties"];
+                        var properties = {};
+                        for (var i = 0; i < propertiesList.length; i++) {
+                            properties[propertiesList[i]["name"]] =
+                                propertiesList[i]["value"];
+                        }
+                        var deviceObject = {};
+                        deviceObject[constants["DEVICE_IDENTIFIER"]] = device["deviceIdentifier"];
+                        deviceObject[constants["DEVICE_NAME"]] = device["name"];
+                        deviceObject[constants["DEVICE_OWNERSHIP"]] = device["enrolmentInfo"]["ownership"];
+                        deviceObject[constants["DEVICE_OWNER"]] = device["enrolmentInfo"]["owner"];
+                        deviceObject[constants["DEVICE_STATUS"]] = device["enrolmentInfo"]["status"];
+                        deviceObject[constants["DEVICE_TYPE"]] = device["type"];
+                        if (device["type"] == constants["PLATFORM_IOS"]) {
+                            properties[constants["DEVICE_MODEL"]] = properties[constants["DEVICE_PRODUCT"]];
+                            delete properties[constants["DEVICE_PRODUCT"]];
+                            properties[constants["DEVICE_VENDOR"]] = constants["VENDOR_APPLE"];
+                        }
+                        deviceObject[constants["DEVICE_PROPERTIES"]] = properties;
+                        return deviceObject;
+                    }
+                }
                 ,
-                                        function (responsePayload) {
-                                            var response = {};
-                                            response["status"] = "error";
-                                            return response;
-                                        }
+                function (responsePayload) {
+                    var response = {};
+                    response["status"] = "error";
+                    return response;
+                }
             );
             return dataNew;
         } catch (e) {
