@@ -440,10 +440,10 @@ public class Policy {
 
     @GET
     @Path("{type}/{id}")
-    public ComplianceData getComplianceDataOfDevice(@PathParam("id") String id, @PathParam("type") String type) throws
+    public ComplianceData getComplianceDataOfDevice(@PathParam("type") String type, @PathParam("id") String id) throws
             MDMAPIException {
         try {
-            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             return policyManagementService.getDeviceCompliance(deviceIdentifier);
         } catch (PolicyComplianceException e) {
@@ -455,11 +455,10 @@ public class Policy {
 
 	@GET
 	@Path("{type}/{id}/active-policy")
-	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("id") String id,
-	        @PathParam("type") String type)
-			throws MDMAPIException {
+	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("type") String type,
+                                                                    @PathParam("id") String id) throws MDMAPIException {
 		try {
-			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
 			PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
 			return policyManagementService.getAppliedPolicyToDevice(deviceIdentifier);
 		}  catch (PolicyManagementException e) {
