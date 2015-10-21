@@ -84,7 +84,7 @@
         "path": "/modules/enrollments/ios/agent-check.jag"
       }
   ],
- "securityConstraints": [
+  "securityConstraints": [
       {
           "securityConstraint": {
               "webResourceCollection": {
@@ -95,17 +95,6 @@
               },
               "userDataConstraint": {
                   "transportGuarantee": "CONFIDENTIAL"
-              }
-          }
-          "securityConstraint": {
-              "webResourceCollection": {
-                  "name": "MDM",
-                  "urlPatterns": [
-                      "/mdm/enrollments/windows/"
-                  ]
-              },
-              "userDataConstraint": {
-                  "transportGuarantee": "NONE"
               }
           }
       }

@@ -29,6 +29,7 @@ import javax.xml.ws.BindingType;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.soap.SOAPBinding;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Interface of WSTEP implementation.
@@ -56,5 +57,5 @@ public interface CertificateEnrollmentService {
             @WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse",
                     targetNamespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE)
             javax.xml.ws.Holder<RequestSecurityTokenResponse> response) throws
-            WindowsDeviceEnrolmentException;
+            WindowsDeviceEnrolmentException, UnsupportedEncodingException;
 }

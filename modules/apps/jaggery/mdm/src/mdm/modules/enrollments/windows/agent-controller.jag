@@ -22,6 +22,7 @@ var log = new Log("/modules/enrollments/windows/agent-controller.jag");
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
 var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
+var constants = require("/modules/constants.js");
 
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
@@ -45,18 +46,18 @@ if (platform != "Windows Phone") {
         var payload = {"credentials": {"username": username, "email": email,
             "password": password, "ownership": ownership}};
         var authUrl = mdmProps["windowsConfigRoot"];
-        serviceInvokers.XMLHttp.post(authUrl, payload, function () {}, function () {});
-        xhr.open("POST", authUrl);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(stringify());
-
-        if (xhr.status == 200 && xhr.readyState == 4) {
+        //serviceInvokers.XMLHttp.post(authUrl, payload, function () {}, function () {});
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open("POST", authUrl);
+        xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+        xmlHttpRequest.send(stringify(payload));
+        if (xmlHttpRequest.status == 200 && xmlHttpRequest.readyState == 4) {
             session.put("authenticatedUser", username);
-            session.put("windowsBinaryToken", xhr.responseText);
+            session.put("windowsBinaryToken", xmlHttpRequest["responseText"]);
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
-        } else if (xhr.status == 403) {
+        } else if (xmlHttpRequest.status == 403) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
-        } else if (xhr.status == 409) {
+        } else if (xmlHttpRequest.status == 409) {
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?" +
                 "error=auth-failed&message=Provided Workplace email does not match with username. Please check.");
         } else {
