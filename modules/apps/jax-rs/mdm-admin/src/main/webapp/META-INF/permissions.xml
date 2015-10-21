@@ -366,14 +366,14 @@
     <Permission>
         <name>Activate Policy</name>
         <path>/device-mgt/policies/update</path>
-        <url>/policies/activate/{id}</url>
+        <url>/policies/activate</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Inactivate Policy</name>
         <path>/device-mgt/policies/update</path>
-        <url>/policies/inactivate/{id}</url>
+        <url>/policies/inactivate</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
