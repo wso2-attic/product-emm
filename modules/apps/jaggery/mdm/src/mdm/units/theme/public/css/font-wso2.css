@@ -421,6 +421,9 @@
 .fw-android:before {
 	content: "\e606";
 }
+.fw-bell:before {
+    content: "\e66b";
+}
 .fw-wifi:before {
 	content: "\e607";
 }

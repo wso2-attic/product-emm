@@ -227,28 +227,31 @@ public class Policy {
     }
 
     @DELETE
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+    @Produces("application/json")
+    public Response deletePolicy(List<Integer> policyIds) throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-        boolean policyDeleted;
+        boolean policyDeleted = true;
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
-            policyDeleted = pap.deletePolicy(policy);
+	        for(int i : policyIds) {
+		        org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(i);
+		        if(!pap.deletePolicy(policy)){
+			        policyDeleted = false;
+		        }
+	        }
         } catch (PolicyManagementException e) {
-            String error = "Exception in deleting policy by id:" + policyId;
+            String error = "Exception in deleting policies.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
         ResponsePayload responsePayload = new ResponsePayload();
         if (policyDeleted) {
             responsePayload.setStatusCode(HttpStatus.SC_OK);
-            responsePayload.setMessageFromServer("Policy by id:" + policyId + " has been successfully deleted.");
+            responsePayload.setMessageFromServer("Policies have been successfully deleted.");
             return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
         } else {
             responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-            responsePayload.setMessageFromServer("Policy by id:" + policyId + " does not exist.");
+            responsePayload.setMessageFromServer("Policy does not exist.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
         }
     }
@@ -272,21 +275,23 @@ public class Policy {
 
     @PUT
     @Produces("application/json")
-    @Path("activate/{id}")
-    public Response activatePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+    @Path("activate")
+    public Response activatePolicy(List<Integer> policyIds) throws MDMAPIException {
         try {
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            pap.activatePolicy(policyId);
+	        for(int i : policyIds) {
+		        pap.activatePolicy(i);
+	        }
         } catch (PolicyManagementException e) {
-            String error = "Exception in activating policy by id:" + policyId;
+            String error = "Exception in activating policies.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
 
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        responsePayload.setMessageFromServer("Policy by id:" + policyId + " has been successfully activated.");
+        responsePayload.setMessageFromServer("Selected policies have been successfully activated.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
 
     }
@@ -294,21 +299,23 @@ public class Policy {
 
     @PUT
     @Produces("application/json")
-    @Path("inactivate/{id}")
-    public Response inactivatePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+    @Path("inactivate")
+    public Response inactivatePolicy(List<Integer> policyIds) throws MDMAPIException {
 
         try {
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            pap.inactivatePolicy(policyId);
+	        for(int i : policyIds) {
+		        pap.inactivatePolicy(i);
+	        }
         } catch (PolicyManagementException e) {
-            String error = "Exception in inactivating policy by id:" + policyId;
+            String error = "Exception in inactivating policies.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        responsePayload.setMessageFromServer("Policy by id:" + policyId + " has been successfully inactivated.");
+        responsePayload.setMessageFromServer("Selected policies have been successfully inactivated.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 

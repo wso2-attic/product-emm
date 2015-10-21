@@ -1,6 +1,0 @@
-{
-  "grantType" : "password",
-  "saasApp" : true,
-  "tokenScope": "admin",
-  "requireDynamicClientRegistration" : false
-}

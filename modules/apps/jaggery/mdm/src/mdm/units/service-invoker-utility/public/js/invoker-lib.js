@@ -16,67 +16,11 @@
  * under the License.
  */
 
-//Using https://github.com/js-cookie/js-cookie
 
 var invokerUtil = function () {
 
     var module = {};
-    var END_POINT = "api/invoker/execute/";
-    var flagAuth = false; // A flag to be used to test without oAuth
-    function requestAccessToken(successCallback, errorCallback) {
-        $.ajax({
-            url: "/mdm/token",
-            type: "GET",
-            success: function () {
-                successCallback
-            }
-        }).fail(errorCallback);
-    }
-
-    function call(method, url, payload, successCallback, errorCallback) {
-        //var accessToken = Cookies.get('accessToken');
-        //var execute = function () {
-        //    var data = {
-        //        url: url,
-        //        type: method,
-        //        contentType: "application/json",
-        //        accept: "application/json",
-        //        //dataType: "json",
-        //        success: successCallback
-        //    };
-        //    if (payload) {
-        //        data.data = JSON.stringify(payload);
-        //    }
-        //    if (flagAuth) {
-        //        accessToken = Cookies.get('accessToken');
-        //        data.headers = {
-        //            "Authorization": "Bearer " + accessToken
-        //        };
-        //    }
-        //    $.ajax(data).fail(function (jqXHR) {
-        //        if (jqXHR.status == "401") {
-        //            window.location.replace("/mdm");
-        //        } else {
-        //            errorCallback(jqXHR);
-        //        }
-        //    });
-        //};
-        //if (flagAuth) {
-        //    if (!accessToken) {
-        //        $.ajax({
-        //            url: "/mdm/token",
-        //            type: "GET",
-        //            success: function () {
-        //                execute();
-        //            }
-        //        }).fail(errorCallback);
-        //    } else {
-        //        execute();
-        //    }
-        //} else {
-        //    execute();
-        //}
-    }
+    var END_POINT = window.location.origin+"/mdm/api/invoker/execute/";
 
     module.get = function (url, successCallback, errorCallback) {
         var payload = null;
@@ -93,11 +37,6 @@ var invokerUtil = function () {
         execute("DELETE", url, payload, successCallback, errorCallback);
     };
     function execute (methoad, url, payload, successCallback, errorCallback) {
-        console.log(methoad);
-        console.log(url);
-        console.log(payload);
-        console.log(JSON.stringify(payload));
-        console.log();
         var data = {
             url: END_POINT,
             type: "POST",
@@ -110,16 +49,13 @@ var invokerUtil = function () {
         paramValue.actionUrl = url;
         paramValue.actionPayload = JSON.stringify(payload)
         data.data = JSON.stringify(paramValue);
-        console.log(data.data);
-        console.log(data);
         $.ajax(data).fail(function (jqXHR) {
-            if (jqXHR.status == "401") {
+            if (JSON.parse(jqXHR).status == "401") {
                 window.location.replace("/mdm");
             } else {
                 errorCallback(jqXHR);
             }
         });
-        console.log("Triggersssss");
     };
     return module;
 }();

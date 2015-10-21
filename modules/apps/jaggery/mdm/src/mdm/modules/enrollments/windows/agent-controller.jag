@@ -47,28 +47,20 @@ if (platform != "Windows Phone") {
         var authUrl = mdmProps["windowsConfigRoot"];
         serviceInvokers.XMLHttp.post(authUrl, payload, function (responseText) {
             session.put("authenticatedUser", username);
-            session.put("windowsBinaryToken", xhr.responseText);
+            session.put("windowsBinaryToken", responseText);
             response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
         }, function (responseText) {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
+            if (responseText == 403) {
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
+            } else if (responseTexts == 409) {
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed&" +
+                                      "message=Provided Workplace email does not match with username. Please check.");
+            } else {
+                // one visible possibility would be server sending 500
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=unexpected");
+            }
         });
-        xhr.open("POST", authUrl);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(stringify());
 
-        if (xhr.status == 200 && xhr.readyState == 4) {
-            session.put("authenticatedUser", username);
-            session.put("windowsBinaryToken", xhr.responseText);
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
-        } else if (xhr.status == 403) {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
-        } else if (xhr.status == 409) {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?" +
-                "error=auth-failed&message=Provided Workplace email does not match with username. Please check.");
-        } else {
-            // one visible possibility would be server sending 500
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=unexpected");
-        }
     }
 }
 %>

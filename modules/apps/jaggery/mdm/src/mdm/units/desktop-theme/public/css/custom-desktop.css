@@ -3366,7 +3366,7 @@ body.inverse .fade-edge:after {
 }
 @media (min-width: 1200px) {
     .table.list-table.grid-view tr {
-        width: 10%;
+        width: 12%;
     }
 }
 
