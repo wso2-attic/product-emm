@@ -226,21 +226,9 @@ $(document).ready(function () {
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
-                    if(config.name == configParams["NOTIFIER_FREQUENCY"]){
+                    if(config.name == configParams["NOTIFIER_FREQUENCY"]) {
                         $("input#windows-config-notifier-frequency").val(config.value);
-                    } else if(config.name == configParams["COMMON_NAME"]){
-                        $("input#windows-config-mdm-cn").val(config.value);
-                    } else if(config.name == configParams["KEYSTORE_PASSWORD"]){
-                        $("input#windows-config-mdm-keystore-password").val(config.value);
-                    } else if(config.name == configParams["PRIVATE_KEY_PASSWORD"]){
-                        $("input#windows-config-mdm-pk-password").val(config.value);
-                    } else if(config.name == configParams["BEFORE_EXPIRE"]){
-                        $("input#windows-config-before-expire").val(config.value);
-                    } else if(config.name == configParams["MDM_CERT_NAME"]){
-                        $("#windows-mdm-cert-file-name").html(config.value);
-                    } else if(config.name == configParams["AFTER_EXPIRE"]){
-                        $("input#windows-config-after-expire").val(config.value);
-                    } else if(config.name == configParams["WINDOWS_EULA"]){
+                    } else if(config.name == configParams["WINDOWS_EULA"]) {
                         $("#windows-eula").val(config.value);
                     }
                 }
@@ -793,48 +781,13 @@ $(document).ready(function () {
     $("button#save-windows-btn").click(function() {
 
         var notifierFrequency = $("#windows-config-notifier-frequency").val();
-        var commonName = $("#windows-config-mdm-cn").val();
-        var keystorePassword = $("#windows-config-mdm-keystore-password").val();
-        var privateKeyPassword = $("#windows-config-mdm-pk-password").val();
-        var beforeExpire = $("#windows-config-before-expire").val();
-        var afterExpire = $("#windows-config-after-expire").val();
         var windowsLicense = tinymce.get('windows-eula').getContent();
 
         if (!notifierFrequency) {
             $(errorMsg).text("Notifier Frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!commonName) {
-            $(errorMsg).text("Common Name is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!keystorePassword) {
-            $(errorMsg).text("Keystore Password is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!privateKeyPassword) {
-            $(errorMsg).text("Private Key Password is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!beforeExpire) {
-            $(errorMsg).text("Before days to expire is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!afterExpire) {
-            $(errorMsg).text("After days to expire is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
         } else if (!windowsLicense) {
             $(errorMsg).text("License is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if(notSupportedError) {
-            $(errorMsg).text("The File APIs are not fully supported in this browser.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (invalidFormatWindowsMDMCert) {
-            $(errorMsg).text("MDM certificate needs to be in jks format.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (base64WindowsMDMCert == '') {
-            $(errorMsg).text("MDM certificate is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if(!$.isNumeric(beforeExpire)){
-            $(errorMsg).text("Provided Before days to expire is invalid. It must be a number.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if(!$.isNumeric(afterExpire)){
-            $(errorMsg).text("Provided After days to expire is invalid. It must be a number.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if(!$.isNumeric(notifierFrequency)){
             $(errorMsg).text("Provided Notifier frequency is invalid. It must be a number.");
@@ -850,48 +803,6 @@ $(document).ready(function () {
             "contentType": "text"
         };
 
-        var configCommonName = {
-            "name": configParams["COMMON_NAME"],
-            "value": commonName,
-            "contentType": "text"
-        };
-
-        var configKeystorePassword = {
-            "name": configParams["KEYSTORE_PASSWORD"],
-            "value": keystorePassword,
-            "contentType": "text"
-        };
-
-        var configPrivateKeyPassword = {
-            "name": configParams["PRIVATE_KEY_PASSWORD"],
-            "value": privateKeyPassword,
-            "contentType": "text"
-        };
-
-        var configBeforeExpire = {
-            "name": configParams["BEFORE_EXPIRE"],
-            "value": beforeExpire,
-            "contentType": "text"
-        };
-
-        var configAfterExpire = {
-            "name": configParams["AFTER_EXPIRE"],
-            "value": afterExpire,
-            "contentType": "text"
-        };
-
-        var paramBase64MDMCert = {
-            "name": configParams["MDM_CERT"],
-            "value": base64WindowsMDMCert,
-            "contentType": "text"
-        };
-
-        var MDMCertName = {
-            "name": configParams["MDM_CERT_NAME"],
-            "value": fileNameWindowsMDMCert,
-            "contentType": "text"
-        };
-
         var windowsEula = {
             "name": configParams["WINDOWS_EULA"],
             "value": windowsLicense,
@@ -899,13 +810,6 @@ $(document).ready(function () {
         };
 
         configList.push(paramNotifierFrequency);
-        configList.push(configCommonName);
-        configList.push(configKeystorePassword);
-        configList.push(configPrivateKeyPassword);
-        configList.push(configBeforeExpire);
-        configList.push(configAfterExpire);
-        configList.push(paramBase64MDMCert);
-        configList.push(MDMCertName);
         configList.push(windowsEula);
 
         addConfigFormData.type = platformTypeConstants["WINDOWS"];
