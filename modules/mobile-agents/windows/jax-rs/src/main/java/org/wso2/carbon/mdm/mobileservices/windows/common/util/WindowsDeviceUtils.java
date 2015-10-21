@@ -23,7 +23,7 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.mdm.mobileservices.windows.common.Constants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.BadRequestException;
 
 import javax.ws.rs.core.MediaType;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class for windows device utilities.
+ * Class for get windows device utilities.
  */
 public class WindowsDeviceUtils {
 
@@ -50,7 +50,7 @@ public class WindowsDeviceUtils {
         for (String deviceID : deviceIDs) {
             deviceIDCounter++;
             if (deviceID == null || deviceID.isEmpty()) {
-                errorDeviceIdList.add(String.format(Constants.DeviceConstants.DEVICE_ID_NOT_FOUND,
+                errorDeviceIdList.add(String.format(PluginConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
                         deviceIDCounter));
                 continue;
             }
@@ -63,13 +63,13 @@ public class WindowsDeviceUtils {
                         getDevice(deviceIdentifier);
                 if (device == null || device.getDeviceIdentifier() == null ||
                         device.getDeviceIdentifier().isEmpty()) {
-                    errorDeviceIdList.add(String.format(Constants.DeviceConstants.DEVICE_ID_NOT_FOUND,
+                    errorDeviceIdList.add(String.format(PluginConstants.DeviceConstants.DEVICE_ID_NOT_FOUND,
                             deviceIDCounter));
                     continue;
                 }
                 validDeviceIDList.add(deviceIdentifier);
             } catch (DeviceManagementException e) {
-                errorDeviceIdList.add(String.format(Constants.DeviceConstants.DEVICE_ID_SERVICE_NOT_FOUND,
+                errorDeviceIdList.add(String.format(PluginConstants.DeviceConstants.DEVICE_ID_SERVICE_NOT_FOUND,
                         deviceIDCounter));
             }
         }

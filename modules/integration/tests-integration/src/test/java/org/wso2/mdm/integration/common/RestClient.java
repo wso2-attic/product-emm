@@ -28,13 +28,33 @@ import java.util.Map;
  * This is the rest client that is used to calls to APIs.
  */
 public class RestClient {
+
     private String backEndUrl;
+    private String authrizationString;
     private Map<String, String> requestHeaders = new HashMap<String, String>();
     private static final String CONTENT_TYPE = "Content-Type";
+    private static final String AUTHORIZATION = "Authorization";
 
     public RestClient(String backEndUrl, String contentType) {
         this.backEndUrl = backEndUrl;
         this.requestHeaders.put(CONTENT_TYPE, contentType);
+    }
+
+    public RestClient(String backEndUrl, String contentType, String authorization) {
+        this.backEndUrl = backEndUrl;
+        this.requestHeaders.put(CONTENT_TYPE, contentType);
+        if(authorization != null || !authorization.isEmpty()){
+            this.authrizationString = authorization;
+            this.requestHeaders.put(AUTHORIZATION, authorization);
+        }
+    }
+
+    public String getAuthrizationString() {
+        return authrizationString;
+    }
+
+    public void setAuthrizationString(String authrizationString) {
+        this.authrizationString = authrizationString;
     }
 
     public void setHttpHeader(String headerName, String value) {
@@ -56,5 +76,4 @@ public class RestClient {
     public HttpResponse get(String endpoint) throws Exception {
         return HttpRequestUtil.doGet(backEndUrl + endpoint, requestHeaders);
     }
-
 }

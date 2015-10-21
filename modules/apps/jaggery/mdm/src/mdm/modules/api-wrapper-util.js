@@ -24,7 +24,7 @@ var apiWrapperUtil = function () {
     module.refreshToken = function () {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
         var clientData = session.get(constants.ENCODED_CLIENT_KEYS_IDENTIFIER);
-        tokenPair = tokenUtil.refreshToken(tokenPair, clientData.clientId, clientData.clientSecret);
+        tokenPair = tokenUtil.refreshToken(tokenPair, clientData);
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
         var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};
         return tokenCookie;

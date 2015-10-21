@@ -32,12 +32,11 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
     var method = request.getContent().actionMethod;
     var targetURL = mdmProps.httpsURL + request.getContent().actionUrl;
     var payload = request.getContent().actionPayload;
-    log.info("Invoking "+method+" for "+targetURL+" with "+payload);
     try {
         switch (method) {
             case constants.HTTP_GET:
                 var responseData = serviceInvokers.XMLHttp.get(targetURL, function (responsePayload) {
-                                                                   return responsePayload.responseText;
+                                                                   return responsePayload;
                                                                },
                                                                function (responsePayload) {
                                                                    return responsePayload;
@@ -46,7 +45,7 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
                 break;
             case constants.HTTP_POST:
                 var responseData = serviceInvokers.XMLHttp.post(targetURL, payload, function (responsePayload) {
-                                                                    return responsePayload.responseText;
+                                                                    return responsePayload;
                                                                 },
                                                                 function (responsePayload) {
                                                                     return responsePayload;
@@ -55,7 +54,7 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
                 break;
             case constants.HTTP_PUT:
                 var responseData = serviceInvokers.XMLHttp.put(targetURL, payload, function (responsePayload) {
-                                                                   return responsePayload.responseText;
+                                                                   return responsePayload;
                                                                },
                                                                function (responsePayload) {
                                                                    return responsePayload;
@@ -64,7 +63,7 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
                 break;
             case constants.HTTP_DELETE:
                 var responseData = serviceInvokers.XMLHttp.delete(targetURL, function (responsePayload) {
-                                                                      return responsePayload.responseText;
+                                                                      return responsePayload;
                                                                   },
                                                                   function (responsePayload) {
                                                                       return responsePayload;

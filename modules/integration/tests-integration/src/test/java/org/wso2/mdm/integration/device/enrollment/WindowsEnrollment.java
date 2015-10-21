@@ -37,7 +37,7 @@ public class WindowsEnrollment extends TestBase {
     @BeforeClass(alwaysRun = true, groups = { Constants.Enrollment.ANDROID_ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
-        client = new RestClient(backendURL, Constants.APPLICATION_JSON);
+        client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON);
     }
 
     @Test(groups = Constants.Enrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows device enrollment.")

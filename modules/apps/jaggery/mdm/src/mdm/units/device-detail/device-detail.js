@@ -2,14 +2,13 @@ function onRequest(context) {
     var log = new Log("device-detail.js");
     var uri = request.getRequestURI();
     var uriMatcher = new URIMatcher(String(uri));
-    var isMatched = uriMatcher.match("/{context}/device/{deviceType}/{+deviceId}");
+    var isMatched = uriMatcher.match("/{context}/device/{deviceType}/{deviceId}");
     if (isMatched) {
         var matchedElements = uriMatcher.elements();
         var deviceType = matchedElements.deviceType;
         var deviceId = matchedElements.deviceId;
         var deviceModule = require("/modules/device.js").deviceModule;
         var device = deviceModule.viewDevice(deviceType, deviceId);
-
         if (device) {
             var viewModel = {};
             var deviceInfo = device.properties.DEVICE_INFO;

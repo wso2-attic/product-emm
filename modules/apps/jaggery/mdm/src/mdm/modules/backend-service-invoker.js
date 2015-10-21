@@ -24,7 +24,9 @@ var backendServiceInvoker = function () {
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
+
     var constants = require("/modules/constants.js");
+    var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
     var log = new Log("modules/backend-service-invoker.js");
 
     /**
@@ -36,23 +38,34 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     function initiateXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
-        var xmlHttpRequest = new XMLHttpRequest();
-        xmlHttpRequest.open(method, url);
-        xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
-        xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
-        if (IS_OAUTH_ENABLED) {
-            var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-            if (!(!accessToken.trim())) {
-                xmlHttpRequest.setRequestHeader(
-                    constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
-            }
-        }
-        xmlHttpRequest.send(stringify(payload));
-        if (xmlHttpRequest.status == 200) {
-            return successCallback(xmlHttpRequest);
-        } else {
+        var execute = function () {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open(method, url);
+            xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+            xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
+            if (IS_OAUTH_ENABLED) {
+                var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
+                    xmlHttpRequest.setRequestHeader(
+                        constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
 
-            return errorCallback(xmlHttpRequest);
+            }
+            xmlHttpRequest.send(stringify(payload));
+            if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
+                return successCallback(parse(xmlHttpRequest.responseText));
+            } else if (xmlHttpRequest.status == 401) {
+                tokenUtil.refreshToken();
+                return execute();
+            }
+            else {
+                return errorCallback(parse(xmlHttpRequest.responseText));
+            }
+        };
+        var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();
+        if (accessToken){
+            return execute();
+        }else {
+            tokenUtil.refreshToken();
+            return execute();
         }
     }
 
@@ -112,7 +125,6 @@ var backendServiceInvoker = function () {
         try {
             client.executeMethod(httpMethodObject);
             var status = httpMethodObject.getStatusCode();
-            log.info("status ;"+status+" :: "+status instanceof Int+"  >>>  "+ (status >= 200 && 400 > status));
             if (status == 200) {
                 return successCallback(httpMethodObject.getResponseBody());
             } else {

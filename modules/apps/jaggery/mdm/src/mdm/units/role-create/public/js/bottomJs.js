@@ -39,14 +39,20 @@ $(document).ready(function () {
         multiple:true,
         tags: true,
         ajax: {
-            url: "/mdm-admin/users",
+            url: window.location.origin + "/mdm/api/invoker/execute/" ,
+            method:"POST",
             dataType: 'json',
             delay: 250,
             id: function(user){ return user.username; },
             data: function (params) {
-                return {
-                    q: params.term, // search term
-                    page: params.page
+                var dataset = JSON.stringify({
+                        q: params.term, // search term
+                        page: params.page
+                });
+                return{
+                    actionMethod:"/mdm-admin/users",
+                    actionUrl:"GET",
+                    actionPayload:
                 };
             },
             processResults: function (data, page) {
@@ -82,7 +88,7 @@ $(document).ready(function () {
         if (!roleName) {
             $(errorMsg).text("Role name is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, roleName)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "]{3,30}$/, roleName)) {
             $(errorMsg).text("Provided role name is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!domain) {

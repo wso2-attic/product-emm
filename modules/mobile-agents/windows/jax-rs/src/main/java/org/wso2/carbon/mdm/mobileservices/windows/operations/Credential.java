@@ -26,35 +26,35 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
  * Credentials passed between the device and the server for security purposes.
  */
 public class Credential {
-	Meta meta;
-	String data;
+    MetaTag meta;
+    String data;
 
-	public Meta getMeta() {
-		return meta;
-	}
+    public MetaTag getMeta() {
+        return meta;
+    }
 
-	public void setMeta(Meta meta) {
-		this.meta = meta;
-	}
+    public void setMeta(MetaTag meta) {
+        this.meta = meta;
+    }
 
-	public String getData() {
-		return data;
-	}
+    public String getData() {
+        return data;
+    }
 
-	public void setData(String data) {
-		this.data = data;
-	}
+    public void setData(String data) {
+        this.data = data;
+    }
 
-	public void buildCredentialElement(Document doc, Element rootElement) {
-		Element credentials = doc.createElement(Constants.CREDENTIAL);
-		rootElement.appendChild(credentials);
-		if (getMeta() != null) {
-			getMeta().buildMetaElement(doc,credentials);
-		}
-		if (getData() != null) {
-			Element data= doc.createElement(Constants.DATA);
-			data.appendChild(doc.createTextNode(getData()));
-			credentials.appendChild(data);
-		}
-	}
+    public void buildCredentialElement(Document doc, Element rootElement) {
+        Element credentials = doc.createElement(Constants.CREDENTIAL);
+        rootElement.appendChild(credentials);
+        if (getMeta() != null) {
+            getMeta().buildMetaElement(doc, credentials);
+        }
+        if (getData() != null) {
+            Element data = doc.createElement(Constants.DATA);
+            data.appendChild(doc.createTextNode(getData()));
+            credentials.appendChild(data);
+        }
+    }
 }

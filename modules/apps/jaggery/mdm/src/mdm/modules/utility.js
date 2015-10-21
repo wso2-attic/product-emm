@@ -96,6 +96,9 @@ utility = function () {
         userModule.addPermissions([{key: "devices/list", name: "List Individual Devices"}], "device-mgt/user", type);
         userModule.addPermissions([{key: "devices/operation", name: "Perform Operation on an Individual Device"}],
                                          "device-mgt/user", type);
+
+        userModule.addPermissions([{key: "tenant-configs", name: "Tenant Configurations"}], "device-mgt/admin", type);
+        userModule.addPermissions([{key: "tenant-configs/view", name: "View Configurations"}], "device-mgt/emm-admin", type);
     };
 
     return publicMethods;

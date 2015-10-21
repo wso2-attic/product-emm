@@ -54,7 +54,7 @@ public class Policy {
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
-
+	policy.setDescription(policyWrapper.getDescription());
         policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
         policy.setOwnershipType(policyWrapper.getOwnershipType());
         policy.setRoles(policyWrapper.getRoles());
@@ -84,7 +84,7 @@ public class Policy {
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
-
+	policy.setDescription(policyWrapper.getDescription());
         policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
         policy.setOwnershipType(policyWrapper.getOwnershipType());
         policy.setRoles(policyWrapper.getRoles());
@@ -169,21 +169,53 @@ public class Policy {
 
     @PUT
     @Path("{id}")
-    public ResponsePayload updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy, @PathParam("id") int policyId)
+    public ResponsePayload updatePolicy(PolicyWrapper policyWrapper, @PathParam("id") int policyId)
             throws MDMAPIException {
+//        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+//        ResponsePayload responseMsg = new ResponsePayload();
+//        try {
+//            PolicyAdministratorPoint pap = policyManagementService.getPAP();
+//            org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
+//            policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
+//            policy.setId(previousPolicy.getId());
+//            pap.updatePolicy(policy);
+//            Response.status(HttpStatus.SC_OK);
+//            responseMsg.setMessageFromServer("Policy has been updated successfully.");
+//            return responseMsg;
+//        } catch (PolicyManagementException e) {
+//            String error = "Policy Management related exception";
+//            log.error(error, e);
+//            throw new MDMAPIException(error, e);
+//        }
+
+
+
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         ResponsePayload responseMsg = new ResponsePayload();
+        org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
+        policy.setPolicyName(policyWrapper.getPolicyName());
+        policy.setId(policyId);
+        policy.setProfileId(policyWrapper.getProfileId());
+        policy.setDescription(policyWrapper.getDescription());
+        policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
+        policy.setOwnershipType(policyWrapper.getOwnershipType());
+        policy.setRoles(policyWrapper.getRoles());
+        policy.setUsers(policyWrapper.getUsers());
+        policy.setTenantId(policyWrapper.getTenantId());
+        policy.setCompliance(policyWrapper.getCompliance());
+       // policy.setActive(true);
+
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
-            policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
-            policy.setId(previousPolicy.getId());
+//            pap.addPolicy(policy);
             pap.updatePolicy(policy);
+//            Response.status(HttpStatus.SC_CREATED);
             Response.status(HttpStatus.SC_OK);
+//            responseMsg.setMessageFromServer("Policy has been added successfully.");
             responseMsg.setMessageFromServer("Policy has been updated successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
+            String error = "Policy Management related exception in policy update.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
@@ -408,16 +440,12 @@ public class Policy {
 
     @GET
     @Path("{type}/{id}")
-    public ComplianceData getComplianceDataOfDevice(@PathParam("id") String id, @PathParam("type") String type) throws
+    public ComplianceData getComplianceDataOfDevice(@PathParam("type") String type, @PathParam("id") String id) throws
             MDMAPIException {
         try {
-            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             return policyManagementService.getDeviceCompliance(deviceIdentifier);
-        } catch (MDMAPIException e) {
-            String error = "Error occurred while getting the policy management service.";
-            log.error(error, e);
-            throw new MDMAPIException(error, e);
         } catch (PolicyComplianceException e) {
             String error = "Error occurred while getting the compliance data.";
             log.error(error, e);
@@ -427,18 +455,13 @@ public class Policy {
 
 	@GET
 	@Path("{type}/{id}/active-policy")
-	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("id") String id,
-	        @PathParam("type") String type)
-			throws MDMAPIException {
+	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("type") String type,
+                                                                    @PathParam("id") String id) throws MDMAPIException {
 		try {
-			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
 			PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
 			return policyManagementService.getAppliedPolicyToDevice(deviceIdentifier);
-		} catch (MDMAPIException e) {
-			String error = "Error occurred while getting the policy management service.";
-			log.error(error, e);
-			throw new MDMAPIException(error, e);
-		} catch (PolicyManagementException e) {
+		}  catch (PolicyManagementException e) {
 			String error = "Error occurred while getting the current policy.";
 			log.error(error, e);
 			throw new MDMAPIException(error, e);
