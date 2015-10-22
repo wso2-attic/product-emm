@@ -117,6 +117,7 @@
                     viewModel.compliance = "COMPLIANT";
                     var content = template(viewModel);
                     $("#policy-list-container").html(content);
+                    $("#operations-log-table").addClass("hidden");
                 }
 
             };
