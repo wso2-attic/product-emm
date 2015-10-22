@@ -176,6 +176,13 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Update a specific role</name>
+        <path>/device-mgt/user/roles</path>
+        <url>/roles/*</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Update User roles</name>
         <path>/device-mgt/user/roles</path>
         <url>/roles/*/users</url>
