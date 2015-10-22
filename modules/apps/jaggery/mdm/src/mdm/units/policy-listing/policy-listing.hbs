@@ -8,6 +8,8 @@
     </div>
     <!-- content -->
     <div class="container-fluid">
+        <span id="policy-listing-status-msg" >{{policyListingStatusMsg}}</span>
+        {{#equal noPolicy false}}
         <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view" id="policy-grid">
             <thead>
             <tr class="sort-row">
@@ -33,37 +35,37 @@
                 <th></th>
             </tr>
             <tr class="bulk-action-row">
-                <th colspan="9">
-                    <ul class="tiles">
-                        <li class="square">
-                            <a href="#" data-click-event="remove-form" class="btn square-element policy-remove-link" data-toggle="modal" data-target="#modalDemo">
-                                    <span class="icon fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="fw fw-delete fw-stack-1x"></i>
-                                    </span>
-                                Remove
-                            </a>
-                        </li>
-                        <li class="square">
-                            <a href="#" data-click-event="remove-form" class="btn square-element policy-publish-link" data-toggle="modal" data-target="#modalDemo">
-                                    <span class="icon fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="glyphicon glyphicon-floppy-saved"></i>
-                                    </span>
-                                Publish
-                            </a>
-                        </li>
-                        <li class="square">
-                            <a href="#" data-click-event="remove-form" class="btn square-element policy-unpublish-link" data-toggle="modal" data-target="#modalDemo">
-                                    <span class="icon fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="glyphicon glyphicon-floppy-remove"></i>
-                                    </span>
-                                Unpublish
-                            </a>
-                        </li>
-                    </ul>
-                </th>
+                    <th colspan="9">
+                        <ul class="tiles">
+                            <li class="square">
+                                <a href="#" data-click-event="remove-form" class="btn square-element policy-remove-link" data-toggle="modal" data-target="#modalDemo">
+                                        <span class="icon fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="fw fw-delete fw-stack-1x"></i>
+                                        </span>
+                                    Remove
+                                </a>
+                            </li>
+                            <li class="square">
+                                <a href="#" data-click-event="remove-form" class="btn square-element policy-publish-link" data-toggle="modal" data-target="#modalDemo">
+                                        <span class="icon fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="glyphicon glyphicon-floppy-saved"></i>
+                                        </span>
+                                    Publish
+                                </a>
+                            </li>
+                            <li class="square">
+                                <a href="#" data-click-event="remove-form" class="btn square-element policy-unpublish-link" data-toggle="modal" data-target="#modalDemo">
+                                        <span class="icon fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="glyphicon glyphicon-floppy-remove"></i>
+                                        </span>
+                                    Unpublish
+                                </a>
+                            </li>
+                        </ul>
+                    </th>
             </tr>
             </thead>
 
@@ -127,6 +129,7 @@
             <br class="c-both" />
             </tbody>
         </table>
+        {{/equal}}
     </div>
     <br class="c-both"/>
     <!-- /content -->

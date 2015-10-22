@@ -7,20 +7,22 @@ function onRequest(context) {
         context["policyListToView"] = policyListToView;
         var policyCount = policyListToView.length;
         if (policyCount == 0) {
-            context["policyListingStatusMsg"] = "No plicy is available to be displayed.";
+            context["policyListingStatusMsg"] = "No policy is available to be displayed.";
             context["saveNewPrioritiesButtonEnabled"] = false;
+            context["noPolicy"] = true;
         } else if (policyCount == 1) {
-            context["policyListingStatusMsg"] = "Add more policies to set-up a priority order.";
             context["saveNewPrioritiesButtonEnabled"] = false;
+            context["noPolicy"] = false;
         } else {
-            context["policyListingStatusMsg"] = "Drag & Move to re-order Policy Priority.";
             context["saveNewPrioritiesButtonEnabled"] = true;
+            context["noPolicy"] = false;
         }
     } else {
         // here, response["status"] == "error"
         context["policyListToView"] = [];
         context["policyListingStatusMsg"] = "An unexpected error occured @ backend. Please try again later.";
         context["saveNewPrioritiesButtonEnabled"] = false;
+        context["noPolicy"] = true;
     }
     return context;
 }
