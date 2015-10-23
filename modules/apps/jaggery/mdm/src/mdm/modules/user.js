@@ -25,7 +25,7 @@ var userModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
     var mdmProps = require('/config/mdm-props.js').config();
-    var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
+    var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 
     /* Initializing user manager */
     var carbon = require('carbon');
@@ -343,6 +343,7 @@ var userModule = function () {
      @Updated
      */
     publicMethods.getUsers = function () {
+        log.info("Users :) ");
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
@@ -352,7 +353,9 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/users";
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var temp = privateMethods.callBackend(url, constants.HTTP_GET);
+            log.info(stringify(temp));
+            return temp;
         } catch (e) {
             throw e;
         } finally {
