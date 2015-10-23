@@ -184,6 +184,10 @@ function loadDevices(searchType, searchParam){
                 $(deviceCheckbox).click(function () {
                     addDeviceSelectedClass(this);
                 });
+            } else {
+                $('#device-grid').addClass('hidden');
+                $('#device-listing-status-msg').text('No device is available to be displayed.');
+
             }
             $('#device-grid').datatables_extended();
             $(".icon .text").res_text(0.2);

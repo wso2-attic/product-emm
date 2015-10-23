@@ -19,16 +19,16 @@
             required to skip schema initialization during the server start up, set the
             following property to "true". -->
         <!-- <SkipDBSchemaCreation>false</SkipDBSchemaCreation> -->
-        <!--SessionDataPersist>
-            <Enable>true</Enable>
-            <RememberMePeriod>20160</RememberMePeriod>
-            <CleanUp>
+        <SessionDataPersist>
+            <Enable>false</Enable>
+            <!--RememberMePeriod>20160</RememberMePeriod-->
+            <!--CleanUp>
                 <Enable>true</Enable>
                     <Period>1</Period>
                     <TimeOut>20160</TimeOut-->
         <!--/CleanUp>
         <Temporary>false</Temporary-->
-        <!--/SessionDataPersist-->
+        </SessionDataPersist>
     </JDBCPersistenceManager>
 
     <!-- Security configurations -->

@@ -92,9 +92,9 @@ var util = function () {
         }
         return tokenPair;
     };
-    module.getTokenWithSAMLGrantType = function (assertion, clientId, clientSecret, scope) {
+    module.getTokenWithSAMLGrantType = function (assertion, clientKeys, scope) {
 
-        var assertionXML = this.decode(assertion) ;
+        var assertionXML = module.decode(assertion) ;
         var encodedExtractedAssertion;
         var extractedAssertion;
         //TODO: make assertion extraction with proper parsing. Since Jaggery XML parser seem to add formatting
@@ -113,10 +113,9 @@ var util = function () {
 
         var xhr = new XMLHttpRequest();
         var tokenEndpoint = mdmProps.idPServer + "/oauth2/token";
-        var encodedClientKeys = this.encode(clientId + ":" + clientSecret);
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
+        xhr.setRequestHeader("Authorization", "Basic " + clientKeys);
         xhr.send("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" +
                  encodeURIComponent(encodedExtractedAssertion) + "&scope=" + "PRODUCTION");
         var tokenPair = {};
@@ -131,29 +130,27 @@ var util = function () {
         }
         return tokenPair;
     };
-    module.refreshToken = function (tokenPair, clientId, clientSecret, scope) {
+    module.refreshToken = function (tokenPair, clientData, scope) {
         var xhr = new XMLHttpRequest();
         var tokenEndpoint = mdmProps.idPServer + "/oauth2/token";
-        var encodedClientKeys = encode(clientId + ":" + clientSecret);
         xhr.open("POST", tokenEndpoint, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
+        xhr.setRequestHeader("Authorization", "Basic " + clientData);
         var url = "grant_type=refresh_token&refresh_token=" + tokenPair.refreshToken;
         if (scope) {
             url = url + "&scope=" + scope
         }
-        log.info(url);
         xhr.send(url);
-        delete password, delete clientSecret, delete encodedClientKeys;
+        delete clientData;
         var tokenPair = {};
         if (xhr.status == 200) {
             var data = parse(xhr.responseText);
             tokenPair.refreshToken = data.refresh_token;
             tokenPair.accessToken = data.access_token;
         } else if (xhr.status == 403) {
-            throw "Error in obtaining token with Password Grant Type";
+            throw "Error in obtaining token with Refresh Token  Grant Type";
         } else {
-            throw "Error in obtaining token with Password Grant Type";
+            throw "Error in obtaining token with  Refresh Token Type";
         }
         return tokenPair;
     };

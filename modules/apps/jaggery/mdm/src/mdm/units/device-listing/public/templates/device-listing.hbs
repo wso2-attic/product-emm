@@ -22,13 +22,15 @@
                 <td class="fade-edge remove-padding-top" data-search="{{type}}" data-display="{{type}}" data-grid-label="Type">{{type}}</td>
                 <td class="fade-edge remove-padding-top" data-search="{{enrolmentInfo.ownership}}" data-display="{{enrolmentInfo.ownership}}" data-grid-label="Ownership">{{enrolmentInfo.ownership}}</td>
                 <td class="text-right content-fill text-left-on-grid-view no-wrap">
-                    <a href="device/{{type}}/{{deviceIdentifier}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-view fw-stack-1x"></i>
-                            </span>
-                        <span class="hidden-xs hidden-on-grid-view">View</span>
-                    </a>
+                    {{#unequal enrolmentInfo.status "REMOVED"}}
+                        <a href="device/{{type}}/{{deviceIdentifier}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view">
+                                <span class="fw-stack">
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                    <i class="fw fw-view fw-stack-1x"></i>
+                                </span>
+                            <span class="hidden-xs hidden-on-grid-view">View</span>
+                        </a>
+                    {{/unequal}}
                     <!--{{#equal type "TemperatureController"}}
                         {{#equal status "INACTIVE"}}
                             <a href="#" data-click-event="remove-form" class="btn padding-reduce-on-grid-view claim-btn" data-deviceid="{{deviceIdentifier}}">

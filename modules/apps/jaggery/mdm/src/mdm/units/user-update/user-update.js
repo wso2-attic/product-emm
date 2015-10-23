@@ -24,7 +24,6 @@ function onRequest(context) {
         if (response["status"] == "success") {
             context["userRoles"] = response["content"];
         }
-        log.info(context);
     }
     return context;
 }
