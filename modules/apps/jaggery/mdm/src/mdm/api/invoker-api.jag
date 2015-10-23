@@ -35,39 +35,44 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
     try {
         switch (method) {
             case constants.HTTP_GET:
-                var responseData = serviceInvokers.XMLHttp.get(targetURL, function (responsePayload) {
-                                                                   return responsePayload;
-                                                               },
-                                                               function (responsePayload) {
-                                                                   return responsePayload;
-                                                               });
+                var responseData = serviceInvokers.XMLHttp.get(
+                        targetURL, function (responsePayload) {
+                            return responsePayload;
+                        },
+                        function (responsePayload) {
+                            return responsePayload;
+                        });
                 result = responseData;
                 break;
             case constants.HTTP_POST:
-                var responseData = serviceInvokers.XMLHttp.post(targetURL, payload, function (responsePayload) {
-                                                                    return responsePayload;
-                                                                },
-                                                                function (responsePayload) {
-                                                                    return responsePayload;
-                                                                });
+                var responseData = serviceInvokers.XMLHttp.post(
+                        targetURL, payload, function (responsePayload) {
+                            return responsePayload;
+                        },
+                        function (responsePayload) {
+                            return responsePayload;
+                        });
                 result = responseData;
                 break;
             case constants.HTTP_PUT:
-                var responseData = serviceInvokers.XMLHttp.put(targetURL, payload, function (responsePayload) {
-                                                                   return responsePayload;
-                                                               },
-                                                               function (responsePayload) {
-                                                                   return responsePayload;
-                                                               });
+                var responseData = serviceInvokers.XMLHttp.put(
+                        targetURL, payload, function (responsePayload) {
+                            return responsePayload;
+                        },
+                        function (responsePayload) {
+                            return responsePayload;
+                        });
                 result = responseData;
                 break;
             case constants.HTTP_DELETE:
-                var responseData = serviceInvokers.XMLHttp.delete(targetURL, function (responsePayload) {
-                                                                      return responsePayload;
-                                                                  },
-                                                                  function (responsePayload) {
-                                                                      return responsePayload;
-                                                                  });
+                var responseData =
+                        serviceInvokers.XMLHttp.delete(
+                                targetURL, function (responsePayload) {
+                                    return responsePayload;
+                                },
+                                function (responsePayload) {
+                                    return responsePayload;
+                                });
                 result = responseData;
                 break;
         }
