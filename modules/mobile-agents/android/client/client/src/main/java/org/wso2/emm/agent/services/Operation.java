@@ -260,7 +260,7 @@ public class Operation implements APIResultCallBack {
 				throw new AndroidAgentException("Invalid JSON format.", e);
 			}
 		}
-		operation.setPayLoad(result.toString());
+		operation.setOperationResponse(result.toString());
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 

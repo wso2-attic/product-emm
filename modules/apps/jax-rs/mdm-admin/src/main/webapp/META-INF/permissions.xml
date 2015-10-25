@@ -39,8 +39,16 @@
     </Permission>
 
     <Permission>
+        <name>Get all notifications</name>
+        <path>/device-mgt/notifications/view</path>
+        <url>/notifications</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
         <name>Get new notifications</name>
-        <path>/</path>
+        <path>/device-mgt/notifications/view</path>
         <url>/notifications/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
