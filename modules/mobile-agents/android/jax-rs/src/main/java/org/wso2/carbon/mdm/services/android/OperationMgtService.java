@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
@@ -85,6 +86,8 @@ public class OperationMgtService {
             log.error("Issue in updating Monitoring operation");
         } catch (DeviceManagementException e) {
             log.error("Issue in retrieving device management service instance", e);
+        } catch (ApplicationManagementException e) {
+            log.error("Issue in retrieving application management service instance", e);
         }
 
         List<? extends Operation> pendingOperations;
@@ -894,7 +897,7 @@ public class OperationMgtService {
     }
 
     private void updateOperations(String deviceId, List<? extends Operation> operations)
-            throws OperationManagementException, PolicyComplianceException {
+            throws OperationManagementException, PolicyComplianceException, ApplicationManagementException {
 
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
             AndroidAPIUtils.updateOperation(deviceId, operation);
