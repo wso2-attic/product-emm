@@ -359,7 +359,7 @@ public class OperationMgtService {
     }
 
     @POST
-    @Path("get-application-list")
+    @Path("application-list")
     public Response getApplications(@HeaderParam(ACCEPT) String acceptHeader,
                                     List<String> deviceIDs) {
 
