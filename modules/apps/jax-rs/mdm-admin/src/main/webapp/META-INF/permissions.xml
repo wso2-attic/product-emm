@@ -39,8 +39,16 @@
     </Permission>
 
     <Permission>
+        <name>Get all notifications</name>
+        <path>/device-mgt/notifications/view</path>
+        <url>/notifications</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
         <name>Get new notifications</name>
-        <path>/</path>
+        <path>/device-mgt/notifications/view</path>
         <url>/notifications/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
@@ -156,50 +164,50 @@
     <!-- Role related APIs -->
     <Permission>
         <name>Get all roles</name>
-        <path>/device-mgt/user/roles</path>
+        <path>/device-mgt/roles</path>
         <url>/roles</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get User roles</name>
-        <path>/device-mgt/user/roles</path>
+        <path>/device-mgt/role</path>
         <url>/roles/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update User roles</name>
-        <path>/device-mgt/user/roles</path>
+        <path>/device-mgt/roles/update</path>
         <url>/roles</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update a specific role</name>
-        <path>/device-mgt/user/roles</path>
+        <path>/device-mgt/role/update</path>
         <url>/roles/*</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update User roles</name>
-        <path>/device-mgt/user/roles</path>
+        <path>/device-mgt/roles</path>
         <url>/roles/*/users</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Save User roles</name>
-        <path>/device-mgt/user/roles</path>
+        <path>/device-mgt/roles/add</path>
         <url>/roles</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Delete User roles</name>
-        <path>/device-mgt/user/roles</path>
-        <url>/roles</url>
+        <path>/device-mgt/roles/delete</path>
+        <url>/roles/*</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>
