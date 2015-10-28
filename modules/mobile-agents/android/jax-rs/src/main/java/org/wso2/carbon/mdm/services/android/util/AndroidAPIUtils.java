@@ -24,6 +24,7 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
@@ -117,6 +118,19 @@ public class AndroidAPIUtils {
         }
         return applicationManagementProviderService;
     }
+
+	public static NotificationManagementService getNotificationManagementService() {
+		NotificationManagementService notificationManagementService;
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
+				NotificationManagementService.class, null);
+		if (notificationManagementService == null) {
+			String msg = "Notification Management service not initialized.";
+			log.error(msg);
+			throw new IllegalStateException(msg);
+		}
+		return notificationManagementService;
+	}
 
     public static void updateOperation(String deviceId, Operation operation)
             throws OperationManagementException, PolicyComplianceException {

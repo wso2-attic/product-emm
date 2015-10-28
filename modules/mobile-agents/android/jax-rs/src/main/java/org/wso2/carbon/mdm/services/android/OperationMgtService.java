@@ -22,11 +22,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.notification.mgt.*;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.mdm.services.android.bean.*;
+import org.wso2.carbon.mdm.services.android.bean.Notification;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.*;
 import org.wso2.carbon.mdm.services.android.exception.AndroidOperationException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
@@ -47,6 +49,8 @@ public class OperationMgtService {
 
     private static Log log = LogFactory.getLog(OperationMgtService.class);
     private static final String ACCEPT = "Accept";
+	private static final String OPERATION_ERROR_STATUS = "ERROR";
+	private static final String DEVICE_TYPE_ANDROID = "android";
 
     @PUT
     @Path("{id}")
@@ -85,6 +89,8 @@ public class OperationMgtService {
             log.error("Issue in updating Monitoring operation");
         } catch (DeviceManagementException e) {
             log.error("Issue in retrieving device management service instance", e);
+        } catch (NotificationManagementException e) {
+	        log.error("Issue in retrieving Notification management service instance", e);
         }
 
         List<? extends Operation> pendingOperations;
@@ -894,10 +900,25 @@ public class OperationMgtService {
     }
 
     private void updateOperations(String deviceId, List<? extends Operation> operations)
-            throws OperationManagementException, PolicyComplianceException {
-
+            throws OperationManagementException, PolicyComplianceException, DeviceManagementException,
+                   NotificationManagementException {
         for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
             AndroidAPIUtils.updateOperation(deviceId, operation);
+	        if(operation.getStatus().equals(OPERATION_ERROR_STATUS)){
+		        org.wso2.carbon.device.mgt.common.notification.mgt.Notification notification = new
+				        org.wso2.carbon.device.mgt.common.notification.mgt.Notification();
+		        DeviceIdentifier id = new DeviceIdentifier();
+		        id.setId(deviceId);
+		        id.setType(DEVICE_TYPE_ANDROID);
+		        String deviceName = AndroidAPIUtils.getDeviceManagementService().getDevice(id).getName();
+		        notification.setOperationId(operation.getId());
+		        notification.setStatus(org.wso2.carbon.device.mgt.common.notification.mgt.Notification.
+				        Status.NEW.toString());
+		        notification.setDeviceIdentifier(id);
+		        notification.setDescription("Operation " + operation.getCode() + " failed to execute on device "+
+		                                    deviceName+". Device ID : " + deviceId);
+		        AndroidAPIUtils.getNotificationManagementService().addNotification(notification);
+	        }
             if (log.isDebugEnabled()) {
                 log.debug("Updating operation '" + operation.toString() + "'");
             }
