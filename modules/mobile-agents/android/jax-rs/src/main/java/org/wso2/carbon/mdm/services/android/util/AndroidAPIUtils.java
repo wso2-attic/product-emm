@@ -125,18 +125,18 @@ public class AndroidAPIUtils {
         return applicationManagementProviderService;
     }
 
-	public static NotificationManagementService getNotificationManagementService() {
-		NotificationManagementService notificationManagementService;
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
-				NotificationManagementService.class, null);
-		if (notificationManagementService == null) {
-			String msg = "Notification Management service not initialized.";
-			log.error(msg);
-			throw new IllegalStateException(msg);
-		}
-		return notificationManagementService;
-	}
+    public static NotificationManagementService getNotificationManagementService() {
+        NotificationManagementService notificationManagementService;
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
+                NotificationManagementService.class, null);
+        if (notificationManagementService == null) {
+            String msg = "Notification Management service not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return notificationManagementService;
+    }
 
     public static void updateOperation(String deviceId, Operation operation)
             throws OperationManagementException, PolicyComplianceException, ApplicationManagementException {
@@ -152,22 +152,7 @@ public class AndroidAPIUtils {
             if (log.isDebugEnabled()) {
                 log.info("Received applications list from device '" + deviceId + "'");
             }
-
-            List<Application> applications = new ArrayList<Application>();
-            // Parsing json string to get applications list.
-            JsonElement jsonElement = new JsonParser().parse(operation.getOperationResponse());
-            JsonArray jsonArray = jsonElement.getAsJsonArray();
-            Application app;
-            for (JsonElement element : jsonArray) {
-                app = new Application();
-                app.setName(element.getAsJsonObject().
-                        get(AndroidConstants.ApplicationProperties.NAME).getAsString());
-                app.setApplicationIdentifier(element.getAsJsonObject().
-                        get(AndroidConstants.ApplicationProperties.IDENTIFIER).getAsString());
-                app.setPlatform(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-                applications.add(app);
-            }
-            getApplicationManagerService().updateApplicationListInstalledInDevice(deviceIdentifier, applications);
+            updateApplicationList(operation, deviceIdentifier);
         }
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
@@ -180,4 +165,22 @@ public class AndroidAPIUtils {
         return operations;
     }
 
+    private static void updateApplicationList(Operation operation, DeviceIdentifier deviceIdentifier)
+            throws ApplicationManagementException {
+        List<Application> applications = new ArrayList<Application>();
+        // Parsing json string to get applications list.
+        JsonElement jsonElement = new JsonParser().parse(operation.getOperationResponse());
+        JsonArray jsonArray = jsonElement.getAsJsonArray();
+        Application app;
+        for (JsonElement element : jsonArray) {
+            app = new Application();
+            app.setName(element.getAsJsonObject().
+                    get(AndroidConstants.ApplicationProperties.NAME).getAsString());
+            app.setApplicationIdentifier(element.getAsJsonObject().
+                    get(AndroidConstants.ApplicationProperties.IDENTIFIER).getAsString());
+            app.setPlatform(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            applications.add(app);
+        }
+        getApplicationManagerService().updateApplicationListInstalledInDevice(deviceIdentifier, applications);
+    }
 }
