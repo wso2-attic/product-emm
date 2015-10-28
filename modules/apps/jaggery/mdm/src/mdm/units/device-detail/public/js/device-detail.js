@@ -51,6 +51,7 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId;
 
             var successCallback = function (data) {
+                data = JSON.parse(data);
                 var viewModel = {};
                 viewModel.operations = data;
                 if(data.length > 0){
@@ -77,6 +78,7 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
 
             var successCallback = function (data) {
+                data = JSON.parse(data);
                 var viewModel = {};
                 viewModel.applications = data;
                 viewModel.deviceType = deviceType;
@@ -123,6 +125,7 @@
             };
 
             var successCallbackPolicy = function (data) {
+                data = JSON.parse(data);
                 if(data != null && data.active == true){
                     activePolicy = data;
                     invokerUtil.get(serviceURLCompliance,

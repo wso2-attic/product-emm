@@ -32,6 +32,11 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
     var method = request.getContent().actionMethod;
     var targetURL = mdmProps.httpsURL + request.getContent().actionUrl;
     var payload = request.getContent().actionPayload;
+    if(method == undefined && payload == undefined){
+        method = parse(request.getContent()).actionMethod;
+        targetURL = mdmProps.httpsURL + parse(request.getContent()).actionUrl;
+        payload = parse(request.getContent()).actionPayload;
+    }
     try {
         switch (method) {
             case constants.HTTP_GET:

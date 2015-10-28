@@ -45,7 +45,7 @@ var userModule = function () {
      * @returns {carbon user object}
      */
     privateMethods.getCarbonUser = function () {
-        var statusCode, carbon = require('carbon');
+        var carbon = require('carbon');
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
@@ -343,7 +343,6 @@ var userModule = function () {
      @Updated
      */
     publicMethods.getUsers = function () {
-        log.info("Users :) ");
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
@@ -353,9 +352,8 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/users";
-            var temp = privateMethods.callBackend(url, constants.HTTP_GET);
-            log.info(stringify(temp));
-            return temp;
+            return privateMethods.callBackend(url, constants.HTTP_GET);
+
         } catch (e) {
             throw e;
         } finally {

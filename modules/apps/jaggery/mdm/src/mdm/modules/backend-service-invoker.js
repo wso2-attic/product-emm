@@ -49,7 +49,7 @@ var backendServiceInvoker = function () {
                         constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
 
             }
-            xmlHttpRequest.send(stringify(payload));
+            xmlHttpRequest.send((payload));
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
                 return successCallback(parse(xmlHttpRequest.responseText));
             } else if (xmlHttpRequest.status == 401) {

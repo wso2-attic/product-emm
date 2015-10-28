@@ -1964,6 +1964,7 @@ $(document).ready(function () {
         // on success
         function (data) {
             // console.log("success: " + JSON.stringify(data));
+            data = JSON.parse(data);
             policyPayloadObj = data["responseContent"];
             skipStep["policy-platform"](policyPayloadObj);
         },
