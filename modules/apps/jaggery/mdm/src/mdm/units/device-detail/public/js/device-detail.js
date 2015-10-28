@@ -39,6 +39,22 @@
         loadOperationsLog();
         loadApplicationsList();
         loadPolicyCompliance();
+
+        $("#refresh-policy").click(function () {
+            $('#policy-spinner').removeClass('hidden');
+            loadPolicyCompliance();
+        });
+
+        $("#refresh-apps").click(function () {
+            $('#apps-spinner').removeClass('hidden');
+            loadApplicationsList();
+        });
+
+        $("#refresh-operations").click(function () {
+            $('#operations-spinner').removeClass('hidden');
+            loadOperationsLog();
+        });
+
     });
 
     function loadOperationsLog() {
@@ -51,6 +67,7 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId;
 
             var successCallback = function (data) {
+                $('#operations-spinner').addClass('hidden');
                 var viewModel = {};
                 viewModel.operations = data;
                 if(data.length > 0){
@@ -77,6 +94,7 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
 
             var successCallback = function (data) {
+                $('#apps-spinner').addClass('hidden');
                 var viewModel = {};
                 viewModel.applications = data;
                 viewModel.deviceType = deviceType;
@@ -123,6 +141,7 @@
             };
 
             var successCallbackPolicy = function (data) {
+                $('#policy-spinner').addClass('hidden');
                 if(data != null && data.active == true){
                     activePolicy = data;
                     invokerUtil.get(serviceURLCompliance,
