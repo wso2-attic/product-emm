@@ -37,13 +37,15 @@
                     &nbsp;
                     <span class="wr-notification-bubble" id="notification-bubble">0</span>
                 </a>
-                <a href="javascript:toggleEnrollment()" class="cu-btn wr-notification-toggle-btn">
-                    <span class="fw-stack-md">
-                        <i class="fw fw-bpmn fw-stack-1-5x"></i>
-                    </span>
-                    &nbsp;
-                    Enroll Device
-                </a>
+                {{#equal pageTitle "Device Management"}}
+                    <a href="javascript:toggleEnrollment()" class="cu-btn wr-notification-toggle-btn">
+                        <span class="fw-stack-md">
+                            <i class="fw fw-bpmn fw-stack-1-5x"></i>
+                        </span>
+                        &nbsp;
+                        Enroll Device
+                    </a>
+                {{/equal}}
             </div>
         </div>
     </div>
@@ -87,7 +89,7 @@
                         Scan QR code to start enrollment
                     </h3>
                     <h4>
-                        Please select a device or a list of devices to perform an operation.
+                        Please scan the QR code using your mobile device to retrieve enrollment URL.
                     </h4>
 
                     <div class="panel panel-default">

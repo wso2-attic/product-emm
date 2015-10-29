@@ -101,9 +101,9 @@ $(document).ready(function () {
                         $("#user-created-msg").removeClass("hidden");
                     }
                 }, function (data) {
-                    if (data["status"] == 409) {
+                    if (data["statusCode"] == 409) {
                         $(errorMsg).text("User : " + username + " doesn't exists. You cannot proceed.");
-                    } else if (data["status"] == 500) {
+                    } else if (data["statusCode"] == 500) {
                         $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
                     } else {
                         $(errorMsg).text("An unexpected error occurred. Please try again later.");

@@ -8,6 +8,23 @@ $( document ).ready(function() {
         $('.wr-validation-summary').removeClass("hidden");
     }
     $('.btn-download-agent').click(function(){
-        $('.form-login-box').submit();
+        submitLoginForm();
     });
 });
+
+function submitLoginForm() {
+    if(event.keyCode==13){
+        var username = $("input#username").val();
+        var password = $("input#password").val();
+
+        if (!username) {
+            $('.wr-validation-summary p').text("Sorry!, Username cannot be empty.");
+            $('.wr-validation-summary').removeClass("hidden");
+        } else if (!password){
+            $('.wr-validation-summary p').text("Sorry!, Password cannot be empty.");
+            $('.wr-validation-summary').removeClass("hidden");
+        } else {
+            $('.form-login-box').submit();
+        }
+    }
+}
