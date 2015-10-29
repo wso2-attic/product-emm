@@ -3,7 +3,7 @@ var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
 var GetMethod = Packages.org.apache.commons.httpclient.methods.GetMethod;
 var StringRequestEntity = Packages.org.apache.commons.httpclient.methods.StringRequestEntity;
 
-var caURL = mdmProps["iOSConfigRoot"] + 'ca';
+var caURL = 'https://10.10.10.36:9443/ios-enrollment/ca';
 var client = new HttpClient();
 var method = new GetMethod(caURL);
 

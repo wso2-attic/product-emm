@@ -27,7 +27,6 @@ var apiWrapperUtil = function () {
         tokenPair = tokenUtil.refreshToken(tokenPair, clientData);
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
         var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};
-        response.addCookie(tokenCookie);
         return tokenCookie;
     };
     module.setupAccessTokenPair = function (type, properties) {
@@ -43,8 +42,6 @@ var apiWrapperUtil = function () {
                 getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, "PRODUCTION");
         }
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
-        var tokenCookie = {'name': 'accessToken', 'value': tokenPair.accessToken, 'maxAge': -1, 'path': "/mdm/"};
-        response.addCookie(tokenCookie);
     };
     return module;
 }();

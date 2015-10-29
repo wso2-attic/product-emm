@@ -44,6 +44,7 @@ $(document).ready(function () {
             getNotificationsAPI,
             null,
             function (data) {
+                data = JSON.parse(data);
                 if (data.statusCode == responseCodes["SUCCESS"]) {
                     $("#config-save-form").addClass("hidden");
                     location.href = redirectUrl;
@@ -80,6 +81,7 @@ function loadNotifications(){
 
         var successCallback = function (data) {
             var viewModel = {};
+            data = JSON.parse(data);
             viewModel.notifications = data;
             if(data.length > 0){
                 var content = template(viewModel);

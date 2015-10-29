@@ -53,7 +53,7 @@ var invokerUtil = function () {
             if (JSON.parse(jqXHR).status == "401") {
                 window.location.replace("/mdm");
             } else {
-                errorCallback(JSON.parse(jqXHR));
+                errorCallback(jqXHR);
             }
         });
     };

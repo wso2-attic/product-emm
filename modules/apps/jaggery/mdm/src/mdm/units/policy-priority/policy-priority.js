@@ -10,7 +10,7 @@ function onRequest(context) {
             context["policyListingStatusMsg"] = "No policy is available to be displayed.";
             context["saveNewPrioritiesButtonEnabled"] = false;
         } else if (policyCount == 1) {
-            context["policyListingStatusMsg"] = "Add more policies to set-up a priority order.";
+            context["policyListingStatusMsg"] = "Add more policies to set up a priority order.";
             context["saveNewPrioritiesButtonEnabled"] = false;
         } else {
             context["policyListingStatusMsg"] = "Drag & Move to re-order Policy Priority.";
