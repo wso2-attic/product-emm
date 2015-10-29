@@ -25,6 +25,7 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
 $(function () {
     var serviceURL = "/mdm-admin/roles";
     var callback = function(data){
+        data = JSON.parse(data);
         data = {
             "viewModel": {
                 "roles": data.responseContent
@@ -38,8 +39,7 @@ $(function () {
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
         beforeStop : function () {
-            var sortedIDs = $(this).sortable('toArray');
-            console.log(sortedIDs);
+            var sortedIDs = $(this).sortable('toArray');;
         }
     });
     $(sortableElem).disableSelection();

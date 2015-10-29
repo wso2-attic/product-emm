@@ -22,13 +22,16 @@ var util = function () {
     var String = Packages.java.lang.String;
     var log = new Log();
     var mdmProps = require('/config/mdm-props.js').config();
+    var carbon = require('carbon');
+    var realmService = carbon.server.osgiService('org.wso2.carbon.user.core.service.RealmService');
+    var adminUserName = realmService.getBootstrapRealmConfiguration().getAdminUserName();
 
     module.getDyanmicCredentials = function (owner) {
         var payload = {
             "callbackUrl": mdmProps.callBackUrl,
             "clientName": "mdm",
             "tokenScope": "admin",
-            "owner": mdmProps.adminUser,
+            "owner": adminUserName,
             "grantType": "urn:ietf:params:oauth:grant-type:password",
             "saasApp" :true
         };

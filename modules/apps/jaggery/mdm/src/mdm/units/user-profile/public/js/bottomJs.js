@@ -45,6 +45,7 @@ function loadDevicesList() {
 
         var successCallback = function (data) {
             var viewModel = {};
+            data = JSON.parse(data);
             viewModel.devices = data;
             if(data.length > 0){
                 var content = template(viewModel);

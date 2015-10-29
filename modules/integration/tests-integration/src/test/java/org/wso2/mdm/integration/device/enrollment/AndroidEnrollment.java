@@ -34,35 +34,35 @@ import org.wso2.mdm.integration.common.*;
 public class AndroidEnrollment extends TestBase {
     private RestClient client;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.Enrollment.ANDROID_ENROLLMENT_GROUP })
+    @BeforeClass(alwaysRun = true, groups = { Constants.AndroidEnrollment.ANDROID_ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     @Test(description = "Test an Android device enrollment.")
     public void testEnrollment() throws Exception {
-        HttpResponse response = client.post(Constants.Enrollment.ENROLLMENT_ENDPOINT,
-                                            Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_PAYLOAD);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED,
+        HttpResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT,
+                                            Constants.AndroidEnrollment.ANDROID_REQUEST_ENROLLMENT_PAYLOAD);
+        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
+        AssertUtil.jsonPayloadCompare(Constants.AndroidEnrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED,
                                       response.getData().toString(), true);
     }
 
     @Test(description = "Test an Android device is enrolled.", dependsOnMethods = { "testEnrollment" })
     public void testIsEnrolled() throws Exception {
-        HttpResponse response = client.get(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+        HttpResponse response = client.get(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_IS_ENROLLMENT_EXPECTED,
+        AssertUtil.jsonPayloadCompare(Constants.AndroidEnrollment.ANDROID_REQUEST_IS_ENROLLMENT_EXPECTED,
                                       response.getData().toString(), true);
     }
 
     @Test(description = "Test modify enrollment.", dependsOnMethods = { "testEnrollment" })
     public void testModifyEnrollment() throws Exception {
-        HttpResponse response = client.put(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID,
-                                           Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_PAYLOAD);
-        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_EXPECTED,
+        HttpResponse response = client.put(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID,
+                                           Constants.AndroidEnrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_PAYLOAD);
+        AssertUtil.jsonPayloadCompare(Constants.AndroidEnrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_EXPECTED,
                                       response.getData().toString(), true);
     }
 

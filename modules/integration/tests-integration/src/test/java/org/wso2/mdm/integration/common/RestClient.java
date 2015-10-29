@@ -38,18 +38,17 @@ public class RestClient {
     private String backEndUrl;
     private String authrizationString;
     private Map<String, String> requestHeaders = new HashMap<String, String>();
-    private static final String CONTENT_TYPE = "Content-Type";
     private static final String AUTHORIZATION = "Authorization";
 
     public RestClient(String backEndUrl, String contentType) {
         this.backEndUrl = backEndUrl;
-        this.requestHeaders.put(CONTENT_TYPE, contentType);
+        this.requestHeaders.put(Constants.CONTENT_TYPE, contentType);
     }
 
     public RestClient(String backEndUrl, String contentType, String authorization) {
         this.backEndUrl = backEndUrl;
-        this.requestHeaders.put(CONTENT_TYPE, contentType);
-        if(authorization != null || !authorization.isEmpty()){
+        this.requestHeaders.put(Constants.CONTENT_TYPE, contentType);
+        if (authorization != null || !authorization.isEmpty()) {
             this.authrizationString = authorization;
             this.requestHeaders.put(AUTHORIZATION, authorization);
         }
@@ -86,7 +85,8 @@ public class RestClient {
             try {
                 urlConnection.setRequestMethod("PUT");
             } catch (ProtocolException e) {
-                throw new Exception("Shouldn\'t happen: HttpURLConnection doesn\'t support POST?? " + e.getMessage(), e);
+                throw new Exception("Shouldn\'t happen: HttpURLConnection doesn\'t support POST?? " + e.getMessage(),
+                                    e);
             }
 
             urlConnection.setDoOutput(true);
@@ -94,9 +94,9 @@ public class RestClient {
             urlConnection.setUseCaches(false);
             urlConnection.setAllowUserInteraction(false);
             Iterator entryIterator = this.requestHeaders.entrySet().iterator();
-            while(entryIterator.hasNext()) {
-                Map.Entry sb = (Map.Entry)entryIterator.next();
-                urlConnection.setRequestProperty((String)sb.getKey(), (String)sb.getValue());
+            while (entryIterator.hasNext()) {
+                Map.Entry sb = (Map.Entry) entryIterator.next();
+                urlConnection.setRequestProperty((String) sb.getKey(), (String) sb.getValue());
             }
             OutputStream outputStream = urlConnection.getOutputStream();
             try {
@@ -106,39 +106,41 @@ public class RestClient {
             } catch (IOException e) {
                 throw new Exception("IOException while sending data " + e.getMessage(), e);
             } finally {
-                if(outputStream != null) {
+                if (outputStream != null) {
                     outputStream.close();
                 }
             }
             StringBuilder sb2 = new StringBuilder();
             BufferedReader rd = null;
             try {
-                rd = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), Charset.defaultCharset()));
+                rd = new BufferedReader(
+                        new InputStreamReader(urlConnection.getInputStream(), Charset.defaultCharset()));
                 String itr;
-                while((itr = rd.readLine()) != null) {
+                while ((itr = rd.readLine()) != null) {
                     sb2.append(itr);
                 }
             } catch (FileNotFoundException e) {
                 throw new Exception("IOException while reading put request data " + e.getMessage(), e);
             } finally {
-                if(rd != null) {
+                if (rd != null) {
                     rd.close();
                 }
             }
             Iterator iterator = urlConnection.getHeaderFields().keySet().iterator();
             HashMap responseHeaders = new HashMap();
-            while(iterator.hasNext()) {
-                String key = (String)iterator.next();
-                if(key != null) {
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                if (key != null) {
                     responseHeaders.put(key, urlConnection.getHeaderField(key));
                 }
             }
-            HttpResponse httpResponse = new HttpResponse(sb2.toString(), urlConnection.getResponseCode(), responseHeaders);
+            HttpResponse httpResponse =
+                    new HttpResponse(sb2.toString(), urlConnection.getResponseCode(), responseHeaders);
             return httpResponse;
         } catch (IOException e) {
             throw new Exception("Connection error (Is server running at " + endpoint + " ?): " + e.getMessage(), e);
         } finally {
-            if(urlConnection != null) {
+            if (urlConnection != null) {
                 urlConnection.disconnect();
             }
 
@@ -155,15 +157,15 @@ public class RestClient {
         HttpResponse httpResponse1;
         try {
             URL url = new URL(backEndUrl + endpoint);
-            conn = (HttpURLConnection)url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("DELETE");
             conn.setDoOutput(true);
             conn.setReadTimeout(30000);
             Iterator entryIterator = this.requestHeaders.entrySet().iterator();
 
-            while(entryIterator.hasNext()) {
-                Map.Entry rd = (Map.Entry)entryIterator.next();
-                conn.setRequestProperty((String)rd.getKey(), (String)rd.getValue());
+            while (entryIterator.hasNext()) {
+                Map.Entry rd = (Map.Entry) entryIterator.next();
+                conn.setRequestProperty((String) rd.getKey(), (String) rd.getValue());
             }
 
             conn.connect();
@@ -175,7 +177,7 @@ public class RestClient {
                 rd1 = new BufferedReader(new InputStreamReader(conn.getInputStream(), Charset.defaultCharset()));
 
                 String ignored;
-                while((ignored = rd1.readLine()) != null) {
+                while ((ignored = rd1.readLine()) != null) {
                     sb1.append(ignored);
                 }
 
@@ -185,14 +187,14 @@ public class RestClient {
                 rd1 = new BufferedReader(new InputStreamReader(conn.getErrorStream(), Charset.defaultCharset()));
 
                 String line;
-                while((line = rd1.readLine()) != null) {
+                while ((line = rd1.readLine()) != null) {
                     sb1.append(line);
                 }
 
                 httpResponse = new HttpResponse(sb1.toString(), conn.getResponseCode());
                 httpResponse.setResponseMessage(conn.getResponseMessage());
             } finally {
-                if(rd1 != null) {
+                if (rd1 != null) {
                     rd1.close();
                 }
 
@@ -200,7 +202,7 @@ public class RestClient {
 
             httpResponse1 = httpResponse;
         } finally {
-            if(conn != null) {
+            if (conn != null) {
                 conn.disconnect();
             }
 
