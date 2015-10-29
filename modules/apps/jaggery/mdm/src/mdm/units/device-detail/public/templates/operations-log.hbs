@@ -4,7 +4,6 @@
             <th>Operation Code</th>
             <th>Status</th>
             <th>Request created at</th>
-            <th>Response received at</th>
         </tr>
     </thead>
     <tbody>
@@ -18,7 +17,6 @@
                 {{#equal status "IN_PROGRESS"}}<span><i class="fw fw-ok icon-warning"></i> In Progress</span>{{/equal}}
             </td>
             <td data-display="{{createdTimeStamp}}" data-grid-label="Created Timestamp">{{createdTimeStamp}}</td>
-            <td data-display="{{receivedTimeStamp}}" data-grid-label="Received Timestamp">{{receivedTimeStamp}}</td>
         </tr>
     {{/each}}
     <br class="c-both" />

@@ -20,7 +20,9 @@ package org.wso2.mdm.integration.device.enrollment;
 import junit.framework.Assert;
 import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
@@ -47,4 +49,26 @@ public class AndroidEnrollment extends TestBase {
         AssertUtil.jsonPayloadCompare(Constants.AndroidEnrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED,
                                       response.getData().toString(), true);
     }
+
+//    @Test(description = "Test an Android device is enrolled.", dependsOnMethods = { "testEnrollment" })
+//    public void testIsEnrolled() throws Exception {
+//        HttpResponse response = client.get(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+//        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+//        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_IS_ENROLLMENT_EXPECTED,
+//                                      response.getData().toString(), true);
+//    }
+//
+//    @Test(description = "Test modify enrollment.", dependsOnMethods = { "testEnrollment" })
+//    public void testModifyEnrollment() throws Exception {
+//        HttpResponse response = client.put(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID,
+//                                           Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_PAYLOAD);
+//        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_EXPECTED,
+//                                      response.getData().toString(), true);
+//    }
+
+    /*@Test(description = "Test disenrollment.", dependsOnGroups = { Constants.Operations.OPERATIONS_GROUP })
+    public void testDisEnrollDevice() throws Exception {
+        int response = client.delete(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+        Assert.assertEquals(response, HttpStatus.SC_ACCEPTED);
+    }*/
 }

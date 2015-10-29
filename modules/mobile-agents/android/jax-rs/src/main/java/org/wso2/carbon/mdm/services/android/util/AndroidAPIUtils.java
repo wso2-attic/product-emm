@@ -18,12 +18,18 @@
 
 package org.wso2.carbon.mdm.services.android.util;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.app.mgt.Application;
+import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
@@ -33,6 +39,7 @@ import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +56,7 @@ public class AndroidAPIUtils {
         return identifier;
     }
 
-    public static void endTenantFlow(){
+    public static void endTenantFlow() {
         PrivilegedCarbonContext.endTenantFlow();
     }
 
@@ -109,7 +116,7 @@ public class AndroidAPIUtils {
     public static ApplicationManagementProviderService getApplicationManagerService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         ApplicationManagementProviderService applicationManagementProviderService =
-            (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
+                (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
         if (applicationManagementProviderService == null) {
             String msg = "Application Management provder service has not initialized";
             log.error(msg);
@@ -118,8 +125,21 @@ public class AndroidAPIUtils {
         return applicationManagementProviderService;
     }
 
+    public static NotificationManagementService getNotificationManagementService() {
+        NotificationManagementService notificationManagementService;
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
+                NotificationManagementService.class, null);
+        if (notificationManagementService == null) {
+            String msg = "Notification Management service not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return notificationManagementService;
+    }
+
     public static void updateOperation(String deviceId, Operation operation)
-            throws OperationManagementException, PolicyComplianceException {
+            throws OperationManagementException, PolicyComplianceException, ApplicationManagementException {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setId(deviceId);
         deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
@@ -128,6 +148,11 @@ public class AndroidAPIUtils {
                 log.info("Received compliance status from MONITOR operation ID: " + operation.getId());
             }
             getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, operation.getOperationResponse());
+        } else if (AndroidConstants.OperationCodes.APPLICATION_LIST.equals(operation.getCode())) {
+            if (log.isDebugEnabled()) {
+                log.info("Received applications list from device '" + deviceId + "'");
+            }
+            updateApplicationList(operation, deviceIdentifier);
         }
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
@@ -140,4 +165,22 @@ public class AndroidAPIUtils {
         return operations;
     }
 
+    private static void updateApplicationList(Operation operation, DeviceIdentifier deviceIdentifier)
+            throws ApplicationManagementException {
+        List<Application> applications = new ArrayList<Application>();
+        // Parsing json string to get applications list.
+        JsonElement jsonElement = new JsonParser().parse(operation.getOperationResponse());
+        JsonArray jsonArray = jsonElement.getAsJsonArray();
+        Application app;
+        for (JsonElement element : jsonArray) {
+            app = new Application();
+            app.setName(element.getAsJsonObject().
+                    get(AndroidConstants.ApplicationProperties.NAME).getAsString());
+            app.setApplicationIdentifier(element.getAsJsonObject().
+                    get(AndroidConstants.ApplicationProperties.IDENTIFIER).getAsString());
+            app.setPlatform(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            applications.add(app);
+        }
+        getApplicationManagerService().updateApplicationListInstalledInDevice(deviceIdentifier, applications);
+    }
 }

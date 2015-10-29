@@ -28,7 +28,6 @@ function loadMap() {
         var mapOptions = {
             zoom: 18
         };
-
         var lat = $("#device-location").data("lat");
         var long = $("#device-location").data("long");
 

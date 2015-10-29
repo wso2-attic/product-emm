@@ -103,8 +103,8 @@
 
     <Permission>
         <name>Application List</name>
-        <path>/device-mgt/android/operations/get-application-list</path>
-        <url>/operation/get-application-list</url>
+        <path>/device-mgt/android/operations/application-list</path>
+        <url>/operation/application-list</url>
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
     </Permission>

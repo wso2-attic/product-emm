@@ -67,6 +67,7 @@ public class ConfigurationMgtService {
 					AndroidAPIUtils.getDeviceManagementService().addLicense(DeviceManagementConstants.
 							                         MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
 					licenseEntry = entry;
+					break;
 				}
 			}
 
@@ -76,7 +77,7 @@ public class ConfigurationMgtService {
 			configuration.setConfiguration(configs);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
 			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Android platform configuration saved successfully");
+			responseMsg.setResponseMessage("Android platform configuration saved successfully.");
 			responseMsg.setResponseCode(Response.Status.CREATED.toString());
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while configuring the android platform";
@@ -122,8 +123,7 @@ public class ConfigurationMgtService {
 	}
 
 	@PUT
-	public Message updateConfiguration(TenantConfiguration configuration)
-			throws AndroidAgentException {
+	public Message updateConfiguration(TenantConfiguration configuration) throws AndroidAgentException {
 		String msg;
 		Message responseMsg = new Message();
 		ConfigurationEntry licenseEntry = null;
@@ -138,7 +138,7 @@ public class ConfigurationMgtService {
 					license.setVersion("1.0.0");
 					license.setText(entry.getValue().toString());
 					AndroidAPIUtils.getDeviceManagementService().addLicense(DeviceManagementConstants.
-							                                                        MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
+							                                    MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
 					licenseEntry = entry;
 				}
 			}
@@ -148,9 +148,9 @@ public class ConfigurationMgtService {
 			}
 			configuration.setConfiguration(configs);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
-			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Android platform configuration succeeded");
-			responseMsg.setResponseCode(Response.Status.CREATED.toString());
+			Response.status(Response.Status.ACCEPTED);
+			responseMsg.setResponseMessage("Android platform configuration has updated successfully.");
+			responseMsg.setResponseCode(Response.Status.ACCEPTED.toString());
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying configuration settings of Android platform";
 			log.error(msg, e);

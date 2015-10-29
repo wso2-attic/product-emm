@@ -81,6 +81,7 @@ public class AndroidOperation extends TestBase {
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device information operation.")
     public void testDeviceInfo() throws Exception {
+
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_DEVICE_INFO_ENDPOINT,
                                             Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
