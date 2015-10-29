@@ -61,11 +61,21 @@ public final class Constants {
 		private AndroidEnrollment() {
 			throw new AssertionError();
 		}
-        public static final String ANDROID_ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
-        public static final String ANDROID_ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
+        public static final String ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
+        public static final String ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
         public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
-        public static final String ANDROID_ENROLLMENT_GROUP = "android-enrollment";
+        public static final String ENROLLMENT_GROUP = "android-enrollment";
 	}
+
+    public static final class AndroidPolicy {
+        private AndroidPolicy() {
+            throw new AssertionError();
+        }
+        public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "android-policy-response-payloads.json";
+        public static final String POLICY_ENDPOINT = "/mdm-android-agent/policy/";
+        public static final String POLICY_GROUP = "android-policy";
+        public static final String GET_EFFECTIVE_POLICY = "getEffectivePolicy";
+    }
 
     public static final class WindowsEnrollment {
         private WindowsEnrollment() {
@@ -95,7 +105,7 @@ public final class Constants {
             throw new AssertionError();
         }
 
-        public static final String ANDROID_OPERATION_PAYLOAD_FILE_NAME = "android-operation-payloads.json";
+        public static final String OPERATION_PAYLOAD_FILE_NAME = "android-operation-payloads.json";
         public static final String OPERATIONS_GROUP = "operations";
         public static final String COMMAND_OPERATION_PAYLOAD = "[\"" + DEVICE_ID + "\"]";
         public static final String CAMERA_OPERATION = "camera";
@@ -108,59 +118,58 @@ public final class Constants {
         public static final String PASSWORD_POLICY_OPERATION = "password_policy";
         public static final String WEB_CLIP_OPERATION = "web_clip";
 
-        public static final String ANDROID_LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
-        public static final String ANDROID_LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
-        public static final String ANDROID_CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
-        public static final String ANDROID_CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
-        public static final String ANDROID_DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
-        public static final String ANDROID_ENTERPRISE_WIPE_ENDPOINT = "/mdm-android-agent/operation/enterprise-wipe";
-        public static final String ANDROID_WIPE_DATA_ENDPOINT = "/mdm-android-agent/operation/wipe-data";
-        public static final String ANDROID_APPLICATION_LIST_ENDPOINT =
-                "/mdm-android-agent/operation/application-list";
-        public static final String ANDROID_RING_ENDPOINT = "/mdm-android-agent/operation/ring-device";
-        public static final String ANDROID_MUTE_ENDPOINT = "/mdm-android-agent/operation/mute";
-        public static final String ANDROID_INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
-        public static final String ANDROID_UNINSTALL_APPS_ENDPOINT =
-                "/mdm-android-agent/operation/uninstall-application";
-        public static final String ANDROID_BLACKLIST_APPS_ENDPOINT =
-                "/mdm-android-agent/operation/blacklist-applications";
-        public static final String ANDROID_NOTIFICATION_ENDPOINT = "/mdm-android-agent/operation/notification";
-        public static final String ANDROID_WIFI_ENDPOINT = "/mdm-android-agent/operation/wifi";
-        public static final String ANDROID_ENCRYPT_ENDPOINT = "/mdm-android-agent/operation/encrypt";
-        public static final String ANDROID_CHANGE_LOCK_ENDPOINT = "/mdm-android-agent/operation/change-lock-code";
-        public static final String ANDROID_PASSWORD_POLICY_ENDPOINT = "/mdm-android-agent/operation/password-policy";
-        public static final String ANDROID_WEB_CLIP_ENDPOINT = "/mdm-android-agent/operation/webclip";
+        public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
+        public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
+        public static final String LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
+        public static final String CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
+        public static final String CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
+        public static final String DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
+        public static final String ENTERPRISE_WIPE_ENDPOINT = "/mdm-android-agent/operation/enterprise-wipe";
+        public static final String WIPE_DATA_ENDPOINT = "/mdm-android-agent/operation/wipe-data";
+        public static final String APPLICATION_LIST_ENDPOINT = "/mdm-android-agent/operation/application-list";
+        public static final String RING_ENDPOINT = "/mdm-android-agent/operation/ring-device";
+        public static final String MUTE_ENDPOINT = "/mdm-android-agent/operation/mute";
+        public static final String INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
+        public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";
+        public static final String BLACKLIST_APPS_ENDPOINT = "/mdm-android-agent/operation/blacklist-applications";
+        public static final String NOTIFICATION_ENDPOINT = "/mdm-android-agent/operation/notification";
+        public static final String WIFI_ENDPOINT = "/mdm-android-agent/operation/wifi";
+        public static final String ENCRYPT_ENDPOINT = "/mdm-android-agent/operation/encrypt";
+        public static final String CHANGE_LOCK_ENDPOINT = "/mdm-android-agent/operation/change-lock-code";
+        public static final String PASSWORD_POLICY_ENDPOINT = "/mdm-android-agent/operation/password-policy";
+        public static final String WEB_CLIP_ENDPOINT = "/mdm-android-agent/operation/webclip";
     }
 
-    public static final class DeviceManagement {
-        private DeviceManagement() {
+    public static final class AndroidDeviceManagement {
+        private AndroidDeviceManagement() {
             throw new AssertionError();
         }
 
         public static final String DEVICE_MANAGEMENT_GROUP = "device-mgt";
-        public static final String ANDROID_KEY_DEVICE_ID = "deviceIdentifier";
-        public static final String ANDROID_KEY_DEVICE_NAME = "name";
-        public static final String ANDROID_DEVICE_MGT_ENDPOINT = "/mdm-android-agent/device/";
-        public static final String ANDROID_DEVICE_LICENSE_SECTION = "This";
-        public static final String ANDROID_LICENSE_ENDPOINT = ANDROID_DEVICE_MGT_ENDPOINT + "license";
-        public static final String ANDROID_APP_LIST_ENDPOINT = ANDROID_DEVICE_MGT_ENDPOINT + "appList/" +
+        public static final String KEY_DEVICE_ID = "deviceIdentifier";
+        public static final String KEY_DEVICE_NAME = "name";
+        public static final String DEVICE_MGT_ENDPOINT = "/mdm-android-agent/device/";
+        public static final String LICENSE_SECTION = "This";
+        public static final String LICENSE_ENDPOINT = DEVICE_MGT_ENDPOINT + "license";
+        public static final String APP_LIST_ENDPOINT = DEVICE_MGT_ENDPOINT + "appList/" +
                                                                Constants.DEVICE_ID;
-        public static final String ANDROID_REQUEST_MODIFY_DEVICE_EXPECTED = "{\"responseMessage\":\"Device information " +
+        public static final String REQUEST_MODIFY_DEVICE_EXPECTED = "{\"responseMessage\":\"Device information " +
                                                                             "has modified successfully.\"}";
 
-        public static final String ANDROID_APPLIST_PAYLOAD = "{\"id\":\"1\"," +
+        public static final String APPLIST_PAYLOAD = "{\"id\":\"1\"," +
                                                                   "\"applicationIdentifier\": \"appid\",\"\"platform\": \"android\"," +
                                                              "\"name\": \"testapp\"}";
+        public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-device-mgt-response-payloads.json";
     }
 
-    public static final class ConfigurationManagement {
-        private ConfigurationManagement() {
+    public static final class AndroidConfigurationManagement {
+        private AndroidConfigurationManagement() {
             throw new AssertionError();
         }
 
-        public static final String ANDROID_DEVICE_CONFIGURATION_GROUP = "android-config-mgt";
-        public static final String ANDROID_DEVICE_CONFIG_MGT_ENDPOINT = "/mdm-android-agent/configuration/";
-        public static final String ANDROID_CONFIG_PAYLOAD_FILE_NAME = "android-configuration-payloads.json";
-        public static final String ANDROID_CONFIG_RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
+        public static final String DEVICE_CONFIGURATION_GROUP = "android-config-mgt";
+        public static final String CONFIG_MGT_ENDPOINT = "/mdm-android-agent/configuration/";
+        public static final String PAYLOAD_FILE_NAME = "android-configuration-payloads.json";
+        public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
     }
 }
