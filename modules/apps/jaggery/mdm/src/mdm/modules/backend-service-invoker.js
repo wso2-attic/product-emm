@@ -51,7 +51,11 @@ var backendServiceInvoker = function () {
             }
             xmlHttpRequest.send((payload));
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
-                return successCallback(parse(xmlHttpRequest.responseText));
+                if (xmlHttpRequest.responseText != null) {
+                    return successCallback(parse(xmlHttpRequest.responseText));
+                } else {
+                    return successCallback(null);
+                }
             } else if (xmlHttpRequest.status == 401) {
                 tokenUtil.refreshToken();
                 return execute();
