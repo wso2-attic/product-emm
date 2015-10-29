@@ -23,8 +23,8 @@ package org.wso2.mdm.integration.common;
 public final class Constants {
 
 	public static final int SUCCESS_CODE = 200;
-    public static final String DEVICE_ID="1234";
-    public static final String AUTOMATION_CONTEXT="MDM";
+    public static final String DEVICE_ID = "1234";
+    public static final String AUTOMATION_CONTEXT = "MDM";
     public static final String APPLICATION_JSON = "application/json";
     public static final String APPLICATION_URL_ENCODED = "application/x-www-form-urlencoded";
     public static final String OAUTH_CLIENT_ID = "client_id";
@@ -35,6 +35,7 @@ public final class Constants {
     public static final String HTTP_METHOD_PUT = "PUT";
     public static final String HTTP_METHOD_GET = "GET";
     public static final String HTTP_METHOD_DELETE = "DELETE";
+    public static final String DEVICE_IDENTIFIER_KEY = "deviceIdentifier";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
@@ -53,27 +54,8 @@ public final class Constants {
 		private Enrollment() {
 			throw new AssertionError();
 		}
-		private static StringBuffer androidPayloadBuffer = new StringBuffer();
-
-		public static final String ANDROID_REQUEST_ENROLLMENT_PAYLOAD = androidPayloadBuffer.append("{\"name\":").
-				append(" \"milan\",\"type\": \"android\",\"description\": \"milan123\"," +
-                       "\"deviceIdentifier\": \"" + DEVICE_ID + "\",").
-				append("\"enrolmentInfo\": {\"ownership\": \"BYOD\",\"status\": \"ACTIVE\",\"owner\": \"admin\"},").
-				append("\"properties\": [{\"name\": \"IMEI\",\"value\": \"123123123\"},{\"name\": \"IMSI\",").
-				append("\"value\": \"123123123\"}]}\n").toString();
-        public static final String ANDROID_REQUEST_MODIFY_ENROLLMENT_PAYLOAD = new StringBuffer().append("{\"name\":").
-                append("\"milan\",\"type\": \"android\",\"description\": \"updatedDescription\"," +
-                       "\"deviceIdentifier\": \"" + DEVICE_ID + "\",").
-                append("\"enrolmentInfo\": {\"ownership\": \"BYOD\",\"status\": \"ACTIVE\",\"owner\": \"admin\"," +
-                       "\"dateOfEnrolment\":\"1445438864650\"},").
-                append("\"properties\": [{\"name\": \"IMEI\",\"value\": \"123123123\"},{\"name\": \"IMSI\",").
-                append("\"value\": \"123123123\"}]}\n").toString();
-		public static final String ANDROID_REQUEST_ENROLLMENT_EXPECTED = "{\"responseCode\": \"Created\"," +
-				"\"responseMessage\": \"Device enrollment succeeded\"}";
-        public static final String ANDROID_REQUEST_IS_ENROLLMENT_EXPECTED = "{\"responseCode\":\"Accepted\"," +
-                                                               "\"responseMessage\":\"Device has already enrolled\"}";
-        public static final String ANDROID_REQUEST_MODIFY_ENROLLMENT_EXPECTED = "{\"responseCode\":\"Accepted\"," +
-                                                "\"responseMessage\":\"Device enrollment has updated successfully\"}";
+        public static final String ANDROID_ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
+        public static final String ANDROID_ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
         public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
         public static final String ANDROID_ENROLLMENT_GROUP = "android-enrollment";
         public static final String WINDOWS_ENROLLMENT_GROUP = "windows-enrollment";

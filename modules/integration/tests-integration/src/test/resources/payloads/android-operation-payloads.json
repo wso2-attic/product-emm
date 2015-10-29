@@ -1,0 +1,8 @@
+{
+  "camera" : {
+    "operation": {
+      "enabled": false
+    },
+    "deviceIDs": []
+  }
+}

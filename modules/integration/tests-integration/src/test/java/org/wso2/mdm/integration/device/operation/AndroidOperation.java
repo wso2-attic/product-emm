@@ -23,10 +23,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
-import org.wso2.mdm.integration.common.Constants;
-import org.wso2.mdm.integration.common.OAuthUtil;
-import org.wso2.mdm.integration.common.RestClient;
-import org.wso2.mdm.integration.common.TestBase;
+import org.wso2.mdm.integration.common.*;
 
 /**
  * This contain tests to check operations supported by Android. Test are executed against a previously enrolled device
@@ -39,6 +36,11 @@ public class AndroidOperation extends TestBase {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
         this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
+        //Enroll a device
+        client.post(Constants.Enrollment.ENROLLMENT_ENDPOINT,
+                                            PayloadGenerator.getJsonPayload(
+                                                    Constants.Enrollment.ANDROID_ENROLLMENT_PAYLOAD_FILE_NAME,
+                                                    Constants.HTTP_METHOD_POST).toString());
     }
 
     @Test(groups = Constants.Operations.OPERATIONS_GROUP, description = "Test Android device lock operation.")

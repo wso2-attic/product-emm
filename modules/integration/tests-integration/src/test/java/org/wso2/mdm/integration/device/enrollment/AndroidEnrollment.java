@@ -17,12 +17,11 @@
  */
 package org.wso2.mdm.integration.device.enrollment;
 
+import com.google.gson.JsonObject;
 import junit.framework.Assert;
 import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
@@ -43,10 +42,15 @@ public class AndroidEnrollment extends TestBase {
 
     @Test(description = "Test an Android device enrollment.")
     public void testEnrollment() throws Exception {
-        HttpResponse response = client.post(Constants.Enrollment.ENROLLMENT_ENDPOINT,
-                                            Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_PAYLOAD);
+        JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
+                Constants.Enrollment.ANDROID_ENROLLMENT_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST);
+        enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
+        HttpResponse response = client.post(Constants.Enrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED,
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.Enrollment.ANDROID_ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_POST).toString(),
                                       response.getData().toString(), true);
     }
 
@@ -54,21 +58,31 @@ public class AndroidEnrollment extends TestBase {
     public void testIsEnrolled() throws Exception {
         HttpResponse response = client.get(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_IS_ENROLLMENT_EXPECTED,
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.Enrollment.ANDROID_ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_GET).toString(),
                                       response.getData().toString(), true);
     }
 
-    @Test(description = "Test modify enrollment.", dependsOnMethods = { "testEnrollment" })
+    @Test(description = "Test modify enrollment.", dependsOnMethods = { "testIsEnrolled" })
     public void testModifyEnrollment() throws Exception {
         HttpResponse response = client.put(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID,
-                                           Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_PAYLOAD);
-        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_EXPECTED,
+                                           PayloadGenerator.getJsonPayload(
+                                                   Constants.Enrollment.ANDROID_ENROLLMENT_PAYLOAD_FILE_NAME,
+                                                   Constants.HTTP_METHOD_PUT).toString());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.Enrollment.ANDROID_ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_PUT).toString(),
                                       response.getData().toString(), true);
     }
 
-    /*@Test(description = "Test disenrollment.", dependsOnGroups = { Constants.Operations.OPERATIONS_GROUP })
+    @Test(description = "Test disenrollment.", dependsOnMethods = { "testModifyEnrollment" })
     public void testDisEnrollDevice() throws Exception {
-        int response = client.delete(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
-        Assert.assertEquals(response, HttpStatus.SC_ACCEPTED);
-    }*/
+        HttpResponse response = client.delete(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.Enrollment.ANDROID_ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_DELETE).toString(),
+                                      response.getData().toString(), true);
+    }
 }
