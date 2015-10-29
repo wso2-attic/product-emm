@@ -38,6 +38,7 @@ public final class Constants {
     public static final String HTTP_METHOD_GET = "GET";
     public static final String HTTP_METHOD_DELETE = "DELETE";
     public static final String DEVICE_IDENTIFIER_KEY = "deviceIdentifier";
+    public static final String DEVICE_IDENTIFIERS_KEY = "deviceIDs";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String APPLICATION_SOAP_XML = "application/soap+xml; charset=utf-8";
     public static final String UTF8 = "UTF-8";
@@ -94,62 +95,41 @@ public final class Constants {
             throw new AssertionError();
         }
 
+        public static final String ANDROID_OPERATION_PAYLOAD_FILE_NAME = "android-operation-payloads.json";
         public static final String OPERATIONS_GROUP = "operations";
         public static final String COMMAND_OPERATION_PAYLOAD = "[\"" + DEVICE_ID + "\"]";
+        public static final String CAMERA_OPERATION = "camera";
+        public static final String WIPE_DATA_OPERATION = "wipe_data";
+        public static final String INSTALL_APPS_OPERATION = "install_apps";
+        public static final String NOTIFICATION_OPERATION = "notification";
+        public static final String WIFI_OPERATION = "wifi";
+        public static final String ENCRYPT_OPERATION = "encrypt";
+        public static final String CHANGE_LOCK_OPERATION = "change_lock";
+        public static final String PASSWORD_POLICY_OPERATION = "password_policy";
+        public static final String WEB_CLIP_OPERATION = "web_clip";
+
         public static final String ANDROID_LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
         public static final String ANDROID_LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
         public static final String ANDROID_CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
         public static final String ANDROID_CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
-        public static final String ANDROID_CAMERA_PAYLOAD = "{\"operation\": {\"enabled\": false}," +
-                                                            "\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
-        public static final String ANDROID_OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
-
         public static final String ANDROID_DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
         public static final String ANDROID_ENTERPRISE_WIPE_ENDPOINT = "/mdm-android-agent/operation/enterprise-wipe";
         public static final String ANDROID_WIPE_DATA_ENDPOINT = "/mdm-android-agent/operation/wipe-data";
-        public static final String ANDROID_WIPE_DATA_PAYLOAD = "{\"operation\": {\"pin\": \"1234\"}," +
-                                                               "\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
         public static final String ANDROID_APPLICATION_LIST_ENDPOINT =
                 "/mdm-android-agent/operation/application-list";
         public static final String ANDROID_RING_ENDPOINT = "/mdm-android-agent/operation/ring-device";
         public static final String ANDROID_MUTE_ENDPOINT = "/mdm-android-agent/operation/mute";
         public static final String ANDROID_INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
-        public static final String ANDROID_INSTALL_APPS_PAYLOAD =
-                "{\"deviceIDs\": [\"" + DEVICE_ID + "\"],\"operation\": " +
-                "{\"appIdentifier\": \"package_name\", \"type\":" +
-                " \"enterprise/public/webapp\",\"url\": \"https://www.youtube.com\"" +
-                ",\"name\": \"youtube\"}}";
         public static final String ANDROID_UNINSTALL_APPS_ENDPOINT =
                 "/mdm-android-agent/operation/uninstall-application";
         public static final String ANDROID_BLACKLIST_APPS_ENDPOINT =
                 "/mdm-android-agent/operation/blacklist-applications";
         public static final String ANDROID_NOTIFICATION_ENDPOINT = "/mdm-android-agent/operation/notification";
-        public static final String ANDROID_NOTIFICATION_PAYLOAD = "{\"deviceIDs\": [\"" + DEVICE_ID + "\"]," +
-                                                                  "\"operation\": {\"message\": \"message\"}}";
         public static final String ANDROID_WIFI_ENDPOINT = "/mdm-android-agent/operation/wifi";
-        ;
-        public static final String ANDROID_WIFI_PAYLOAD = "{\"operation\": {\"ssid\": \"ssid\",\"password\": " +
-                                                          "\"password\"},\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
-
         public static final String ANDROID_ENCRYPT_ENDPOINT = "/mdm-android-agent/operation/encrypt";
-        public static final String ANDROID_ENCRYPT_PAYLOAD = "{\"operation\": {\"encrypted\": true}," +
-                                                             "\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
         public static final String ANDROID_CHANGE_LOCK_ENDPOINT = "/mdm-android-agent/operation/change-lock-code";
-        public static final String ANDROID_CHANGE_LOCK_PAYLOAD = "{\"operation\": {\"lockCode\": \"lock_code\"}," +
-                                                                 "\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
-
         public static final String ANDROID_PASSWORD_POLICY_ENDPOINT = "/mdm-android-agent/operation/password-policy";
-        public static final String ANDROID_PASSWORD_POLICY_PAYLOAD = "{\"operation\": {\"maxFailedAttempts\": 1," +
-                                                                     "\"minLength\": 5,\"pinHistory\": 1," +
-                                                                     "\"minComplexChars\": 4,\"maxPINAgeInDays\": 1," +
-                                                                     "\"requireAlphanumeric\": true," +
-                                                                     "\"allowSimple\": true}," +
-                                                                     "\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
         public static final String ANDROID_WEB_CLIP_ENDPOINT = "/mdm-android-agent/operation/webclip";
-        public static final String ANDROID_WEB_CLIP_PAYLOAD = "{\"operation\": {\"identity\": \"identity\"," +
-                                                              "\"title\": \"title\",\"type\": \"install\"}," +
-                                                              "\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
-
     }
 
     public static final class DeviceManagement {

@@ -17,6 +17,9 @@
  */
 package org.wso2.mdm.integration.device.operation;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import junit.framework.Assert;
 import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeTest;
@@ -57,14 +60,6 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
-/*
-    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device lock operation.")
-    public void testPendingLock() throws Exception {
-        HttpResponse response = client.get(Constants.AndroidOperations.ANDROID_OPERATION_ENDPOINT + Constants.DEVICE_ID);
-        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
-    }
-    */
-
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device clear password " +
                                                                         "operation.")
     public void testClearPassword() throws Exception {
@@ -75,8 +70,15 @@ public class AndroidOperation extends TestBase {
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device camera operation.")
     public void testCamera() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.CAMERA_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_CAMERA_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_CAMERA_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
@@ -97,9 +99,15 @@ public class AndroidOperation extends TestBase {
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android wipe data operation.")
     public void testWipeData() throws Exception {
-        System.out.println(Constants.AndroidOperations.ANDROID_INSTALL_APPS_PAYLOAD);
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WIPE_DATA_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_WIPE_DATA_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_WIPE_DATA_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
@@ -126,65 +134,127 @@ public class AndroidOperation extends TestBase {
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android install apps operation.")
     public void testInstallApps() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_INSTALL_APPS_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_INSTALL_APPS_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android uninstall apps operation.")
     public void testUninstallApps() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_UNINSTALL_APPS_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_INSTALL_APPS_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android blacklist apps operation.")
     public void testBlacklistApps() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_BLACKLIST_APPS_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_INSTALL_APPS_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android notification operation.")
     public void testNotification() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.NOTIFICATION_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_NOTIFICATION_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_NOTIFICATION_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android WiFi operation.")
     public void testWiFi() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WIFI_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_WIFI_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_WIFI_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android encrypt operation.")
     public void testEncrypt() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.ENCRYPT_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_ENCRYPT_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_ENCRYPT_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android change lock operation.")
     public void testChangeLock() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.CHANGE_LOCK_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_CHANGE_LOCK_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_CHANGE_LOCK_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android password policy operation.")
     public void testPasswordPolicy() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.PASSWORD_POLICY_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_PASSWORD_POLICY_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_PASSWORD_POLICY_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android web clip operation.")
     public void testWebClip() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.ANDROID_OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WEB_CLIP_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.ANDROID_WEB_CLIP_ENDPOINT,
-                                            Constants.AndroidOperations.ANDROID_WEB_CLIP_PAYLOAD);
+                                            operationData.toString());
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
-
 }
