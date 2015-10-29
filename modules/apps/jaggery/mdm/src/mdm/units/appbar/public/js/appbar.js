@@ -77,7 +77,7 @@ function loadNotifications(){
     var serviceURL = "/mdm-admin/notifications/NEW";
 
     var successCallback = function (data) {
-
+        data = JSON.parse(data);
         if(data.length > 0){
             $("#notification-bubble").html(data.length);
         }

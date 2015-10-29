@@ -155,6 +155,8 @@
                 <include>**/sso-sp-config.properties</include>
             	<include>**/entitlement.properties</include>
                 <include>**/trusted-idp-config.xml</include>
+                <include>**/cipher-text.properties</include>
+                <include>**/cipher-tool.properties</include>
 	    </includes>
             <excludes>
                 <exclude>authenticators.xml</exclude>
@@ -754,6 +756,23 @@
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
             <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!-- Cipher Tool Files -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.sh</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/org.wso2.ciphertool-${cipher.tool.version}.jar</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/lib</outputDirectory>
             <fileMode>644</fileMode>
         </file>
 

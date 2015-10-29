@@ -117,7 +117,7 @@ $(document).ready(function () {
         getAndroidConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
@@ -149,7 +149,7 @@ $(document).ready(function () {
         getGeneralConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
@@ -181,7 +181,7 @@ $(document).ready(function () {
         getIosConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
@@ -222,7 +222,7 @@ $(document).ready(function () {
         getWindowsConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
