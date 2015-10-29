@@ -36,6 +36,7 @@ public class Constants {
     public static final String MD5 = "MD5";
     public static final String YES = "yes";
     public static final String ERROR = "Error";
+    public static final String INFORMATION = "information";
 
     public static final String EXECUTE = "Exec";
     public static final String ATOMIC = "Atomic";

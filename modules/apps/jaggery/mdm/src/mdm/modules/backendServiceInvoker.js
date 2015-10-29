@@ -23,7 +23,7 @@ var backendServiceInvoker = function () {
     var publicXMLHTTPInvokers = {};
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
-    var IS_OAUTH_ENABLED = true;
+    var IS_OAUTH_ENABLED = false;
     var constants = require("/modules/constants.js");
     var log = new Log("modules/backendServiceInvoker.js");
 

@@ -35,7 +35,7 @@ public class SyncmlBody {
     Alert alert;
     Replace replace;
     Results results;
-    Sequence sequence;
+    SequenceTag sequence;
     AtomicTag atomicTag;
 
     public AtomicTag getAtomicTag() {
@@ -46,11 +46,11 @@ public class SyncmlBody {
         this.atomicTag = atomicTag;
     }
 
-    public Sequence getSequence() {
+    public SequenceTag getSequence() {
         return sequence;
     }
 
-    public void setSequence(Sequence sequence) {
+    public void setSequence(SequenceTag sequence) {
         this.sequence = sequence;
     }
 

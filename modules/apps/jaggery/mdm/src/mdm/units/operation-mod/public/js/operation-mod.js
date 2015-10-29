@@ -799,7 +799,7 @@ var operationModule = function () {
             "APPLICATION_LIST": "get-application-list",
             "DEVICE_RING": "devicering",
             "DEVICE_MUTE": "mute",
-            "LOCK_RESET": "lockreset",
+            "LOCKRESET": "lockreset",
             "NOTIFICATION": "notification",
             "ENCRYPT_STORAGE": "encrypt",
             "CHANGE_LOCK_CODE": "change-lock-code",
@@ -843,12 +843,12 @@ var operationModule = function () {
         var featureMap = {
             "DEVICE_LOCK": "fw-lock",
             "DEVICE_LOCATION": "fw-map-location",
-            "DISENROLL": "fw-clear",
+            "DISENROLL": "fw-delete",
             "WIPE_DATA": "fw-clear",
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
-            "LOCKRESET": "fw-lock",
+            "LOCKRESET": "fw-key",
         };
         return featureMap[operationCode];
     };

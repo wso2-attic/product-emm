@@ -282,25 +282,25 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             Node userNameAuthPosition = wapParm.item(APPAUTH_USERNAME_POSITION);
             NamedNodeMap appServerAttribute = userNameAuthPosition.getAttributes();
             Node authNameNode = appServerAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(decodedBST);
-            String username = cacheentry.getUsername();
-            authNameNode.setTextContent(cacheentry.getUsername());
+            CacheEntry cacheEntry = (CacheEntry) DeviceUtil.getCacheEntry(decodedBST);
+            String username = cacheEntry.getUsername();
+            authNameNode.setTextContent(cacheEntry.getUsername());
             DeviceUtil.removeToken(decodedBST);
             String password = DeviceUtil.generateRandomToken();
             Node passwordAuthPosition = wapParm.item(APPAUTH_PASSWORD_POSITION);
             NamedNodeMap appSrvPasswordAttribute = passwordAuthPosition.getAttributes();
             Node authPasswordNode = appSrvPasswordAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             authPasswordNode.setTextContent(password);
-            String rqstSecurityTokenResponce = new SyncmlCredentials().generateRST(username, password);
-            DeviceUtil.persistChallengeToken(rqstSecurityTokenResponce, "", username);
+            String requestSecurityTokenResponse = new SyncmlCredentials().generateRST(username, password);
+            DeviceUtil.persistChallengeToken(requestSecurityTokenResponse, null, username);
 
             // Get device polling frequency from the tenant Configurations.
             Node numberOfFirstRetries = wapParm.item(POLLING_FREQUENCY_POSITION);
             NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
-            Node pollvalue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            pollvalue.setTextContent(pollingFrequency);
+            Node pollValue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+            pollValue.setTextContent(pollingFrequency);
             if (log.isDebugEnabled()) {
-                log.debug("Username: " + username + "Password: " + rqstSecurityTokenResponce);
+                log.debug("Username: " + username + "Password: " + requestSecurityTokenResponse);
             }
             wapProvisioningString = convertDocumentToString(document);
 
