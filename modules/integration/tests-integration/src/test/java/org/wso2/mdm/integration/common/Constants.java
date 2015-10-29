@@ -17,6 +17,8 @@
  */
 package org.wso2.mdm.integration.common;
 
+import java.io.File;
+
 /**
  * Constants used through out the test suite are defined here.
  */
@@ -41,11 +43,12 @@ public final class Constants {
                        "\"saasApp\": \"" + true + "\"}").toString();
         public static final String REGISTRATION_ENDPOINT = "/dynamic-client-web/register";
         public static final String TOKEN_ENDPOINT = "/oauth2/token";
-        public static final String OAUTH_TOKEN_PAYLOAD = "grant_type=password&username=admin&password=admin";
+        public static final String OAUTH_TOKEN_PAYLOAD =
+                "grant_type=password&username=admin&password=admin&scope=default";
     }
 
-	public static final class Enrollment {
-		private Enrollment() {
+	public static final class AndroidEnrollment {
+		private AndroidEnrollment() {
 			throw new AssertionError();
 		}
 		private static StringBuffer androidPayloadBuffer = new StringBuffer();
@@ -60,11 +63,31 @@ public final class Constants {
 				"\"responseMessage\": \"Device enrollment succeeded\"}";
         public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
         public static final String ANDROID_ENROLLMENT_GROUP = "android-enrollment";
-        public static final String WINDOWS_ENROLLMENT_GROUP = "windows-enrollment";
 	}
 
-    public static final class Operations {
-        private Operations() {
+    public static final class WindowsEnrollment {
+        private WindowsEnrollment() {
+            throw new AssertionError();
+        }
+
+        private static StringBuffer androidPayloadBuffer = new StringBuffer();
+
+        public static final String DISCOVERY_GET_URL = "/mdm-windows-agent/services/discovery/get";
+        public static final String DISCOVERY_POST_URL = "/mdm-windows-agent/services/discovery/post";
+        public static final String BSD_URL = "/mdm-windows-agent/services/federated/bst/authentication";
+        public static final String MS_EXCEP = "/mdm-windows-agent/services/certificatepolicy/xcep";
+        public static final String DISCOVERY_PAYLOAD = File
+                                                               .separator + "mdm-windows-agent" + File
+                                                               .separator + "services" + File
+                                                               .separator + "certificatepolicy" + File.separator +
+                                                       "xcep";
+        public static final String WINDOWS_ENROLLMENT_GROUP = "windows-enrollment";
+        public static final String WSTEP_URL = "/mdm-windows-agent/services/deviceenrolment/wstep";
+        public static final String SYNC_ML_URL = "/mdm-windows-agent/services/syncml/devicemanagement/request";
+    }
+
+    public static final class AndroidOperations {
+        private AndroidOperations() {
             throw new AssertionError();
         }
 
@@ -76,6 +99,7 @@ public final class Constants {
         public static final String ANDROID_CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
         public static final String ANDROID_CAMERA_PAYLOAD = "{\"operation\": {\"enabled\": false}," +
                                                             "\"deviceIDs\": [\"" + DEVICE_ID + "\"]}";
+        public static final String ANDROID_OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
 
         public static final String ANDROID_DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
         public static final String ANDROID_ENTERPRISE_WIPE_ENDPOINT = "/mdm-android-agent/operation/enterprise-wipe";

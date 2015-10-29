@@ -26,14 +26,19 @@
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
     </listeners>
-    <!--<test name="android-enrollment" preserve-order="false" parallel="true">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.mdm.integration.device.enrollment.AndroidEnrollment"/>-->
-        <!--</classes>-->
-    <!--</test>-->
-    <!--<test name="android-operation" preserve-order="false" parallel="true">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.mdm.integration.device.operation.AndroidOperation"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="android-enrollment" preserve-order="false" parallel="true">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.enrollment.AndroidEnrollment"/>
+        </classes>
+    </test>
+    <test name="android-operation" preserve-order="false" parallel="true">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.operation.AndroidOperation"/>
+        </classes>
+    </test>
+    <test name="windows-enrollment" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.enrollment.WindowsEnrollment"/>
+        </classes>
+    </test>
 </suite>

@@ -76,4 +76,8 @@ public class RestClient {
     public HttpResponse get(String endpoint) throws Exception {
         return HttpRequestUtil.doGet(backEndUrl + endpoint, requestHeaders);
     }
+
+    public void put(String endpoint) throws Exception {
+         HttpRequestUtil.sendPutRequest(null,new URL(backEndUrl + endpoint), null,"");
+    }
 }
