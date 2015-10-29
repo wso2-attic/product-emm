@@ -144,7 +144,7 @@
                                     <classpath refid="maven.runtime.classpath" />
 
                                     <fileset
-                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/plugins/h2_ios.sql" />
+                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/plugins/ios/h2.sql" />
                                 </sql>
                                 <echo message="##################### END ####################" />
                             </tasks>
@@ -172,7 +172,7 @@
                                     <classpath refid="maven.runtime.classpath" />
 
                                     <fileset
-                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/plugins/h2_android.sql" />
+                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/plugins/android/h2.sql" />
                                 </sql>
                                 <echo message="##################### END ####################" />
                             </tasks>
@@ -199,7 +199,7 @@
                                     <classpath refid="maven.runtime.classpath" />
 
                                     <fileset
-                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/plugins/h2_windows.sql" />
+                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/plugins/windows/h2.sql" />
                                 </sql>
                                 <echo message="##################### END ####################" />
                             </tasks>

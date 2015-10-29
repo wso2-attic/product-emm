@@ -317,12 +317,13 @@ deviceModule = function () {
      @Updated
      */
     publicMethods.getLicense = function (deviceType, languageCode) {
-        var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
-        serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-            return responsePayload.responseContent;
-        }, function (responsePayload) {
-            return null;
-        });
+        return "";
+        //var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
+        //serviceInvokers.XMLHttp.get(url, function (responsePayload) {
+        //    return responsePayload.responseContent;
+        //}, function (responsePayload) {
+        //    return null;
+        //});
     };
 
     return publicMethods;
