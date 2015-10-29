@@ -55,14 +55,13 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
     }
 
-
-//    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device lock operation.")
-//    public void testPendingLock() throws Exception {
-//        HttpResponse response = client.get(Constants.AndroidOperations.ANDROID_OPERATION_ENDPOINT + Constants.DEVICE_ID);
-//        System.out.println(HttpStatus.SC_CREATED+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+response
-//                .getResponseCode());
-//        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
-//    }
+/*
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device lock operation.")
+    public void testPendingLock() throws Exception {
+        HttpResponse response = client.get(Constants.AndroidOperations.ANDROID_OPERATION_ENDPOINT + Constants.DEVICE_ID);
+        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_CREATED);
+    }
+    */
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device clear password " +
                                                                         "operation.")

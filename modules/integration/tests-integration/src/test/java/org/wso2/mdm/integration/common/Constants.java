@@ -37,6 +37,9 @@ public final class Constants {
     public static final String HTTP_METHOD_PUT = "PUT";
     public static final String HTTP_METHOD_GET = "GET";
     public static final String HTTP_METHOD_DELETE = "DELETE";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String APPLICATION_SOAP_XML = "application/soap+xml; charset=utf-8";
+    public static final String UTF8 = "UTF-8";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
@@ -85,20 +88,22 @@ public final class Constants {
             throw new AssertionError();
         }
 
-        private static StringBuffer androidPayloadBuffer = new StringBuffer();
-
         public static final String DISCOVERY_GET_URL = "/mdm-windows-agent/services/discovery/get";
         public static final String DISCOVERY_POST_URL = "/mdm-windows-agent/services/discovery/post";
         public static final String BSD_URL = "/mdm-windows-agent/services/federated/bst/authentication";
         public static final String MS_EXCEP = "/mdm-windows-agent/services/certificatepolicy/xcep";
-        public static final String DISCOVERY_PAYLOAD = File
-                                                               .separator + "mdm-windows-agent" + File
-                                                               .separator + "services" + File
-                                                               .separator + "certificatepolicy" + File.separator +
-                                                       "xcep";
         public static final String WINDOWS_ENROLLMENT_GROUP = "windows-enrollment";
         public static final String WSTEP_URL = "/mdm-windows-agent/services/deviceenrolment/wstep";
         public static final String SYNC_ML_URL = "/mdm-windows-agent/services/syncml/devicemanagement/request";
+        public static final String DISCOVERY_POST_FILE = "windows" + File.separator + "enrollment" + File
+                .separator + "discovery-post.xml";
+        public static final String MS_XCEP_FILE =
+                "windows" + File.separator + "enrollment" + File.separator + "ms_xcep.xml";
+        public static final String WS_STEP_FILE =
+                "windows" + File.separator + "enrollment" + File.separator + "wstep.xml";
+        public static final String BSD_PAYLOAD = "{\"credentials\" : {\"username\" : \"admin\", " +
+                                                 "\"password\" : \"admin\", " +
+                                                 "\"ownership\" : \"BYOD\"}}";
     }
 
     public static final class AndroidOperations {

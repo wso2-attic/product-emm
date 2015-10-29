@@ -50,21 +50,21 @@ public class AndroidEnrollment extends TestBase {
                                       response.getData().toString(), true);
     }
 
-//    @Test(description = "Test an Android device is enrolled.", dependsOnMethods = { "testEnrollment" })
-//    public void testIsEnrolled() throws Exception {
-//        HttpResponse response = client.get(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
-//        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-//        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_IS_ENROLLMENT_EXPECTED,
-//                                      response.getData().toString(), true);
-//    }
-//
-//    @Test(description = "Test modify enrollment.", dependsOnMethods = { "testEnrollment" })
-//    public void testModifyEnrollment() throws Exception {
-//        HttpResponse response = client.put(Constants.Enrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID,
-//                                           Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_PAYLOAD);
-//        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_EXPECTED,
-//                                      response.getData().toString(), true);
-//    }
+    @Test(description = "Test an Android device is enrolled.", dependsOnMethods = { "testEnrollment" })
+    public void testIsEnrolled() throws Exception {
+        HttpResponse response = client.get(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        AssertUtil.jsonPayloadCompare(Constants.AndroidEnrollment.ANDROID_REQUEST_IS_ENROLLMENT_EXPECTED,
+                                      response.getData().toString(), true);
+    }
+
+    @Test(description = "Test modify enrollment.", dependsOnMethods = { "testEnrollment" })
+    public void testModifyEnrollment() throws Exception {
+        HttpResponse response = client.put(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID,
+                                           Constants.AndroidEnrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_PAYLOAD);
+        AssertUtil.jsonPayloadCompare(Constants.AndroidEnrollment.ANDROID_REQUEST_MODIFY_ENROLLMENT_EXPECTED,
+                                      response.getData().toString(), true);
+    }
 
     /*@Test(description = "Test disenrollment.", dependsOnGroups = { Constants.Operations.OPERATIONS_GROUP })
     public void testDisEnrollDevice() throws Exception {

@@ -38,6 +38,7 @@ import java.net.URL;
 public class WindowsEnrollment extends TestBase {
     private RestClient client;
     private static String bsd;
+    private static final String BSD_PLACEHOLDER =  "{BinarySecurityToken}";
 
     @BeforeClass(alwaysRun = true, groups = { Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP })
     public void initTest() throws Exception {
@@ -51,28 +52,23 @@ public class WindowsEnrollment extends TestBase {
      */
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery get.")
     public void testServerAvailability() throws Exception {
-        client.setHttpHeader("Content-Type", "application/soap+xml; charset=utf-8");
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         HttpResponse response = client.get(Constants.WindowsEnrollment.DISCOVERY_GET_URL);
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post.")
-    public void testDiscoveryPost() throws Exception {
-        //TODO: move to paylaod class
-        URL url = ClassLoader.getSystemResource("windows/enrollment/discovery-post.xml");
-        File folder = new File(url.toURI());
-        String xml = FileUtils.readFileToString(folder, "UTF-8");
-
-        client.setHttpHeader("Content-Type", "application/soap+xml; charset=utf-8");
+    public void testDiscoveryPost() throws Exception {;
+        String xml = readXML(Constants.WindowsEnrollment.DISCOVERY_POST_FILE, Constants.UTF8);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         HttpResponse response = client.post(Constants.WindowsEnrollment.DISCOVERY_POST_URL, xml);
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows BST.")
     public void testBST() throws Exception {
-        String temp = "{\"credentials\" : {\"username\" : \"admin\", \"password\" : \"admin\", "+
-        "\"ownership\" : \"BYOD\"}}";
-        HttpResponse response = client.post(Constants.WindowsEnrollment.BSD_URL, temp);
+
+        HttpResponse response = client.post(Constants.WindowsEnrollment.BSD_URL, Constants.WindowsEnrollment.BSD_PAYLOAD);
         bsd = response.getData();
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
     }
@@ -80,12 +76,9 @@ public class WindowsEnrollment extends TestBase {
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post.",
           dependsOnMethods = "testBST")
     public void testMSXCEP() throws Exception {
-        //TODO: move to paylaod class
-        URL url = ClassLoader.getSystemResource("windows/enrollment/ms_xcep.xml");
-        File folder = new File(url.toURI());
-        String xml = FileUtils.readFileToString(folder, "UTF-8");
-        String payload = xml.replace("{BinarySecurityToken}", bsd);
-        client.setHttpHeader("Content-Type", "application/soap+xml; charset=utf-8");
+        String xml = readXML(Constants.WindowsEnrollment.MS_XCEP_FILE, Constants.UTF8);
+        String payload = xml.replace(BSD_PLACEHOLDER, bsd);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         HttpResponse response = client.post(Constants.WindowsEnrollment.MS_EXCEP, payload);
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_ACCEPTED);
     }
@@ -93,29 +86,31 @@ public class WindowsEnrollment extends TestBase {
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post.",
           dependsOnMethods = "testMSXCEP")
     public void testWSETP() throws Exception {
-        //TODO: move to paylaod class
-        URL url = ClassLoader.getSystemResource("windows/enrollment/wstep.xml");
-        File folder = new File(url.toURI());
-        String xml = FileUtils.readFileToString(folder, "UTF-8");
-        String payload = xml.replace("{BinarySecurityToken}", bsd);
-        client.setHttpHeader("Content-Type", "application/soap+xml; charset=utf-8");
+        String xml = readXML(Constants.WindowsEnrollment.WS_STEP_FILE, Constants.UTF8);
+        String payload = xml.replace(BSD_PLACEHOLDER, bsd);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         HttpResponse response = client.post(Constants.WindowsEnrollment.WSTEP_URL, payload);
-        System.out.println(response.getData()+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>... " +
-                                                                                                               "inosh");
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_ACCEPTED);
     }
-//
-//    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post.",
-//          dependsOnMethods = "testWSETP")
-//    public void testInitialDeviceInfo() throws Exception {
-//        //TODO: move to paylaod class
-//        URL url = ClassLoader.getSystemResource("windows/enrollment/inital_device_info.xml");
-//        File folder = new File(url.toURI());
-//        String xml = FileUtils.readFileToString(folder, "UTF-16");
-//        client.setHttpHeader("Content-Type", "application/vnd.syncml.dm+xml;charset=utf-8");
-//        HttpResponse response = client.post(Constants.WindowsEnrollment.SYNC_ML_URL, xml);
-//
-//        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
-//    }
+
+
+    private String readXML(String fileName, String characterEncoding) throws Exception {
+        URL url = ClassLoader.getSystemResource(fileName);
+        File folder = new File(url.toURI());
+        return FileUtils.readFileToString(folder, characterEncoding);
+    }
+/*
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post.",
+          dependsOnMethods = "testWSETP")
+    public void testInitialDeviceInfo() throws Exception {
+        URL url = ClassLoader.getSystemResource("windows/enrollment/inital_device_info.xml");
+        File folder = new File(url.toURI());
+        String xml = FileUtils.readFileToString(folder, "UTF-16");
+        client.setHttpHeader("Content-Type", "application/vnd.syncml.dm+xml;charset=utf-8");
+        HttpResponse response = client.post(Constants.WindowsEnrollment.SYNC_ML_URL, xml);
+
+        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
+    }
+    */
 
 }
