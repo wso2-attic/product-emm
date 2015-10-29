@@ -2,6 +2,7 @@ var updateStats = function (serviceURL, id) {
     invokerUtil.get(
         serviceURL,
         function (data) {
+            data = JSON.parse(data);
             $(id).html(data);
         }, function (message) {
             console.log(message);

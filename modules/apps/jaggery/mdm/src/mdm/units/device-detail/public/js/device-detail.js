@@ -67,6 +67,7 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId;
 
             var successCallback = function (data) {
+                data = JSON.parse(data);
                 $('#operations-spinner').addClass('hidden');
                 var viewModel = {};
                 viewModel.operations = data;
@@ -94,6 +95,7 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
 
             var successCallback = function (data) {
+                data = JSON.parse(data);
                 $('#apps-spinner').addClass('hidden');
                 var viewModel = {};
                 viewModel.applications = data;
@@ -141,6 +143,7 @@
             };
 
             var successCallbackPolicy = function (data) {
+                data = JSON.parse(data);
                 $('#policy-spinner').addClass('hidden');
                 if(data != null && data.active == true){
                     activePolicy = data;
