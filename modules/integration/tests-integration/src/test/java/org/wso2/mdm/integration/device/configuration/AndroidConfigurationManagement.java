@@ -29,7 +29,7 @@ import org.wso2.mdm.integration.common.*;
 /**
  * This class contains integration tests for Android configuration management backend services.
  */
-public class AndroidConfigurationManagement extends TestBase{
+public class AndroidConfigurationManagement extends TestBase {
 
     private RestClient client;
 
@@ -43,33 +43,42 @@ public class AndroidConfigurationManagement extends TestBase{
     @Test(description = "Test add android platform configuration.")
     public void testAddConfiguration() throws Exception {
         HttpResponse response = client.post(Constants.ConfigurationManagement.ANDROID_DEVICE_CONFIG_MGT_ENDPOINT,
-                    PayloadGenerator.getJsonPayload(Constants.ConfigurationManagement.ANDROID_CONFIG_PAYLOAD_FILE_NAME,
-                                                                            Constants.HTTP_METHOD_POST).toString());
+                                            PayloadGenerator.getJsonPayload(
+                                                    Constants.ConfigurationManagement.ANDROID_CONFIG_PAYLOAD_FILE_NAME,
+                                                    Constants.HTTP_METHOD_POST).toString()
+        );
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.ConfigurationManagement.ANDROID_CONFIG_RESPONSE_PAYLOAD_FILE_NAME,
-                                                                      Constants.HTTP_METHOD_POST).toString(),
-                                      response.getData().toString(), true);
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.ConfigurationManagement.ANDROID_CONFIG_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_POST).toString(),
+                                      response.getData().toString(), true
+        );
     }
 
     @Test(description = "Test update android configuration.", dependsOnMethods = { "testAddConfiguration" })
     public void testModifyConfiguration() throws Exception {
         HttpResponse response = client.put(Constants.ConfigurationManagement.ANDROID_DEVICE_CONFIG_MGT_ENDPOINT,
-                                            PayloadGenerator.getJsonPayload(
-                                                    Constants.ConfigurationManagement.ANDROID_CONFIG_PAYLOAD_FILE_NAME,
-                                                    Constants.HTTP_METHOD_PUT).toString());
+                                           PayloadGenerator.getJsonPayload(
+                                                   Constants.ConfigurationManagement.ANDROID_CONFIG_PAYLOAD_FILE_NAME,
+                                                   Constants.HTTP_METHOD_PUT).toString()
+        );
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                                               Constants.ConfigurationManagement.ANDROID_CONFIG_RESPONSE_PAYLOAD_FILE_NAME,
                                               Constants.HTTP_METHOD_PUT).toString(),
-                                      response.getData().toString(), true);
+                                      response.getData().toString(), true
+        );
     }
 
-    @Test(description = "Test get android configuration.", dependsOnMethods = { "testAddConfiguration", "testModifyConfiguration" })
+    @Test(description = "Test get android configuration.",
+          dependsOnMethods = { "testAddConfiguration", "testModifyConfiguration" })
     public void testGetConfiguration() throws Exception {
         HttpResponse response = client.get(Constants.ConfigurationManagement.ANDROID_DEVICE_CONFIG_MGT_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.ConfigurationManagement.ANDROID_CONFIG_PAYLOAD_FILE_NAME,
-                                                                      Constants.HTTP_METHOD_PUT).toString(),
-                                      response.getData().toString(), true);
+        AssertUtil.jsonPayloadCompare(
+                PayloadGenerator.getJsonPayload(Constants.ConfigurationManagement.ANDROID_CONFIG_PAYLOAD_FILE_NAME,
+                                                Constants.HTTP_METHOD_PUT).toString(),
+                response.getData().toString(), true
+        );
     }
 }
