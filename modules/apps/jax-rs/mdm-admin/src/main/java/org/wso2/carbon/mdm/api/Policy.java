@@ -258,9 +258,11 @@ public class Policy {
         }
     }
 
-    @DELETE
+    @POST
+    @Path("bulk-remove")
+    @Consumes("application/json")
     @Produces("application/json")
-    public Response deletePolicy(List<Integer> policyIds) throws MDMAPIException {
+    public Response bulkRemovePolicy(List<Integer> policyIds) throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         boolean policyDeleted = true;
         try {
