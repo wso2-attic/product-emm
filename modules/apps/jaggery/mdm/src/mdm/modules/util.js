@@ -32,7 +32,7 @@ var util = function () {
             "clientName": "mdm",
             "tokenScope": "admin",
             "owner": adminUserName,
-            "grantType": "urn:ietf:params:oauth:grant-type:password",
+            "grantType": "password refresh_token urn:ietf:params:oauth:grant-type:saml2-bearer",
             "saasApp" :true
         };
         var xhr = new XMLHttpRequest();
