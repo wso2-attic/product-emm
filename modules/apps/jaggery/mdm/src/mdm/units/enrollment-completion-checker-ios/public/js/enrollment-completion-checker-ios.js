@@ -19,23 +19,12 @@
 $(document).ready(function () {
     var iOSCheckUrl = "/mdm/enrollment/ios/check";
     setInterval(function () {
-        invokerUtil.get(
-            iOSCheckUrl,
-            function (data) {
-                // executions on success
-                var parsedData = JSON.parse(data);
-                var deviceID = parsedData["deviceID"];
-                // @inosh: var accessToken = parsedData["accessToken"];
-                if (deviceID != null) {
-                    window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + deviceID;
-                    // window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + deviceID +
-                    // "&access-token=" + accessToken;
-                }
-            },
-            function () {
-                // executions on error
-                // doing nothing
+        $.get(iOSCheckUrl, function(data, status){
+            var parsedData = JSON.parse(data);
+            var deviceID = parsedData["deviceID"];
+            if (deviceID != null) {
+                window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + deviceID;
             }
-        );
+        });
     }, 1000);
 });
