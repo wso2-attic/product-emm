@@ -317,13 +317,19 @@ deviceModule = function () {
      @Updated
      */
     publicMethods.getLicense = function (deviceType, languageCode) {
-        return "";
-        //var url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
-        //serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-        //    return responsePayload.responseContent;
-        //}, function (responsePayload) {
-        //    return null;
-        //});
+        var url;
+        var license;
+        if(deviceType != null && deviceType != undefined && deviceType == "windows"){
+            url = mdmProps["httpURL"] + "/mdm-windows-agent/services/device/license";
+        } else{
+            url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
+        }
+        serviceInvokers.XMLHttp.get(url, function (responsePayload) {
+            license = responsePayload.text;
+        }, function (responsePayload) {
+            return null;
+        });
+        return license;
     };
 
     return publicMethods;
