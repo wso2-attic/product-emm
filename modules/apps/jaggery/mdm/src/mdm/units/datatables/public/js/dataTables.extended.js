@@ -129,7 +129,7 @@ $.fn.datatables_extended = function(settings){
                  */
                 $('.dataTable.list-table').closest('.dataTables_wrapper').find('.dataTablesTop .dataTables_toolbar').html('' +
                         '<ul class="nav nav-pills navbar-right remove-margin" role="tablist">' +
-                        '<li><button data-click-event="toggle-selected" class="btn btn-default btn-primary">Select All</li>' +
+                        '<li><button data-click-event="toggle-selected" id="dt-select-all" class="btn btn-default btn-primary">Select All</li>' +
                         '<li><button data-click-event="toggle-list-view" data-view="grid" class="btn btn-default"><i class="fw fw-grid"></i></button></li>' +
                         '<li><button data-click-event="toggle-list-view" data-view="list" class="btn btn-default"><i class="fw fw-list"></i></button></li>' +
                         '<li><button class="btn btn-default" data-toggle="dropdown"><i class="fw fw-sort"></i></button>'+dropdownmenu[0].outerHTML+'</li>' +
