@@ -7,6 +7,7 @@
         </td>
         <td class="fade-edge remove-padding-top" >{{this}}</td>
         <td class="text-right content-fill text-left-on-grid-view no-wrap">
+            {{#unequal "admin" this }}
             <a href="/mdm/roles/edit-role/{{this}}" data-role="{{this}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-role-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
@@ -22,14 +23,13 @@
                 <span class="hidden-xs hidden-on-grid-view">Edit Permission</span>
             </a>
 
-            {{#unequal "admin" username }}
-                <a data-role="{{this}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-role-link">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-delete fw-stack-1x"></i>
-                            </span>
-                    <span class="hidden-xs hidden-on-grid-view">Remove</span>
-                </a>
+            <a data-role="{{this}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-role-link">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-delete fw-stack-1x"></i>
+                        </span>
+                <span class="hidden-xs hidden-on-grid-view">Remove</span>
+            </a>
             {{/unequal}}
         </td>
     </tr>
