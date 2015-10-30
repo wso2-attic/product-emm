@@ -332,6 +332,7 @@ $(document).ready(function () {
                 addConfigAPI,
                 addConfigFormData,
                 function (data) {
+                    data = JSON.parse(data);
                     if (data.responseCode == responseCodes["CREATED"]) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
@@ -464,6 +465,7 @@ $(document).ready(function () {
                 addConfigAPI,
                 addConfigFormData,
                 function (data) {
+                    data = JSON.parse(data);
                     if (data.statusCode == responseCodes["SUCCESS"]) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
@@ -721,6 +723,7 @@ $(document).ready(function () {
             addConfigAPI,
             addConfigFormData,
             function (data) {
+                data = JSON.parse(data);
                 if (data.responseCode == responseCodes["CREATED"]) {
                     $("#config-save-form").addClass("hidden");
                     $("#record-created-msg").removeClass("hidden");
@@ -821,6 +824,7 @@ $(document).ready(function () {
             addConfigAPI,
             addConfigFormData,
             function (data) {
+                data = JSON.parse(data);
                 if (data.responseCode == responseCodes["CREATED"]) {
                     $("#config-save-form").addClass("hidden");
                     $("#record-created-msg").removeClass("hidden");
