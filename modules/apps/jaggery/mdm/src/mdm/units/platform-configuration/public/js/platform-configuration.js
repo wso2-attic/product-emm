@@ -109,7 +109,7 @@ $(document).ready(function () {
 
     /**
      * Following requests would execute
-     * on page load event of tenant configuration page in WSO2 EMM Console.
+     * on page load event of platform configuration page in WSO2 EMM Console.
      * Upon receiving the response, the parameters will be set to the fields,
      * in case those configurations are already set.
      */
@@ -117,7 +117,7 @@ $(document).ready(function () {
         getAndroidConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
@@ -149,7 +149,7 @@ $(document).ready(function () {
         getGeneralConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
@@ -181,7 +181,7 @@ $(document).ready(function () {
         getIosConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
@@ -222,7 +222,7 @@ $(document).ready(function () {
         getWindowsConfigAPI,
 
         function (data) {
-
+            data = JSON.parse(data);
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
@@ -257,7 +257,7 @@ $(document).ready(function () {
     /**
      * Following click function would execute
      * when a user clicks on "Save" button
-     * on Android tenant configuration page in WSO2 EMM Console.
+     * on Android platform configuration page in WSO2 EMM Console.
      */
     $("button#save-android-btn").click(function() {
         var notifierType = $("#android-config-notifier").find("option:selected").attr("value");
@@ -332,6 +332,7 @@ $(document).ready(function () {
                 addConfigAPI,
                 addConfigFormData,
                 function (data) {
+                    data = JSON.parse(data);
                     if (data.responseCode == responseCodes["CREATED"]) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
@@ -355,7 +356,7 @@ $(document).ready(function () {
     /**
      * Following click function would execute
      * when a user clicks on "Save" button
-     * on General tenant configuration page in WSO2 EMM Console.
+     * on General platform configuration page in WSO2 EMM Console.
      */
     $("button#save-general-btn").click(function() {
         var notifierFrequency = $("input#monitoring-config-frequency").val();
@@ -464,6 +465,7 @@ $(document).ready(function () {
                 addConfigAPI,
                 addConfigFormData,
                 function (data) {
+                    data = JSON.parse(data);
                     if (data.statusCode == responseCodes["SUCCESS"]) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
@@ -721,6 +723,7 @@ $(document).ready(function () {
             addConfigAPI,
             addConfigFormData,
             function (data) {
+                data = JSON.parse(data);
                 if (data.responseCode == responseCodes["CREATED"]) {
                     $("#config-save-form").addClass("hidden");
                     $("#record-created-msg").removeClass("hidden");
@@ -821,6 +824,7 @@ $(document).ready(function () {
             addConfigAPI,
             addConfigFormData,
             function (data) {
+                data = JSON.parse(data);
                 if (data.responseCode == responseCodes["CREATED"]) {
                     $("#config-save-form").addClass("hidden");
                     $("#record-created-msg").removeClass("hidden");

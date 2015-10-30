@@ -61,6 +61,7 @@ $(document).ready(function () {
         $.template("treeTemplate", treeTemplateSrc, function (template) {
             invokerUtil.get(serviceUrl,
                 function(data){
+                    data = JSON.parse(data);
                     var treeData = data.responseContent.permissionList;
                     if(treeData.nodeList.length > 0){
                         treeData = { nodeList: treeData.nodeList };

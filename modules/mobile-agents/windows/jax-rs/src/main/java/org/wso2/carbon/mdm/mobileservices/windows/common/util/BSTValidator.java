@@ -48,7 +48,7 @@ public class BSTValidator implements Validator {
     public Credential validate(Credential credential, RequestData requestData) throws WSSecurityException {
 
         BinarySecurity binarySecurityTokenObject = credential.getBinarySecurityToken();
-        String binarySecurityToken = new String(binarySecurityTokenObject.getToken());
+        String binarySecurityToken = new String(binarySecurityTokenObject.getElement().getFirstChild().getTextContent());
         Credential returnCredentials;
         try {
             if (authenticate(binarySecurityToken)) {

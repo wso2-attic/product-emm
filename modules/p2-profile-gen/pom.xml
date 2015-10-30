@@ -107,7 +107,7 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.server.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
-				                <featureArtifactDef>
+                                <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.extensions.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -198,7 +198,7 @@
                                     org.wso2.carbon.commons:org.wso2.carbon.databridge.datapublisher.feature:${carbon.commons.version}
                                 </featureArtifactDef>
                                 <!--<featureArtifactDef>-->
-                                    <!--org.wso2.carbon.commons:org.wso2.carbon.user.mgt.feature:${carbon.commons.version}-->
+                                <!--org.wso2.carbon.commons:org.wso2.carbon.user.mgt.feature:${carbon.commons.version}-->
                                 <!--</featureArtifactDef>-->
                                 <featureArtifactDef>
                                     org.wso2.carbon.commons:org.wso2.carbon.ntask.feature:${carbon.commons.version}
@@ -225,7 +225,7 @@
                                     org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.mgt.core.feature:${carbon.multitenancy.version}
                                 </featureArtifactDef>
                                 <!--<featureArtifactDef>-->
-                                    <!--org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.mgt.server.feature:${carbon.multitenancy.version}-->
+                                <!--org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.mgt.server.feature:${carbon.multitenancy.version}-->
                                 <!--</featureArtifactDef>-->
                                 <!-- End of Carbon Multi-tenancy Features -->
 
@@ -278,7 +278,7 @@
                                     org.wso2.carbon.identity:org.wso2.carbon.identity.application.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <!--<featureArtifactDef>-->
-                                    <!--org.wso2.carbon.identity:org.wso2.carbon.identity.mgt.feature:${carbon.identity.version}-->
+                                <!--org.wso2.carbon.identity:org.wso2.carbon.identity.mgt.feature:${carbon.identity.version}-->
                                 <!--</featureArtifactDef>-->
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.claim.mgt.server.feature:${carbon.identity.version}
@@ -391,10 +391,65 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.mediation:org.wso2.carbon.task.server.feature:${carbon.mediation.version}
                                 </featureArtifactDef>
-				<featureArtifactDef>
-				    org.wso2.carbon.mediation:org.wso2.carbon.mediation.ui.feature:${carbon.mediation.version}
-				</featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.mediation:org.wso2.carbon.mediation.ui.feature:${carbon.mediation.version}
+                                </featureArtifactDef>
                                 <!-- End of Mediation Features -->
+
+                                <!-- App Manager features-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.core.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!--&lt;!&ndash;<featureArtifactDef>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.interceptor.feature:${appmgt..feature.version}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</featureArtifactDef>&ndash;&gt;-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.wso2emm.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.wso2mdm.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mobile.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.publisher.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.services.api.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!--&lt;!&ndash;<featureArtifactDef>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.startup.publisher.feature:${appmgt..feature.version}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</featureArtifactDef>&ndash;&gt;-->
+
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.store.feature:${appmgt..feature.version}-->
+                                <!--</featureArtifactDef>-->
+
+                                <!-- End of app manager feature-->
+
+
+                                <!-- Cipher tools feature -->
+
+                                <featureArtifactDef>
+                                    org.wso2.ciphertool:org.wso2.ciphertool.feature:${cipher.tool.version}
+                                </featureArtifactDef>
+
+                                <!-- End of cipher tools feature -->
+
+
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -425,7 +480,7 @@
                                     <id>org.wso2.carbon.device.mgt.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
-				                <feature>
+                                <feature>
                                     <id>org.wso2.carbon.device.mgt.extensions.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
@@ -449,7 +504,7 @@
                                     <id>org.wso2.carbon.dynamic.client.registration.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
-				                 <feature>
+                                <feature>
                                     <id>org.wso2.carbon.apimgt.webapp.publisher.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
@@ -539,8 +594,8 @@
                                     <version>${carbon.commons.version}</version>
                                 </feature>
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.user.mgt.feature.group</id>-->
-                                    <!--<version>${carbon.commons.version}</version>-->
+                                <!--<id>org.wso2.carbon.user.mgt.feature.group</id>-->
+                                <!--<version>${carbon.commons.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
@@ -570,8 +625,8 @@
                                     <version>${carbon.multitenancy.version}</version>
                                 </feature>
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.tenant.mgt.server.feature.group</id>-->
-                                    <!--<version>${carbon.multitenancy.version}</version>-->
+                                <!--<id>org.wso2.carbon.tenant.mgt.server.feature.group</id>-->
+                                <!--<version>${carbon.multitenancy.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.tenant.mgt.core.feature.group</id>
@@ -626,11 +681,15 @@
                                 </feature>
                                 <!-- SSO Features -->
                                 <feature>
-                                    <id>org.wso2.carbon.identity.application.authenticator.basicauth.server.feature.group</id>
+                                    <id>
+                                        org.wso2.carbon.identity.application.authenticator.basicauth.server.feature.group
+                                    </id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.identity.application.authentication.framework.server.feature.group</id>
+                                    <id>
+                                        org.wso2.carbon.identity.application.authentication.framework.server.feature.group
+                                    </id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
                                 <feature>
@@ -651,8 +710,8 @@
                                     <version>${carbon.identity.version}</version>
                                 </feature>
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.identity.mgt.feature.group</id>-->
-                                    <!--<version>${carbon.identity.version}</version>-->
+                                <!--<id>org.wso2.carbon.identity.mgt.feature.group</id>-->
+                                <!--<version>${carbon.identity.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.claim.mgt.server.feature.group</id>
@@ -784,11 +843,65 @@
                                     <id>org.wso2.carbon.task.server.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
-				<feature>
-				    <id>org.wso2.carbon.mediation.ui.feature.group</id>
-				    <version>${carbon.mediation.version}</version>
-				</feature>
+                                <feature>
+                                    <id>org.wso2.carbon.mediation.ui.feature.group</id>
+                                    <version>${carbon.mediation.version}</version>
+                                </feature>
                                 <!-- End of Mediation Features -->
+
+                                <!-- App management features-->
+
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.core.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+                                <!--&lt;!&ndash;<feature>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<id>org.wso2.carbon.appmgt.interceptor.feature.group</id>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<version>${appmgt..feature.version}</version>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</feature>&ndash;&gt;-->
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.mdm.wso2emm.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.mdm.wso2mdm.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.mobile.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.publisher.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.services.api.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+                                <!--&lt;!&ndash;<feature>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<id>org.wso2.carbon.appmgt.startup.publisher.feature.group</id>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<version>${appmgt..feature.version}</version>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</feature>&ndash;&gt;-->
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.appmgt.store.feature.group</id>-->
+                                    <!--<version>${appmgt..feature.version}</version>-->
+                                <!--</feature>-->
+
+                                <!-- End of app management features-->
+
+                                <!-- Cipher too feature -->
+
+                                <feature>
+                                    <id>org.wso2.ciphertool.feature.group</id>
+                                    <version>${cipher.tool.version}</version>
+                                </feature>
+                                <!-- Cipher too feature -->
+
                             </features>
                         </configuration>
                     </execution>

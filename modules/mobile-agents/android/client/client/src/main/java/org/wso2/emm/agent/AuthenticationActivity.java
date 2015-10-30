@@ -19,6 +19,7 @@ package org.wso2.emm.agent;
 
 import java.util.Map;
 
+import android.content.SharedPreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -325,18 +326,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 			} else if (status.trim().equals(Constants.Status.AUTHENTICATION_FAILED)) {
 				showAuthenticationError();
-				try {
-					CommonUtils.clearAppData(context);
-				} catch (AndroidAgentException e) {
-					Log.e(TAG, "Failed to clear app data.", e);
-				}
+				// clearing client credentials from shared memory
+				CommonUtils.clearClientCredentials(context);
 			} else if (status.trim().equals(Constants.Status.INTERNAL_SERVER_ERROR)) {
 				showInternalServerErrorMessage();
-
 			} else {
 				showAuthCommonErrorMessage();
 			}
-
 		} else {
 			showAuthCommonErrorMessage();
 		}

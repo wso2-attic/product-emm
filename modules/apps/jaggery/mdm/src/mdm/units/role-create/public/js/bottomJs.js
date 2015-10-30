@@ -39,15 +39,23 @@ $(document).ready(function () {
         multiple:true,
         tags: true,
         ajax: {
-            url: "/mdm-admin/users",
+            url: window.location.origin + "/mdm/api/invoker/execute/",
+            method: "POST",
             dataType: 'json',
             delay: 250,
-            id: function(user){ return user.username; },
+            id: function (user) {
+                return user.username;
+            },
             data: function (params) {
-                return {
+                var postData = {};
+                postData.actionMethod = "GET";
+                postData.actionUrl = "/mdm-admin/users";
+                postData.actionPayload = JSON.stringify({
                     q: params.term, // search term
                     page: params.page
-                };
+                });
+
+                return JSON.stringify(postData);
             },
             processResults: function (data, page) {
                 var newData = [];
@@ -109,15 +117,13 @@ $(document).ready(function () {
             invokerUtil.post(
                 addRoleAPI,
                 addRoleFormData,
-                function (data, status, jqXHR) {
-                    if (jqXHR.status == 201) {
+                function (data) {
                         // Clearing user input fields.
                         $("input#rolename").val("");
                         $("#domain").val("");
                         // Refreshing with success message
                         $("#role-create-form").addClass("hidden");
                         $("#role-created-msg").removeClass("hidden");
-                    }
                 }, function () {
                     $(errorMsg).text("An unexpected error occurred. Please try again later.");
                     $(errorMsgWrapper).removeClass("hidden");

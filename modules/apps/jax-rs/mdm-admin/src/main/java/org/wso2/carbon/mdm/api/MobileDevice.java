@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -186,4 +187,25 @@ public class MobileDevice {
         }
         return devices;
     }
+
+	/**
+	 * Get the list of available device types.
+	 *
+	 * @return list of device types.
+	 * @throws MDMAPIException If some unusual behaviour is observed while fetching the device list
+	 */
+	@GET
+	@Path("types")
+	public List<DeviceType> getDeviceTypes() throws MDMAPIException {
+
+		List<DeviceType> deviceTypes;
+		try {
+			deviceTypes = MDMAPIUtils.getDeviceManagementService().getAvailableDeviceTypes();
+		} catch (DeviceManagementException e) {
+			String msg = "Error occurred while fetching the list of device types.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return deviceTypes;
+	}
 }

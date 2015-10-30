@@ -39,6 +39,14 @@
     </Permission>
 
     <Permission>
+        <name>Get all device types</name>
+        <path>/device-mgt/devices/types</path>
+        <url>/devices/types</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
         <name>Get all notifications</name>
         <path>/device-mgt/notifications/view</path>
         <url>/notifications</url>
@@ -333,6 +341,13 @@
         <name>Add Active Policy</name>
         <path>/device-mgt/policies/add</path>
         <url>/policies/active-policy</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Bulk Policy Removal</name>
+        <path>/device-mgt/policies/bulk-remove</path>
+        <url>/policies/bulk-remove</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>

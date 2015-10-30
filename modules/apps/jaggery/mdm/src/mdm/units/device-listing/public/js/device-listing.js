@@ -172,6 +172,7 @@ function loadDevices(searchType, searchParam){
             }
         }
         var successCallback = function (data) {
+            data = JSON.parse(data);
             var viewModel = {};
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;

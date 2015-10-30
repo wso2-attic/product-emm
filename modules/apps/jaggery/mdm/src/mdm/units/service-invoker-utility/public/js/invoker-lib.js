@@ -16,81 +16,46 @@
  * under the License.
  */
 
-//Using https://github.com/js-cookie/js-cookie
-
 var invokerUtil = function () {
-    var module = {};
-    var flagAuth = true; // A flag to be used to test without oAuth
-    function requestAccessToken (successCallback, errorCallback) {
-        $.ajax({
-            url: "/mdm/token",
-            type: "GET",
-            success: function () {
-                successCallback ();
-            }
-        }).fail(errorCallback);
-    }
-    function call(method, url, payload, successCallback, errorCallback){
-        var accessToken = Cookies.get('accessToken');
-        var execute = function () {
-            var data = {
-                url: url,
-                type: method,
-                contentType: "application/json",
-                accept: "application/json",
-                //dataType: "json",
-                success: successCallback
-            };
-            if (payload) {
-                data.data = JSON.stringify(payload);
-            }
-            if (flagAuth) {
-                accessToken = Cookies.get('accessToken');
-                data.headers = {
-                    "Authorization": "Bearer " + accessToken
-                };
-            }
-            $.ajax(data).fail(function (jqXHR) {
-                if (jqXHR.status == "401"){
-                    requestAccessToken(function () {
-                        execute();
-                    },function () {
-                        window.location.replace("/mdm");
-                    });
 
-                } else {
-                    errorCallback(jqXHR);
-                }
-            });
-        };
-        if (flagAuth) {
-            if (!accessToken){
-                $.ajax({
-                    url: "/mdm/token",
-                    type: "GET",
-                    success: function(){
-                        execute();
-                    }
-                }).fail(errorCallback);
-            } else{
-                execute();
-            }
-        } else {
-            execute();
-        }
-    }
-    module.get = function(url, successCallback, errorCallback){
+    var module = {};
+
+    var END_POINT = window.location.origin+"/mdm/api/invoker/execute/";
+
+    module.get = function (url, successCallback, errorCallback) {
         var payload = null;
-        call("GET", url, payload, successCallback, errorCallback);
+        execute("GET", url, payload, successCallback, errorCallback);
     };
-    module.post = function(url, payload, successCallback, errorCallback){
-        call("POST", url, payload, successCallback, errorCallback);
+    module.post = function (url, payload, successCallback, errorCallback) {
+        execute("POST", url, payload, successCallback, errorCallback);
     };
-    module.put = function(url, payload, successCallback, errorCallback){
-        call("PUT", url, payload, successCallback, errorCallback);
+    module.put = function (url, payload, successCallback, errorCallback) {
+        execute("PUT", url, payload, successCallback, errorCallback);
     };
-    module.delete = function(url, payload, successCallback, errorCallback){
-        call("DELETE", url, payload, successCallback, errorCallback);
+    module.delete = function (url, successCallback, errorCallback) {
+        var payload = null;
+        execute("DELETE", url, payload, successCallback, errorCallback);
+    };
+    function execute (methoad, url, payload, successCallback, errorCallback) {
+        var data = {
+            url: END_POINT,
+            type: "POST",
+            contentType: "application/json",
+            accept: "application/json",
+            success: successCallback
+        };
+        var paramValue = {};
+        paramValue.actionMethod = methoad;
+        paramValue.actionUrl = url;
+        paramValue.actionPayload = JSON.stringify(payload)
+        data.data = JSON.stringify(paramValue);
+        $.ajax(data).fail(function (jqXHR) {
+            if (JSON.parse(jqXHR).status == "401") {
+                window.location.replace("/mdm");
+            } else {
+                errorCallback(JSON.parse(jqXHR));
+            }
+        });
     };
     return module;
 }();

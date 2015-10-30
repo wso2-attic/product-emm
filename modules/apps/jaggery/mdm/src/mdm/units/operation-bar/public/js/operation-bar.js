@@ -174,7 +174,7 @@ function loadOperationBar (deviceType) {
 //                    return total;
 //                }, {});
 //            }
-            data = data.filter(function (current) {
+            data = JSON.parse(data).filter(function (current) {
                 var iconName;
                 if (deviceType == "android"){
                     iconName = operationModule.getAndroidIconForFeature(current.code);

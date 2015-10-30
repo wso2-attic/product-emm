@@ -807,6 +807,74 @@
                 <artifactId>jackson-jaxrs</artifactId>
                 <version>1.9.0</version>
             </dependency>
+
+
+            <!-- App Management feature dependencies-->
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.core.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+
+
+            <!--<dependency>-->
+                <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
+                <!--<artifactId>org.wso2.carbon.appmgt.interceptor.feature</artifactId>-->
+                <!--<version>${appmgt..feature.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.mdm.wso2emm.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.mdm.wso2mdm.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.mobile.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.publisher.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.services.api.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
+                <!--<artifactId>org.wso2.carbon.appmgt.startup.publisher.feature</artifactId>-->
+                <!--<version>${appmgt..feature.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.store.feature</artifactId>
+                <version>${appmgt..feature.version}</version>
+            </dependency>
+
+            <!-- End of app management features-->
+
+            <!-- Adding cipertool feature to the product -->
+            <dependency>
+                <groupId>org.wso2.ciphertool</groupId>
+                <artifactId>org.wso2.ciphertool</artifactId>
+                <version>${cipher.tool.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -856,7 +924,7 @@
         <carbon.commons.version>4.4.7</carbon.commons.version>
 
         <!-- Carbon Deployment -->
-        <carbon.deployment.version>4.5.2</carbon.deployment.version>
+        <carbon.deployment.version>4.6.0-alpha</carbon.deployment.version>
 
         <!-- Carbon Identity -->
         <carbon.identity.version>4.6.0-SNAPSHOT</carbon.identity.version>
@@ -912,6 +980,12 @@
         <commons-io.version>2.4</commons-io.version>
         <jsr311-api.version>1.1.1</jsr311-api.version>
         <google.gson.version>2.3.1</google.gson.version>
+
+        <!-- App manager version-->
+        <appmgt..feature.version>1.1.0</appmgt..feature.version>
+
+        <!-- Cipher tool version-->
+        <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
     </properties>
 
     <scm>
@@ -1099,16 +1173,16 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-	<!--<repository>-->
-            <!--<id>wso2-staging</id>-->
-            <!--<name>WSO2 internal Repository</name>-->
-            <!--<url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonapimgt-009/</url>-->
-            <!--<releases>-->
-                <!--<enabled>true</enabled>-->
-                <!--<updatePolicy>daily</updatePolicy>-->
-                <!--<checksumPolicy>ignore</checksumPolicy>-->
-            <!--</releases>-->
-        <!--</repository>-->
+	<repository>
+            <id>wso2-staging</id>
+            <name>WSO2 internal Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbondeployment-069/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
     </repositories>
 
 </project>
