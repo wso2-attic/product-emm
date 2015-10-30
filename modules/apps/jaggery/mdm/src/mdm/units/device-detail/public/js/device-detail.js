@@ -98,6 +98,12 @@
                 data = JSON.parse(data);
                 $('#apps-spinner').addClass('hidden');
                 var viewModel = {};
+                if(data != null && data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].name = data[i].name.replace(/[^\w\s]/gi, ' ');
+                        data[i].name = data[i].name.replace(/[0-9]/g, ' ');
+                    }
+                }
                 viewModel.applications = data;
                 viewModel.deviceType = deviceType;
                 if(data.length > 0){
@@ -128,7 +134,7 @@
                 var viewModel = {};
                 viewModel.policy = activePolicy;
                 viewModel.deviceType = deviceType;
-                if(data != null && data.complianceFeatures.length > 0) {
+                if(data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined && data.complianceFeatures.length > 0) {
                     viewModel.compliance = "NON-COMPLIANT";
                     viewModel.complianceFeatures = data.complianceFeatures;
                     var content = template(viewModel);
