@@ -345,6 +345,13 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Bulk Policy Removal</name>
+        <path>/device-mgt/policies/bulk-remove</path>
+        <url>/policies/bulk-remove</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Get Policies</name>
         <path>/device-mgt/policies/view</path>
         <url>/policies</url>
