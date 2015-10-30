@@ -147,7 +147,7 @@ public class DeviceManagementService {
                             DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS,
                             DeviceManagementConstants.LanguageCodes.LANGUAGE_CODE_ENGLISH_US);
         } catch (DeviceManagementException e) {
-            String msg = "Error occurred while retrieving the license configured for Windows device enrolment";
+            String msg = "Error occurred while retrieving the license configured for Windows device enrollment";
             log.error(msg, e);
             throw new WindowsConfigurationException(msg, e);
         }

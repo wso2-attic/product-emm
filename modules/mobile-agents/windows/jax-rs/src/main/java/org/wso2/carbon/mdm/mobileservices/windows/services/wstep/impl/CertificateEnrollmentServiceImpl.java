@@ -120,10 +120,9 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         }
         List<ConfigurationEntry> tenantConfigurations;
         try {
-            if (getTenantConfigurationData()!= null) {
+            if (getTenantConfigurationData() != null) {
                 tenantConfigurations = getTenantConfigurationData();
-            }
-            else {
+            } else {
                 String msg = "Tenant configurations are not initialized.";
                 log.error(msg);
                 throw new WindowsDeviceEnrolmentException(msg);
@@ -206,17 +205,19 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
         byte[] byteArrayHeaderBST = DatatypeConverter.parseBase64Binary(headerBst);
         String decodedBST = new String(byteArrayHeaderBST);
-        String rootCertEncodedString = null;
-        String signedCertEncodedString = null;
-        X509Certificate signedCertificate = null;
+        String rootCertEncodedString;
+        String signedCertEncodedString;
+        X509Certificate signedCertificate;
 
         CertificateManagementServiceImpl impl = CertificateManagementServiceImpl.getInstance();
         Base64 base64Encoder = new Base64();
         try {
             rootCACertificate = (X509Certificate) impl.getCACertificate();
             rootCertEncodedString = base64Encoder.encodeAsString(rootCACertificate.getEncoded());
-        } catch (KeystoreException e1) {
-            e1.printStackTrace();
+        } catch (KeystoreException e) {
+            String msg = "CA certificate cannot be generated";
+            log.error(msg, e);
+            throw new CertificateGenerationException(msg, e);
         } catch (CertificateEncodingException e) {
             String msg = "CA certificate cannot be encoded.";
             log.error(msg, e);
@@ -230,8 +231,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             String msg = "Singed certificate cannot be encoded.";
             log.error(msg, e);
             throw new CertificateGenerationException(msg, e);
-        } catch (KeystoreException e1) {
-            e1.printStackTrace();
+        } catch (KeystoreException e) {
+            String msg = "CA certificate cannot be generated";
+            log.error(msg, e);
+            throw new CertificateGenerationException(msg, e);
         }
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -252,7 +255,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             NamedNodeMap rootCertAttributes = caCertificatePosition.getAttributes();
             Node rootCertNode =
                     rootCertAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            rootCertEncodedString= rootCertEncodedString.replaceAll("\n", "");
+            rootCertEncodedString = rootCertEncodedString.replaceAll("\n", "");
             rootCertNode.setTextContent(rootCertEncodedString);
 
             if (log.isDebugEnabled()) {
@@ -335,7 +338,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
      * @throws DeviceManagementException
      */
     private List<ConfigurationEntry> getTenantConfigurationData() throws DeviceManagementException {
-        if ( WindowsAPIUtils.getTenantConfiguration()!= null) {
+        if (WindowsAPIUtils.getTenantConfiguration() != null) {
             TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
             return configuration.getConfiguration();
         } else {
