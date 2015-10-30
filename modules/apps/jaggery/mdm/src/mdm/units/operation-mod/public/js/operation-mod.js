@@ -799,7 +799,7 @@ var operationModule = function () {
             "APPLICATION_LIST": "get-application-list",
             "DEVICE_RING": "devicering",
             "DEVICE_MUTE": "mute",
-            "LOCKRESET": "lockreset",
+            "LOCK_RESET": "lockreset",
             "NOTIFICATION": "notification",
             "ENCRYPT_STORAGE": "encrypt",
             "CHANGE_LOCK_CODE": "change-lock-code",
@@ -848,7 +848,7 @@ var operationModule = function () {
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
-            "LOCKRESET": "fw-key",
+            "LOCK_RESET": "fw-key"
         };
         return featureMap[operationCode];
     };

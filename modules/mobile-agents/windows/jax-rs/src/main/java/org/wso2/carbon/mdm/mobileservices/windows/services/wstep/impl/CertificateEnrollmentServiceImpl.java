@@ -134,7 +134,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             throw new WindowsDeviceEnrolmentException(msg, e);
         }
         for (ConfigurationEntry configurationEntry : tenantConfigurations) {
-            if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIERFREQUENCY)) {
+            if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY)) {
                 pollingFrequency = configurationEntry.getValue().toString();
             }
         }
