@@ -218,8 +218,7 @@ $(document).ready(function () {
 
     $(".policy-remove-link").click(function () {
         var policyList = getSelectedPolicies();
-        var deletePolicyAPI = "/mdm-admin/policies";
-        console.log(policyList);
+        var deletePolicyAPI = "/mdm-admin/policies/bulk-remove";
         if (policyList == 0) {
             $(modalPopupContent).html($("#errorPolicy").html());
         } else {
@@ -228,7 +227,7 @@ $(document).ready(function () {
         showPopup();
 
         $("a#remove-policy-yes-link").click(function () {
-            invokerUtil.delete(
+            invokerUtil.post(
                 deletePolicyAPI,
                 policyList,
                 // on success

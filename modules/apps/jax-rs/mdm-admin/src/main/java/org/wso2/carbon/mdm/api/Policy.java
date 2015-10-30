@@ -54,7 +54,7 @@ public class Policy {
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
-	policy.setDescription(policyWrapper.getDescription());
+	    policy.setDescription(policyWrapper.getDescription());
         policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
         policy.setOwnershipType(policyWrapper.getOwnershipType());
         policy.setRoles(policyWrapper.getRoles());
@@ -84,7 +84,7 @@ public class Policy {
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
-	policy.setDescription(policyWrapper.getDescription());
+	    policy.setDescription(policyWrapper.getDescription());
         policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
         policy.setOwnershipType(policyWrapper.getOwnershipType());
         policy.setRoles(policyWrapper.getRoles());
@@ -258,9 +258,11 @@ public class Policy {
         }
     }
 
-    @DELETE
+    @POST
+    @Path("bulk-remove")
+    @Consumes("application/json")
     @Produces("application/json")
-    public Response deletePolicy(List<Integer> policyIds) throws MDMAPIException {
+    public Response bulkRemovePolicy(List<Integer> policyIds) throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         boolean policyDeleted = true;
         try {
@@ -440,10 +442,10 @@ public class Policy {
 
     @GET
     @Path("{type}/{id}")
-    public ComplianceData getComplianceDataOfDevice(@PathParam("id") String id, @PathParam("type") String type) throws
+    public ComplianceData getComplianceDataOfDevice(@PathParam("type") String type, @PathParam("id") String id) throws
             MDMAPIException {
         try {
-            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             return policyManagementService.getDeviceCompliance(deviceIdentifier);
         } catch (PolicyComplianceException e) {
@@ -455,11 +457,10 @@ public class Policy {
 
 	@GET
 	@Path("{type}/{id}/active-policy")
-	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("id") String id,
-	        @PathParam("type") String type)
-			throws MDMAPIException {
+	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("type") String type,
+                                                                    @PathParam("id") String id) throws MDMAPIException {
 		try {
-			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
 			PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
 			return policyManagementService.getAppliedPolicyToDevice(deviceIdentifier);
 		}  catch (PolicyManagementException e) {

@@ -69,7 +69,7 @@ public class DeviceNotification {
 		}
 	}
 
-	@POST
+	@PUT
 	@Path("{id}/{status}")
 	public ResponsePayload updateNotificationStatus(@PathParam("id") int id,
 	                                                @PathParam("status") Notification.Status status)
@@ -77,8 +77,25 @@ public class DeviceNotification {
 		ResponsePayload responseMsg = new ResponsePayload();
 		try {
 			MDMAPIUtils.getNotificationManagementService().updateNotificationStatus(id, status);
-			Response.status(HttpStatus.SC_CREATED);
+			Response.status(HttpStatus.SC_ACCEPTED);
 			responseMsg.setMessageFromServer("Notification status updated successfully.");
+			responseMsg.setStatusCode(HttpStatus.SC_ACCEPTED);
+			return responseMsg;
+		} catch (NotificationManagementException e) {
+			String msg = "Error occurred while updating notification status.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+	}
+
+	@POST
+	public ResponsePayload addNotification(Notification notification)
+			throws MDMAPIException{
+		ResponsePayload responseMsg = new ResponsePayload();
+		try {
+			MDMAPIUtils.getNotificationManagementService().addNotification(notification);
+			Response.status(HttpStatus.SC_CREATED);
+			responseMsg.setMessageFromServer("Notification has added successfully.");
 			responseMsg.setStatusCode(HttpStatus.SC_CREATED);
 			return responseMsg;
 		} catch (NotificationManagementException e) {

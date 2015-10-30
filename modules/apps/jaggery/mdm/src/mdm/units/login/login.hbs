@@ -2,7 +2,6 @@
     <div class="container col-md-12 col-lg-3 col-centered wr-content wr-login col-centered">
 
         <p class="page-sub-title">Login</p>
-        <p>Enter your Enterprise Mobility Manager credentials to login.</p>
         <hr />
 
         <!-- validation -->
@@ -13,18 +12,20 @@
 
             <div class="wr-input-control">
                 <label class="wr-input-label">Username *</label>
-                <input name="username" class="form-control" type="text" value="" placeholder="Enter your username here" />
+                <input name="username" id="username" class="form-control" type="text" value="" onkeypress="javascript:submitLoginForm()" placeholder="Enter your username here" />
             </div>
 
             <div class="wr-input-control">
                 <label class="wr-input-label">Password *</label>
-                <input name="password" class="form-control" type="password" value="" placeholder="Enter your password here" />
-            </div>
-
-            <div class="wr-input-control wr-btn-grp">
-                <button class="wr-btn" onclick="document.location.href='home.html';">&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <input name="password" id="password" class="form-control" type="password" value="" onkeypress="javascript:submitLoginForm()" placeholder="Enter your password here" />
             </div>
         </form>
+        <div class="wr-input-control wr-btn-grp">
+            <button class="wr-btn btn-download-agent">&nbsp;&nbsp;&nbsp;&nbsp;Log in&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        </div>
 
     </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/login-box.js"></script>
 {{/zone}}

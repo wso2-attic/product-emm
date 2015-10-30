@@ -39,6 +39,22 @@
         loadOperationsLog();
         loadApplicationsList();
         loadPolicyCompliance();
+
+        $("#refresh-policy").click(function () {
+            $('#policy-spinner').removeClass('hidden');
+            loadPolicyCompliance();
+        });
+
+        $("#refresh-apps").click(function () {
+            $('#apps-spinner').removeClass('hidden');
+            loadApplicationsList();
+        });
+
+        $("#refresh-operations").click(function () {
+            $('#operations-spinner').removeClass('hidden');
+            loadOperationsLog();
+        });
+
     });
 
     function loadOperationsLog() {
@@ -51,6 +67,8 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId;
 
             var successCallback = function (data) {
+                data = JSON.parse(data);
+                $('#operations-spinner').addClass('hidden');
                 var viewModel = {};
                 viewModel.operations = data;
                 if(data.length > 0){
@@ -77,7 +95,15 @@
             var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
 
             var successCallback = function (data) {
+                data = JSON.parse(data);
+                $('#apps-spinner').addClass('hidden');
                 var viewModel = {};
+                if(data != null && data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].name = data[i].name.replace(/[^\w\s]/gi, ' ');
+                        data[i].name = data[i].name.replace(/[0-9]/g, ' ');
+                    }
+                }
                 viewModel.applications = data;
                 viewModel.deviceType = deviceType;
                 if(data.length > 0){
@@ -108,7 +134,7 @@
                 var viewModel = {};
                 viewModel.policy = activePolicy;
                 viewModel.deviceType = deviceType;
-                if(data != null && data.complianceFeatures.length > 0) {
+                if(data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined && data.complianceFeatures.length > 0) {
                     viewModel.compliance = "NON-COMPLIANT";
                     viewModel.complianceFeatures = data.complianceFeatures;
                     var content = template(viewModel);
@@ -117,11 +143,14 @@
                     viewModel.compliance = "COMPLIANT";
                     var content = template(viewModel);
                     $("#policy-list-container").html(content);
+                    $("#operations-log-table").addClass("hidden");
                 }
 
             };
 
             var successCallbackPolicy = function (data) {
+                data = JSON.parse(data);
+                $('#policy-spinner').addClass('hidden');
                 if(data != null && data.active == true){
                     activePolicy = data;
                     invokerUtil.get(serviceURLCompliance,

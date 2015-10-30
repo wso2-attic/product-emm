@@ -228,7 +228,7 @@ public final class PluginConstants {
         public static final String DEVICE_RING = "DEVICE_RING";
         public static final String WIPE_DATA = "WIPE_DATA";
         public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
-        public static final String LOCK_RESET = "LOCKRESET";
+        public static final String LOCK_RESET = "LOCK_RESET";
         public static final String PIN_CODE = "LOCK_PIN";
         public static final String CAMERA = "CAMERA";
         public static final String PASSCODE_POLICY = "PASSCODE_POLICY";
@@ -271,13 +271,8 @@ public final class PluginConstants {
         public static final String LICENSE_KEY = "windowsLicense";
         public static final String LANGUAGE_US = "en_US";
         public static final String CONTENT_TYPE_TEXT = "text";
-        public static final String NOTIFIERFREQUENCY = "notifierFrequency";
-        public static final String KEYSTOREPASSWORD = "keystorePassword";
-        public static final String PRIVATEKEYPASSWORD = "privateKeyPassword";
-        public static final String BEFOREEXPIRE = "beforeExpire";
-        public static final String AFTEREXPIRE = "afterExpire";
-        public static final String MDMCERT = "MDMCert";
-        public static final String COMMONNAME = "commonName";
+        public static final String NOTIFIER_FREQUENCY = "notifierFrequency";
+
     }
 
     /**

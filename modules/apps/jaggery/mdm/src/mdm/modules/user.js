@@ -25,7 +25,7 @@ var userModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
     var mdmProps = require('/config/mdm-props.js').config();
-    var serviceInvokers = require("/modules/backendServiceInvoker.js").backendServiceInvoker;
+    var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 
     /* Initializing user manager */
     var carbon = require('carbon');
@@ -45,7 +45,7 @@ var userModule = function () {
      * @returns {carbon user object}
      */
     privateMethods.getCarbonUser = function () {
-        var statusCode, carbon = require('carbon');
+        var carbon = require('carbon');
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
@@ -70,6 +70,9 @@ var userModule = function () {
                 var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
                         var response = {};
                         response.content = responsePayload["responseContent"];
+                        if(responsePayload["responseContent"] == null && responsePayload != null){
+                            response.content = responsePayload;
+                        }
                         response.status = "success";
                         return response;
                     },
@@ -353,6 +356,7 @@ var userModule = function () {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/users";
             return privateMethods.callBackend(url, constants.HTTP_GET);
+
         } catch (e) {
             throw e;
         } finally {
@@ -450,6 +454,27 @@ var userModule = function () {
             utility.endTenantFlow();
         }
     };
+
+    /**
+     * Get Platforms.
+     */
+    publicMethods.getPlatforms = function () {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require('/modules/utility.js')["utility"];
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
+        }
+        try {
+            utility.startTenantFlow(carbonUser);
+            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/types";
+            return privateMethods.callBackend(url, constants.HTTP_GET);
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
     /*
      @Updated
      */
@@ -466,7 +491,6 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/roles/" + roleName;
-            log.info(url);
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
             return response;
         } catch (e) {
@@ -475,8 +499,6 @@ var userModule = function () {
             utility.endTenantFlow();
         }
     };
-
-    /////////////////////////////////////////////////////////////////////////
 
     /**
      * Authenticate a user when he or she attempts to login to MDM.
@@ -563,7 +585,7 @@ var userModule = function () {
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
             permissions["VIEW_DASHBOARD"] = true;
         }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/tenant-configs/view")) {
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/platform-configs/view")) {
             permissions["TENANT_CONFIGURATION"] = true;
         }
 

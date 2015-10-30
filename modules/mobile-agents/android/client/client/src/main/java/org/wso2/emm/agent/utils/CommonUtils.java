@@ -93,10 +93,7 @@ public class CommonUtils {
 	public static void clearAppData(Context context) throws AndroidAgentException {
 		revokePolicy(context);
 		Resources resources = context.getResources();
-		SharedPreferences mainPref = context.getSharedPreferences(context.getResources().
-				                                                          getString(R.string.shared_pref_package),
-		                                                          Context.MODE_PRIVATE);
-
+		SharedPreferences mainPref = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
 		Editor editor = mainPref.edit();
 		editor.putString(context.getResources().getString(R.string.shared_pref_policy),
 				resources.getString(R.string.shared_pref_default_string));
@@ -109,14 +106,13 @@ public class CommonUtils {
 		editor.putString(context.getResources().getString(R.string.shared_pref_ip),
 				resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
-                resources.getString(R.string.shared_pref_default_string));
+		                 resources.getString(R.string.shared_pref_default_string));
 		editor.putString(context.getResources().getString(R.string.shared_pref_eula),
-				resources.getString(R.string.shared_pref_default_string));
+		                 resources.getString(R.string.shared_pref_default_string));
 		editor.putString(resources.getString(R.string.shared_pref_device_active),
 				resources.getString(R.string.shared_pref_reg_fail));
-		editor.putString(Constants.CLIENT_ID, null);
-		editor.putString(Constants.CLIENT_SECRET, null);
 		editor.commit();
+		clearClientCredentials(context);
 
 	}
 
@@ -221,5 +217,18 @@ public class CommonUtils {
 		} catch (IOException e) {
 			throw new AndroidAgentException("Error occurred while parsing stream", e);
 		}
+	}
+
+	/**
+	 * Clear client credentials.
+	 * @param context - Application context.
+	 */
+	public static void clearClientCredentials(Context context) {
+		SharedPreferences mainPref = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
+		Editor editor = mainPref.edit();
+		editor.putString(Constants.CLIENT_ID, null);
+		editor.putString(Constants.CLIENT_SECRET, null);
+		editor.commit();
+
 	}
 }

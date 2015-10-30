@@ -157,7 +157,7 @@ public class OperationUtils {
                         NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
-                        lockResetNotification.setStatus(Constants.ERROR);
+                        lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
 
@@ -408,6 +408,7 @@ public class OperationUtils {
                         notification.setDescription(pinValue);
                         notification.setOperationId(result.getCommandReference());
                         notification.setDeviceIdentifier(deviceIdentifier);
+                        notification.setStatus(String.valueOf(Notification.Status.NEW));
                         try {
                             nmService.addNotification(notification);
                         } catch (NotificationManagementException e) {

@@ -12,6 +12,9 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
                 if(data.length > 0){
                     var content = template(data.viewModel);
                     $(objectGridContainer).html(content);
+                    $('#role-grid').datatables_extended();
+                    $("#dt-select-all").addClass("hidden");
+                    $(".icon .text").res_text(0.2);
                 }
                 //$(objectGridId).datatables_extended();
             }, function(message){
@@ -23,6 +26,7 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
 $(function () {
     var serviceURL = "/mdm-admin/roles";
     var callback = function(data){
+        data = JSON.parse(data);
         data = {
             "viewModel": {
                 "roles": data.responseContent
@@ -36,8 +40,7 @@ $(function () {
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
         beforeStop : function () {
-            var sortedIDs = $(this).sortable('toArray');
-            console.log(sortedIDs);
+            var sortedIDs = $(this).sortable('toArray');;
         }
     });
     $(sortableElem).disableSelection();
@@ -48,8 +51,7 @@ var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
 var dataTableSelection = '.DTTT_selected';
-$('#role-grid').datatables_extended();
-$(".icon .text").res_text(0.2);
+
 
 /*
  * set popup maximum height function.
@@ -90,16 +92,12 @@ $("#role-grid").on("click", ".remove-role-link", function () {
     $("a#remove-role-yes-link").click(function () {
         invokerUtil.delete(
             removeRoleAPI,
-            null,
-
-            function (data, status, jqXHR) {
-                if (jqXHR.status == 200) {
-                    $("#role-" + role).remove();
-                    $(modalPopupContent).html($('#remove-role-success-content').html());
-                    $("a#remove-role-success-link").click(function () {
-                        hidePopup();
-                    });
-                }
+            function () {
+                $("#role-" + role).remove();
+                $(modalPopupContent).html($('#remove-role-success-content').html());
+                $("a#remove-role-success-link").click(function () {
+                    hidePopup();
+                });
             },
             function () {
                 $(modalPopupContent).html($('#remove-role-error-content').html());

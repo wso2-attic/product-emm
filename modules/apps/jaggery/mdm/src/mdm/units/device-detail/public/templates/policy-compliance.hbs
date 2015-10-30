@@ -45,7 +45,7 @@
         </div>
         <div class="col-lg-3">
             <span class="list-group-item-actions">
-                <a href="#" class="cu-btn-inner policy-view-link" data-id="{{id}}">
+                <a href="/mdm/policies/view?id={{policy.id}}" class="cu-btn-inner policy-view-link" data-id="{{id}}">
                     <span class="fw-stack">
                         <i class="fw fw-ring fw-stack-2x"></i>
                         <i class="fw fw-view fw-stack-1x"></i>
@@ -61,7 +61,6 @@
     <thead>
         <tr class="sort-row">
             <th>Feature</th>
-            <th>Message</th>
             <th>Compliance</th>
         </tr>
     </thead>
@@ -69,7 +68,6 @@
     {{#each complianceFeatures}}
         <tr data-type="selectable">
             <td data-display="{{featureCode}}" data-grid-label="Feature Code">{{featureCode}}</td>
-            <td data-display="{{message}}" data-grid-label="Message">{{message}}</td>
             <td data-display="{{compliance}}" data-grid-label="Status">
                 {{#equal compliance true}}<span><i class="fw fw-ok icon-success"></i> Compliant</span>{{/equal}}
                 {{#equal compliance false}}<span><i class="fw fw-warning icon-danger"></i> Not Compliant</span>{{/equal}}

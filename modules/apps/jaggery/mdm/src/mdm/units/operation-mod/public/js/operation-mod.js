@@ -793,12 +793,13 @@ var operationModule = function () {
     publicMethods.getWindowsServiceEndpoint = function (operationCode) {
         var featureMap = {
             "CAMERA": "camera",
-            "DEVICE_LOCK": "lock",
+            "DEVICE_LOCK": "devicelock",
             "DEVICE_LOCATION": "location",
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
-            "DEVICE_RING": "ring-device",
+            "DEVICE_RING": "devicering",
             "DEVICE_MUTE": "mute",
+            "LOCK_RESET": "lockreset",
             "NOTIFICATION": "notification",
             "ENCRYPT_STORAGE": "encrypt",
             "CHANGE_LOCK_CODE": "change-lock-code",
@@ -808,9 +809,10 @@ var operationModule = function () {
             "BLACKLIST_APPLICATIONS": "blacklist-applications",
             "PASSCODE_POLICY": "password-policy",
             "ENTERPRISE_WIPE": "enterprise-wipe",
-            "WIPE_DATA": "wipe-data"
+            "WIPE_DATA": "devicewipe",
+            "DISENROLL": "devicedisenroll"
         };
-        return "/mdm-android-agent/operation/" + featureMap[operationCode];
+        return "/mdm-windows-agent/services/windows/operation/" + featureMap[operationCode];
     };
     /**
      * Get the icon for the featureCode
@@ -841,12 +843,12 @@ var operationModule = function () {
         var featureMap = {
             "DEVICE_LOCK": "fw-lock",
             "DEVICE_LOCATION": "fw-map-location",
-            "CLEAR_PASSWORD": "fw-key",
-            "ENTERPRISE_WIPE": "fw-clear",
+            "DISENROLL": "fw-delete",
+            "WIPE_DATA": "fw-clear",
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
-            "CHANGE_LOCK_CODE": "fw-security"
+            "LOCK_RESET": "fw-key"
         };
         return featureMap[operationCode];
     };

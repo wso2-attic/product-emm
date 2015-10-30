@@ -38,9 +38,19 @@ public class Credentials {
     private String password;
     @XmlElement(required = true, name = "ownership")
     private String ownership;
+    @XmlElement(required = true, name = "token")
+    private String usertoken;
 
     public Credentials() {
 
+    }
+
+    public String getUsertoken() {
+        return usertoken;
+    }
+
+    public void setUsertoken(String usertoken) {
+        this.usertoken = usertoken;
     }
 
     public String getOwnership() {

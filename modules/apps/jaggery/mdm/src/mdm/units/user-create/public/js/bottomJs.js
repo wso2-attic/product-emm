@@ -78,6 +78,7 @@ $(document).ready(function () {
                 addUserAPI,
                 addUserFormData,
                 function (data) {
+                    data = JSON.parse(data);
                     if (data["statusCode"] == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");

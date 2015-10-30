@@ -5,7 +5,7 @@
             <div id="config-save-form" class="container col-centered wr-content">
                 <br>
                 <h1 class="page-sub-title">
-                    Tenant Configurations
+                    Platform Configurations
                 </h1>
                 <br>
                 General and Platform Specific Server Settings for the Tenant
@@ -455,82 +455,6 @@
 
                                     <div id="wifi-heading" class="panel-heading" role="tab">
                                         <h2 class="sub-title panel-title">
-                                            Windows MDM Configurations
-                                            <hr>
-                                        </h2>
-                                    </div>
-
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
-                                        <div id="windows-mdm-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                            <i class="icon fw fw-error"></i><span></span>
-                                        </div>
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="windows-config-mdm-certificate">
-                                                MDM Certificate
-                                                <span class="helper" title="Upload MDM Certificate">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label><br>
-                                            <label class="wr-input-label" id="windows-mdm-cert-file-name">
-                                            </label>
-                                            <input id="windows-config-mdm-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="windows-config-mdm-cn">
-                                                Common Name
-                                                <span class="helper" title="MDM Certificate Common Name">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="windows-config-mdm-cn" type="text" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="windows-config-mdm-keystore-password">
-                                                Keystore Password
-                                                <span class="helper" title="MDM Certificate Keystore Password">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="windows-config-mdm-keystore-password" type="password" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="windows-config-mdm-pk-password">
-                                                Private Key Password
-                                                <span class="helper" title="MDM Certificate Private Key Password">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="windows-config-mdm-pk-password" type="password" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="windows-config-before-expire">
-                                                Before days to expire
-                                                <span class="helper" title="Time before which the certificate is not valid (in days)">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="windows-config-before-expire" type="text" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="windows-config-after-expire">
-                                                After days to expire
-                                                <span class="helper" title="Time after which the certificate is not valid (in days)">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="windows-config-after-expire" type="text" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-
-                                    </div>
-
-                                    <div id="wifi-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
                                             End User License Agreement (EULA)
                                             <hr>
                                         </h2>
@@ -558,7 +482,7 @@
                     <br>Please click <b>"Go back to configurations"</b>, if you wish to save another configuration or click
                     <b>"Exit"</b> to complete the process and go back to the dashboard.
                     <hr />
-                    <button class="wr-btn" onclick="window.location.href='/mdm/tenant-configuration'">Go back to configurations</button>
+                    <button class="wr-btn" onclick="window.location.href='/mdm/platform-configuration'">Go back to configurations</button>
                     <button class="wr-btn" onclick="window.location.href='/mdm'">&nbsp;&nbsp;&nbsp;&nbsp;Exit&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </div>
             </div>
@@ -567,5 +491,5 @@
     </div>
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script src="{{self.publicURL}}/js/tenant-configuration.js"></script>
+    <script src="{{self.publicURL}}/js/platform-configuration.js"></script>
 {{/zone}}

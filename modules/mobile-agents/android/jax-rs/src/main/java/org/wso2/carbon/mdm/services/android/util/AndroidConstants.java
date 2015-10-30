@@ -103,4 +103,12 @@ public final class AndroidConstants {
 		public static final String CONTENT_TYPE_TEXT = "text";
 	}
 
+    public final class ApplicationProperties {
+        private ApplicationProperties(){
+            throw new AssertionError();
+        }
+        public static final String NAME = "name";
+        public static final String IDENTIFIER = "package";
+        public static final String ICON = "icon";
+    }
 }

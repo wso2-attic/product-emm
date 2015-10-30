@@ -41,6 +41,7 @@ public class Operation implements Serializable {
 	private String createdTimeStamp;
 	private boolean enabled;
 	private Object payLoad;
+	private String operationResponse;
 
 	public Operation() {
 	}
@@ -121,5 +122,13 @@ public class Operation implements Serializable {
 			}
 			this.payLoad = convertedOperations.toString();
 		}
+	}
+
+	public String getOperationResponse() {
+		return operationResponse;
+	}
+
+	public void setOperationResponse(String operationResponse) {
+		this.operationResponse = operationResponse;
 	}
 }
