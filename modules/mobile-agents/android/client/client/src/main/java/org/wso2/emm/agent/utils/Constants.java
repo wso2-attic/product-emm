@@ -84,6 +84,8 @@ public class Constants {
 	public static final String GRANT_TYPE = "password refresh_token";
 	public static final String TOKEN_SCOPE = "production";
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
+	public static final String PACKAGE_NAME = "com.mdm";
+
 
 	/**
 	 * Request codes.
