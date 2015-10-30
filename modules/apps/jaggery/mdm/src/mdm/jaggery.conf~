@@ -82,10 +82,6 @@
       {
         "url": "/enrollment/ios/check",
         "path": "/modules/enrollments/ios/agent-check.jag"
-      },
-      {
-        "url": "/api/invoker/*",
-        "path": "/api/invoker-api.jag"
       }
   ],
   "securityConstraints": [
@@ -99,21 +95,6 @@
               },
               "userDataConstraint": {
                   "transportGuarantee": "CONFIDENTIAL"
-              }
-          }
-      },
-      {
-          "securityConstraint": {
-              "webResourceCollection": {
-                  "name": "MDM-http",
-                  "urlPatterns": [
-                      "/public/*",
-                      "/enrollments/windows/*",
-                      "/enrollment/windows/*"
-                  ]
-              },
-              "userDataConstraint": {
-                  "transportGuarantee": "NONE"
               }
           }
       }

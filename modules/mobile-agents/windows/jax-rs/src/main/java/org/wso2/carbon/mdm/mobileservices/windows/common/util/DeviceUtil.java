@@ -52,9 +52,10 @@ public class DeviceUtil {
         } else {
             cacheEntry = (CacheEntry) objCacheEntry;
         }
-        cacheEntry.setDeviceID(deviceID);
+        if (deviceID != null) {
+            cacheEntry.setDeviceID(deviceID);
+        }
         getTokenCache().put(token, cacheEntry);
-
     }
 
     public static void removeToken(String token) {

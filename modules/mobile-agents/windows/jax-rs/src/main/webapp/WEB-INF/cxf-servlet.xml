@@ -141,17 +141,30 @@
 
     <!--Endpoint for Policy -->
     <jaxrs:server id="policyService" address="/policy">
-    <jaxrs:serviceBeans>
-        <ref bean="policyServiceBean"/>
-    </jaxrs:serviceBeans>
-    <jaxrs:providers>
-        <ref bean="jsonProvider"/>
-        <ref bean="errorHandler"/>
-    </jaxrs:providers>
+        <jaxrs:serviceBeans>
+            <ref bean="policyServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="bstprovider_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl.BSTProviderImpl"/>
-    <bean id="adminoperations_bean" class="org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl.OperationsImpl"/>
+    <!--Endpoint for Devicemanager -->
+    <jaxrs:server id="deviceManagementService" address="/device">
+        <jaxrs:serviceBeans>
+            <ref bean="deviceMgtServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <bean id="bstprovider_bean"
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl.BSTProviderImpl"/>
+    <bean id="adminoperations_bean"
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.adminoperations.impl.OperationsImpl"/>
     <bean id="DiscoveryService_rest_bean"
           class="org.wso2.carbon.mdm.mobileservices.windows.services.discovery.impl.DiscoveryServiceImpl"/>
     <bean id="wss4jInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
@@ -188,5 +201,7 @@
     <bean id="policyServiceBean"
           class="org.wso2.carbon.mdm.mobileservices.windows.services.policymgtservice.PolicyMgtService"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.ErrorHandler"/>
+    <bean id="deviceMgtServiceBean"
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.devicemgtservice.DeviceManagementService"/>
 </beans>
 
