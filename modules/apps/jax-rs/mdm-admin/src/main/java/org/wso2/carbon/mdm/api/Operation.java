@@ -97,7 +97,7 @@ public class Operation {
         ResponsePayload responseMsg = new ResponsePayload();
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            int  operationId = dmService.addOperation(operationContext.getOperation(),
+            int operationId = dmService.addOperation(operationContext.getOperation(),
                     operationContext.getDevices());
             if (operationId>0) {
                 Response.status(HttpStatus.SC_CREATED);

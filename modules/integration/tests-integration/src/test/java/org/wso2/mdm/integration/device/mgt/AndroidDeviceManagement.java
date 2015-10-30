@@ -37,45 +37,47 @@ public class AndroidDeviceManagement extends TestBase{
     private RestClient client;
     private JsonObject device;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.DeviceManagement.DEVICE_MANAGEMENT_GROUP })
+    @BeforeClass(alwaysRun = true, groups = { Constants.AndroidDeviceManagement.DEVICE_MANAGEMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
         this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
-    @Test(description = "Test get all android devices.", groups = Constants.DeviceManagement.DEVICE_MANAGEMENT_GROUP)
+    @Test(description = "Test get all android devices.", groups = Constants.AndroidDeviceManagement.DEVICE_MANAGEMENT_GROUP)
     public void testGetAllDevices() throws Exception {
-        HttpResponse response = client.get(Constants.DeviceManagement.ANDROID_DEVICE_MGT_ENDPOINT);
+        HttpResponse response = client.get(Constants.AndroidDeviceManagement.DEVICE_MGT_ENDPOINT);
         JsonArray jsonArray = new JsonParser().parse(response.getData()).getAsJsonArray();
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         Assert.assertEquals(jsonArray.size(), 1);
     }
 
-    @Test(description = "Test get android device.", groups = Constants.DeviceManagement.DEVICE_MANAGEMENT_GROUP)
+    @Test(description = "Test get android device.", groups = Constants.AndroidDeviceManagement.DEVICE_MANAGEMENT_GROUP)
     public void testGetDevice() throws Exception {
-        HttpResponse response = client.get(Constants.DeviceManagement.ANDROID_DEVICE_MGT_ENDPOINT + Constants.DEVICE_ID);
+        HttpResponse response = client.get(Constants.AndroidDeviceManagement.DEVICE_MGT_ENDPOINT + Constants.DEVICE_ID);
         device = new JsonParser().parse(response.getData()).getAsJsonObject();
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        Assert.assertEquals(device.get(Constants.DeviceManagement.ANDROID_KEY_DEVICE_ID).getAsString(),Constants.DEVICE_ID);
+        Assert.assertEquals(device.get(Constants.AndroidDeviceManagement.KEY_DEVICE_ID).getAsString(),Constants.DEVICE_ID);
     }
 
-    @Test(description = "Test update android device.", groups = Constants.DeviceManagement.DEVICE_MANAGEMENT_GROUP,
+    @Test(description = "Test update android device.", groups = Constants.AndroidDeviceManagement.DEVICE_MANAGEMENT_GROUP,
             dependsOnMethods = {"testGetDevice"} )
     public void testUpdateDevice() throws Exception {
-        device.addProperty(Constants.DeviceManagement.ANDROID_KEY_DEVICE_NAME, "UpdatedName");
-        HttpResponse response = client.put(Constants.DeviceManagement.ANDROID_DEVICE_MGT_ENDPOINT + Constants.DEVICE_ID,
+        device.addProperty(Constants.AndroidDeviceManagement.KEY_DEVICE_NAME, "UpdatedName");
+        HttpResponse response = client.put(Constants.AndroidDeviceManagement.DEVICE_MGT_ENDPOINT + Constants.DEVICE_ID,
                                            device.toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(Constants.DeviceManagement.ANDROID_REQUEST_MODIFY_DEVICE_EXPECTED,
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.AndroidDeviceManagement.RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_PUT).toString(),
                                       response.getData().toString(), true);
     }
 
 
-    @Test(description = "Test get android license.", groups = Constants.DeviceManagement.DEVICE_MANAGEMENT_GROUP)
+    @Test(description = "Test get android license.", groups = Constants.AndroidDeviceManagement.DEVICE_MANAGEMENT_GROUP)
     public void testGetLicense() throws Exception {
-        HttpResponse response = client.get(Constants.DeviceManagement.ANDROID_LICENSE_ENDPOINT);
-        CharSequence sequence = Constants.DeviceManagement.ANDROID_DEVICE_LICENSE_SECTION;
+        HttpResponse response = client.get(Constants.AndroidDeviceManagement.LICENSE_ENDPOINT);
+        CharSequence sequence = Constants.AndroidDeviceManagement.LICENSE_SECTION;
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         Assert.assertTrue(response.getData().contains(sequence));
     }
@@ -84,10 +86,10 @@ public class AndroidDeviceManagement extends TestBase{
     @Test(description = "Test update android device applist.", groups = Constants.DeviceManagement.DEVICE_MANAGEMENT_GROUP,
             dependsOnMethods = {"testGetDevice"} )
     public void testUpdateAppList() throws Exception {
-        HttpResponse response = client.post(Constants.DeviceManagement.ANDROID_APP_LIST_ENDPOINT,
-                                           Constants.DeviceManagement.ANDROID_APPLIST_PAYLOAD);
+        HttpResponse response = client.post(Constants.DeviceManagement.APP_LIST_ENDPOINT,
+                                           Constants.DeviceManagement.APPLIST_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(Constants.DeviceManagement.ANDROID_REQUEST_MODIFY_DEVICE_EXPECTED,
+        AssertUtil.jsonPayloadCompare(Constants.DeviceManagement.REQUEST_MODIFY_DEVICE_EXPECTED,
                                       response.getData().toString(), true);
     }*/
 

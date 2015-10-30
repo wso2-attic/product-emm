@@ -109,7 +109,7 @@ $(document).ready(function () {
 
     /**
      * Following requests would execute
-     * on page load event of tenant configuration page in WSO2 EMM Console.
+     * on page load event of platform configuration page in WSO2 EMM Console.
      * Upon receiving the response, the parameters will be set to the fields,
      * in case those configurations are already set.
      */
@@ -257,7 +257,7 @@ $(document).ready(function () {
     /**
      * Following click function would execute
      * when a user clicks on "Save" button
-     * on Android tenant configuration page in WSO2 EMM Console.
+     * on Android platform configuration page in WSO2 EMM Console.
      */
     $("button#save-android-btn").click(function() {
         var notifierType = $("#android-config-notifier").find("option:selected").attr("value");
@@ -355,7 +355,7 @@ $(document).ready(function () {
     /**
      * Following click function would execute
      * when a user clicks on "Save" button
-     * on General tenant configuration page in WSO2 EMM Console.
+     * on General platform configuration page in WSO2 EMM Console.
      */
     $("button#save-general-btn").click(function() {
         var notifierFrequency = $("input#monitoring-config-frequency").val();

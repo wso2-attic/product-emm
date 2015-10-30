@@ -18,7 +18,7 @@
 
 var responseCodes = {
     "CREATED": "Created",
-    "SUCCESS": "201",
+    "ACCEPTED": "202",
     "INTERNAL_SERVER_ERROR": "Internal Server Error"
 };
 
@@ -40,12 +40,12 @@ $(document).ready(function () {
         var getNotificationsAPI = "/mdm-admin/notifications/"+notificationId+"/CHECKED";
         var errorMsgWrapper = "#error-msg";
         var errorMsg = "#error-msg span";
-        invokerUtil.post(
+        invokerUtil.put(
             getNotificationsAPI,
             null,
             function (data) {
                 data = JSON.parse(data);
-                if (data.statusCode == responseCodes["SUCCESS"]) {
+                if (data.statusCode == responseCodes["ACCEPTED"]) {
                     $("#config-save-form").addClass("hidden");
                     location.href = redirectUrl;
                 } else if (data == 500) {
@@ -72,13 +72,6 @@ function loadNotifications(){
     var currentUser = deviceListing.data("currentUser");
     $.template("notification-listing", deviceListingSrc, function (template) {
         var serviceURL = "/mdm-admin/notifications";
-        /*if ($.hasPermission("LIST_DEVICES")) {
-            serviceURL = "/mdm-admin/notifications";
-        } else {
-            $("#ast-container").html("Permission denied");
-            return;
-        }*/
-
         var successCallback = function (data) {
             var viewModel = {};
             data = JSON.parse(data);

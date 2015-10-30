@@ -26,7 +26,7 @@
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
     </listeners>
-    <test name="android-enrollment" preserve-order="false" parallel="true">
+    <test name="android-enrollment" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.device.enrollment.AndroidEnrollment"/>
         </classes>
@@ -46,9 +46,14 @@
             <class name="org.wso2.mdm.integration.device.mgt.AndroidDeviceManagement"/>
         </classes>
     </test>
-    <test name="android-configuration" preserve-order="false" parallel="true">
+    <test name="android-configuration" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.device.configuration.AndroidConfigurationManagement"/>
+        </classes>
+    </test>
+    <test name="android-policy" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.policy.AndroidPolicy"/>
         </classes>
     </test>
 </suite>

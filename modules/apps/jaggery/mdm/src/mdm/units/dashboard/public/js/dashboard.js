@@ -15,3 +15,9 @@ $(document).ready(function(){
     updateStats("/mdm-admin/policies/count", "#policy-count");
     updateStats("/mdm-admin/users/count/" + "carbon.super", "#user-count");
 });
+
+function toggleEnrollment(){
+    $(".modalpopup-content").html($("#qr-code-modal").html());
+    generateQRCode(".modalpopup-content .qr-code");
+    showPopup();
+}
