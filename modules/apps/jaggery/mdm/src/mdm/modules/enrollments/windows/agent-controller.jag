@@ -21,7 +21,8 @@ var log = new Log("/modules/enrollments/windows/agent-controller.jag");
 
 var mdmProps = require('/config/mdm-props.js').config();
 var UAParser = require("/modules/ua-parser.min.js")["UAParser"];
-var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
+var apiWrapperUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
+var constants = require("/modules/constants.js");
 
 var parser = new UAParser();
 var userAgent = request.getHeader("User-Agent");
@@ -42,25 +43,32 @@ if (platform != "Windows Phone") {
     if (!username || !email || !password || !ownership) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
-        var payload = {"credentials": {"username": username, "email": email,
-            "password": password, "ownership": ownership}};
-        var authUrl = mdmProps["windowsConfigRoot"];
-        serviceInvokers.XMLHttp.post(authUrl, payload, function (responseText) {
-            session.put("authenticatedUser", username);
-            session.put("windowsBinaryToken", responseText);
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
-        }, function (responseText) {
-            if (responseText == 403) {
+        apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
+        var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
+        if (tokenPair != null && tokenPair != undefined && tokenPair.accessToken != null) {
+            var payload = {"credentials": {"username": username, "email": email,
+                "password": password, "ownership": ownership, "token":tokenPair.accessToken}};
+            var authUrl = mdmProps["windowsConfigRoot"];
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open("POST", authUrl);
+            xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+            xmlHttpRequest.send(stringify(payload));
+
+            if (xmlHttpRequest.status == 200 && xmlHttpRequest.readyState == 4) {
+                session.put("authenticatedUser", username);
+                session.put("windowsBinaryToken", parse(xmlHttpRequest["responseText"]).UserToken);
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/license-agent");
+            } else if (xmlHttpRequest.status == 403) {
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed");
-            } else if (responseTexts == 409) {
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=auth-failed&" +
-                                      "message=Provided Workplace email does not match with username. Please check.");
+            } else if (xmlHttpRequest.status == 409) {
+                response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?" +
+                        "error=auth-failed&message=Provided Workplace email does not match with username. Please check.");
+
             } else {
                 // one visible possibility would be server sending 500
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/login-agent?error=unexpected");
             }
-        });
-
+        }
     }
 }
 %>

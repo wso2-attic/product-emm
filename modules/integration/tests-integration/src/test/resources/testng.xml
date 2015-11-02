@@ -36,11 +36,11 @@
             <class name="org.wso2.mdm.integration.device.operation.AndroidOperation"/>
         </classes>
     </test>
-    <test name="windows-enrollment" preserve-order="true" parallel="false">
+    <!--test name="windows-enrollment" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.device.enrollment.WindowsEnrollment"/>
         </classes>
-    </test>
+    </test-->
     <test name="android-device-mgt" preserve-order="false" parallel="true">
         <classes>
             <class name="org.wso2.mdm.integration.device.mgt.AndroidDeviceManagement"/>

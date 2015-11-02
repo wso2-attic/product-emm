@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Sequence data that use to execute tag list
  */
-public class Sequence {
+public class SequenceTag {
 
     int commandId;
     ExecuteTag exec;

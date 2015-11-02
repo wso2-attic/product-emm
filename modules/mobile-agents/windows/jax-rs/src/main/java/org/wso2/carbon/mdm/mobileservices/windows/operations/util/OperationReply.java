@@ -56,7 +56,7 @@ public class OperationReply {
     private static final String ALERT_COMMAND_TEXT = "Alert";
     private static final String REPLACE_COMMAND_TEXT = "Replace";
     private static final String GET_COMMAND_TEXT = "Get";
-    private static final String EXEC_COMMAND_TEXT = "ExecuteTag";
+    private static final String EXEC_COMMAND_TEXT = "Exec";
     private List<? extends Operation> operations;
     Gson gson = new Gson();
 
@@ -186,15 +186,16 @@ public class OperationReply {
             for (ExecuteTag exec : Executes) {
                 int execCommandId = ++headerCommandId;
                 Status execStatus = new Status(execCommandId, sourceHeader.getMsgID(),
-                        exec.getCommandId(), GET_COMMAND_TEXT, null,
-                        String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
+                        exec.getCommandId(), EXEC_COMMAND_TEXT, null, String.valueOf(
+                        Constants.SyncMLResponseCodes.ACCEPTED));
                 statuses.add(execStatus);
             }
         }
         if (sourceSyncmlBody.getGet() != null) {
             int getCommandId = ++headerCommandId;
-            Status execStatus = new Status(getCommandId, sourceHeader.getMsgID(), sourceSyncmlBody.getGet().getCommandId(),
-                    EXEC_COMMAND_TEXT, null, String.valueOf(Constants.SyncMLResponseCodes.ACCEPTED));
+            Status execStatus = new Status(getCommandId, sourceHeader.getMsgID(), sourceSyncmlBody
+                    .getGet().getCommandId(), GET_COMMAND_TEXT, null, String.valueOf(
+                    Constants.SyncMLResponseCodes.ACCEPTED));
             statuses.add(execStatus);
         }
         syncmlBodyReply.setStatus(statuses);
@@ -204,13 +205,13 @@ public class OperationReply {
     private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException, PolicyManagementException,
             FeatureManagementException, JSONException {
         Get getElement = new Get();
-        List<Item> itemsGet = new ArrayList<>();
-        List<ExecuteTag> execList = new ArrayList<>();
+        List<Item> getElements = new ArrayList<>();
+        List<ExecuteTag> executeElements = new ArrayList<>();
         AtomicTag atomicTagElement = new AtomicTag();
-        List<AddTag> addsAtomic = new ArrayList<>();
+        List<AddTag> addElements = new ArrayList<>();
         Replace replaceElement = new Replace();
-        List<Item> replaceItem = new ArrayList<>();
-        Sequence monitorSequence = new Sequence();
+        List<Item> replaceItems = new ArrayList<>();
+        SequenceTag monitorSequence = new SequenceTag();
 
         if (operations != null) {
             for (Operation operation : operations) {
@@ -220,16 +221,16 @@ public class OperationReply {
                         if (this.syncmlDocument.getBody().getAlert() != null) {
                             if (this.syncmlDocument.getBody().getAlert().getData().equals
                                     (Constants.INITIAL_ALERT_DATA)) {
-                                Sequence policySequence = new Sequence();
+                                SequenceTag policySequence = new SequenceTag();
                                 policySequence = buildSequence(operation, policySequence);
                                 syncmlBody.setSequence(policySequence);
                             }
                         }
                         break;
                     case CONFIG:
-                        List<AddTag> addConfig = appendAddConfiguration(operation);
-                        for (AddTag addConfiguration : addConfig) {
-                            addsAtomic.add(addConfiguration);
+                        List<AddTag> addConfigurations = appendAddConfiguration(operation);
+                        for (AddTag addConfiguration : addConfigurations) {
+                            addElements.add(addConfiguration);
                         }
                         break;
                     case MESSAGE:
@@ -237,33 +238,33 @@ public class OperationReply {
                         break;
                     case INFO:
                         Item itemGet = appendGetInfo(operation);
-                        itemsGet.add(itemGet);
+                        getElements.add(itemGet);
                         break;
                     case COMMAND:
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.DEVICE_LOCK)) {
                             ExecuteTag execElement = executeCommand(operation);
-                            execList.add(execElement);
+                            executeElements.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.DEVICE_RING)) {
                             ExecuteTag execElement = executeCommand(operation);
-                            execList.add(execElement);
+                            executeElements.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.DISENROLL)) {
                             ExecuteTag execElement = executeCommand(operation);
-                            execList.add(execElement);
+                            executeElements.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.WIPE_DATA)) {
                             ExecuteTag execElement = executeCommand(operation);
-                            execList.add(execElement);
+                            executeElements.add(execElement);
                         }
                         if (operation.getCode().equals(PluginConstants
                                 .OperationCodes.LOCK_RESET)) {
-                            Sequence sequenceElement = new Sequence();
-                            Sequence sequence = buildSequence(operation, sequenceElement);
+                            SequenceTag sequenceElement = new SequenceTag();
+                            SequenceTag sequence = buildSequence(operation, sequenceElement);
                             syncmlBody.setSequence(sequence);
                         }
                         if (operation.getCode().equals(PluginConstants
@@ -300,20 +301,20 @@ public class OperationReply {
                 }
             }
         }
-        if (!replaceItem.isEmpty()) {
+        if (!replaceItems.isEmpty()) {
             replaceElement.setCommandId(300);
-            replaceElement.setItems(replaceItem);
+            replaceElement.setItems(replaceItems);
         }
-        if (!itemsGet.isEmpty()) {
+        if (!getElements.isEmpty()) {
             getElement.setCommandId(75);
-            getElement.setItems(itemsGet);
+            getElement.setItems(getElements);
         }
-        if (!addsAtomic.isEmpty()) {
+        if (!addElements.isEmpty()) {
             atomicTagElement.setCommandId(400);
-            atomicTagElement.setAdds(addsAtomic);
+            atomicTagElement.setAdds(addElements);
         }
         syncmlBody.setGet(getElement);
-        syncmlBody.setExec(execList);
+        syncmlBody.setExec(executeElements);
         syncmlBody.setAtomicTag(atomicTagElement);
         syncmlBody.setReplace(replaceElement);
     }
@@ -522,7 +523,7 @@ public class OperationReply {
         return execElement;
     }
 
-    public Sequence buildSequence(Operation operation, Sequence sequenceElement) throws WindowsOperationException,
+    public SequenceTag buildSequence(Operation operation, SequenceTag sequenceElement) throws WindowsOperationException,
             JSONException {
 
         sequenceElement.setCommandId(operation.getId());
