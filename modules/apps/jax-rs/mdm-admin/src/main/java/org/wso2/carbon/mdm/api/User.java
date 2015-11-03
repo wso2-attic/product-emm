@@ -475,7 +475,7 @@ public class User {
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(username);
 	    //TODO: move this to a config
-        emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
+       // emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
         emailMessageProperties.setPassword(generateInitialUserPassword());
         String[] mailAddress = new String[1];
@@ -502,7 +502,7 @@ public class User {
 	        int i;
 	        for (i = 0; i < usernames.size(); i++) {
 		        EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-		        emailMessageProperties.setEnrolmentUrl("https://download-agent");
+//		        emailMessageProperties.setEnrolmentUrl("https://download-agent");
 		        emailMessageProperties
 				        .setFirstName(getClaimValue(usernames.get(i), Constants.USER_CLAIM_FIRST_NAME));
 		        emailMessageProperties.setUserName(usernames.get(i));
