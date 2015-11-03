@@ -23,7 +23,7 @@
                 <td class="fade-edge remove-padding-top" data-search="{{enrolmentInfo.ownership}}" data-display="{{enrolmentInfo.ownership}}" data-grid-label="Ownership">{{enrolmentInfo.ownership}}</td>
                 <td class="text-right content-fill text-left-on-grid-view no-wrap">
                     {{#unequal enrolmentInfo.status "REMOVED"}}
-                        <a href="device/{{type}}/{{deviceIdentifier}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view">
+                        <a href="device?type={{type}}&id={{deviceIdentifier}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view">
                                 <span class="fw-stack">
                                     <i class="fw fw-ring fw-stack-2x"></i>
                                     <i class="fw fw-view fw-stack-1x"></i>
