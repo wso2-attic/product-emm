@@ -48,7 +48,7 @@ var ERRORS = {
     };
 
 var USER_STORES_NOISY_CHAR = "\"";
-var USER_STORES_SPLITTING_CHAR = "\n";
+var USER_STORES_SPLITTING_CHAR = "\\n";
 var USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT =
     "/services/UserStoreConfigAdminService.UserStoreConfigAdminServiceHttpsSoap12Endpoint/";
 

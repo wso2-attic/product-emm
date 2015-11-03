@@ -31,6 +31,7 @@ $(document).ready(function () {
      * on Add User page in WSO2 MDM Console.
      */
     $("button#add-user-btn").click(function() {
+        var domain = $("#userStore").val();
         var username = $("input#username").val();
         var firstname = $("input#firstname").val();
         var lastname = $("input#lastname").val();
@@ -66,7 +67,7 @@ $(document).ready(function () {
         } else {
             var addUserFormData = {};
 
-            addUserFormData.username = username;
+            addUserFormData.username = domain + "/" + username;
             addUserFormData.firstname = firstname;
             addUserFormData.lastname = lastname;
             addUserFormData.emailAddress = emailAddress;
