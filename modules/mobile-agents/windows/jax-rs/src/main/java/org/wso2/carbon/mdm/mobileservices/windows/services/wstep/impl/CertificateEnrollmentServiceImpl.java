@@ -164,7 +164,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
             requestSecurityTokenResponse.setRequestID(REQUEST_ID);
             response.value = requestSecurityTokenResponse;
-
         } catch (CertificateGenerationException e) {
             String msg = "Problem occurred in generating certificate.";
             log.error(msg, e);
