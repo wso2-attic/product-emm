@@ -271,7 +271,7 @@ deviceModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
 
-            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/" + deviceType + "/" + deviceId;
+            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/view?type=" + deviceType + "&id=" + deviceId;
             var dataNew = serviceInvokers.XMLHttp.get(
                 url, function (responsePayload) {
                     var device = responsePayload.responseContent;

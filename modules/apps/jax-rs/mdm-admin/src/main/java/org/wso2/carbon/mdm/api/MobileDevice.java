@@ -86,16 +86,14 @@ public class MobileDevice {
     /**
      * Fetch device details for a given device type and device Id.
      *
-     * @param type Device Type
-     * @param id   Device Identifier
      * @return Device wrapped inside Response
      * @throws MDMAPIException
      */
     @GET
-    @Path("{type}/{id}")
+    @Path("view")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getDevice(@PathParam("type") String type,
-                              @PathParam("id") String id) throws MDMAPIException {
+    public Response getDevice(@QueryParam("type") String type,
+                              @QueryParam("id") String id) throws MDMAPIException {
         DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         Device device;
