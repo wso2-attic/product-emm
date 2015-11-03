@@ -155,7 +155,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         try {
             encodedWap = prepareWapProvisioningXML(binarySecurityToken,
                     wapProvisioningFilePath, headerBinarySecurityToken);
-
             RequestedSecurityToken requestedSecurityToken = new RequestedSecurityToken();
             BinarySecurityToken binarySecToken = new BinarySecurityToken();
             binarySecToken.setValueType(PluginConstants.CertificateEnrolment.VALUE_TYPE);
