@@ -55,4 +55,8 @@
         <param-name>doAuthentication</param-name>
         <param-value>false</param-value>
     </context-param>
+    <context-param>
+        <param-name>nonSecuredEndPoints</param-name>
+        <param-value>/services/discovery/get,/services/discovery/post,/services/syncml</param-value>
+    </context-param>
 </web-app>
