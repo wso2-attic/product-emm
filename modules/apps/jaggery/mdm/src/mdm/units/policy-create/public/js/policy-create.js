@@ -1902,6 +1902,8 @@ var showHideHelpText = function (addFormContainer) {
 
 $(document).ready(function () {
 
+    $("#loading-content").remove();
+    $(".policy-platform").removeClass("hidden");
     // Adding initial state of wizard-steps.
     $("#policy-platform-wizard-steps").html($(".wr-steps").html());
 

@@ -95,7 +95,7 @@ public final class Constants {
                 "windows" + File.separator + "enrollment" + File.separator + "ms_xcep.xml";
         public static final String WS_STEP_FILE =
                 "windows" + File.separator + "enrollment" + File.separator + "wstep.xml";
-        public static final String BSD_PAYLOAD = "{\"credentials\" : {\"username\" : \"admin\", " +
+        public static final String BSD_PAYLOAD = "{\"credentials\" : {\"username\" : \"admin\", \"token\" : \"A0252faew\", " +
                                                  "\"password\" : \"admin\", " +
                                                  "\"ownership\" : \"BYOD\"}}";
     }
