@@ -239,28 +239,28 @@
     <Permission>
         <name>Get user</name>
         <path>/device-mgt/users/view</path>
-        <url>/users/*</url>
+        <url>/users/view</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Update user</name>
         <path>/device-mgt/users/update</path>
-        <url>/users/*</url>
+        <url>/users</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Delete user</name>
         <path>/device-mgt/users/delete</path>
-        <url>/users/*</url>
+        <url>/users</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>Get user roles by name</name>
         <path>/device-mgt/users/roles</path>
-        <url>/users/*/roles</url>
+        <url>/users/roles</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -281,7 +281,7 @@
     <Permission>
         <name>Get all devices of user</name>
         <path>/device-mgt/users/devices</path>
-        <url>/users/*/*/devices</url>
+        <url>/users/devices</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -295,7 +295,7 @@
     <Permission>
         <name>Get user count</name>
         <path>/device-mgt/users/view</path>
-        <url>/users/count/*</url>
+        <url>/users/count</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>

@@ -107,7 +107,7 @@ $("a.invite-user-link").click(function () {
  */
 $("a.remove-user-link").click(function () {
     var username = $(this).data("username");
-    var removeUserAPI = "/mdm-admin/users/" + username;
+    var removeUserAPI = "/mdm-admin/users?username=" + username;
 
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
