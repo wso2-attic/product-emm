@@ -253,4 +253,6 @@ $(document).ready(function () {
             hidePopup();
         });
     });
+    $("#loading-content").remove();
+    $("#policy-grid").removeClass("hidden");
 });

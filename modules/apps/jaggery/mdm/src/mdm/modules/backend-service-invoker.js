@@ -38,15 +38,15 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     function initiateXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
-        var execute = function () {
+        var execute = function (count) {
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open(method, url);
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
             xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
             if (IS_OAUTH_ENABLED) {
                 var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-                    xmlHttpRequest.setRequestHeader(
-                        constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
+                xmlHttpRequest.setRequestHeader(
+                    constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
 
             }
             xmlHttpRequest.send((payload));
@@ -56,20 +56,23 @@ var backendServiceInvoker = function () {
                 } else {
                     return successCallback(null);
                 }
-            } else if (xmlHttpRequest.status == 401) {
+            } else if (xmlHttpRequest.status == 401 && xmlHttpRequest.responseText == "Access token has expired" && count < 3) {
+                count++;
                 tokenUtil.refreshToken();
-                return execute();
-            }
-            else {
+                return execute(count);
+            } else {
                 return errorCallback(parse(xmlHttpRequest.responseText));
             }
         };
         var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();
-        if (accessToken){
-            return execute();
-        }else {
-            tokenUtil.refreshToken();
-            return execute();
+        if (accessToken) {
+            return execute(1);
+        } else {
+            log.error("User is not logged in to the EMM");
+            var dummyRespose = {};
+            dummyRespose.status = 401;
+            dummyRespose.responseText = "401";
+            errorCallback(stringify(dummyRespose));
         }
     }
 
