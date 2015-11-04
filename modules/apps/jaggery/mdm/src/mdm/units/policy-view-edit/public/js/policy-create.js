@@ -2000,7 +2000,7 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users";
+                postData.actionUrl = "/mdm-admin/users?q=ad";
                 postData.actionPayload = JSON.stringify({
                     q: params.term, // search term
                     page: params.page

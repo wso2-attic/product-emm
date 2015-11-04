@@ -96,13 +96,16 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         } else {
             userRoles = String(addUserFormData.userRoles).split(",");
         }
-
-        try {
-            result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);
-        } catch (e) {
-            log.error("Exception occurred while trying to add a user to MDM User Store", e);
-            // http status code 400 refers to - Bad request.
-            result = 400;
+        if (username.length < mdmProps.usernameLength) {
+            log.error("Limit for the username is exceeded");
+        }else {
+            try {
+                result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);
+            } catch (e) {
+                log.error("Exception occurred while trying to add a user to MDM User Store", e);
+                // http status code 400 refers to - Bad request.
+                result = 400;
+            }
         }
     } else {
         // http status code 403 refers to - forbidden.

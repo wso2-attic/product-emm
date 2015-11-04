@@ -31,7 +31,7 @@ $(document).ready(function () {
      * on Add User page in WSO2 MDM Console.
      */
     $("button#add-user-btn").click(function() {
-        var username = $("input#username").val();
+        var username = $("input#username").val().trim();
         var firstname = $("input#firstname").val();
         var lastname = $("input#lastname").val();
         var emailAddress = $("input#emailAddress").val();
@@ -41,9 +41,6 @@ $(document).ready(function () {
         var errorMsg = "#user-create-error-msg span";
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, username)) {
-            $(errorMsg).text("Provided username is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
@@ -79,7 +76,10 @@ $(document).ready(function () {
                 addUserFormData,
                 function (data) {
                     data = JSON.parse(data);
-                    if (data["statusCode"] == 201) {
+                    if (data.errorMessage) {
+                        $(errorMsg).text("Selected user store prompt an error : "data.errorMessage);
+                        $(errorMsgWrapper).removeClass("hidden");
+                    } else if (data["statusCode"] == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");
