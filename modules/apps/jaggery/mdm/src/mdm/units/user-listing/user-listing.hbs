@@ -41,7 +41,7 @@
 
             <tbody>
             {{#each users}}
-                <tr data-type="selectable" id="{{username}}">
+                <tr data-type="selectable" id="{{userid}}">
                     <td class="remove-padding icon-only content-fill">
                         <div class="thumbnail icon">
                             <i class="square-element text fw fw-user"></i>
@@ -60,7 +60,8 @@
                         </a>
                     </td>
                     <td class="text-right content-fill text-left-on-grid-view no-wrap">
-                        <a href="/mdm/users/profile/{{username}}" data-username="{{username}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view view-user-link">
+                        <a href="/mdm/users/profile?username={{username}}" data-username="{{username}}"
+                           data-click-event="edit-form" class="btn padding-reduce-on-grid-view view-user-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
                                 <i class="fw fw-view fw-stack-1x"></i>
@@ -68,7 +69,8 @@
                             <span class="hidden-xs hidden-on-grid-view">View</span>
                         </a>
 
-                        <a href="/mdm/users/edit-user/{{username}}" data-username="{{username}}" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-user-link">
+                        <a href="/mdm/users/edit-user?username={{username}}" data-username="{{username}}"
+                           data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-user-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
                                 <i class="fw fw-edit fw-stack-1x"></i>
@@ -77,7 +79,9 @@
                         </a>
 
                         {{#unequal "admin" username }}
-                            <a href="#" data-username="{{username}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-user-link">
+                            <a href="#" data-username="{{username}}" data-userid="{{userid}}"
+                               data-click-event="remove-form"
+                               class="btn padding-reduce-on-grid-view remove-user-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
                                 <i class="fw fw-delete fw-stack-1x"></i>

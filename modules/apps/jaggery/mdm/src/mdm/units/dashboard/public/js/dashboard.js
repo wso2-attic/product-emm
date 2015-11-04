@@ -13,7 +13,7 @@ var updateStats = function (serviceURL, id) {
 $(document).ready(function(){
     updateStats("/mdm-admin/devices/count", "#device-count");
     updateStats("/mdm-admin/policies/count", "#policy-count");
-    updateStats("/mdm-admin/users/count/" + "carbon.super", "#user-count");
+    updateStats("/mdm-admin/users/count", "#user-count");
 });
 
 function toggleEnrollment(){

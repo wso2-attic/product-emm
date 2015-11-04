@@ -91,7 +91,8 @@ public class MDMAPIUtils {
     }
 
     /**
-     * Getting the current tenant's user relam
+     * Getting the current tenant's user realm
+     *
      * @return
      * @throws MDMAPIException
      */
@@ -121,6 +122,7 @@ public class MDMAPIUtils {
         }
         return realm;
     }
+
     public static AuthorizationManager getAuthorizationManager() throws MDMAPIException {
         RealmService realmService;
         AuthorizationManager authorizationManager;
@@ -143,10 +145,11 @@ public class MDMAPIUtils {
     }
 
     /**
+     * This method is used to get the current tenant id.
      *
-     * @return
+     * @return returns the tenant id.
      */
-    public static int getTenantId(){
+    public static int getTenantId() {
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
@@ -166,7 +169,7 @@ public class MDMAPIUtils {
     public static ApplicationManagementProviderService getAppManagementService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         ApplicationManagementProviderService applicationManagementProviderService =
-             (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
+                (ApplicationManagementProviderService) ctx.getOSGiService(ApplicationManagementProviderService.class, null);
         if (applicationManagementProviderService == null) {
             String msg = "Application management service has not initialized.";
             log.error(msg);
@@ -191,7 +194,7 @@ public class MDMAPIUtils {
     public static TenantConfigurationManagementService getTenantConfigurationManagementService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         TenantConfigurationManagementService tenantConfigurationManagementService =
-             (TenantConfigurationManagementService) ctx.getOSGiService(TenantConfigurationManagementService.class, null);
+                (TenantConfigurationManagementService) ctx.getOSGiService(TenantConfigurationManagementService.class, null);
         if (tenantConfigurationManagementService == null) {
             String msg = "Tenant configuration Management service not initialized.";
             log.error(msg);
@@ -204,7 +207,7 @@ public class MDMAPIUtils {
         NotificationManagementService notificationManagementService;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
-                                                                        NotificationManagementService.class, null);
+                NotificationManagementService.class, null);
         if (notificationManagementService == null) {
             String msg = "Notification Management service not initialized.";
             log.error(msg);
