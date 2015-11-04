@@ -31,6 +31,7 @@ $(document).ready(function () {
      * on Add User page in WSO2 MDM Console.
      */
     $("button#add-user-btn").click(function() {
+        var domain = $("#userStore").val();
         var username = $("input#username").val().trim();
         var firstname = $("input#firstname").val();
         var lastname = $("input#lastname").val();
@@ -63,7 +64,7 @@ $(document).ready(function () {
         } else {
             var addUserFormData = {};
 
-            addUserFormData.username = username;
+            addUserFormData.username = domain + "/" + username;
             addUserFormData.firstname = firstname;
             addUserFormData.lastname = lastname;
             addUserFormData.emailAddress = emailAddress;
@@ -77,7 +78,7 @@ $(document).ready(function () {
                 function (data) {
                     data = JSON.parse(data);
                     if (data.errorMessage) {
-                        $(errorMsg).text("Selected user store prompt an error : "data.errorMessage);
+                        $(errorMsg).text("Selected user store prompt an error : " + data.errorMessage);
                         $(errorMsgWrapper).removeClass("hidden");
                     } else if (data["statusCode"] == 201) {
                         // Clearing user input fields.

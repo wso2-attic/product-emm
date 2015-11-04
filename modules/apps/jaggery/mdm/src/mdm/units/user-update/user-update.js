@@ -8,19 +8,16 @@ function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
 
     var uri = request.getRequestURI();
-    var uriMatcher = new URIMatcher(String(uri));
-    var isMatched = uriMatcher.match("/{context}/users/edit-user/{username}");
+    var userName = request.getParameter("username");
 
-    if (isMatched) {
-        var matchedElements = uriMatcher.elements();
-        var username = matchedElements.username;
-        var response = userModule.getUser(username);
+    if (userName) {
+        var response = userModule.getUser(userName);
 
         if (response["status"] == "success") {
             context["editUser"] = response["content"];
         }
 
-        response = userModule.getRolesByUsername(username);
+        response = userModule.getRolesByUsername(userName);
         if (response["status"] == "success") {
             context["userRoles"] = response["content"];
         }

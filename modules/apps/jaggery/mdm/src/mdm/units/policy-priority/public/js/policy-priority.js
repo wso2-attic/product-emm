@@ -21,10 +21,9 @@ var sortUpdateBtn = "#sortUpdateBtn";
 var applyChangesBtn = "#applyChangesBtn";
 var sortedIDs;
 
-var saveNewPrioritiesButton = "#save-new-priorities-button";
-var saveNewPrioritiesButtonEnabled = Boolean($(saveNewPrioritiesButton).data("enabled"));
+var saveNewPrioritiesButtonEnabled = Boolean($(sortUpdateBtn).data("enabled"));
 if (saveNewPrioritiesButtonEnabled) {
-    $(saveNewPrioritiesButton).removeClass("hide");
+    $(sortUpdateBtn).removeClass("hide");
 }
 
 /**

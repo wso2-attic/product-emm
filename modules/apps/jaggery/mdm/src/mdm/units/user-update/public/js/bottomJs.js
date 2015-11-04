@@ -42,8 +42,8 @@ $(document).ready(function () {
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, username)) {
-            $(errorMsg).text("Provided username is invalid. Please check.");
+        } else if (!password) {
+            $(errorMsg).text("Password is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (password != "" && !inputIsValid(/^[\S]{5,30}$/, password)) {
             $(errorMsg).text("Provided password doesn't conform to the password policy. Please check.");
@@ -81,7 +81,7 @@ $(document).ready(function () {
             }
             addUserFormData.roles = roles;
 
-            var addUserAPI = "/mdm-admin/users/" + username;
+            var addUserAPI = "/mdm-admin/users?username=" + username;
 
             invokerUtil.put(
                 addUserAPI,
