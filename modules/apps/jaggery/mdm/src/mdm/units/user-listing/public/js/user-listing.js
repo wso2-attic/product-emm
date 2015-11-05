@@ -107,28 +107,25 @@ $("a.invite-user-link").click(function () {
  */
 $("a.remove-user-link").click(function () {
     var username = $(this).data("username");
-    var removeUserAPI = "/mdm-admin/users/" + username;
-
+    var userid = $(this).data("userid");
+    var removeUserAPI = "/mdm-admin/users?username=" + username;
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
 
     $("a#remove-user-yes-link").click(function () {
         invokerUtil.delete(
             removeUserAPI,
-            null,
-            function (data) {
-                if (data["statusCode"] == 200) {
-                    $("#" + username).remove();
-                    // get new user-list-count
-                    var newUserListCount = $(".user-list > span").length;
-                    // update user-listing-status-msg with new user-count
-                    $("#user-listing-status-msg").text("Total number of Users found : " + newUserListCount);
-                    // update modal-content with success message
-                    $(modalPopupContent).html($('#remove-user-success-content').html());
-                    $("a#remove-user-success-link").click(function () {
-                        hidePopup();
-                    });
-                }
+            function () {
+                $("#" + userid).remove();
+                // get new user-list-count
+                var newUserListCount = $(".user-list > span").length;
+                // update user-listing-status-msg with new user-count
+                $("#user-listing-status-msg").text("Total number of Users found : " + newUserListCount);
+                // update modal-content with success message
+                $(modalPopupContent).html($('#remove-user-success-content').html());
+                $("a#remove-user-success-link").click(function () {
+                    hidePopup();
+                });
             },
             function () {
                 $(modalPopupContent).html($('#remove-user-error-content').html());

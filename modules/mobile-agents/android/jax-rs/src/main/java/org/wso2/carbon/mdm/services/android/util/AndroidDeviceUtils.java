@@ -19,10 +19,7 @@
 package org.wso2.carbon.mdm.services.android.util;
 
 import org.apache.commons.lang.StringUtils;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
 
 import javax.ws.rs.core.MediaType;
@@ -91,7 +88,9 @@ public class AndroidDeviceUtils {
         Device device = AndroidAPIUtils.getDeviceManagementService().
                 getDevice(deviceIdentifier);
         if (device == null || device.getDeviceIdentifier() == null ||
-                device.getDeviceIdentifier().isEmpty()) {
+                device.getDeviceIdentifier().isEmpty() || device.getEnrolmentInfo() == null) {
+            return false;
+        } else if (EnrolmentInfo.Status.REMOVED.equals(device.getEnrolmentInfo().getStatus())) {
             return false;
         }
         return true;

@@ -35,6 +35,9 @@ import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.apache.commons.codec.binary.Base64;
+import org.wso2.carbon.user.mgt.UserRealmProxy;
+import org.wso2.carbon.user.mgt.common.FlaggedName;
+import org.wso2.carbon.user.mgt.common.UserAdminException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -112,9 +115,9 @@ public class User {
 	 * @throws MDMAPIException
 	 */
 	@GET
-	@Path("{username}")
+    @Path("view")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getUser(@PathParam("username") String username) throws MDMAPIException {
+	public Response getUser(@QueryParam("username") String username) throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
 		ResponsePayload responsePayload = new ResponsePayload();
 		try {
@@ -160,8 +163,7 @@ public class User {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("{username}")
-	public Response updateUser(UserWrapper userWrapper, @PathParam("username") String username)
+	public Response updateUser(UserWrapper userWrapper, @QueryParam("username") String username)
 			throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
 		ResponsePayload responsePayload = new ResponsePayload();
@@ -296,9 +298,8 @@ public class User {
 	 * @throws MDMAPIException
 	 */
 	@DELETE
-	@Path("{username}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response removeUser(@PathParam("username") String username) throws MDMAPIException {
+	public Response removeUser(@QueryParam("username") String username) throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
 		ResponsePayload responsePayload = new ResponsePayload();
 		try {
@@ -340,9 +341,9 @@ public class User {
 	 * @throws MDMAPIException
 	 */
 	@GET
-	@Path("{username}/roles")
+	@Path("roles")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getRoles(@PathParam("username") String username) throws MDMAPIException {
+	public Response getRoles(@QueryParam("username") String username) throws MDMAPIException {
 		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
 		ResponsePayload responsePayload = new ResponsePayload();
 		try {
@@ -394,7 +395,7 @@ public class User {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
 		ArrayList<UserWrapper> userList= new ArrayList<UserWrapper>();
 		try {
-			String[] users = userStoreManager.listUsers("", -1);
+			String[] users = userStoreManager.listUsers("*", -1);
             UserWrapper user;
 			for (String username : users) {
 				user = new UserWrapper();
@@ -474,7 +475,7 @@ public class User {
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(username);
 	    //TODO: move this to a config
-        emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
+       // emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
         emailMessageProperties.setPassword(generateInitialUserPassword());
         String[] mailAddress = new String[1];
@@ -501,7 +502,7 @@ public class User {
 	        int i;
 	        for (i = 0; i < usernames.size(); i++) {
 		        EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-		        emailMessageProperties.setEnrolmentUrl("https://download-agent");
+//		        emailMessageProperties.setEnrolmentUrl("https://download-agent");
 		        emailMessageProperties
 				        .setFirstName(getClaimValue(usernames.get(i), Constants.USER_CLAIM_FIRST_NAME));
 		        emailMessageProperties.setUserName(usernames.get(i));
@@ -536,9 +537,8 @@ public class User {
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    @Path("/{tenantDomain}/{username}/devices")
-    public List<Device> getAllDeviceOfUser(@PathParam("username") String username,
-                                           @PathParam("tenantDomain") String tenantDomain)
+    @Path("devices")
+    public List<Device> getAllDeviceOfUser(@QueryParam("username") String username)
             throws MDMAPIException {
         DeviceManagementProviderService dmService;
         try {
@@ -566,10 +566,10 @@ public class User {
 
 	//TODO : Refactor the users/count API to remove tenant-domain parameter
 	@GET
-	@Path("count/{tenantDomain}")
-	public int getUserCount(@PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+	@Path("count")
+	public int getUserCount() throws MDMAPIException {
 		try {
-			String[] users = MDMAPIUtils.getUserStoreManager().listUsers("", -1);
+			String[] users = MDMAPIUtils.getUserStoreManager().listUsers("*", -1);
 			if (users == null) {
 				return 0;
 			}

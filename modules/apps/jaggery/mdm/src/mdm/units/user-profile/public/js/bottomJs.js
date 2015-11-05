@@ -41,7 +41,7 @@ function loadDevicesList() {
     var domain = devicesList.data("domain");
 
     $.template("user-devices-view", deviceListingSrc, function (template) {
-        var serviceURL = "/mdm-admin/users/"+domain+"/"+username+"/devices";
+        var serviceURL = "/mdm-admin/users/devices?username=" + username;
 
         var successCallback = function (data) {
             var viewModel = {};

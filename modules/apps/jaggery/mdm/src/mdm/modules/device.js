@@ -322,7 +322,7 @@ deviceModule = function () {
         if(deviceType != null && deviceType != undefined && deviceType == "windows"){
             url = mdmProps["httpURL"] + "/mdm-windows-agent/services/device/license";
         } else{
-            url = mdmProps["httpsURL"] + "/mdm-admin/license/" + deviceType + "/" + languageCode;
+            url = mdmProps["httpsURL"] + "/ios-enrollment/license/";
         }
         serviceInvokers.XMLHttp.get(url, function (responsePayload) {
             license = responsePayload.text;
