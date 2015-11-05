@@ -85,7 +85,6 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
      */
     if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
         addUserFormData = request.getContent();
-
         username = addUserFormData.username;
         firstname = addUserFormData.firstname;
         lastname = addUserFormData.lastname;
@@ -97,7 +96,8 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
             userRoles = String(addUserFormData.userRoles).split(",");
         }
         if (username.length < mdmProps.usernameLength) {
-            log.error("Limit for the username is exceeded");
+            log.error("Username Must be between 1 and " + mdmPops.usernameLength + " characters long");
+            result = "Username Must be between 1 and " + mdmPops.usernameLength + " characters long";
         }else {
             try {
                 result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);

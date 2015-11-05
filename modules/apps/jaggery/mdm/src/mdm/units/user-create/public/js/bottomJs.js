@@ -31,6 +31,7 @@ $(document).ready(function () {
      * on Add User page in WSO2 MDM Console.
      */
     $("button#add-user-btn").click(function() {
+        var charLimit =parseInt($("input#username").attr("limit"));
         var domain = $("#userStore").val();
         var username = $("input#username").val().trim();
         var firstname = $("input#firstname").val();
@@ -42,6 +43,9 @@ $(document).ready(function () {
         var errorMsg = "#user-create-error-msg span";
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (username.length > charLimit || username.length < 3) {
+            $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
@@ -78,7 +82,7 @@ $(document).ready(function () {
                 function (data) {
                     data = JSON.parse(data);
                     if (data.errorMessage) {
-                        $(errorMsg).text("Selected user store prompt an error : " + data.errorMessage);
+                        $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
                         $(errorMsgWrapper).removeClass("hidden");
                     } else if (data["statusCode"] == 201) {
                         // Clearing user input fields.
