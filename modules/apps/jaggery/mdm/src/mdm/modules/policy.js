@@ -44,6 +44,7 @@ policyModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
+            var isUpdated = false;
             var response = serviceInvokers.XMLHttp.get(url,function(responsePayload){
                 var response = {};
                 var policyListFromRestEndpoint = responsePayload["responseContent"];
@@ -67,10 +68,12 @@ policyModule = function () {
 
                     if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == true) {
                         policyObjectToView["status"] = "Active/Updated";
+                        isUpdated = true;
                     } else if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == false) {
                         policyObjectToView["status"] = "Active";
                     } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == true) {
                         policyObjectToView["status"] = "Inactive/Updated";
+                        isUpdated = true;
                     } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == false) {
                         policyObjectToView["status"] = "Inactive";
                     }
@@ -78,6 +81,7 @@ policyModule = function () {
                     policyListToView.push(policyObjectToView);
                 }
                 // generate response
+                response.updated = isUpdated;
                 response.status = "success";
                 response.content = policyListToView;
                 return response;

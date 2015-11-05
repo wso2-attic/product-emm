@@ -13,9 +13,11 @@ function onRequest(context) {
         } else if (policyCount == 1) {
             context["saveNewPrioritiesButtonEnabled"] = false;
             context["noPolicy"] = false;
+            context["isUpdated"] = response["updated"] ;
         } else {
             context["saveNewPrioritiesButtonEnabled"] = true;
             context["noPolicy"] = false;
+            context["isUpdated"] = response["updated"] ;
         }
     } else {
         // here, response["status"] == "error"
