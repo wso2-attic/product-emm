@@ -61,19 +61,24 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 			interval = DEFAULT_INTERVAL;
 		}
 
-		if (mode != null && Constants.NOTIFIER_LOCAL.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
+		if(mode == null) {
+			mode = Constants.NOTIFIER_LOCAL;
+		}
+
+		if (Constants.NOTIFIER_LOCAL.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
 			long startTime = SystemClock.elapsedRealtime() + DEFAULT_TIME_MILLISECONDS;
 
 			Intent alarmIntent = new Intent(context, AlarmReceiver.class);
 			PendingIntent recurringAlarmIntent =
 					PendingIntent.getBroadcast(context,
-							DEFAULT_REQUEST_CODE,
-							alarmIntent,
-							PendingIntent.FLAG_CANCEL_CURRENT);
+					                           DEFAULT_REQUEST_CODE,
+					                           alarmIntent,
+					                           PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager alarmManager =
 					(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, startTime,
-					interval, recurringAlarmIntent);
+			                          interval, recurringAlarmIntent);
 		}
 	}
+
 }
