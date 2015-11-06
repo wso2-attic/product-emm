@@ -31,8 +31,9 @@ $(document).ready(function () {
      * on Add User page in WSO2 MDM Console.
      */
     $("button#add-user-btn").click(function() {
+        var charLimit =parseInt($("input#username").attr("limit"));
         var domain = $("#userStore").val();
-        var username = $("input#username").val();
+        var username = $("input#username").val().trim();
         var firstname = $("input#firstname").val();
         var lastname = $("input#lastname").val();
         var emailAddress = $("input#emailAddress").val();
@@ -43,7 +44,10 @@ $(document).ready(function () {
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "A-Z]{3,30}$/, username)) {
+        } else if (username.length > charLimit || username.length < 3) {
+            $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else if (!inputIsValid(/^[a-zA-Z0-9\-\\\/\@\.]+$/, username)) {
             $(errorMsg).text("Provided username is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
@@ -80,7 +84,10 @@ $(document).ready(function () {
                 addUserFormData,
                 function (data) {
                     data = JSON.parse(data);
-                    if (data["statusCode"] == 201) {
+                    if (data.errorMessage) {
+                        $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
+                        $(errorMsgWrapper).removeClass("hidden");
+                    } else if (data["statusCode"] == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");
