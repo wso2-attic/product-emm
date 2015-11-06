@@ -38,6 +38,8 @@ import android.os.SystemClock;
 public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	private static final int DEFAULT_TIME_MILLISECONDS = 1000;
 	private static final int DEFAULT_REQUEST_CODE = 0;
+	public static final int DEFAULT_INDEX = 0;
+	public static final int DEFAULT_INTERVAL = 30000;
 	private Resources resources;
 
 	@Override
@@ -54,22 +56,29 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 		String mode =
 				Preference
 						.getString(context, resources.getString(R.string.shared_pref_notifier));
-		Float interval = Float.valueOf(Preference
-				                               .getString(context, resources.getString(R.string.shared_pref_frequency)).toString());
+		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
+		if(interval == DEFAULT_INDEX){
+			interval = DEFAULT_INTERVAL;
+		}
 
-		if (mode != null && Constants.NOTIFIER_LOCAL.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
+		if(mode == null) {
+			mode = Constants.NOTIFIER_LOCAL;
+		}
+
+		if (Constants.NOTIFIER_LOCAL.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
 			long startTime = SystemClock.elapsedRealtime() + DEFAULT_TIME_MILLISECONDS;
 
 			Intent alarmIntent = new Intent(context, AlarmReceiver.class);
 			PendingIntent recurringAlarmIntent =
 					PendingIntent.getBroadcast(context,
-							DEFAULT_REQUEST_CODE,
-							alarmIntent,
-							PendingIntent.FLAG_CANCEL_CURRENT);
+					                           DEFAULT_REQUEST_CODE,
+					                           alarmIntent,
+					                           PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager alarmManager =
 					(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, startTime,
-					interval.intValue(), recurringAlarmIntent);
+			                          interval, recurringAlarmIntent);
 		}
 	}
+
 }

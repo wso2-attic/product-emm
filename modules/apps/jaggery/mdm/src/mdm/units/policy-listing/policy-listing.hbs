@@ -6,6 +6,9 @@
             </span>
         </div>
     </div>
+    {{#equal isUpdated true}}
+        <input type="hidden" id="is-updated" name="country" value="UPDATED">
+    {{/equal}}
     <!-- content -->
     <div class="container-fluid">
         <span id="policy-listing-status-msg" >{{policyListingStatusMsg}}</span>
@@ -323,6 +326,56 @@
             </div>
         </div>
     </div>
+
+    <div id="change-policy-modal-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Do you really want to apply changes to all policies?</h3>
+                    <div class="buttons">
+                        <a href="#" id="change-policy-yes-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="#" id="change-policy-cancel-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-policy-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Done. Changes applied successfully.</h3>
+                    <div class="buttons">
+                        <a href="#" id="change-policy-success-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-policy-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+                    <div class="buttons">
+                        <a href="#" id="change-policy-error-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="errorPolicyUnPublish" class="hide">
         <div class="content">
             <div class="row">

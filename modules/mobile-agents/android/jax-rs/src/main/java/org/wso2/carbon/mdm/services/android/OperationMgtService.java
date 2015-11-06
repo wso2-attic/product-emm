@@ -268,6 +268,7 @@ public class OperationMgtService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_INFO);
             operation.setType(Operation.Type.COMMAND);
+	        getApplications(acceptHeader, deviceIDs);
             return AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message,
                     responseMediaType);
         } catch (OperationManagementException e) {
