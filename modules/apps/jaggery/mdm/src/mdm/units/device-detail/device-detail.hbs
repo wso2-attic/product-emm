@@ -69,7 +69,15 @@
                             <div class="panel-group tab-content">
                                 <div class="panel panel-default tab-pane active" id="device_details" role="tabpanel" aria-labelledby="device_details">
                                     <div class="panel-heading">Device Details</div>
-                                    <div class="panel-body">
+                                    <div id="loading-content" class="col-centered">
+                                        <br>
+                                        <br>
+                                        <i class="fw fw-settings fw-spin fw-2x"></i>
+                                        &nbsp;&nbsp;&nbsp;
+                                        Loading Device Details . . .
+                                        <br>
+                                    </div>
+                                    <div class="panel-body hidden">
                                         <!-- device summary -->
                                         <div class="row">
                                             {{#if device.viewModel.BatteryLevel}}

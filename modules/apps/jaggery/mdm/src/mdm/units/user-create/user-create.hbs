@@ -27,10 +27,10 @@
                             </div>
                             <label class="wr-input-label">
                                 User Name * <br>
-                                ( should be in minimum 3 characters long, lower-case and not include any whitespaces )
-                            </label>
+                                ( should be in minimum 3 characters long, use lower-case and not include any whitespaces )
+ s                           </label>
                             <div class="wr-input-control">
-                                <input type="text" id="username" class="form-control" placeholder="[ Required field ]"/>
+                                <input limit="{{charLimit}}" type="text" id="username" class="form-control" placeholder="[ Required field ]"/>
                             </div>
                             <label class="wr-input-label">First Name *</label>
                             <div class="wr-input-control">
@@ -92,6 +92,7 @@
             <!-- /content -->
         </div>
     </div>
+
     <!-- /content/body -->
 {{/zone}}
 {{#zone "bottomJs"}}
