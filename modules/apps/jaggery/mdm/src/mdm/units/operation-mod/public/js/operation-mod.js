@@ -793,13 +793,13 @@ var operationModule = function () {
     publicMethods.getWindowsServiceEndpoint = function (operationCode) {
         var featureMap = {
             "CAMERA": "camera",
-            "DEVICE_LOCK": "devicelock",
+            "DEVICE_LOCK": "lock",
             "DEVICE_LOCATION": "location",
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
-            "DEVICE_RING": "devicering",
+            "DEVICE_RING": "ring-device",
             "DEVICE_MUTE": "mute",
-            "LOCK_RESET": "lockreset",
+            "LOCK_RESET": "lock-reset",
             "NOTIFICATION": "notification",
             "ENCRYPT_STORAGE": "encrypt",
             "CHANGE_LOCK_CODE": "change-lock-code",
@@ -809,8 +809,8 @@ var operationModule = function () {
             "BLACKLIST_APPLICATIONS": "blacklist-applications",
             "PASSCODE_POLICY": "password-policy",
             "ENTERPRISE_WIPE": "enterprise-wipe",
-            "WIPE_DATA": "devicewipe",
-            "DISENROLL": "devicedisenroll"
+            "WIPE_DATA": "wipe-data",
+            "DISENROLL": "disenroll"
         };
         return "/mdm-windows-agent/services/windows/operation/" + featureMap[operationCode];
     };

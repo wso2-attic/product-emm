@@ -138,6 +138,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         for (ConfigurationEntry configurationEntry : tenantConfigurations) {
             if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY)) {
                 pollingFrequency = configurationEntry.getValue().toString();
+            } else {
+                pollingFrequency = PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY;
             }
         }
         ServletContext ctx =
