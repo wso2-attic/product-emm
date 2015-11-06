@@ -17,7 +17,6 @@
  */
 
 function onRequest(context) {
-    // var log = new Log("units/appbar/appbar.js");
     var userModule = require("/modules/user.js").userModule;
     var mdmProps = require('/config/mdm-props.js').config();
     var uiPermissions = userModule.getUIPermissions();
@@ -58,6 +57,14 @@ function onRequest(context) {
             "title": "Policy Priority",
             "icon": "fw-throttling-policy",
             "url": "/mdm/policies/priority"
+        });
+
+        links["policy-mgt"].push({
+            "title": "Apply Changes",
+            "icon": "fw-check",
+            "url": "#",
+            "tooltip": "Click to apply policy changes to devices (This depends on policy priority if you have multiple policies)",
+            "id": "apply-changes"
         });
     }
 

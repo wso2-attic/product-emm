@@ -102,6 +102,45 @@ function getSelectedPolicies() {
 $(document).ready(function () {
     sortElements();
     // Click functions related to Policy Listing
+    var isUpdated = $('#is-updated').val();
+    if(!isUpdated) {
+        $('#appbar-btn-apply-changes').addClass('hidden');
+    }
+
+    $("#appbar-btn-apply-changes").click(function () {
+        var applyPolicyChangesAPI = "/mdm-admin/policies/apply-changes";
+        $(modalPopupContent).html($('#change-policy-modal-content').html());
+        showPopup();
+
+        $("a#change-policy-yes-link").click(function () {
+            invokerUtil.put(
+                applyPolicyChangesAPI,
+                null,
+                // on success
+                function () {
+                    $(modalPopupContent).html($('#change-policy-success-content').html());
+                    showPopup();
+                    $("a#change-policy-success-link").click(function () {
+                        hidePopup();
+                        location.reload();
+                    });
+                },
+                // on error
+                function () {
+                    $(modalPopupContent).html($('#change-policy-error-content').html());
+                    showPopup();
+                    $("a#change-policy-error-link").click(function () {
+                        hidePopup();
+                    });
+                }
+            );
+        });
+
+        $("a#change-policy-cancel-link").click(function () {
+            hidePopup();
+        });
+    });
+
     $(sortUpdateBtn).click(function () {
         $(sortUpdateBtn).prop("disabled", true);
 
