@@ -24,6 +24,8 @@ var backendServiceInvoker = function () {
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
+    var TOKEN_EXPIRED = "Access token has expired";
+    var TOKEN_INVALID = "Invalid input. Access token validation failed";
 
     var constants = require("/modules/constants.js");
     var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
@@ -47,7 +49,6 @@ var backendServiceInvoker = function () {
                 var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
                 xmlHttpRequest.setRequestHeader(
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
-
             }
             xmlHttpRequest.send((payload));
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
@@ -56,8 +57,8 @@ var backendServiceInvoker = function () {
                 } else {
                     return successCallback(null);
                 }
-            } else if (xmlHttpRequest.status == 401 && xmlHttpRequest.responseText == "Access token has expired" && count < 3) {
-                count++;
+            } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
+                                                        xmlHttpRequest.responseText == TOKEN_INVALID )) {
                 tokenUtil.refreshToken();
                 return execute(count);
             } else {
@@ -68,7 +69,6 @@ var backendServiceInvoker = function () {
         if (accessToken) {
             return execute(1);
         } else {
-            log.error("User is not logged in to the EMM");
             var dummyRespose = {};
             dummyRespose.status = 401;
             dummyRespose.responseText = "401";
@@ -161,10 +161,10 @@ var backendServiceInvoker = function () {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
             if (!(!accessToken)) {
                 var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
-                var authenticationHeaderValue =String(constants.BEARER_PREFIX + accessToken);
+                var authenticationHeaderValue = String(constants.BEARER_PREFIX + accessToken);
                 var headers = [];
                 var oAuthAuthenticationData = {};
-                oAuthAuthenticationData.name =  authenticationHeaderName;
+                oAuthAuthenticationData.name = authenticationHeaderName;
                 oAuthAuthenticationData.value = authenticationHeaderValue;
                 headers.push(oAuthAuthenticationData);
                 options.HTTPHeaders = headers;
