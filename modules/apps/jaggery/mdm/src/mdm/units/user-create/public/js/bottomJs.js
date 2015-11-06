@@ -47,6 +47,9 @@ $(document).ready(function () {
         } else if (username.length > charLimit || username.length < 3) {
             $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
             $(errorMsgWrapper).removeClass("hidden");
+        } else if (!inputIsValid(/^[a-zA-Z0-9\-\\\/\@\.]+$/, username)) {
+            $(errorMsg).text("Provided username is invalid. Please check.");
+            $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
