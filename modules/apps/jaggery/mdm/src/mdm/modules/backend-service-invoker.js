@@ -24,6 +24,8 @@ var backendServiceInvoker = function () {
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
+    var TOKEN_EXPIRED = "Access token has expired";
+    var TOKEN_INVALID = "Invalid input. Access token validation failed";
 
     var constants = require("/modules/constants.js");
     var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
@@ -38,16 +40,15 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     function initiateXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
-        var execute = function () {
+        var execute = function (count) {
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open(method, url);
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
             xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
             if (IS_OAUTH_ENABLED) {
                 var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
-                    xmlHttpRequest.setRequestHeader(
-                        constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
-
+                xmlHttpRequest.setRequestHeader(
+                    constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
             xmlHttpRequest.send((payload));
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
@@ -56,20 +57,22 @@ var backendServiceInvoker = function () {
                 } else {
                     return successCallback(null);
                 }
-            } else if (xmlHttpRequest.status == 401) {
+            } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
+                                                        xmlHttpRequest.responseText == TOKEN_INVALID )) {
                 tokenUtil.refreshToken();
-                return execute();
-            }
-            else {
+                return execute(count);
+            } else {
                 return errorCallback(parse(xmlHttpRequest.responseText));
             }
         };
         var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();
-        if (accessToken){
-            return execute();
-        }else {
-            tokenUtil.refreshToken();
-            return execute();
+        if (accessToken) {
+            return execute(1);
+        } else {
+            var dummyRespose = {};
+            dummyRespose.status = 401;
+            dummyRespose.responseText = "401";
+            errorCallback(stringify(dummyRespose));
         }
     }
 
@@ -158,10 +161,10 @@ var backendServiceInvoker = function () {
             var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
             if (!(!accessToken)) {
                 var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
-                var authenticationHeaderValue =String(constants.BEARER_PREFIX + accessToken);
+                var authenticationHeaderValue = String(constants.BEARER_PREFIX + accessToken);
                 var headers = [];
                 var oAuthAuthenticationData = {};
-                oAuthAuthenticationData.name =  authenticationHeaderName;
+                oAuthAuthenticationData.name = authenticationHeaderName;
                 oAuthAuthenticationData.value = authenticationHeaderValue;
                 headers.push(oAuthAuthenticationData);
                 options.HTTPHeaders = headers;

@@ -21,6 +21,53 @@
         </div>
     </div>
 </div>
+<div id="operationSuccess" class="operation">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-5 col-md-6 col-centered">
+                <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-check fw-stack-1x"></i>
+                    </span>
+                    Operation performed successfully !
+                </h3>
+                <h4>
+                    Operation has been queued to be sent to the device.
+                </h4>
+                <div class="buttons">
+                    <a href="javascript:hidePopup()" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="messageSuccess" class="operation">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-5 col-md-6 col-centered">
+                <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-check fw-stack-1x"></i>
+                    </span>
+                    Message sent successfully !
+                </h3>
+                <h4>
+                    Message has been queued to be sent to the device.
+                </h4>
+                <div class="buttons">
+                    <a href="javascript:hidePopup()" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {{#each features}}
     <a href="javascript:operationSelect('{{code}}')">
         <i class="fw {{icon}}"></i>

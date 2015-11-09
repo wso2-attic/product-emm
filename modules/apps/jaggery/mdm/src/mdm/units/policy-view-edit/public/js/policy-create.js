@@ -106,12 +106,12 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
     var userRoleInput = $("#user-roles-input");
     var ownershipInput = $("#ownership-input");
-    var userInput = $("#users-select-field");
+    var userInput = $("#users-input");
     var actionInput = $("#action-input");
     var policyNameInput = $("#policy-name-input");
     var policyDescriptionInput = $("#policy-description-input");
-    userRoleInput.val(policyPayloadObj.roles);
-    userInput.val(policyPayloadObj.users);
+    userRoleInput.val(policyPayloadObj.roles).trigger("change");
+    userInput.val(policyPayloadObj.users).trigger("change");
     ownershipInput.val(policyPayloadObj.ownershipType);
     actionInput.val(policyPayloadObj.compliance);
     policyNameInput.val(policyPayloadObj["policyName"]);
@@ -1773,7 +1773,6 @@ var updatePolicy = function (policy, state) {
         payload["roles"] = [];
     }
 
-    console.log(JSON.stringify(payload));
     var serviceURL = "/mdm-admin/policies/" + getParameterByName("id");
     invokerUtil.put(
         serviceURL,
@@ -1953,17 +1952,85 @@ var getParameterByName = function (name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
+function formatRepo (user) {
+    if (user.loading) {
+        return user.text
+    }
+    if (!user.username){
+        return;
+    }
+    var markup = '<div class="clearfix">' +
+                 '<div clas="col-sm-8">' +
+                 '<div class="clearfix">' +
+                 '<div class="col-sm-3">' + user.username + '</div>';
+    if (user.firstname) {
+        markup +=  '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + user.firstname + '</div>';
+    }
+    if (user.emailAddress) {
+        markup += '<div class="col-sm-2"><i class="fa fa-star"></i> ' + user.emailAddress + '</div></div>';
+    }
+    markup += '</div></div>';
+    return markup;
+}
+
+function formatRepoSelection (user) {
+    return user.username || user.text;;
+}
+
 $(document).ready(function () {
 
     // Adding initial state of wizard-steps.
     $("#policy-profile-wizard-steps").html($(".wr-steps").html());
+
+    $("select.select2[multiple=multiple]").select2({
+        "tags": true
+    });
+
+    $("#users-input").select2({
+        multiple:true,
+        tags: true,
+        ajax: {
+            url: window.location.origin + "/mdm/api/invoker/execute/",
+            method: "POST",
+            dataType: 'json',
+            delay: 250,
+            id: function (user) {
+                return user.username;
+            },
+            data: function (params) {
+                var postData = {};
+                postData.actionMethod = "GET";
+                postData.actionUrl = "/mdm-admin/users?q=ad";
+                postData.actionPayload = JSON.stringify({
+                    q: params.term, // search term
+                    page: params.page
+                });
+
+                return JSON.stringify(postData);
+            },
+            processResults: function (data, page) {
+                var newData = [];
+                $.each(data.responseContent, function (index, value) {
+                    value.id = value.username;
+                    newData.push(value);
+                });
+                return {
+                    results: newData
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        minimumInputLength: 1,
+        templateResult: formatRepo, // omitted for brevity, see the source of this page
+        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+    });
 
     var policyPayloadObj;
     invokerUtil.get(
         "/mdm-admin/policies/" + getParameterByName("id"),
         // on success
         function (data) {
-            // console.log("success: " + JSON.stringify(data));
             data = JSON.parse(data);
             policyPayloadObj = data["responseContent"];
             skipStep["policy-platform"](policyPayloadObj);
@@ -1973,10 +2040,6 @@ $(document).ready(function () {
             // should be redirected to an error page
         }
     );
-
-    $("select.select2[multiple=multiple]").select2({
-        "tags": true
-    });
 
     $("#users-select-field").hide();
     $("#user-roles-select-field").show();
@@ -1993,7 +2056,7 @@ $(document).ready(function () {
     });
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
-    $("#users-input, #user-roles-input").select2({
+    $("#user-roles-input").select2({
         "tags": true
     }).on("select2:select", function (e) {
         if (e.params.data.id == "ANY") {

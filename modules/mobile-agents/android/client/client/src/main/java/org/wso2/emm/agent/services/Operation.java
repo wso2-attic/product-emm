@@ -919,7 +919,7 @@ public class Operation implements APIResultCallBack {
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 
-		CommonUtils.clearAppData(context);
+		CommonUtils.disableAdmin(context);
 
 		Intent intent = new Intent(context, ServerDetails.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

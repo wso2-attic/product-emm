@@ -1897,10 +1897,74 @@ var showHideHelpText = function (addFormContainer) {
     }
 };
 
+function formatRepo (user) {
+    if (user.loading) {
+        return user.text
+    }
+    if (!user.username){
+        return;
+    }
+    var markup = '<div class="clearfix">' +
+                 '<div clas="col-sm-8">' +
+                 '<div class="clearfix">' +
+                 '<div class="col-sm-3">' + user.username + '</div>';
+    if (user.firstname) {
+        markup +=  '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + user.firstname + '</div>';
+    }
+    if (user.emailAddress) {
+        markup += '<div class="col-sm-2"><i class="fa fa-star"></i> ' + user.emailAddress + '</div></div>';
+    }
+    markup += '</div></div>';
+    return markup;
+}
+
+function formatRepoSelection (user) {
+    return user.username || user.text;;
+}
+
 // End of functions related to grid-input-view
 
 
 $(document).ready(function () {
+    $("#users-input").select2({
+        multiple:true,
+        tags: true,
+        ajax: {
+            url: window.location.origin + "/mdm/api/invoker/execute/",
+            method: "POST",
+            dataType: 'json',
+            delay: 250,
+            id: function (user) {
+                return user.username;
+            },
+            data: function (params) {
+                var postData = {};
+                postData.actionMethod = "GET";
+                postData.actionUrl = "/mdm-admin/users";
+                postData.actionPayload = JSON.stringify({
+                    q: params.term, // search term
+                    page: params.page
+                });
+
+                return JSON.stringify(postData);
+            },
+            processResults: function (data, page) {
+                var newData = [];
+                $.each(data.responseContent, function (index, value) {
+                    value.id = value.username;
+                    newData.push(value);
+                });
+                return {
+                    results: newData
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        minimumInputLength: 1,
+        templateResult: formatRepo, // omitted for brevity, see the source of this page
+        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+    });
 
     $("#loading-content").remove();
     $(".policy-platform").removeClass("hidden");
@@ -1926,7 +1990,7 @@ $(document).ready(function () {
     });
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
-    $("#users-input, #user-roles-input").select2({
+    $("#user-roles-input").select2({
         "tags": true
     }).on("select2:select", function (e) {
             if (e.params.data.id == "ANY") {

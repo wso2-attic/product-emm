@@ -133,7 +133,20 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     } else if(policyPayloadObj["active"] == false &&  policyPayloadObj["updated"] == false) {
         policyStatus = '<i class="fw fw-error icon-danger"></i> Inactive</span>';
     }
+
     $("#policy-status").html(policyStatus);
+
+    if(policyPayloadObj.users.length > 0) {
+        $("#policy-users").text(policyPayloadObj.users.toString().split(",").join(", "));
+    } else {
+        $("#users-row").addClass("hidden");
+    }
+
+    if(policyPayloadObj.roles.length > 0) {
+        $("#policy-roles").text(policyPayloadObj.roles.toString().split(",").join(", "));
+    } else {
+        $("#roles-row").addClass("hidden");
+    }
 
     var deviceType = policy["platform"];
     var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
