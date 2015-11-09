@@ -35,27 +35,27 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
     username = request.getParameter("username");
     password = request.getParameter("password");
     try {
-        userModule.login(username, password, function(user) {
+        userModule.login(username, password, function (user) {
             if (log.isDebugEnabled()) {
                 log.debug("User Logged In : " + user);
             }
             utility.insertAppPermissions(userModule, "login");
             apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
             var permissions = userModule.getUIPermissions();
-            if (permissions.VIEW_DASHBOARD){
+            if (permissions.VIEW_DASHBOARD) {
                 response.sendRedirect(constants.WEB_APP_CONTEXT);
-            }else {
+            } else {
                 response.sendRedirect(constants.WEB_APP_CONTEXT + "/device-mgt");
             }
-        }, function() {
+        }, function () {
             response.sendRedirect(mdmProps.appContext + "login?#auth-failed");
         });
     } catch (e) {
         log.error("Exception occurred while a user tried to login to MDM", e);
         response.sendRedirect(mdmProps.appContext + "login?#error");
     }
-} else if (uriMatcher.match("/{context}/api/user/logout/")){
-    userModule.logout(function() {
+} else if (uriMatcher.match("/{context}/api/user/logout/")) {
+    userModule.logout(function () {
         response.sendRedirect(mdmProps.appContext + "login");
     });
 } else if (uriMatcher.match("/{context}/api/user/devices/")) {
@@ -85,7 +85,6 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
      */
     if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
         addUserFormData = request.getContent();
-
         username = addUserFormData.username;
         firstname = addUserFormData.firstname;
         lastname = addUserFormData.lastname;
@@ -96,13 +95,17 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
         } else {
             userRoles = String(addUserFormData.userRoles).split(",");
         }
-
-        try {
-            result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);
-        } catch (e) {
-            log.error("Exception occurred while trying to add a user to MDM User Store", e);
-            // http status code 400 refers to - Bad request.
-            result = 400;
+        if (username.length < mdmProps.usernameLength) {
+            log.error("Username Must be between 1 and " + mdmPops.usernameLength + " characters long");
+            result = "Username Must be between 1 and " + mdmPops.usernameLength + " characters long";
+        } else {
+            try {
+                result = userModule.addUser(username, firstname, lastname, emailAddress, userRoles);
+            } catch (e) {
+                log.error("Exception occurred while trying to add a user to MDM User Store", e);
+                // http status code 400 refers to - Bad request.
+                result = 400;
+            }
         }
     } else {
         // http status code 403 refers to - forbidden.
