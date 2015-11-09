@@ -20,7 +20,6 @@ var util = function () {
     var module = {};
     var Base64 = Packages.org.apache.commons.codec.binary.Base64;
     var String = Packages.java.lang.String;
-    var log = new Log();
     var mdmProps = require('/config/mdm-props.js').config();
     var carbon = require('carbon');
     var realmService = carbon.server.osgiService('org.wso2.carbon.user.core.service.RealmService');
@@ -150,6 +149,8 @@ var util = function () {
             var data = parse(xhr.responseText);
             tokenPair.refreshToken = data.refresh_token;
             tokenPair.accessToken = data.access_token;
+        } else if (xhr.status == 400) {
+            tokenPair =  session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
         } else if (xhr.status == 403) {
             throw "Error in obtaining token with Refresh Token  Grant Type";
         } else {

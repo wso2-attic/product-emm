@@ -21,6 +21,7 @@
     var deviceIdentifier = deviceId.data("deviceid");
     var deviceType = deviceId.data("type");
     var payload = [deviceIdentifier];
+    var operationTable;
     if (deviceType == "ios") {
         var serviceUrl = "/ios/operation/deviceinfo";
     } else if (deviceType == "android") {
@@ -35,6 +36,8 @@
             });
     }
     $(document).ready(function(){
+        $(".panel-body").removeClass("hidden");
+        $("#loading-content").remove();
         loadOperationBar(deviceType);
         loadOperationsLog();
         loadApplicationsList();
@@ -52,12 +55,12 @@
 
         $("#refresh-operations").click(function () {
             $('#operations-spinner').removeClass('hidden');
-            loadOperationsLog();
+            loadOperationsLog(true);
         });
 
     });
 
-    function loadOperationsLog() {
+    function loadOperationsLog(update) {
         var operationsLog = $("#operations-log");
         var deviceListingSrc = operationsLog.attr("src");
         var deviceId = operationsLog.data("device-id");
@@ -73,8 +76,30 @@
                 viewModel.operations = data;
                 if(data.length > 0){
                     var content = template(viewModel);
-                    $("#operations-log-container").html(content);
-                    $('#operations-log-table').datatables_extended();
+                    if(!update) {
+                        $("#operations-log-container").html(content);
+                        operationTable = $('#operations-log-table').datatables_extended();
+                    }else{
+                        $('#operations-log-table').dataTable().fnClearTable();
+                        for(var i=0; i < data.length; i++) {
+                            var status;
+                            if(data[i].status == "COMPLETED") {
+                                status = "<span><i class='fw fw-ok icon-success'></i> Completed</span>";
+                            } else if(data[i].status == "PENDING") {
+                                status = "<span><i class='fw fw-warning icon-warning'></i> Pending</span>";
+                            } else if(data[i].status == "ERROR") {
+                                status = "<span><i class='fw fw-error icon-danger'></i> Error</span>";
+                            } else if(data[i].status == "IN_PROGRESS") {
+                                status = "<span><i class='fw fw-ok icon-warning'></i> In Progress</span>";
+                            }
+
+                            $('#operations-log-table').dataTable().fnAddData([
+                                data[i].code,
+                                status,
+                                data[i].createdTimeStamp
+                            ]);
+                        }
+                    }
                 }
 
             };
@@ -83,6 +108,7 @@
                     console.log(message);
             });
         });
+
     }
 
     function loadApplicationsList() {
@@ -143,7 +169,7 @@
                     viewModel.compliance = "COMPLIANT";
                     var content = template(viewModel);
                     $("#policy-list-container").html(content);
-                    $("#operations-log-table").addClass("hidden");
+                    $("#policy-compliance-table").addClass("hidden");
                 }
 
             };

@@ -11,6 +11,7 @@
     "idPServer":"%https.ip%",
     "callBackUrl":"%https.ip%/mdm-admin",
     "adminUser":"admin",
+    "usernameLength":30,
     "device" : {
         "ios" : {
             "location" : "%http.ip%/mdm/public/asset-download-agent-ios/asset/ios-agent.ipa",

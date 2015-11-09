@@ -4,15 +4,15 @@
 
             <div class="wr-steps hidden">
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz itm-wiz-current" data-step="policy-profile"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Edit Current Profile</span></div></div>
+                    <div class="itm-wiz itm-wiz-current" data-step="policy-profile"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Edit current profile</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">2</div><div class="wiz-lbl hidden-xs"><span>Edit Assignment Groups</span></div></div>
+                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">2</div><div class="wiz-lbl hidden-xs"><span>Edit assignment groups</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-naming"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Republish to Devices</span></div></div>
+                    <div class="itm-wiz" data-step="policy-naming"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Republish to devices</span></div></div>
                     <br class="c-both" />
                 </div>
             </div>
@@ -21,17 +21,17 @@
                 <div class="wr-form">
                     <h1 id="policy-message-page-wizard-title" class="page-sub-title">Policy is successfully re-configured.</h1>
                     <br>Please click <b>"Add Another Policy"</b>, if you wish to add another policy or click
-                    <b>"View Policy List"</b> to complete the process and go back to the policy list.
+                    <b>"View policy list"</b> to complete the process and go back to the policy list.
                     <hr>
                     <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/mdm/policies/">
-                        &nbsp;&nbsp;&nbsp;&nbsp;View Policy List&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;View policy list&nbsp;&nbsp;&nbsp;&nbsp;
                     </button>
                     <a href="/mdm/policies/add-policy" class="cu-btn-inner">
                         <span class="fw-stack">
                             <i class="fw fw-ring fw-stack-2x"></i>
                             <i class="fw fw-add fw-stack-1x"></i>
                         </span>
-                        Add Another Policy
+                        Add another policy
                     </a>
                 </div>
             </div>
@@ -44,14 +44,14 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 3: Republish to Devices</h4>
+                            <h4>Step 3: Republish to devices</h4>
                             <br>
                             <div id="policy-naming-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
                             <div>
                                 <label class="wr-input-label">
-                                    Set a Name * to your Policy<br>
+                                    Set a name * to your policy<br>
                                     ( should be 1-to-30 characters long )
                                 </label>
                                 <div class="wr-input-control">
@@ -61,7 +61,7 @@
                                     <br class="c-both" />
                                 </div>
                                 <label class="wr-input-label">
-                                    Add a Description
+                                    Add a description
                                 </label>
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
@@ -95,11 +95,11 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 2: Edit Assignment Groups</h4>
+                            <h4>Step 2: Edit assignment groups</h4>
                             <br>
                             <div>
                                 <label class="wr-input-label">
-                                    Set Device Ownership Type
+                                    Set device ownership type
                                 </label>
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
@@ -114,11 +114,11 @@
                                 <div class="wr-input-control">
                                     <label class="wr-input-control radio light">
                                         <input id="user-roles-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" checked/>
-                                        <span class="helper">&nbsp;Set User Role(s)</span>
+                                        <span class="helper">&nbsp;Set user role(s)</span>
                                     </label>
                                     <label class="wr-input-control radio light" rel="assetfilter">
                                         <input id="users-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" />
-                                        <span class="helper">&nbsp;Set User(s)</span>
+                                        <span class="helper">&nbsp;Set user(s)</span>
                                     </label>
                                 </div>
                                 <div id="user-roles-select-field" class="select-users">
@@ -139,9 +139,6 @@
                                         <div class="cus-col-50">
                                             <select id="users-input" class="form-control select2" multiple="multiple">
                                                 <option value="ANY" selected>ANY</option>
-                                                {{#each users}}
-                                                    <option>{{this}}</option>
-                                                {{/each}}
                                             </select>
                                         </div>
                                         <br class="c-both" />
@@ -149,7 +146,7 @@
                                 </div>
                                 <br>
                                 <label class="wr-input-label" title="">
-                                    Set an Action upon Non-compliance
+                                    Set an action upon non-compliance
                                 </label>
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
@@ -183,7 +180,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 1: Edit Current Profile</h4>
+                            <h4>Step 1: Edit current profile</h4>
                             <br>
                             <div id="policy-profile-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -194,7 +191,7 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <i class="fw fw-settings fw-spin fw-2x"></i>
                                     &nbsp;&nbsp;&nbsp;
-                                    Loading Platform Features . . .
+                                    Loading platform features . . .
                                     <br>
                                     <br>
                                 </div>

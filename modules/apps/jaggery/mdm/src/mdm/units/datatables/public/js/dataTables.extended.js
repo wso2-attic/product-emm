@@ -103,6 +103,11 @@ $.fn.datatables_extended = function(settings){
                             column
                                 .search($(this).val())
                                 .draw();
+                            if($('.dataTables_empty').length > 0) {
+                                $('.bulk-action-row').addClass("hidden");
+                            } else {
+                                $('.bulk-action-row').removeClass("hidden");
+                            }
                         });
                     }
 

@@ -233,9 +233,15 @@ function runOperation (operationName) {
 //        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
 //        'class="wr-notification-operation">' + currentOperationList[operationName].name +
 //        '- Operation Successful!</div><hr /></div>');
-        var notificationCount = parseInt($(notificationBubble).html());
+        /*var notificationCount = parseInt($(notificationBubble).html());
         notificationCount++;
-        $(notificationBubble).html(notificationCount);
+        $(notificationBubble).html(notificationCount);*/
+        if(operationName == "NOTIFICATION"){
+            $(modalPopupContent).html($("#messageSuccess").html());
+        }else {
+            $(modalPopupContent).html($("#operationSuccess").html());
+        }
+        showPopup();
     };
 
     var payload, serviceEndPoint;
