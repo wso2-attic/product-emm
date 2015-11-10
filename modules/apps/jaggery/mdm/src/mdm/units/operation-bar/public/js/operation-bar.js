@@ -179,6 +179,7 @@ function loadOperationBar (deviceType) {
                 var iconName;
                 if (deviceType == "android"){
                     iconName = operationModule.getAndroidIconForFeature(current.code);
+                    current.type = deviceType;
                 } if (deviceType == "windows"){
                     iconName = operationModule.getWindowsIconForFeature(current.code);
                 } else if (deviceType == "ios"){

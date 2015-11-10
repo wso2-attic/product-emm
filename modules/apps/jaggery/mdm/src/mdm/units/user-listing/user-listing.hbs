@@ -50,10 +50,10 @@
                     <td class="fade-edge" data-search="{{firstname}},{{lastname}}" data-display="{{firstname}} {{lastname}}">
                         <h4>{{firstname}} {{lastname}}</h4>
                     </td>
-                    <td class="fade-edge remove-padding-top" data-search="{{username}}" data-display="{{username}}" data-grid-label="Username">{{username}}</td>
-                    <td class="fade-edge remove-padding-top" data-search="{{emailAddress}}" data-display="{{emailAddress}}" data-grid-label="Email">
+                    <td class="fade-edge remove-padding-top" data-search="{{username}}" data-display="{{username}}"><i class="fw-user"></i> {{username}}</td>
+                    <td class="fade-edge remove-padding-top" data-search="{{emailAddress}}" data-display="{{emailAddress}}">
                         <a href="mailto:{{emailAddress}}" class="wr-list-email">
-                            {{emailAddress}}
+                            <i class="fw-mail"></i> {{emailAddress}}
                             {{#unequal "" emailAddress }}
                                 Unspecified
                             {{/unequal}}

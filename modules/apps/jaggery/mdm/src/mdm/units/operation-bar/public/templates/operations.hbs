@@ -86,6 +86,16 @@
                         <br>
                     </h3>
                     <h4>
+                        {{#equal code "WIPE_DATA"}}
+                            {{#equal type "android"}}
+                                Enter PIN code (Optional - This is required only if the device type is BYOD).
+                                <br><br>
+                                <div>
+                                    <input type="password" class="form-control modal-input operationDataKeys" id="pin" data-key="pin"></textarea>
+                                </div>
+                                <br>
+                            {{/equal}}
+                        {{/equal}}
                         {{#equal code "NOTIFICATION"}}
                             Type your message below.
                             <br><br>
