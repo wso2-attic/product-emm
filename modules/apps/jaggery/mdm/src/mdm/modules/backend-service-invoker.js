@@ -26,10 +26,10 @@ var backendServiceInvoker = function () {
     var IS_OAUTH_ENABLED = true;
     var TOKEN_EXPIRED = "Access token has expired";
     var TOKEN_INVALID = "Invalid input. Access token validation failed";
-
+var log = new Log("HUTAZ.js");
     var constants = require("/modules/constants.js");
     var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
-    var log = new Log("modules/backend-service-invoker.js");
+
 
     /**
      * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
@@ -58,11 +58,13 @@ var backendServiceInvoker = function () {
                     return successCallback(null);
                 }
             } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
-                                                        xmlHttpRequest.responseText == TOKEN_INVALID )) {
+                                                        xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5 ) {
                 tokenUtil.refreshToken();
                 return execute(count);
+            } else if (xmlHttpRequest.status == 500) {
+                return errorCallback(xmlHttpRequest.status);
             } else {
-                return errorCallback(parse(xmlHttpRequest.responseText));
+                return errorCallback(xmlHttpRequest);
             }
         };
         var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();
