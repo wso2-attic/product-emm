@@ -53,7 +53,7 @@ function getSelectedUsernames() {
     var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
     thisTable.api().rows().every(function(){
         if($(this.node()).hasClass('DTTT_selected')){
-            usernameList.push($(thisTable.api().row(this).node()).data('id'));
+			usernameList.push($(thisTable.api().row(this).node())[0].getAttribute('id'));
         }
     });
     return usernameList;
