@@ -107,4 +107,8 @@ $("#role-grid").on("click", ".remove-role-link", function () {
             }
         );
     });
+
+    $("a#remove-role-cancel-link").click(function () {
+        hidePopup();
+    });
 });

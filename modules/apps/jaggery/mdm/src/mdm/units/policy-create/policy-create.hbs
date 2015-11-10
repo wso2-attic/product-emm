@@ -4,19 +4,19 @@
 
             <div class="wr-steps hidden">
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz itm-wiz-current" data-step="policy-platform"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Select a Platform</span></div></div>
+                    <div class="itm-wiz itm-wiz-current" data-step="policy-platform"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Select a platform</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-profile"><div class="wiz-no">2</div><div class="wiz-lbl hidden-xs"><span>Configure Profile</span></div></div>
+                    <div class="itm-wiz" data-step="policy-profile"><div class="wiz-no">2</div><div class="wiz-lbl hidden-xs"><span>Configure profile</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Assign to Groups</span></div></div>
+                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Assign to groups</span></div></div>
                     <br class="c-both" />
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-naming"><div class="wiz-no">4</div><div class="wiz-lbl hidden-xs"><span>Publish to Devices</span></div></div>
+                    <div class="itm-wiz" data-step="policy-naming"><div class="wiz-no">4</div><div class="wiz-lbl hidden-xs"><span>Publish to devices</span></div></div>
                     <br class="c-both" />
                 </div>
             </div>
@@ -25,17 +25,17 @@
                 <div class="wr-form">
                     <h1 id="policy-message-page-wizard-title" class="page-sub-title">Policy creation is successful.</h1>
                     <br>Please click <b>"Add Another Policy"</b>, if you wish to add another policy or click
-                    <b>"View Policy List"</b> to complete the process and go back to the policy list.
+                    <b>"View policy list"</b> to complete the process and go back to the policy list.
                     <hr>
                     <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/mdm/policies/">
-                        &nbsp;&nbsp;&nbsp;&nbsp;View Policy List&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;View policy list&nbsp;&nbsp;&nbsp;&nbsp;
                     </button>
                     <a href="/mdm/policies/add-policy" class="cu-btn-inner">
                         <span class="fw-stack">
                             <i class="fw fw-ring fw-stack-2x"></i>
                             <i class="fw fw-add fw-stack-1x"></i>
                         </span>
-                        Add Another Policy
+                        Add another policy
                     </a>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 4: Publish to Devices</h4>
+                            <h4>Step 4: Publish to devices</h4>
                             <br>
                             <div id="policy-naming-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -65,7 +65,7 @@
                                     <br class="c-both" />
                                 </div>
                                 <label class="wr-input-label">
-                                    Add a Description
+                                    Add a description
                                 </label>
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
@@ -75,13 +75,13 @@
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
-                                <a href="#" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-naming" data-next="policy-criteria">
+                                <a href="javascript:void(0)" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-naming" data-next="policy-criteria">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-naming-publish" data-next="policy-message" data-validate="true">
+                                <a href="javascript:void(0)" class="wr-btn wizard-stepper" data-current="policy-naming-publish" data-next="policy-message" data-validate="true">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Save & Publish&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-naming" data-next="policy-message" data-validate="true">
+                                <a href="javascript:void(0)" class="wr-btn wizard-stepper" data-current="policy-naming" data-next="policy-message" data-validate="true">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
                             </div>
@@ -98,11 +98,11 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 3: Assign to Groups</h4>
+                            <h4>Step 3: Assign to groups</h4>
                             <br>
                             <div>
                                 <label class="wr-input-label">
-                                    Set Device Ownership Type
+                                    Set device ownership type
                                 </label>
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
@@ -117,11 +117,11 @@
                                 <div class="wr-input-control">
                                     <label class="wr-input-control radio light">
                                         <input id="user-roles-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" checked/>
-                                        <span class="helper">&nbsp;Set User Role(s)</span>
+                                        <span class="helper">&nbsp;Set user role(s)</span>
                                     </label>
                                     <label class="wr-input-control radio light" rel="assetfilter">
                                         <input id="users-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" />
-                                        <span class="helper">&nbsp;Set User(s)</span>
+                                        <span class="helper">&nbsp;Set user(s)</span>
                                     </label>
                                 </div>
                                 <div id="user-roles-select-field" class="select-users">
@@ -148,7 +148,7 @@
                                 </div>
                                 <br>
                                 <label class="wr-input-label" title="">
-                                    Set an Action upon Non-compliance
+                                    Set an action upon non-compliance
                                 </label>
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
@@ -162,10 +162,10 @@
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
-                                <a href="#" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-criteria" data-next="policy-profile">
+                                <a href="javascript:void(0)" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-criteria" data-next="policy-profile">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-criteria" data-next="policy-naming" data-validate="false">
+                                <a href="javascript:void(0)" class="wr-btn wizard-stepper" data-current="policy-criteria" data-next="policy-naming" data-validate="false">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Continue&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
                             </div>
@@ -182,7 +182,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 2: Configure Profile</h4>
+                            <h4>Step 2: Configure profile</h4>
                             <br>
                             <div id="policy-profile-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -193,16 +193,16 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <i class="fw fw-settings fw-spin fw-2x"></i>
                                     &nbsp;&nbsp;&nbsp;
-                                    Loading Platform Features . . .
+                                    Loading platform features . . .
                                     <br>
                                     <br>
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
-                                <a href="#" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-profile" data-next="policy-platform">
+                                <a href="javascript:void(0)" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-profile" data-next="policy-platform">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
-                                <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-next="policy-criteria"  data-validate="true">
+                                <a href="javascript:void(0)" class="wr-btn wizard-stepper" data-current="policy-profile" data-next="policy-criteria"  data-validate="true">
                                     &nbsp;&nbsp;&nbsp;&nbsp;Continue&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
                             </div>
@@ -215,7 +215,7 @@
                 <br>
                 <i class="fw fw-settings fw-spin fw-2x"></i>
                 &nbsp;&nbsp;&nbsp;
-                Loading Policy Creation Wizard . . .
+                Loading policy creation wizard . . .
                 <br>
             </div>
             <div class="container col-centered wr-content policy-platform hidden">
@@ -226,7 +226,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 1: Select a Platform</h4>
+                            <h4>Step 1: Select a platform</h4>
                             <br>
                             <div class="row wr-tile-buttons-list">
                                 <div class="wr-input-control">
@@ -234,7 +234,7 @@
                                         {{#each types}}
                                             {{#equal name "android"}}
                                                 <li class="col-lg-4">
-                                                    <a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="android" data-platform-id="1" data-validate="false">
+                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="android" data-platform-id="1" data-validate="false">
                                                         <i class="fw fw-android"></i>
                                                         <b>Android</b>
                                                     </a>
@@ -242,7 +242,7 @@
                                             {{/equal}}
                                             {{#equal name "ios"}}
                                                 <li class="col-lg-4">
-                                                    <a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="ios" data-platform-id="3" data-validate="false">
+                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="ios" data-platform-id="3" data-validate="false">
                                                         <i class="fw fw-apple"></i>
                                                         <b>Apple iOS</b>
                                                     </a>
@@ -250,7 +250,7 @@
                                             {{/equal}}
                                             {{#equal name "windows"}}
                                                 <li class="col-lg-4">
-                                                    <a href="#" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="windows" data-platform-id="2" data-validate="false">
+                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="windows" data-platform-id="2" data-validate="false">
                                                         <i class="fw fw-windows"></i>
                                                         <b>Windows Phone</b>
                                                     </a>
