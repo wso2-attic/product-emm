@@ -44,16 +44,14 @@
                             <!-- general -->
                             <div class="wr-hidden-operation" data-operation="general" style="display: block">
                                 <div class="panel panel-default">
-                                    <div id="general-config-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
-                                            Policy Monitoring
-                                            <hr>
-                                        </h2>
-                                    </div>
                                     <div id="email-config-body" class="panel-collapse panel-body" role="tabpanel">
                                         <div id="email-config-error-msg" class="alert alert-danger hidden" role="alert">
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
+                                        <h4>
+                                            Policy Monitoring
+                                            <hr>
+                                        </h4>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="email-config-host">
                                                 Monitoring Frequency
@@ -149,7 +147,10 @@
                                         <div id="android-config-error-msg" class="alert alert-danger hidden" role="alert">
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
-
+                                        <h4>
+                                            Communication Protocol Configuration
+                                            <hr>
+                                        </h4>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="android-config-notifier">
                                                 Notifier Type
@@ -198,15 +199,11 @@
                                                 <input id="android-config-gcm-sender-id" type="text" class="form-control" placeholder="[ Required Field ]">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div id="wifi-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
+                                        <h4>
                                             End User License Agreement (EULA)
                                             <hr>
-                                        </h2>
-                                    </div>
+                                        </h4>
 
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
                                         <div class="wr-input-control">
                                             <textarea id="android-eula" type="text" class="form-control"></textarea>
                                         </div>
@@ -221,16 +218,14 @@
                             <!-- ios -->
                             <div class="wr-hidden-operation" data-operation="ios">
                                 <div class="panel panel-default operation-data" data-operation="wifi" data-operation-code="WIFI">
-                                    <div id="ios-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
+                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="ios-body">
+                                        <div id="ios-config-error-msg" class="alert alert-danger hidden" role="alert">
+                                            <i class="icon fw fw-error"></i><span></span>
+                                        </div>
+                                        <h4>
                                             iOS SCEP Certificate Configurations
                                             <hr>
-                                        </h2>
-                                    </div>
-                                    <div id="ios-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                        <i class="icon fw fw-error"></i><span></span>
-                                    </div>
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="ios-body">
+                                        </h4>
                                         <div id="ios-scep-config-error-msg" class="alert alert-danger hidden" role="alert">
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
@@ -284,16 +279,12 @@
                                             </label>
                                             <input id="ios-config-organization-unit" type="text" class="form-control" placeholder="[ Required Field ]">
                                         </div>
-                                    </div>
 
-                                    <div id="wifi-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
+                                        <h4>
                                             iOS Profile Configurations
                                             <hr>
-                                        </h2>
-                                    </div>
+                                        </h4>
 
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
                                         <div id="ios-profile-conf-error-msg" class="alert alert-danger hidden" role="alert">
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
@@ -306,22 +297,18 @@
                                             </label>
                                             <input id="ios-org-display-name" type="text" class="form-control" placeholder="[ Required Field ]">
                                         </div>
-                                    </div>
 
-                                    <div id="wifi-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
+                                        <h4>
                                             iOS MDM Configurations
                                             <hr>
-                                        </h2>
-                                    </div>
+                                        </h4>
 
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
                                         <div id="ios-mdm-config-error-msg" class="alert alert-danger hidden" role="alert">
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-mdm-certificate">
-                                               MDM Certificate
+                                                MDM Certificate
                                                 <span class="helper" title="Upload MDM Certificate">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
@@ -363,16 +350,12 @@
                                                 <option value="2">Developer</option>
                                             </select>
                                         </div>
-                                    </div>
 
-                                    <div id="wifi-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
+                                        <h4>
                                             iOS APNS Configurations
                                             <hr>
-                                        </h2>
-                                    </div>
+                                        </h4>
 
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
                                         <div id="ios-apns-config-error-msg" class="alert alert-danger hidden" role="alert">
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
@@ -410,15 +393,12 @@
                                                 <option value="2">Developer</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div id="wifi-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
+
+                                        <h4>
                                             End User License Agreement (EULA)
                                             <hr>
-                                        </h2>
-                                    </div>
+                                        </h4>
 
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
                                         <div class="wr-input-control">
                                             <textarea id="ios-eula" type="text" class="form-control"></textarea>
                                         </div>
@@ -437,7 +417,10 @@
                                         <div id="windows-config-error-msg" class="alert alert-danger hidden" role="alert">
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
-
+                                        <h4>
+                                            Device Notifier Configuration
+                                            <hr>
+                                        </h4>
                                         <div id="local-inputs">
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label" for="windows-config-notifier-frequency">
@@ -451,15 +434,10 @@
                                                 <input id="windows-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div id="wifi-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
+                                        <h4>
                                             End User License Agreement (EULA)
                                             <hr>
-                                        </h2>
-                                    </div>
-                                    <div id="wifi-body" class="panel-collapse panel-body" role="tabpanel" aria-labelledby="wifi-body">
+                                        </h4>
                                         <div class="wr-input-control">
                                             <textarea id="windows-eula" type="text" class="form-control"></textarea>
                                         </div>
@@ -467,7 +445,7 @@
                                             <button id="save-windows-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
                                         </div>
                                     </div>
-                                </div>
+                                    </div>
                             </div>
                             <!-- /windows -->
                         </div>
