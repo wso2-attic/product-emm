@@ -68,7 +68,7 @@ $("a.invite-user-link").click(function () {
     var usernameList = getSelectedUsernames();
     var inviteUserAPI = "/mdm-admin/users/email-invitation";
 
-    if (usernameList == 0) {
+    if (usernameList.length == 0) {
         $(modalPopupContent).html($("#errorUsers").html());
     } else {
         $(modalPopupContent).html($('#invite-user-modal-content').html());
