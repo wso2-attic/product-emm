@@ -26,7 +26,6 @@ var backendServiceInvoker = function () {
     var IS_OAUTH_ENABLED = true;
     var TOKEN_EXPIRED = "Access token has expired";
     var TOKEN_INVALID = "Invalid input. Access token validation failed";
-var log = new Log("HUTAZ.js");
     var constants = require("/modules/constants.js");
     var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
 
