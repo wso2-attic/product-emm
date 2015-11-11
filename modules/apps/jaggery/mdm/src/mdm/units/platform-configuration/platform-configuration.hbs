@@ -12,7 +12,11 @@
                 <br>
                 <br>
                 <div class="wr-advance-operations">
-                    <div class="row no-gutter">
+                    <div class="row no-gutter" id="typeDiv" typeData="
+                    {{#each types}}
+                        {{name}},
+                    {{/each}}
+                    ">
                         <div class="wr-hidden-operations-nav col-lg-4">
                             <a href="javascript:void(0)" onclick="showAdvanceOperation('general', this)" class="selected">
                                 <span class="wr-hidden-operations-icon fw-stack">
@@ -20,24 +24,32 @@
                                 </span>
                                 General Configurations
                             </a>
-                            <a href="javascript:void(0)" onclick="showAdvanceOperation('android', this)">
-                                <span class="wr-hidden-operations-icon fw-stack">
-                                    <i class="fw fw-android fw-stack-2x"></i>
-                                </span>
-                                Android Configurations
-                            </a>
-                            <a href="javascript:void(0)" onclick="showAdvanceOperation('ios', this)">
-                                <span class="wr-hidden-operations-icon fw-stack">
-                                    <i class="fw fw-apple fw-stack-2x"></i>
-                                </span>
-                                iOS Configurations
-                            </a>
-                            <a href="javascript:void(0)" onclick="showAdvanceOperation('windows', this)">
-                                <span class="wr-hidden-operations-icon fw-stack">
-                                    <i class="fw fw-windows fw-stack-2x"></i>
-                                </span>
-                                Windows Configurations
-                            </a>
+                            {{#each types}}
+                                {{#equal name "android"}}
+                                    <a href="javascript:void(0)" onclick="showAdvanceOperation('android', this)">
+                                        <span class="wr-hidden-operations-icon fw-stack">
+                                            <i class="fw fw-android fw-stack-2x"></i>
+                                        </span>
+                                        Android Configurations
+                                    </a>
+                                {{/equal}}
+                                {{#equal name "ios"}}
+                                    <a href="javascript:void(0)" onclick="showAdvanceOperation('ios', this)">
+                                        <span class="wr-hidden-operations-icon fw-stack">
+                                            <i class="fw fw-apple fw-stack-2x"></i>
+                                        </span>
+                                        iOS Configurations
+                                    </a>
+                                {{/equal}}
+                                {{#equal name "windows"}}
+                                    <a href="javascript:void(0)" onclick="showAdvanceOperation('windows', this)">
+                                        <span class="wr-hidden-operations-icon fw-stack">
+                                            <i class="fw fw-windows fw-stack-2x"></i>
+                                        </span>
+                                        Windows Configurations
+                                    </a>
+                                {{/equal}}
+                            {{/each}}
                         </div>
 
                         <div class="wr-hidden-operations-content col-lg-8">
@@ -445,7 +457,7 @@
                                             <button id="save-windows-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
                                         </div>
                                     </div>
-                                    </div>
+                                </div>
                             </div>
                             <!-- /windows -->
                         </div>

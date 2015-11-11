@@ -74,7 +74,7 @@
 
             <tbody>
             {{#each policyListToView}}
-                <tr data-type="selectable" data-id="{{id}}">
+                <tr data-type="selectable" data-id="{{id}}" data-status="{{status}}">
                     <td class="remove-padding icon-only content-fill">
                         <div class="thumbnail icon">
                             {{#equal platform "android"}}
@@ -389,6 +389,52 @@
                     </h3>
                     <h4>
                         Please select a policy or a list of policies to unpublish.
+                    </h4>
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="errorPolicyUnPublishSelection" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        You cannot select already inactive policies. Please deselect inactive policies and try again.
+                    </h4>
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="errorPolicyPublishSelection" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        You cannot select already active policies. Please deselect active policies and try again.
                     </h4>
                     <div class="buttons">
                         <a href="javascript:hidePopup()" class="btn-operations">
