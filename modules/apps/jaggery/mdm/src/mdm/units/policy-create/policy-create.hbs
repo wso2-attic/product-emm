@@ -234,7 +234,7 @@
                                         {{#each types}}
                                             {{#equal name "android"}}
                                                 <li class="col-lg-4">
-                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="android" data-platform-id="1" data-validate="false">
+                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="android" data-platform-id={{id}} data-validate="false">
                                                         <i class="fw fw-android"></i>
                                                         <b>Android</b>
                                                     </a>
@@ -242,7 +242,7 @@
                                             {{/equal}}
                                             {{#equal name "ios"}}
                                                 <li class="col-lg-4">
-                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="ios" data-platform-id="3" data-validate="false">
+                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="ios" data-platform-id={{id}} data-validate="false">
                                                         <i class="fw fw-apple"></i>
                                                         <b>Apple iOS</b>
                                                     </a>
@@ -250,7 +250,7 @@
                                             {{/equal}}
                                             {{#equal name "windows"}}
                                                 <li class="col-lg-4">
-                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="windows" data-platform-id="2" data-validate="false">
+                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="windows" data-platform-id={{id}} data-validate="false">
                                                         <i class="fw fw-windows"></i>
                                                         <b>Windows Phone</b>
                                                     </a>
