@@ -4,6 +4,9 @@ function onRequest(context) {
     if(response["content"] != null) {
         for(var i=0; i<response["content"].length; i++){
             response["content"][i].userid = response["content"][i].username.replace(/[^\w\s]/gi, '');
+            if(response["content"][i].emailAddress == null || response["content"][i].emailAddress == undefined){
+                response["content"][i].emailAddress = "Unspecified";
+            }
         }
     }
     context["permissions"] = userModule.getUIPermissions();

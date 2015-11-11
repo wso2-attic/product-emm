@@ -1179,7 +1179,7 @@
 	<repository>
             <id>wso2-staging</id>
             <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbondeployment-069/</url>
+            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonidentity-115/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>daily</updatePolicy>
