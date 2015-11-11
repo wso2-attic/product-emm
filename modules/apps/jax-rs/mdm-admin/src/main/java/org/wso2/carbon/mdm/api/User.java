@@ -615,4 +615,33 @@ public class User {
 		}
 		return Response.status(HttpStatus.SC_OK).build();
 	}
+	/**
+	 * Get the list of usernames in the system.
+	 *
+	 * @return A list of usernames
+	 * @throws MDMAPIException
+	 */
+	@GET
+	@Path("users-by-username")
+	public Response getFilteredUsersByUsername(@QueryParam("q") String username) throws MDMAPIException {
+		log.error("HIT with param");
+		if (log.isDebugEnabled()) {
+			log.debug("Getting the list of users by name");
+		}
+		UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+		String[] users;
+		try {
+			users = userStoreManager.listUsers(username, -1);
+		} catch (UserStoreException e) {
+			String msg = "Error occurred while retrieving the list of users";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		ResponsePayload responsePayload = new ResponsePayload();
+		responsePayload.setStatusCode(HttpStatus.SC_OK);
+		responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
+		                                     "Obtained user count: " + users.length);
+		responsePayload.setResponseContent(Arrays.asList(users));
+		return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+	}
 }
