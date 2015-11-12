@@ -61,9 +61,9 @@ var backendServiceInvoker = function () {
                 tokenUtil.refreshToken();
                 return execute(count);
             } else if (xmlHttpRequest.status == 500) {
-                return errorCallback(xmlHttpRequest.status);
+                return errorCallback(xmlHttpRequest.responseText);
             } else {
-                return errorCallback(xmlHttpRequest);
+                return errorCallback(xmlHttpRequest.responseText);
             }
         };
         var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();
