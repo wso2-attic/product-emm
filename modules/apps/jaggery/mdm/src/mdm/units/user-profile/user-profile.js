@@ -6,10 +6,7 @@
  */
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
-
-    var uri = request.getRequestURI();
     var userName = request.getParameter("username");
-    var uriMatcher = new URIMatcher(String(uri));
 
     if (userName) {
         var response = userModule.getUser(userName);

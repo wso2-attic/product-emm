@@ -84,7 +84,7 @@ function hidePopup() {
  */
 $("#role-grid").on("click", ".remove-role-link", function () {
     var role = $(this).data("role");
-    var removeRoleAPI = "/mdm-admin/roles/" + role;
+    var removeRoleAPI = "/mdm-admin/roles?rolename=" + role;
 
     $(modalPopupContent).html($('#remove-role-modal-content').html());
     showPopup();

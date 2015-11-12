@@ -6,14 +6,9 @@
  */
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
+    var roleName = request.getParameter("rolename");
 
-    var uri = request.getRequestURI();
-    var uriMatcher = new URIMatcher(String(uri));
-    var isMatched = uriMatcher.match("/{context}/roles/edit-role/{rolename}");
-
-    if (isMatched) {
-        var matchedElements = uriMatcher.elements();
-        var roleName = matchedElements.rolename;
+    if (roleName) {
         var response = userModule.getRole(roleName);
         if (response["status"] == "success") {
             context["role"] = response["content"];
