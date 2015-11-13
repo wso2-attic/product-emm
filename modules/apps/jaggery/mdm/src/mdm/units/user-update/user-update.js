@@ -7,7 +7,6 @@
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
 
-    var uri = request.getRequestURI();
     var userName = request.getParameter("username");
 
     if (userName) {
