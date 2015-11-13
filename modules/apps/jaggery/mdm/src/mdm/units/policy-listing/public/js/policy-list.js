@@ -115,7 +115,6 @@ function getSelectedPolicies() {
 }
 
 $(document).ready(function () {
-    $(".icon .text").res_text(0.2);
     sortElements();
     // Click functions related to Policy Listing
     var isUpdated = $('#is-updated').val();
@@ -320,4 +319,5 @@ $(document).ready(function () {
     });
     $("#loading-content").remove();
     $("#policy-grid").removeClass("hidden");
+    $(".icon .text").res_text(0.2);
 });
