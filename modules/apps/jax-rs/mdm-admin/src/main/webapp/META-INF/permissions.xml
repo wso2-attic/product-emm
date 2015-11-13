@@ -259,6 +259,13 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Change user password</name>
+        <path>/device-mgt/users/reset-password</path>
+        <url>/users/reset-password</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Delete user</name>
         <path>/device-mgt/users/delete</path>
         <url>/users</url>

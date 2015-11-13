@@ -43,17 +43,10 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
             case constants.HTTP_GET:
                 var responseData = serviceInvokers.XMLHttp.get(
                         targetURL, function (responsePayload) {
-                            log.info(targetURL);
-                            log.info(responsePayload.status);
-                            log.info(stringify(responsePayload));
                             return responsePayload;
                         },
                         function (responsePayload) {
-                            log.info(targetURL);
-                            log.info(responsePayload.status);
-                            log.info(stringify(responsePayload));
-                            response.sendError(500);
-                            <!--return responsePayload;-->
+                            return responsePayload;
                         });
                 result = responseData;
                 break;

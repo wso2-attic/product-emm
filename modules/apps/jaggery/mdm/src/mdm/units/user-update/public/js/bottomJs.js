@@ -24,6 +24,10 @@ $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
         tags : true
     });
+    var roleList = $("#roles").attr("selectedVals").trim().replace(/ /g,"");
+    roleList = roleList.replace(/(\r\n|\n|\r)/gm,"");
+    var roleArr = roleList.split(",");
+    $("#roles").val(roleArr).trigger("change");
 
     /**
      * Following click function would execute
@@ -34,19 +38,12 @@ $(document).ready(function () {
         var username = $("input#username").val();
         var firstname = $("input#firstname").val();
         var lastname = $("input#lastname").val();
-        var password = $("input#password").val();
         var emailAddress = $("input#emailAddress").val();
         var roles = $("select#roles").val();
         var errorMsgWrapper = "#user-create-error-msg";
         var errorMsg = "#user-create-error-msg span";
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (!password) {
-            $(errorMsg).text("Password is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (password != "" && !inputIsValid(/^[\S]{5,30}$/, password)) {
-            $(errorMsg).text("Provided password doesn't conform to the password policy. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
@@ -73,9 +70,7 @@ $(document).ready(function () {
             addUserFormData.firstname = firstname;
             addUserFormData.lastname = lastname;
             addUserFormData.emailAddress = emailAddress;
-            // Base64 encode the password
-            //TODO: use CryptoJS for this
-            addUserFormData.password = window.btoa(password);
+
             if (roles == null){
                 roles = [];
             }
@@ -94,7 +89,6 @@ $(document).ready(function () {
                         $("input#firstname").val("");
                         $("input#lastname").val("");
                         $("input#email").val("");
-                        $("input#password").val("");
                         $("select#roles").select2("val", "");
                         // Refreshing with success message
                         $("#user-create-form").addClass("hidden");
