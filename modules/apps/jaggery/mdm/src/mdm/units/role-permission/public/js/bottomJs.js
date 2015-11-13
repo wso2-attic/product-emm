@@ -56,13 +56,13 @@ $(document).ready(function () {
     var listPartialSrc = $("#list-partial").attr("src");
     var treeTemplateSrc = $("#tree-template").attr("src");
     var roleName = $("#permissionList").data("currentrole");
-    var serviceUrl = "/mdm-admin/roles?rolename=" + roleName;
+    var serviceUrl = "/mdm-admin/roles/permissions?rolename=" + roleName;
     $.registerPartial("list", listPartialSrc, function(){
         $.template("treeTemplate", treeTemplateSrc, function (template) {
             invokerUtil.get(serviceUrl,
                 function(data){
                     data = JSON.parse(data);
-                    var treeData = data.responseContent.permissionList;
+                    var treeData = data.responseContent;
                     if(treeData.nodeList.length > 0){
                         treeData = { nodeList: treeData.nodeList };
                         var content = template(treeData);
