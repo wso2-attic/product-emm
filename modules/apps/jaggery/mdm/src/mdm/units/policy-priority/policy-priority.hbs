@@ -28,6 +28,9 @@
                                         {{#equal platform "android"}}
                                             <i class=" fw fw-android"></i>
                                         {{/equal}}
+                                        {{#equal platform "windows"}}
+                                            <i class=" fw fw-windows"></i>
+                                        {{/equal}}
                                         {{#equal platform "ios"}}
                                             <i class=" fw fw-apple"></i>
                                         {{/equal}}
@@ -68,10 +71,12 @@
                         </span>
                     {{/each}}
                 </div>
-                <div id="save-new-priorities-button" class="wr-input-control wr-btn-grp">
-                    <button class="wr-btn hide" id="sortUpdateBtn" data-policycount="{{policyCount}}" data-enabled="{{saveNewPrioritiesButtonEnabled}}" disabled>Save New Priority Order</button>
-                    <button class="wr-btn" id="applyChangesBtn">Apply Changes</button>
-                </div>
+                {{#equal noPolicy false}}
+                    <div id="save-new-priorities-button" class="wr-input-control wr-btn-grp">
+                        <button class="wr-btn hide" id="sortUpdateBtn" data-policycount="{{policyCount}}" data-enabled="{{saveNewPrioritiesButtonEnabled}}" disabled>Save New Priority Order</button>
+                        <button class="wr-btn" id="applyChangesBtn">Apply Changes</button>
+                    </div>
+                {{/equal}}
             </div>
             <!-- /content -->
         </div>
