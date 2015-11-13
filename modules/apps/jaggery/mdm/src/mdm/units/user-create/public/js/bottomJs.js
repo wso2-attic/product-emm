@@ -103,7 +103,7 @@ $(document).ready(function () {
                         $(errorMsg).text(data["messageFromServer"]);
                         $(errorMsgWrapper).removeClass("hidden");
                     } else if (data["statusCode"] == 500) {
-                        $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
+                        $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                         $(errorMsgWrapper).removeClass("hidden");
                     }
                 }, function (data) {
