@@ -150,13 +150,7 @@ public class MDMAPIUtils {
      * @return returns the tenant id.
      */
     public static int getTenantId() {
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
-        PrivilegedCarbonContext.endTenantFlow();
-        return tenantId;
+        return CarbonContext.getThreadLocalCarbonContext().getTenantId();
     }
 
     public static DeviceIdentifier instantiateDeviceIdentifier(String deviceType, String deviceId) {
