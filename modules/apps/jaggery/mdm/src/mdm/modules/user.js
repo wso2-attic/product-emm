@@ -490,7 +490,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/" + roleName;
+            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/role?rolename=" + roleName;
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
             return response;
         } catch (e) {
