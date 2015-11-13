@@ -947,7 +947,7 @@
         <mdm.version>2.0.0-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
-        <carbon.api.mgt.version>4.3.0-SNAPSHOT</carbon.api.mgt.version>
+        <carbon.api.mgt.version>4.3.0</carbon.api.mgt.version>
 
         <!-- Carbon Mediation -->
         <carbon.mediation.version>4.4.11</carbon.mediation.version>
@@ -1177,14 +1177,14 @@
             </releases>
         </repository>
         <!--<repository>-->
-        <!--<id>wso2-staging</id>-->
-        <!--<name>WSO2 internal Repository</name>-->
-        <!--<url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonmediation-124/</url>-->
-        <!--<releases>-->
-        <!--<enabled>true</enabled>-->
-        <!--<updatePolicy>daily</updatePolicy>-->
-        <!--<checksumPolicy>ignore</checksumPolicy>-->
-        <!--</releases>-->
+            <!--<id>wso2-staging</id>-->
+            <!--<name>WSO2 internal Repository</name>-->
+            <!--<url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonapimgt-125/</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>daily</updatePolicy>-->
+                <!--<checksumPolicy>ignore</checksumPolicy>-->
+            <!--</releases>-->
         <!--</repository>-->
     </repositories>
 
