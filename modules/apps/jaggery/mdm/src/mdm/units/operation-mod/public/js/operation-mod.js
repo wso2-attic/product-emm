@@ -40,6 +40,7 @@ var operationModule = function () {
         "CAMERA_OPERATION_CODE": "CAMERA",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "WIFI_OPERATION_CODE": "WIFI",
+        "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE"
     };
@@ -625,6 +626,14 @@ var operationModule = function () {
                 payload = {
                     "operation": {
                         "message" : operationData["message"]
+                    }
+                };
+                break;
+            case androidOperationConstants["WIPE_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "pin" : operationData["pin"]
                     }
                 };
                 break;

@@ -50,10 +50,16 @@ public class EnrollmentService {
 		String msg;
 		try {
 			device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-			AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
-			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Device enrollment succeeded");
-			responseMsg.setResponseCode(Response.Status.CREATED.toString());
+			boolean status = AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
+			if (status) {
+				Response.status(Response.Status.CREATED);
+				responseMsg.setResponseMessage("Device enrollment succeeded.");
+				responseMsg.setResponseCode(Response.Status.CREATED.toString());
+			} else {
+				Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+				responseMsg.setResponseMessage("Device enrollment failed.");
+				responseMsg.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);

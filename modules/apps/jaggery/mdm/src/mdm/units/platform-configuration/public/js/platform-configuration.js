@@ -90,6 +90,7 @@ var configParams = {
 };
 
 $(document).ready(function () {
+    var platformsSupported = $("#typeDiv").attr("typeData");
     $("#gcm-inputs").hide();
     tinymce.init({
         selector: "textarea",
@@ -113,37 +114,39 @@ $(document).ready(function () {
      * Upon receiving the response, the parameters will be set to the fields,
      * in case those configurations are already set.
      */
-    invokerUtil.get(
-        getAndroidConfigAPI,
 
-        function (data) {
-            data = JSON.parse(data);
-            if (data != null && data.configuration != null) {
-                for (var i = 0; i < data.configuration.length; i++) {
-                    var config = data.configuration[i];
-                    if(config.name == configParams["NOTIFIER_TYPE"]){
-                        $("#android-config-notifier").val(config.value);
-                        if(config.value != notifierTypeConstants["GCM"] ) {
-                            $("#gcm-inputs").hide();
-                        }else{
-                            $("#gcm-inputs").show();
+    if (platformsSupported.indexOf('android') != -1) {
+        invokerUtil.get(
+            getAndroidConfigAPI,
+
+            function (data) {
+                data = JSON.parse(data);
+                if (data != null && data.configuration != null) {
+                    for (var i = 0; i < data.configuration.length; i++) {
+                        var config = data.configuration[i];
+                        if (config.name == configParams["NOTIFIER_TYPE"]) {
+                            $("#android-config-notifier").val(config.value);
+                            if (config.value != notifierTypeConstants["GCM"]) {
+                                $("#gcm-inputs").hide();
+                            } else {
+                                $("#gcm-inputs").show();
+                            }
+                        } else if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
+                            $("input#android-config-notifier-frequency").val(config.value);
+                        } else if (config.name == configParams["GCM_API_KEY"]) {
+                            $("input#android-config-gcm-api-key").val(config.value);
+                        } else if (config.name == configParams["GCM_SENDER_ID"]) {
+                            $("input#android-config-gcm-sender-id").val(config.value);
+                        } else if (config.name == configParams["ANDROID_EULA"]) {
+                            $("#android-eula").val(config.value);
                         }
-                    } else if(config.name == configParams["NOTIFIER_FREQUENCY"]){
-                        $("input#android-config-notifier-frequency").val(config.value);
-                    } else if(config.name == configParams["GCM_API_KEY"]){
-                        $("input#android-config-gcm-api-key").val(config.value);
-                    } else if(config.name == configParams["GCM_SENDER_ID"]){
-                        $("input#android-config-gcm-sender-id").val(config.value);
-                    } else if(config.name == configParams["ANDROID_EULA"]){
-                        $("#android-eula").val(config.value);
                     }
                 }
+            }, function () {
+
             }
-
-        }, function () {
-
-        }
-    );
+        );
+    }
 
     invokerUtil.get(
         getGeneralConfigAPI,
@@ -153,22 +156,22 @@ $(document).ready(function () {
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
-                    if(config.name == configParams["NOTIFIER_FREQUENCY"]){
+                    if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
                         $("input#monitoring-config-frequency").val(config.value);
                     }
                     /*if(config.name == configParams["GENERAL_EMAIL_HOST"]){
-                        $("input#email-config-host").val(config.value);
-                    } else if(config.name == configParams["GENERAL_EMAIL_PORT"]){
-                        $("input#email-config-port").val(config.value);
-                    } else if(config.name == configParams["GENERAL_EMAIL_USERNAME"]){
-                        $("input#email-config-username").val(config.value);
-                    } else if(config.name == configParams["GENERAL_EMAIL_PASSWORD"]){
-                        $("input#email-config-password").val(config.value);
-                    } else if(config.name == configParams["GENERAL_EMAIL_SENDER_ADDRESS"]){
-                        $("input#email-config-sender-email").val(config.value);
-                    } else if(config.name == configParams["GENERAL_EMAIL_TEMPLATE"]){
-                        $("input#email-config-template").val(config.value);
-                    }*/
+                     $("input#email-config-host").val(config.value);
+                     } else if(config.name == configParams["GENERAL_EMAIL_PORT"]){
+                     $("input#email-config-port").val(config.value);
+                     } else if(config.name == configParams["GENERAL_EMAIL_USERNAME"]){
+                     $("input#email-config-username").val(config.value);
+                     } else if(config.name == configParams["GENERAL_EMAIL_PASSWORD"]){
+                     $("input#email-config-password").val(config.value);
+                     } else if(config.name == configParams["GENERAL_EMAIL_SENDER_ADDRESS"]){
+                     $("input#email-config-sender-email").val(config.value);
+                     } else if(config.name == configParams["GENERAL_EMAIL_TEMPLATE"]){
+                     $("input#email-config-template").val(config.value);
+                     }*/
                 }
             }
 
@@ -177,79 +180,80 @@ $(document).ready(function () {
         }
     );
 
-    invokerUtil.get(
-        getIosConfigAPI,
-
-        function (data) {
-            data = JSON.parse(data);
-            if (data != null && data.configuration != null) {
-                for (var i = 0; i < data.configuration.length; i++) {
-                    var config = data.configuration[i];
-                    if(config.name == configParams["CONFIG_COUNTRY"]){
-                        $("input#ios-config-country").val(config.value);
-                    } else if(config.name == configParams["CONFIG_STATE"]){
-                        $("input#ios-config-state").val(config.value);
-                    } else if(config.name == configParams["CONFIG_LOCALITY"]){
-                        $("input#ios-config-locality").val(config.value);
-                    } else if(config.name == configParams["CONFIG_ORGANIZATION"]){
-                        $("input#ios-config-organization").val(config.value);
-                    } else if(config.name == configParams["CONFIG_ORGANIZATION_UNIT"]){
-                        $("input#ios-config-organization-unit").val(config.value);
-                    } else if(config.name == configParams["MDM_CERT_PASSWORD"]){
-                        $("input#ios-config-mdm-certificate-password").val(config.value);
-                    } else if(config.name == configParams["MDM_CERT_TOPIC_ID"]){
-                        $("input#ios-config-mdm-certificate-topic-id").val(config.value);
-                    } else if(config.name == configParams["APNS_CERT_PASSWORD"]){
-                        $("input#ios-config-apns-certificate-password").val(config.value);
-                    } else if(config.name == configParams["MDM_CERT_NAME"]){
-                        $("#mdm-cert-file-name").html(config.value);
-                    } else if(config.name == configParams["APNS_CERT_NAME"]){
-                        $("#apns-cert-file-name").html(config.value);
-                    } else if(config.name == configParams["ORG_DISPLAY_NAME"]){
-                        $("input#ios-org-display-name").val(config.value);
-                    } else if(config.name == configParams["IOS_EULA"]){
-                        $("#ios-eula").val(config.value);
+    if (platformsSupported.indexOf('windows') != -1) {
+        invokerUtil.get(
+            getWindowsConfigAPI,
+            function (data) {
+                data = JSON.parse(data);
+                if (data != null && data.configuration != null) {
+                    for (var i = 0; i < data.configuration.length; i++) {
+                        var config = data.configuration[i];
+                        if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
+                            $("input#windows-config-notifier-frequency").val(config.value);
+                        } else if (config.name == configParams["WINDOWS_EULA"]) {
+                            $("#windows-eula").val(config.value);
+                        }
                     }
                 }
+
+            }, function () {
+
             }
+        );
+    }
 
-        }, function () {
-
-        }
-    );
-
-    invokerUtil.get(
-        getWindowsConfigAPI,
-
-        function (data) {
-            data = JSON.parse(data);
-            if (data != null && data.configuration != null) {
-                for (var i = 0; i < data.configuration.length; i++) {
-                    var config = data.configuration[i];
-                    if(config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                        $("input#windows-config-notifier-frequency").val(config.value);
-                    } else if(config.name == configParams["WINDOWS_EULA"]) {
-                        $("#windows-eula").val(config.value);
+    if (platformsSupported.indexOf('ios') != -1) {
+        invokerUtil.get(
+            getIosConfigAPI,
+            function (data) {
+                data = JSON.parse(data);
+                if (data != null && data.configuration != null) {
+                    for (var i = 0; i < data.configuration.length; i++) {
+                        var config = data.configuration[i];
+                        if (config.name == configParams["CONFIG_COUNTRY"]) {
+                            $("input#ios-config-country").val(config.value);
+                        } else if (config.name == configParams["CONFIG_STATE"]) {
+                            $("input#ios-config-state").val(config.value);
+                        } else if (config.name == configParams["CONFIG_LOCALITY"]) {
+                            $("input#ios-config-locality").val(config.value);
+                        } else if (config.name == configParams["CONFIG_ORGANIZATION"]) {
+                            $("input#ios-config-organization").val(config.value);
+                        } else if (config.name == configParams["CONFIG_ORGANIZATION_UNIT"]) {
+                            $("input#ios-config-organization-unit").val(config.value);
+                        } else if (config.name == configParams["MDM_CERT_PASSWORD"]) {
+                            $("input#ios-config-mdm-certificate-password").val(config.value);
+                        } else if (config.name == configParams["MDM_CERT_TOPIC_ID"]) {
+                            $("input#ios-config-mdm-certificate-topic-id").val(config.value);
+                        } else if (config.name == configParams["APNS_CERT_PASSWORD"]) {
+                            $("input#ios-config-apns-certificate-password").val(config.value);
+                        } else if (config.name == configParams["MDM_CERT_NAME"]) {
+                            $("#mdm-cert-file-name").html(config.value);
+                        } else if (config.name == configParams["APNS_CERT_NAME"]) {
+                            $("#apns-cert-file-name").html(config.value);
+                        } else if (config.name == configParams["ORG_DISPLAY_NAME"]) {
+                            $("input#ios-org-display-name").val(config.value);
+                        } else if (config.name == configParams["IOS_EULA"]) {
+                            $("#ios-eula").val(config.value);
+                        }
                     }
                 }
+
+            }, function () {
+
             }
-
-        }, function () {
-
-        }
-    );
-
+        );
+    }
 
     $("select.select2[multiple=multiple]").select2({
-        tags : true
+        tags: true
     });
 
-    $("#android-config-notifier").change(function() {
+    $("#android-config-notifier").change(function () {
         var notifierType = $("#android-config-notifier").find("option:selected").attr("value");
-        if(notifierType  != notifierTypeConstants["GCM"] ) {
+        if (notifierType != notifierTypeConstants["GCM"]) {
             $("#gcm-inputs").hide();
             $("#local-inputs").show();
-        }else{
+        } else {
             $("#local-inputs").hide();
             $("#gcm-inputs").show();
         }
@@ -259,7 +263,7 @@ $(document).ready(function () {
      * when a user clicks on "Save" button
      * on Android platform configuration page in WSO2 EMM Console.
      */
-    $("button#save-android-btn").click(function() {
+    $("button#save-android-btn").click(function () {
         var notifierType = $("#android-config-notifier").find("option:selected").attr("value");
         var notifierFrequency = $("input#android-config-notifier-frequency").val();
         var gcmAPIKey = $("input#android-config-gcm-api-key").val();
@@ -358,14 +362,14 @@ $(document).ready(function () {
      * when a user clicks on "Save" button
      * on General platform configuration page in WSO2 EMM Console.
      */
-    $("button#save-general-btn").click(function() {
+    $("button#save-general-btn").click(function () {
         var notifierFrequency = $("input#monitoring-config-frequency").val();
         /*var emailHost = $("input#email-config-host").val();
-        var emailPort = $("input#email-config-port").val();
-        var emailUsername = $("input#email-config-username").val();
-        var emailPassword = $("input#email-config-password").val();
-        var emailSenderAddress = $("input#email-config-sender-email").val();
-        var emailTemplate = $("input#email-config-template").val();*/
+         var emailPort = $("input#email-config-port").val();
+         var emailUsername = $("input#email-config-username").val();
+         var emailPassword = $("input#email-config-password").val();
+         var emailSenderAddress = $("input#email-config-sender-email").val();
+         var emailTemplate = $("input#email-config-template").val();*/
 
         var errorMsgWrapper = "#email-config-error-msg";
         var errorMsg = "#email-config-error-msg span";
@@ -501,7 +505,7 @@ $(document).ready(function () {
     var fileNameAPNSCert = "";
     var invalidFormatAPNSCert = false;
 
-    $(fileInputMDMCert).change(function() {
+    $(fileInputMDMCert).change(function () {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");
@@ -513,11 +517,11 @@ $(document).ready(function () {
         var file = fileInputMDMCert[0].files[0];
         fileNameMDMCert = file.name;
         var extension = file.name.split('.').pop().toLowerCase(),
-        isSuccess = fileTypes.indexOf(extension) > -1;
+            isSuccess = fileTypes.indexOf(extension) > -1;
 
         if (isSuccess) {
             var fileReader = new FileReader();
-            fileReader.onload = function(event) {
+            fileReader.onload = function (event) {
                 base64MDMCert = event.target.result;
             };
             fileReader.readAsDataURL(file);
@@ -528,7 +532,7 @@ $(document).ready(function () {
         }
     });
 
-    $(fileInputAPNSCert).change(function() {
+    $(fileInputAPNSCert).change(function () {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");
@@ -540,11 +544,11 @@ $(document).ready(function () {
         var file = fileInputAPNSCert[0].files[0];
         fileNameAPNSCert = file.name;
         var extension = file.name.split('.').pop().toLowerCase(),
-        isSuccess = fileTypes.indexOf(extension) > -1;
+            isSuccess = fileTypes.indexOf(extension) > -1;
 
         if (isSuccess) {
             var fileReader = new FileReader();
-            fileReader.onload = function(event) {
+            fileReader.onload = function (event) {
                 base64APNSCert = event.target.result;
             };
             fileReader.readAsDataURL(file);
@@ -555,7 +559,7 @@ $(document).ready(function () {
         }
     });
 
-    $("button#save-ios-btn").click(function() {
+    $("button#save-ios-btn").click(function () {
 
         var configCountry = $("#ios-config-country").val();
         var configState = $("#ios-config-state").val();
@@ -592,7 +596,7 @@ $(document).ready(function () {
         } else if (!APNSCertPassword) {
             $(errorMsg).text("APNS certificate password is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if(notSupportedError) {
+        } else if (notSupportedError) {
             $(errorMsg).text("The File APIs are not fully supported in this browser.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (invalidFormatMDMCert) {
@@ -610,143 +614,143 @@ $(document).ready(function () {
         } else if (!configOrgDisplayName) {
             $(errorMsg).text("Organization display name is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        }
+        } else {
+            var addConfigFormData = {};
+            var configList = new Array();
 
-        var addConfigFormData = {};
-        var configList = new Array();
+            var configCountry = {
+                "name": configParams["CONFIG_COUNTRY"],
+                "value": configCountry,
+                "contentType": "text"
+            };
 
-        var configCountry = {
-            "name": configParams["CONFIG_COUNTRY"],
-            "value": configCountry,
-            "contentType": "text"
-        };
+            var configState = {
+                "name": configParams["CONFIG_STATE"],
+                "value": configState,
+                "contentType": "text"
+            };
 
-        var configState = {
-            "name": configParams["CONFIG_STATE"],
-            "value": configState,
-            "contentType": "text"
-        };
+            var configLocality = {
+                "name": configParams["CONFIG_LOCALITY"],
+                "value": configLocality,
+                "contentType": "text"
+            };
 
-        var configLocality = {
-            "name": configParams["CONFIG_LOCALITY"],
-            "value": configLocality,
-            "contentType": "text"
-        };
+            var configOrganization = {
+                "name": configParams["CONFIG_ORGANIZATION"],
+                "value": configOrganization,
+                "contentType": "text"
+            };
 
-        var configOrganization = {
-            "name": configParams["CONFIG_ORGANIZATION"],
-            "value": configOrganization,
-            "contentType": "text"
-        };
+            var configOrganizationUnit = {
+                "name": configParams["CONFIG_ORGANIZATION_UNIT"],
+                "value": configOrganizationUnit,
+                "contentType": "text"
+            };
 
-        var configOrganizationUnit = {
-            "name": configParams["CONFIG_ORGANIZATION_UNIT"],
-            "value": configOrganizationUnit,
-            "contentType": "text"
-        };
+            var MDMCertPassword = {
+                "name": configParams["MDM_CERT_PASSWORD"],
+                "value": MDMCertPassword,
+                "contentType": "text"
+            };
 
-        var MDMCertPassword = {
-            "name": configParams["MDM_CERT_PASSWORD"],
-            "value": MDMCertPassword,
-            "contentType": "text"
-        };
+            var MDMCertTopicID = {
+                "name": configParams["MDM_CERT_TOPIC_ID"],
+                "value": MDMCertTopicID,
+                "contentType": "text"
+            };
 
-        var MDMCertTopicID = {
-            "name": configParams["MDM_CERT_TOPIC_ID"],
-            "value": MDMCertTopicID,
-            "contentType": "text"
-        };
+            var APNSCertPassword = {
+                "name": configParams["APNS_CERT_PASSWORD"],
+                "value": APNSCertPassword,
+                "contentType": "text"
+            };
 
-        var APNSCertPassword = {
-            "name": configParams["APNS_CERT_PASSWORD"],
-            "value": APNSCertPassword,
-            "contentType": "text"
-        };
+            var paramBase64MDMCert = {
+                "name": configParams["MDM_CERT"],
+                "value": base64MDMCert,
+                "contentType": "text"
+            };
 
-        var paramBase64MDMCert = {
-            "name": configParams["MDM_CERT"],
-            "value": base64MDMCert,
-            "contentType": "text"
-        };
+            var MDMCertName = {
+                "name": configParams["MDM_CERT_NAME"],
+                "value": fileNameMDMCert,
+                "contentType": "text"
+            };
 
-        var MDMCertName = {
-            "name": configParams["MDM_CERT_NAME"],
-            "value": fileNameMDMCert,
-            "contentType": "text"
-        };
+            var paramBase64APNSCert = {
+                "name": configParams["APNS_CERT"],
+                "value": base64APNSCert,
+                "contentType": "text"
+            };
 
-        var paramBase64APNSCert = {
-            "name": configParams["APNS_CERT"],
-            "value": base64APNSCert,
-            "contentType": "text"
-        };
+            var APNSCertName = {
+                "name": configParams["APNS_CERT_NAME"],
+                "value": fileNameAPNSCert,
+                "contentType": "text"
+            };
 
-        var APNSCertName = {
-            "name": configParams["APNS_CERT_NAME"],
-            "value": fileNameAPNSCert,
-            "contentType": "text"
-        };
+            var paramOrganizationDisplayName = {
+                "name": configParams["ORG_DISPLAY_NAME"],
+                "value": configOrgDisplayName,
+                "contentType": "text"
+            };
 
-        var paramOrganizationDisplayName = {
-            "name": configParams["ORG_DISPLAY_NAME"],
-            "value": configOrgDisplayName,
-            "contentType": "text"
-        };
+            var iosEula = {
+                "name": configParams["IOS_EULA"],
+                "value": iosLicense,
+                "contentType": "text"
+            };
 
-        var iosEula = {
-            "name": configParams["IOS_EULA"],
-            "value": iosLicense,
-            "contentType": "text"
-        };
+            configList.push(configCountry);
+            configList.push(configState);
+            configList.push(configLocality);
+            configList.push(configOrganization);
+            configList.push(configOrganizationUnit);
+            configList.push(MDMCertPassword);
+            configList.push(MDMCertTopicID);
+            configList.push(APNSCertPassword);
+            configList.push(paramBase64MDMCert);
+            configList.push(MDMCertName);
+            configList.push(paramBase64APNSCert);
+            configList.push(APNSCertName);
+            configList.push(paramOrganizationDisplayName);
+            configList.push(iosEula);
 
-        configList.push(configCountry);
-        configList.push(configState);
-        configList.push(configLocality);
-        configList.push(configOrganization);
-        configList.push(configOrganizationUnit);
-        configList.push(MDMCertPassword);
-        configList.push(MDMCertTopicID);
-        configList.push(APNSCertPassword);
-        configList.push(paramBase64MDMCert);
-        configList.push(MDMCertName);
-        configList.push(paramBase64APNSCert);
-        configList.push(APNSCertName);
-        configList.push(paramOrganizationDisplayName);
-        configList.push(iosEula);
+            addConfigFormData.type = platformTypeConstants["IOS"];
+            addConfigFormData.configuration = configList;
 
-        addConfigFormData.type = platformTypeConstants["IOS"];
-        addConfigFormData.configuration = configList;
+            var addConfigAPI = "/ios/configuration";
 
-        var addConfigAPI = "/ios/configuration";
+            invokerUtil.post(
+                addConfigAPI,
+                addConfigFormData,
+                function (data) {
+                    data = JSON.parse(data);
+                    if (data.responseCode == responseCodes["CREATED"]) {
+                        $("#config-save-form").addClass("hidden");
+                        $("#record-created-msg").removeClass("hidden");
+                    } else if (data == 500) {
+                        $(errorMsg).text("Exception occurred at backend.");
+                    } else if (data == 400) {
+                        $(errorMsg).text("Configurations cannot be empty.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
+                    }
 
-        invokerUtil.post(
-            addConfigAPI,
-            addConfigFormData,
-            function (data) {
-                data = JSON.parse(data);
-                if (data.responseCode == responseCodes["CREATED"]) {
-                    $("#config-save-form").addClass("hidden");
-                    $("#record-created-msg").removeClass("hidden");
-                } else if (data == 500) {
-                    $(errorMsg).text("Exception occurred at backend.");
-                } else if (data == 400) {
-                    $(errorMsg).text("Configurations cannot be empty.");
-                } else {
+                    $(errorMsgWrapper).removeClass("hidden");
+                }, function () {
                     $(errorMsg).text("An unexpected error occurred.");
+                    $(errorMsgWrapper).removeClass("hidden");
                 }
-
-                $(errorMsgWrapper).removeClass("hidden");
-            }, function () {
-                $(errorMsg).text("An unexpected error occurred.");
-                $(errorMsgWrapper).removeClass("hidden");
-            }
-        );
+            );
+        }
 
     });
 
-    var errorMsgWrapper = "#windows-config-error-msg";
-    var errorMsg = "#windows-config-error-msg span";
-    var fileTypes = ['jks'];
+    var errorMsgWrapperWindows = "#windows-config-error-msg";
+    var errorMsgWindows = "#windows-config-error-msg span";
+    var fileTypesWindows = ['jks'];
     var notSupportedError = false;
 
     var base64WindowsMDMCert = "";
@@ -754,11 +758,11 @@ $(document).ready(function () {
     var fileNameWindowsMDMCert = "";
     var invalidFormatWindowsMDMCert = false;
 
-    $(fileInputWindowsMDMCert).change(function() {
+    $(fileInputWindowsMDMCert).change(function () {
 
         if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-            $(errorMsg).text("The File APIs are not fully supported in this browser.");
-            $(errorMsgWrapper).removeClass("hidden");
+            $(errorMsgWindows).text("The File APIs are not fully supported in this browser.");
+            $(errorMsgWrapperWindows).removeClass("hidden");
             notSupportedError = true;
             return;
         }
@@ -766,11 +770,11 @@ $(document).ready(function () {
         var file = fileInputWindowsMDMCert[0].files[0];
         fileNameWindowsMDMCert = file.name;
         var extension = file.name.split('.').pop().toLowerCase(),
-            isSuccess = fileTypes.indexOf(extension) > -1;
+            isSuccess = fileTypesWindows.indexOf(extension) > -1;
 
         if (isSuccess) {
             var fileReader = new FileReader();
-            fileReader.onload = function(event) {
+            fileReader.onload = function (event) {
                 base64WindowsMDMCert = event.target.result;
             };
             fileReader.readAsDataURL(file);
@@ -781,67 +785,67 @@ $(document).ready(function () {
         }
     });
 
-    $("button#save-windows-btn").click(function() {
+    $("button#save-windows-btn").click(function () {
 
         var notifierFrequency = $("#windows-config-notifier-frequency").val();
         var windowsLicense = tinymce.get('windows-eula').getContent();
 
         if (!notifierFrequency) {
-            $(errorMsg).text("Notifier Frequency is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
+            $(errorMsgWindows).text("Notifier Frequency is a required field. It cannot be empty.");
+            $(errorMsgWrapperWindows).removeClass("hidden");
         } else if (!windowsLicense) {
-            $(errorMsg).text("License is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if(!$.isNumeric(notifierFrequency)){
-            $(errorMsg).text("Provided Notifier frequency is invalid. It must be a number.");
-            $(errorMsgWrapper).removeClass("hidden");
-        }
+            $(errorMsgWindows).text("License is a required field. It cannot be empty.");
+            $(errorMsgWrapperWindows).removeClass("hidden");
+        } else if (!$.isNumeric(notifierFrequency)) {
+            $(errorMsgWindows).text("Provided Notifier frequency is invalid. It must be a number.");
+            $(errorMsgWrapperWindows).removeClass("hidden");
+        } else {
+            var addConfigFormData = {};
+            var configList = new Array();
 
-        var addConfigFormData = {};
-        var configList = new Array();
+            var paramNotifierFrequency = {
+                "name": configParams["NOTIFIER_FREQUENCY"],
+                "value": notifierFrequency,
+                "contentType": "text"
+            };
 
-        var paramNotifierFrequency = {
-            "name": configParams["NOTIFIER_FREQUENCY"],
-            "value": notifierFrequency,
-            "contentType": "text"
-        };
+            var windowsEula = {
+                "name": configParams["WINDOWS_EULA"],
+                "value": windowsLicense,
+                "contentType": "text"
+            };
 
-        var windowsEula = {
-            "name": configParams["WINDOWS_EULA"],
-            "value": windowsLicense,
-            "contentType": "text"
-        };
+            configList.push(paramNotifierFrequency);
+            configList.push(windowsEula);
 
-        configList.push(paramNotifierFrequency);
-        configList.push(windowsEula);
+            addConfigFormData.type = platformTypeConstants["WINDOWS"];
+            addConfigFormData.configuration = configList;
 
-        addConfigFormData.type = platformTypeConstants["WINDOWS"];
-        addConfigFormData.configuration = configList;
+            var addConfigAPI = "/mdm-windows-agent/services/configuration";
 
-        var addConfigAPI = "/mdm-windows-agent/services/configuration";
+            invokerUtil.post(
+                addConfigAPI,
+                addConfigFormData,
+                function (data) {
+                    data = JSON.parse(data);
+                    if (data.responseCode == responseCodes["CREATED"]) {
+                        $("#config-save-form").addClass("hidden");
+                        $("#record-created-msg").removeClass("hidden");
+                    } else if (data == 500) {
+                        $(errorMsg).text("Exception occurred at backend.");
+                    } else if (data == 400) {
+                        $(errorMsg).text("Configurations cannot be empty.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
+                    }
 
-        invokerUtil.post(
-            addConfigAPI,
-            addConfigFormData,
-            function (data) {
-                data = JSON.parse(data);
-                if (data.responseCode == responseCodes["CREATED"]) {
-                    $("#config-save-form").addClass("hidden");
-                    $("#record-created-msg").removeClass("hidden");
-                } else if (data == 500) {
-                    $(errorMsg).text("Exception occurred at backend.");
-                } else if (data == 400) {
-                    $(errorMsg).text("Configurations cannot be empty.");
-                } else {
-                    $(errorMsg).text("An unexpected error occurred.");
+                    $(errorMsgWrapperWindows).removeClass("hidden");
+                }, function () {
+                    $(errorMsgWindows).text("An unexpected error occurred.");
+                    $(errorMsgWrapperWindows).removeClass("hidden");
                 }
-
-                $(errorMsgWrapper).removeClass("hidden");
-            }, function () {
-                $(errorMsg).text("An unexpected error occurred.");
-                $(errorMsgWrapper).removeClass("hidden");
-            }
-        );
+            );
+        }
 
     });
 });

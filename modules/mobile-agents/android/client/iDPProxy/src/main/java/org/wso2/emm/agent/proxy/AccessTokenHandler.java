@@ -79,6 +79,9 @@ public class AccessTokenHandler extends Activity {
             request_params.put(Constants.GRANT_TYPE, Constants.GRANT_TYPE_PASSWORD);
             request_params.put(USERNAME_LABEL, info.getUsername());
             request_params.put(PASSWORD_LABEL, info.getPassword());
+            if(info.getTenantDomain() != null) {
+                request_params.put(TENANT_DOMAIN_LABEL, info.getTenantDomain());
+            }
             request_params.put(Constants.SCOPE, SCOPE);
 
             EndPointInfo endPointInfo = new EndPointInfo();

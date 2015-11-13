@@ -105,7 +105,7 @@ $(document).ready(function () {
             }
             addRoleFormData.users = users;
 
-            var addRoleAPI = "/mdm-admin/roles/" + currentRoleName;
+            var addRoleAPI = "/mdm-admin/roles?rolename=" + currentRoleName;
 
             invokerUtil.put(
                 addRoleAPI,

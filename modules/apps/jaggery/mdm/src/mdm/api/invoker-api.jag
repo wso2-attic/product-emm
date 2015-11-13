@@ -38,6 +38,7 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
         payload = parse(request.getContent()).actionPayload;
     }
     try {
+
         switch (method) {
             case constants.HTTP_GET:
                 var responseData = serviceInvokers.XMLHttp.get(

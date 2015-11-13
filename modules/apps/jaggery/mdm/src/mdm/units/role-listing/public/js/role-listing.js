@@ -12,6 +12,7 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
                 if(data.length > 0){
                     var content = template(data.viewModel);
                     $(objectGridContainer).html(content);
+                    $("#loading-content").remove();
                     $('#role-grid').datatables_extended();
                     $("#dt-select-all").addClass("hidden");
                     $(".icon .text").res_text(0.2);
@@ -84,7 +85,7 @@ function hidePopup() {
  */
 $("#role-grid").on("click", ".remove-role-link", function () {
     var role = $(this).data("role");
-    var removeRoleAPI = "/mdm-admin/roles/" + role;
+    var removeRoleAPI = "/mdm-admin/roles?rolename=" + role;
 
     $(modalPopupContent).html($('#remove-role-modal-content').html());
     showPopup();
@@ -106,5 +107,9 @@ $("#role-grid").on("click", ".remove-role-link", function () {
                 });
             }
         );
+    });
+
+    $("a#remove-role-cancel-link").click(function () {
+        hidePopup();
     });
 });
