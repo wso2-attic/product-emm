@@ -83,7 +83,6 @@ $(document).ready(function () {
                 addUserAPI,
                 addUserFormData,
                 function (data) {
-                    console.log(data);
                     data = JSON.parse(data);
                     if (data.errorMessage) {
                         $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
@@ -107,7 +106,7 @@ $(document).ready(function () {
                         $(errorMsgWrapper).removeClass("hidden");
                     }
                 }, function (data) {
-                    console.log(data);
+
                     if (data["status"] == 409) {
                         $(errorMsg).text("User : " + username + " already exists. You cannot proceed.");
                     } else if (data["status"] == 500) {
