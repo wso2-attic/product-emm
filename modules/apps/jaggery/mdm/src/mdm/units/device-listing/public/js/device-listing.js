@@ -189,6 +189,7 @@ function loadDevices(searchType, searchParam){
                 $('#device-table').addClass('hidden');
                 $('#device-listing-status-msg').text('No device is available to be displayed.');
             }
+            $("#loading-content").remove();
             $('#device-grid').datatables_extended();
             $(".icon .text").res_text(0.2);
 

@@ -115,7 +115,7 @@ $(document).ready(function () {
      * in case those configurations are already set.
      */
 
-    if (platformsSupported.contains("android")) {
+    if (platformsSupported.indexOf('android') != -1) {
         invokerUtil.get(
             getAndroidConfigAPI,
 
@@ -180,10 +180,9 @@ $(document).ready(function () {
         }
     );
 
-    if (platformsSupported.contains("ios")) {
+    if (platformsSupported.indexOf('windows') != -1) {
         invokerUtil.get(
-            getIosConfigAPI,
-
+            getWindowsConfigAPI,
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
@@ -202,9 +201,10 @@ $(document).ready(function () {
             }
         );
     }
-    if (platformsSupported.contains("windows")) {
+
+    if (platformsSupported.indexOf('ios') != -1) {
         invokerUtil.get(
-            getWindowsConfigAPI,
+            getIosConfigAPI,
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {

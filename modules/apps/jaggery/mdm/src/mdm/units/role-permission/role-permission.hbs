@@ -13,7 +13,14 @@
                             <div id="role-create-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
-                            <div id="permissionList" class="well" data-currentrole="{{roleName}}"></div>
+                            <div id="permissionList" class="well" data-currentrole="{{roleName}}">
+                                <div id="loading-content" class="col-centered">
+                                    <i class="fw fw-settings fw-spin fw-2x"></i>
+                                    &nbsp;&nbsp;&nbsp;
+                                    Loading permissions list . . .
+                                    <br>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <br>
