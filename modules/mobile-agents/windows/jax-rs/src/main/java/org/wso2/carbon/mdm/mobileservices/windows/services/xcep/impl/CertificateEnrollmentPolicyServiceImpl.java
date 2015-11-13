@@ -18,20 +18,12 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.services.xcep.impl;
 
-import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.CertificateEnrollmentPolicyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Attributes;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.CACollection;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.CertificateEnrollmentPolicy;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Client;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.OID;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.OIDCollection;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.PolicyCollection;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.PrivateKeyAttributes;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.RequestFilter;
-import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.Response;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.CertificateEnrollmentPolicyService;
+import org.wso2.carbon.mdm.mobileservices.windows.services.xcep.beans.*;
 
 import javax.jws.WebService;
 import javax.xml.ws.BindingType;
@@ -101,5 +93,8 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
 		oidCollectionElement.getOID().add(oidElement);
 		caCollection.value = caCollectionElement;
 		oidCollection.value = oidCollectionElement;
+
+		PrivilegedCarbonContext.endTenantFlow();
+
 	}
 }

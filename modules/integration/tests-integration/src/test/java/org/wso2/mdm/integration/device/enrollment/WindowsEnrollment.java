@@ -20,11 +20,13 @@ package org.wso2.mdm.integration.device.enrollment;
 import junit.framework.Assert;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.Constants;
+import org.wso2.mdm.integration.common.OAuthUtil;
 import org.wso2.mdm.integration.common.RestClient;
 import org.wso2.mdm.integration.common.TestBase;
 
@@ -43,7 +45,8 @@ public class WindowsEnrollment extends TestBase {
     @BeforeClass(alwaysRun = true, groups = { Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
-        client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON);
+        String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
+        client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     /**
@@ -58,7 +61,7 @@ public class WindowsEnrollment extends TestBase {
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post.")
-    public void testDiscoveryPost() throws Exception {;
+    public void testDiscoveryPost() throws Exception {
         String xml = readXML(Constants.WindowsEnrollment.DISCOVERY_POST_FILE, Constants.UTF8);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         HttpResponse response = client.post(Constants.WindowsEnrollment.DISCOVERY_POST_URL, xml);
@@ -67,9 +70,17 @@ public class WindowsEnrollment extends TestBase {
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows BST.")
     public void testBST() throws Exception {
+        JSONObject bsdObject = new JSONObject(Constants.WindowsEnrollment.BSD_PAYLOAD);
+        JSONObject childObject = bsdObject.getJSONObject("credentials");
+
+        JSONObject modifiedObject = new JSONObject();
+        modifiedObject.put("token", OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL));
+
+        childObject.put("token", modifiedObject);
 
         HttpResponse response = client.post(Constants.WindowsEnrollment.BSD_URL, Constants.WindowsEnrollment.BSD_PAYLOAD);
         bsd = response.getData();
+
         Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
     }
 

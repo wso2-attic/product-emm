@@ -65,6 +65,7 @@ public final class PluginConstants {
     //Message handler constants
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String SECURITY = "Security";
+    public static final String CXF_REQUEST_URI = "org.apache.cxf.request.uri";
 
     //Web services media types
     public static final String SYNCML_MEDIA_TYPE = "application/vnd.syncml.dm+xml;charset=utf-8";

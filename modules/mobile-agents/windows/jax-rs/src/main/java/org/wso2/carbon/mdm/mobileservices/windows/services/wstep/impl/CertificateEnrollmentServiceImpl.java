@@ -29,6 +29,7 @@ import org.apache.cxf.message.Message;
 import org.w3c.dom.*;
 import org.wso2.carbon.certificate.mgt.core.exception.KeystoreException;
 import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementServiceImpl;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
@@ -121,26 +122,27 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 headerBinarySecurityToken = element.getFirstChild().getNextSibling().getFirstChild().getTextContent();
             }
         }
-        List<ConfigurationEntry> tenantConfigurations;
+        List<ConfigurationEntry> tenantConfigurations = null;
         try {
             if (getTenantConfigurationData() != null) {
                 tenantConfigurations = getTenantConfigurationData();
+                for (ConfigurationEntry configurationEntry : tenantConfigurations) {
+                    if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.
+                            NOTIFIER_FREQUENCY)) {
+                        pollingFrequency = configurationEntry.getValue().toString();
+                    } else {
+                        pollingFrequency = PluginConstants.TenantConfigProperties.DEFAULT_FREQUENCY;
+                    }
+                }
             } else {
-                String msg = "Tenant configurations are not initialized.";
+                pollingFrequency = PluginConstants.TenantConfigProperties.DEFAULT_FREQUENCY;
+                String msg = "Tenant configurations are not initialized yet.";
                 log.error(msg);
-                throw new WindowsDeviceEnrolmentException(msg);
             }
         } catch (DeviceManagementException e) {
             String msg = "Error occurred in while getting tenant configurations.";
             log.error(msg);
             throw new WindowsDeviceEnrolmentException(msg, e);
-        }
-        for (ConfigurationEntry configurationEntry : tenantConfigurations) {
-            if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY)) {
-                pollingFrequency = configurationEntry.getValue().toString();
-            } else {
-                pollingFrequency = PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY;
-            }
         }
         ServletContext ctx =
                 (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
@@ -174,6 +176,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             String msg = "Problem occurred in generating wap-provisioning file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
         }
     }
 
