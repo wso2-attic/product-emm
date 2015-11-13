@@ -750,7 +750,7 @@ $(document).ready(function () {
 
     var errorMsgWrapperWindows = "#windows-config-error-msg";
     var errorMsgWindows = "#windows-config-error-msg span";
-    var fileTypes = ['jks'];
+    var fileTypesWindows = ['jks'];
     var notSupportedError = false;
 
     var base64WindowsMDMCert = "";
@@ -770,7 +770,7 @@ $(document).ready(function () {
         var file = fileInputWindowsMDMCert[0].files[0];
         fileNameWindowsMDMCert = file.name;
         var extension = file.name.split('.').pop().toLowerCase(),
-            isSuccess = fileTypes.indexOf(extension) > -1;
+            isSuccess = fileTypesWindows.indexOf(extension) > -1;
 
         if (isSuccess) {
             var fileReader = new FileReader();

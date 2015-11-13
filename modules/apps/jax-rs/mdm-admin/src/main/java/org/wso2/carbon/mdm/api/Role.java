@@ -79,16 +79,15 @@ public class Role {
     }
 
     /**
-     * TODO:- change this to a different endpoint since it clashes with the role get
+     * Get role permissions.
      *
      * @return list of permissions
      * @throws MDMAPIException
      */
-    @Deprecated
     @GET
     @Path ("permissions")
     @Produces ({MediaType.APPLICATION_JSON})
-    public ResponsePayload getPermissions() throws MDMAPIException {
+    public ResponsePayload getPermissions(@QueryParam ("rolename") String roleName) throws MDMAPIException {
         final UserRealm userRealm = MDMAPIUtils.getUserRealm();
         org.wso2.carbon.user.core.UserRealm userRealmCore = null;
         final UIPermissionNode rolePermissions;
@@ -98,7 +97,7 @@ public class Role {
 
         try {
             final UserRealmProxy userRealmProxy = new UserRealmProxy(userRealmCore);
-            rolePermissions = userRealmProxy.getAllUIPermissions(MDMAPIUtils.getTenantId());
+	        rolePermissions = userRealmProxy.getRolePermissions(roleName, MDMAPIUtils.getTenantId());
             UIPermissionNode[] deviceMgtPermissions = new UIPermissionNode[2];
 
             for (UIPermissionNode permissionNode : rolePermissions.getNodeList()) {

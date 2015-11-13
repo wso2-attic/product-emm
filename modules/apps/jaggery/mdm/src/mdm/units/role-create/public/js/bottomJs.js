@@ -49,7 +49,7 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users;
+                postData.actionUrl = "/mdm-admin/users";
                 postData.actionPayload = null;
                 return JSON.stringify(postData);
             },

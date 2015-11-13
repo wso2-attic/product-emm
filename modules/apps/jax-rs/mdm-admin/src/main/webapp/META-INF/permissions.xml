@@ -186,6 +186,13 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Get role permissions</name>
+        <path>/device-mgt/roles</path>
+        <url>/roles/permissions</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Get User roles</name>
         <path>/device-mgt/role</path>
         <url>/roles/*</url>
