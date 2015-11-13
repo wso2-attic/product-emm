@@ -193,8 +193,6 @@ function loadDevices(searchType, searchParam){
             $("#loading-content").remove();
             $('#device-grid').datatables_extended();
             $(".icon .text").res_text(0.2);
-
-
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){
@@ -224,6 +222,7 @@ function openCollapsedNav(){
  * DOM ready functions.
  */
 $(document).ready(function () {
+
     loadDevices();
     //$('#device-grid').datatables_extended();
 

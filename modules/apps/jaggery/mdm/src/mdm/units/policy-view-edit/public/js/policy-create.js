@@ -111,6 +111,9 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     var policyNameInput = $("#policy-name-input");
     var policyDescriptionInput = $("#policy-description-input");
     userRoleInput.val(policyPayloadObj.roles).trigger("change");
+    //userInput.select2({
+    //    data: policyPayloadObj.users,
+    //});
     userInput.val(policyPayloadObj.users).trigger("change");
     ownershipInput.val(policyPayloadObj.ownershipType);
     actionInput.val(policyPayloadObj.compliance);
@@ -1980,6 +1983,46 @@ function formatRepoSelection (user) {
 $(document).ready(function () {
 
     // Adding initial state of wizard-steps.
+
+    var policyPayloadObj;
+    invokerUtil.get(
+        "/mdm-admin/policies/" + getParameterByName("id"),
+        // on success
+        function (data) {
+            data = JSON.parse(data);
+            policyPayloadObj = data["responseContent"];
+            skipStep["policy-platform"](policyPayloadObj);
+        },
+        // on error
+        function () {
+            // should be redirected to an error page
+        }
+    );
+
+    $("#users-select-field").hide();
+    $("#user-roles-select-field").show();
+
+    $("input[type='radio'].select-users-radio").change(function () {
+        if ($("#users-radio-btn").is(":checked")) {
+            $("#user-roles-select-field").hide();
+            $("#users-select-field").show();
+        }
+        if ($("#user-roles-radio-btn").is(":checked")) {
+            $("#users-select-field").hide();
+            $("#user-roles-select-field").show();
+        }
+    });
+
+    // Support for special input type "ANY" on user(s) & user-role(s) selection
+    $("#user-roles-input").select2({
+        "tags": true
+    }).on("select2:select", function (e) {
+        if (e.params.data.id == "ANY") {
+            $(this).val("ANY").trigger("change");
+        } else {
+            $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
+        }
+    });
     $("#policy-profile-wizard-steps").html($(".wr-steps").html());
 
     $("select.select2[multiple=multiple]").select2({
@@ -2024,46 +2067,6 @@ $(document).ready(function () {
         minimumInputLength: 1,
         templateResult: formatRepo, // omitted for brevity, see the source of this page
         templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-    });
-
-    var policyPayloadObj;
-    invokerUtil.get(
-        "/mdm-admin/policies/" + getParameterByName("id"),
-        // on success
-        function (data) {
-            data = JSON.parse(data);
-            policyPayloadObj = data["responseContent"];
-            skipStep["policy-platform"](policyPayloadObj);
-        },
-        // on error
-        function () {
-            // should be redirected to an error page
-        }
-    );
-
-    $("#users-select-field").hide();
-    $("#user-roles-select-field").show();
-
-    $("input[type='radio'].select-users-radio").change(function () {
-        if ($("#users-radio-btn").is(":checked")) {
-            $("#user-roles-select-field").hide();
-            $("#users-select-field").show();
-        }
-        if ($("#user-roles-radio-btn").is(":checked")) {
-            $("#users-select-field").hide();
-            $("#user-roles-select-field").show();
-        }
-    });
-
-    // Support for special input type "ANY" on user(s) & user-role(s) selection
-    $("#user-roles-input").select2({
-        "tags": true
-    }).on("select2:select", function (e) {
-        if (e.params.data.id == "ANY") {
-            $(this).val("ANY").trigger("change");
-        } else {
-            $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
-        }
     });
 
     // Maintains an array of configured features of the profile
