@@ -191,9 +191,6 @@ function loadDevices(searchType, searchParam){
             }
             $('#device-grid').datatables_extended();
             $(".icon .text").res_text(0.2);
-
-            $("#loading-content").remove();
-            $("#ast-container").removeClass("hidden");
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){
