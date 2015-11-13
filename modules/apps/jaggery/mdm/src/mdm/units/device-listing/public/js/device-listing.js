@@ -177,6 +177,7 @@ function loadDevices(searchType, searchParam){
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;
             if(data.length > 0){
+                $('#device-grid').removeClass('hidden');
                 var content = template(viewModel);
                 $("#ast-container").html(content);
                 /*
