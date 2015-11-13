@@ -49,7 +49,7 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users?p=" + params.term + "&page=" +params.page;
+                postData.actionUrl = "/mdm-admin/users;
                 postData.actionPayload = null;
                 return JSON.stringify(postData);
             },
@@ -114,12 +114,18 @@ $(document).ready(function () {
                 addRoleAPI,
                 addRoleFormData,
                 function (data) {
+                    data = JSON.parse(data);
+                    if (data.errorMessage) {
+                        $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
+                        $(errorMsgWrapper).removeClass("hidden");
+                    } else {
                         // Clearing user input fields.
                         $("input#rolename").val("");
                         $("#domain").val("");
                         // Refreshing with success message
                         $("#role-create-form").addClass("hidden");
                         $("#role-created-msg").removeClass("hidden");
+                    }
                 }, function () {
                     $(errorMsg).text("An unexpected error occurred. Please try again later.");
                     $(errorMsgWrapper).removeClass("hidden");
