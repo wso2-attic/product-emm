@@ -39,9 +39,13 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </label>
                             <div class="wr-input-control">
-                                <select id="roles" class="form-control select2" multiple="multiple">
+                                <select id="roles" class="form-control select2" multiple="multiple" selectedVals="
+                                 {{#each usersRoles}}
+                                        {{this}},
+                                    {{/each}}
+                                ">
                                     {{#each userRoles}}
-                                        <option selected="selected">{{this}}</option>
+                                        <option >{{this}}</option>
                                     {{/each}}
                                 </select>
                             </div>

@@ -22,7 +22,7 @@ function emailIsValid(email) {
 
 $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
-        tags : true
+        tags: true
     });
 
     /**
@@ -30,8 +30,8 @@ $(document).ready(function () {
      * when a user clicks on "Add User" button
      * on Add User page in WSO2 MDM Console.
      */
-    $("button#add-user-btn").click(function() {
-        var charLimit =parseInt($("input#username").attr("limit"));
+    $("button#add-user-btn").click(function () {
+        var charLimit = parseInt($("input#username").attr("limit"));
         var domain = $("#userStore").val();
         var username = $("input#username").val().trim();
         var firstname = $("input#firstname").val();
@@ -106,7 +106,6 @@ $(document).ready(function () {
                         $(errorMsgWrapper).removeClass("hidden");
                     }
                 }, function (data) {
-
                     if (data["status"] == 409) {
                         $(errorMsg).text("User : " + username + " already exists. You cannot proceed.");
                     } else if (data["status"] == 500) {

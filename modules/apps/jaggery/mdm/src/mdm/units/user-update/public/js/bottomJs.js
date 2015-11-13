@@ -24,6 +24,10 @@ $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
         tags : true
     });
+    var roleList = $("#roles").attr("selectedVals").trim().replace(/ /g,"");
+    roleList = roleList.replace(/(\r\n|\n|\r)/gm,"");
+    var roleArr = roleList.split(",");
+    $("#roles").val(roleArr).trigger("change");
 
     /**
      * Following click function would execute

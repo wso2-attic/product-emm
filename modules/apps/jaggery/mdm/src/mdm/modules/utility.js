@@ -56,7 +56,6 @@ utility = function () {
     };
 
     publicMethods.insertAppPermissions = function (userModule, type) {
-        userModule.addPermissions([{key: "device-mgt", name: "Device Management"}], "", type);
         // Below are the 2 types of users:- Normal users and Admins
         userModule.addPermissions([{key: "emm-admin", name: "Device Management Admin"}], "device-mgt", type);
         userModule.addPermissions([{key: "user", name: "Device Management User"}], "device-mgt", type);
@@ -97,7 +96,7 @@ utility = function () {
         userModule.addPermissions([{key: "devices/operation", name: "Perform Operation on an Individual Device"}],
                                          "device-mgt/user", type);
 
-        userModule.addPermissions([{key: "platform-configs", name: "Platform Configurations"}], "device-mgt/admin", type);
+        userModule.addPermissions([{key: "platform-configs", name: "Platform Configurations"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "platform-configs/view", name: "View Configurations"}], "device-mgt/emm-admin", type);
     };
 

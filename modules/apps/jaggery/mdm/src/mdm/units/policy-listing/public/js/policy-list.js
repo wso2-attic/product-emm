@@ -116,6 +116,7 @@ function getSelectedPolicies() {
 
 $(document).ready(function () {
     sortElements();
+    $("#loading-content").remove();
     // Click functions related to Policy Listing
     var isUpdated = $('#is-updated').val();
     if(!isUpdated) {

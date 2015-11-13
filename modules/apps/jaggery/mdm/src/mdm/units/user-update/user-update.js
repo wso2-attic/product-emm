@@ -18,6 +18,10 @@ function onRequest(context) {
 
         response = userModule.getRolesByUsername(userName);
         if (response["status"] == "success") {
+            context["usersRoles"] = response["content"];
+        }
+        response = userModule.getRoles();
+        if (response["status"] == "success") {
             context["userRoles"] = response["content"];
         }
     }
