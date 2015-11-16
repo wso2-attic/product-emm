@@ -2,14 +2,15 @@
 
 <suite name="DssTestSuite" parallel="false">
     <parameter name="useDefaultListeners" value="false"/>
-    <test name="DSS-Integration-Test" parallel="false" verbose="2">
+    <test name="EMM-Integration-Test" parallel="false" verbose="2">
 
         <packages>
 
         </packages>
 
         <classes>
-
+            <class name="org.wso2.emm.ui.integration.test.ManagementConsoleLoginTestCase"/>
+            <class name="org.wso2.emm.ui.integration.test.login.MDMLoginTestCase"/>
         </classes>
 
     </test>
