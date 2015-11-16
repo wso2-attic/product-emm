@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ you may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<!-- This file contains the list of permissions that are associated with URL end points
+    of the web app. Each permission should contain the name, permission path, API path
+    (URL) , HTTP method and authorization scope (OAuth2).
+    When defining dynamic paths for APIs, path variables are denoted by '*' notation.
+    For ex:
+    Actual API endpoint: mdm-windows-agent/1.0.0/operation/{device-id}
+    URL to be represented here: /operation/*
+    NOTE: All the endpoints of the web app should be available in this file. Otherwise
+    it will result 403 error at the runtime.
+-->
+<PermissionConfiguration>
+    <APIVersion></APIVersion>
+    <!-- Operations management related permissions for admin -->
+    <Permission>
+        <name>Lock</name>
+        <path>/device-mgt/windows/operation/lock</path>
+        <url>/services/windows/operation/lock</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Enterprise Wipe</name>
+        <path>/device-mgt/windows/operation/wipe-data</path>
+        <url>/services/windows/operation/wipe-data</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Ring</name>
+        <path>/device-mgt/windows/operation/ring-device</path>
+        <url>/services/windows/operation/ring-device</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Disenroll</name>
+        <path>/device-mgt/windows/operation/disenroll</path>
+        <url>/services/windows/operation/disenroll</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>LockReset</name>
+        <path>/device-mgt/windows/operation/lock-reset</path>
+        <url>/services/windows/operation/lock-reset</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <!-- Enrollment related permissions -->
+    <Permission>
+        <name>Get CSR Policy</name>
+        <path>/device-mgt/windows/devices/getPolicy</path>
+        <url>/services/certificatepolicy/xcep</url>
+        <method>POST</method>
+        <scope>emm_windows_agent</scope>
+    </Permission>
+    <Permission>
+        <name>Get BST</name>
+        <path>/device-mgt/windows/devices/getBST</path>
+        <url>/services/federated/bst/authentication</url>
+        <method>POST</method>
+        <scope>emm_windows_agent</scope>
+    </Permission>
+    <Permission>
+        <name>Provide CSR</name>
+        <path>/device-mgt/windows/devices/requestSecurityToken</path>
+        <url>/services/deviceenrolment/wstep</url>
+        <method>POST</method>
+        <scope>emm_windows_agent</scope>
+    </Permission>
+    <Permission>
+        <name>GetLicense</name>
+        <path>/device-mgt/windows/devices/license</path>
+        <url>/services/device/license</url>
+        <method>GET</method>
+        <scope>emm_windows_agent</scope>
+    </Permission>
+    <!-- Policy related permissions -->
+    <Permission>
+        <name>View Policies</name>
+        <path>/device-mgt/windows/policies/view</path>
+        <url>/services/policy/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>View Policy Features</name>
+        <path>/device-mgt/windows/policies/view</path>
+        <url>/services/policy/features/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- Configuration related permissions -->
+    <Permission>
+        <name>View Tenant configuration</name>
+        <path>/device-mgt/windows/tenant/configuration</path>
+        <url>/services/configuration</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Add Tenant configuration</name>
+        <path>/device-mgt/windows/tenant/configuration</path>
+        <url>/services/configuration</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Update Tenant configuration</name>
+        <path>/device-mgt/windows/tenant/configuration</path>
+        <url>/services/configuration</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+</PermissionConfiguration>

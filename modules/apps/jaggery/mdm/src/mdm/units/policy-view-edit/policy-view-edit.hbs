@@ -139,6 +139,9 @@
                                         <div class="cus-col-50">
                                             <select id="users-input" class="form-control select2" multiple="multiple">
                                                 <option value="ANY" selected>ANY</option>
+                                                {{#each users}}
+                                                    <option>{{this}}</option>
+                                                {{/each}}
                                             </select>
                                         </div>
                                         <br class="c-both" />
