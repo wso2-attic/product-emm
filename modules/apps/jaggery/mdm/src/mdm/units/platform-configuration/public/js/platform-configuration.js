@@ -115,7 +115,7 @@ $(document).ready(function () {
      * in case those configurations are already set.
      */
 
-    if (platformsSupported.contains("android")) {
+    if (platformsSupported.indexOf('android') != -1) {
         invokerUtil.get(
             getAndroidConfigAPI,
 
@@ -180,10 +180,9 @@ $(document).ready(function () {
         }
     );
 
-    if (platformsSupported.contains("ios")) {
+    if (platformsSupported.indexOf('windows') != -1) {
         invokerUtil.get(
-            getIosConfigAPI,
-
+            getWindowsConfigAPI,
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
@@ -202,9 +201,10 @@ $(document).ready(function () {
             }
         );
     }
-    if (platformsSupported.contains("windows")) {
+
+    if (platformsSupported.indexOf('ios') != -1) {
         invokerUtil.get(
-            getWindowsConfigAPI,
+            getIosConfigAPI,
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
@@ -750,7 +750,7 @@ $(document).ready(function () {
 
     var errorMsgWrapperWindows = "#windows-config-error-msg";
     var errorMsgWindows = "#windows-config-error-msg span";
-    var fileTypes = ['jks'];
+    var fileTypesWindows = ['jks'];
     var notSupportedError = false;
 
     var base64WindowsMDMCert = "";
@@ -770,7 +770,7 @@ $(document).ready(function () {
         var file = fileInputWindowsMDMCert[0].files[0];
         fileNameWindowsMDMCert = file.name;
         var extension = file.name.split('.').pop().toLowerCase(),
-            isSuccess = fileTypes.indexOf(extension) > -1;
+            isSuccess = fileTypesWindows.indexOf(extension) > -1;
 
         if (isSuccess) {
             var fileReader = new FileReader();

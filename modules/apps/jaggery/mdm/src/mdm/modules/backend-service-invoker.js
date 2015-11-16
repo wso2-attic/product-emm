@@ -20,6 +20,7 @@
  * This backendServiceInvoker contains the wrappers for back end jaggary calls.
  */
 var backendServiceInvoker = function () {
+    var log = new Log("modules/backend-service-invoker.js")
     var publicXMLHTTPInvokers = {};
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
@@ -50,11 +51,14 @@ var backendServiceInvoker = function () {
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
             xmlHttpRequest.send((payload));
+            log.debug("Service Invoker-URL: " + url);
+            log.debug("Service Invoker-Method: " + method);
+
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
                 if (xmlHttpRequest.responseText != null) {
                     return successCallback(parse(xmlHttpRequest.responseText));
                 } else {
-                    return successCallback(null);
+                    return successCallback({"statusCode":200,"messageFromServer":"Operation Completed"});
                 }
             } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
                                                         xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5 ) {

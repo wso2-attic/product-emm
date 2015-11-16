@@ -12,6 +12,7 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
                 if(data.length > 0){
                     var content = template(data.viewModel);
                     $(objectGridContainer).html(content);
+                    $("#loading-content").remove();
                     $('#role-grid').datatables_extended();
                     $("#dt-select-all").addClass("hidden");
                     $(".icon .text").res_text(0.2);

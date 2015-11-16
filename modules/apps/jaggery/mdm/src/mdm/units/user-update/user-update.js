@@ -7,7 +7,6 @@
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
 
-    var uri = request.getRequestURI();
     var userName = request.getParameter("username");
 
     if (userName) {
@@ -18,6 +17,10 @@ function onRequest(context) {
         }
 
         response = userModule.getRolesByUsername(userName);
+        if (response["status"] == "success") {
+            context["usersRoles"] = response["content"];
+        }
+        response = userModule.getRoles();
         if (response["status"] == "success") {
             context["userRoles"] = response["content"];
         }

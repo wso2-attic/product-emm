@@ -22,7 +22,6 @@ var sortableListFunction = (function(){
 
         var sortableElem = '.wr-sortable',
             sortUpdateBtn = '#sortUpdateBtn',
-            applyChangesBtn = '#applyChangesBtn',
             sortableElemList = [],
             sortedIDs,
             currentElemId,
@@ -73,6 +72,7 @@ var sortableListFunction = (function(){
          * on input key press validation function
          */
         $(sortableElem).on('keyup', '.wr-sort-index input.index', function(e){
+            $(".ui-autocomplete").addClass("hidden");
             if (e.which == 13) {
                 $(this).focusout();
             }
@@ -99,9 +99,8 @@ var sortableListFunction = (function(){
                     elem.remove();
                     $(elem).prependTo(sortableElem);
                 });
-
                 $(sortUpdateBtn).prop('disabled', false);
-                //$(applyChangesBtn).prop('disabled', false);
+                sortedIDs =  $(sortableElem).sortable('toArray');
                 addSortableIndexNumbers();
             }
             else{
@@ -123,7 +122,6 @@ var sortableListFunction = (function(){
                     sortedIDs = $(this).sortable('toArray');
                     addSortableIndexNumbers();
                     $(sortUpdateBtn).prop('disabled', false);
-                    //$(applyChangesBtn).prop('disabled', false);
                 }
             });
             $(sortableElem).disableSelection();

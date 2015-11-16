@@ -1940,12 +1940,8 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users";
-                postData.actionPayload = JSON.stringify({
-                    q: params.term, // search term
-                    page: params.page
-                });
-
+                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
+                postData.actionPayload = null;
                 return JSON.stringify(postData);
             },
             processResults: function (data, page) {
