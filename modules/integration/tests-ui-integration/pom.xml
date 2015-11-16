@@ -166,7 +166,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/keystores/products
+                            <outputDirectory>src/test/resources/keystores/products
                             </outputDirectory>
                             <resources>
                                 <resource>
@@ -187,7 +187,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/keystores/stratos
+                            <outputDirectory>src/test/resources/keystores/stratos
                             </outputDirectory>
                             <resources>
                                 <resource>
@@ -208,7 +208,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/axis2config
+                            <outputDirectory>src/test/resources/axis2config
                             </outputDirectory>
                             <resources>
                                 <resource>
@@ -229,7 +229,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/client/modules
+                            <outputDirectory>src/test/resources/client/modules
                             </outputDirectory>
                             <resources>
                                 <resource>
@@ -253,10 +253,10 @@
             <groupId>org.wso2.mdm</groupId>
             <artifactId>org.wso2.carbon.mdm.integration.ui.pages</artifactId>
             <exclusions>
-            <exclusion>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-            </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -271,6 +271,8 @@
             <groupId>org.wso2.carbon.automationutils</groupId>
             <artifactId>org.wso2.carbon.integration.common.extensions</artifactId>
         </dependency>
+
+
     </dependencies>
 
     <properties>
