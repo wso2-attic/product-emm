@@ -56,13 +56,13 @@ $(document).ready(function () {
     var listPartialSrc = $("#list-partial").attr("src");
     var treeTemplateSrc = $("#tree-template").attr("src");
     var roleName = $("#permissionList").data("currentrole");
-    var serviceUrl = "/mdm-admin/roles/" + roleName;
+    var serviceUrl = "/mdm-admin/roles/permissions?rolename=" + roleName;
     $.registerPartial("list", listPartialSrc, function(){
         $.template("treeTemplate", treeTemplateSrc, function (template) {
             invokerUtil.get(serviceUrl,
                 function(data){
                     data = JSON.parse(data);
-                    var treeData = data.responseContent.permissionList;
+                    var treeData = data.responseContent;
                     if(treeData.nodeList.length > 0){
                         treeData = { nodeList: treeData.nodeList };
                         var content = template(treeData);
@@ -88,7 +88,7 @@ $(document).ready(function () {
      */
     $("button#update-permissions-btn").click(function() {
         var roleName = $("#permissionList").data("currentrole");
-        var updateRolePermissionAPI = "/mdm-admin/roles/" + roleName;
+        var updateRolePermissionAPI = "/mdm-admin/roles?rolename=" + roleName;
         var updateRolePermissionData = {};
         var perms = [];
         $("#permissionList li input:checked").each(function(){

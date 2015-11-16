@@ -186,6 +186,13 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Get role permissions</name>
+        <path>/device-mgt/roles</path>
+        <url>/roles/permissions</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Get User roles</name>
         <path>/device-mgt/role</path>
         <url>/roles/*</url>
@@ -259,6 +266,13 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Change user password</name>
+        <path>/device-mgt/users/reset-password</path>
+        <url>/users/reset-password</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Delete user</name>
         <path>/device-mgt/users/delete</path>
         <url>/users</url>
@@ -310,7 +324,7 @@
     <Permission>
         <name>Get all user names</name>
         <path>/device-mgt/users/view</path>
-        <url>/users/users-by-username</url>
+        <url>/users/view-users</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>

@@ -57,6 +57,21 @@
                 <exclude>**/lib/encoder*</exclude>
                 <exclude>**/plugins/jaxb*</exclude>
                 <exclude>**/security/authenticators.xml</exclude>
+
+                <exclude>**/plugins/org.wso2.carbon.localentry.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.mediation.security.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.mediation.library.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.task.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.sequences.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.proxyadmin.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.priority.executors.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.message.store.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.message.processor.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.mediation.templates.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.mediation.artifactuploader.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.endpoint.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.inbound.ui*</exclude>
+                <exclude>**/plugins/org.wso2.carbon.rest.api.ui*</exclude>
             </excludes>
         </fileSet>
 
@@ -548,8 +563,7 @@
 
         <!-- Copying api-manager.xml -->
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/api-manager.xml
-            </source>
+            <source>src/repository/conf/api-manager.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <fileMode>644</fileMode>
         </file>

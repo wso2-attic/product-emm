@@ -177,6 +177,7 @@ function loadDevices(searchType, searchParam){
             viewModel.devices = data;
             viewModel.imageLocation = imageResource;
             if(data.length > 0){
+                $('#device-grid').removeClass('hidden');
                 var content = template(viewModel);
                 $("#ast-container").html(content);
                 /*
@@ -186,14 +187,12 @@ function loadDevices(searchType, searchParam){
                     addDeviceSelectedClass(this);
                 });
             } else {
-                $('#device-grid').addClass('hidden');
+                $('#device-table').addClass('hidden');
                 $('#device-listing-status-msg').text('No device is available to be displayed.');
-
             }
+            $("#loading-content").remove();
             $('#device-grid').datatables_extended();
             $(".icon .text").res_text(0.2);
-
-
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){
@@ -223,6 +222,7 @@ function openCollapsedNav(){
  * DOM ready functions.
  */
 $(document).ready(function () {
+
     loadDevices();
     //$('#device-grid').datatables_extended();
 

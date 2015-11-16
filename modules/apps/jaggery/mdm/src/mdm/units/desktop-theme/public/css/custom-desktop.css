@@ -3319,7 +3319,7 @@ body.inverse .fade-edge:after {
 .table.list-table.grid-view .filter-row,
 .table.list-table .filter-row.filter-box {
     background: #e4e4e4;
-    margin: 0 30px;
+    margin: 0 20px 0 30px;
     display: block;
 }
 .table.list-table .filter-row.filter-box tr {
@@ -3439,7 +3439,7 @@ table.dataTable tr td.dataTables_empty {
 }
 .dataTablesTop,
 .dataTablesBottom {
-    margin: 20px 0;
+    margin: 0 0 20px;
 }
 .dataTablesTop:after,
 .dataTablesBottom:after {

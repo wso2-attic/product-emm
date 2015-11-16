@@ -20,16 +20,16 @@
  * This backendServiceInvoker contains the wrappers for back end jaggary calls.
  */
 var backendServiceInvoker = function () {
+    var log = new Log("modules/backend-service-invoker.js")
     var publicXMLHTTPInvokers = {};
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
     var TOKEN_EXPIRED = "Access token has expired";
     var TOKEN_INVALID = "Invalid input. Access token validation failed";
-
     var constants = require("/modules/constants.js");
     var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
-    var log = new Log("modules/backend-service-invoker.js");
+
 
     /**
      * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
@@ -52,18 +52,23 @@ var backendServiceInvoker = function () {
             }
             xmlHttpRequest.send((payload));
             log.info(accessToken+"             :    " + method + " : " + url + " : " + stringify(payload) + " : :  :  :    "  +stringify(xmlHttpRequest.responseText) );
+            log.debug("Service Invoker-URL: " + url);
+            log.debug("Service Invoker-Method: " + method);
+
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
                 if (xmlHttpRequest.responseText != null) {
                     return successCallback(parse(xmlHttpRequest.responseText));
                 } else {
-                    return successCallback(null);
+                    return successCallback({"statusCode":200,"messageFromServer":"Operation Completed"});
                 }
             } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
-                                                        xmlHttpRequest.responseText == TOKEN_INVALID )) {
+                                                        xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5 ) {
                 tokenUtil.refreshToken();
                 return execute(count);
+            } else if (xmlHttpRequest.status == 500) {
+                return errorCallback(xmlHttpRequest.responseText);
             } else {
-                return errorCallback(parse(xmlHttpRequest.responseText));
+                return errorCallback(xmlHttpRequest.responseText);
             }
         };
         var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();

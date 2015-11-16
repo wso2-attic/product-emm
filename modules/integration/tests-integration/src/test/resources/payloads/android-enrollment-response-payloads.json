@@ -1,7 +1,7 @@
 {
   "POST" : {
       "responseCode" : "Created",
-      "responseMessage" : "Device enrollment succeeded"
+      "responseMessage" : "Device enrollment succeeded."
   },
   "PUT" : {
     "responseCode" : "Accepted",

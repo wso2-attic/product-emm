@@ -1980,51 +1980,6 @@ function formatRepoSelection (user) {
 $(document).ready(function () {
 
     // Adding initial state of wizard-steps.
-    $("#policy-profile-wizard-steps").html($(".wr-steps").html());
-
-    $("select.select2[multiple=multiple]").select2({
-        "tags": true
-    });
-
-    $("#users-input").select2({
-        multiple:true,
-        tags: true,
-        ajax: {
-            url: window.location.origin + "/mdm/api/invoker/execute/",
-            method: "POST",
-            dataType: 'json',
-            delay: 250,
-            id: function (user) {
-                return user.username;
-            },
-            data: function (params) {
-                var postData = {};
-                postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users?q=ad";
-                postData.actionPayload = JSON.stringify({
-                    q: params.term, // search term
-                    page: params.page
-                });
-
-                return JSON.stringify(postData);
-            },
-            processResults: function (data, page) {
-                var newData = [];
-                $.each(data.responseContent, function (index, value) {
-                    value.id = value.username;
-                    newData.push(value);
-                });
-                return {
-                    results: newData
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        minimumInputLength: 1,
-        templateResult: formatRepo, // omitted for brevity, see the source of this page
-        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-    });
 
     var policyPayloadObj;
     invokerUtil.get(
@@ -2064,6 +2019,11 @@ $(document).ready(function () {
         } else {
             $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
         }
+    });
+    $("#policy-profile-wizard-steps").html($(".wr-steps").html());
+
+    $("select.select2[multiple=multiple]").select2({
+        "tags": true
     });
 
     // Maintains an array of configured features of the profile

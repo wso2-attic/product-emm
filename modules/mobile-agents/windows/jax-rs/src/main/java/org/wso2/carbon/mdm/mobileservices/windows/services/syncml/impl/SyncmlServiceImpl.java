@@ -38,6 +38,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
+import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
@@ -164,6 +165,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                             deviceInfoOperations = deviceInfo.getDeviceInfo();
                             try {
                                 response = generateReply(syncmlDocument, deviceInfoOperations);
+                                PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
+                                policyManagerService.getEffectivePolicy(deviceIdentifier);
                                 return Response.status(Response.Status.OK).entity(response).build();
                             } catch (JSONException e) {
                                 String msg = "Error occurred in while parsing json object.";

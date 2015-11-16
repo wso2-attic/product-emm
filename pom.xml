@@ -36,11 +36,11 @@
     </parent>
 
     <modules>
-	<module>modules/apps/jax-rs/mdm-admin</module>
+        <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/mdm</module>
         <module>modules/tools</module>
-	    <module>modules/mdm-ui</module>
+        <module>modules/mdm-ui</module>
         <module>modules/features</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
@@ -54,18 +54,60 @@
                 <groupId>org.wso2.carbon.automation</groupId>
                 <artifactId>org.wso2.carbon.automation.engine</artifactId>
                 <version>${test.framework.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
+                </exclusions>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.automation</groupId>
                 <artifactId>org.wso2.carbon.automation.test.utils</artifactId>
                 <version>${test.framework.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
+                </exclusions>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.automationutils</groupId>
                 <artifactId>org.wso2.carbon.integration.common.utils</artifactId>
                 <version>${test.framework.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
+                </exclusions>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -77,7 +119,15 @@
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
-		    <exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>org.apache.ftpserver</groupId>
                         <artifactId>ftpserver-core</artifactId>
                     </exclusion>
@@ -113,7 +163,7 @@
                         <groupId>org.apache.jmeter</groupId>
                         <artifactId>ApacheJMeter_core</artifactId>
                     </exclusion>
-		    <exclusion>
+                    <exclusion>
                         <groupId>com.saucelabs.selenium</groupId>
                         <artifactId>sauce-ondemand-driver</artifactId>
                     </exclusion>
@@ -142,6 +192,18 @@
                 <version>${automation.utils.version}</version>
                 <scope>test</scope>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>org.apache.ftpserver</groupId>
                         <artifactId>ftpserver-core</artifactId>
@@ -206,6 +268,18 @@
                 <version>${automation.utils.version}</version>
                 <scope>test</scope>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>org.wso2.carbon.commons</groupId>
                         <artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
@@ -740,7 +814,21 @@
                 <artifactId>joda-time</artifactId>
                 <version>${joda-time.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.wso2.carbon.identity</groupId>
+                <artifactId>org.wso2.carbon.identity.oauth.stub</artifactId>
+                <version>${carbon.identity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity</groupId>
+                <artifactId>org.wso2.carbon.identity.oauth.dto</artifactId>
+                <version>${carbon.identity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity</groupId>
+                <artifactId>org.wso2.carbon.identity.oauth</artifactId>
+                <version>${carbon.identity.version}</version>
+            </dependency>
             <!-- Tomcat dependencies -->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -785,12 +873,6 @@
                 <version>${google.gson.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.identity</groupId>
-                <artifactId>org.wso2.carbon.identity.oauth.stub</artifactId>
-                <version>${carbon.identity.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <scope>test</scope>
@@ -802,6 +884,7 @@
                 <artifactId>org.wso2.carbon.dynamic.client.registration</artifactId>
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-jaxrs</artifactId>
@@ -825,9 +908,9 @@
 
 
             <!--<dependency>-->
-                <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
-                <!--<artifactId>org.wso2.carbon.appmgt.interceptor.feature</artifactId>-->
-                <!--<version>${appmgt..feature.version}</version>-->
+            <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
+            <!--<artifactId>org.wso2.carbon.appmgt.interceptor.feature</artifactId>-->
+            <!--<version>${appmgt..feature.version}</version>-->
             <!--</dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
@@ -856,9 +939,9 @@
                 <version>${appmgt..feature.version}</version>
             </dependency>
             <!--<dependency>-->
-                <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
-                <!--<artifactId>org.wso2.carbon.appmgt.startup.publisher.feature</artifactId>-->
-                <!--<version>${appmgt..feature.version}</version>-->
+            <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
+            <!--<artifactId>org.wso2.carbon.appmgt.startup.publisher.feature</artifactId>-->
+            <!--<version>${appmgt..feature.version}</version>-->
             <!--</dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
@@ -947,13 +1030,13 @@
         <mdm.version>2.0.0-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
-        <carbon.api.mgt.version>4.3.0-SNAPSHOT</carbon.api.mgt.version>
+        <carbon.api.mgt.version>4.3.0</carbon.api.mgt.version>
 
         <!-- Carbon Mediation -->
-        <carbon.mediation.version>4.4.11-SNAPSHOT</carbon.mediation.version>
+        <carbon.mediation.version>4.4.11</carbon.mediation.version>
 
-	<!-- Carbon Analytics Common -->
-	<carbon.analytics.common.version>5.0.5</carbon.analytics.common.version>
+        <!-- Carbon Analytics Common -->
+        <carbon.analytics.common.version>5.0.5</carbon.analytics.common.version>
 
         <!-- Tomcat -->
         <orbit.tomcat.version>7.0.59.wso2v1</orbit.tomcat.version>
@@ -1176,16 +1259,16 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-	<repository>
-            <id>wso2-staging</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonidentity-115/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
+        <!--<repository>-->
+            <!--<id>wso2-staging</id>-->
+            <!--<name>WSO2 internal Repository</name>-->
+            <!--<url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonapimgt-125/</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>daily</updatePolicy>-->
+                <!--<checksumPolicy>ignore</checksumPolicy>-->
+            <!--</releases>-->
+        <!--</repository>-->
     </repositories>
 
 </project>

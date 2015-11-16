@@ -22,7 +22,7 @@ function emailIsValid(email) {
 
 $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
-        tags : true
+        tags: true
     });
 
     /**
@@ -30,8 +30,8 @@ $(document).ready(function () {
      * when a user clicks on "Add User" button
      * on Add User page in WSO2 MDM Console.
      */
-    $("button#add-user-btn").click(function() {
-        var charLimit =parseInt($("input#username").attr("limit"));
+    $("button#add-user-btn").click(function () {
+        var charLimit = parseInt($("input#username").attr("limit"));
         var domain = $("#userStore").val();
         var username = $("input#username").val().trim();
         var firstname = $("input#firstname").val();
@@ -98,6 +98,12 @@ $(document).ready(function () {
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
                         generateQRCode("#user-created-msg .qr-code");
+                    } else if (data["statusCode"] == 409) {
+                        $(errorMsg).text(data["messageFromServer"]);
+                        $(errorMsgWrapper).removeClass("hidden");
+                    } else if (data["statusCode"] == 500) {
+                        $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
+                        $(errorMsgWrapper).removeClass("hidden");
                     }
                 }, function (data) {
                     if (data["status"] == 409) {

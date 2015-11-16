@@ -263,12 +263,29 @@ function runOperation (operationName) {
 //        serviceEndPoint = operationModule.getTemperatureControllerServiceEndpoint(operationName);
 //    }
     console.log(payload);
-    invokerUtil.post(serviceEndPoint, payload,
-        successCallback, function(jqXHR, textStatus, errorThrown){
-            console.log(textStatus);
-        });
-    $(modalPopupContent).removeData();
-    hidePopup();
+    if(operationName == "NOTIFICATION"){
+        var errorMsgWrapper = "#notification-error-msg";
+        var errorMsg = "#notification-error-msg span";
+        var message = $("#message").val();
+        if (!message) {
+            $(errorMsg).text("Please enter a message. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else {
+            invokerUtil.post(serviceEndPoint, payload,
+                successCallback, function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                });
+            $(modalPopupContent).removeData();
+            hidePopup();
+        }
+    } else {
+        invokerUtil.post(serviceEndPoint, payload,
+            successCallback, function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            });
+        $(modalPopupContent).removeData();
+        hidePopup();
+    }
 }
 
 /*

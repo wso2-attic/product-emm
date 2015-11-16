@@ -19,13 +19,6 @@
                             <div class="wr-input-control">
                                 <input type="text" id="username" class="form-control" value="{{editUser.username}}" disabled/>
                             </div>
-                            <label class="wr-input-label">
-                                Password * <br>
-                                (Keep empty if you don't wish to change. Should be in minimum 5 characters long )
-                            </label>
-                            <div class="wr-input-control">
-                                <input type="password" id="password" class="form-control" value=""/>
-                            </div>
                             <label class="wr-input-label">First Name *</label>
                             <div class="wr-input-control">
                                 <input type="text" id="firstname" class="form-control" value="{{editUser.firstname}}"/>
@@ -46,9 +39,13 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </label>
                             <div class="wr-input-control">
-                                <select id="roles" class="form-control select2" multiple="multiple">
+                                <select id="roles" class="form-control select2" multiple="multiple" selectedVals="
+                                 {{#each usersRoles}}
+                                        {{this}},
+                                    {{/each}}
+                                ">
                                     {{#each userRoles}}
-                                        <option selected="selected">{{this}}</option>
+                                        <option >{{this}}</option>
                                     {{/each}}
                                 </select>
                             </div>
