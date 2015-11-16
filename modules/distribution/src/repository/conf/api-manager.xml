@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <APIManager>
     <!--
         JNDI name of the data source to be used by the API publisher, API store and API
@@ -7,10 +8,10 @@
     <DataSourceName>jdbc/WSO2AM_DB</DataSourceName>
 
     <!-- This parameter is used when adding api management capability to other products like GReg, AS, DSS etc.-->
-    <GatewayType>Tomcat</GatewayType>
+    <GatewayType>None</GatewayType>
 
     <!-- This parameter is used to enable the securevault support when try to publish endpoint secured APIs. Values should be "true" or "false".
-    By default secure vault is disabled.-->
+	By default secure vault is disabled.-->
     <EnableSecureVault>false</EnableSecureVault>
     <!--
         Database configuration used by API publisher, API store and API key manager.
@@ -19,23 +20,23 @@
     -->
     <!--Database-->
     <!--
-        JDBC connection string for the database.
-    -->
+		JDBC connection string for the database.
+	-->
     <!--<URL>jdbc:h2:repository/database/WSO2AM_DB</URL> -->
 
     <!--
-        JDBC username for the database.
-    -->
+		JDBC username for the database.
+	-->
     <!--<Username>wso2carbon</Username>-->
 
     <!--
-        JDBC password for the database.
-    -->
+		JDBC password for the database.
+	-->
     <!--<Password>wso2carbon</Password>
 
 
-        JDBC driver for the database.
-    -->
+		JDBC driver for the database.
+	-->
     <!--<Driver>org.h2.Driver</Driver>
 </Database>-->
 
@@ -70,34 +71,34 @@
         <SecurityContextHeader>X-JWT-Assertion</SecurityContextHeader>
 
         <!--
-            Fully qualified name of the class that will retrieve additional user claims
-            to be appended to the JWT. If not specified no claims will be appended.If user wants to add all user claims in the
-            jwt token, he needs to enable this parameter.
-            The DefaultClaimsRetriever class adds user claims from the default carbon user store.
-        -->
+			Fully qualified name of the class that will retrieve additional user claims
+			to be appended to the JWT. If not specified no claims will be appended.If user wants to add all user claims in the
+			jwt token, he needs to enable this parameter.
+			The DefaultClaimsRetriever class adds user claims from the default carbon user store.
+		-->
         <!--ClaimsRetrieverImplClass>org.wso2.carbon.apimgt.impl.token.DefaultClaimsRetriever</ClaimsRetrieverImplClass-->
 
         <!--
-            The dialectURI under which the claimURIs that need to be appended to the
-            JWT are defined. Not used with custom ClaimsRetriever implementations. The
-            same value is used in the keys for appending the default properties to the
-            JWT.
-        -->
+			The dialectURI under which the claimURIs that need to be appended to the
+			JWT are defined. Not used with custom ClaimsRetriever implementations. The
+			same value is used in the keys for appending the default properties to the
+			JWT.
+		-->
         <!--ConsumerDialectURI>http://wso2.org/claims</ConsumerDialectURI-->
 
         <!--
-        Signature algorithm. Accepts "SHA256withRSA" or "NONE". To disable signing explicitly specify "NONE".
-    -->
+		Signature algorithm. Accepts "SHA256withRSA" or "NONE". To disable signing explicitly specify "NONE".
+	-->
         <!--SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm-->
 
         <!--
-            Enable/Disable JWT generation. Default is false.
-        -->
+			Enable/Disable JWT generation. Default is false.
+		-->
         <!--EnableTokenGeneration>false</EnableTokenGeneration-->
 
         <!--
-            Remove OAuth headers from outgoing message or keep with it.
-        -->
+			Remove OAuth headers from outgoing message or keep with it.
+		-->
         <!--RemoveOAuthHeadersFromOutMessage>true</RemoveOAuthHeadersFromOutMessage-->
     </APIConsumerAuthentication>
 
@@ -122,28 +123,27 @@
         <!-- The environments to which an API will be published -->
         <Environments>
             <!-- Environments can be of different types. Allowed values are 'hybrid', 'production' and 'sandbox'.
-                 An API deployed on a 'production' type gateway will only support production keys
-                 An API deployed on a 'sandbox' type gateway will only support sandbox keys
-                 An API deployed on a 'hybrid' type gateway will support both production and sandbox keys -->
+				 An API deployed on a 'production' type gateway will only support production keys
+				 An API deployed on a 'sandbox' type gateway will only support sandbox keys
+				 An API deployed on a 'hybrid' type gateway will support both production and sandbox keys -->
             <Environment type="hybrid">
                 <Name>Production and Sandbox</Name>
                 <!--
-                            Server URL of the API gateway.
-                    -->
+							Server URL of the API gateway.
+					-->
                 <ServerURL>https://${carbon.local.ip}:${mgt.transport.https.port}${carbon.context}/services/</ServerURL>
                 <!--
-                            Admin username for the API gateway.
-                    -->
+							Admin username for the API gateway.
+					-->
                 <Username>admin</Username>
                 <!--
-                            Admin password for the API gateway.
-                    -->
+							Admin password for the API gateway.
+					-->
                 <Password>admin</Password>
                 <!--
-                            Endpoint URLs for the APIs hosted in this API gateway.
-                    -->
-                <!--<GatewayEndpoint>http://${carbon.local.ip}:${http.nio.port},https://${carbon.local.ip}:${https.nio.port}</GatewayEndpoint>-->
-                <GatewayEndpoint>http://${carbon.local.ip}:${mgt.transport.http.port},https://${carbon.local.ip}:${mgt.transport.https.port}</GatewayEndpoint>
+							Endpoint URLs for the APIs hosted in this API gateway.
+					-->
+                <GatewayEndpoint>http://${carbon.local.ip}:${http.nio.port},https://${carbon.local.ip}:${https.nio.port}</GatewayEndpoint>
             </Environment>
         </Environments>
 
@@ -158,15 +158,15 @@
         <EnableGatewayResourceCache>true</EnableGatewayResourceCache>
 
         <!-- Header name can be configurable, as you preferred. When API invocation is restricted to access only for authorized domains,
-            client request should send his domain, as the value of this header.
-        -->
+			client request should send his domain, as the value of this header.
+		-->
         <ClientDomainHeader>referer</ClientDomainHeader>
 
     </APIGateway>
 
     <!--
-       Enable/Disable Usage metering and billing for api usage
-    -->
+	   Enable/Disable Usage metering and billing for api usage
+	-->
     <EnableBillingAndUsage>false</EnableBillingAndUsage>
 
     <!--
@@ -219,14 +219,45 @@
         -->
         <!--DataSourceName>jdbc/WSO2AM_STATS_DB</DataSourceName-->
 
+
+        <!--
+                Data publishing stream names and versions of API requests, responses and faults. If the default values
+                are changed, the toolbox also needs to be changed accordingly.
+            -->
+        <Streams>
+            <Request>
+                <Name>org.wso2.apimgt.statistics.request</Name>
+                <Version>1.0.0</Version>
+            </Request>
+            <Response>
+                <Name>org.wso2.apimgt.statistics.response</Name>
+                <Version>1.0.0</Version>
+            </Response>
+            <Fault>
+                <Name>org.wso2.apimgt.statistics.fault</Name>
+                <Version>1.0.0</Version>
+            </Fault>
+            <Destination>
+                <Name>org_wso2_apimgt_statistics_destination</Name>
+                <Version>1.0.0</Version>
+                <BAMProfileName>bam-profile</BAMProfileName>
+            </Destination>
+            <Throttle>
+                <Name>org.wso2.apimgt.statistics.throttle</Name>
+                <Version>1.0.0</Version>
+            </Throttle>
+            <Workflow>
+                <Name>org.wso2.apimgt.statistics.workflow</Name>
+                <Version>1.0.0</Version>
+            </Workflow>
+        </Streams>
     </APIUsageTracking>
 
     <!--
-        API key manager configuration used by API key manager (IS), API store and API gateway.
-        This is used by API store to generate and manage API keys. API gateway uses it to
-        validate and authenticate users against the provided API keys.
+        API key validator configuration used by API key manager (IS), API store and API gateway.
+        API gateway uses it to validate and authenticate users against the provided API keys.
     -->
-    <APIKeyManager>
+    <APIKeyValidator>
         <!--
             Server URL of the API key manager
         -->
@@ -267,10 +298,20 @@
         <ThriftServerPort>10397</ThriftServerPort>
         <!--ThriftServerHost>localhost</ThriftServerHost-->
         <EnableThriftServer>true</EnableThriftServer>
+
         <!--
-           This parameter is used to specify Thrift server host name. In a distributed deployment we must set this parameter
-           if keymanager running on separate machine. Gateway use this parameter to connect key validation thrift service
+        Scope used for marking Application Tokens. If a token is generated with this scope, they will be treated as Application Access Tokens
         -->
+        <ApplicationTokenScope>am_application_scope</ApplicationTokenScope>
+
+        <!--
+        Specifies the implementation to be used for KeyValidationHandler. Steps for validating a token can be controlled by plugging in a custom KeyValidation Handler
+        -->
+        <KeyValidationHandlerClassName>org.wso2.carbon.apimgt.keymgt.handlers.DefaultKeyValidationHandler</KeyValidationHandlerClassName>
+        <!--
+		   This parameter is used to specify Thrift server host name. In a distributed deployment we must set this parameter
+		   if keymanager running on separate machine. Gateway use this parameter to connect key validation thrift service
+		-->
         <!--ThriftServerHost>127.0.0.1</ThriftServerHost-->
 
         <!--
@@ -282,18 +323,18 @@
         <TokenEndPointName>/oauth2/token</TokenEndPointName>
 
         <!-- This the API URL for revoke API. When we revoke tokens revoke requests should go through this
-                 API deployed in API gateway. Then it will do cache invalidations related to revoked tokens.
-             In distributed deployment we should configure this property in key manager node by pointing
-             gateway https url. Also please note that we should point gateway revoke service to key manager
-        -->
-        <RevokeAPIURL>https://${carbon.local.ip}:${mgt.transport.https.port}/oauth2/revoke</RevokeAPIURL>
+				 API deployed in API gateway. Then it will do cache invalidations related to revoked tokens.
+			 In distributed deployment we should configure this property in key manager node by pointing
+			 gateway https url. Also please note that we should point gateway revoke service to key manager
+		-->
+        <RevokeAPIURL>https://${carbon.local.ip}:${https.nio.port}/revoke</RevokeAPIURL>
 
         <!-- Whether to encrypt tokens when storing in the Database
-        Note: If changing this value to true, change the value of <TokenPersistenceProcessor> to
-        org.wso2.carbon.identity.oauth.tokenprocessor.EncryptionDecryptionPersistenceProcessor in the identity.xml -->
+		Note: If changing this value to true, change the value of <TokenPersistenceProcessor> to
+		org.wso2.carbon.identity.oauth.tokenprocessor.EncryptionDecryptionPersistenceProcessor in the identity.xml -->
         <EncryptPersistedTokens>false</EncryptPersistedTokens>
 
-    </APIKeyManager>
+    </APIKeyValidator>
 
     <!--
         Settings related to managing API access tiers.
@@ -348,30 +389,30 @@
         <DisplayAllAPIs>false</DisplayAllAPIs>
 
         <!--
-           This parameter specifies whether to display the comment editing facility or not.
-          Default is "true". If user wants to disable, he must set this param as "false"
+		   This parameter specifies whether to display the comment editing facility or not.
+		  Default is "true". If user wants to disable, he must set this param as "false"
 
-       -->
+	   -->
         <DisplayComments>true</DisplayComments>
 
         <!--
-           This parameter specifies whether to display the ratings  or not.
-          Default is "true". If user wants to disable, he must set this param as "false"
+		   This parameter specifies whether to display the ratings  or not.
+		  Default is "true". If user wants to disable, he must set this param as "false"
 
-       -->
+	   -->
         <DisplayRatings>true</DisplayRatings>
 
         <!--
-          This parameter specifies the expiration time of the TagCache. TagCache will
-          only be created when this element is uncommented. When the specified
-          time duration gets elapsed ,tag cache will get re-generated.
-         -->
+		  This parameter specifies the expiration time of the TagCache. TagCache will
+		  only be created when this element is uncommented. When the specified
+		  time duration gets elapsed ,tag cache will get re-generated.
+		 -->
         <!--TagCacheDuration>120000</TagCacheDuration-->
 
         <!--
-        This parameter specifies whether Recently Added APIs will be loaded from the cache or not.
-        If there are multiple API modification during a short time period, better to disable cache.
-        -->
+		This parameter specifies whether Recently Added APIs will be loaded from the cache or not.
+		If there are multiple API modification during a short time period, better to disable cache.
+		-->
         <EnableRecentlyAddedAPICache>false</EnableRecentlyAddedAPICache>
 
     </APIStore>
@@ -404,18 +445,18 @@
     <StartupAPIPublisher>
 
         <!--
-                Enable/Disable the API Startup Publisher
-            -->
+				Enable/Disable the API Startup Publisher
+			-->
 
         <Enabled>false</Enabled>
 
         <!--
-        Configuration to create APIs for local endpoints.
-        Endpoint will be computed as http://${carbon.local.ip}:${mgt.transport.http.port}/Context.
-        Define many LocalAPI elements as below to create many APIs
-        for local Endpoints.
-        IconPath should be relative to CARBON_HOME.
-        -->
+		Configuration to create APIs for local endpoints.
+		Endpoint will be computed as http://${carbon.local.ip}:${mgt.transport.http.port}/Context.
+		Define many LocalAPI elements as below to create many APIs
+		for local Endpoints.
+		IconPath should be relative to CARBON_HOME.
+		-->
         <LocalAPIs>
             <LocalAPI>
                 <Context>/resource</Context>
@@ -427,24 +468,24 @@
             </LocalAPI>
         </LocalAPIs>
         <!--
-        Configuration to create APIs for remote endpoints.
-        When Endpoint need to be defined use this configuration.
-        Define many API elements as below to create many APIs
-        for external Endpoints.
-        If you do not need to add Icon or Documentation set
-        'none' as the value for IconPath & DocumentURL.
-        -->
+		Configuration to create APIs for remote endpoints.
+		When Endpoint need to be defined use this configuration.
+		Define many API elements as below to create many APIs
+		for external Endpoints.
+		If you do not need to add Icon or Documentation set
+		'none' as the value for IconPath & DocumentURL.
+		-->
         <!--APIs>
-            <API>
-                <Context>/resource</Context>
-                <Endpoint>http://localhost:9764/resource</Endpoint>
-                <Provider>admin</Provider>
-                <Version>1.0.0</Version>
-                <IconPath>none</IconPath>
-                <DocumentURL>none</DocumentURL>
-                <AuthType>Any</AuthType>
-            </API>
-        </APIs-->
+			<API>
+				<Context>/resource</Context>
+				<Endpoint>http://localhost:9764/resource</Endpoint>
+				<Provider>admin</Provider>
+				<Version>1.0.0</Version>
+				<IconPath>none</IconPath>
+				<DocumentURL>none</DocumentURL>
+				<AuthType>Any</AuthType>
+			</API>
+		</APIs-->
 
     </StartupAPIPublisher>
 
@@ -467,15 +508,15 @@
         <Enabled>true</Enabled>
 
         <!--The value of the Access-Control-Allow-Origin header. Default values are
-            API Store addresses, which is needed for swagger to function.-->
+			API Store addresses, which is needed for swagger to function.-->
         <Access-Control-Allow-Origin>https://localhost:9443,http://localhost:9763</Access-Control-Allow-Origin>
 
         <!--Configure Access-Control-Allow-Headers-->
         <Access-Control-Allow-Headers>authorization,Access-Control-Allow-Origin,Content-Type</Access-Control-Allow-Headers>
 
     </CORSConfiguration>
-    <!-- This property is there to configure velocity log file location. normally it will
-         crete file in carbon home. If you need to use different location you can use this
-    -->
-    <!--VelocityLogPath></VelocityLogPath-->
+    <!-- This property is there to configure velocity log output into existing Log4j carbon Logger.
+	  You can enable this and set preferable Logger name.
+	-->
+    <!--VelocityLogger>VELOCITY</VelocityLogger-->
 </APIManager>
