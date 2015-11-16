@@ -16,7 +16,7 @@
 *under the License.
 */
 
-package org.wso2.emm.ui.integration.test;
+package org.wso2.emm.ui.integration.test.login;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
@@ -42,7 +42,7 @@ public class ManagementConsoleLoginTestCase extends EMMIntegrationUiBaseTestCase
     public void testLogin() throws Exception {
         ManagementConsoleLoginPage test = new ManagementConsoleLoginPage(driver);
         HomePage home = test.loginAs(automationContext.getSuperTenant().getTenantAdmin().getUserName(),
-                automationContext.getSuperTenant().getTenantAdmin().getPassword());
+                                     automationContext.getSuperTenant().getTenantAdmin().getPassword());
         home.logout();
         driver.close();
     }
