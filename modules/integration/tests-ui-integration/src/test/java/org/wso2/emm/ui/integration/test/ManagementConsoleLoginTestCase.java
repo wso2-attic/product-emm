@@ -25,23 +25,22 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
 import org.wso2.emm.integration.ui.pages.home.HomePage;
-import org.wso2.emm.integration.ui.pages.login.LoginPage;
+import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 
-public class LoginTestCase extends EMMIntegrationUiBaseTestCase {
+public class ManagementConsoleLoginTestCase extends EMMIntegrationUiBaseTestCase {
 
     private WebDriver driver;
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
         super.init();
-
         driver = BrowserManager.getWebDriver();
         driver.get(getLoginURL());
     }
 
-    @Test(groups = "wso2.emm", description = "verify login to emm server")
+    @Test(groups = "wso2.emm", description = "verify login to emm server's management console")
     public void testLogin() throws Exception {
-        LoginPage test = new LoginPage(driver);
+        ManagementConsoleLoginPage test = new ManagementConsoleLoginPage(driver);
         HomePage home = test.loginAs(automationContext.getSuperTenant().getTenantAdmin().getUserName(),
                 automationContext.getSuperTenant().getTenantAdmin().getPassword());
         home.logout();

@@ -31,12 +31,12 @@ import org.wso2.emm.integration.ui.pages.home.HomePage;
 /**
  * Login page class - contains methods to login to wso2 products.
  */
-public class LoginPage {
-    private static final Log log = LogFactory.getLog(LoginPage.class);
+public class ManagementConsoleLoginPage {
+    private static final Log log = LogFactory.getLog(ManagementConsoleLoginPage.class);
     private WebDriver driver;
     private UIElementMapper uiElementMapper;
 
-    public LoginPage(WebDriver driver) throws IOException {
+    public ManagementConsoleLoginPage(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
