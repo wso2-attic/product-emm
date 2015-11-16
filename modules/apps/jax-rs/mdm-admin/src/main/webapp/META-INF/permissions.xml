@@ -324,7 +324,7 @@
     <Permission>
         <name>Get all user names</name>
         <path>/device-mgt/users/view</path>
-        <url>/users/users-by-username</url>
+        <url>/users/view-users</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
