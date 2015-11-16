@@ -1,0 +1,5 @@
+{
+  "PUT": {
+    "permissions":["/permission/admin/device-mgt/android/operations/location","/permission/admin/device-mgt/devices/count","/permission/admin/device-mgt/operations/add","/permission/admin/device-mgt/operations/application","/permission/admin/device-mgt/operations/application/install","/permission/admin/device-mgt/operations/application/uninstall","/permission/admin/device-mgt/operations/application/view-all","/permission/admin/device-mgt/roles/delete","/permission/admin/device-mgt/users/update","/permission/admin/device-mgt/users/view","/permission/admin/login"]
+  }
+}

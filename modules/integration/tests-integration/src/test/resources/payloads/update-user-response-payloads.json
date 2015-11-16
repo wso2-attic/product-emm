@@ -1,0 +1,6 @@
+{
+  "PUT" : {
+    "statusCode":201,
+    "messageFromServer":"User by username: username123 was successfully updated."
+  }
+}

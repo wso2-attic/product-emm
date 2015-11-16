@@ -1,0 +1,6 @@
+{
+  "DELETE" : {
+    "statusCode":200,
+    "messageFromServer":"User by username: username123 was successfully removed."
+  }
+}

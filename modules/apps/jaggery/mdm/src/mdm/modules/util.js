@@ -85,6 +85,9 @@ var util = function () {
         var tokenPair = {};
         if (xhr.status == 200) {
             var data = parse(xhr.responseText);
+            log.info("====================================================");
+            log.info("Oauth            : " + data.access_token );
+            log.info("=====================================================");
             tokenPair.refreshToken = data.refresh_token;
             tokenPair.accessToken = data.access_token;
         } else if (xhr.status == 403) {

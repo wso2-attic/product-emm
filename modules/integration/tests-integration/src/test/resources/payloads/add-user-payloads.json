@@ -1,0 +1,9 @@
+{
+  "POST" : {
+    "username":"PRIMARY/username123",
+    "firstname":"userfirstname",
+    "lastname":"userlastname",
+    "emailAddress":"user123@gmail.com",
+    "roles":["admin"]
+  }
+}

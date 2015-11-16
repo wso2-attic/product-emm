@@ -1,0 +1,6 @@
+{
+  "POST":{
+    "roleName":"administration",
+    "users":["admin"]
+  }
+}
