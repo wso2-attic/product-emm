@@ -52,6 +52,7 @@ if (platform != "Windows Phone") {
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open("POST", authUrl);
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+            xmlHttpRequest.setRequestHeader(constants.AUTHORIZATION_HEADER, "Bearer " + tokenPair.accessToken);
             xmlHttpRequest.send(stringify(payload));
 
             if (xmlHttpRequest.status == 200 && xmlHttpRequest.readyState == 4) {
