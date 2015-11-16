@@ -34,7 +34,7 @@ var apiWrapperUtil = function () {
         session.put(constants.ENCODED_CLIENT_KEYS_IDENTIFIER, encodedClientKeys);
         if (type == "password") {
             tokenPair =
-                tokenUtil.getTokenWithPasswordGrantType(properties.username, properties.password, encodedClientKeys);
+                tokenUtil.getTokenWithPasswordGrantType(properties.username, encodeURIComponent(properties.password), encodedClientKeys);
         } else if (type == "saml") {
             tokenPair = tokenUtil.
                 getTokenWithSAMLGrantType(properties.samlToken, clientData.clientId, clientData.clientSecret, "PRODUCTION");
