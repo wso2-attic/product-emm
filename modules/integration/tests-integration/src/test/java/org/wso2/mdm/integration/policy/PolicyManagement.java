@@ -25,6 +25,7 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
+
 /**
  * This class contains integration tests for policy management backend services.
  */
@@ -39,20 +40,20 @@ public class PolicyManagement extends TestBase {
         this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
-    @Test(description = "Test add policy.")
-    public void testAddPolicy() throws Exception {
-        HttpResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.ADD_POLICY_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString()
-        );
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.ADD_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true
-        );
-    }
+//    @Test(description = "Test add policy.")
+//    public void testAddPolicy() throws Exception {
+//        HttpResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
+//                PayloadGenerator.getJsonPayload(
+//                        Constants.PolicyManagement.ADD_POLICY_PAYLOAD_FILE_NAME,
+//                        Constants.HTTP_METHOD_POST).toString()
+//        );
+//        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+//                        Constants.PolicyManagement.ADD_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+//                        Constants.HTTP_METHOD_POST).toString(),
+//                response.getData().toString(), true
+//        );
+//    }
 
 //    @Test(description = "Test update policy.", dependsOnMethods = { "testAddPolicy"})
 //    public void testUpdatePolicy() throws Exception {
@@ -70,18 +71,18 @@ public class PolicyManagement extends TestBase {
 //
 //    }
 
-    @Test(description = "Test remove policy.", dependsOnMethods = { "testAddPolicy" })
-    public void testRemovePolicy() throws Exception {
-        HttpResponse response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString()
-        );
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.REMOVE_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true
-        );
-    }
+//    @Test(description = "Test remove policy.", dependsOnMethods = { "testAddPolicy" })
+//    public void testRemovePolicy() throws Exception {
+//        HttpResponse response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
+//                PayloadGenerator.getJsonPayload(
+//                        Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME,
+//                        Constants.HTTP_METHOD_POST).toString()
+//        );
+//        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+//                        Constants.PolicyManagement.REMOVE_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+//                        Constants.HTTP_METHOD_POST).toString(),
+//                response.getData().toString(), true
+//        );
+//    }
 }

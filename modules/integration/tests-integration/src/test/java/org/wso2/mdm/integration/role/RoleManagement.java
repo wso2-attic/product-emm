@@ -25,6 +25,10 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * This class contains integration tests for role management backend services.
  */
@@ -77,7 +81,7 @@ public class RoleManagement extends TestBase {
                         Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString()
         );
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
 //        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
 //                        Constants.RoleManagement.UPDATE_ROLE_PERMISSION_RESPONSE_PAYLOAD_FILE_NAME,
 //                        Constants.HTTP_METHOD_PUT).toString(),
@@ -86,15 +90,15 @@ public class RoleManagement extends TestBase {
 
     }
 
-    @Test(description = "Test remove user.", dependsOnMethods = { "testAddRole" , "testUpdateRole", "testUpdateRolePermission" })
-    public void testRemoveUser() throws Exception {
-        HttpResponse response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+//    @Test(description = "Test remove user.", dependsOnMethods = { "testAddRole" , "testUpdateRole", "testUpdateRolePermission" })
+//    public void testRemoveRole() throws Exception {
+//        HttpResponse response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
+//        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
 //        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
 //                        Constants.RoleManagement.REMOVE_ROLE_RESPONSE_PAYLOAD_FILE_NAME,
 //                        Constants.HTTP_METHOD_DELETE).toString(),
 //                response.getData().toString(), true
 //        );
-
-    }
+//
+//    }
 }

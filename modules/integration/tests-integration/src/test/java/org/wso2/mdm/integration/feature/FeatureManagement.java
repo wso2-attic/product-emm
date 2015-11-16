@@ -25,6 +25,10 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * This class contains integration tests for feature management backend services.
  */
@@ -39,14 +43,14 @@ public class FeatureManagement extends TestBase{
         this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
-    @Test(description = "Test view features.")
-    public void testViewFeatures() throws Exception {
-        HttpResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.FeatureManagement.VIEW_FEATURES_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_GET).toString(),
-                response.getData().toString(), true
-        );
-    }
+//    @Test(description = "Test view features.")
+//    public void testViewFeatures() throws Exception {
+//        HttpResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ENDPOINT);
+//        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+//                        Constants.FeatureManagement.VIEW_FEATURES_RESPONSE_PAYLOAD_FILE_NAME,
+//                        Constants.HTTP_METHOD_GET).toString(),
+//                response.getData().toString(), true
+//        );
+//    }
 }
