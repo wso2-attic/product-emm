@@ -111,9 +111,6 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     var policyNameInput = $("#policy-name-input");
     var policyDescriptionInput = $("#policy-description-input");
     userRoleInput.val(policyPayloadObj.roles).trigger("change");
-    //userInput.select2({
-    //    data: policyPayloadObj.users,
-    //});
     userInput.val(policyPayloadObj.users).trigger("change");
     ownershipInput.val(policyPayloadObj.ownershipType);
     actionInput.val(policyPayloadObj.compliance);
@@ -2027,46 +2024,6 @@ $(document).ready(function () {
 
     $("select.select2[multiple=multiple]").select2({
         "tags": true
-    });
-
-    $("#users-input").select2({
-        multiple:true,
-        tags: true,
-        ajax: {
-            url: window.location.origin + "/mdm/api/invoker/execute/",
-            method: "POST",
-            dataType: 'json',
-            delay: 250,
-            id: function (user) {
-                return user.username;
-            },
-            data: function (params) {
-                var postData = {};
-                postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users?q=ad";
-                postData.actionPayload = JSON.stringify({
-                    q: params.term, // search term
-                    page: params.page
-                });
-
-                return JSON.stringify(postData);
-            },
-            processResults: function (data, page) {
-                var newData = [];
-                $.each(data.responseContent, function (index, value) {
-                    value.id = value.username;
-                    newData.push(value);
-                });
-                return {
-                    results: newData
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        minimumInputLength: 1,
-        templateResult: formatRepo, // omitted for brevity, see the source of this page
-        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
     });
 
     // Maintains an array of configured features of the profile
