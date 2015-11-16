@@ -1,0 +1,138 @@
+{
+  "GET" :
+  [
+    {
+      "id": 0,
+      "code": "DEVICE_LOCK",
+      "name": "Device Lock",
+      "description": "Lock the device",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "DEVICE_LOCATION",
+      "name": "Location",
+      "description": "Request coordinates of device location",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "WIFI",
+      "name": "wifi",
+      "description": "Setting up wifi configuration",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "CAMERA",
+      "name": "camera",
+      "description": "Enable or disable camera",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "EMAIL",
+      "name": "Email",
+      "description": "Configure email settings",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "DEVICE_MUTE",
+      "name": "mute",
+      "description": "Enable mute in the device",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "DEVICE_INFO",
+      "name": "Device info",
+      "description": "Request device information",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "ENTERPRISE_WIPE",
+      "name": "Enterprise Wipe",
+      "description": "Remove enterprise applications",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "CLEAR_PASSWORD",
+      "name": "Clear Password",
+      "description": "Clear current password",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "WIPE_DATA",
+      "name": "Wipe Data",
+      "description": "Factory reset the device",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "APPLICATION_LIST",
+      "name": "Application List",
+      "description": "Request list of current installed applications",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "CHANGE_LOCK_CODE",
+      "name": "Change Lock-code",
+      "description": "Change current lock code",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "INSTALL_APPLICATION",
+      "name": "Install App",
+      "description": "Install Enterprise or Market application",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "UNINSTALL_APPLICATION",
+      "name": "Uninstall App",
+      "description": "Uninstall application",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "BLACKLIST_APPLICATIONS",
+      "name": "Blacklist app",
+      "description": "Blacklist applications",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "ENCRYPT_STORAGE",
+      "name": "Encrypt storage",
+      "description": "Encrypt storage",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "DEVICE_RING",
+      "name": "Ring",
+      "description": "Ring the device",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "PASSCODE_POLICY",
+      "name": "Password Policy",
+      "description": "Set passcode policy",
+      "deviceType": "android"
+    },
+    {
+      "id": 0,
+      "code": "NOTIFICATION",
+      "name": "Message",
+      "description": "Send message",
+      "deviceType": "android"
+    }
+  ]
+}

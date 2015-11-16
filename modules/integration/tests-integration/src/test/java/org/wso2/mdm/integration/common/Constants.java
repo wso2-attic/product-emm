@@ -232,4 +232,11 @@ public final class Constants {
         public static final String REMOVE_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "remove-policy-response-payloads.json";
     }
 
+    public static final class FeatureManagement {
+        private FeatureManagement() { throw new AssertionError(); }
+
+        public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
+        public static final String VIEW_FEATURES_ENDPOINT="/mdm-admin/features/android";
+        public static final String VIEW_FEATURES_RESPONSE_PAYLOAD_FILE_NAME = "view-feature-response-payloads.json";
+    }
 }
