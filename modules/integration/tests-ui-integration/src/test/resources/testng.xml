@@ -9,7 +9,8 @@
         </packages>
 
         <classes>
-            <class name="org.wso2.emm.ui.integration.test.LoginTestCase"/>
+            <class name="org.wso2.emm.ui.integration.test.ManagementConsoleLoginTestCase"/>
+            <class name="org.wso2.emm.ui.integration.test.login.MDMLoginTestCase"/>
         </classes>
 
     </test>
