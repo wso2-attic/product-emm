@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
 import org.wso2.emm.integration.ui.pages.user.AddUserPage;
+import org.wso2.emm.integration.ui.pages.user.UserListPage;
 
 public class UserTestCase extends EMMIntegrationUiBaseTestCase {
 
@@ -45,9 +46,15 @@ public class UserTestCase extends EMMIntegrationUiBaseTestCase {
         driver.get(getWebAppURL() + "/mdm/users/add-user");
         AddUserPage addUserPage = new AddUserPage(driver);
         addUserPage.addUser("inosh", "Inosh", "Perera", "inosh@wso2.com");
-        driver.close();
     }
 
+    @Test(description = "verify delete user to emm console")
+    public void testDeleteUser() throws Exception {
+        driver.get(getWebAppURL() + "/mdm/users/");
+        UserListPage userListPage = new UserListPage(driver);
+        userListPage.deleteUser();
+//        driver.close();
+    }
     @AfterClass(alwaysRun = true)
     public void tearDown() throws Exception {
         driver.quit();
