@@ -497,7 +497,7 @@
 
             <!--MDM dependencies-->
             <dependency>
-                <groupId>org.wso2.carbon.mdm</groupId>
+                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.mobile.impl</artifactId>
                 <version>${carbon.mobile.device.mgt.version}</version>
             </dependency>
