@@ -581,11 +581,6 @@ public class OperationReply {
 
                 }
                 if (policy.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
-
-                    DeleteTag delete = new DeleteTag();
-                    delete.setCommandId(operation.getId());
-                    delete.setItems(buildDeleteInfo(policy));
-
                     AtomicTag atomicTagElement = new AtomicTag();
                     List<AddTag> addConfig;
                     try {

@@ -22,6 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.w3c.dom.Document;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -125,7 +127,7 @@ public class SyncmlServiceImpl implements SyncmlService {
     public Response getResponse(Document request)
             throws WindowsDeviceEnrolmentException, WindowsOperationException, NotificationManagementException,
             WindowsConfigurationException {
-
+        String val = getStringFromDoc(request);
         int msgId;
         int sessionId;
         String user;
@@ -424,6 +426,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 Device generateDevice = generateDevice(DeviceManagementConstants.MobileDeviceTypes.
                         MOBILE_DEVICE_TYPE_WINDOWS, devID, modVersion, imsi, imei, devMan, devMod, user);
                 status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(generateDevice);
+                WindowsAPIUtils.startTenantFlow(user);
                 return status;
 
             } else if (msgID == PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID) {
@@ -481,6 +484,9 @@ public class SyncmlServiceImpl implements SyncmlService {
                     existingDevice.setDeviceIdentifier(syncmlDocument.getHeader().getSource().getLocURI());
                     existingDevice.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
                     status = WindowsAPIUtils.getDeviceManagementService().modifyEnrollment(existingDevice);
+                    // call effective policy for the enrolling device.
+                    PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
+                    policyManagerService.getEffectivePolicy(deviceIdentifier);
                     return status;
                 }
             }
@@ -491,6 +497,12 @@ public class SyncmlServiceImpl implements SyncmlService {
         } catch (SyncmlMessageFormatException e) {
             String msg = "Error occurred in bad format of the syncml payload.";
             throw new WindowsOperationException(msg, e);
+        } catch (PolicyManagementException e) {
+            String msg = "Error occurred in getting effective policy.";
+            log.debug(msg, e);
+            throw new WindowsOperationException(msg, e);
+        } finally {
+
         }
         return status;
     }
@@ -521,5 +533,11 @@ public class SyncmlServiceImpl implements SyncmlService {
         syncmlResponse = operationReply.generateReply();
         generator = new SyncmlGenerator();
         return generator.generatePayload(syncmlResponse);
+    }
+
+    public String getStringFromDoc(org.w3c.dom.Document doc) {
+        DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
+        LSSerializer lsSerializer = domImplementation.createLSSerializer();
+        return lsSerializer.writeToString(doc);
     }
 }

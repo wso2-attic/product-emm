@@ -199,4 +199,12 @@ public class WindowsAPIUtils {
         return oAuth2TokenValidationService;
     }
 
+    public static void startTenantFlow(String userName) {
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.
+                getThreadLocalCarbonContext();
+        privilegedCarbonContext.setTenantId(-1234);
+        privilegedCarbonContext.setTenantDomain("carbon.super");
+        privilegedCarbonContext.setUsername(userName);
+    }
 }
