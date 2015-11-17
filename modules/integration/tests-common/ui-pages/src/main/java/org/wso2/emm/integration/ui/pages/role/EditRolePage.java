@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.emm.integration.ui.pages.user;
+package org.wso2.emm.integration.ui.pages.role;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,25 +27,29 @@ import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
 
-public class UserListPage {
+public class EditRolePage {
     private WebDriver driver;
     private UIElementMapper uiElementMapper;
-    private static final Log log = LogFactory.getLog(UserListPage.class);
+    private static final Log log = LogFactory.getLog(RoleListPage.class);
 
-    public UserListPage(WebDriver driver) throws IOException {
+    public EditRolePage(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
-        if (!(driver.getCurrentUrl().contains("mdm/users"))) {
-            // Alternatively, we could navigate to the login page, perhaps logging out first
-            throw new IllegalStateException("This is not the list users page");
+        // Check that we're on the right page.
+        if (!(driver.getCurrentUrl().contains("roles/edit-role"))) {
+            throw new IllegalStateException("This is not the edit role page");
         }
     }
 
-    public void deleteUser() throws IOException {
-        WebElement deleteButton = driver.findElement(By.xpath(uiElementMapper.getElement("emm.user.delete.button")));
-        deleteButton.click();
-        WebElement deleteConfirmButton = driver.findElement(By.id(uiElementMapper.getElement("emm.user.delete.button" +
-                                                                                             ".confirm")));
-        deleteConfirmButton.click();
+    public void editRole(String role){
+        WebElement roleName = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.update.rolename.input")));
+        roleName.sendKeys(role);
+        WebElement addRoleButton = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.update.role.button")));
+        addRoleButton.click();
+        String resultText = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.update.role.created.msg.div")
+        )).getText();
+        if(!resultText.contains("ROLE WAS UPDATED SUCCESSFULLY")){
+            throw new IllegalStateException("Role was not edited");
+        }
     }
 }
