@@ -1,0 +1,15 @@
+{
+  "POST": {
+    "policyName":"RestrictCamera",
+    "description":"description",
+    "compliance":"enforce",
+    "ownershipType":"BYOD",
+    "profile":{
+      "profileName":"RestrictCamera",
+      "deviceType":{"id":1},
+      "profileFeaturesList":[{"featureCode":"CAMERA","deviceTypeId":1,
+        "content":{"enabled":true}}]},
+    "roles":["ANY"]
+  }
+
+}

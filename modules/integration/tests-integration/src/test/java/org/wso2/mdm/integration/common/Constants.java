@@ -172,4 +172,21 @@ public final class Constants {
         public static final String PAYLOAD_FILE_NAME = "android-configuration-payloads.json";
         public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
     }
+
+    public static final class PolicyManagement {
+        private PolicyManagement() { throw new AssertionError();}
+
+        public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
+        public static final String ADD_POLICY_ENDPOINT="/mdm-admin/policies/active-policy";
+        public static final String ADD_POLICY_PAYLOAD_FILE_NAME = "add-policy-payloads.json";
+        public static final String ADD_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "add-policy-response-payloads.json";
+
+        public static final String VIEW_POLICY_ENDPOINT="/mdm-admin/policies/1";
+        public static final String VIEW_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "view-policy-response-payloads.json";
+
+    }
+
+
+
+
 }
