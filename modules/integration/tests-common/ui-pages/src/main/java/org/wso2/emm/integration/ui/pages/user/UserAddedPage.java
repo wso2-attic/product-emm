@@ -16,36 +16,24 @@
  * under the License.
  */
 
-package org.wso2.emm.integration.ui.pages.home;
+package org.wso2.emm.integration.ui.pages.user;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
-import org.wso2.emm.integration.ui.pages.login.MDMLoginPage;
-import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 
 import java.io.IOException;
 
-public class MDMHomePage {
-
-    private static final Log log = LogFactory.getLog(MDMHomePage.class);
+public class UserAddedPage {
     private WebDriver driver;
     private UIElementMapper uiElementMapper;
 
-    public MDMHomePage(WebDriver driver) throws IOException {
+    public UserAddedPage(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.dashboard.device.div.xpath"))).getText()
-                   .contains("DEVICES")) {
-            throw new IllegalStateException("This is not the home page");
+        if (driver.findElement(By.tagName("canvas")) == null) {
+            throw new IllegalStateException("This is not the user added success page");
         }
     }
-
-    //        public MDMLoginPage logout() throws IOException {
-    //            driver.findElement(By.xpath("/html/body/div[3]/header/div/div[2]/div/div/div[3]/a")).click();
-    //            return new MDMLoginPage(driver);
-    //        }
 }

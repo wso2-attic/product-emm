@@ -16,37 +16,45 @@
  * under the License.
  */
 
-package org.wso2.emm.ui.integration.test.login;
+package org.wso2.emm.ui.integration.test;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
-import org.wso2.emm.integration.ui.pages.home.MDMHomePage;
-import org.wso2.emm.integration.ui.pages.login.MDMLoginPage;
-import org.wso2.emm.ui.integration.test.Constants;
+import org.wso2.emm.integration.ui.pages.user.AddUserPage;
+import org.wso2.emm.integration.ui.pages.user.UserListPage;
 
-public class MDMLoginTestCase extends EMMIntegrationUiBaseTestCase {
+public class UserTestCase extends EMMIntegrationUiBaseTestCase {
 
     private WebDriver driver;
+    private static final Log log = LogFactory.getLog(UserTestCase.class);
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.LOGIN_GROUP })
+    @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
         super.init();
         driver = BrowserManager.getWebDriver();
-        driver.get(getWebAppURL() + Constants.MDM_LOGIN_PATH);
+        LoginUtils.login(driver, automationContext, getWebAppURL());
     }
 
-    @Test(groups = { Constants.LOGIN_GROUP }, description = "verify login to emm console")
-    public void testLogin() throws Exception {
-        MDMLoginPage test = new MDMLoginPage(driver);
-        MDMHomePage home = test.loginAs(automationContext.getSuperTenant().getTenantAdmin().getUserName(),
-                                        automationContext.getSuperTenant().getTenantAdmin().getPassword());
-        driver.close();
+    @Test(description = "verify add user to emm console")
+    public void testAddUser() throws Exception {
+        driver.get(getWebAppURL() + "/mdm/users/add-user");
+        AddUserPage addUserPage = new AddUserPage(driver);
+        addUserPage.addUser("inosh", "Inosh", "Perera", "inosh@wso2.com");
     }
 
+    @Test(description = "verify delete user to emm console")
+    public void testDeleteUser() throws Exception {
+        driver.get(getWebAppURL() + "/mdm/users/");
+        UserListPage userListPage = new UserListPage(driver);
+        userListPage.deleteUser();
+//        driver.close();
+    }
     @AfterClass(alwaysRun = true)
     public void tearDown() throws Exception {
         driver.quit();
