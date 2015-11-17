@@ -25,7 +25,7 @@ import org.openqa.selenium.WebDriver;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
-import org.wso2.emm.integration.ui.pages.login.LoginPage;
+import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 
 /**
  * Home page class holds the information of product page you got once login
@@ -46,8 +46,8 @@ public class HomePage {
         }
     }
 
-    public LoginPage logout() throws IOException {
+    public ManagementConsoleLoginPage logout() throws IOException {
         driver.findElement(By.xpath(uiElementMapper.getElement("home.greg.sign.out.xpath"))).click();
-        return new LoginPage(driver);
+        return new ManagementConsoleLoginPage(driver);
     }
 }

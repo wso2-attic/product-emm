@@ -29,6 +29,7 @@ import org.apache.cxf.message.Message;
 import org.w3c.dom.*;
 import org.wso2.carbon.certificate.mgt.core.exception.KeystoreException;
 import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementServiceImpl;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
@@ -45,13 +46,14 @@ import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.Additiona
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.BinarySecurityToken;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestSecurityTokenResponse;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestedSecurityToken;
+import org.xml.sax.SAXException;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -64,8 +66,10 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -107,7 +111,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                                      String binarySecurityToken,
                                      AdditionalContext additionalContext,
                                      Holder<RequestSecurityTokenResponse> response) throws
-            WindowsDeviceEnrolmentException, UnsupportedEncodingException {
+            WindowsDeviceEnrolmentException, UnsupportedEncodingException, WAPProvisioningException {
 
         String headerBinarySecurityToken = null;
         List<Header> headers = getHeaders();
@@ -118,24 +122,27 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 headerBinarySecurityToken = element.getFirstChild().getNextSibling().getFirstChild().getTextContent();
             }
         }
-        List<ConfigurationEntry> tenantConfigurations;
+        List<ConfigurationEntry> tenantConfigurations = null;
         try {
             if (getTenantConfigurationData() != null) {
                 tenantConfigurations = getTenantConfigurationData();
+                for (ConfigurationEntry configurationEntry : tenantConfigurations) {
+                    if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.
+                            NOTIFIER_FREQUENCY)) {
+                        pollingFrequency = configurationEntry.getValue().toString();
+                    } else {
+                        pollingFrequency = PluginConstants.TenantConfigProperties.DEFAULT_FREQUENCY;
+                    }
+                }
             } else {
-                String msg = "Tenant configurations are not initialized.";
+                pollingFrequency = PluginConstants.TenantConfigProperties.DEFAULT_FREQUENCY;
+                String msg = "Tenant configurations are not initialized yet.";
                 log.error(msg);
-                throw new WindowsDeviceEnrolmentException(msg);
             }
         } catch (DeviceManagementException e) {
             String msg = "Error occurred in while getting tenant configurations.";
             log.error(msg);
             throw new WindowsDeviceEnrolmentException(msg, e);
-        }
-        for (ConfigurationEntry configurationEntry : tenantConfigurations) {
-            if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY)) {
-                pollingFrequency = configurationEntry.getValue().toString();
-            }
         }
         ServletContext ctx =
                 (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
@@ -161,13 +168,16 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
             requestSecurityTokenResponse.setRequestID(REQUEST_ID);
             response.value = requestSecurityTokenResponse;
-        }
-        //Generic exception is caught here as there is no need of taking different actions for
-        //different exceptions.
-        catch (Exception e) {
-            String msg = "Wap provisioning file couldn't be prepared.";
+        } catch (CertificateGenerationException e) {
+            String msg = "Problem occurred in generating certificate.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
+        } catch (WAPProvisioningException e) {
+            String msg = "Problem occurred in generating wap-provisioning file.";
+            log.error(msg, e);
+            throw new WAPProvisioningException(msg, e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
         }
     }
 
@@ -201,10 +211,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
     public String prepareWapProvisioningXML(
             String binarySecurityToken,
             String wapProvisioningFilePath, String headerBst) throws CertificateGenerationException,
-            WAPProvisioningException {
+            WAPProvisioningException, WindowsDeviceEnrolmentException {
 
-        byte[] byteArrayHeaderBST = DatatypeConverter.parseBase64Binary(headerBst);
-        String decodedBST = new String(byteArrayHeaderBST);
         String rootCertEncodedString;
         String signedCertEncodedString;
         X509Certificate signedCertificate;
@@ -240,8 +248,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         DocumentBuilder builder;
         String wapProvisioningString;
         try {
-
             builder = domFactory.newDocumentBuilder();
+
             Document document = builder.parse(wapProvisioningFilePath);
             NodeList wapParm = document.getElementsByTagName(PluginConstants.CertificateEnrolment.PARM);
             Node caCertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
@@ -285,17 +293,17 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             Node userNameAuthPosition = wapParm.item(APPAUTH_USERNAME_POSITION);
             NamedNodeMap appServerAttribute = userNameAuthPosition.getAttributes();
             Node authNameNode = appServerAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            CacheEntry cacheEntry = (CacheEntry) DeviceUtil.getCacheEntry(decodedBST);
-            String username = cacheEntry.getUsername();
+            CacheEntry cacheEntry = (CacheEntry) DeviceUtil.getCacheEntry(headerBst);
+            String userName = cacheEntry.getUsername();
             authNameNode.setTextContent(cacheEntry.getUsername());
-            DeviceUtil.removeToken(decodedBST);
+            DeviceUtil.removeToken(headerBst);
             String password = DeviceUtil.generateRandomToken();
             Node passwordAuthPosition = wapParm.item(APPAUTH_PASSWORD_POSITION);
             NamedNodeMap appSrvPasswordAttribute = passwordAuthPosition.getAttributes();
             Node authPasswordNode = appSrvPasswordAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             authPasswordNode.setTextContent(password);
-            String requestSecurityTokenResponse = new SyncmlCredentials().generateRST(username, password);
-            DeviceUtil.persistChallengeToken(requestSecurityTokenResponse, null, username);
+            String requestSecurityTokenResponse = new SyncmlCredentials().generateRST(userName, password);
+            DeviceUtil.persistChallengeToken(requestSecurityTokenResponse, null, userName);
 
             // Get device polling frequency from the tenant Configurations.
             Node numberOfFirstRetries = wapParm.item(POLLING_FREQUENCY_POSITION);
@@ -303,14 +311,35 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             Node pollValue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             pollValue.setTextContent(pollingFrequency);
             if (log.isDebugEnabled()) {
-                log.debug("Username: " + username + "Password: " + requestSecurityTokenResponse);
+                log.debug("Username: " + userName + "Password: " + requestSecurityTokenResponse);
             }
             wapProvisioningString = convertDocumentToString(document);
-
-            //Generic exception is caught here as there is no need of taking different actions for
-            //different exceptions.
-        } catch (Exception e) {
-            String msg = "Problem occurred with wap-provisioning.xml file.";
+        } catch (ParserConfigurationException e) {
+            String msg = "Problem occurred in parsing wap-provisioning.xml file.";
+            log.error(msg, e);
+            throw new WAPProvisioningException(msg, e);
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred in while getting CA and Root certificates.";
+            log.error(msg, e);
+            throw new WindowsDeviceEnrolmentException(msg, e);
+        } catch (NoSuchAlgorithmException | CertificateEncodingException e) {
+            String msg = "Error occurred in while encoding certificates.";
+            log.error(msg, e);
+            throw new WindowsDeviceEnrolmentException(msg, e);
+        } catch (UnsupportedEncodingException e) {
+            String msg = "Error occurred in while encoding wap-provisioning file.";
+            log.error(msg, e);
+            throw new WindowsDeviceEnrolmentException(msg, e);
+        } catch (SAXException e) {
+            String msg = "Error occurred in while parsing wap-provisioning.xml file.";
+            log.error(msg, e);
+            throw new WAPProvisioningException(msg, e);
+        } catch (TransformerException e) {
+            String msg = "Error occurred in while transforming wap-provisioning.xml file.";
+            log.error(msg, e);
+            throw new WAPProvisioningException(msg, e);
+        } catch (IOException e) {
+            String msg = "Error occurred in while getting wap-provisioning.xml file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
         }

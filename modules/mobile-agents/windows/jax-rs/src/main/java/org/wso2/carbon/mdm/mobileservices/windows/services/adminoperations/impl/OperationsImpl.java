@@ -56,7 +56,7 @@ public class OperationsImpl implements Operations {
      * @throws WindowsDeviceEnrolmentException
      */
     @POST
-    @Path("/devicelock")
+    @Path("/lock")
     public Response lock(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
         if (log.isDebugEnabled()) {
@@ -94,7 +94,7 @@ public class OperationsImpl implements Operations {
      * @throws WindowsDeviceEnrolmentException
      */
     @POST
-    @Path("/devicedisenroll")
+    @Path("/disenroll")
     public Response disenroll(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
 
@@ -130,7 +130,7 @@ public class OperationsImpl implements Operations {
      * @throws WindowsDeviceEnrolmentException
      */
     @POST
-    @Path("/devicewipe")
+    @Path("/wipe-data")
     public Response wipe(@HeaderParam("Accept") String acceptHeader, List<String> deviceids)
             throws WindowsDeviceEnrolmentException {
 
@@ -168,7 +168,7 @@ public class OperationsImpl implements Operations {
      * @throws WindowsDeviceEnrolmentException
      */
     @POST
-    @Path("/devicering")
+    @Path("/ring-device")
     public Response ring(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
 
@@ -211,7 +211,7 @@ public class OperationsImpl implements Operations {
      * @throws WindowsDeviceEnrolmentException
      */
     @POST
-    @Path("/lockreset")
+    @Path("/lock-reset")
     public Response lockReset(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
 

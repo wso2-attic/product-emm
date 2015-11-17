@@ -1982,7 +1982,7 @@ var getParameterByName = function (name) {
 };
 
 $(document).ready(function () {
-
+    $('#appbar-btn-apply-changes').addClass('hidden');
     // Adding initial state of wizard-steps.
     $("#policy-profile-wizard-steps").html($(".wr-steps").html());
 
