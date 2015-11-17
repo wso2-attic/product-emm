@@ -272,7 +272,7 @@ $(document).ready(function () {
 
         var errorMsgWrapper = "#android-config-error-msg";
         var errorMsg = "#android-config-error-msg span";
-        if (!notifierFrequency) {
+        if (notifierType == notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!$.isNumeric(notifierFrequency)) {
