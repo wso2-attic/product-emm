@@ -275,7 +275,7 @@ $(document).ready(function () {
         if (notifierType == notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!$.isNumeric(notifierFrequency)) {
+        } else if (notifierType == notifierTypeConstants["LOCAL"] && !$.isNumeric(notifierFrequency)) {
             $(errorMsg).text("Provided notifier frequency is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (notifierType == notifierTypeConstants["GCM"] && !gcmAPIKey) {
