@@ -176,7 +176,6 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
-		CommonDialogUtils.stopProgressDialog(progressDialog);
 		DeviceInfo info = new DeviceInfo(context);
 		if (Constants.REGISTER_REQUEST_CODE == requestCode) {
 			String responseStatus;
@@ -197,6 +196,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				displayConnectionError();
 			}
 		} else if (Constants.POLICY_REQUEST_CODE == requestCode) {
+			CommonDialogUtils.stopProgressDialog(progressDialog);
 			loadAlreadyRegisteredActivity();
 		} else if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
 			String status = result.get(Constants.STATUS_KEY);
@@ -205,6 +205,8 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			} else {
 				getEffectivePolicy();
 			}
+		} else {
+			CommonDialogUtils.stopProgressDialog(progressDialog);
 		}
 	}
 
