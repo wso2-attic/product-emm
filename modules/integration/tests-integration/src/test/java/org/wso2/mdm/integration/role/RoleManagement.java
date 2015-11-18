@@ -27,6 +27,7 @@ import org.wso2.mdm.integration.common.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
 /**
@@ -59,10 +60,8 @@ public class RoleManagement extends TestBase {
     }
 
     @Test(description = "Test update role.", dependsOnMethods = { "testAddRole"})
-    public void testUpdateRole() {
-        HttpResponse response = null;
-        try {
-            response = client.put(Constants.RoleManagement.UPDATE_ROLE_ENDPOINT,
+    public void testUpdateRole() throws Exception {
+        HttpResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_ENDPOINT,
                     PayloadGenerator.getJsonPayload(
                             Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString()
@@ -73,18 +72,12 @@ public class RoleManagement extends TestBase {
                             Constants.HTTP_METHOD_PUT).toString(),
                     response.getData().toString(), true
             );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
     }
 
     @Test(description = "Test update permission role.", dependsOnMethods = { "testAddRole"})
-    public void testUpdateRolePermission()  {
-        HttpResponse response = null;
-        try {
-            response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
+    public void testUpdateRolePermission() throws Exception {
+        HttpResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
                     PayloadGenerator.getJsonPayload(
                             Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString()
@@ -95,28 +88,17 @@ public class RoleManagement extends TestBase {
                             Constants.HTTP_METHOD_PUT).toString(),
                     response.getData().toString(), true
             );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
     }
 
     @Test(description = "Test remove user.", dependsOnMethods = { "testAddRole" })
-    public void testRemoveRole()  {
-        HttpResponse response = null;
-        try {
-            response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
+    public void testRemoveRole() throws Exception {
+        HttpResponse response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
             Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
             AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                             Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_DELETE).toString(),
                     response.getData().toString(), true
             );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
     }
 }

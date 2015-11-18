@@ -1,23 +1,30 @@
 {
   "POST":{
-    "statusCode":0,
+    "statusCode":201,
     "messageFromServer":"Policy has been added successfully."
   },
-  "GET": {
-    "statusCode":200,
-    "messageFromServer":"Sending all retrieved device policies.",
-    "responseContent":[{"id":1,
-      "priorityId":1,
-      "profile":{"profileId":1,
-        "profileName":"Camera",
-        "tenantId":-1234,
-        "deviceType":{"id":1,
-          "name":"android"},
-        "createdDate":"Nov 17, 2015 7:55:48 PM","updatedDate":"Nov 17, 2015 7:55:48 PM","profileFeaturesList":[{"id":1,"featureCode":"CAMERA","profileId":1,"deviceTypeId":1,"content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],"ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":1}]
-  },
+  "GET": {"statusCode":200,"messageFromServer":"Sending all retrieved device policies.","responseContent":[{"id":1,"priorityId":0,
+    "profile":{"profileId":1,"profileName":"Camera","tenantId":-1234,"deviceType":{"id":1,"name":"android"},
+      "createdDate":"Nov 18, 2015 7:49:26 PM","updatedDate":"Nov 18, 2015 7:49:26 PM","profileFeaturesList":[{"id":1,
+        "featureCode":"CAMERA","profileId":1,"deviceTypeId":1,"content":"{\"enabled\":true}"},{"id":2,
+        "featureCode":"ENCRYPT_STORAGE","profileId":1,"deviceTypeId":1,"content":"{\"encrypted\":true}"}]},
+    "policyName":"Camera","generic":false,"roles":["ANY"],"ownershipType":"ANY","devices":[],"users":[],"active":true,
+    "updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":1},
+    {"id":2,"priorityId":1,"profile":{"profileId":2,"profileName":"Camera","tenantId":-1234,
+      "deviceType":{"id":1,"name":"android"},"createdDate":"Nov 18, 2015 8:07:51 PM",
+      "updatedDate":"Nov 18, 2015 8:07:51 PM","profileFeaturesList":[{"id":3,"featureCode":"CAMERA","profileId":2,
+        "deviceTypeId":1,"content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],
+      "ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional",
+      "compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":2},{"id":3,"priorityId":2,
+      "profile":{"profileId":3,"profileName":"Camera","tenantId":-1234,"deviceType":{"id":1,"name":"android"},
+        "createdDate":"Nov 18, 2015 8:09:37 PM","updatedDate":"Nov 18, 2015 8:09:37 PM",
+        "profileFeaturesList":[{"id":4,"featureCode":"CAMERA","profileId":3,"deviceTypeId":1,
+          "content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],
+      "ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":3},{"id":4,"priorityId":3,"profile":{"profileId":4,"profileName":"Camera","tenantId":-1234,"deviceType":{"id":1,"name":"android"},"createdDate":"Nov 18, 2015 8:59:50 PM","updatedDate":"Nov 18, 2015 8:59:50 PM","profileFeaturesList":[{"id":5,"featureCode":"CAMERA","profileId":4,"deviceTypeId":1,"content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],"ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":4},{"id":5,"priorityId":4,"profile":{"profileId":5,"profileName":"Camera","tenantId":-1234,"deviceType":{"id":1,"name":"android"},"createdDate":"Nov 18, 2015 9:06:33 PM","updatedDate":"Nov 18, 2015 9:06:33 PM","profileFeaturesList":[{"id":6,"featureCode":"CAMERA","profileId":5,"deviceTypeId":1,"content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],"ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":5},{"id":6,"priorityId":5,"profile":{"profileId":6,"profileName":"Camera","tenantId":-1234,"deviceType":{"id":1,"name":"android"},"createdDate":"Nov 18, 2015 9:08:14 PM","updatedDate":"Nov 18, 2015 9:08:14 PM","profileFeaturesList":[{"id":7,"featureCode":"CAMERA","profileId":6,"deviceTypeId":1,"content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],"ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":6},{"id":7,"priorityId":6,"profile":{"profileId":7,"profileName":"Camera","tenantId":-1234,"deviceType":{"id":1,"name":"android"},"createdDate":"Nov 18, 2015 9:14:59 PM","updatedDate":"Nov 18, 2015 9:14:59 PM","profileFeaturesList":[{"id":8,"featureCode":"CAMERA","profileId":7,"deviceTypeId":1,"content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],"ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[],"tenantId":-1234,"profileId":7},{"id":8,"priorityId":7,"profile":{"profileId":8,"profileName":"Camera","tenantId":-1234,"deviceType":{"id":1,"name":"android"},"createdDate":"Nov 18, 2015 9:17:11 PM","updatedDate":"Nov 18, 2015 9:17:11 PM","profileFeaturesList":[{"id":9,"featureCode":"CAMERA","profileId":8,"deviceTypeId":1,"content":"{\"enabled\":true}"}]},"policyName":"Camera","generic":false,"roles":[],"ownershipType":"ANY","devices":[],"users":[],"active":true,"updated":true,"description":"Optional","compliance":"enforce","policyCriterias":[]
+  ,"tenantId":-1234,"profileId":8}]},
   "PUT": {
-    "statusCode":200,
-    "messageFromServer":"Selected policies have been successfully activated."
+    "statusCode":0,
+    "messageFromServer":"Policy has been updated successfully."
   },
   "DELETE" : {
     "statusCode":200,

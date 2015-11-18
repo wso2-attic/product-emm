@@ -36,87 +36,68 @@ import java.io.FileWriter;
  */
 public class PolicyManagement extends TestBase {
 
-    private RestClient client;
+    private MDMHttpClient client;
 
     @BeforeClass(alwaysRun = true, groups = { Constants.PolicyManagement.POLICY_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     @Test(description = "Test add policy.")
-    public void testAddPolicy()   {
-        HttpResponse response = null;
-        try {
-            response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
-                        PayloadGenerator.getJsonPayload(
-                                Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
-                                Constants.HTTP_METHOD_POST).toString()
-                );
-            Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                            Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_POST).toString(),
-                    response.getData().toString(), true
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void testAddPolicy() throws Exception  {
+
+        MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
+                PayloadGenerator.getJsonPayload(
+                        Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString()
+        );
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(
+                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST).toString(),response.getBody());
 
     }
 
     @Test(description = "Test view policy list.", dependsOnMethods = { "testAddPolicy"})
     public void testViewPolicyList() throws Exception {
-        HttpResponse response = client.get(Constants.PolicyManagement.VIEW_POLICY_LIST_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-//                        Constants.PolicyManagement.VIEW_POLICY_LIST_RESPONSE_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_GET).toString(),
-//                response.getData().toString(), true
-//        );
+        MDMResponse response = client.get(Constants.PolicyManagement.VIEW_POLICY_LIST_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+//        Assert.assertEquals(PayloadGenerator.getJsonPayload(
+//                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+//                Constants.HTTP_METHOD_GET).toString(),response.getBody());
     }
 
     @Test(description = "Test update policy.", dependsOnMethods = { "testViewPolicyList"})
-    public void testUpdatePolicy()  {
-        HttpResponse response = null;
-        try {
-            response = client.put(Constants.PolicyManagement.UPDATE_POLICY_ENDPOINT,
-                    PayloadGenerator.getJsonPayload(
-                            Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_PUT).toString()
-            );
-            Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                            Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_PUT).toString(),
-                    response.getData().toString(), true
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void testUpdatePolicy() throws Exception {
 
-
+        MDMResponse response = client.put(Constants.PolicyManagement.UPDATE_POLICY_ENDPOINT,
+                PayloadGenerator.getJsonPayload(
+                        Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString()
+        );
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(
+                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_PUT).toString(), response.getBody());
     }
 
-    @Test(description = "Test remove policy.", dependsOnMethods = { "testAddPolicy" })
-    public void testRemovePolicy()  {
-        HttpResponse response = null;
-        try {
-            response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
-                    PayloadGenerator.getJsonPayload(
-                            Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_POST).toString()
-            );
-            Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                            Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_POST).toString(),
-                    response.getData().toString(), true
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Test(description = "Test remove policy.", dependsOnMethods = { "testUpdatePolicy" })
+    public void testRemovePolicy() throws Exception {
 
+        MDMResponse response = client.delete(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
+                Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME
+        );
+        File logFile = new File("/home/tharinda/Working/EMM/product-mdm/remove.txt");
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
+        writer.write(response.getBody());
+        writer.write("hello");
+        writer.close();
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(
+                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_DELETE).toString(), response.getBody());
     }
 }
