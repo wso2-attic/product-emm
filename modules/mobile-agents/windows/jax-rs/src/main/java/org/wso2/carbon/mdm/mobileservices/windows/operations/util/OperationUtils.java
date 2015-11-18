@@ -84,7 +84,8 @@ public class OperationUtils {
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
                     try {
                         NotificationManagementService service =
-                                org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.getNotificationManagementService();
+                                org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.
+                                        getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
@@ -153,7 +154,8 @@ public class OperationUtils {
                     new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                     try {
-                        NotificationManagementService service = org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.getNotificationManagementService();
+                        NotificationManagementService service = org.wso2.carbon.mdm.mobileservices.windows.common.util.
+                                WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
@@ -439,7 +441,8 @@ public class OperationUtils {
         boolean isCompliance = false;
         if (profiles.size() != Constants.EMPTY) {
             try {
-                List<ProfileFeature> profileFeatures = org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
+                List<ProfileFeature> profileFeatures = org.wso2.carbon.mdm.mobileservices.windows.common.util.
+                        WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
                         deviceIdentifier);
                 List<ComplianceFeature> complianceFeatures = new ArrayList<>();
                 for (ProfileFeature activeFeature : profileFeatures) {
@@ -486,7 +489,8 @@ public class OperationUtils {
                         }
                     }
                 }
-                org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, complianceFeatures);
+                org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.getPolicyManagerService().
+                        checkPolicyCompliance(deviceIdentifier, complianceFeatures);
             } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                 String msg = "Error occurred while getting effective policy.";
                 log.error(msg);
