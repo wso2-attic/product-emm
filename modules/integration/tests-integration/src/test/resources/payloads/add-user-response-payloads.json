@@ -1,6 +1,0 @@
-{
-  "POST" : {
-    "statusCode":201,
-    "messageFromServer":"User by username: PRIMARY/username123 was successfully added."
-  }
-}

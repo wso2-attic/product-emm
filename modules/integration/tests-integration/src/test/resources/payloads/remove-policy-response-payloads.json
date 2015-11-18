@@ -1,6 +1,0 @@
-{
-  "POST" : {
-    "statusCode":200,
-    "messageFromServer":"Policies have been successfully deleted."
-  }
-}

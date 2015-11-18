@@ -1,6 +1,0 @@
-{
-  "PUT": {
-    "roleName":"manager",
-    "users":["admin"]
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "PUT": {
-    "statusCode":0,
-    "messageFromServer":"Policy has been updated successfully."
-  }
-}

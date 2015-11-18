@@ -2,5 +2,9 @@
   "POST":{
     "roleName":"administration",
     "users":["admin"]
+  },
+  "PUT": {
+    "roleName":"manager",
+    "users":["admin"]
   }
 }
