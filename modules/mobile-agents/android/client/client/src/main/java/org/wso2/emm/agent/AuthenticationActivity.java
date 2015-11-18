@@ -486,7 +486,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 										                     Constants.NOTIFIER_LOCAL);
 									}
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
-										equals(context.getString(R.string.shared_pref_frequency))){
+										equals(context.getString(R.string.shared_pref_frequency)) && !param.getString(
+										context.getString(R.string.shared_pref_config_value)).trim().isEmpty()){
 										Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
 										                  Integer.valueOf(param.getString(context.getString(R.string.shared_pref_config_value)).trim()));
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
