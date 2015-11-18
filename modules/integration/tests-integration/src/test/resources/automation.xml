@@ -29,7 +29,7 @@
         <!--
          Change this to product|platform/cloud to execute test on specific environment
         -->
-        <executionEnvironment>standalone</executionEnvironment>
+        <executionEnvironment>product</executionEnvironment>
         <!--
          Change this to user/tenant to execute test with user mode or tenant mode
         -->
@@ -176,8 +176,8 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">10863</port>
-                    <port type="https">10543</port>
+                    <port type="http">9763</port>
+                    <port type="https">9443</port>
                 </ports>
                 <properties>
 
@@ -193,7 +193,7 @@
            <extentionClasses>
                <class>
                    <name>org.wso2.carbon.automation.extensions.servers.carbonserver.CarbonServerExtension</name>
-                   <parameter name="-DportOffset" value="1100" />
+                   <parameter name="-DportOffset" value="0" />
                    <!--<parameter name="cmdArg" value="debug 5005" />-->
                </class>
                <class>
