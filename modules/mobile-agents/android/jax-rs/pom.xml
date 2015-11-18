@@ -158,6 +158,11 @@
             <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.mobile.impl</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>commons-httpclient.wso2</groupId>

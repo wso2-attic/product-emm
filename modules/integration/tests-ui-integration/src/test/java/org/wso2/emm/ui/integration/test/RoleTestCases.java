@@ -20,19 +20,22 @@ package org.wso2.emm.ui.integration.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
-import org.wso2.emm.integration.ui.pages.user.AddUserPage;
-import org.wso2.emm.integration.ui.pages.user.UserListPage;
+import org.wso2.emm.integration.ui.pages.role.EditRolePage;
+import org.wso2.emm.integration.ui.pages.role.RoleListPage;
 
-public class UserTestCase extends EMMIntegrationUiBaseTestCase {
+public class RoleTestCases extends EMMIntegrationUiBaseTestCase {
 
     private WebDriver driver;
-    private static final Log log = LogFactory.getLog(UserTestCase.class);
+    private static String roleName = "role-manager";
+    private static String roleNameEdit = "role-wso2-manager";
+    private static final Log log = LogFactory.getLog(RoleTestCases.class);
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
@@ -41,19 +44,18 @@ public class UserTestCase extends EMMIntegrationUiBaseTestCase {
         LoginUtils.login(driver, automationContext, getWebAppURL());
     }
 
-    @Test(description = "verify add user to emm console")
-    public void testAddUser() throws Exception {
-        driver.get(getWebAppURL() + Constants.MDM_USER_ADD_URL);
-        AddUserPage addUserPage = new AddUserPage(driver);
-        addUserPage.addUser("inosh", "Inosh", "Perera", "inosh@wso2.com");
+    @Test(description = "verify add role to emm")
+    public void testAddRole() throws Exception {
+        driver.get(getWebAppURL() + Constants.MDM_ROLES_URL);
+        RoleListPage roleListPage = new RoleListPage(driver, Constants.MDM_ROLES_URL);
+        roleListPage.addRole(roleName);
     }
 
-    @Test(description = "verify delete user to emm console")
-    public void testDeleteUser() throws Exception {
-        driver.get(getWebAppURL() + Constants.MDM_USER_URL);
-        UserListPage userListPage = new UserListPage(driver);
-        userListPage.deleteUser();
-        driver.close();
+    @Test(description = "verify edit role to emm", dependsOnMethods = { "testAddRole" })
+    public void testEditRole() throws Exception {
+        driver.get(getWebAppURL() + Constants.MDM_ROLES_EDIT_URL + roleName);
+        EditRolePage rolePage = new EditRolePage(driver);
+        rolePage.editRole(roleNameEdit);
     }
 
     @AfterClass(alwaysRun = true)
