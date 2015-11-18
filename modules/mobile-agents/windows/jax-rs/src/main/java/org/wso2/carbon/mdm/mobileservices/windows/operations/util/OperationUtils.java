@@ -242,7 +242,6 @@ public class OperationUtils {
             PolicyComplianceException, NotificationManagementException, WindowsDeviceEnrolmentException,
             WindowsOperationException {
 
-
         List<? extends Operation> pendingOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
@@ -404,7 +403,7 @@ public class OperationUtils {
                         String pinValue = item.getData();
                         NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification notification = new Notification();
-                        notification.setDescription(pinValue + " of device : " + deviceIdentifier);
+                        notification.setDescription("Auto generated DevicePin : " + pinValue);
                         notification.setOperationId(result.getCommandReference());
                         notification.setDeviceIdentifier(deviceIdentifier);
                         notification.setStatus(String.valueOf(Notification.Status.NEW));

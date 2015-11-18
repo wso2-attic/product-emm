@@ -25,7 +25,7 @@ public class OperationCode {
     public static enum Info {
         DEV_ID("./DevInfo/DevId"),
         MANUFACTURER("./DevInfo/Man"),
-        MODEL("./DevInfo/Mod"),
+        DEVICE_MODEL("./DevInfo/Mod"),
         DM_VERSION("./DevInfo/DmV"),
         LANGUAGE("./DevInfo/Lang"),
         IMSI("./Vendor/MSFT/DeviceInstanceService/Identity/Identity1/IMSI"),

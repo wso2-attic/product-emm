@@ -203,8 +203,8 @@ public class WindowsAPIUtils {
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.
                 getThreadLocalCarbonContext();
-        privilegedCarbonContext.setTenantId(-1234);
-        privilegedCarbonContext.setTenantDomain("carbon.super");
+        privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
         privilegedCarbonContext.setUsername(userName);
     }
 }

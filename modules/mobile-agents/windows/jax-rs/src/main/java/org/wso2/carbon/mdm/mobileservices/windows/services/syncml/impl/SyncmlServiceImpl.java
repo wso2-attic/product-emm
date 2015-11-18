@@ -22,8 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.w3c.dom.Document;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -127,7 +125,7 @@ public class SyncmlServiceImpl implements SyncmlService {
     public Response getResponse(Document request)
             throws WindowsDeviceEnrolmentException, WindowsOperationException, NotificationManagementException,
             WindowsConfigurationException {
-        String val = getStringFromDoc(request);
+
         int msgId;
         int sessionId;
         String user;
@@ -144,7 +142,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 try {
                     syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
                 } catch (SyncmlMessageFormatException e) {
-                    String msg = "Error occurred due to bad syncml format";
+                    String msg = "Error occurred due to bad syncml format.";
                     log.error(msg, e);
                     throw new SyncmlMessageFormatException(msg, e);
                 }
@@ -240,8 +238,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                         if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
                             try {
                                 pendingOperations = operationUtils.getPendingOperations(syncmlDocument);
-                                return Response.ok().entity(generateReply(syncmlDocument, (List<Operation>)
-                                        pendingOperations)).build();
+                                return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
                             } catch (OperationManagementException e) {
                                 String msg = "Cannot access operation management service.";
                                 log.error(msg);
@@ -435,6 +432,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 imsi = itemList.get(PluginConstants.SyncML.IMSI_POSITION).getData();
                 imei = itemList.get(PluginConstants.SyncML.IMEI_POSITION).getData();
                 vender = itemList.get(PluginConstants.SyncML.VENDER_POSITION).getData();
+                devMod = itemList.get(PluginConstants.SyncML.MODEL_POSITION).getData();
                 macAddress = itemList.get(PluginConstants.SyncML.MACADDRESS_POSITION).getData();
                 resolution = itemList.get(PluginConstants.SyncML.RESOLUTION_POSITION).getData();
                 deviceName = itemList.get(PluginConstants.SyncML.DEVICE_NAME_POSITION).getData();
@@ -480,6 +478,11 @@ public class SyncmlServiceImpl implements SyncmlService {
                     deviceNameProperty.setValue(deviceName);
                     existingProperties.add(deviceNameProperty);
 
+                    Device.Property deviceModelProperty = new Device.Property();
+                    deviceNameProperty.setName(PluginConstants.SyncML.MODEL);
+                    deviceNameProperty.setValue(devMod);
+                    existingProperties.add(deviceModelProperty);
+
                     existingDevice.setProperties(existingProperties);
                     existingDevice.setDeviceIdentifier(syncmlDocument.getHeader().getSource().getLocURI());
                     existingDevice.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
@@ -522,6 +525,7 @@ public class SyncmlServiceImpl implements SyncmlService {
             throws WindowsOperationException, JSONException, PolicyManagementException,
             org.wso2.carbon.policy.mgt.common.FeatureManagementException, UnsupportedEncodingException,
             NoSuchAlgorithmException, SyncmlMessageFormatException {
+
         OperationReply operationReply;
         SyncmlGenerator generator;
         SyncmlDocument syncmlResponse;
@@ -533,11 +537,5 @@ public class SyncmlServiceImpl implements SyncmlService {
         syncmlResponse = operationReply.generateReply();
         generator = new SyncmlGenerator();
         return generator.generatePayload(syncmlResponse);
-    }
-
-    public String getStringFromDoc(org.w3c.dom.Document doc) {
-        DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
-        LSSerializer lsSerializer = domImplementation.createLSSerializer();
-        return lsSerializer.writeToString(doc);
     }
 }
