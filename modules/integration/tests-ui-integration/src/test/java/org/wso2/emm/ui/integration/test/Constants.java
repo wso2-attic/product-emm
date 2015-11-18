@@ -25,4 +25,7 @@ public class Constants {
     public static final String MDM_USER_ADD_URL = "/mdm/users/add-user";
     public static final String MDM_USER_URL = "/mdm/users/";
     public static final String MDM_ROLES_EDIT_URL = "/mdm/roles/edit-role/";
+    public static final String MDM_PLATFORM_CONFIG_URL = "/mdm/platform-configuration";
+    public static final String MDM_NOTIFICATION_URL = "/mdm/notification-listing";
+    public static final String MDM_HOME_URL = "/mdm";
 }
