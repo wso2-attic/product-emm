@@ -276,7 +276,7 @@
     </dependencies>
 
     <properties>
-        <skipUiTests>false</skipUiTests>
+        <skipUiTests>true</skipUiTests>
     </properties>
 
 </project>
