@@ -26,6 +26,10 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * This class contains integration tests for user management backend services.
  */
@@ -44,12 +48,12 @@ public class UserManagement extends TestBase {
     public void testAddUser() throws Exception {
         HttpResponse response = client.post(Constants.UserManagement.ADD_USER_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
-                        Constants.UserManagement.ADD_USER_PAYLOAD_FILE_NAME,
+                        Constants.UserManagement.USER_PAYLOAD_FILE_NAME ,
                         Constants.HTTP_METHOD_POST).toString()
         );
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.UserManagement.ADD_USER_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(),
                 response.getData().toString(), true
         );
@@ -59,12 +63,12 @@ public class UserManagement extends TestBase {
     public void testUpdateUser() throws Exception {
         HttpResponse response = client.put(Constants.UserManagement.UPDATE_USER_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
-                        Constants.UserManagement.UPDATE_USER_PAYLOAD_FILE_NAME,
+                        Constants.UserManagement.USER_PAYLOAD_FILE_NAME ,
                         Constants.HTTP_METHOD_PUT).toString()
         );
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.UserManagement.UPDATE_USER_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString(),
                 response.getData().toString(), true
         );
@@ -76,7 +80,7 @@ public class UserManagement extends TestBase {
         HttpResponse response = client.get(Constants.UserManagement.VIEW_USER_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.UserManagement.VIEW_USER_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME ,
                         Constants.HTTP_METHOD_GET).toString(),
                 response.getData().toString(), true
         );
@@ -87,7 +91,7 @@ public class UserManagement extends TestBase {
         HttpResponse response = client.delete(Constants.UserManagement.REMOVE_USER_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.UserManagement.REMOVE_USER_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_DELETE).toString(),
                 response.getData().toString(), true
         );

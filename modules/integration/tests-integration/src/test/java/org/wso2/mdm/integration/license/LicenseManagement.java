@@ -25,6 +25,10 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * This class contains integration tests for license management backend services.
  */
@@ -32,10 +36,21 @@ public class LicenseManagement extends TestBase {
 
     private RestClient client;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.RoleManagement.ROLE_MANAGEMENT_GROUP})
+    @BeforeClass(alwaysRun = true, groups = { Constants.LicenseManagement.LICENSE_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
         this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+    }
+
+    @Test(description = "Test get license.")
+    public void testGetLicense() throws Exception {
+        HttpResponse response = client.get(Constants.LicenseManagement.GET_LICENSE_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                        Constants.LicenseManagement.LICENSE_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_GET).toString(),
+                response.getData().toString(), true
+        );
     }
 }

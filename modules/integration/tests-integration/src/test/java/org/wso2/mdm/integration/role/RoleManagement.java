@@ -47,58 +47,76 @@ public class RoleManagement extends TestBase {
     public void testAddRole() throws Exception {
         HttpResponse response = client.post(Constants.RoleManagement.ADD_ROLE_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
-                        Constants.RoleManagement.ADD_USER_PAYLOAD_FILE_NAME,
+                        Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString()
         );
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
 //        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-//                        Constants.RoleManagement.ADD_USER_RESPONSE_PAYLOAD_FILE_NAME,
+//                        Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD_FILE_NAME,
 //                        Constants.HTTP_METHOD_POST).toString(),
 //                response.getData().toString(), true
 //        );
     }
 
     @Test(description = "Test update role.", dependsOnMethods = { "testAddRole"})
-    public void testUpdateRole() throws Exception {
-        HttpResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.RoleManagement.UPDATE_ROLE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString()
-        );
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-//                        Constants.RoleManagement.UPDATE_ROLE_RESPONSE_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_PUT).toString(),
-//                response.getData().toString(), true
-//        );
+    public void testUpdateRole() {
+        HttpResponse response = null;
+        try {
+            response = client.put(Constants.RoleManagement.UPDATE_ROLE_ENDPOINT,
+                    PayloadGenerator.getJsonPayload(
+                            Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
+                            Constants.HTTP_METHOD_PUT).toString()
+            );
+            Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                            Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD_FILE_NAME,
+                            Constants.HTTP_METHOD_PUT).toString(),
+                    response.getData().toString(), true
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
     @Test(description = "Test update permission role.", dependsOnMethods = { "testAddRole"})
-    public void testUpdateRolePermission() throws Exception {
-        HttpResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString()
-        );
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-//                        Constants.RoleManagement.UPDATE_ROLE_PERMISSION_RESPONSE_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_PUT).toString(),
-//                response.getData().toString(), true
-//        );
+    public void testUpdateRolePermission()  {
+        HttpResponse response = null;
+        try {
+            response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
+                    PayloadGenerator.getJsonPayload(
+                            Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
+                            Constants.HTTP_METHOD_PUT).toString()
+            );
+            Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                            Constants.RoleManagement.UPDATE_ROLE_PERMISSION_RESPONSE_PAYLOAD_FILE_NAME,
+                            Constants.HTTP_METHOD_PUT).toString(),
+                    response.getData().toString(), true
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
-//    @Test(description = "Test remove user.", dependsOnMethods = { "testAddRole" , "testUpdateRole", "testUpdateRolePermission" })
-//    public void testRemoveRole() throws Exception {
-//        HttpResponse response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
-//        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-//                        Constants.RoleManagement.REMOVE_ROLE_RESPONSE_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_DELETE).toString(),
-//                response.getData().toString(), true
-//        );
-//
-//    }
+    @Test(description = "Test remove user.", dependsOnMethods = { "testAddRole" })
+    public void testRemoveRole()  {
+        HttpResponse response = null;
+        try {
+            response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
+            Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                            Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD_FILE_NAME,
+                            Constants.HTTP_METHOD_DELETE).toString(),
+                    response.getData().toString(), true
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }

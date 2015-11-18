@@ -48,8 +48,7 @@ public class FeatureManagement extends TestBase{
 //        HttpResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ENDPOINT);
 //        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
 //        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-//                        Constants.FeatureManagement.VIEW_FEATURES_RESPONSE_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_GET).toString(),
+//                        Constants.FeatureManagement.VIEW_FEATURES_RESPONSE_PAYLOAD_FILE_NAME).toString(),
 //                response.getData().toString(), true
 //        );
 //    }

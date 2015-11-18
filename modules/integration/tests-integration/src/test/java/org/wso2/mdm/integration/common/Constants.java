@@ -178,18 +178,14 @@ public final class Constants {
 
         public static final String USER_MANAGEMENT_GROUP = "user-mgt";
         public static final String ADD_USER_ENDPOINT="/mdm-admin/users";
-        public static final String ADD_USER_PAYLOAD_FILE_NAME = "add-user-payloads.json";
-        public static final String ADD_USER_RESPONSE_PAYLOAD_FILE_NAME = "add-user-response-payloads.json";
+        public static final String USER_PAYLOAD_FILE_NAME = "user-payloads.json";
+        public static final String USER_RESPONSE_PAYLOAD_FILE_NAME = "user-response-payloads.json";
 
         public static final String VIEW_USER_ENDPOINT="/mdm-admin/users/view?username=username123";
-        public static final String VIEW_USER_RESPONSE_PAYLOAD_FILE_NAME = "view-user-response-payloads.json";
 
         public static final String UPDATE_USER_ENDPOINT="/mdm-admin/users?username=username123";
-        public static final String UPDATE_USER_PAYLOAD_FILE_NAME = "update-user-payloads.json";
-        public static final String UPDATE_USER_RESPONSE_PAYLOAD_FILE_NAME = "update-user-response-payloads.json";
 
         public static final String REMOVE_USER_ENDPOINT="/mdm-admin/users?username=username123";
-        public static final String REMOVE_USER_RESPONSE_PAYLOAD_FILE_NAME = "remove-user-response-payloads.json";
 
 
     }
@@ -199,19 +195,16 @@ public final class Constants {
 
         public static final String ROLE_MANAGEMENT_GROUP = "role-mgt";
         public static final String ADD_ROLE_ENDPOINT="/mdm-admin/roles";
-        public static final String ADD_USER_PAYLOAD_FILE_NAME = "add-role-payloads.json";
-        public static final String ADD_USER_RESPONSE_PAYLOAD_FILE_NAME = "add-role-response-payloads.json";
+        public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
+        public static final String ROLE_RESPONSE_PAYLOAD_FILE_NAME = "role-response-payloads.json";
 
         public static final String UPDATE_ROLE_ENDPOINT="/mdm-admin/roles/administration";
-        public static final String UPDATE_ROLE_PAYLOAD_FILE_NAME = "update-role-payloads.json";
-        public static final String UPDATE_ROLE_RESPONSE_PAYLOAD_FILE_NAME = "update-role-response-payloads.json";
 
         public static final String UPDATE_ROLE_PERMISSION_ENDPOINT ="/mdm-admin/roles/administration";
         public static final String UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME = "update-role-permission-payloads.json";
         public static final String UPDATE_ROLE_PERMISSION_RESPONSE_PAYLOAD_FILE_NAME = "update-role-permission-response-payloads.json";
 
         public static final String REMOVE_ROLE_ENDPOINT="/mdm-admin/roles/administration";
-        public static final String REMOVE_ROLE_RESPONSE_PAYLOAD_FILE_NAME = "remove-role-response-payloads.json";
 
     }
 
@@ -220,16 +213,15 @@ public final class Constants {
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
         public static final String ADD_POLICY_ENDPOINT="/mdm-admin/policies/active-policy";
-        public static final String ADD_POLICY_PAYLOAD_FILE_NAME = "add-policy-payloads.json";
-        public static final String ADD_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "add-policy-response-payloads.json";
+        public static final String POLICY_PAYLOAD_FILE_NAME = "policy-payloads.json";
+        public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
 
         public static final String UPDATE_POLICY_ENDPOINT="/mdm-admin/policies/1";
-        public static final String UPDATE_POLICY_PAYLOAD_FILE_NAME = "update-policy-payloads.json";
-        public static final String UPDATE_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "update-policy-response-payloads.json";
 
         public static final String REMOVE_POLICY_ENDPOINT="/mdm-admin/policies/bulk-remove";
         public static final String REMOVE_POLICY_PAYLOAD_FILE_NAME = "[1]";
-        public static final String REMOVE_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "remove-policy-response-payloads.json";
+
+        public static final String VIEW_POLICY_LIST_ENDPOINT="/mdm-admin/policies";
     }
 
     public static final class FeatureManagement {
@@ -238,5 +230,36 @@ public final class Constants {
         public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
         public static final String VIEW_FEATURES_ENDPOINT="/mdm-admin/features/android";
         public static final String VIEW_FEATURES_RESPONSE_PAYLOAD_FILE_NAME = "view-feature-response-payloads.json";
+    }
+
+    public static final class LicenseManagement {
+        private LicenseManagement() { throw new AssertionError(); }
+
+        public static final String LICENSE_MANAGEMENT_GROUP = "license-mgt";
+        public static final String GET_LICENSE_ENDPOINT="/mdm-admin/license/android/en_US";
+        public static final String LICENSE_RESPONSE_PAYLOAD_FILE_NAME = "license-response-payloads.json";
+
+    }
+
+    public static final class ConfigurationManagement {
+        private ConfigurationManagement() { throw new AssertionError(); }
+
+        public static final String CONFIGURATION_MANAGEMENT_GROUP = "configuration-mgt";
+        public static final String CONFIGURATION_ENDPOINT="/mdm-admin/configuration";
+        public static final String CONFIGURATION_PAYLOAD_FILE_NAME = "configuration-payloads.json";
+        public static final String CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME = "configuration-response-payloads.json";
+    }
+
+    public static final class NotificationManagement {
+        private NotificationManagement() { throw new AssertionError(); }
+
+        public static final String NOTIFICATION_MANAGEMENT_GROUP = "notification-mgt";
+        public static final String NOTIFICATION_ENDPOINT="/mdm-admin/notifications";
+        public static final String NOTIFICATION_PAYLOAD_FILE_NAME = "notification-payloads.json";
+        public static final String NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "notification-response-payloads.json";
+
+        public static final String NOTIFICATION_UPDATE_ENDPOINT="/mdm-admin/notifications/1234/NEW";
+
+        public static final String GET_NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "[{\"notificationId\":1,\"deviceIdentifier\":{\"id\":\"1234\",\"type\":\"android\"},\"description\":\"test notification\",\"operationId\":1,\"status\":\"NEW\"}]";
     }
 }
