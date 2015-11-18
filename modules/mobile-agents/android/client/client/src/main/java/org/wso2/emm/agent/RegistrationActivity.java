@@ -92,11 +92,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			utils.setServerIP(ipSaved);
 
 			CommonUtils.callSecuredAPI(RegistrationActivity.this,
-					utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
-					HTTP_METHODS.POST,
-					deviceInfoBuilder.getDeviceInfoPayload(),
-					RegistrationActivity.this,
-					Constants.REGISTER_REQUEST_CODE);
+			                           utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
+			                           HTTP_METHODS.POST,
+			                           deviceInfoBuilder.getDeviceInfoPayload(),
+			                           RegistrationActivity.this,
+			                           Constants.REGISTER_REQUEST_CODE);
 
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
@@ -198,6 +198,13 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			}
 		} else if (Constants.POLICY_REQUEST_CODE == requestCode) {
 			loadAlreadyRegisteredActivity();
+		} else if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
+			String status = result.get(Constants.STATUS_KEY);
+			if (!Constants.Status.SUCCESSFUL.equals(status)) {
+				displayConnectionError();
+			} else {
+				getEffectivePolicy();
+			}
 		}
 	}
 
@@ -222,7 +229,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				Preference.putString(context, Constants.REG_ID, regId);
 				if (regId != null) {
 					try {
-						registrationManager.sendRegistrationId();
+						sendRegistrationId();
 					} catch (AndroidAgentException e) {
 						Log.e(TAG, "Error while sending registration Id");
 					}
@@ -236,7 +243,30 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				}
 			}
 		}.execute();
-		getEffectivePolicy();
+	}
+
+	/**
+	 * This is used to send the registration Id to MDM server so that the server
+	 * can use it as a reference to identify the device when sending messages to
+	 * Google server.
+	 *
+	 * @throws AndroidAgentException
+	 */
+	public void sendRegistrationId() throws AndroidAgentException {
+		DeviceInfo deviceInfo = new DeviceInfo(context);
+		DeviceInfoPayload deviceInfoPayload = new DeviceInfoPayload(context);
+		deviceInfoPayload.build();
+
+		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
+		String ipSaved = Preference.getString(context, Constants.IP);
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(ipSaved);
+
+		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
+
+		CommonUtils.callSecuredAPI(context, url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
+		                           replyPayload, RegistrationActivity.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
+
 	}
 
 	/**

@@ -21,4 +21,8 @@ package org.wso2.emm.ui.integration.test;
 public class Constants {
     public static final String MDM_LOGIN_PATH = "/mdm/login";
     public static final String LOGIN_GROUP = "login-group";
+    public static final String MDM_ROLES_URL = "/mdm/roles";
+    public static final String MDM_USER_ADD_URL = "/mdm/users/add-user";
+    public static final String MDM_USER_URL = "/mdm/users/";
+    public static final String MDM_ROLES_EDIT_URL = "/mdm/roles/edit-role/";
 }
