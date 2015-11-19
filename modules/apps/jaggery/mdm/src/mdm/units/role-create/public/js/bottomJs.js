@@ -37,7 +37,7 @@ $(document).ready(function () {
 
     $("#users").select2({
         multiple:true,
-        tags: true,
+        tags: false,
         ajax: {
             url: window.location.origin + "/mdm/api/invoker/execute/",
             method: "POST",
