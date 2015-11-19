@@ -1,10 +1,15 @@
 {
-  "POST":{
-    "roleName":"administration",
-    "users":["admin"]
+  "POST": {
+    "roleName": "administration",
+    "users": [
+      "admin"
+    ]
   },
   "PUT": {
-    "roleName":"manager",
-    "users":["admin"]
+    "permissions": [
+      "permission/admin/device-mgt/android/operations/disenroll",
+      "permission/admin/device-mgt/android/operations/notification",
+      "/permission/admin/device-mgt/windows/operation/lock"
+    ]
   }
 }

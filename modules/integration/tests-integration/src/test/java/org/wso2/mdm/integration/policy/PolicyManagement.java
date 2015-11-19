@@ -22,14 +22,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-
 
 /**
  * This class contains integration tests for policy management backend services.
@@ -64,9 +57,7 @@ public class PolicyManagement extends TestBase {
     public void testViewPolicyList() throws Exception {
         MDMResponse response = client.get(Constants.PolicyManagement.VIEW_POLICY_LIST_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-//        Assert.assertEquals(PayloadGenerator.getJsonPayload(
-//                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-//                Constants.HTTP_METHOD_GET).toString(),response.getBody());
+
     }
 
     @Test(description = "Test update policy.", dependsOnMethods = { "testViewPolicyList"})
@@ -86,15 +77,9 @@ public class PolicyManagement extends TestBase {
     @Test(description = "Test remove policy.", dependsOnMethods = { "testUpdatePolicy" })
     public void testRemovePolicy() throws Exception {
 
-        MDMResponse response = client.delete(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
+        MDMResponse response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
                 Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME
         );
-        File logFile = new File("/home/tharinda/Working/EMM/product-mdm/remove.txt");
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
-        writer.write(response.getBody());
-        writer.write("hello");
-        writer.close();
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertEquals(PayloadGenerator.getJsonPayload(
                 Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,

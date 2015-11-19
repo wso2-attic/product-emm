@@ -25,80 +25,43 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-
 /**
  * This class contains integration tests for role management backend services.
  */
 public class RoleManagement extends TestBase {
 
-    private RestClient client;
+    private MDMHttpClient client;
 
     @BeforeClass(alwaysRun = true, groups = { Constants.RoleManagement.ROLE_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     @Test(description = "Test add role.")
     public void testAddRole() throws Exception {
-        HttpResponse response = client.post(Constants.RoleManagement.ADD_ROLE_ENDPOINT,
+        MDMResponse response = client.post(Constants.RoleManagement.ADD_ROLE_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString()
         );
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-//                        Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_POST).toString(),
-//                response.getData().toString(), true
-//        );
-    }
-
-    @Test(description = "Test update role.", dependsOnMethods = { "testAddRole"})
-    public void testUpdateRole() throws Exception {
-        HttpResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_ENDPOINT,
-                    PayloadGenerator.getJsonPayload(
-                            Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_PUT).toString()
-            );
-            Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                            Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_PUT).toString(),
-                    response.getData().toString(), true
-            );
-
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
     @Test(description = "Test update permission role.", dependsOnMethods = { "testAddRole"})
     public void testUpdateRolePermission() throws Exception {
-        HttpResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
+        MDMResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
                     PayloadGenerator.getJsonPayload(
                             Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString()
             );
-            Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                            Constants.RoleManagement.UPDATE_ROLE_PERMISSION_RESPONSE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_PUT).toString(),
-                    response.getData().toString(), true
-            );
-
+            Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(description = "Test remove user.", dependsOnMethods = { "testAddRole" })
+    @Test(description = "Test remove user.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRole() throws Exception {
-        HttpResponse response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
-            Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-            AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                            Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_DELETE).toString(),
-                    response.getData().toString(), true
-            );
+        MDMResponse response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
+            Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 }

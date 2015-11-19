@@ -26,10 +26,6 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-
 /**
  * This class contains integration tests for user management backend services.
  */
@@ -75,7 +71,7 @@ public class UserManagement extends TestBase {
 
     }
 
-    @Test(description = "Test view user.", dependsOnMethods = { "testAddUser" , "testUpdateUser"})
+    @Test(description = "Test view user.", dependsOnMethods = { "testUpdateUser"})
     public void testViewUser() throws Exception {
         HttpResponse response = client.get(Constants.UserManagement.VIEW_USER_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
@@ -86,7 +82,7 @@ public class UserManagement extends TestBase {
         );
     }
 
-    @Test(description = "Test remove user.", dependsOnMethods = { "testAddUser" , "testUpdateUser", "testViewUser" })
+    @Test(description = "Test remove user.", dependsOnMethods = { "testViewUser" })
     public void testRemoveUser() throws Exception {
         HttpResponse response = client.delete(Constants.UserManagement.REMOVE_USER_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());

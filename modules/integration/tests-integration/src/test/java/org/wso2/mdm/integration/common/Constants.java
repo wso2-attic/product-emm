@@ -196,15 +196,11 @@ public final class Constants {
         public static final String ROLE_MANAGEMENT_GROUP = "role-mgt";
         public static final String ADD_ROLE_ENDPOINT="/mdm-admin/roles";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
-        public static final String ROLE_RESPONSE_PAYLOAD_FILE_NAME = "role-response-payloads.json";
 
-        public static final String UPDATE_ROLE_ENDPOINT="/mdm-admin/roles/administration";
+        public static final String UPDATE_ROLE_PERMISSION_ENDPOINT ="/mdm-admin/roles?rolename=administration";
+        public static final String UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME = "role-payloads.json";
 
-        public static final String UPDATE_ROLE_PERMISSION_ENDPOINT ="/mdm-admin/roles/administration";
-        public static final String UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME = "update-role-permission-payloads.json";
-        public static final String UPDATE_ROLE_PERMISSION_RESPONSE_PAYLOAD_FILE_NAME = "update-role-permission-response-payloads.json";
-
-        public static final String REMOVE_ROLE_ENDPOINT="/mdm-admin/roles/administration";
+        public static final String REMOVE_ROLE_ENDPOINT="/mdm-admin/roles?rolename=administration";
 
     }
 
@@ -229,7 +225,6 @@ public final class Constants {
 
         public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
         public static final String VIEW_FEATURES_ENDPOINT="/mdm-admin/features/android";
-        public static final String VIEW_FEATURES_RESPONSE_PAYLOAD_FILE_NAME = "view-feature-response-payloads.json";
     }
 
     public static final class LicenseManagement {
