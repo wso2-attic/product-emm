@@ -22,7 +22,7 @@ function emailIsValid(email) {
 
 $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
-        tags: true
+        tags: false
     });
 
     /**
