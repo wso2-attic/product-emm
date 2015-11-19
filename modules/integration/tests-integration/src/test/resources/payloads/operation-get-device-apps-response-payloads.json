@@ -1,8 +1,0 @@
-[
-    {
-      "id" : 1,
-      "platform" : "android",
-      "name" : "youtube",
-      "applicationIdentifier" : "package_name"
-    }
-  ]
