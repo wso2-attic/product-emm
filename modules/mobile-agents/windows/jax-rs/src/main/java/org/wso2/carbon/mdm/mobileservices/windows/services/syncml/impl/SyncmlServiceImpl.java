@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.w3c.dom.Document;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -29,6 +30,7 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementExcept
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsConfigurationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
@@ -41,8 +43,6 @@ import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,7 +125,6 @@ public class SyncmlServiceImpl implements SyncmlService {
     public Response getResponse(Document request)
             throws WindowsDeviceEnrolmentException, WindowsOperationException, NotificationManagementException,
             WindowsConfigurationException {
-
         int msgId;
         int sessionId;
         String user;
@@ -168,26 +167,14 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
                                 policyManagerService.getEffectivePolicy(deviceIdentifier);
                                 return Response.status(Response.Status.OK).entity(response).build();
-                            } catch (JSONException e) {
-                                String msg = "Error occurred in while parsing json object.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
                             } catch (PolicyManagementException e) {
                                 String msg = "Error occurred in while getting effective policy.";
                                 log.error(msg, e);
                                 throw new WindowsConfigurationException(msg, e);
-                            } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                                String msg = "Error occurred in while getting effective feature.";
-                                log.error(msg, e);
-                                throw new WindowsConfigurationException(msg, e);
-                            } catch (NoSuchAlgorithmException e) {
+                            } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred in while generating hash value.";
                                 log.error(msg);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
-                            } catch (UnsupportedEncodingException e) {
-                                String msg = "Error occurred in while encoding hash value.";
-                                log.error(msg);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
+                                throw new WindowsOperationException(msg, e);
                             }
 
                         } else {
@@ -206,28 +193,11 @@ public class SyncmlServiceImpl implements SyncmlService {
                     if (enrollDevice(request)) {
                         try {
                             return Response.ok().entity(generateReply(syncmlDocument, null)).build();
-                        } catch (JSONException e) {
-                            String msg = "Error occurred in while parsing json object.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
-                        } catch (PolicyManagementException e) {
-                            String msg = "Error occurred in while getting effective policy.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
-                        } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
+                        } catch (SyncmlOperationException e) {
                             String msg = "Error occurred in while getting effective feature";
                             log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
-                        } catch (NoSuchAlgorithmException e) {
-                            String msg = "Error occurred in while generating hash value.";
-                            log.error(msg);
-                            throw new WindowsDeviceEnrolmentException(msg, e);
-                        } catch (UnsupportedEncodingException e) {
-                            String msg = "Error occurred in while encoding hash value.";
-                            log.error(msg);
-                            throw new WindowsDeviceEnrolmentException(msg, e);
                         }
-
                     } else {
                         String msg = "Error occurred in modify enrollment.";
                         log.error(msg);
@@ -255,29 +225,13 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 String msg = "Error occurred in setting policy compliance.";
                                 log.error(msg);
                                 throw new WindowsConfigurationException(msg, e);
-                            } catch (JSONException e) {
-                                String msg = "Error occurred in while parsing json object.";
-                                log.error(msg);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
-                            } catch (PolicyManagementException e) {
-                                String msg = "Error occurred in while getting effective policy.";
-                                log.error(msg);
-                                throw new WindowsConfigurationException(msg, e);
-                            } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                                String msg = "Error occurred in while getting effective feature";
-                                log.error(msg);
-                                throw new WindowsConfigurationException(msg, e);
                             } catch (NotificationManagementException e) {
                                 String msg = "Error occurred in while getting notification service";
                                 throw new WindowsOperationException(msg, e);
-                            } catch (NoSuchAlgorithmException e) {
-                                String msg = "Error occurred in while generating hash value.";
-                                log.error(msg);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
-                            } catch (UnsupportedEncodingException e) {
+                            } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred in while encoding hash value.";
                                 log.error(msg);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
+                                throw new WindowsOperationException(msg, e);
                             }
                         } else {
                             try {
@@ -293,24 +247,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 String msg = "Failure occurred in dis-enrollment flow.";
                                 log.error(msg);
                                 throw new WindowsOperationException(msg, e);
-                            } catch (JSONException e) {
-                                String msg = "Error occurred in while parsing json object.";
-                                log.error(msg, e);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
-                            } catch (PolicyManagementException e) {
-                                String msg = "Error occurred in while getting effective policy.";
-                                throw new WindowsConfigurationException(msg, e);
-                            } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                                String msg = "Error occurred in while getting effective feature";
-                                throw new WindowsConfigurationException(msg, e);
-                            } catch (NoSuchAlgorithmException e) {
+                            } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred in while generating hash value.";
                                 log.error(msg);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
-                            } catch (UnsupportedEncodingException e) {
-                                String msg = "Error occurred in while encoding hash value.";
-                                log.error(msg);
-                                throw new WindowsDeviceEnrolmentException(msg, e);
+                                throw new WindowsOperationException(msg, e);
                             }
                         }
                     } else {
@@ -334,30 +274,14 @@ public class SyncmlServiceImpl implements SyncmlService {
                             String msg = "Error occurred in setting policy compliance.";
                             log.error(msg);
                             throw new WindowsConfigurationException(msg, e);
-                        } catch (JSONException e) {
-                            String msg = "Error occurred in while parsing json object.";
-                            log.error(msg);
-                            throw new WindowsDeviceEnrolmentException(msg, e);
-                        } catch (PolicyManagementException e) {
-                            String msg = "Error occurred in while getting effective policy.";
-                            log.error(msg);
-                            throw new WindowsConfigurationException(msg, e);
-                        } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                            String msg = "Error occurred in while getting effective feature";
-                            log.error(msg);
-                            throw new WindowsConfigurationException(msg, e);
                         } catch (NotificationManagementException e) {
-                            String msg = "Error occurred in while getting notification service";
+                            String msg = "Error occurred in while getting notification service.";
                             log.error(msg);
                             throw new WindowsOperationException(msg, e);
-                        } catch (NoSuchAlgorithmException e) {
-                            String msg = "Error occurred in while generating hash value.";
+                        } catch (SyncmlOperationException e) {
+                            String msg = "Error occurred in while getting effective feature.";
                             log.error(msg);
-                            throw new WindowsDeviceEnrolmentException(msg, e);
-                        } catch (UnsupportedEncodingException e) {
-                            String msg = "Error occurred in while encoding hash value.";
-                            log.error(msg);
-                            throw new WindowsDeviceEnrolmentException(msg, e);
+                            throw new WindowsConfigurationException(msg, e);
                         }
                     }
                 } else {
@@ -495,17 +419,18 @@ public class SyncmlServiceImpl implements SyncmlService {
             }
         } catch (DeviceManagementException e) {
             String msg = "Failure occurred in enrolling device.";
-            log.debug(msg, e);
+            log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
         } catch (SyncmlMessageFormatException e) {
             String msg = "Error occurred in bad format of the syncml payload.";
+            log.error(msg, e);
             throw new WindowsOperationException(msg, e);
         } catch (PolicyManagementException e) {
             String msg = "Error occurred in getting effective policy.";
-            log.debug(msg, e);
+            log.error(msg, e);
             throw new WindowsOperationException(msg, e);
         } finally {
-
+            PrivilegedCarbonContext.endTenantFlow();
         }
         return status;
     }
@@ -513,7 +438,7 @@ public class SyncmlServiceImpl implements SyncmlService {
     /**
      * Generate Device payloads.
      *
-     * @param syncmlDocument parsed suncml payload from the syncml engine.
+     * @param syncmlDocument parsed syncml payload from the syncml engine.
      * @param operations     operations for generate payload.
      * @return String type syncml payload.
      * @throws WindowsOperationException
@@ -522,9 +447,7 @@ public class SyncmlServiceImpl implements SyncmlService {
      * @throws org.wso2.carbon.policy.mgt.common.FeatureManagementException
      */
     public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> operations)
-            throws WindowsOperationException, JSONException, PolicyManagementException,
-            org.wso2.carbon.policy.mgt.common.FeatureManagementException, UnsupportedEncodingException,
-            NoSuchAlgorithmException, SyncmlMessageFormatException {
+            throws SyncmlMessageFormatException, SyncmlOperationException {
 
         OperationReply operationReply;
         SyncmlGenerator generator;
