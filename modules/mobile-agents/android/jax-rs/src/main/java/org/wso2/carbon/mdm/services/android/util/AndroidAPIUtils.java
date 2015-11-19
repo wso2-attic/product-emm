@@ -58,6 +58,16 @@ public class AndroidAPIUtils {
         return identifier;
     }
 
+    public static String getAuthenticatedUser() {
+        PrivilegedCarbonContext threadLocalCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        String username = threadLocalCarbonContext.getUsername();
+        String tenantDomain = threadLocalCarbonContext.getTenantDomain();
+        if (username.endsWith(tenantDomain)) {
+            return username.substring(0, username.lastIndexOf("@"));
+        }
+        return username;
+    }
+
     public static DeviceManagementProviderService getDeviceManagementService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         DeviceManagementProviderService deviceManagementProviderService =
