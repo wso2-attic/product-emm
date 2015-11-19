@@ -55,6 +55,22 @@
     </Permission>
 
     <Permission>
+        <name>Add notification</name>
+        <path>/device-mgt/notifications/add</path>
+        <url>/notifications</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Update notification</name>
+        <path>/device-mgt/notifications/view</path>
+        <url>/notifications/*/*</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
         <name>Get new notifications</name>
         <path>/device-mgt/notifications/view</path>
         <url>/notifications/*</url>
