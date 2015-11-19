@@ -36,6 +36,7 @@
     </parent>
 
     <modules>
+        <module>modules/components/mdm-mgt</module>
         <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/mdm</module>
@@ -45,6 +46,8 @@
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
         <module>modules/integration</module>
+        <module>modules/components/app-mgt</module>
+
     </modules>
 
     <dependencyManagement>
@@ -816,24 +819,18 @@
                 <version>${appmgt..feature.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
                 <artifactId>org.wso2.carbon.appmgt.feature</artifactId>
                 <version>${appmgt..feature.version}</version>
             </dependency>
 
-
-            <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
-            <!--<artifactId>org.wso2.carbon.appmgt.interceptor.feature</artifactId>-->
-            <!--<version>${appmgt..feature.version}</version>-->
-            <!--</dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
                 <artifactId>org.wso2.carbon.appmgt.mdm.wso2emm.feature</artifactId>
                 <version>${appmgt..feature.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
                 <artifactId>org.wso2.carbon.appmgt.mdm.wso2mdm.feature</artifactId>
@@ -845,25 +842,33 @@
                 <artifactId>org.wso2.carbon.appmgt.mobile.feature</artifactId>
                 <version>${appmgt..feature.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
                 <artifactId>org.wso2.carbon.appmgt.publisher.feature</artifactId>
                 <version>${appmgt..feature.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
                 <artifactId>org.wso2.carbon.appmgt.services.api.feature</artifactId>
                 <version>${appmgt..feature.version}</version>
             </dependency>
-            <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon.appmgt</groupId>-->
-            <!--<artifactId>org.wso2.carbon.appmgt.startup.publisher.feature</artifactId>-->
-            <!--<version>${appmgt..feature.version}</version>-->
-            <!--</dependency>-->
+
+           <dependency>
+               <groupId>org.wso2.carbon.appmgt</groupId>
+               <artifactId>org.wso2.carbon.appmgt.store.feature</artifactId>
+               <version>${appmgt..feature.version}</version>
+           </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
                 <artifactId>org.wso2.carbon.appmgt.store.feature</artifactId>
                 <version>${appmgt..feature.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.appmgt</groupId>
+                <artifactId>org.wso2.carbon.appmgt.mobile</artifactId>
+                <version>${carbon.appmgt.version}</version>
             </dependency>
 
             <!-- End of app management features-->
@@ -985,8 +990,11 @@
         <google.gson.version>2.3.1</google.gson.version>
 
         <!-- App manager version-->
-        <appmgt..feature.version>1.1.0</appmgt..feature.version>
+        <appmgt..feature.version>1.1.1</appmgt..feature.version>
+        <carbon.appmgt.version>1.1.1</carbon.appmgt.version>
 
+        <!-- Carbon Store version-->
+        <carbon.store.version>1.4.1</carbon.store.version>
         <!-- Cipher tool version-->
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
     </properties>
@@ -1129,6 +1137,16 @@
             <id>wso2-nexus</id>
             <name>WSO2 internal Repository</name>
             <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>wso2-staging</id>
+            <name>WSO2 staging Repository</name>
+            <url>ttp://maven.wso2.org/nexus/content/repositories/orgwso2carbonappmgt-129/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>daily</updatePolicy>
