@@ -35,72 +35,59 @@ import java.io.FileWriter;
  */
 public class PolicyManagement extends TestBase {
 
-    private RestClient client;
+    private MDMHttpClient client;
 
     @BeforeClass(alwaysRun = true, groups = { Constants.PolicyManagement.POLICY_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     @Test(description = "Test add policy.")
     public void testAddPolicy() throws Exception {
-        HttpResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.ADD_POLICY_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString()
+        MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
+        PayloadGenerator.getJsonPayload(
+        Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
+        Constants.HTTP_METHOD_POST).toString()
         );
-        /*Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.ADD_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true
-        );
-    */}
+
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(
+        Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+        Constants.HTTP_METHOD_POST).toString(),response.getBody());
+    }
 
     @Test(description = "Test view policy.", dependsOnMethods ={"testAddPolicy"})
     public void testViewPolicy() throws Exception {
-        HttpResponse response = client.get(Constants.PolicyManagement.VIEW_POLICY_ENDPOINT);
-
-        File logFile = new File("/Desktop/Test.txt");
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
-        writer.write(response.getData().toString());
-        writer.write("hello");
-        writer.close();
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.VIEW_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true
-        );
+        MDMResponse response = client.get(Constants.PolicyManagement.VIEW_POLICY_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
     @Test(description = "Test a secondary policy adding")
     public void addSecondaryPolicy() throws Exception {
-        HttpResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
+        MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.PolicyManagement.ADD_SECONDARY_POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString()
         );
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
 
     }
 
     @Test(description = "Test prioritizing policies", dependsOnMethods ={"testAddPolicy","addSecondaryPolicy"})
     public void testPrioritizePolicy() throws Exception {
-
-        HttpResponse response = client.post(Constants.PolicyManagement.PRIORITIZE_POLICY_ENDPOINT,
+        MDMResponse response = client.post(Constants.PolicyManagement.PRIORITIZE_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.PolicyManagement.PRIORITIZE_POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString()
         );
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.PolicyManagement.PRIORITIZE_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true
+                response.getBody().toString(), true
         );
-
     }
 
 

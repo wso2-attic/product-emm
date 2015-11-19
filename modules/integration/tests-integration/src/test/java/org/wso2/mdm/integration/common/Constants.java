@@ -26,6 +26,8 @@ public final class Constants {
 
 	public static final int SUCCESS_CODE = 200;
     public static final String DEVICE_ID = "1234";
+    public static final String NUMBER_NOT_EQUAL_TO_DEVICE_ID = "1111";
+    public static final String DEVICE_IMEI ="123123123";
     public static final String AUTOMATION_CONTEXT = "MDM";
     public static final String APPLICATION_JSON = "application/json";
     public static final String APPLICATION_URL_ENCODED = "application/x-www-form-urlencoded";
@@ -177,29 +179,40 @@ public final class Constants {
         private PolicyManagement() { throw new AssertionError();}
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
-        public static final String ADD_POLICY_ENDPOINT="/mdm-admin/policies/active-policy";
-        public static final String ADD_POLICY_PAYLOAD_FILE_NAME = "add-policy-payloads.json";
-        public static final String ADD_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "add-policy-response-payloads.json";
+        public static final String ADD_POLICY_ENDPOINT ="/mdm-admin/policies/active-policy";
 
-        public static final String VIEW_POLICY_ENDPOINT="/mdm-admin/policies/1";
+        public static final String POLICY_PAYLOAD_FILE_NAME = "policy-payloads.json";
+        public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
+
+        public static final String VIEW_POLICY_ENDPOINT ="/mdm-admin/policies/1";
         public static final String VIEW_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "view-policy-response-payloads.json";
 
-        public static final String ADD_SECONDARY_POLICY_PAYLOAD_FILE_NAME="add-secondary-policy-payloads.json";
+        public static final String ADD_SECONDARY_POLICY_PAYLOAD_FILE_NAME ="add-secondary-policy-payloads.json";
 
-        public static final String PRIORITIZE_POLICY_ENDPOINT="/mdm-admin/policies/priorities";
+        public static final String PRIORITIZE_POLICY_ENDPOINT ="/mdm-admin/policies/priorities";
         public static final String PRIORITIZE_POLICY_PAYLOAD_FILE_NAME = "prioritize-policy-payloads.json";
         public static final String PRIORITIZE_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "prioritize-policy-response-payloads.json";
-
 
     }
 
     public static final class OperationManagement {
         private OperationManagement(){ throw new AssertionError();}
+        public static final String PATH_APPS = "/apps";
 
         public static final String OPERATION_MANAGEMENT_GROUP = "api-policy-mgt";
+        public static final String GET_DEVICE_APPS_ENDPOINT = "/mdm-admin/operations/android/";
+        public static final String OPERATION_GET_DEVICE_APPS_RESPONSE_PAYLOADS_FILE_NAME = "operation-get-device-apps-response-payloads.json";
 
+        public static final String GET_DEVICE_OPERATIONS_ENDPOINT = "/mdm-admin/operations/android/";
     }
 
-
+    public static final class MobileDeviceManagement {
+        private MobileDeviceManagement(){ throw new AssertionError();}
+        public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
+        public static final String GET_DEVICE_COUNT_ENDPOINT ="/mdm-admin/devices/count";
+        public static final String NO_OF_DEVICES = "1";
+        public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
+        public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
+    }
 
 }
