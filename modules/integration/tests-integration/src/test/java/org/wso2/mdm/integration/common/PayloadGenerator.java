@@ -39,10 +39,4 @@ public class PayloadGenerator {
         return jsonObject.get(method).getAsJsonObject();
     }
 
-    public static String getJsonPayload(String fileName) throws FileNotFoundException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource(PAYLOAD_LOCATION + fileName);
-        String jsonObject=new FileReader(url.getPath()).toString();
-        return jsonObject;
-    }
-
 }
