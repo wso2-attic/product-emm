@@ -21,12 +21,9 @@ package org.wso2.mdm.integration.common;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * This class is used to load the necessary payloads from payload files for integration tests.
@@ -43,5 +40,3 @@ public class PayloadGenerator {
     }
 
 }
-
-
