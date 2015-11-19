@@ -61,3 +61,13 @@ Handlebars.registerHelper("unequal", function (lvalue, rvalue, options) {
         return options.fn(this);
     }
 });
+
+Handlebars.registerHelper("contains", function (lvalue, rvalue, options) {
+    if (arguments.length < 3)
+        throw new Error("Handlebars Helper equal needs 2 parameters");
+    if (lvalue.indexOf(rvalue) > -1) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+});
