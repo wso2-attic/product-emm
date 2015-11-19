@@ -673,7 +673,7 @@ var userModule = function () {
                 }
             }, function (e) {
                 log.error("Error retrieving secondary user stores", e);
-            }, constants.SOAP_VERSION);;
+            }, constants.SOAP_VERSION);
         return returnVal;
     };
     return publicMethods;
