@@ -169,7 +169,7 @@ public class MDMHttpClient {
         return null;
     }
 
-    public MDMResponse delete(String endpoint, String body) {
+    public MDMResponse delete(String endpoint) {
 
         HttpClient client = new HttpClient();
 

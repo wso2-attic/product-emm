@@ -1,6 +1,4 @@
-{
-  "GET":
-  [
+[
     {
       "id" : 1,
       "platform" : "android",
@@ -8,4 +6,3 @@
       "applicationIdentifier" : "package_name"
     }
   ]
-}

@@ -24,7 +24,6 @@ import java.io.File;
  */
 public final class Constants {
 
-	public static final int SUCCESS_CODE = 200;
     public static final String DEVICE_ID = "1234";
     public static final String NUMBER_NOT_EQUAL_TO_DEVICE_ID = "1111";
     public static final String DEVICE_IMEI ="123123123";
@@ -175,34 +174,12 @@ public final class Constants {
         public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
     }
 
-    public static final class PolicyManagement {
-        private PolicyManagement() { throw new AssertionError();}
-
-        public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
-        public static final String ADD_POLICY_ENDPOINT ="/mdm-admin/policies/active-policy";
-
-        public static final String POLICY_PAYLOAD_FILE_NAME = "policy-payloads.json";
-        public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
-
-        public static final String VIEW_POLICY_ENDPOINT ="/mdm-admin/policies/1";
-        public static final String VIEW_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "view-policy-response-payloads.json";
-
-        public static final String ADD_SECONDARY_POLICY_PAYLOAD_FILE_NAME ="add-secondary-policy-payloads.json";
-
-        public static final String PRIORITIZE_POLICY_ENDPOINT ="/mdm-admin/policies/priorities";
-        public static final String PRIORITIZE_POLICY_PAYLOAD_FILE_NAME = "prioritize-policy-payloads.json";
-        public static final String PRIORITIZE_POLICY_RESPONSE_PAYLOAD_FILE_NAME = "prioritize-policy-response-payloads.json";
-
-    }
-
     public static final class OperationManagement {
         private OperationManagement(){ throw new AssertionError();}
         public static final String PATH_APPS = "/apps";
 
         public static final String OPERATION_MANAGEMENT_GROUP = "api-policy-mgt";
         public static final String GET_DEVICE_APPS_ENDPOINT = "/mdm-admin/operations/android/";
-        public static final String OPERATION_GET_DEVICE_APPS_RESPONSE_PAYLOADS_FILE_NAME = "operation-get-device-apps-response-payloads.json";
-
         public static final String GET_DEVICE_OPERATIONS_ENDPOINT = "/mdm-admin/operations/android/";
     }
 
