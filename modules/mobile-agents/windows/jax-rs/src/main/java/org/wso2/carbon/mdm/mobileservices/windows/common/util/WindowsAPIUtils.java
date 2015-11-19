@@ -32,12 +32,16 @@ import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagement
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
+import org.wso2.carbon.identity.oauth2.OAuth2TokenValidationService;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+import org.wso2.carbon.user.api.TenantManager;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
+import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -164,6 +168,35 @@ public class WindowsAPIUtils {
     public static TenantConfiguration getTenantConfiguration() throws DeviceManagementException {
         return getDeviceManagementService().getConfiguration(
                 DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
+    }
+
+    public static int getTenantIdOFUser(String username) throws DeviceManagementException {
+        int tenantId = 0;
+        String domainName = MultitenantUtils.getTenantDomain(username);
+        if (domainName != null) {
+            try {
+                TenantManager tenantManager = IdentityTenantUtil.getRealmService().getTenantManager();
+                tenantId = tenantManager.getTenantId(domainName);
+            } catch (UserStoreException e) {
+                String errorMsg = "Error when getting the tenant id from the tenant domain : " +
+                        domainName;
+                log.error(errorMsg, e);
+                throw new DeviceManagementException(errorMsg, e);
+            }
+        }
+        return tenantId;
+    }
+
+    public static OAuth2TokenValidationService getOAuth2TokenValidationService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        OAuth2TokenValidationService oAuth2TokenValidationService =
+                (OAuth2TokenValidationService) ctx.getOSGiService(OAuth2TokenValidationService.class, null);
+        if (oAuth2TokenValidationService == null) {
+            String msg = "OAuth2TokenValidation service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return oAuth2TokenValidationService;
     }
 
 }

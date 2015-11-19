@@ -42,11 +42,14 @@ public class EMMIntegrationUiBaseTestCase {
 
     protected String getBackendURL() throws XPathExpressionException {
         return automationContext.getContextUrls().getBackEndUrl();
+    }
 
+    protected String getWebAppURL() throws XPathExpressionException {
+        return automationContext.getContextUrls().getWebAppURL();
     }
 
     protected String getSessionCookie(AutomationContext context) throws RemoteException, XPathExpressionException,
-            LoginAuthenticationExceptionException {
+        LoginAuthenticationExceptionException {
         AuthenticatorClient authenticationAdminClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
         String sessionCookie = authenticationAdminClient.login(automationContext.getSuperTenant().
                 getTenantAdmin().getUserName(), automationContext.getSuperTenant().

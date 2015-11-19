@@ -63,6 +63,7 @@ var operationModule = function () {
         "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
         "LDAP_OPERATION_CODE": "LDAP",
         "CALENDAR_OPERATION_CODE": "CALDAV",
+        "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION",
         "APN_OPERATION_CODE": "APN",
         "CELLULAR_OPERATION_CODE": "CELLULAR"
@@ -73,6 +74,7 @@ var operationModule = function () {
             "DEVICE_LOCK": "lock",
             "ALARM": "alarm",
             "LOCATION": "location",
+            "NOTIFICATION": "message",
             "AIR_PLAY": "airplay",
             "RESTRICTION": "restriction",
             "CELLULAR": "cellular",
@@ -538,6 +540,14 @@ var operationModule = function () {
                     }
                 };
                 break;
+            case iosOperationConstants["NOTIFICATION_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "message" : operationData["message"]
+                    }
+                };
+                break;
             default:
                 // If the operation is neither of above, it is a command operation
                 operationType = operationTypeConstants["COMMAND"];
@@ -802,13 +812,13 @@ var operationModule = function () {
     publicMethods.getWindowsServiceEndpoint = function (operationCode) {
         var featureMap = {
             "CAMERA": "camera",
-            "DEVICE_LOCK": "devicelock",
+            "DEVICE_LOCK": "lock",
             "DEVICE_LOCATION": "location",
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
-            "DEVICE_RING": "devicering",
+            "DEVICE_RING": "ring-device",
             "DEVICE_MUTE": "mute",
-            "LOCK_RESET": "lockreset",
+            "LOCK_RESET": "lock-reset",
             "NOTIFICATION": "notification",
             "ENCRYPT_STORAGE": "encrypt",
             "CHANGE_LOCK_CODE": "change-lock-code",
@@ -818,8 +828,8 @@ var operationModule = function () {
             "BLACKLIST_APPLICATIONS": "blacklist-applications",
             "PASSCODE_POLICY": "password-policy",
             "ENTERPRISE_WIPE": "enterprise-wipe",
-            "WIPE_DATA": "devicewipe",
-            "DISENROLL": "devicedisenroll"
+            "WIPE_DATA": "wipe-data",
+            "DISENROLL": "disenroll"
         };
         return "/mdm-windows-agent/services/windows/operation/" + featureMap[operationCode];
     };
@@ -872,6 +882,7 @@ var operationModule = function () {
             "DEVICE_LOCK": "fw-lock",
             "LOCATION": "fw-map-location",
             "ENTERPRISE_WIPE": "fw-clear",
+            "NOTIFICATION": "fw-message",
             "ALARM": "fw-dial-up"
         };
         return featureMap[operationCode];

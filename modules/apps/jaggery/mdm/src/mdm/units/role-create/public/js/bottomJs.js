@@ -30,7 +30,7 @@ function formatRepo (user) {
 }
 
 function formatRepoSelection (user) {
-    return user.username || user.text;;
+    return user.username || user.text;
 }
 
 $(document).ready(function () {
@@ -49,7 +49,7 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users";
+                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
                 postData.actionPayload = null;
                 return JSON.stringify(postData);
             },

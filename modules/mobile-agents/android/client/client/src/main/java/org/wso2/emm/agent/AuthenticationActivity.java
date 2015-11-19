@@ -17,6 +17,8 @@
  */
 package org.wso2.emm.agent;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import android.content.SharedPreferences;
@@ -299,7 +301,12 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		info.setClientID(clientKey);
 		info.setClientSecret(clientSecret);
 		info.setUsername(username);
-		info.setPassword(passwordVal);
+		try {
+			info.setPassword(URLEncoder.encode(passwordVal, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			String msg = "error occurred while encoding password.";
+			Log.e(TAG, msg, e);
+		}
 		info.setTokenEndPoint(serverURL);
 		if(tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
 			info.setTenantDomain(tenantDomain.toString().trim());
@@ -479,7 +486,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 										                     Constants.NOTIFIER_LOCAL);
 									}
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
-										equals(context.getString(R.string.shared_pref_frequency))){
+										equals(context.getString(R.string.shared_pref_frequency)) && !param.getString(
+										context.getString(R.string.shared_pref_config_value)).trim().isEmpty()){
 										Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
 										                  Integer.valueOf(param.getString(context.getString(R.string.shared_pref_config_value)).trim()));
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().

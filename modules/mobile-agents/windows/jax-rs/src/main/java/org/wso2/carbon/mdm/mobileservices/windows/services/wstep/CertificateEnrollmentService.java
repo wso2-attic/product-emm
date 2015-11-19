@@ -18,6 +18,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.wstep;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.AdditionalContext;
 import org.wso2.carbon.mdm.mobileservices.windows.services.wstep.beans.RequestSecurityTokenResponse;
@@ -57,5 +58,5 @@ public interface CertificateEnrollmentService {
             @WebParam(mode = WebParam.Mode.OUT, name = "RequestSecurityTokenResponse",
                     targetNamespace = PluginConstants.WS_TRUST_TARGET_NAMESPACE)
             javax.xml.ws.Holder<RequestSecurityTokenResponse> response) throws
-            WindowsDeviceEnrolmentException, UnsupportedEncodingException;
+            WindowsDeviceEnrolmentException, UnsupportedEncodingException, WAPProvisioningException;
 }
