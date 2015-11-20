@@ -26,6 +26,7 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.SyncmlCommandType;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.PasscodePolicy;
@@ -34,8 +35,6 @@ import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.common.ProfileFeature;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,15 +70,13 @@ public class OperationReply {
         replySyncmlDocument = new SyncmlDocument();
     }
 
-    public SyncmlDocument generateReply() throws WindowsOperationException, PolicyManagementException,
-            FeatureManagementException, JSONException, UnsupportedEncodingException, NoSuchAlgorithmException,
-            SyncmlMessageFormatException {
+    public SyncmlDocument generateReply() throws SyncmlMessageFormatException, SyncmlOperationException {
         generateHeader();
         generateBody();
         return replySyncmlDocument;
     }
 
-    private void generateHeader() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    private void generateHeader() throws SyncmlMessageFormatException {
         String nextnonceValue = Constants.INITIAL_NONCE;
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
         SyncmlHeader header = new SyncmlHeader();
@@ -117,17 +114,16 @@ public class OperationReply {
         replySyncmlDocument.setHeader(header);
     }
 
-    private void generateBody() throws WindowsOperationException, PolicyManagementException, FeatureManagementException,
-            JSONException, SyncmlMessageFormatException {
+    private void generateBody() throws SyncmlMessageFormatException, SyncmlOperationException {
         SyncmlBody syncmlBody = generateStatuses();
         try {
             appendOperations(syncmlBody);
         } catch (PolicyManagementException e) {
-            throw new PolicyManagementException("Error occurred while retrieving policy operations.", e);
+            throw new SyncmlOperationException("Error occurred while retrieving policy operations.", e);
         } catch (FeatureManagementException e) {
-            throw new FeatureManagementException("Error occurred while retrieving effective policy operations.");
+            throw new SyncmlOperationException("Error occurred while retrieving effective policy operations.", e);
         } catch (JSONException e) {
-            throw new SyncmlMessageFormatException("Error Occurred while parsing operation object.");
+            throw new SyncmlMessageFormatException("Error Occurred while parsing operation object.", e);
         }
         replySyncmlDocument.setBody(syncmlBody);
     }
@@ -202,8 +198,8 @@ public class OperationReply {
         return syncmlBodyReply;
     }
 
-    private void appendOperations(SyncmlBody syncmlBody) throws WindowsOperationException, PolicyManagementException,
-            FeatureManagementException, JSONException {
+    private void appendOperations(SyncmlBody syncmlBody) throws PolicyManagementException,
+            FeatureManagementException, JSONException, SyncmlOperationException {
         Get getElement = new Get();
         List<Item> getElements = new ArrayList<>();
         List<ExecuteTag> executeElements = new ArrayList<>();
@@ -285,7 +281,7 @@ public class OperationReply {
                                         profileFeatures = WindowsAPIUtils.getPolicyManagerService().
                                                 getEffectiveFeatures(deviceIdentifier);
                                     } catch (FeatureManagementException e) {
-                                        throw new FeatureManagementException("Error in getting effective policy.", e);
+                                        throw new SyncmlOperationException("Error in getting effective policy.", e);
                                     }
                                     monitorItems = buildMonitorOperation(profileFeatures);
                                     if (!monitorItems.isEmpty()) {
@@ -469,7 +465,7 @@ public class OperationReply {
         return addList;
     }
 
-    private List<AddTag> appendAddConfiguration(Operation operation) throws WindowsOperationException {
+    private List<AddTag> appendAddConfiguration(Operation operation) {
 
         List<AddTag> addList = new ArrayList<>();
         Gson gson = new Gson();
@@ -523,8 +519,8 @@ public class OperationReply {
         return execElement;
     }
 
-    public SequenceTag buildSequence(Operation operation, SequenceTag sequenceElement) throws WindowsOperationException,
-            JSONException {
+    public SequenceTag buildSequence(Operation operation, SequenceTag sequenceElement) throws
+            JSONException, SyncmlOperationException {
 
         sequenceElement.setCommandId(operation.getId());
         List<Replace> replaceItems = new ArrayList<>();
@@ -546,7 +542,7 @@ public class OperationReply {
             List<? extends Operation> policyOperations;
             try {
                 policyOperations = (List<? extends Operation>) operation.getPayLoad();
-            }catch (ClassCastException e) {
+            } catch (ClassCastException e) {
                 throw new ClassCastException();
             }
             for (Operation policy : policyOperations) {
@@ -558,7 +554,7 @@ public class OperationReply {
                         cameraItem = appendReplaceInfo(policy);
                         cameraItems.add(cameraItem);
                     } catch (JSONException e) {
-                        throw new WindowsOperationException("Error occurred while parsing payload object to json.");
+                        throw new SyncmlOperationException("Error occurred while parsing payload object to json.", e);
                     }
                     replaceCameraConfig.setCommandId(operation.getId());
                     replaceCameraConfig.setItems(cameraItems);
@@ -573,7 +569,7 @@ public class OperationReply {
                         storageItem = appendReplaceInfo(policy);
                         storageItems.add(storageItem);
                     } catch (JSONException e) {
-                        throw new WindowsOperationException("Error occurred while parsing payload object to json.", e);
+                        throw new SyncmlOperationException("Error occurred while parsing payload object to json.", e);
                     }
                     replaceStorageConfig.setCommandId(operation.getId());
                     replaceStorageConfig.setItems(storageItems);
@@ -581,11 +577,6 @@ public class OperationReply {
 
                 }
                 if (policy.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
-
-                    DeleteTag delete = new DeleteTag();
-                    delete.setCommandId(operation.getId());
-                    delete.setItems(buildDeleteInfo(policy));
-
                     AtomicTag atomicTagElement = new AtomicTag();
                     List<AddTag> addConfig;
                     try {
@@ -595,7 +586,7 @@ public class OperationReply {
 
                         sequenceElement.setAtomicTag(atomicTagElement);
                     } catch (WindowsOperationException e) {
-                        throw new WindowsOperationException("Error occurred while generating operation payload.", e);
+                        throw new SyncmlOperationException("Error occurred while generating operation payload.", e);
                     }
                 }
             }
@@ -774,6 +765,7 @@ public class OperationReply {
         }
         return add;
     }
+
 }
 
 

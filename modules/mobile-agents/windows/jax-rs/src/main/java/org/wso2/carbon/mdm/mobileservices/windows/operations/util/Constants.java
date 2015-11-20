@@ -87,10 +87,12 @@ public class Constants {
     public final class SyncMLResponseCodes {
         public static final String AUTHENTICATION_ACCEPTED = "212";
         public static final String ACCEPTED = "200";
-        public static final String PIN_NOTFOUND = "405";
         public static final String ACCEPTED_FOR_PROCESSING = "202";
-        public static final String LOCKRESET_NOTIFICATION = "Error occurred in Lock Operation." +
-                "Please Reset device lockOperationUpdate.";
+        public static final String PIN_NOTFOUND = "405";
+        public static final String CREDENTIALS_MISSING = "407";
+        public static final String INVALID_CREDENTIALS = "401";
+        public static final String LOCKRESET_NOTIFICATION = "Error occurred in Device Lock Operation. " +
+                "Please trigger lock-reset operation.";
     }
 
 }
