@@ -88,8 +88,9 @@ public class BSTValidator implements Validator {
             log.error(msg, e);
             throw new WSSecurityException(msg, e);
         } catch (WindowsDeviceEnrolmentException e) {
-            String msg = "Error occurred in validating request token.";
-            log.error(msg);
+            String msg = "Authentication Failure occurred due to binary security token.";
+            log.error(msg, e);
+            throw new WSSecurityException(msg, e);
         }
         return returnCredentials;
     }
@@ -101,7 +102,6 @@ public class BSTValidator implements Validator {
      * @return - Authentication status
      * @throws AuthenticationException
      */
-
     public boolean authenticate(String binarySecurityToken) throws
             AuthenticationException {
 
@@ -113,7 +113,7 @@ public class BSTValidator implements Validator {
     /**
      * Validate SOAP request token.
      *
-     * @param requestedUri-Requested            endpoint URI.
+     * @param requestedUri-                     Requested endpoint URI.
      * @param encodedBinarySecurityToken-Binary security token comes from the soap request message.
      * @return returns authorized user information.
      * @throws WindowsDeviceEnrolmentException
@@ -154,10 +154,9 @@ public class BSTValidator implements Validator {
             }
         } catch (DeviceManagementException e) {
             String msg = "Authentication failure due to invalid binary security token.";
-            log.error(msg);
-            throw new WindowsDeviceEnrolmentException(msg);
+            log.error(msg, e);
+            throw new WindowsDeviceEnrolmentException(msg, e);
         }
         return authenticationInfo;
     }
-
 }

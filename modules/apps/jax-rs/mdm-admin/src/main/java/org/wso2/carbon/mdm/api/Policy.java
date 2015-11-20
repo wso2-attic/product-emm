@@ -98,6 +98,7 @@ public class Policy {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             pap.addPolicy(policy);
             Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setStatusCode(HttpStatus.SC_CREATED);
             responseMsg.setMessageFromServer("Policy has been added successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {

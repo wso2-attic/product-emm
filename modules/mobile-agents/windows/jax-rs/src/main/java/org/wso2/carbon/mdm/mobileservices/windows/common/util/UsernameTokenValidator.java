@@ -71,8 +71,12 @@ public class UsernameTokenValidator implements Validator {
             }
             //Generic exception is caught here as there is no need of taking different actions for
             //different exceptions.
-        } catch (Exception e) {
-            String msg = "Failure occurred in the credential validator.";
+        } catch (AuthenticationException e) {
+            String msg = "Failure occurred in the BST validator.";
+            log.error(msg, e);
+            throw new WSSecurityException(msg, e);
+        } catch (WindowsDeviceEnrolmentException e) {
+            String msg = "Authentication Failure occurred due to binary security token.";
             log.error(msg, e);
             throw new WSSecurityException(msg, e);
         }
