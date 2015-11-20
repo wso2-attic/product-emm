@@ -17,7 +17,9 @@
  */
 package org.wso2.mdm.integration.common;
 
-
+/**
+ * This class contains the functions to handle a HTTP Response
+ */
 public class MDMResponse {
 
     private int status;

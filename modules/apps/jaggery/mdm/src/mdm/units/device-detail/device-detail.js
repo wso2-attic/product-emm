@@ -13,6 +13,7 @@ function onRequest(context) {
             if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0) {
                 deviceInfo = parse(stringify(deviceInfo));
                 if (device.type == "ios") {
+                    deviceInfo = parse(deviceInfo);
                     viewModel.imei = device.properties.IMEI;
                     viewModel.phoneNumber = deviceInfo.PhoneNumber;
                     viewModel.udid = deviceInfo.UDID;
