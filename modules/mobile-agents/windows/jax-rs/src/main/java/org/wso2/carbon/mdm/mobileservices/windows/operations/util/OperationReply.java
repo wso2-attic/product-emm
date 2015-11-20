@@ -121,9 +121,9 @@ public class OperationReply {
         } catch (PolicyManagementException e) {
             throw new SyncmlOperationException("Error occurred while retrieving policy operations.", e);
         } catch (FeatureManagementException e) {
-            throw new SyncmlOperationException("Error occurred while retrieving effective policy operations.");
+            throw new SyncmlOperationException("Error occurred while retrieving effective policy operations.", e);
         } catch (JSONException e) {
-            throw new SyncmlMessageFormatException("Error Occurred while parsing operation object.");
+            throw new SyncmlMessageFormatException("Error Occurred while parsing operation object.", e);
         }
         replySyncmlDocument.setBody(syncmlBody);
     }

@@ -59,8 +59,8 @@ public class SyncmlGenerator {
             docBuilder = documentFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             String message = "Error while generating a new document of syncml";
-            log.error(message);
-            throw new SyncmlOperationException(message);
+            log.error(message, e);
+            throw new SyncmlOperationException(message, e);
         }
         return docBuilder.newDocument();
     }
@@ -80,8 +80,8 @@ public class SyncmlGenerator {
             transformer = transformerFactory.newTransformer();
         } catch (TransformerConfigurationException e) {
             String message = "Error while retrieving a new transformer";
-            log.error(message);
-            throw new SyncmlOperationException(message);
+            log.error(message, e);
+            throw new SyncmlOperationException(message, e);
         }
         transformer.setOutputProperty(OutputKeys.ENCODING, Constants.UTF_8);
         transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
@@ -92,8 +92,8 @@ public class SyncmlGenerator {
             transformer.transform(domSource, streamResult);
         } catch (TransformerException e) {
             String message = "Error while transforming document to a string";
-            log.error(message);
-            throw new SyncmlOperationException(message);
+            log.error(message, e);
+            throw new SyncmlOperationException(message, e);
         }
         return stringWriter.toString();
     }
