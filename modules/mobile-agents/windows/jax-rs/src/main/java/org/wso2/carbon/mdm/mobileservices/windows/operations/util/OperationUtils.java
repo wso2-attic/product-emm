@@ -489,8 +489,7 @@ public class OperationUtils {
                         }
                     }
                 }
-                org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.getPolicyManagerService().
-                        checkPolicyCompliance(deviceIdentifier, complianceFeatures);
+                WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, complianceFeatures);
             } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                 String msg = "Error occurred while getting effective policy.";
                 log.error(msg);
