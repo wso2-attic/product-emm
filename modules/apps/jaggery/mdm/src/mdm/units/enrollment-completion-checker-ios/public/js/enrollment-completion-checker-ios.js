@@ -21,9 +21,18 @@ $(document).ready(function () {
     setInterval(function () {
         $.get(iOSCheckUrl, function(data, status){
             var parsedData = JSON.parse(data);
-            var deviceID = parsedData["deviceID"];
-            if (deviceID != null) {
-                window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + deviceID;
+            var extractedData = parsedData["deviceID"];
+            if(extractedData && extractedData.indexOf("_accessToken_") != -1){
+                var result = extractedData.split("_accessToken_");
+                var deviceId =  result[0];
+                var result = result[1].split("_refreshToken_");
+                var accessToken =  result[0];
+                var result = result[1].split("_clientCredentials_");
+                var refreshToken =  result[0];
+                var clientCredentials =  result[1];
+
+                window.location = "/mdm/enrollments/ios/thank-you-agent?device-id=" + encodeURI(deviceId) + "&accessToken=" +
+                    encodeURI(accessToken) +"&refreshToken=" + encodeURI(refreshToken) + "&clientCredentials=" + encodeURI(clientCredentials);
             }
         });
     }, 1000);
