@@ -33,6 +33,7 @@ public class TestBase {
     protected String backendHTTPURL;
     static String accessToken;
 
+
     protected void init(TestUserMode userMode) throws Exception {
         automationContext = new AutomationContext(Constants.AUTOMATION_CONTEXT, userMode);
         backendHTTPSURL = automationContext.getContextUrls().getWebAppURLHttps();

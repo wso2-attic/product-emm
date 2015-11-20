@@ -1,0 +1,6 @@
+{
+  "POST":{
+    "configuration":[{"name":"notifierFrequency","value":"5",
+      "contentType":"text"}]
+  }
+}
