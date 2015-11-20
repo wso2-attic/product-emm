@@ -1095,6 +1095,9 @@
         <carbon.store.version>1.4.1</carbon.store.version>
         <!-- Cipher tool version-->
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
+
+	<!-- Release plugin ID for github-->
+        <project.scm.id>github-scm</project.scm.id>
     </properties>
 
     <scm>
