@@ -51,14 +51,12 @@ public class NotificationManagement extends TestBase {
         HttpResponse response = client.post(Constants.NotificationManagement.NOTIFICATION_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_POST).toString()
-        );
+                        Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true
-        );
+                response.getData().toString(), true);
     }
 
     @Test(description = "Test update notification.", dependsOnMethods = { "testAddNotification"})
@@ -66,14 +64,11 @@ public class NotificationManagement extends TestBase {
         HttpResponse response = client.put(Constants.NotificationManagement.NOTIFICATION_UPDATE_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString()
-        );
+                        Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString(),
-                response.getData().toString(), true
-        );
+                response.getData().toString(), true);
 
     }
 
@@ -81,6 +76,5 @@ public class NotificationManagement extends TestBase {
     public void testGetNotification() throws Exception {
         HttpResponse response = client.get(Constants.NotificationManagement.NOTIFICATION_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        Assert.assertEquals(Constants.NotificationManagement.GET_NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,response.getData().toString());
     }
 }

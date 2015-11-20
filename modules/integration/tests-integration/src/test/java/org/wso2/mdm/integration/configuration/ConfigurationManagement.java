@@ -44,15 +44,11 @@ public class ConfigurationManagement extends TestBase {
     public void testSaveConfiguration() throws Exception {
         HttpResponse response = client.post(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
-                        Constants.ConfigurationManagement.CONFIGURATION_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString()
-        );
+                        Constants.ConfigurationManagement.CONFIGURATION_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true
-        );
+                        Constants.HTTP_METHOD_POST).toString(), response.getData().toString(), true);
     }
 
     @Test(description = "Test get configuration.", dependsOnMethods = { "testSaveConfiguration"})
@@ -61,8 +57,6 @@ public class ConfigurationManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_GET).toString(),
-                response.getData().toString(), true
-        );
+                        Constants.HTTP_METHOD_GET).toString(), response.getData().toString(), true);
     }
 }

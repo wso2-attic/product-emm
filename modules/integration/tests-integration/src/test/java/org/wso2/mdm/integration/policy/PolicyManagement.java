@@ -42,13 +42,10 @@ public class PolicyManagement extends TestBase {
     public void testAddPolicy() throws Exception  {
 
         MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString()
-        );
+                PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(PayloadGenerator.getJsonPayload(
-                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST).toString(),response.getBody());
 
     }
@@ -66,11 +63,9 @@ public class PolicyManagement extends TestBase {
         MDMResponse response = client.put(Constants.PolicyManagement.UPDATE_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString()
-        );
+                        Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(PayloadGenerator.getJsonPayload(
-                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_PUT).toString(), response.getBody());
     }
 
@@ -78,11 +73,9 @@ public class PolicyManagement extends TestBase {
     public void testRemovePolicy() throws Exception {
 
         MDMResponse response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
-                Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME
-        );
+                Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(PayloadGenerator.getJsonPayload(
-                Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_DELETE).toString(), response.getBody());
     }
 }

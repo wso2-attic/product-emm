@@ -42,20 +42,16 @@ public class RoleManagement extends TestBase {
     @Test(description = "Test add role.")
     public void testAddRole() throws Exception {
         MDMResponse response = client.post(Constants.RoleManagement.ADD_ROLE_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString()
-        );
+                PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
     @Test(description = "Test update permission role.", dependsOnMethods = { "testAddRole"})
     public void testUpdateRolePermission() throws Exception {
         MDMResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
-                    PayloadGenerator.getJsonPayload(
-                            Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_PUT).toString()
-            );
+                    PayloadGenerator.getJsonPayload(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
+                            Constants.HTTP_METHOD_PUT).toString());
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 

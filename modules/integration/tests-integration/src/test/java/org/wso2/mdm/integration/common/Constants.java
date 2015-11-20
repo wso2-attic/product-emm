@@ -177,16 +177,11 @@ public final class Constants {
         private UserManagement() { throw new AssertionError(); }
 
         public static final String USER_MANAGEMENT_GROUP = "user-mgt";
-        public static final String ADD_USER_ENDPOINT="/mdm-admin/users";
+        public static final String USER_NAME="username123";
+        public static final String USER_ENDPOINT="/mdm-admin/users";
         public static final String USER_PAYLOAD_FILE_NAME = "user-payloads.json";
         public static final String USER_RESPONSE_PAYLOAD_FILE_NAME = "user-response-payloads.json";
-
-        public static final String VIEW_USER_ENDPOINT="/mdm-admin/users/view?username=username123";
-
-        public static final String UPDATE_USER_ENDPOINT="/mdm-admin/users?username=username123";
-
-        public static final String REMOVE_USER_ENDPOINT="/mdm-admin/users?username=username123";
-
+        public static final String VIEW_USER_ENDPOINT="/mdm-admin/users/view";
 
     }
 
@@ -255,6 +250,5 @@ public final class Constants {
 
         public static final String NOTIFICATION_UPDATE_ENDPOINT="/mdm-admin/notifications/1234/NEW";
 
-        public static final String GET_NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "[{\"notificationId\":1,\"deviceIdentifier\":{\"id\":\"1234\",\"type\":\"android\"},\"description\":\"test notification\",\"operationId\":1,\"status\":\"NEW\"}]";
     }
 }

@@ -43,10 +43,7 @@ public class LicenseManagement extends TestBase {
     public void testGetLicense() throws Exception {
         HttpResponse response = client.get(Constants.LicenseManagement.GET_LICENSE_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.LicenseManagement.LICENSE_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_GET).toString(),
-                response.getData().toString(), true
-        );
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.LicenseManagement.LICENSE_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_GET).toString(), response.getData().toString(), true);
     }
 }
