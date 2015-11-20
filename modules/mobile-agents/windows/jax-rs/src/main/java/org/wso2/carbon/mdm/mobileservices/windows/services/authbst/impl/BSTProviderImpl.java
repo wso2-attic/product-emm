@@ -70,12 +70,12 @@ public class BSTProviderImpl implements BSTProvider {
             return Response.ok().entity(tokenContent.toString()).build();
         } catch (DeviceManagementException e) {
             String msg = "Failure occurred in generating challenge token.";
-            log.error(msg);
-            throw new WindowsDeviceEnrolmentException(msg);
+            log.error(msg, e);
+            throw new WindowsDeviceEnrolmentException(msg, e);
         } catch (JSONException e) {
             String msg = "Failure occurred in generating challenge token Json.";
-            log.error(msg);
-            throw new WindowsDeviceEnrolmentException(msg);
+            log.error(msg, e);
+            throw new WindowsDeviceEnrolmentException(msg, e);
         }
     }
 

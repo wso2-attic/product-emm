@@ -36,6 +36,7 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WAPProvisioningException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
@@ -69,7 +70,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -246,7 +246,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         }
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
-        String wapProvisioningString;
+        String wapProvisioningString = null;
         try {
             builder = domFactory.newDocumentBuilder();
 
@@ -322,7 +322,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             String msg = "Error occurred in while getting CA and Root certificates.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
-        } catch (NoSuchAlgorithmException | CertificateEncodingException e) {
+        } catch (CertificateEncodingException e) {
             String msg = "Error occurred in while encoding certificates.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
@@ -342,6 +342,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             String msg = "Error occurred in while getting wap-provisioning.xml file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
+        } catch (SyncmlMessageFormatException e) {
+            String msg = "Error occurred in while getting CA and Root certificates.";
+            log.error(msg, e);
+            throw new WindowsDeviceEnrolmentException(msg, e);
         }
         return base64Encoder.encodeAsString(wapProvisioningString.getBytes());
     }

@@ -19,7 +19,7 @@
                         <tr data-type="selectable" data-id="{{notificationId}}">
                             <td data-display="{{description}}" data-grid-label="Description">{{description}}</td>
                             <td style="text-align: center;">
-                                <a href="#" data-id="{{notificationId}}" data-url="device/{{deviceIdentifier.type}}/{{deviceIdentifier.id}}" class="new-notification" data-click-event="remove-form">
+                                <a href="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" data-id="{{notificationId}}" data-url="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" class="new-notification" data-click-event="remove-form">
                                      <span class="fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-view fw-stack-1x"></i>
@@ -57,7 +57,7 @@
                     <tr data-type="selectable" data-id="{{notificationId}}">
                         <td  data-display="{{description}}" data-grid-label="Description">{{description}}</td>
                         <td style="text-align: center;">
-                            <a href="device/{{deviceIdentifier.type}}/{{deviceIdentifier.id}}" data-click-event="remove-form">
+                            <a href="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" data-click-event="remove-form">
                                  <span class="fw-stack">
                                     <i class="fw fw-ring fw-stack-2x"></i>
                                     <i class="fw fw-view fw-stack-1x"></i>

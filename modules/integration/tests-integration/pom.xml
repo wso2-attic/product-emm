@@ -260,6 +260,7 @@
             <artifactId>org.wso2.carbon.certificate.mgt.core</artifactId>
             <scope>compile</scope>
         </dependency>
+
     </dependencies>
 
 </project>

@@ -38,4 +38,5 @@ public class PayloadGenerator {
         JsonObject jsonObject = parser.parse(new FileReader(url.getPath())).getAsJsonObject();
         return jsonObject.get(method).getAsJsonObject();
     }
+
 }
