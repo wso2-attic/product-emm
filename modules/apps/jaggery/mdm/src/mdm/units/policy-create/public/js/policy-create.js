@@ -1928,7 +1928,7 @@ function formatRepoSelection (user) {
 $(document).ready(function () {
     $("#users-input").select2({
         multiple:true,
-        tags: true,
+        tags: false,
         ajax: {
             url: window.location.origin + "/mdm/api/invoker/execute/",
             method: "POST",
@@ -1968,7 +1968,7 @@ $(document).ready(function () {
     $("#policy-platform-wizard-steps").html($(".wr-steps").html());
 
     $("select.select2[multiple=multiple]").select2({
-        "tags": true
+        "tags": false
     });
 
     $("#users-select-field").hide();
@@ -1987,7 +1987,7 @@ $(document).ready(function () {
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
     $("#user-roles-input").select2({
-        "tags": true
+        "tags": false
     }).on("select2:select", function (e) {
             if (e.params.data.id == "ANY") {
                 $(this).val("ANY").trigger("change");
