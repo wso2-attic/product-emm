@@ -70,15 +70,15 @@ public class AndroidConfigurationManagement extends TestBase {
         );
     }
 
-    @Test(description = "Test get android configuration.",
-          dependsOnMethods = { "testAddConfiguration", "testModifyConfiguration" })
-    public void testGetConfiguration() throws Exception {
-        HttpResponse response = client.get(Constants.AndroidConfigurationManagement.CONFIG_MGT_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(
-                PayloadGenerator.getJsonPayload(Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
-                                                Constants.HTTP_METHOD_PUT).toString(),
-                response.getData().toString(), true
-        );
-    }
+//    @Test(description = "Test get android configuration.",
+//          dependsOnMethods = { "testAddConfiguration", "testModifyConfiguration" })
+//    public void testGetConfiguration() throws Exception {
+//        HttpResponse response = client.get(Constants.AndroidConfigurationManagement.CONFIG_MGT_ENDPOINT);
+//        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+//        AssertUtil.jsonPayloadCompare(
+//                PayloadGenerator.getJsonPayload(Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
+//                                                Constants.HTTP_METHOD_PUT).toString(),
+//                response.getData().toString(), true
+//        );
+//    }
 }

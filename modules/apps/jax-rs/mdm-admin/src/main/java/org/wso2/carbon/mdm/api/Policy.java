@@ -66,6 +66,7 @@ public class Policy {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             pap.addPolicy(policy);
             Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setStatusCode(HttpStatus.SC_CREATED);
             responseMsg.setMessageFromServer("Policy has been added successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
@@ -97,6 +98,7 @@ public class Policy {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             pap.addPolicy(policy);
             Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setStatusCode(HttpStatus.SC_CREATED);
             responseMsg.setMessageFromServer("Policy has been added successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
@@ -211,6 +213,7 @@ public class Policy {
             pap.updatePolicy(policy);
 //            Response.status(HttpStatus.SC_CREATED);
             Response.status(HttpStatus.SC_OK);
+            responseMsg.setStatusCode(HttpStatus.SC_CREATED);
 //            responseMsg.setMessageFromServer("Policy has been added successfully.");
             responseMsg.setMessageFromServer("Policy has been updated successfully.");
             return responseMsg;

@@ -246,7 +246,7 @@
     <Permission>
         <name>Delete User roles</name>
         <path>/device-mgt/roles/delete</path>
-        <url>/roles/*</url>
+        <url>/roles</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>
     </Permission>
