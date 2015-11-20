@@ -42,7 +42,7 @@ public class SyncmlCredentials {
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes(Constants.UTF_8)));
         } catch (UnsupportedEncodingException e) {
-            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.");
+            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.", e);
         } catch (NoSuchAlgorithmException e) {
             throw new SyncmlMessageFormatException("Problem occurred in generating password hash.", e);
         }
@@ -61,7 +61,7 @@ public class SyncmlCredentials {
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes(Constants.UTF_8)));
         } catch (UnsupportedEncodingException e) {
-            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.");
+            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.", e);
         } catch (NoSuchAlgorithmException e) {
             throw new SyncmlMessageFormatException("Problem occurred in generating password hash.", e);
         }

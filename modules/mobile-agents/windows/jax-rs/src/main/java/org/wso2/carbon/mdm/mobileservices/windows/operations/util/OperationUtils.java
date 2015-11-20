@@ -83,14 +83,14 @@ public class OperationUtils {
                     operation.setStatus(Operation.Status.ERROR);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
                     try {
-                        NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
+                        NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(
                                 Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
-                        service.addNotification(lockResetNotification);
+                        nmService.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
                         throw new WindowsOperationException("Failure occurred in getting notification service", e);
                     }
@@ -152,15 +152,14 @@ public class OperationUtils {
                     new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                     try {
-                        NotificationManagementService service = org.wso2.carbon.mdm.mobileservices.windows.common.util.
-                                WindowsAPIUtils.getNotificationManagementService();
+                        NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
 
-                        service.addNotification(lockResetNotification);
+                        nmService.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
                         String msg = "Failure occurred in getting notification service";
                         log.error(msg, e);
@@ -439,8 +438,7 @@ public class OperationUtils {
         boolean isCompliance = false;
         if (profiles.size() != Constants.EMPTY) {
             try {
-                List<ProfileFeature> profileFeatures = org.wso2.carbon.mdm.mobileservices.windows.common.util.
-                        WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
+                List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
                         deviceIdentifier);
                 List<ComplianceFeature> complianceFeatures = new ArrayList<>();
                 for (ProfileFeature activeFeature : profileFeatures) {

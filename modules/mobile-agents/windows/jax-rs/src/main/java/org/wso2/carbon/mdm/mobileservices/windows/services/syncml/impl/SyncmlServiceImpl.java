@@ -171,7 +171,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 throw new WindowsConfigurationException(msg, e);
                             } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred in while generating hash value.";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             }
 
