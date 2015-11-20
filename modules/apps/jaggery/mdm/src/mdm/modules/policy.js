@@ -21,7 +21,7 @@
  */
 var policyModule;
 policyModule = function () {
-    var log = new Log("modules/user.js");
+    var log = new Log("modules/policy.js");
 
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
@@ -85,9 +85,14 @@ policyModule = function () {
                 response.status = "success";
                 response.content = policyListToView;
                 return response;
-            },function(){
+            },function(responsePayload){
                 var response = {};
                 response.status = "error";
+                if(responsePayload  == "Scope validation failed"){
+                    response.content = "Permission Denied";
+                } else {
+                    response.content = responsePayload;
+                }
                 return response;
             });
             return response;
