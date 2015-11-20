@@ -33,20 +33,21 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Bundle-Version>${carbon.device.mgt.version}</Bundle-Version>
-                        <Bundle-Description>Device Management Core Bundle</Bundle-Description>
-                        <Private-Package>org.wso2.carbon.device.mgt.core.internal</Private-Package>
+                        <Bundle-Version>${mdm.version}</Bundle-Version>
+                        <Bundle-Description>MDM Management Core Bundle</Bundle-Description>
+                        <Private-Package>org.wso2.mdm.appmgt.internal</Private-Package>
                         <Import-Package>
                             org.osgi.framework,
                             org.osgi.service.component,
                             org.apache.commons.logging,
                             org.wso2.carbon.appmgt.mobile.*,
-                            org.wso2.carbon.device.mgt.core.*,
                             org.wso2.carbon.device.mgt.common,
                             org.wso2.carbon.device.mgt.common.operation.mgt,
                             org.wso2.carbon.device.mgt.core.operation.mgt,
                             org.wso2.mdm.mdmmgt.*,
                             org.wso2.carbon.device.mgt.common.app.mgt,
+                            org.wso2.carbon.device.mgt.core.service,
+                            org.wso2.carbon.device.mgt.core.app.mgt
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.mdm.appmgt.internal,
@@ -121,11 +122,6 @@
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wso2.carbon.appmgt</groupId>
-            <artifactId>org.wso2.carbon.appmgt.mobile</artifactId>
         </dependency>
     </dependencies>
 

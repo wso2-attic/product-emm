@@ -89,13 +89,13 @@ public class MDMAndroidOperationUtil {
 			case ENTERPRISE:
 				EnterpriseApplication enterpriseApplication = new EnterpriseApplication();
 				enterpriseApplication.setType(application.getType().toString());
-				enterpriseApplication.setAppIdentifier(application.getAppIdentifier());
+				enterpriseApplication.setAppIdentifier(application.getIdentifier());
 				operation.setPayLoad(enterpriseApplication.toJSON());
 				break;
 			case PUBLIC:
 				AppStoreApplication appStoreApplication = new AppStoreApplication();
 				appStoreApplication.setType(application.getType().toString());
-				appStoreApplication.setAppIdentifier(application.getAppIdentifier());
+				appStoreApplication.setAppIdentifier(application.getIdentifier());
 				operation.setPayLoad(appStoreApplication.toJSON());
 				break;
 			case WEBAPP:

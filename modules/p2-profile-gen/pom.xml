@@ -433,18 +433,29 @@
                                 </featureArtifactDef>
 
                                 <featureArtifactDef>
-                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.store.feature:${appmgt..feature.version}
-                                </featureArtifactDef>
-
-                                <featureArtifactDef>
                                     org.wso2.carbon.store:org.wso2.store.feature:${carbon.store.version}
                                 </featureArtifactDef>
 
                                 <featureArtifactDef>
-                                org.wso2.carbon.commons:org.wso2.carbon.event.feature:${carbon.commons.version}
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.store.feature:${appmgt..feature.version}
+                                </featureArtifactDef>
+
+                                <featureArtifactDef>
+                                    org.wso2.carbon.store:org.wso2.carbon.social.feature:${carbon.store.version}
+                                </featureArtifactDef>
+
+
+                                <featureArtifactDef>
+                                    org.wso2.carbon.commons:org.wso2.carbon.event.feature:${carbon.commons.version}
                                 </featureArtifactDef>
                                 <!-- End of app manager feature-->
 
+
+                                <!-- MDM Server Feature -->
+
+                                <featureArtifactDef>
+                                    org.wso2.mdm:org.wso2.mdm.mdmmgt.server.feature:${mdm.version}
+                                </featureArtifactDef>
 
                                 <!-- Cipher tools feature -->
 
@@ -873,6 +884,13 @@
                                 <!--<id>org.wso2.carbon.appmgt.feature.group</id>-->
                                 <!--<version>${appmgt..feature.version}</version>-->
                                 <!--</feature>-->
+
+
+                                <feature>
+                                    <id>org.wso2.carbon.store.feature.group</id>
+                                    <version>${carbon.store.version}</version>
+                                </feature>
+
                                 <feature>
                                     <id>org.wso2.carbon.appmgt.mdm.wso2emm.feature.group</id>
                                     <version>${appmgt..feature.version}</version>
@@ -894,19 +912,23 @@
                                     <version>${appmgt..feature.version}</version>
                                 </feature>
 
-                                <!--
+
                                 <feature>
                                     <id>org.wso2.carbon.appmgt.store.feature.group</id>
                                     <version>${appmgt..feature.version}</version>
                                 </feature>
-                                -->
+
                                 <!-- End of app management features-->
-                               <!--
+
+                                <!-- MDM Server Feature -->
                                 <feature>
-                                    <id>org.wso2.store.feature.group</id>
+                                    <id>org.wso2.mdm.mdmmgt.server.feature.group</id>
+                                    <version>${mdm.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.social.feature.group</id>
                                     <version>${carbon.store.version}</version>
                                 </feature>
-                                -->
                                 <!-- Cipher tool feature -->
 
                                 <feature>

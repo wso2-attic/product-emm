@@ -37,6 +37,7 @@
 
     <modules>
         <module>modules/components/mdm-mgt</module>
+        <module>modules/components/app-mgt</module>
         <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/mdm</module>
@@ -46,7 +47,7 @@
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
         <module>modules/integration</module>
-        <module>modules/components/app-mgt</module>
+
 
     </modules>
 
@@ -956,6 +957,20 @@
 
             <!-- End of app management features-->
 
+            <!-- Carbon store -->
+
+            <dependency>
+                <groupId>org.wso2.carbon.store</groupId>
+                <artifactId>org.wso2.store.feature</artifactId>
+                <version>${carbon.store.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.store</groupId>
+                <artifactId>org.wso2.carbon.social.feature</artifactId>
+                <version>${carbon.store.version}</version>
+            </dependency>
+            <!--End of Carbon store -->
+
             <!-- Adding cipertool feature to the product -->
             <dependency>
                 <groupId>org.wso2.ciphertool</groupId>
@@ -1226,16 +1241,6 @@
                 <checksumPolicy>ignore</checksumPolicy>
             </releases>
         </pluginRepository>
-        <pluginRepository>
-            <id>wso2-staging</id>
-            <name>WSO2 staging Repository</name>
-            <url>ttp://maven.wso2.org/nexus/content/repositories/orgwso2carbonappmgt-129/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </pluginRepository>
     </pluginRepositories>
 
 
@@ -1277,16 +1282,16 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-        <!--<repository>-->
-            <!--<id>wso2-staging</id>-->
-            <!--<name>WSO2 internal Repository</name>-->
-            <!--<url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonapimgt-125/</url>-->
-            <!--<releases>-->
-                <!--<enabled>true</enabled>-->
-                <!--<updatePolicy>daily</updatePolicy>-->
-                <!--<checksumPolicy>ignore</checksumPolicy>-->
-            <!--</releases>-->
-        <!--</repository>-->
+        <repository>
+            <id>wso2-staging</id>
+            <name>WSO2 Staging Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonappmgt-129/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
     </repositories>
 
 </project>

@@ -6,6 +6,7 @@
         <artifactId>mdm-mgt</artifactId>
         <groupId>org.wso2.mdm</groupId>
         <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -88,7 +89,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Bundle-Version>${carbon.device.mgt.version}</Bundle-Version>
+                        <Bundle-Version>${mdm.version}</Bundle-Version>
                         <Bundle-Description>MDM Management Components Bundle</Bundle-Description>
                         <Export-Package>
                             org.wso2.mdm.mdmmgt.*

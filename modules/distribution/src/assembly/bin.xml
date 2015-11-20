@@ -161,11 +161,16 @@
                 <include>**/uuid/</include>
                 <include>**/i18n/</include>
                 <include>**/ws/</include>
+                <include>**/appmgtpublisher/</include>
+                <include>**/lifecycle/</include>
+                <include>**/utils/</include>
                 <include>**/caramel/</include>
                 <include>**/markdown/</include>
                 <include>**/handlebars/</include>
                 <include>**/event/</include>
-                <include>**/store/</include>
+                <include>**/claims/</include>
+                <include>**/permission/</include>
+                <include>**/registration/</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -370,6 +375,22 @@
                 <include>**/entitlement.properties</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/identity-providers</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers</outputDirectory>
+            <includes>
+                <include>**/default.xml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/service-providers</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/service-providers</outputDirectory>
+            <includes>
+                <include>**/default.xml</include>
+            </includes>
+        </fileSet>
+
+
     </fileSets>
 
 
