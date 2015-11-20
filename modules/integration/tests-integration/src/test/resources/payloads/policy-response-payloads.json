@@ -4,7 +4,7 @@
     "messageFromServer": "Policy has been added successfully."
   },
   "PUT": {
-    "statusCode": 0,
+    "statusCode": 201,
     "messageFromServer": "Policy has been updated successfully."
   },
   "DELETE": {

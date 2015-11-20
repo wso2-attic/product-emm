@@ -56,7 +56,7 @@ public class PolicyManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
 
     }
-/*
+
     @Test(description = "Test update policy.", dependsOnMethods = { "testViewPolicyList"})
     public void testUpdatePolicy() throws Exception {
 
@@ -68,8 +68,8 @@ public class PolicyManagement extends TestBase {
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_PUT).toString(), response.getBody());
     }
-*/
-    @Test(description = "Test remove policy.", dependsOnMethods = { "testViewPolicyList" })
+
+    @Test(description = "Test remove policy.", dependsOnMethods = { "testUpdatePolicy" })
     public void testRemovePolicy() throws Exception {
 
         MDMResponse response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
