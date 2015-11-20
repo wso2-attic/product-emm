@@ -431,14 +431,14 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
-        <file>
+        <!--<file>
             <source>
                 ../tools/mdm-android-agent-archetype/target/mdm-android-agent-archetype-${mdm.android.agent.archetype.version}.jar
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/tools
             </outputDirectory>
             <fileMode>755</fileMode>
-        </file>
+        </file>-->
         <file>
             <source>../tools/mdm-android-agent-archetype/README.txt</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/tools
