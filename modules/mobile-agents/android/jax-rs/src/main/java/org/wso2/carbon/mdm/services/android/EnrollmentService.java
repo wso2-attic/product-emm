@@ -50,6 +50,7 @@ public class EnrollmentService {
 		String msg;
 		try {
 			device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+			device.getEnrolmentInfo().setOwner(AndroidAPIUtils.getAuthenticatedUser());
 			boolean status = AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
 			if (status) {
 				Response.status(Response.Status.CREATED);

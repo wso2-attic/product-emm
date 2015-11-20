@@ -22,10 +22,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlBody;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlDocument;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.SyncmlHeader;
-import org.wso2.carbon.mdm.mobileservices.windows.operations.WindowsOperationException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,7 +42,7 @@ public class SyncmlGenerator {
 
     private static Log log = LogFactory.getLog(SyncmlGenerator.class);
 
-    public String generatePayload(SyncmlDocument syncmlDocument) throws WindowsOperationException {
+    public String generatePayload(SyncmlDocument syncmlDocument) throws SyncmlOperationException {
         Document doc = generateDocument();
         Element rootElement = createRootElement(doc);
         SyncmlHeader header = syncmlDocument.getHeader();
@@ -52,15 +52,15 @@ public class SyncmlGenerator {
         return transformDocument(doc);
     }
 
-    private static Document generateDocument() throws WindowsOperationException {
+    private static Document generateDocument() throws SyncmlOperationException {
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
         try {
             docBuilder = documentFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             String message = "Error while generating a new document of syncml";
-            log.error(message);
-            throw new WindowsOperationException(message);
+            log.error(message, e);
+            throw new SyncmlOperationException(message, e);
         }
         return docBuilder.newDocument();
     }
@@ -72,7 +72,7 @@ public class SyncmlGenerator {
         return rootElement;
     }
 
-    private String transformDocument(Document document) throws WindowsOperationException {
+    private String transformDocument(Document document) throws SyncmlOperationException {
         DOMSource domSource = new DOMSource(document);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
@@ -80,8 +80,8 @@ public class SyncmlGenerator {
             transformer = transformerFactory.newTransformer();
         } catch (TransformerConfigurationException e) {
             String message = "Error while retrieving a new transformer";
-            log.error(message);
-            throw new WindowsOperationException(message);
+            log.error(message, e);
+            throw new SyncmlOperationException(message, e);
         }
         transformer.setOutputProperty(OutputKeys.ENCODING, Constants.UTF_8);
         transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
@@ -92,8 +92,8 @@ public class SyncmlGenerator {
             transformer.transform(domSource, streamResult);
         } catch (TransformerException e) {
             String message = "Error while transforming document to a string";
-            log.error(message);
-            throw new WindowsOperationException(message);
+            log.error(message, e);
+            throw new SyncmlOperationException(message, e);
         }
         return stringWriter.toString();
     }

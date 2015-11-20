@@ -19,6 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
 import org.apache.commons.codec.binary.Base64;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -29,8 +30,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SyncmlCredentials {
 
-    public String generateCredData(String nextNonce) throws UnsupportedEncodingException,
-            NoSuchAlgorithmException {
+    public String generateCredData(String nextNonce) throws SyncmlMessageFormatException {
         MessageDigest digest;
         String usrPwdNonceHash;
         String nonce;
@@ -42,15 +42,14 @@ public class SyncmlCredentials {
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes(Constants.UTF_8)));
         } catch (UnsupportedEncodingException e) {
-            throw new UnsupportedEncodingException("Problem occurred in encoding credentials data.");
+            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.", e);
         } catch (NoSuchAlgorithmException e) {
-            throw new NoSuchAlgorithmException("Problem occurred in generating password hash.", e);
+            throw new SyncmlMessageFormatException("Problem occurred in generating password hash.", e);
         }
         return usrPwdNonceHash;
     }
 
-    public String generateRST(String username, String password) throws UnsupportedEncodingException,
-            NoSuchAlgorithmException {
+    public String generateRST(String username, String password) throws SyncmlMessageFormatException {
         MessageDigest digest;
         String usrPwdNonceHash;
         String nonce;
@@ -62,9 +61,9 @@ public class SyncmlCredentials {
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes(Constants.UTF_8)));
         } catch (UnsupportedEncodingException e) {
-            throw new UnsupportedEncodingException("Problem occurred in encoding credentials data.");
+            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.", e);
         } catch (NoSuchAlgorithmException e) {
-            throw new NoSuchAlgorithmException("Problem occurred in generating password hash.", e);
+            throw new SyncmlMessageFormatException("Problem occurred in generating password hash.", e);
         }
         return usrPwdNonceHash;
     }

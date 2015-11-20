@@ -156,7 +156,7 @@ public class Operation {
                     }
                     deviceIdentifiers.add(deviceIdentifier);
                 }
-                appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
+                appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
             return responseMsg;
         } catch (ApplicationManagementException e) {
@@ -189,7 +189,7 @@ public class Operation {
                     }
                     deviceIdentifiers.add(deviceIdentifier);
                 }
-                appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
+                appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
             return responseMsg;
         } catch (ApplicationManagementException e) {

@@ -35,7 +35,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDevic
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Profile;
-import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.util.SyncmlUtils;
 import org.wso2.carbon.policy.mgt.common.ProfileFeature;
 import org.wso2.carbon.policy.mgt.common.monitor.ComplianceFeature;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
@@ -67,7 +66,7 @@ public class OperationUtils {
             throws OperationManagementException, DeviceManagementException, NotificationManagementException,
             WindowsOperationException {
 
-        pendingDataOperations = SyncmlUtils.getDeviceManagementService()
+        pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED) || status.getData().equals
                 (Constants.SyncMLResponseCodes.ACCEPTED_FOR_PROCESSING)) {
@@ -84,15 +83,14 @@ public class OperationUtils {
                     operation.setStatus(Operation.Status.ERROR);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
                     try {
-                        NotificationManagementService service =
-                                WindowsAPIUtils.getNotificationManagementService();
+                        NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(
                                 Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
-                        service.addNotification(lockResetNotification);
+                        nmService.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
                         throw new WindowsOperationException("Failure occurred in getting notification service", e);
                     }
@@ -133,7 +131,7 @@ public class OperationUtils {
     public void lockOperationUpdate(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException, NotificationManagementException {
 
-        pendingDataOperations = SyncmlUtils.getDeviceManagementService()
+        pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
             for (Operation operation : pendingDataOperations) {
@@ -154,17 +152,17 @@ public class OperationUtils {
                     new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                     try {
-                        NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
+                        NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
 
-                        service.addNotification(lockResetNotification);
+                        nmService.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
                         String msg = "Failure occurred in getting notification service";
-                        log.error(msg);
+                        log.error(msg, e);
                         throw new NotificationManagementException(msg, e);
                     }
                 }
@@ -186,7 +184,7 @@ public class OperationUtils {
             throws OperationManagementException, DeviceManagementException {
 
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-            pendingDataOperations = SyncmlUtils.getDeviceManagementService()
+            pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                     .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
             for (Operation operation : pendingDataOperations) {
                 if (operation.getCode().equals(OperationCode.Command.DEVICE_RING) &&
@@ -213,7 +211,7 @@ public class OperationUtils {
             throws OperationManagementException, DeviceManagementException {
 
         if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
-            pendingDataOperations = SyncmlUtils.getDeviceManagementService()
+            pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                     .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
             for (Operation operation : pendingDataOperations) {
 
@@ -243,14 +241,13 @@ public class OperationUtils {
             PolicyComplianceException, NotificationManagementException, WindowsDeviceEnrolmentException,
             WindowsOperationException {
 
-
         List<? extends Operation> pendingOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
         UpdateUriOperations(syncmlDocument);
         generateComplianceFeatureStatus(syncmlDocument);
 
-        pendingOperations = SyncmlUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
+        pendingOperations = WindowsAPIUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
         return pendingOperations;
     }
 
@@ -304,7 +301,7 @@ public class OperationUtils {
             if (status.getCommand().equals(Constants.SEQUENCE)) {
                 if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
 
-                    pendingDataOperations = SyncmlUtils.getDeviceManagementService()
+                    pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                             .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
                     for (Operation operation : pendingDataOperations) {
                         if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE) &&
@@ -319,7 +316,7 @@ public class OperationUtils {
                     operationUtils.updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 } else {
-                    pendingDataOperations = SyncmlUtils.getDeviceManagementService()
+                    pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                             .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
                     for (Operation operation : pendingDataOperations) {
 
@@ -405,7 +402,7 @@ public class OperationUtils {
                         String pinValue = item.getData();
                         NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification notification = new Notification();
-                        notification.setDescription(pinValue);
+                        notification.setDescription("Auto generated DevicePin : " + pinValue);
                         notification.setOperationId(result.getCommandReference());
                         notification.setDeviceIdentifier(deviceIdentifier);
                         notification.setStatus(String.valueOf(Notification.Status.NEW));
@@ -413,9 +410,10 @@ public class OperationUtils {
                             nmService.addNotification(notification);
                         } catch (NotificationManagementException e) {
                             String msg = "Failure Occurred in getting notification service.";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         }
+                        break;
                     }
                 }
             }
@@ -490,7 +488,7 @@ public class OperationUtils {
                 WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, complianceFeatures);
             } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                 String msg = "Error occurred while getting effective policy.";
-                log.error(msg);
+                log.error(msg, e);
                 throw new FeatureManagementException(msg, e);
             } catch (JSONException e) {
                 String msg = "Error occurred while parsing json object.";
@@ -498,7 +496,7 @@ public class OperationUtils {
                 throw new WindowsDeviceEnrolmentException(msg, e);
             } catch (PolicyComplianceException e) {
                 String msg = "Error occurred while setting up policy compliance.";
-                log.error(msg);
+                log.error(msg, e);
                 throw new PolicyComplianceException(msg, e);
             }
         }
