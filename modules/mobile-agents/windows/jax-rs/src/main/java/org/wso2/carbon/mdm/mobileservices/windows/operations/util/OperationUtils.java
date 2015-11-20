@@ -83,9 +83,7 @@ public class OperationUtils {
                     operation.setStatus(Operation.Status.ERROR);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
                     try {
-                        NotificationManagementService service =
-                                org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.
-                                        getNotificationManagementService();
+                        NotificationManagementService service = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
