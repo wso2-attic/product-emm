@@ -165,7 +165,7 @@ public class OperationUtils {
                         service.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
                         String msg = "Failure occurred in getting notification service";
-                        log.error(msg);
+                        log.error(msg, e);
                         throw new NotificationManagementException(msg, e);
                     }
                 }
@@ -413,7 +413,7 @@ public class OperationUtils {
                             nmService.addNotification(notification);
                         } catch (NotificationManagementException e) {
                             String msg = "Failure Occurred in getting notification service.";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         }
                         break;
@@ -492,7 +492,7 @@ public class OperationUtils {
                 WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, complianceFeatures);
             } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
                 String msg = "Error occurred while getting effective policy.";
-                log.error(msg);
+                log.error(msg, e);
                 throw new FeatureManagementException(msg, e);
             } catch (JSONException e) {
                 String msg = "Error occurred while parsing json object.";
@@ -500,7 +500,7 @@ public class OperationUtils {
                 throw new WindowsDeviceEnrolmentException(msg, e);
             } catch (PolicyComplianceException e) {
                 String msg = "Error occurred while setting up policy compliance.";
-                log.error(msg);
+                log.error(msg, e);
                 throw new PolicyComplianceException(msg, e);
             }
         }

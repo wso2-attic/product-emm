@@ -145,9 +145,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                     log.error(msg, e);
                     throw new SyncmlMessageFormatException(msg, e);
                 }
-
                 SyncmlHeader syncmlHeader = syncmlDocument.getHeader();
-
                 sessionId = syncmlHeader.getSessionId();
                 user = syncmlHeader.getSource().getLocName();
                 DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlHeader.getSource()
@@ -211,26 +209,26 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
                             } catch (OperationManagementException e) {
                                 String msg = "Cannot access operation management service.";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (DeviceManagementException e) {
                                 String msg = "Cannot access Device management service.";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (FeatureManagementException e) {
                                 String msg = "Error occurred in getting effective features. ";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (PolicyComplianceException e) {
                                 String msg = "Error occurred in setting policy compliance.";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsConfigurationException(msg, e);
                             } catch (NotificationManagementException e) {
                                 String msg = "Error occurred in while getting notification service";
                                 throw new WindowsOperationException(msg, e);
                             } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred in while encoding hash value.";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             }
                         } else {
@@ -245,11 +243,11 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 }
                             } catch (DeviceManagementException e) {
                                 String msg = "Failure occurred in dis-enrollment flow.";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred in while generating hash value.";
-                                log.error(msg);
+                                log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             }
                         }
@@ -260,27 +258,27 @@ public class SyncmlServiceImpl implements SyncmlService {
                                     .build();
                         } catch (OperationManagementException e) {
                             String msg = "Cannot access operation management service.";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         } catch (DeviceManagementException e) {
                             String msg = "Cannot access Device management service.";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         } catch (FeatureManagementException e) {
                             String msg = "Error occurred in getting effective features. ";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsConfigurationException(msg, e);
                         } catch (PolicyComplianceException e) {
                             String msg = "Error occurred in setting policy compliance.";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsConfigurationException(msg, e);
                         } catch (NotificationManagementException e) {
                             String msg = "Error occurred in while getting notification service.";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         } catch (SyncmlOperationException e) {
                             String msg = "Error occurred in while getting effective feature.";
-                            log.error(msg);
+                            log.error(msg, e);
                             throw new WindowsConfigurationException(msg, e);
                         }
                     }
@@ -292,7 +290,7 @@ public class SyncmlServiceImpl implements SyncmlService {
             }
         } catch (SyncmlMessageFormatException e) {
             String msg = "Error occurred in parsing syncml request.";
-            log.error(msg);
+            log.error(msg, e);
             throw new WindowsOperationException(msg, e);
         }
         return null;

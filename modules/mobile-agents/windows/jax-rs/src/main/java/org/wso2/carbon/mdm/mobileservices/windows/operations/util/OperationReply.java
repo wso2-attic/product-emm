@@ -554,7 +554,7 @@ public class OperationReply {
                         cameraItem = appendReplaceInfo(policy);
                         cameraItems.add(cameraItem);
                     } catch (JSONException e) {
-                        throw new SyncmlOperationException("Error occurred while parsing payload object to json.");
+                        throw new SyncmlOperationException("Error occurred while parsing payload object to json.", e);
                     }
                     replaceCameraConfig.setCommandId(operation.getId());
                     replaceCameraConfig.setItems(cameraItems);
