@@ -550,18 +550,22 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					                     licenseAgreement);
 					showAgreement(licenseAgreement, Constants.EULA_TITLE);
 				} else {
+					CommonUtils.clearClientCredentials(context);
 					showErrorMessage(
 							getResources().getString(R.string.error_enrollment_failed_detail),
 							getResources().getString(R.string.error_enrollment_failed));
 				}
 
 			} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
+				CommonUtils.clearClientCredentials(context);
 				showInternalServerErrorMessage();
 			} else {
+				CommonUtils.clearClientCredentials(context);
 				showEnrollementFailedErrorMessage();
 			}
 
 		} else {
+			CommonUtils.clearClientCredentials(context);
 			showEnrollementFailedErrorMessage();
 		}
 	}
@@ -635,6 +639,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
+				CommonUtils.clearClientCredentials(context);
 				cancelEntry();
 			}
 		});
