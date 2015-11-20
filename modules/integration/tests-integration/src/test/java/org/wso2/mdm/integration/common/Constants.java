@@ -24,8 +24,9 @@ import java.io.File;
  */
 public final class Constants {
 
-	public static final int SUCCESS_CODE = 200;
     public static final String DEVICE_ID = "1234";
+    public static final String NUMBER_NOT_EQUAL_TO_DEVICE_ID = "1111";
+    public static final String DEVICE_IMEI ="123123123";
     public static final String AUTOMATION_CONTEXT = "MDM";
     public static final String APPLICATION_JSON = "application/json";
     public static final String APPLICATION_URL_ENCODED = "application/x-www-form-urlencoded";
@@ -42,7 +43,8 @@ public final class Constants {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String APPLICATION_SOAP_XML = "application/soap+xml; charset=utf-8";
     public static final String UTF8 = "UTF-8";
-
+    public static final String ZERO = "0";
+    public static final String NULL = "[]";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
@@ -172,6 +174,27 @@ public final class Constants {
         public static final String PAYLOAD_FILE_NAME = "android-configuration-payloads.json";
         public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
     }
+
+    public static final class OperationManagement {
+        private OperationManagement(){ throw new AssertionError();}
+        public static final String PATH_APPS = "/apps";
+
+        public static final String OPERATION_MANAGEMENT_GROUP = "api-policy-mgt";
+        public static final String GET_DEVICE_APPS_ENDPOINT = "/mdm-admin/operations/android/";
+        public static final String GET_DEVICE_OPERATIONS_ENDPOINT = "/mdm-admin/operations/android/";
+    }
+
+    public static final class MobileDeviceManagement {
+        private MobileDeviceManagement(){ throw new AssertionError();}
+        public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
+        public static final String GET_DEVICE_COUNT_ENDPOINT ="/mdm-admin/devices/count";
+        public static final String NO_OF_DEVICES = "1";
+        public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
+        public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
+        public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
+                                                        "mobile-device-mgt-view-device-types-response-payloads.json";
+    }
+
 
     public static final class UserManagement {
         private UserManagement() { throw new AssertionError(); }
