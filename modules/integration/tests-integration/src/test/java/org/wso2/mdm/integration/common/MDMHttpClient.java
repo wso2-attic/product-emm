@@ -25,6 +25,8 @@ import org.apache.commons.httpclient.methods.*;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 
@@ -34,12 +36,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * This class creates a customised Http Client Class
+ */
 public class MDMHttpClient {
 
     private String backEndUrl;
     private String authrizationString;
     private Map<String, String> requestHeaders = new HashMap<String, String>();
     private static final String AUTHORIZATION = "Authorization";
+
+    private static Log log = LogFactory.getLog(MDMHttpClient.class);
 
     public MDMHttpClient(String backEndUrl, String contentType, String authorization) {
 
@@ -85,7 +92,8 @@ public class MDMHttpClient {
 
             PostMethod method = new PostMethod(url);
             method.setRequestHeader(AUTHORIZATION, authrizationString);
-            StringRequestEntity requestEntity = new StringRequestEntity(body, requestHeaders.get(Constants.CONTENT_TYPE), "UTF-8");
+            StringRequestEntity requestEntity = new StringRequestEntity(body,
+                                                        requestHeaders.get(Constants.CONTENT_TYPE), Constants.UTF8);
 
             method.setRequestEntity(requestEntity);
 
@@ -96,9 +104,9 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            log.error("Failure occurred at MDMResponse post for GeneralSecurityException",e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failure occured at MDMResponse post for IOException",e);
         }
 
         return null;
@@ -107,7 +115,6 @@ public class MDMHttpClient {
     public MDMResponse put(String endpoint, String body) {
 
         HttpClient client = new HttpClient();
-
         try {
             ProtocolSocketFactory socketFactory = new EasySSLProtocolSocketFactory();
 
@@ -118,7 +125,8 @@ public class MDMHttpClient {
 
             PutMethod method = new PutMethod(url);
             method.setRequestHeader(AUTHORIZATION, authrizationString);
-            StringRequestEntity requestEntity = new StringRequestEntity(body, requestHeaders.get(Constants.CONTENT_TYPE), "UTF-8");
+            StringRequestEntity requestEntity = new StringRequestEntity(
+                                                    body, requestHeaders.get(Constants.CONTENT_TYPE), Constants.UTF8);
 
             method.setRequestEntity(requestEntity);
 
@@ -129,9 +137,9 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            log.error("Failure occurred at MDMResponse put for GeneralSecurityException",e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failure occurred at MDMResponse put for IO Exception",e);
         }
 
         return null;
@@ -161,9 +169,9 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            log.error("Failure occurred at MDMResponse get for GeneralSecurityException", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failure occurred at MDMResponse get for IOException", e);
         }
 
         return null;
@@ -183,7 +191,6 @@ public class MDMHttpClient {
 
             DeleteMethod method = new DeleteMethod(url);
             method.setRequestHeader(AUTHORIZATION, authrizationString);
-            method.setRequestHeader(AUTHORIZATION, authrizationString);
             method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                     new DefaultHttpMethodRetryHandler(3, false));
 
@@ -194,9 +201,9 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            log.error("Failure occurred at MDMResponse delete for GeneralSecurityException", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failure occurred at MDMResponse delete for IOException", e);
         }
 
         return null;

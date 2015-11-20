@@ -28,8 +28,6 @@ import org.wso2.mdm.integration.common.*;
 /**
  * This class contains integration tests for API Device management backend services.
  */
-
-
 public class MobileDeviceManagement extends TestBase {
     private MDMHttpClient client;
 
@@ -41,7 +39,7 @@ public class MobileDeviceManagement extends TestBase {
     }
 
     @Test(description = "Add an Android device.")
-    public void testEnrollment() throws Exception {
+    public void addEnrollment() throws Exception {
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST);
@@ -53,24 +51,26 @@ public class MobileDeviceManagement extends TestBase {
                 Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
     }
 
-    @Test(dependsOnMethods = {"testEnrollment"}, description = "Test count devices")
+    @Test(dependsOnMethods = {"addEnrollment"}, description = "Test count devices")
     public void testCountDevices() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_DEVICE_COUNT_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertTrue(response.getBody().toString().equals(Constants.MobileDeviceManagement.NO_OF_DEVICES));
 
     }
-
-    @Test(dependsOnMethods = {"testCountDevices"}, description = "Test view devices")
+    @Test(dependsOnMethods = {"addEnrollment"}, description = "Test view devices")
     public void testViewDevices() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-    }
+   }
 
-    @Test(dependsOnMethods = {"testViewDevices"}, description = "Test view device types")
+    @Test(dependsOnMethods = {"addEnrollment"}, description = "Test view device types")
     public void testViewDeviceTypes() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.VIEW_DEVICE_TYPES_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(PayloadGenerator.getJsonPayloadToString
+                (Constants.MobileDeviceManagement.VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME),response.getBody());
+        //Response has two device types, because in windows enrollment a windows device is previously enrolled.
     }
 
 }

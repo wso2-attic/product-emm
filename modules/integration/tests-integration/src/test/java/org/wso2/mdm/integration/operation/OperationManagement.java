@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.mdm.integration.operation;
 
 import com.google.gson.JsonArray;
@@ -42,7 +43,6 @@ public class OperationManagement extends TestBase {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
         this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
-
         this.rclient = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
@@ -57,7 +57,6 @@ public class OperationManagement extends TestBase {
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
-
     }
 
     @Test(dependsOnMethods = {"testEnrollment"}, description = "Test Android install apps operation.")
@@ -74,10 +73,10 @@ public class OperationManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
-
     @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get device apps with wrong Device ID")
     public void testGetDeviceAppsWithWrongDeviceID() throws Exception{
-        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT+Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID+Constants.OperationManagement.PATH_APPS);
+        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT+
+                Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID+Constants.OperationManagement.PATH_APPS);
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 
     }
@@ -86,7 +85,5 @@ public class OperationManagement extends TestBase {
     public void testGetDeviceOperationsWithWrongDeviceID() throws Exception{
         MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT+Constants.DEVICE_IMEI);
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
-
     }
-
 }

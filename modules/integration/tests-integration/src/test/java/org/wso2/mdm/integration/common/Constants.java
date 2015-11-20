@@ -43,7 +43,8 @@ public final class Constants {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String APPLICATION_SOAP_XML = "application/soap+xml; charset=utf-8";
     public static final String UTF8 = "UTF-8";
-
+    public static final String ZERO = "0";
+    public static final String NULL = "[]";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
@@ -190,6 +191,8 @@ public final class Constants {
         public static final String NO_OF_DEVICES = "1";
         public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
+        public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
+                                                        "mobile-device-mgt-view-device-types-response-payloads.json";
     }
 
 }
