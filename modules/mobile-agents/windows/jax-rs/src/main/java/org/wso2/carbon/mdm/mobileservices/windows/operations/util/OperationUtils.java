@@ -113,7 +113,7 @@ public class OperationUtils {
             throws OperationManagementException {
 
         for (Operation operation : operations) {
-            org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.updateOperation(deviceId, operation);
+            WindowsAPIUtils.updateOperation(deviceId, operation);
             if (log.isDebugEnabled()) {
                 log.debug("Updating operation '" + operation.toString() + "'");
             }
