@@ -117,6 +117,7 @@ function getSelectedPolicies() {
 $(document).ready(function () {
     sortElements();
     $("#loading-content").remove();
+    $("#policy-listing-status-msg").removeClass("hidden");
     // Click functions related to Policy Listing
     var isUpdated = $('#is-updated').val();
     if(!isUpdated) {
@@ -296,13 +297,21 @@ $(document).ready(function () {
                 deletePolicyAPI,
                 policyList,
                 // on success
-                function () {
-                    $(modalPopupContent).html($('#remove-policy-success-content').html());
-                    $("a#remove-policy-success-link").click(function () {
-                        var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
-                        thisTable.api().rows('.DTTT_selected').remove().draw(false);
-                        hidePopup();
-                    });
+                function (data) {
+                    data = JSON.parse(data);
+                    if(data.errorMessage != null && data.errorMessage != undefined) {
+                        $(modalPopupContent).html($('#remove-policy-error-devices').html());
+                        $("a#remove-policy-error-devices").click(function () {
+                            hidePopup();
+                        });
+                    } else {
+                        $(modalPopupContent).html($('#remove-policy-success-content').html());
+                        $("a#remove-policy-success-link").click(function () {
+                            var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
+                            thisTable.api().rows('.DTTT_selected').remove().draw(false);
+                            hidePopup();
+                        });
+                    }
                 },
                 // on error
                 function () {

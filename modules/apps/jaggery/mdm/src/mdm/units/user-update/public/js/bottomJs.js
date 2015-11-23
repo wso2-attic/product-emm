@@ -22,7 +22,7 @@ function emailIsValid(email) {
 
 $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
-        tags : true
+        tags : false
     });
     var roleList = $("#roles").attr("selectedVals").trim().replace(/ /g,"");
     roleList = roleList.replace(/(\r\n|\n|\r)/gm,"");

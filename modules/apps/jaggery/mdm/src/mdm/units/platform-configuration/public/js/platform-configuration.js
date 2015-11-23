@@ -128,8 +128,10 @@ $(document).ready(function () {
                             $("#android-config-notifier").val(config.value);
                             if (config.value != notifierTypeConstants["GCM"]) {
                                 $("#gcm-inputs").hide();
+                                $("#local-inputs").show();
                             } else {
                                 $("#gcm-inputs").show();
+                                $("#local-inputs").hide();
                             }
                         } else if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
                             $("input#android-config-notifier-frequency").val(config.value);
@@ -272,10 +274,10 @@ $(document).ready(function () {
 
         var errorMsgWrapper = "#android-config-error-msg";
         var errorMsg = "#android-config-error-msg span";
-        if (!notifierFrequency) {
+        if (notifierType == notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!$.isNumeric(notifierFrequency)) {
+        } else if (notifierType == notifierTypeConstants["LOCAL"] && !$.isNumeric(notifierFrequency)) {
             $(errorMsg).text("Provided notifier frequency is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (notifierType == notifierTypeConstants["GCM"] && !gcmAPIKey) {

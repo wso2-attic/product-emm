@@ -29,6 +29,13 @@ var platformTypeConstants = {
     "WINDOWS": "windows"
 };
 
+// Constants to define platform types ids.
+var platformTypeIds = {
+    "ANDROID": 1,
+    "IOS": 3,
+    "WINDOWS": 2
+};
+
 // Constants to define Android Operation Constants
 var androidOperationConstants = {
     "PASSCODE_POLICY_OPERATION": "passcode-policy",
@@ -1731,6 +1738,9 @@ var savePolicy = function (policy, state) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
+        if(policy["platformId"] == platformTypeIds["WINDOWS"] && key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
+            policy["profile"][key].enablePassword = true;
+        }
         if (policy["profile"].hasOwnProperty(key)) {
             profilePayloads.push({
                 "featureCode": key,
@@ -1928,7 +1938,7 @@ function formatRepoSelection (user) {
 $(document).ready(function () {
     $("#users-input").select2({
         multiple:true,
-        tags: true,
+        tags: false,
         ajax: {
             url: window.location.origin + "/mdm/api/invoker/execute/",
             method: "POST",
@@ -1968,7 +1978,7 @@ $(document).ready(function () {
     $("#policy-platform-wizard-steps").html($(".wr-steps").html());
 
     $("select.select2[multiple=multiple]").select2({
-        "tags": true
+        "tags": false
     });
 
     $("#users-select-field").hide();
@@ -1987,7 +1997,7 @@ $(document).ready(function () {
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
     $("#user-roles-input").select2({
-        "tags": true
+        "tags": false
     }).on("select2:select", function (e) {
             if (e.params.data.id == "ANY") {
                 $(this).val("ANY").trigger("change");

@@ -26,23 +26,24 @@ import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
 import org.wso2.emm.integration.ui.pages.home.MDMHomePage;
 import org.wso2.emm.integration.ui.pages.login.MDMLoginPage;
+import org.wso2.emm.ui.integration.test.Constants;
 
 public class MDMLoginTestCase extends EMMIntegrationUiBaseTestCase {
 
     private WebDriver driver;
 
-    @BeforeClass(alwaysRun = true)
+    @BeforeClass(alwaysRun = true, groups = { Constants.LOGIN_GROUP })
     public void setUp() throws Exception {
         super.init();
         driver = BrowserManager.getWebDriver();
-        driver.get(getWebAppURL()+"/mdm/login");
+        driver.get(getWebAppURL() + Constants.MDM_LOGIN_PATH);
     }
 
-    @Test(groups = "wso2.emm", description = "verify login to emm console")
+    @Test(groups = { Constants.LOGIN_GROUP }, description = "verify login to emm console")
     public void testLogin() throws Exception {
         MDMLoginPage test = new MDMLoginPage(driver);
         MDMHomePage home = test.loginAs(automationContext.getSuperTenant().getTenantAdmin().getUserName(),
-                                     automationContext.getSuperTenant().getTenantAdmin().getPassword());
+                                        automationContext.getSuperTenant().getTenantAdmin().getPassword());
         driver.close();
     }
 

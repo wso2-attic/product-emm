@@ -2013,7 +2013,7 @@ $(document).ready(function () {
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
     $("#user-roles-input").select2({
-        "tags": true
+        "tags": false
     }).on("select2:select", function (e) {
         if (e.params.data.id == "ANY") {
             $(this).val("ANY").trigger("change");
@@ -2024,7 +2024,7 @@ $(document).ready(function () {
     $("#policy-profile-wizard-steps").html($(".wr-steps").html());
 
     $("select.select2[multiple=multiple]").select2({
-        "tags": true
+        "tags": false
     });
 
     // Maintains an array of configured features of the profile

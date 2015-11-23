@@ -37,17 +37,21 @@ $(document).ready(function () {
 
     $("#users").select2({
         multiple:true,
-        tags: true,
+        tags: false,
         ajax: {
-            url: "/mdm-admin/users",
+            url: window.location.origin + "/mdm/api/invoker/execute/",
+            method: "POST",
             dataType: 'json',
             delay: 250,
-            id: function(user){ return user.username; },
+            id: function (user) {
+                return user.username;
+            },
             data: function (params) {
-                return {
-                    q: params.term, // search term
-                    page: params.page
-                };
+                var postData = {};
+                postData.actionMethod = "GET";
+                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
+                postData.actionPayload = null;
+                return JSON.stringify(postData);
             },
             processResults: function (data, page) {
                 var newData = [];

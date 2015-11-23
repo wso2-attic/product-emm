@@ -100,10 +100,10 @@ public class MDMAPIUtils {
         RealmService realmService;
         UserRealm realm;
         try {
-            PrivilegedCarbonContext.startTenantFlow();
+            //PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-            ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            //ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            //ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
 
             if (realmService == null) {
@@ -118,7 +118,7 @@ public class MDMAPIUtils {
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         } finally {
-            PrivilegedCarbonContext.endTenantFlow();
+            //PrivilegedCarbonContext.endTenantFlow();
         }
         return realm;
     }

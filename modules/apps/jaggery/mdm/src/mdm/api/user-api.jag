@@ -27,6 +27,7 @@ var mdmProps = require('/config/mdm-props.js').config();
 var userModule = require("/modules/user.js").userModule;
 var deviceModule = require("/modules/device.js").deviceModule;
 var utility = require("/modules/utility.js").utility;
+var util = require("/modules/util.js").util;
 var apiWrapperUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
 
 var result;
@@ -34,6 +35,8 @@ var result;
 if (uriMatcher.match("/{context}/api/user/login/")) {
     username = request.getParameter("username");
     password = request.getParameter("password");
+    username = util.decode(username);
+    password = util.decode(password);
     try {
         userModule.login(username, password, function (user) {
             if (log.isDebugEnabled()) {

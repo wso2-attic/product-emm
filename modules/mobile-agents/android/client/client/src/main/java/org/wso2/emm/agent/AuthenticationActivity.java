@@ -486,7 +486,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 										                     Constants.NOTIFIER_LOCAL);
 									}
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
-										equals(context.getString(R.string.shared_pref_frequency))){
+										equals(context.getString(R.string.shared_pref_frequency)) && !param.getString(
+										context.getString(R.string.shared_pref_config_value)).trim().isEmpty()){
 										Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
 										                  Integer.valueOf(param.getString(context.getString(R.string.shared_pref_config_value)).trim()));
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
@@ -549,18 +550,22 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					                     licenseAgreement);
 					showAgreement(licenseAgreement, Constants.EULA_TITLE);
 				} else {
+					CommonUtils.clearClientCredentials(context);
 					showErrorMessage(
 							getResources().getString(R.string.error_enrollment_failed_detail),
 							getResources().getString(R.string.error_enrollment_failed));
 				}
 
 			} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
+				CommonUtils.clearClientCredentials(context);
 				showInternalServerErrorMessage();
 			} else {
+				CommonUtils.clearClientCredentials(context);
 				showEnrollementFailedErrorMessage();
 			}
 
 		} else {
+			CommonUtils.clearClientCredentials(context);
 			showEnrollementFailedErrorMessage();
 		}
 	}
@@ -634,6 +639,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
+				CommonUtils.clearClientCredentials(context);
 				cancelEntry();
 			}
 		});

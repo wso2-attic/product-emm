@@ -28,24 +28,24 @@ import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 
 import java.io.IOException;
 
-public class MDMHomePage{
+public class MDMHomePage {
 
-private static final Log log = LogFactory.getLog(MDMHomePage.class);
-private WebDriver driver;
-private UIElementMapper uiElementMapper;
+    private static final Log log = LogFactory.getLog(MDMHomePage.class);
+    private WebDriver driver;
+    private UIElementMapper uiElementMapper;
 
-        public MDMHomePage(WebDriver driver) throws IOException {
-            this.driver = driver;
-            this.uiElementMapper = UIElementMapper.getInstance();
-            // Check that we're on the right page.
-            if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.dashboard.device.div.xpath"))).getText()
-                       .contains("DEVICES")) {
-                throw new IllegalStateException("This is not the home page");
-            }
+    public MDMHomePage(WebDriver driver) throws IOException {
+        this.driver = driver;
+        this.uiElementMapper = UIElementMapper.getInstance();
+        // Check that we're on the right page.
+        if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.dashboard.device.div.xpath"))).getText()
+                   .contains("DEVICES")) {
+            throw new IllegalStateException("This is not the home page");
         }
+    }
 
-//        public MDMLoginPage logout() throws IOException {
-//            driver.findElement(By.xpath("/html/body/div[3]/header/div/div[2]/div/div/div[3]/a")).click();
-//            return new MDMLoginPage(driver);
-//        }
+    //        public MDMLoginPage logout() throws IOException {
+    //            driver.findElement(By.xpath("/html/body/div[3]/header/div/div[2]/div/div/div[3]/a")).click();
+    //            return new MDMLoginPage(driver);
+    //        }
 }
