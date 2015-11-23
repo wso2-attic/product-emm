@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.api;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -35,13 +36,27 @@ import org.wso2.carbon.mdm.util.Constants;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
-import org.apache.commons.codec.binary.Base64;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.TreeSet;
 
 /**
  * This class represents the JAX-RS services of User related functionality.
@@ -49,6 +64,7 @@ import java.util.*;
 public class User {
 
     private static Log log = LogFactory.getLog(User.class);
+    private String ROLE_EVERYONE = "Internal/everyone";
 
     /**
      * Method to add user to emm-user-store.
@@ -58,8 +74,8 @@ public class User {
      * @throws MDMAPIException
      */
     @POST
-    @Consumes ({MediaType.APPLICATION_JSON})
-    @Produces ({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response addUser(UserWrapper userWrapper) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
@@ -68,20 +84,22 @@ public class User {
                 // if user already exists
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
-                            " already exists. Therefore, request made to add user was refused.");
+                              " already exists. Therefore, request made to add user was refused.");
                 }
                 // returning response with bad request state
                 responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
-                responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                        " already exists. Therefore, request made to add user was refused.");
+                responsePayload.
+                        setMessageFromServer("User by username: " + userWrapper.getUsername() +
+                                             " already exists. Therefore, request made to add user was refused.");
                 return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
             } else {
                 String initialUserPassword = generateInitialUserPassword();
-                Map<String, String> defaultUserClaims = buildDefaultUserClaims(userWrapper.getFirstname(),
-                        userWrapper.getLastname(), userWrapper.getEmailAddress());
+                Map<String, String> defaultUserClaims =
+                        buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
+                                               userWrapper.getEmailAddress());
                 // calling addUser method of carbon user api
                 userStoreManager.addUser(userWrapper.getUsername(), initialUserPassword,
-                        userWrapper.getRoles(), defaultUserClaims, null);
+                                         userWrapper.getRoles(), defaultUserClaims, null);
                 // invite newly added user to enroll device
                 inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername());
                 // Outputting debug message upon successful addition of user
@@ -91,7 +109,7 @@ public class User {
                 // returning response with success state
                 responsePayload.setStatusCode(HttpStatus.SC_CREATED);
                 responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                        " was successfully added.");
+                                                     " was successfully added.");
                 return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
@@ -113,9 +131,9 @@ public class User {
      * @throws MDMAPIException
      */
     @GET
-    @Path ("view")
-    @Produces ({MediaType.APPLICATION_JSON})
-    public Response getUser(@QueryParam ("username") String username) throws MDMAPIException {
+    @Path("view")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUser(@QueryParam("username") String username) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
         try {
@@ -159,9 +177,9 @@ public class User {
      * @throws MDMAPIException
      */
     @PUT
-    @Consumes ({MediaType.APPLICATION_JSON})
-    @Produces ({MediaType.APPLICATION_JSON})
-    public Response updateUser(UserWrapper userWrapper, @QueryParam ("username") String username)
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response updateUser(UserWrapper userWrapper, @QueryParam("username") String username)
             throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
@@ -169,13 +187,14 @@ public class User {
             if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
                 Map<String, String> defaultUserClaims =
                         buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
-                                userWrapper.getEmailAddress());
+                                               userWrapper.getEmailAddress());
                 if (StringUtils.isNotEmpty(userWrapper.getPassword())) {
                     //TODO: return correct error codes Eg:- password policy not complied
                     //TODO: use the base64 string directly
                     // Decoding Base64 encoded password
                     byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
-                    userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(), new String(decodedBytes, "UTF-8"));
+                    userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(),
+                                                             new String(decodedBytes, "UTF-8"));
                     log.debug("User credential of username: " + userWrapper.getUsername() + " has been changed");
                 }
                 final String[] existingRoles = userStoreManager.getRoleListOfUser(userWrapper.getUsername());
@@ -194,6 +213,9 @@ public class User {
                 existingRolesSet.removeAll(newRolesSet);
                 // Now we have the roles to delete
                 String[] rolesToDelete = existingRolesSet.toArray(new String[existingRolesSet.size()]);
+                List<String> roles = new ArrayList<String>(Arrays.asList(rolesToDelete));
+                roles.remove(ROLE_EVERYONE);
+                rolesToDelete = roles.toArray(new String[0]);
 
                 // Clearing and re-initializing the set
                 existingRolesSet.clear();
@@ -202,6 +224,7 @@ public class User {
                 newRolesSet.removeAll(existingRolesSet);
                 // Now we have the roles to add
                 String[] rolesToAdd = newRolesSet.toArray(new String[newRolesSet.size()]);
+
 
                 userStoreManager.updateRoleListOfUser(userWrapper.getUsername(), rolesToDelete, rolesToAdd);
 
@@ -215,17 +238,18 @@ public class User {
                 // returning response with success state
                 responsePayload.setStatusCode(HttpStatus.SC_CREATED);
                 responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                        " was successfully updated.");
+                                                     " was successfully updated.");
                 return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
-                            " doesn't exists. Therefore, request made to update user was refused.");
+                              " doesn't exists. Therefore, request made to update user was refused.");
                 }
                 // returning response with bad request state
                 responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
-                responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                        " doesn't  exists. Therefore, request made to update user was refused.");
+                responsePayload.
+                        setMessageFromServer("User by username: " + userWrapper.getUsername() +
+                                             " doesn't  exists. Therefore, request made to update user was refused.");
                 return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
@@ -296,8 +320,8 @@ public class User {
      * @throws MDMAPIException
      */
     @DELETE
-    @Produces ({MediaType.APPLICATION_JSON})
-    public Response removeUser(@QueryParam ("username") String username) throws MDMAPIException {
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response removeUser(@QueryParam("username") String username) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
         try {
@@ -339,9 +363,9 @@ public class User {
      * @throws MDMAPIException
      */
     @GET
-    @Path ("roles")
-    @Produces ({MediaType.APPLICATION_JSON})
-    public Response getRoles(@QueryParam ("username") String username) throws MDMAPIException {
+    @Path("roles")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRoles(@QueryParam("username") String username) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
         try {
@@ -385,7 +409,7 @@ public class User {
      * @throws MDMAPIException
      */
     @GET
-    @Produces ({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getAllUsers() throws MDMAPIException {
         if (log.isDebugEnabled()) {
             log.debug("Getting the list of users with all user-related information");
@@ -411,7 +435,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                "Obtained user count: " + userList.size());
+                                             "Obtained user count: " + userList.size());
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -423,8 +447,8 @@ public class User {
      * @throws MDMAPIException
      */
     @GET
-    @Path ("view-users")
-    public Response getAllUsersByUsername(@QueryParam ("username") String userName) throws MDMAPIException {
+    @Path("view-users")
+    public Response getAllUsersByUsername(@QueryParam("username") String userName) throws MDMAPIException {
         if (log.isDebugEnabled()) {
             log.debug("Getting the list of users by name");
         }
@@ -449,7 +473,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
-                "Obtained user count: " + userList.size());
+                                             "Obtained user count: " + userList.size());
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -474,7 +498,8 @@ public class User {
      * @throws MDMAPIException, UserStoreException, DeviceManagementException
      */
     private void inviteNewlyAddedUserToEnrollDevice(String username) throws
-            MDMAPIException, UserStoreException, DeviceManagementException {
+                                                                     MDMAPIException, UserStoreException,
+                                                                     DeviceManagementException {
         if (log.isDebugEnabled()) {
             log.debug("Sending invitation mail to user by username: " + username);
         }
@@ -498,8 +523,8 @@ public class User {
      * @throws MDMAPIException
      */
     @POST
-    @Path ("email-invitation")
-    @Produces ({MediaType.APPLICATION_JSON})
+    @Path("email-invitation")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response inviteExistingUsersToEnrollDevice(List<String> usernames) throws MDMAPIException {
         if (log.isDebugEnabled()) {
             log.debug("Sending enrollment invitation mail to existing user.");
@@ -543,9 +568,9 @@ public class User {
      * @throws MDMAPIException
      */
     @GET
-    @Produces ({MediaType.APPLICATION_JSON})
-    @Path ("devices")
-    public List<Device> getAllDeviceOfUser(@QueryParam ("username") String username)
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("devices")
+    public List<Device> getAllDeviceOfUser(@QueryParam("username") String username)
             throws MDMAPIException {
         DeviceManagementProviderService dmService;
         try {
@@ -565,7 +590,7 @@ public class User {
      * @throws MDMAPIException
      */
     @GET
-    @Path ("count")
+    @Path("count")
     public int getUserCount() throws MDMAPIException {
         try {
             String[] users = MDMAPIUtils.getUserStoreManager().listUsers("*", -1);
@@ -590,9 +615,9 @@ public class User {
      * @throws MDMAPIException
      */
     @PUT
-    @Path ("{roleName}/users")
-    @Produces ({MediaType.APPLICATION_JSON})
-    public Response updateRoles(@PathParam ("username") String username, List<String> userList)
+    @Path("{roleName}/users")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response updateRoles(@PathParam("username") String username, List<String> userList)
             throws MDMAPIException {
         final UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         try {
@@ -601,7 +626,7 @@ public class User {
             }
             SetReferenceTransformer transformer = new SetReferenceTransformer();
             transformer.transform(Arrays.asList(userStoreManager.getRoleListOfUser(username)),
-                    userList);
+                                  userList);
             final String[] rolesToAdd = (String[])
                     transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
             final String[] rolesToDelete = (String[])
@@ -624,9 +649,9 @@ public class User {
      * @throws MDMAPIException
      */
     @POST
-    @Path ("reset-password")
-    @Consumes ({MediaType.APPLICATION_JSON})
-    @Produces ({MediaType.APPLICATION_JSON})
+    @Path("reset-password")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response resetPassword(UserCredentialWrapper credentials) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
@@ -637,7 +662,7 @@ public class User {
                     decodedNewPassword, "UTF-8"), new String(decodedOldPassword, "UTF-8"));
             responsePayload.setStatusCode(HttpStatus.SC_CREATED);
             responsePayload.setMessageFromServer("User password by username: " + credentials.getUsername() +
-                    " was successfully changed.");
+                                                 " was successfully changed.");
             return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
         } catch (UserStoreException e) {
             String errorMsg = "Exception in trying to change the password by username: " + credentials.getUsername();
