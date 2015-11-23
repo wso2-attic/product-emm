@@ -1776,8 +1776,8 @@ var savePolicy = function (policy, state) {
             $(".policy-naming").addClass("hidden");
             $(".policy-message").removeClass("hidden");
         },
-        function () {
-
+        function (data) {
+            console.log(data);
         }
     );
 };

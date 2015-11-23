@@ -98,7 +98,7 @@ $(document).ready(function () {
         invokerUtil.put(
             updateRolePermissionAPI,
             updateRolePermissionData,
-            function (data, status, jqXHR) {
+            function (jqXHR) {
                 if (jqXHR.status == 200) {
                     // Refreshing with success message
                     $("#role-create-form").addClass("hidden");

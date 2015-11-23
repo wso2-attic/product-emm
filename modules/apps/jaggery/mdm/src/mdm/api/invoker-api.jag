@@ -43,49 +43,52 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
             case constants.HTTP_GET:
                 var responseData = serviceInvokers.XMLHttp.get(
                         targetURL, function (responsePayload) {
-                            return responsePayload;
+                            response.status = 200;
+                            response.content =  responsePayload;
                         },
                         function (responsePayload) {
-                            return responsePayload;
+                            response.status = responsePayload.status;
+                            response.content =  responsePayload.responseText;
                         });
-                result = responseData;
                 break;
             case constants.HTTP_POST:
                 var responseData = serviceInvokers.XMLHttp.post(
                         targetURL, payload, function (responsePayload) {
-                            return responsePayload;
+                            response.status = 200;
+                            response.content =  responsePayload;
                         },
                         function (responsePayload) {
-                            return responsePayload;
+                            response.status = responsePayload.status;
+                            response.content =  responsePayload.responseText;
                         });
-                result = responseData;
                 break;
             case constants.HTTP_PUT:
                 var responseData = serviceInvokers.XMLHttp.put(
                         targetURL, payload, function (responsePayload) {
-                            return responsePayload;
+                            response.status = 200;
+                            response.content =  responsePayload;
                         },
                         function (responsePayload) {
-                            return responsePayload;
+                            response.status = responsePayload.status;
+                            response.content =  responsePayload.responseText;
                         });
-                result = responseData;
                 break;
             case constants.HTTP_DELETE:
                 var responseData =
                         serviceInvokers.XMLHttp.delete(
                                 targetURL, function (responsePayload) {
-                                    return responsePayload;
+                                    response.status = 200;
+                                    response.content =  responsePayload;
                                 },
                                 function (responsePayload) {
-                                    return responsePayload;
+                                    response.status = responsePayload.status;
+                                    response.content =  responsePayload.responseText;
                                 });
-                result = responseData;
                 break;
         }
     } catch (e) {
         log.error("Exception occurred while accessing sevices", e);
     }
 }
-print(result);
 
 %>

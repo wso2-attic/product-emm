@@ -64,9 +64,14 @@ $(document).ready(function () {
                             $(errorMsg).text("Old password does not match with the entered value. Please check.");
                             $(errorMsgWrapper).removeClass("hidden");
                         }
-                    }, function () {
-                        $(errorMsg).text("An unexpected error occurred. Please try again later.");
-                        $(errorMsgWrapper).removeClass("hidden");
+                    }, function (data) {
+                        if (data.statusCode == 400) {
+                            $(errorMsg).text("Old password does not match with the entered value. Please check.");
+                            $(errorMsgWrapper).removeClass("hidden");
+                        }else {
+                            $(errorMsg).text("An unexpected error occurred. Please try again later.");
+                            $(errorMsgWrapper).removeClass("hidden");
+                        }
                     }
                 );
             }

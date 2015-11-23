@@ -110,7 +110,7 @@ $(document).ready(function () {
             invokerUtil.put(
                 addRoleAPI,
                 addRoleFormData,
-                function (data, status, jqXHR) {
+                function (jqXHR) {
                     if (jqXHR.status == 200) {
                         // Clearing user input fields.
                         $("input#rolename").val("");
