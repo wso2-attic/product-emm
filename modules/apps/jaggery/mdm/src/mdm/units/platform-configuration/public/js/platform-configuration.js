@@ -128,8 +128,10 @@ $(document).ready(function () {
                             $("#android-config-notifier").val(config.value);
                             if (config.value != notifierTypeConstants["GCM"]) {
                                 $("#gcm-inputs").hide();
+                                $("#local-inputs").show();
                             } else {
                                 $("#gcm-inputs").show();
+                                $("#local-inputs").hide();
                             }
                         } else if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
                             $("input#android-config-notifier-frequency").val(config.value);

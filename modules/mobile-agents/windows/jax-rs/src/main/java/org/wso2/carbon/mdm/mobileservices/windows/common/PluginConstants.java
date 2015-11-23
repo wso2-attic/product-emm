@@ -183,9 +183,10 @@ public final class PluginConstants {
         public static final int IMSI_POSITION = 1;
         public static final int IMEI_POSITION = 2;
         public static final int VENDER_POSITION = 4;
-        public static final int MACADDRESS_POSITION = 6;
-        public static final int RESOLUTION_POSITION = 7;
-        public static final int DEVICE_NAME_POSITION = 8;
+        public static final int MODEL_POSITION = 5;
+        public static final int MACADDRESS_POSITION = 7;
+        public static final int RESOLUTION_POSITION = 8;
+        public static final int DEVICE_NAME_POSITION = 9;
         public static final String SYNCML_DATA_ONE = "1";
         public static final String SYNCML_DATA_ZERO = "0";
         public static final String OS_VERSION = "OS_VERSION";

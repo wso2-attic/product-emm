@@ -22,7 +22,7 @@ function onRequest(context) {
     } else {
         // here, response["status"] == "error"
         context["policyListToView"] = [];
-        context["policyListingStatusMsg"] = "An unexpected error occurred at backend. Please try again later.";
+        context["policyListingStatusMsg"] = response["content"];
         context["saveNewPrioritiesButtonEnabled"] = false;
     }
     return context;

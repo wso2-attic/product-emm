@@ -25,8 +25,11 @@ var getParameterByName = function (name) {
 $(document).ready(function () {
     setTimeout(function () {
         var deviceID = getParameterByName("device-id");
-        // var accessToken = getParameterByName("access-token");
-        window.location.href = "wso2agent://" + deviceID;
-        // window.location.href = "wso2agent://" + deviceID + "?access-token=" + accessToken;
+        var accessToken = getParameterByName("accessToken");
+        var refreshToken = getParameterByName("refreshToken");
+        var clientCredentials = getParameterByName("clientCredentials");
+//        window.location.href = "wso2agent://" + deviceID;
+        window.location.href = "wso2agent://" + deviceID + "?accessToken=" +
+            accessToken +"&refreshToken=" + refreshToken + "&clientCredentials=" + clientCredentials;
     }, 1000);
 });

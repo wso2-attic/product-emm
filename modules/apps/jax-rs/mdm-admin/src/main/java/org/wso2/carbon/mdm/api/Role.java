@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
+import org.wso2.carbon.base.MultitenantConstants;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
@@ -97,7 +98,7 @@ public class Role {
 
         try {
             final UserRealmProxy userRealmProxy = new UserRealmProxy(userRealmCore);
-	        rolePermissions = userRealmProxy.getRolePermissions(roleName, MDMAPIUtils.getTenantId());
+	        rolePermissions = userRealmProxy.getRolePermissions(roleName, MultitenantConstants.SUPER_TENANT_ID);
             UIPermissionNode[] deviceMgtPermissions = new UIPermissionNode[2];
 
             for (UIPermissionNode permissionNode : rolePermissions.getNodeList()) {
@@ -152,7 +153,7 @@ public class Role {
                 roleWrapper.setUsers(userStoreManager.getUserListOfRole(roleName));
                 // Get the permission nodes and hand picking only device management and login perms
                 final UIPermissionNode rolePermissions =
-                        userRealmProxy.getRolePermissions(roleName, MDMAPIUtils.getTenantId());
+                        userRealmProxy.getRolePermissions(roleName, MultitenantConstants.SUPER_TENANT_ID);
                 UIPermissionNode[] deviceMgtPermissions = new UIPermissionNode[2];
 
                 for (UIPermissionNode permissionNode : rolePermissions.getNodeList()) {

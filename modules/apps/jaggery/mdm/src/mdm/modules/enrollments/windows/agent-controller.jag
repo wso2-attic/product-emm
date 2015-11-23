@@ -39,15 +39,18 @@ if (platform != "Windows Phone") {
     var username = request.getParameter("username");
     var email = session.get("email");
     var password = request.getParameter("password");
-    var ownership = request.getParameter("ownership");
-    if (!username || !email || !password || !ownership) {
+    if (!username || !email || !password) {
         response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
     } else {
         apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
         if (tokenPair != null && tokenPair != undefined && tokenPair.accessToken != null) {
-            var payload = {"credentials": {"username": username, "email": email,
-                "password": password, "ownership": ownership, "token":tokenPair.accessToken}};
+            var payload = {
+                "credentials": {
+                    "username": username, "email": email,
+                    "password": password, "token": tokenPair.accessToken
+                }
+            };
             var authUrl = mdmProps["windowsConfigRoot"];
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open("POST", authUrl);

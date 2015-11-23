@@ -48,7 +48,7 @@ public class UserTestCase extends EMMIntegrationUiBaseTestCase {
         addUserPage.addUser("inosh", "Inosh", "Perera", "inosh@wso2.com");
     }
 
-    @Test(description = "verify delete user to emm console")
+    @Test(description = "verify delete user to emm console", dependsOnMethods = { "testAddUser" })
     public void testDeleteUser() throws Exception {
         driver.get(getWebAppURL() + Constants.MDM_USER_URL);
         UserListPage userListPage = new UserListPage(driver);
