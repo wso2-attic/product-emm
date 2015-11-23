@@ -36,7 +36,6 @@ import org.wso2.carbon.mdm.util.Constants;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -200,37 +199,28 @@ public class User {
                 final String[] existingRoles = userStoreManager.getRoleListOfUser(userWrapper.getUsername());
                 /*
                     Use the Set theory to find the roles to delete and roles to add
-
                     The difference of roles in existingRolesSet and newRolesSet needed to be deleted
                     new roles to add = newRolesSet - The intersection of roles in existingRolesSet and newRolesSet
 				 */
                 final TreeSet<String> existingRolesSet = new TreeSet<String>();
                 Collections.addAll(existingRolesSet, existingRoles);
-
                 final TreeSet<String> newRolesSet = new TreeSet<String>();
                 Collections.addAll(newRolesSet, userWrapper.getRoles());
-
                 existingRolesSet.removeAll(newRolesSet);
                 // Now we have the roles to delete
                 String[] rolesToDelete = existingRolesSet.toArray(new String[existingRolesSet.size()]);
                 List<String> roles = new ArrayList<String>(Arrays.asList(rolesToDelete));
                 roles.remove(ROLE_EVERYONE);
                 rolesToDelete = roles.toArray(new String[0]);
-
                 // Clearing and re-initializing the set
                 existingRolesSet.clear();
                 Collections.addAll(existingRolesSet, existingRoles);
-
                 newRolesSet.removeAll(existingRolesSet);
                 // Now we have the roles to add
                 String[] rolesToAdd = newRolesSet.toArray(new String[newRolesSet.size()]);
-
-
                 userStoreManager.updateRoleListOfUser(userWrapper.getUsername(), rolesToDelete, rolesToAdd);
-
                 //TODO: find what happens when the profileName is null
                 userStoreManager.setUserClaimValues(userWrapper.getUsername(), defaultUserClaims, null);
-
                 // Outputting debug message upon successful addition of user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() + " was successfully updated.");
@@ -280,7 +270,6 @@ public class User {
         Random randomGenerator = new Random();
         String totalCharset = lowerCaseCharset + upperCaseCharset + numericCharset;
         int totalCharsetLength = totalCharset.length();
-
         StringBuffer initialUserPassword = new StringBuffer();
         for (int i = 0; i < passwordLength; i++) {
             initialUserPassword
@@ -370,9 +359,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(username)) {
-
                 String[] roleListOfUser = userStoreManager.getRoleListOfUser(username);
-
                 responsePayload.setResponseContent(Arrays.asList(roleListOfUser));
                 // Outputting debug message upon successful removal of user
                 if (log.isDebugEnabled()) {

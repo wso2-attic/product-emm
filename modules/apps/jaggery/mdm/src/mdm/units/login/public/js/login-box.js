@@ -31,8 +31,38 @@ function post(path, params, method) {
     form.submit();
 }
 
+function submitLoginForm() {
+    $('form').each(function () {
+        $(this).find('input').keypress(function (e) {
+            if (e.which == 10 || e.which == 13) {
+                var username = $("input#username").val();
+                var password = $("input#password").val();
+                if (!username) {
+                    $('.wr-validation-summary p').text("Sorry!, Username cannot be empty.");
+                    $('.wr-validation-summary').removeClass("hidden");
+                } else if (!password) {
+                    $('.wr-validation-summary p').text("Sorry!, Password cannot be empty.");
+                    $('.wr-validation-summary').removeClass("hidden");
+                } else {
+                    var username = utf8_to_b64($("input#username").val());
+                    var password = utf8_to_b64($("input#password").val());
+                    post($("#login").attr("action"), {"username": username, password: password}, "POST");
+                }
+            }
+        });
+    });
+}
 
 $( document ).ready(function() {
+
+    $("input#username").focus();
+    $("input#username").bind('keydown',function (e) {
+        if(e.which == 10 || e.which == 13){
+            e.preventDefault();
+            $("input#password").focus();
+        }
+    });
+
     var currentHash = window.location.hash;
     if(currentHash=="#auth-failed") {
         $('.wr-validation-summary p').text("Sorry!, Please make sure to enter correct username and password");
@@ -58,26 +88,3 @@ $( document ).ready(function() {
         }
     });
 });
-
-function submitLoginForm() {
-    $('form').each(function() {
-        $(this).find('input').keypress(function(e) {
-            if(e.which == 10 || e.which == 13) {
-                var username = $("input#username").val();
-                var password = $("input#password").val();
-
-                if (!username) {
-                    $('.wr-validation-summary p').text("Sorry!, Username cannot be empty.");
-                    $('.wr-validation-summary').removeClass("hidden");
-                } else if (!password){
-                    $('.wr-validation-summary p').text("Sorry!, Password cannot be empty.");
-                    $('.wr-validation-summary').removeClass("hidden");
-                } else {
-                    var username = utf8_to_b64($("input#username").val());
-                    var password = utf8_to_b64($("input#password").val());
-                    post($("#login").attr("action"),{"username":username,password:password},"POST");
-                }
-            }
-        });
-    });
-}
