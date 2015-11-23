@@ -49,6 +49,7 @@ import java.util.*;
 public class User {
 
     private static Log log = LogFactory.getLog(User.class);
+    private String ROLE_EVERYONE = "Internal/everyone";
 
     /**
      * Method to add user to emm-user-store.
@@ -194,6 +195,9 @@ public class User {
                 existingRolesSet.removeAll(newRolesSet);
                 // Now we have the roles to delete
                 String[] rolesToDelete = existingRolesSet.toArray(new String[existingRolesSet.size()]);
+                List<String> listRole = new ArrayList<String>(Arrays.asList(rolesToDelete));
+                listRole.remove(ROLE_EVERYONE);
+                rolesToDelete = listRole.toArray(new String[0]);
 
                 // Clearing and re-initializing the set
                 existingRolesSet.clear();
@@ -202,6 +206,7 @@ public class User {
                 newRolesSet.removeAll(existingRolesSet);
                 // Now we have the roles to add
                 String[] rolesToAdd = newRolesSet.toArray(new String[newRolesSet.size()]);
+                
 
                 userStoreManager.updateRoleListOfUser(userWrapper.getUsername(), rolesToDelete, rolesToAdd);
 
