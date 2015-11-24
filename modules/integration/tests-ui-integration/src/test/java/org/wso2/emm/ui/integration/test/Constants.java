@@ -19,13 +19,13 @@
 package org.wso2.emm.ui.integration.test;
 
 public class Constants {
-    public static final String MDM_LOGIN_PATH = "/mdm/login";
+    public static final String MDM_LOGIN_PATH = "/emm/login";
     public static final String LOGIN_GROUP = "login-group";
-    public static final String MDM_ROLES_URL = "/mdm/roles";
-    public static final String MDM_USER_ADD_URL = "/mdm/users/add-user";
-    public static final String MDM_USER_URL = "/mdm/users/";
-    public static final String MDM_ROLES_EDIT_URL = "/mdm/roles/edit-role/";
-    public static final String MDM_PLATFORM_CONFIG_URL = "/mdm/platform-configuration";
-    public static final String MDM_NOTIFICATION_URL = "/mdm/notification-listing";
-    public static final String MDM_HOME_URL = "/mdm";
+    public static final String MDM_ROLES_URL = "/emm/roles";
+    public static final String MDM_USER_ADD_URL = "/emm/users/add-user";
+    public static final String MDM_USER_URL = "/emm/users/";
+    public static final String MDM_ROLES_EDIT_URL = "/emm/roles/edit-role/";
+    public static final String MDM_PLATFORM_CONFIG_URL = "/emm/platform-configuration";
+    public static final String MDM_NOTIFICATION_URL = "/emm/notification-listing";
+    public static final String MDM_HOME_URL = "/emm";
 }

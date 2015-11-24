@@ -35,7 +35,7 @@ public class UserListPage {
     public UserListPage(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
-        if (!(driver.getCurrentUrl().contains("mdm/users"))) {
+        if (!(driver.getCurrentUrl().contains("emm/users"))) {
             // Alternatively, we could navigate to the login page, perhaps logging out first
             throw new IllegalStateException("This is not the list users page");
         }
