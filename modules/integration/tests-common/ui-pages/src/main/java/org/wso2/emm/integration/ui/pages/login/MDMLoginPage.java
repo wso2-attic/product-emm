@@ -38,7 +38,7 @@ public class MDMLoginPage {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!(driver.getCurrentUrl().contains("mdm/login"))) {
+        if (!(driver.getCurrentUrl().contains("emm/login"))) {
             // Alternatively, we could navigate to the login page, perhaps logging out first
             throw new IllegalStateException("This is not the login page");
         }
