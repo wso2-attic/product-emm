@@ -24,6 +24,10 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * This class contains integration tests for policy management backend services.
  */
@@ -40,13 +44,22 @@ public class PolicyManagement extends TestBase {
 
     @Test(description = "Test add policy.")
     public void testAddPolicy() throws Exception  {
-
         MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST).toString(),response.getBody());
+
+    }
+    @Test(description = "Test a secondary policy adding")
+    public void addSecondaryPolicy() throws Exception {
+        MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
+                PayloadGenerator.getJsonPayload(
+                        Constants.PolicyManagement.ADD_SECONDARY_POLICY_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString()
+        );
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
 
     }
 
@@ -78,4 +91,25 @@ public class PolicyManagement extends TestBase {
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_DELETE).toString(), response.getBody());
     }
+/*
+    @Test(description = "Test prioritizing policies", dependsOnMethods ={"testAddPolicy","addSecondaryPolicy"})
+    public void testPrioritizePolicy() throws Exception {
+        MDMResponse response = client.put(Constants.PolicyManagement.PRIORITIZE_POLICY_ENDPOINT,
+                PayloadGenerator.getJsonPayloadToString(
+                        Constants.PolicyManagement.PRIORITIZE_POLICY_PAYLOAD_FILE_NAME)
+        );
+
+        File logFile = new File("priority.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
+        writer.write(response.getBody());
+        writer.write("hello");
+        writer.close();
+
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
+//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+//                        Constants.PolicyManagement.PRIORITIZE_POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+//                        Constants.HTTP_METHOD_POST).toString(),
+//                response.getBody().toString(), true
+//        );
+    }*/
 }

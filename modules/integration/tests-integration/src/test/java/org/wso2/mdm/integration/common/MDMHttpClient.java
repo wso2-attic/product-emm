@@ -98,7 +98,7 @@ public class MDMHttpClient {
         } catch (GeneralSecurityException e) {
             log.error("Failure occurred at MDMResponse post for GeneralSecurityException",e);
         } catch (IOException e) {
-            log.error("Failure occured at MDMResponse post for IOException",e);
+            log.error("Failure occurred at MDMResponse post for IOException",e);
         }
         return null;
     }
