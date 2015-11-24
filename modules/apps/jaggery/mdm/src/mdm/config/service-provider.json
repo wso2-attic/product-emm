@@ -1,9 +1,0 @@
-{
-  "grantType" : "password urn:ietf:params:oauth:grant-type:saml2-bearer refresh_token",
-  "saasApp" : true,
-  "tokenScope": "admin",
-  "requireDynamicClientRegistration" : true,
-  "audience" : "https://10.10.10.203:9443/oauth2/token",
-  "assertionConsumerURL" : "https://localhost:9443/mdm/sso/acs",
-  "recepientValidationURL" : "https://10.100.5.37:9443/oauth2/token"
-}
