@@ -24,8 +24,8 @@
     "windowsConfigRoot" : "%http.ip%/mdm-windows-agent/services/federated/bst/authentication",
     "ssoConfiguration" : {
         "enabled" : false,
-        "issuer" : "emm",
-        "appName" : "emm",
+        "issuer" : "mdm",
+        "appName" : "admin_emm",
         "identityProviderURL" : "%https.ip%/sso/samlsso.jag",
         "responseSigningEnabled" : "true",
         "keyStorePassword" : "wso2carbon",

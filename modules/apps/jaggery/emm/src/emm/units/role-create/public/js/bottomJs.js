@@ -39,7 +39,7 @@ $(document).ready(function () {
         multiple:true,
         tags: false,
         ajax: {
-            url: window.location.origin + "/mdm/api/invoker/execute/",
+            url: window.location.origin + "/emm/api/invoker/execute/",
             method: "POST",
             dataType: 'json',
             delay: 250,
