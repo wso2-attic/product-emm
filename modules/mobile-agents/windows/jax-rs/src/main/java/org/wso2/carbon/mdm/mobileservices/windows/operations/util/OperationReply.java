@@ -643,35 +643,6 @@ public class OperationReply {
         return monitorItems;
     }
 
-    public List<Replace> buildPasscodeReplace(Operation operation) {
-        List<Replace> replaces = new ArrayList<>();
-        List<Item> policyItems = new ArrayList<>();
-        Replace replace = new Replace();
-        Target target = new Target();
-        // String operationCode = operation.getCode();
-        if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
-            operation.setCode(PluginConstants.OperationCodes.DEVICE_PASSWORD_ENABLE);
-            for (Command command : Command.values()) {
-
-                if (operation.getCode() != null && operation.getCode().equals(command.name())) {
-                    target.setLocURI(command.getCode());
-                    MetaTag meta = new MetaTag();
-                    meta.setFormat(Constants.META_FORMAT_INT);
-                    Item item = new Item();
-                    item.setTarget(target);
-                    item.setMeta(meta);
-                    item.setData("1");
-                    policyItems.add(item);
-                    replace.setCommandId(operation.getId());
-                    replace.setItems(policyItems);
-                    replaces.add(replace);
-                }
-            }
-
-        }
-        return replaces;
-    }
-
     public List<Item> buildDeletePassCode(Operation operation) {
         List<Item> deleteItems = new ArrayList<>();
         Item deleteItem = new Item();
