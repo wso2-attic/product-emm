@@ -105,6 +105,10 @@ public class Preference {
 		return mainPref.getInt(key, DEFAULT_INDEX);
 	}
 
+	/**
+	 * Clear data saved in app local shared preferences.
+	 * @param context - The context of activity which is requesting to put data.
+	 */
 	public static void clearPreferences(Context context) {
 		SharedPreferences mainPref =
 				context.getSharedPreferences(context.getResources()
