@@ -40,7 +40,7 @@
         <module>modules/components/app-mgt</module>
         <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
-        <module>modules/apps/jaggery/mdm</module>
+        <module>modules/apps/jaggery/emm</module>
         <module>modules/tools</module>
         <module>modules/mdm-ui</module>
         <module>modules/features</module>
@@ -1288,7 +1288,7 @@
         <repository>
             <id>wso2-staging</id>
             <name>WSO2 Staging Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonappmgt-129/</url>
+            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbonappmgt-133/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>daily</updatePolicy>

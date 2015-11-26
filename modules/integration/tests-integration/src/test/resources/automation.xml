@@ -171,7 +171,7 @@
         -->
         <productGroup name="MDM" clusteringEnabled="false" default="true">
 
-            <instance name="mdm" type="standalone" nonBlockingTransportEnabled="false">
+            <instance name="emm" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
                     <host type="default">localhost</host>
                 </hosts>
