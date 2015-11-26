@@ -45,6 +45,7 @@ public final class Constants {
     public static final String UTF8 = "UTF-8";
     public static final String ZERO = "0";
     public static final String NULL = "[]";
+    public static final String TEMP = "[{\"id\": 2,\"priority\": 1},{\"id\": 1,\"priority\": 2}]";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
