@@ -90,7 +90,7 @@ public final class PluginConstants {
                         "PolicyEnrollmentWebservice.svc";
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
-        public static final String WAB_URL = "/mdm/enrollments/windows/login-agent";
+        public static final String WAB_URL = "/emm/enrollments/windows/login-agent";
 
     }
 
