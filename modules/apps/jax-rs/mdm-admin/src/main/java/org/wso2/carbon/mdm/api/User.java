@@ -492,13 +492,17 @@ public class User {
             log.debug("Sending invitation mail to user by username: " + username);
         }
         String tennentDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        if(!username.contains("/")) {
-         username = "/"+username;
+        if (tennentDomain.equalsIgnoreCase("carbon.super")) {
+            tennentDomain = "";
+        }
+        if (!username.contains("/")) {
+            username = "/"+username;
         }
         String[] usernameBits = username.split("/");
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(usernameBits[1]);
+        emailMessageProperties.setDomainName(tennentDomain);
         //TODO: move this to a config
         // emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
