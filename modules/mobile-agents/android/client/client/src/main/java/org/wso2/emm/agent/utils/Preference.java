@@ -105,4 +105,13 @@ public class Preference {
 		return mainPref.getInt(key, DEFAULT_INDEX);
 	}
 
+	public static void clearPreferences(Context context) {
+		SharedPreferences mainPref =
+				context.getSharedPreferences(context.getResources()
+						                             .getString(R.string.shared_pref_package),
+				                             Context.MODE_PRIVATE
+				);
+		mainPref.edit().clear().commit();
+	}
+
 }
