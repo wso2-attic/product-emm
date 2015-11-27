@@ -203,7 +203,7 @@
             </outputDirectory>
             <includes>
                 <include>**/master-datasources.xml</include>
-                <include>**/cdm-datasources.xml</include>
+                <include>**/emm-datasources.xml</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -280,7 +280,7 @@
         <!-- Copying Device Management related dbscripts -->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/cdm</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/emm</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -299,7 +299,7 @@
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.mobile.device.mgt.version}/dbscripts/cdm/plugins
             </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/cdm/plugins</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/emm/plugins</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
