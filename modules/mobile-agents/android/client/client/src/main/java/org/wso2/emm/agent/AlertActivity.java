@@ -18,6 +18,7 @@
 package org.wso2.emm.agent;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -46,6 +47,7 @@ public class AlertActivity extends SherlockActivity {
 	private Ringtone defaultRingtone;
 	private DeviceInfo deviceInfo;
 	private String type;
+	private Context context;
 
 	private static final String DEVICE_OPERATION_RING = "ring";
 	private static final String TAG = AlertActivity.class.getSimpleName();
@@ -59,6 +61,7 @@ public class AlertActivity extends SherlockActivity {
 		btnOK = (Button) findViewById(R.id.btnOK);
 		txtMessage = (TextView) findViewById(R.id.txtMessage);
 		deviceInfo = new DeviceInfo(this);
+		context = AlertActivity.this.getApplicationContext();
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -108,6 +111,8 @@ public class AlertActivity extends SherlockActivity {
 	 */
 	@TargetApi(21)
 	private void startRing() {
+		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 		defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE);
 		defaultRingtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
 

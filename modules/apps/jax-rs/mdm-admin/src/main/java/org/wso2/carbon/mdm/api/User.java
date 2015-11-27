@@ -23,6 +23,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
@@ -100,7 +101,7 @@ public class User {
                 userStoreManager.addUser(userWrapper.getUsername(), initialUserPassword,
                                          userWrapper.getRoles(), defaultUserClaims, null);
                 // invite newly added user to enroll device
-                inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername());
+                inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername(),initialUserPassword);
                 // Outputting debug message upon successful addition of user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() + " was successfully added.");
@@ -484,19 +485,28 @@ public class User {
      * @param username Username of the user
      * @throws MDMAPIException, UserStoreException, DeviceManagementException
      */
-    private void inviteNewlyAddedUserToEnrollDevice(String username) throws
+    private void inviteNewlyAddedUserToEnrollDevice(String username,String password) throws
                                                                      MDMAPIException, UserStoreException,
                                                                      DeviceManagementException {
         if (log.isDebugEnabled()) {
             log.debug("Sending invitation mail to user by username: " + username);
         }
+        String tennentDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+        if (tennentDomain.equalsIgnoreCase("carbon.super")) {
+            tennentDomain = "";
+        }
+        if (!username.contains("/")) {
+            username = "/"+username;
+        }
+        String[] usernameBits = username.split("/");
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-        emailMessageProperties.setUserName(username);
+        emailMessageProperties.setUserName(usernameBits[1]);
+        emailMessageProperties.setDomainName(tennentDomain);
         //TODO: move this to a config
         // emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
-        emailMessageProperties.setPassword(generateInitialUserPassword());
+        emailMessageProperties.setPassword(password);
         String[] mailAddress = new String[1];
         mailAddress[0] = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
         emailMessageProperties.setMailTo(mailAddress);
