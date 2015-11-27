@@ -1,10 +1,10 @@
 
-function utf8_to_b64( str ) {
-    return window.btoa(unescape(encodeURIComponent( str )));
+function utf8_to_b64(stringValue) {
+    return window.btoa(unescape(encodeURIComponent(stringValue)));
 }
 
-function b64_to_utf8( str ) {
-    return decodeURIComponent(escape(window.atob( str )));
+function b64_to_utf8(stringValue) {
+    return decodeURIComponent(escape(window.atob(stringValue)));
 }
 
 function post(path, params, method) {
