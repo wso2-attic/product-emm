@@ -45,8 +45,8 @@ $(document).ready(function () {
             } else {
                 var changePasswordFormData = {};
                 changePasswordFormData.username = user;
-                changePasswordFormData.oldPassword = window.btoa(oldPassword);
-                changePasswordFormData.newPassword = window.btoa(confirmedPassword);
+                changePasswordFormData.oldPassword = window.btoa(unescape(encodeURIComponent(oldPassword)));
+                changePasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
                 var changePasswordAPI = "/mdm-admin/users/reset-password";
 
