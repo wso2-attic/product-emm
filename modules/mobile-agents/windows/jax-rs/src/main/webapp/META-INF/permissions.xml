@@ -32,7 +32,7 @@
     <!-- Operations management related permissions for admin -->
     <Permission>
         <name>Lock</name>
-        <path>/device-mgt/windows/operation/lock</path>
+        <path>/device-mgt/windows/operations/lock</path>
         <url>/services/windows/operation/lock</url>
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
@@ -40,7 +40,7 @@
 
     <Permission>
         <name>Enterprise Wipe</name>
-        <path>/device-mgt/windows/operation/wipe-data</path>
+        <path>/device-mgt/windows/operations/wipe-data</path>
         <url>/services/windows/operation/wipe-data</url>
         <method>POST</method>
         <scope>emm_admin</scope>
@@ -48,7 +48,7 @@
 
     <Permission>
         <name>Ring</name>
-        <path>/device-mgt/windows/operation/ring-device</path>
+        <path>/device-mgt/windows/operations/ring-device</path>
         <url>/services/windows/operation/ring-device</url>
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
@@ -56,7 +56,7 @@
 
     <Permission>
         <name>Disenroll</name>
-        <path>/device-mgt/windows/operation/disenroll</path>
+        <path>/device-mgt/windows/operations/disenroll</path>
         <url>/services/windows/operation/disenroll</url>
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
@@ -64,7 +64,7 @@
 
     <Permission>
         <name>LockReset</name>
-        <path>/device-mgt/windows/operation/lock-reset</path>
+        <path>/device-mgt/windows/operations/lock-reset</path>
         <url>/services/windows/operation/lock-reset</url>
         <method>POST</method>
         <scope>emm_admin,emm_user</scope>
@@ -94,7 +94,7 @@
     </Permission>
     <Permission>
         <name>GetLicense</name>
-        <path>/device-mgt/windows/devices/license</path>
+        <path>/device-mgt/windows/license/view</path>
         <url>/services/device/license</url>
         <method>GET</method>
         <scope>emm_windows_agent</scope>
@@ -118,7 +118,7 @@
     <!-- Configuration related permissions -->
     <Permission>
         <name>View Tenant configuration</name>
-        <path>/device-mgt/windows/tenant/configuration</path>
+        <path>/device-mgt/windows/tenant/configuration/view</path>
         <url>/services/configuration</url>
         <method>GET</method>
         <scope>emm_admin</scope>
@@ -126,7 +126,7 @@
 
     <Permission>
         <name>Add Tenant configuration</name>
-        <path>/device-mgt/windows/tenant/configuration</path>
+        <path>/device-mgt/windows/tenant/configuration/modify</path>
         <url>/services/configuration</url>
         <method>POST</method>
         <scope>emm_admin</scope>
@@ -134,7 +134,7 @@
 
     <Permission>
         <name>Update Tenant configuration</name>
-        <path>/device-mgt/windows/tenant/configuration</path>
+        <path>/device-mgt/windows/tenant/configuration/modify</path>
         <url>/services/configuration</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
