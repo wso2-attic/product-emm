@@ -6,7 +6,7 @@
     <datasources>
         <datasource>
             <name>DM_DS</name>
-            <description>The datasource used for CDM</description>
+            <description>The datasource used for EMM</description>
             <jndiConfig>
                 <name>jdbc/DM_DS</name>
             </jndiConfig>
@@ -26,7 +26,7 @@
         </datasource>
         <datasource>
             <name>MobileIOSDM_DS</name>
-            <description>The datasource used for CDM Mobile Device Management</description>
+            <description>The datasource used for EMM Mobile iOS Device Management</description>
             <jndiConfig>
                 <name>jdbc/MobileIOSDM_DS</name>
             </jndiConfig>
@@ -46,7 +46,7 @@
         </datasource>
         <datasource>
             <name>MobileAndroidDM_DS</name>
-            <description>The datasource used for CDM Mobile Device Management</description>
+            <description>The datasource used for EMM Mobile Android Device Management</description>
             <jndiConfig>
                 <name>jdbc/MobileAndroidDM_DS</name>
             </jndiConfig>
@@ -66,7 +66,7 @@
         </datasource>
         <datasource>
             <name>MobileWindowsDM_DS</name>
-            <description>The datasource used for CDM Mobile Device Management</description>
+            <description>The datasource used for EMM Mobile Windows Device Management</description>
             <jndiConfig>
                 <name>jdbc/MobileWindowsDM_DS</name>
             </jndiConfig>
