@@ -579,11 +579,15 @@ public class OperationReply {
                 if (policy.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
                     AtomicTag atomicTagElement = new AtomicTag();
                     List<AddTag> addConfig;
+                    DeleteTag deleteTag = new DeleteTag();
                     try {
                         addConfig = appendAddInfo(policy);
                         atomicTagElement.setAdds(addConfig);
                         atomicTagElement.setCommandId(operation.getId());
-
+                        List<Item> deleteItems = buildDeletePassCode(policy);
+                        deleteTag.setCommandId(operation.getId());
+                        deleteTag.setItems(deleteItems);
+                        sequenceElement.setDeleteTag(deleteTag);
                         sequenceElement.setAtomicTag(atomicTagElement);
                     } catch (WindowsOperationException e) {
                         throw new SyncmlOperationException("Error occurred while generating operation payload.", e);
@@ -639,19 +643,19 @@ public class OperationReply {
         return monitorItems;
     }
 
-    public List<Item> buildDeleteInfo(Operation operation) {
+    public List<Item> buildDeletePassCode(Operation operation) {
         List<Item> deleteItems = new ArrayList<>();
         Item deleteItem = new Item();
         Target target = new Target();
-        String operationCode = operation.getCode();
         if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
             operation.setCode(PluginConstants.OperationCodes.DEVICE_PASSCODE_DELETE);
             for (Command command : Command.values()) {
-
-                if (operationCode != null && operationCode.equals(command.name())) {
+                if (operation.getCode() != null && operation.getCode().equals(command.name())) {
                     target.setLocURI(command.getCode());
                     deleteItem.setTarget(target);
+                    deleteItems.add(deleteItem);
                 }
+
             }
         }
         return deleteItems;
