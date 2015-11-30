@@ -236,23 +236,24 @@ public class Role {
             MDMAPIException {
         final UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         final AuthorizationManager authorizationManager = MDMAPIUtils.getAuthorizationManager();
+        String newRoleName = roleWrapper.getRoleName();
         try {
             if (log.isDebugEnabled()) {
                 log.debug("Updating the role to user store");
             }
-            if (roleWrapper.getRoleName() != null && !roleName.equals(roleWrapper.getRoleName())) {
-                userStoreManager.updateRoleName(roleName, roleWrapper.getRoleName());
+            if (newRoleName != null && !roleName.equals(newRoleName)) {
+                userStoreManager.updateRoleName(roleName, newRoleName);
             }
             if (roleWrapper.getUsers() != null) {
                 SetReferenceTransformer transformer = new SetReferenceTransformer();
-                transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(roleName)),
+                transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(newRoleName)),
                         Arrays.asList(roleWrapper.getUsers()));
                 final String[] usersToAdd = (String[])
                         transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
                 final String[] usersToDelete = (String[])
                         transformer.getObjectsToRemove().toArray(new String[transformer.getObjectsToRemove().size()]);
 
-                userStoreManager.updateUserListOfRole(roleName, usersToDelete, usersToAdd);
+                userStoreManager.updateUserListOfRole(newRoleName, usersToDelete, usersToAdd);
             }
             if (roleWrapper.getPermissions() != null) {
                 // Delete all authorizations for the current role before authorizing the permission tree
@@ -265,7 +266,7 @@ public class Role {
                 }
             }
         } catch (UserStoreException e) {
-            String msg = "Error occurred while saving the role: " + roleWrapper.getRoleName();
+            String msg = "Error occurred while saving the role: " + newRoleName;
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
