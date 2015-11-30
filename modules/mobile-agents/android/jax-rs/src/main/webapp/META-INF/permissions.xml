@@ -291,7 +291,7 @@
     <!-- Configuration related permissions -->
     <Permission>
         <name>View Tenant configuration</name>
-        <path>/device-mgt/android/tenant/configuration</path>
+        <path>/device-mgt/android/tenant/configuration/view</path>
         <url>/configuration</url>
         <method>GET</method>
         <scope>emm_admin</scope>
@@ -299,7 +299,7 @@
 
     <Permission>
         <name>Add Tenant configuration</name>
-        <path>/device-mgt/android/tenant/configuration</path>
+        <path>/device-mgt/android/tenant/configuration/modify</path>
         <url>/configuration</url>
         <method>POST</method>
         <scope>emm_admin</scope>
@@ -307,7 +307,7 @@
 
     <Permission>
         <name>Update Tenant configuration</name>
-        <path>/device-mgt/android/tenant/configuration</path>
+        <path>/device-mgt/android/tenant/configuration/modify</path>
         <url>/configuration</url>
         <method>PUT</method>
         <scope>emm_admin</scope>
