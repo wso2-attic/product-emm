@@ -104,8 +104,8 @@ $(document).ready(function () {
                     $("#role-create-form").addClass("hidden");
                     $("#role-created-msg").removeClass("hidden");
                 }
-            }, function () {
-                $(errorMsg).text("An unexpected error occurred. Please try again later.");
+            }, function (data) {
+                $(errorMsg).text(data.errorMessage);
                 $(errorMsgWrapper).removeClass("hidden");
             }
         );

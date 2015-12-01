@@ -111,7 +111,7 @@ $(document).ready(function () {
                     } else if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
                     } else {
-                        $(errorMsg).text("An unexpected error occurred. Please try again later.");
+                        $(errorMsg).text(data.errorMessage);
                     }
                     $(errorMsgWrapper).removeClass("hidden");
                 }
