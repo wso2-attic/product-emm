@@ -133,7 +133,10 @@ function operationSelect (selection) {
 function getDevicesByTypes (deviceList) {
     var deviceTypes = {};
     $.each(deviceList, function (index, item) {
-        deviceTypes[item.type] = [];
+        if(deviceTypes[item.type] == null || deviceTypes[item.type] == undefined) {
+            deviceTypes[item.type] = [];
+        }
+
         if (item.type == "android" || item.type == "ios" || item.type == "windows") {
             deviceTypes[item.type].push(item.id);
         }

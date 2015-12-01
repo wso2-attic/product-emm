@@ -30,6 +30,13 @@ var platformTypeConstants = {
     "WINDOWS": "windows"
 };
 
+// Constants to define platform types ids.
+var platformTypeIds = {
+    "ANDROID": 1,
+    "IOS": 3,
+    "WINDOWS": 2
+};
+
 // Constants to define Android Operation Constants
 var androidOperationConstants = {
     "PASSCODE_POLICY_OPERATION": "passcode-policy",
@@ -1742,6 +1749,10 @@ var updatePolicy = function (policy, state) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
+        if(policy["platformId"] == platformTypeIds["WINDOWS"] && key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
+            policy["profile"][key].enablePassword = true;
+        }
+
         if (policy["profile"].hasOwnProperty(key)) {
             profilePayloads.push({
                 "featureCode": key,

@@ -107,11 +107,12 @@ public class SequenceTag {
                 }
             }
         }
-        if (getAtomicTag() != null) {
-            getAtomicTag().buildAtomicElement(doc, sequence);
-        }
         if (getDeleteTag() != null) {
             getDeleteTag().buildDeleteElement(doc, sequence);
         }
+        if (getAtomicTag() != null) {
+            getAtomicTag().buildAtomicElement(doc, sequence);
+        }
+
     }
 }
