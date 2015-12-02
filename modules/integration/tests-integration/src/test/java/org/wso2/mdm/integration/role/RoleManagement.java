@@ -22,8 +22,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
-import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.mdm.integration.common.*;
 
 /**
@@ -66,11 +64,5 @@ public class RoleManagement extends TestBase {
 
     private String GetURL(String endPoint){
         return endPoint+"?rolename="+Constants.RoleManagement.ROLE_NAME;
-    }
-
-    public static String getAndroidAgentUrl(){
-
-        String hostName= CarbonUtils.getServerURL(null, null);
-        return hostName;
     }
 }
