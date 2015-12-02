@@ -65,8 +65,6 @@ public class PolicyManagement extends TestBase {
                         Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-//        Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
-//                Constants.HTTP_METHOD_PUT).toString(), response.getBody());
     }
 
     @Test(description = "Test remove policy.", dependsOnMethods = { "testUpdatePolicy" })
