@@ -54,7 +54,6 @@ utility = function () {
     publicMethods.getPolicyManagementService = function () {
         return getOsgiService("org.wso2.carbon.policy.mgt.core.PolicyManagerService");
     };
-
     publicMethods.insertAppPermissions = function (userModule, type) {
         // Below are the 2 types of users:- Normal users and Admins
         userModule.addPermissions([{key: "emm-admin", name: "Device Management Admin"}], "device-mgt", type);
@@ -101,6 +100,7 @@ utility = function () {
     };
 
     return publicMethods;
+
 }();
 
 
