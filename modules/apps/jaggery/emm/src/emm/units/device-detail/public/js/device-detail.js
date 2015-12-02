@@ -32,7 +32,7 @@
             function(message){
                 console.log(message);
             }, function (message) {
-                console.log(message);
+                console.log(message.content);
             });
     }
     $(document).ready(function(){
@@ -105,7 +105,7 @@
             };
             invokerUtil.get(serviceURL,
                 successCallback, function(message){
-                    console.log(message);
+                    console.log(message.content);
             });
         });
 
@@ -140,7 +140,7 @@
             };
             invokerUtil.get(serviceURL,
                 successCallback, function(message){
-                    console.log(message);
+                    console.log(message.content);
             });
         });
     }
@@ -181,14 +181,14 @@
                     activePolicy = data;
                     invokerUtil.get(serviceURLCompliance,
                         successCallbackCompliance, function(message){
-                            console.log(message);
+                            console.log(message.content);
                     });
                 }
             };
 
             invokerUtil.get(serviceURLPolicy,
                 successCallbackPolicy, function(message){
-                    console.log(message);
+                    console.log(message.content);
             });
         });
 

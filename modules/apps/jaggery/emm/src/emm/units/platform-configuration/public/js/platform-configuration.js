@@ -144,8 +144,8 @@ $(document).ready(function () {
                         }
                     }
                 }
-            }, function () {
-
+            }, function (data) {
+                console.log(data);
             }
         );
     }
@@ -177,8 +177,8 @@ $(document).ready(function () {
                 }
             }
 
-        }, function () {
-
+        }, function (data) {
+            console.log(data);
         }
     );
 
@@ -198,8 +198,8 @@ $(document).ready(function () {
                     }
                 }
 
-            }, function () {
-
+            }, function (data) {
+                console.log(data);
             }
         );
     }
@@ -240,8 +240,8 @@ $(document).ready(function () {
                     }
                 }
 
-            }, function () {
-
+            }, function (data) {
+                console.log(data);
             }
         );
     }
@@ -344,15 +344,25 @@ $(document).ready(function () {
                         $("#record-created-msg").removeClass("hidden");
                     } else if (data == 500) {
                         $(errorMsg).text("Exception occurred at backend.");
+                        $(errorMsgWrapper).removeClass("hidden");
+                    } else if (data == 403) {
+                        $(errorMsg).text("Action was not permitted.");
+                        $(errorMsgWrapper).removeClass("hidden");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
+                        $(errorMsgWrapper).removeClass("hidden");
+                    }
+
+
+                }, function (data) {
+                    data = data.status;
+                    if (data == 500) {
+                        $(errorMsg).text("Exception occurred at backend.");
                     } else if (data == 403) {
                         $(errorMsg).text("Action was not permitted.");
                     } else {
                         $(errorMsg).text("An unexpected error occurred.");
                     }
-
-                    $(errorMsgWrapper).removeClass("hidden");
-                }, function () {
-                    $(errorMsg).text("An unexpected error occurred.");
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );
@@ -484,8 +494,15 @@ $(document).ready(function () {
                     }
 
                     $(errorMsgWrapper).removeClass("hidden");
-                }, function () {
-                    $(errorMsg).text("An unexpected error occurred.");
+                }, function (data) {
+                    data = data.status;
+                    if (data == 500) {
+                        $(errorMsg).text("Exception occurred at backend.");
+                    } else if (data == 403) {
+                        $(errorMsg).text("Action was not permitted.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
+                    }
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );
@@ -741,8 +758,15 @@ $(document).ready(function () {
                     }
 
                     $(errorMsgWrapper).removeClass("hidden");
-                }, function () {
-                    $(errorMsg).text("An unexpected error occurred.");
+                }, function (data) {
+                    data = data.status;
+                    if (data == 500) {
+                        $(errorMsg).text("Exception occurred at backend.");
+                    } else if (data == 403) {
+                        $(errorMsg).text("Action was not permitted.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
+                    }
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );
@@ -842,9 +866,16 @@ $(document).ready(function () {
                     }
 
                     $(errorMsgWrapperWindows).removeClass("hidden");
-                }, function () {
-                    $(errorMsgWindows).text("An unexpected error occurred.");
-                    $(errorMsgWrapperWindows).removeClass("hidden");
+                }, function (data) {
+                    data = data.status;
+                    if (data == 500) {
+                        $(errorMsg).text("Exception occurred at backend.");
+                    } else if (data == 403) {
+                        $(errorMsg).text("Action was not permitted.");
+                    } else {
+                        $(errorMsg).text("An unexpected error occurred.");
+                    }
+                    $(errorMsgWrapper).removeClass("hidden");
                 }
             );
         }
