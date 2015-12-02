@@ -89,7 +89,10 @@ public class EnrollmentService {
 				Response.status(Response.Status.NOT_FOUND);
 			}
 		} catch (DeviceManagementException e) {
-			msg = "Error occurred while enrollment of the device.";
+            msg = "Error occurred while checking enrollment status of the device.";
+            responseMsg.setResponseMessage(msg);
+            responseMsg.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+            Response.status(Response.Status.INTERNAL_SERVER_ERROR);
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
 		}

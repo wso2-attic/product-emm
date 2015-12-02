@@ -30,11 +30,11 @@ import org.wso2.emm.agent.utils.Preference;
  * polls to server based on a predefined to retrieve pending data.
  */
 public class LocalNotification {
-	public static boolean localNoticicationInvoked = false;
 	public static final int DEFAULT_INTERVAL = 30000;
 	public static final int DEFAULT_INDEX = 0;
 	public static final int DEFAULT_BUFFER = 1000;
 	public static final int REQUEST_CODE = 0;
+	public static final String LOCAL_NOTIFIER_INVOKED_PREF_KEY = "localNoticicationInvoked";
 
 	public static void startPolling(Context context) {
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
@@ -43,8 +43,8 @@ public class LocalNotification {
 		}
 		long currentTime = SystemClock.elapsedRealtime();
 		currentTime += DEFAULT_BUFFER;
-		if (!localNoticicationInvoked) {
-			localNoticicationInvoked = true;
+		if (!Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
+			Preference.putBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY, true);
 			Intent alarm = new Intent(context, AlarmReceiver.class);
 			PendingIntent recurringAlarm =
 					PendingIntent.getBroadcast(context,
@@ -58,8 +58,8 @@ public class LocalNotification {
 	}
 
 	public static void stopPolling(Context context) {
-		if (localNoticicationInvoked) {
-			localNoticicationInvoked = false;
+		if (Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
+			Preference.putBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY, false);
 			Intent alarm = new Intent(context, AlarmReceiver.class);
 			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, DEFAULT_INDEX);
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

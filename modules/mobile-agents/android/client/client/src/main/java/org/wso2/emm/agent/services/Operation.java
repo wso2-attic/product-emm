@@ -62,6 +62,7 @@ public class Operation implements APIResultCallBack {
 
 	private Context context;
 	private DevicePolicyManager devicePolicyManager;
+	private ComponentName cdmDeviceAdmin;
 	private ApplicationManager appList;
 	private Resources resources;
 	private ResultPayload resultBuilder;
@@ -89,6 +90,7 @@ public class Operation implements APIResultCallBack {
 		this.resources = context.getResources();
 		this.devicePolicyManager =
 				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		this.cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		this.appList = new ApplicationManager(context.getApplicationContext());
 		this.resultBuilder = new ResultPayload();
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
@@ -160,7 +162,9 @@ public class Operation implements APIResultCallBack {
 				changeLockCode(operation);
 				break;
 			case Constants.Operation.POLICY_BUNDLE:
-				setPolicyBundle(operation);
+				if(devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
+					setPolicyBundle(operation);
+				}
 				break;
 			case Constants.Operation.POLICY_MONITOR:
 				monitorPolicy(operation);
@@ -362,17 +366,16 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void clearPassword(org.wso2.emm.agent.beans.Operation operation) {
-		ComponentName demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 
-		devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
+		devicePolicyManager.setPasswordQuality(cdmDeviceAdmin,
 				DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
-		devicePolicyManager.setPasswordMinimumLength(demoDeviceAdmin, DEFAULT_PASSWORD_LENGTH);
+		devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, DEFAULT_PASSWORD_LENGTH);
 		devicePolicyManager.resetPassword(resources.getString(R.string.shared_pref_default_string),
 				DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
 		devicePolicyManager.lockNow();
-		devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
+		devicePolicyManager.setPasswordQuality(cdmDeviceAdmin,
 				DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Password cleared");
@@ -468,10 +471,9 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void disableCamera(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		boolean camFunc = operation.isEnabled();
-		ComponentName cameraAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
-		devicePolicyManager.setCameraDisabled(cameraAdmin, !camFunc);
+		devicePolicyManager.setCameraDisabled(cdmDeviceAdmin, !camFunc);
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Camera enabled: " + camFunc);
 		}
@@ -553,13 +555,12 @@ public class Operation implements APIResultCallBack {
 	public void encryptStorage(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		boolean doEncrypt = operation.isEnabled();
 		JSONObject result = new JSONObject();
-		ComponentName admin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 
 		if (doEncrypt &&
 				devicePolicyManager.getStorageEncryptionStatus() != DevicePolicyManager.ENCRYPTION_STATUS_UNSUPPORTED &&
 				(devicePolicyManager.getStorageEncryptionStatus() == DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE)) {
 
-			devicePolicyManager.setStorageEncryption(admin, doEncrypt);
+			devicePolicyManager.setStorageEncryption(cdmDeviceAdmin, doEncrypt);
 			Intent intent = new Intent(DevicePolicyManager.ACTION_START_ENCRYPTION);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(intent);
@@ -569,7 +570,7 @@ public class Operation implements APIResultCallBack {
 				(devicePolicyManager.getStorageEncryptionStatus() == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE ||
 						devicePolicyManager.getStorageEncryptionStatus() == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING)) {
 
-			devicePolicyManager.setStorageEncryption(admin, doEncrypt);
+			devicePolicyManager.setStorageEncryption(cdmDeviceAdmin, doEncrypt);
 		}
 
 		try {
@@ -650,8 +651,6 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void setPasswordPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-		ComponentName demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-
 		int attempts, length, history, specialChars;
 		String alphanumeric, complex;
 		boolean isAlphanumeric, isComplex;
@@ -665,25 +664,25 @@ public class Operation implements APIResultCallBack {
 			if (!policyData.isNull(resources.getString(R.string.policy_password_max_failed_attempts)) &&
 			    policyData.get(resources.getString(R.string.policy_password_max_failed_attempts)) != null) {
 				attempts = policyData.getInt(resources.getString(R.string.policy_password_max_failed_attempts));
-				devicePolicyManager.setMaximumFailedPasswordsForWipe(demoDeviceAdmin, attempts);
+				devicePolicyManager.setMaximumFailedPasswordsForWipe(cdmDeviceAdmin, attempts);
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_min_length)) &&
 			    policyData.get(resources.getString(R.string.policy_password_min_length)) != null) {
 				length = policyData.getInt(resources.getString(R.string.policy_password_min_length));
-				devicePolicyManager.setPasswordMinimumLength(demoDeviceAdmin, length);
+				devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, length);
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_pin_history)) &&
 			    policyData.get(resources.getString(R.string.policy_password_pin_history)) != null) {
 				history = policyData.getInt(resources.getString(R.string.policy_password_pin_history));
-				devicePolicyManager.setPasswordHistoryLength(demoDeviceAdmin, history);
+				devicePolicyManager.setPasswordHistoryLength(cdmDeviceAdmin, history);
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_min_complex_chars)) &&
 			    policyData.get(resources.getString(R.string.policy_password_min_complex_chars)) != null) {
 				specialChars = policyData.getInt(resources.getString(R.string.policy_password_min_complex_chars));
-				devicePolicyManager.setPasswordMinimumSymbols(demoDeviceAdmin, specialChars);
+				devicePolicyManager.setPasswordMinimumSymbols(cdmDeviceAdmin, specialChars);
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_require_alphanumeric)) &&
@@ -693,7 +692,7 @@ public class Operation implements APIResultCallBack {
 					alphanumeric = (String) policyData.get(resources.getString(
 									R.string.policy_password_require_alphanumeric));
 					if (alphanumeric.equals(resources.getString(R.string.shared_pref_default_status))) {
-						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
+						devicePolicyManager.setPasswordQuality(cdmDeviceAdmin,
 								DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC);
 					}
 				} else if (policyData.get(resources.getString(
@@ -701,7 +700,7 @@ public class Operation implements APIResultCallBack {
 					isAlphanumeric = policyData.getBoolean(resources.getString(
 									R.string.policy_password_require_alphanumeric));
 					if (isAlphanumeric) {
-						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
+						devicePolicyManager.setPasswordQuality(cdmDeviceAdmin,
 								DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC);
 					}
 				}
@@ -714,7 +713,7 @@ public class Operation implements APIResultCallBack {
 					complex = (String) policyData.get(resources.getString(
 									R.string.policy_password_allow_simple));
 					if (!complex.equals(resources.getString(R.string.shared_pref_default_status))) {
-						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
+						devicePolicyManager.setPasswordQuality(cdmDeviceAdmin,
 								DevicePolicyManager.PASSWORD_QUALITY_COMPLEX);
 					}
 				} else if (policyData.get(resources.getString(
@@ -722,7 +721,7 @@ public class Operation implements APIResultCallBack {
 					isComplex = policyData.getBoolean(
 									resources.getString(R.string.policy_password_allow_simple));
 					if (!isComplex) {
-						devicePolicyManager.setPasswordQuality(demoDeviceAdmin,
+						devicePolicyManager.setPasswordQuality(cdmDeviceAdmin,
 								DevicePolicyManager.PASSWORD_QUALITY_COMPLEX);
 					}
 				}
@@ -732,7 +731,7 @@ public class Operation implements APIResultCallBack {
 			    policyData.get(resources.getString(R.string.policy_password_pin_age_in_days)) != null) {
 				int daysOfExp = policyData.getInt(resources.getString(R.string.policy_password_pin_age_in_days));
 				timout = daysOfExp * DAY_MILLISECONDS_MULTIPLIER;
-				devicePolicyManager.setPasswordExpirationTimeout(demoDeviceAdmin, timout);
+				devicePolicyManager.setPasswordExpirationTimeout(cdmDeviceAdmin, timout);
 			}
 
 			if (Constants.DEBUG_MODE_ENABLED) {
@@ -790,8 +789,7 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void changeLockCode(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-		ComponentName demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-		devicePolicyManager.setPasswordMinimumLength(demoDeviceAdmin, DEFAULT_PASSWORD_MIN_LENGTH);
+		devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, DEFAULT_PASSWORD_MIN_LENGTH);
 		String password = null;
 
 		try {
