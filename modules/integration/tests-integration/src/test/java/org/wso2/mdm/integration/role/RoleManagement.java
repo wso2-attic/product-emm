@@ -23,6 +23,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
+import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.mdm.integration.common.*;
 
 /**
@@ -49,7 +50,8 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test update permission role.", dependsOnMethods = { "testAddRole"})
     public void testUpdateRolePermission() throws Exception {
-        MDMResponse response = client.put(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_ENDPOINT,
+        String url=GetURL(Constants.RoleManagement.ROLE_PERMISSION_ENDPOINT);
+        MDMResponse response = client.put(url,
                     PayloadGenerator.getJsonPayload(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString());
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
@@ -57,7 +59,18 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test remove user.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRole() throws Exception {
-        MDMResponse response = client.delete(Constants.RoleManagement.REMOVE_ROLE_ENDPOINT);
+        String url=GetURL(Constants.RoleManagement.ROLE_PERMISSION_ENDPOINT);
+        MDMResponse response = client.delete(url);
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    private String GetURL(String endPoint){
+        return endPoint+"?rolename="+Constants.RoleManagement.ROLE_NAME;
+    }
+
+    public static String getAndroidAgentUrl(){
+
+        String hostName= CarbonUtils.getServerURL(null, null);
+        return hostName;
     }
 }

@@ -27,6 +27,7 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.RoleWrapper;
+import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.*;
 import org.wso2.carbon.user.mgt.UserRealmProxy;
@@ -237,30 +238,31 @@ public class Role {
         final UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         final AuthorizationManager authorizationManager = MDMAPIUtils.getAuthorizationManager();
         try {
+
             if (log.isDebugEnabled()) {
                 log.debug("Updating the role to user store");
             }
             if (roleWrapper.getRoleName() != null && !roleName.equals(roleWrapper.getRoleName())) {
                 userStoreManager.updateRoleName(roleName, roleWrapper.getRoleName());
             }
+            String newRoleName=roleWrapper.getRoleName();
             if (roleWrapper.getUsers() != null) {
                 SetReferenceTransformer transformer = new SetReferenceTransformer();
-                transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(roleName)),
+                transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(newRoleName)),
                         Arrays.asList(roleWrapper.getUsers()));
                 final String[] usersToAdd = (String[])
                         transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
                 final String[] usersToDelete = (String[])
                         transformer.getObjectsToRemove().toArray(new String[transformer.getObjectsToRemove().size()]);
-
-                userStoreManager.updateUserListOfRole(roleName, usersToDelete, usersToAdd);
+                userStoreManager.updateUserListOfRole(newRoleName, usersToDelete, usersToAdd);
             }
             if (roleWrapper.getPermissions() != null) {
                 // Delete all authorizations for the current role before authorizing the permission tree
-                authorizationManager.clearRoleAuthorization(roleName);
+                authorizationManager.clearRoleAuthorization(newRoleName);
                 if (roleWrapper.getPermissions() != null && roleWrapper.getPermissions().length > 0) {
                     for (int i = 0; i < roleWrapper.getPermissions().length; i++) {
                         String permission = roleWrapper.getPermissions()[i];
-                        authorizationManager.authorizeRole(roleName, permission, CarbonConstants.UI_PERMISSION_ACTION);
+                        authorizationManager.authorizeRole(newRoleName, permission, CarbonConstants.UI_PERMISSION_ACTION);
                     }
                 }
             }

@@ -48,7 +48,6 @@ public class MDMUtil {
 
         org.wso2.carbon.policy.mgt.common.ProfileFeature profileFeature = new org.wso2.carbon.policy.mgt.common
                 .ProfileFeature();
-
         profileFeature.setProfileId(mdmProfileFeature.getProfileId());
         profileFeature.setContent(mdmProfileFeature.getPayLoad());
         profileFeature.setDeviceTypeId(mdmProfileFeature.getDeviceTypeId());
@@ -57,4 +56,5 @@ public class MDMUtil {
         return profileFeature;
 
     }
+
 }
