@@ -20,6 +20,6 @@
         <property name="userforum">http://stackoverflow.com/questions/tagged/wso2/</property>
         <property name="userguide">https://docs.wso2.org/display/EMM200/WSO2+Enterprise+Mobility+Manager</property>
         <property name="mailinglist">http://wso2.org/mail</property>
-        <property name="issuetracker">https://wso2.org/jira/browse/MDM</property>
+        <property name="issuetracker">https://wso2.org/jira/browse/EMM</property>
     </properties>
 </product>

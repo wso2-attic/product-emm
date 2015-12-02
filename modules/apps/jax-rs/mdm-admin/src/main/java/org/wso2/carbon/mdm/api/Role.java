@@ -68,7 +68,7 @@ public class Role {
         // removing all internal roles and roles created for Service-providers
         List<String> filteredRoles = new ArrayList<String>();
         for (String role : roles) {
-            if (!role.startsWith("Internal/") || !role.startsWith("Application/")) {
+            if (!(role.startsWith("Internal/") || role.startsWith("Application/"))) {
                 filteredRoles.add(role);
             }
         }
