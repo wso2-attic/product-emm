@@ -81,7 +81,7 @@
                                 <importBundleDef>org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.common:compatible:${carbon.device.mgt.version}</importBundleDef>
                                 <importBundleDef>org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.core:compatible:${carbon.device.mgt.version}</importBundleDef>
                                 <importBundleDef>org.wso2.carbon.devicemgt:org.wso2.carbon.policy.mgt.core:compatible:${carbon.device.mgt.version}</importBundleDef>
-                                <importBundleDef>org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mobile:compatible:${appmgt..feature.version}</importBundleDef>
+                                <importBundleDef>org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mobile:compatible:${appmgt.feature.version}</importBundleDef>
 
                             </importBundles>
                         </configuration>
