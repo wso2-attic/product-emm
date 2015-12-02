@@ -321,17 +321,17 @@ public class SyncmlParser {
                     status.setCommand(command);
                     break;
                 case PluginConstants.SyncML.SYNCML_CHAL:
-                    NodeList chalNodes = node.getChildNodes().item(x).getChildNodes();
+                    NodeList childNodes = node.getChildNodes().item(x).getChildNodes();
                     MetaTag meta = new MetaTag();
-                    ChallengeTag chal = new ChallengeTag();
-                    String format = chalNodes.item(0).getFirstChild().getTextContent();
+                    ChallengeTag challengeTag = new ChallengeTag();
+                    String format = childNodes.item(0).getFirstChild().getTextContent();
                     meta.setFormat(format);
-                    String type = chalNodes.item(0).getFirstChild().getNextSibling().getTextContent();
+                    String type = childNodes.item(0).getFirstChild().getNextSibling().getTextContent();
                     meta.setType(type);
-                    String nonce = chalNodes.item(0).getFirstChild().getNextSibling().getNextSibling().getTextContent();
+                    String nonce = childNodes.item(0).getFirstChild().getNextSibling().getNextSibling().getTextContent();
                     meta.setNextNonce(nonce);
-                    chal.setMeta(meta);
-                    status.setChallenge(chal);
+                    challengeTag.setMeta(meta);
+                    status.setChallenge(challengeTag);
                     break;
                 case PluginConstants.SyncML.SYNCML_DATA:
                     String data = node.getChildNodes().item(x).getTextContent().trim();

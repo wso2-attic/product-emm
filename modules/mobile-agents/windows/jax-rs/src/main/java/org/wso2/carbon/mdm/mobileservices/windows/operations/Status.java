@@ -132,7 +132,7 @@ public class Status {
             status.appendChild(targetReference);
         }
         if (getChallenge() != null) {
-            getChallenge().buildChallElement(doc, status);
+            getChallenge().buildChalElement(doc, status);
         }
         if (getData() != null) {
             Element data = doc.createElement(Constants.DATA);

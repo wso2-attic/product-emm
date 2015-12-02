@@ -19,6 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.discovery;
 
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryRequest;
 import org.wso2.carbon.mdm.mobileservices.windows.services.discovery.beans.DiscoveryResponse;
 
@@ -52,7 +53,7 @@ public interface DiscoveryService {
             @WebParam(mode = WebParam.Mode.OUT, name = "DiscoverResult",
                     targetNamespace = PluginConstants.DISCOVERY_SERVICE_TARGET_NAMESPACE)
             javax.xml.ws.Holder<DiscoveryResponse> response
-    );
+    ) throws WindowsDeviceEnrolmentException;
 
     @GET
     @WebMethod
