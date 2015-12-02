@@ -65,6 +65,7 @@ public class RoleManagement extends TestBase {
 
     private String GetURL(String endPoint){
         return endPoint+"?rolename="+Constants.RoleManagement.ROLE_NAME;
+
     }
 
 }
