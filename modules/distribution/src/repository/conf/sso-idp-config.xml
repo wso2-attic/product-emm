@@ -17,14 +17,6 @@
   -->
 <SSOIdentityProviderConfig>
     <TenantRegistrationPage>https://stratos-local.wso2.com/carbon/tenant-register/select_domain.jsp</TenantRegistrationPage>
-<!--     <ServiceProviders>
-        <ServiceProvider>
-            <Issuer>cdm</Issuer>
-            <AssertionConsumerService>https://localhost:9443/cdm/acs</AssertionConsumerService>
-            <SignResponse>true</SignResponse>
-            <CustomLoginPage>/cdm/login</CustomLoginPage>
-        </ServiceProvider>
-    </ServiceProviders> -->
     <ServiceProviders>
         <ServiceProvider>
             <Issuer>cdm</Issuer>
@@ -63,6 +55,30 @@
                 <Audience>carbonServer</Audience>
             </AudiencesList>
             <ConsumingServiceIndex></ConsumingServiceIndex>
+        </ServiceProvider>
+        <ServiceProvider>
+            <Issuer>store</Issuer>
+            <AssertionConsumerServiceURLs>https://localhost:9443/store/acs</AssertionConsumerServiceURLs>
+            <AssertionConsumerServiceURLs>https://localhost:9443/store/acs</AssertionConsumerServiceURLs>
+            <DefaultAssertionConsumerServiceURL>https://localhost:9443/store/acs</DefaultAssertionConsumerServiceURL>
+            <SignResponse>true</SignResponse>
+            <CustomLoginPage>/store/login.jag</CustomLoginPage>
+        </ServiceProvider>
+        <ServiceProvider>
+            <Issuer>social</Issuer>
+            <AssertionConsumerServiceURLs>https://localhost:9443/social/acs</AssertionConsumerServiceURLs>
+            <AssertionConsumerServiceURLs>https://localhost:9443/social/acs</AssertionConsumerServiceURLs>
+            <DefaultAssertionConsumerServiceURL>https://localhost:9443/social/acs</DefaultAssertionConsumerServiceURL>
+            <SignResponse>true</SignResponse>
+            <CustomLoginPage>/social/login</CustomLoginPage>
+        </ServiceProvider>
+        <ServiceProvider>
+            <Issuer>publisher</Issuer>
+            <AssertionConsumerServiceURLs>https://localhost:9443/publisher/acs</AssertionConsumerServiceURLs>
+            <AssertionConsumerServiceURLs>https://localhost:9443/publisher/acs</AssertionConsumerServiceURLs>
+            <DefaultAssertionConsumerServiceURL>https://localhost:9443/publisher/acs</DefaultAssertionConsumerServiceURL>
+            <SignResponse>true</SignResponse>
+            <CustomLoginPage>/publisher/controllers/login.jag</CustomLoginPage>
         </ServiceProvider>
     </ServiceProviders>
 </SSOIdentityProviderConfig>
