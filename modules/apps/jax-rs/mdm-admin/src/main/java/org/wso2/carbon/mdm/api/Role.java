@@ -65,17 +65,17 @@ public class Role {
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        // removing all internal roles
-        List<String> rolesWithoutInternalRoles = new ArrayList<String>();
+        // removing all internal roles and roles created for Service-providers
+        List<String> filteredRoles = new ArrayList<String>();
         for (String role : roles) {
-            if (!role.startsWith("Internal/")) {
-                rolesWithoutInternalRoles.add(role);
+            if (!role.startsWith("Internal/") || !role.startsWith("Application/")) {
+                filteredRoles.add(role);
             }
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         responsePayload.setMessageFromServer("All user roles were successfully retrieved.");
-        responsePayload.setResponseContent(rolesWithoutInternalRoles);
+        responsePayload.setResponseContent(filteredRoles);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
