@@ -22,11 +22,13 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.MultitenantConstants;
+import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -41,6 +43,7 @@ import org.wso2.carbon.user.api.TenantManager;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
+import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import javax.ws.rs.core.MediaType;
@@ -68,7 +71,7 @@ public class WindowsAPIUtils {
         ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
         ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
         cmService =
-                (CertificateManagementService)ctx.getOSGiService(DeviceManagementProviderService.class, null);
+                (CertificateManagementService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
         PrivilegedCarbonContext.endTenantFlow();
         return cmService;
     }
@@ -206,5 +209,35 @@ public class WindowsAPIUtils {
         privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
         privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
         privilegedCarbonContext.setUsername(userName);
+    }
+
+    /**
+     * Get the host name from the carbon.xml file.
+     *
+     * @return
+     */
+    public static String getHostName() {
+        ServerConfiguration serverConfiguration = CarbonUtils.getServerConfiguration();
+        String[] hostNameCharacters = serverConfiguration.getProperties(PluginConstants.Discovery.HOST_NAME);
+        StringBuilder builder = new StringBuilder();
+        for (String s : hostNameCharacters) {
+            builder.append(s);
+        }
+        return builder.toString();
+    }
+
+    /**
+     * This method is used to get tenant configurations.
+     *
+     * @return List of Configurations entries.
+     * @throws DeviceManagementException
+     */
+    public static List<ConfigurationEntry> getTenantConfigurationData() throws DeviceManagementException {
+        if (WindowsAPIUtils.getTenantConfiguration() != null) {
+            TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
+            return configuration.getConfiguration();
+        } else {
+            return null;
+        }
     }
 }
