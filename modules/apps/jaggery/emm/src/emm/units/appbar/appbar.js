@@ -19,7 +19,6 @@
 function onRequest(context) {
     var userModule = require("/modules/user.js").userModule;
     var mdmProps = require('/config/mdm-props.js').config();
-    var enrollmentUtils = require('/modules/enrollments/util/utils.js').methods;
     var uiPermissions = userModule.getUIPermissions();
     context["permissions"] = uiPermissions;
 

@@ -76,7 +76,7 @@ public class User {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response addUser(UserWrapper userWrapper) throws MDMAPIException{
+    public Response addUser(UserWrapper userWrapper) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
         try {

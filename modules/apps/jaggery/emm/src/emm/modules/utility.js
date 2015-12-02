@@ -21,7 +21,6 @@ utility = function () {
     // var log = new Log("modules/utility.js");
     var JavaClass = Packages.java.lang.Class;
     var PrivilegedCarbonContext = Packages.org.wso2.carbon.context.PrivilegedCarbonContext;
-    var mdmProps = require('/config/mdm-props.js').config();
 
     var getOsgiService = function (className) {
         return PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(JavaClass.forName(className));
