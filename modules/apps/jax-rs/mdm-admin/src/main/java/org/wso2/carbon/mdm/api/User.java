@@ -48,7 +48,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.*;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,8 +76,7 @@ public class User {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response addUser(UserWrapper userWrapper) throws MDMAPIException, IOException {
-
+    public Response addUser(UserWrapper userWrapper) throws MDMAPIException{
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
         try {

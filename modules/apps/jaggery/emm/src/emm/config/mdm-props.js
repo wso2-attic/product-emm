@@ -39,4 +39,3 @@ var config = function () {
     }
     return conf;
 };
-

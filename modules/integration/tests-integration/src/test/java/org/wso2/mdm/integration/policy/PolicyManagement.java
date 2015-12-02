@@ -48,16 +48,6 @@ public class PolicyManagement extends TestBase {
                 Constants.HTTP_METHOD_POST).toString(),response.getBody());
 
     }
-    @Test(description = "Test a secondary policy adding")
-    public void addSecondaryPolicy() throws Exception {
-        MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.ADD_SECONDARY_POLICY_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString()
-        );
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-
-    }
 
     @Test(description = "Test view policy list.", dependsOnMethods = { "testAddPolicy"})
     public void testViewPolicyList() throws Exception {

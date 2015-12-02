@@ -51,10 +51,6 @@ var backendServiceInvoker = function () {
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
             xmlHttpRequest.send((payload));
-
-            log.info(accessToken+"             :    " + method + " : " + url + " : " + stringify(payload) +
-                                                        " : :  :  :    "  +stringify(xmlHttpRequest.responseText) );
-
             log.debug("Service Invoker-URL: " + url);
             log.debug("Service Invoker-Method: " + method);
 

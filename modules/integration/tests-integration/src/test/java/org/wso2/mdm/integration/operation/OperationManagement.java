@@ -29,10 +29,6 @@ import org.wso2.mdm.integration.common.*;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-
 /**
  * This class contains integration tests for API Operation management backend services.
  */
