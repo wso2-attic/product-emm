@@ -247,7 +247,7 @@ public class Role {
             if (roleWrapper.getUsers() != null) {
                 SetReferenceTransformer transformer = new SetReferenceTransformer();
                 transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(newRoleName)),
-                        Arrays.asList(roleWrapper.getUsers()));
+                                      Arrays.asList(roleWrapper.getUsers()));
                 final String[] usersToAdd = (String[])
                         transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
                 final String[] usersToDelete = (String[])
@@ -258,7 +258,7 @@ public class Role {
             if (roleWrapper.getPermissions() != null) {
                 // Delete all authorizations for the current role before authorizing the permission tree
                 authorizationManager.clearRoleAuthorization(roleName);
-                if (roleWrapper.getPermissions() != null && roleWrapper.getPermissions().length > 0) {
+                if (roleWrapper.getPermissions().length > 0) {
                     for (int i = 0; i < roleWrapper.getPermissions().length; i++) {
                         String permission = roleWrapper.getPermissions()[i];
                         authorizationManager.authorizeRole(roleName, permission, CarbonConstants.UI_PERMISSION_ACTION);

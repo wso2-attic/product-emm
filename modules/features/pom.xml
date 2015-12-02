@@ -38,11 +38,4 @@
 		<module>org.wso2.mdm.styles.feature</module>
         <module>org.wso2.mdm.mdmmgt.server.feature</module>
     </modules>
-
-	<dependencyManagement>
-	</dependencyManagement>
-
-	<properties>
-	</properties>
-
 </project>
