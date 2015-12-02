@@ -3,7 +3,7 @@
     "apiContext" : "api",
     "httpsURL" : "%https.ip%",
     "httpURL" : "%http.ip%",
-    "enrollmentURL": "%https.ip%/emm/enrollment",
+    "enrollmentDir": "/emm/enrollment",
     "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
     "iOSAPIRoot" : "%https.ip%/ios/",
     "dynamicClientRegistrationEndPoint" : "%https.ip%/dynamic-client-web/register/",
@@ -34,6 +34,7 @@
     },
     "generalConfig" : {
         "companyName" : "WSO2 Enterprise Mobility Manager",
+        "host" : "http://10.10.10.103:9763",
         "browserTitle" : "WSO2 EMM",
         "copyrightText" : "\u00A9 %date-year%, WSO2 Inc. (http://www.wso2.org) All Rights Reserved."
     }

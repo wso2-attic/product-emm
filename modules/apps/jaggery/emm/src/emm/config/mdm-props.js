@@ -16,6 +16,7 @@
  * under the License.
  */
 
+
 var config = function () {
     var conf = application.get("PINCH_CONFIG");
     if (!conf) {
@@ -38,3 +39,4 @@ var config = function () {
     }
     return conf;
 };
+
