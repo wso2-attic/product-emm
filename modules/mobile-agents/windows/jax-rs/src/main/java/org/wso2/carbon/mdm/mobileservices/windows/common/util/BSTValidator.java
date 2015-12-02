@@ -59,7 +59,7 @@ public class BSTValidator implements Validator {
     public Credential validate(Credential credential, RequestData requestData) throws WSSecurityException {
         String encodedBinarySecurityToken;
         String requestedUri;
-        Credential returnCredentials = null;
+        Credential returnCredentials;
 
         HashMap msgContext = (HashMap) requestData.getMsgContext();
         requestedUri = msgContext.get(PluginConstants.CXF_REQUEST_URI).toString();

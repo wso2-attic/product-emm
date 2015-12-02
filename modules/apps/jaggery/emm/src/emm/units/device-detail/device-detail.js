@@ -43,12 +43,10 @@ function onRequest(context) {
                     }
                     deviceInfo = info;
                     viewModel.BatteryLevel = deviceInfo.BATTERY_LEVEL;
-                    viewModel.internal_memory.FreeCapacity = Math.round((deviceInfo.INTERNAL_TOTAL_MEMORY -
-                        deviceInfo.INTERNAL_AVAILABLE_MEMORY) * 100) / 100;
+                    viewModel.internal_memory.FreeCapacity = Math.round(deviceInfo.INTERNAL_AVAILABLE_MEMORY * 100)/100;
                     viewModel.internal_memory.DeviceCapacityPercentage = Math.round(deviceInfo.INTERNAL_AVAILABLE_MEMORY
                         / deviceInfo.INTERNAL_TOTAL_MEMORY * 10000) / 100;
-                    viewModel.external_memory.FreeCapacity = Math.round((deviceInfo.EXTERNAL_TOTAL_MEMORY -
-                        deviceInfo.EXTERNAL_AVAILABLE_MEMORY) * 100) / 100;
+                    viewModel.external_memory.FreeCapacity = Math.round(deviceInfo.EXTERNAL_AVAILABLE_MEMORY * 100) / 100;
                     viewModel.external_memory.DeviceCapacityPercentage = Math.round(deviceInfo.EXTERNAL_AVAILABLE_MEMORY
                         / deviceInfo.EXTERNAL_TOTAL_MEMORY * 10000) / 100;
                 } else if (device.type == "windows") {

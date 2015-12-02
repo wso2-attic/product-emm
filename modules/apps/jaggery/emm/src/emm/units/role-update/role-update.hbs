@@ -26,16 +26,6 @@
                                 <input type="text" id="rolename" class="form-control" data-currentrole="{{role.roleName}}" placeholder="[ Required field ]"
                                         value="{{role.roleName}}"/>
                             </div>
-                            <label class="wr-input-label">
-                                User list
-                            </label>
-                            <div class="wr-input-control">
-                                <select id="users" class="form-control select2" multiple="multiple">
-                                    {{#each role.users}}
-                                        <option selected="selected">{{this}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
                         </div>
                     </div>
                     <br>

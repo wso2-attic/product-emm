@@ -5,7 +5,7 @@ var updateStats = function (serviceURL, id) {
             data = JSON.parse(data);
             $(id).html(data);
         }, function (message) {
-            console.log(message);
+            console.log(message.content);
         }
     );
 };

@@ -82,7 +82,6 @@ $(document).ready(function () {
         var roleName = $("input#rolename").val();
         var currentRoleName = $("input#rolename").data("currentrole");
         var domain = $("#domain").val();
-        var users = $("#users").val();
 
         var errorMsgWrapper = "#role-create-error-msg";
         var errorMsg = "#role-create-error-msg span";
@@ -101,21 +100,17 @@ $(document).ready(function () {
         } else {
             var addRoleFormData = {};
             addRoleFormData.roleName = roleName;
+
             if (domain != "PRIMARY"){
                 addRoleFormData.roleName = domain + "/" + roleName;
             }
-            if (users == null){
-                users = [];
-            }
-            addRoleFormData.users = users;
 
             var addRoleAPI = "/mdm-admin/roles?rolename=" + currentRoleName;
-
             invokerUtil.put(
                 addRoleAPI,
                 addRoleFormData,
-                function (data, status, jqXHR) {
-                    if (jqXHR.status == 200) {
+                function (jqXHR) {
+                    if (JSON.parse(jqXHR).statusCode == 200 || jqXHR.status == 200) {
                         // Clearing user input fields.
                         $("input#rolename").val("");
                         $("#domain").val("");
@@ -123,8 +118,8 @@ $(document).ready(function () {
                         $("#role-create-form").addClass("hidden");
                         $("#role-created-msg").removeClass("hidden");
                     }
-                }, function () {
-                    $(errorMsg).text("An unexpected error occurred. Please try again later.");
+                }, function (data) {
+                    $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );

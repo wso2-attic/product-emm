@@ -20,7 +20,7 @@ var invokerUtil = function () {
 
     var module = {};
 
-    var END_POINT = window.location.origin+"/mdm/api/invoker/execute/";
+    var END_POINT = window.location.origin+"/emm/api/invoker/execute/";
 
     module.get = function (url, successCallback, errorCallback) {
         var payload = null;
@@ -51,7 +51,7 @@ var invokerUtil = function () {
         data.data = JSON.stringify(paramValue);
         $.ajax(data).fail(function (jqXHR) {
             if (JSON.parse(jqXHR).status == "401") {
-                window.location.replace("/mdm");
+                window.location.replace("/emm");
             } else {
                 errorCallback(jqXHR);
             }

@@ -50,10 +50,10 @@ var invokerUtil = function () {
         paramValue.actionPayload = JSON.stringify(payload)
         data.data = JSON.stringify(paramValue);
         $.ajax(data).fail(function (jqXHR) {
-            if (JSON.parse(jqXHR).status == "401") {
+            if (jqXHR.status == "401") {
                 window.location.replace("/emm");
             } else {
-                errorCallback(JSON.parse(jqXHR));
+                errorCallback(jqXHR);
             }
         });
     };

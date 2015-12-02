@@ -19,10 +19,9 @@ package org.wso2.emm.agent.services;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.api.GPSTracker;
 import org.wso2.emm.agent.beans.Device;
-import org.wso2.emm.agent.factory.DeviceStateFactory;
-import org.wso2.emm.agent.interfaces.DeviceState;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -49,13 +48,12 @@ public class DeviceInfoPayload {
 	private String registrationId ;
 
 	public DeviceInfoPayload(Context context) {
-		deviceInfo = new DeviceInfo(context.getApplicationContext());
-		this.context = context;
+		this.context = context.getApplicationContext();
+		deviceInfo = new DeviceInfo(context);
 		mapper = new ObjectMapper();
-		gps = new GPSTracker(context.getApplicationContext());
-		registrationId = Preference.getString(context.getApplicationContext(), Constants.REG_ID);
-		phoneState = DeviceStateFactory.getDeviceState(context.getApplicationContext(),
-		                                               deviceInfo.getSdkVersion());
+		gps = new GPSTracker(context);
+		registrationId = Preference.getString(context, Constants.REG_ID);
+		phoneState = new DeviceState(context);
 	}
 
 	/**
