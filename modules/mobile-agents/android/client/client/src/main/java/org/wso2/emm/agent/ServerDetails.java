@@ -32,8 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.factory.DeviceStateFactory;
-import org.wso2.emm.agent.interfaces.DeviceState;
+import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
@@ -56,7 +55,7 @@ public class ServerDetails extends Activity {
 		setContentView(R.layout.activity_settings);
 		context = this.getApplicationContext();
 		deviceInfo = new DeviceInfo(context);
-		state = DeviceStateFactory.getDeviceState(context, deviceInfo.getSdkVersion());
+		state = new DeviceState(context);
 		evServerIP = (TextView) findViewById(R.id.evServerIP);
 		txtSeverAddress = (TextView) findViewById(R.id.tvSeverAddress);
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);

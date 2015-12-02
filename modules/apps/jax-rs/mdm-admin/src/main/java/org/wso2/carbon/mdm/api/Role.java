@@ -66,17 +66,17 @@ public class Role {
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        // removing all internal roles
-        List<String> rolesWithoutInternalRoles = new ArrayList<String>();
+        // removing all internal roles and roles created for Service-providers
+        List<String> filteredRoles = new ArrayList<String>();
         for (String role : roles) {
-            if (!role.startsWith("Internal/")) {
-                rolesWithoutInternalRoles.add(role);
+            if (!role.startsWith("Internal/") || !role.startsWith("Application/")) {
+                filteredRoles.add(role);
             }
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         responsePayload.setMessageFromServer("All user roles were successfully retrieved.");
-        responsePayload.setResponseContent(rolesWithoutInternalRoles);
+        responsePayload.setResponseContent(filteredRoles);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
@@ -237,13 +237,14 @@ public class Role {
             MDMAPIException {
         final UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         final AuthorizationManager authorizationManager = MDMAPIUtils.getAuthorizationManager();
+        String newRoleName = roleWrapper.getRoleName();
         try {
 
             if (log.isDebugEnabled()) {
                 log.debug("Updating the role to user store");
             }
-            if (roleWrapper.getRoleName() != null && !roleName.equals(roleWrapper.getRoleName())) {
-                userStoreManager.updateRoleName(roleName, roleWrapper.getRoleName());
+            if (newRoleName != null && !roleName.equals(newRoleName)) {
+                userStoreManager.updateRoleName(roleName, newRoleName);
             }
             String newRoleName=roleWrapper.getRoleName();
             if (roleWrapper.getUsers() != null) {
@@ -254,6 +255,10 @@ public class Role {
                         transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
                 final String[] usersToDelete = (String[])
                         transformer.getObjectsToRemove().toArray(new String[transformer.getObjectsToRemove().size()]);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8afcbb52fa13e92c22c4ef0fad95fdc5614fdf56
                 userStoreManager.updateUserListOfRole(newRoleName, usersToDelete, usersToAdd);
             }
             if (roleWrapper.getPermissions() != null) {
@@ -267,7 +272,7 @@ public class Role {
                 }
             }
         } catch (UserStoreException e) {
-            String msg = "Error occurred while saving the role: " + roleWrapper.getRoleName();
+            String msg = "Error occurred while saving the role: " + newRoleName;
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }

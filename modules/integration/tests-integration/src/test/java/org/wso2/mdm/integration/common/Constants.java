@@ -213,11 +213,8 @@ public final class Constants {
 
         public static final String ROLE_MANAGEMENT_GROUP = "role-mgt";
         public static final String ROLE_NAME="administration";
-        public static final String ADD_ROLE_ENDPOINT="/mdm-admin/roles";
+        public static final String ROLE_ENDPOINT="/mdm-admin/roles";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
-
-        public static final String ROLE_PERMISSION_ENDPOINT ="/mdm-admin/roles";
-        public static final String UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME = "role-payloads.json";
 
     }
 

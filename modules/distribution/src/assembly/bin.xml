@@ -36,7 +36,6 @@
                 <exclude>**/*.sh</exclude>
                 <exclude>**/README*</exclude>
                 <exclude>**/LICENSE*</exclude>
-                <exclude>**/INSTALL*</exclude>
                 <exclude>**/release-notes.html</exclude>
                 <exclude>**/axis2services/sample01.aar</exclude>
                 <exclude>**/axis2services/echo/**</exclude>
@@ -247,6 +246,17 @@
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/apimgt</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+
+        <!-- Copying Social plugin related dbscripts -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/social
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/social</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -497,12 +507,6 @@
                     <fileMode>644</fileMode>
                 </file>-->
 
-        <file>
-            <source>INSTALL.txt</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
         <file>
             <source>README.txt</source>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>

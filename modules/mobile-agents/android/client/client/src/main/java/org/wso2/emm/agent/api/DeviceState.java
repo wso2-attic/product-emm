@@ -21,102 +21,109 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.wso2.emm.agent.interfaces.DeviceState;
+import android.support.v4.content.ContextCompat;
 import org.wso2.emm.agent.utils.Response;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
-import android.os.Environment;
-import android.os.StatFs;
 
 /**
- * This class represents all the device state related APIs for devices up to 
- * Android SDK 15 - ICS.
+ * This class represents all the functionalities related to the retrieval of
+ * the device state (battery, memory status etc).
  */
-public class DeviceStateICS implements DeviceState{
+public class DeviceState {
 	private Context context;
 	private DeviceInfo info;
 	private File dataDirectory;
-	private File externalStorageDirectory;
-	private StatFs dataDirectoryStatus;
-	private StatFs externalDirectoryStatus;
+	private File [] externalStorageDirectoryList;
 	private static final int DEFAULT_LEVEL = -1;
 	private static final float PRECENTAGE_MULTIPLIER = 100.0f;
 	private static final int SCALE = 2;
 	private static final int MEMORY_NOT_AVAILABLE = 0;
 	private static final double GB_DIVIDER = 1073741824;
 	private static final double MB_DIVIDER = 1048576;
+	private static final String INTERNAL_STORAGE_PATH = "storage/emulated/0";
 
-	public DeviceStateICS(Context context) {
+	public DeviceState(Context context) {
 		this.context = context;
 		this.info = new DeviceInfo(context);
-		this.dataDirectory = Environment.getDataDirectory();
-		this.dataDirectoryStatus = new StatFs(dataDirectory.getPath());
+		this.dataDirectory = new File(context.getFilesDir().getAbsoluteFile().toString());
 		if (externalMemoryAvailable()) {
-			this.externalStorageDirectory = Environment.getExternalStorageDirectory();
-			this.externalDirectoryStatus = new StatFs(externalStorageDirectory.getPath());
+			this.externalStorageDirectoryList = ContextCompat.getExternalFilesDirs(context, null);
 		}
 	}
-	
-	@Override
+
+	/**
+	 * Returns whether the external memory is available or not.
+	 * @return - External memory status.
+	 */
 	public boolean externalMemoryAvailable() {
 		return android.os.Environment.getExternalStorageState()
 		                             .equals(android.os.Environment.MEDIA_MOUNTED);
 	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
+
+	/**
+	 * Returns the available internal memory size.
+	 * @return - Available internal memory size.
+	 */
 	public double getAvailableInternalMemorySize() {
-		double blockSize, availableBlocks;
-		blockSize = dataDirectoryStatus.getBlockSize();
-		availableBlocks = dataDirectoryStatus.getAvailableBlocks();
-
-		return formatSizeInGb(availableBlocks * blockSize);
+		long freeBytesInternal = dataDirectory.getFreeSpace();
+		return formatSizeInGb(freeBytesInternal);
 	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
+
+	/**
+	 * Returns the total internal memory size.
+	 * @return - Total internal memory size.
+	 */
 	public double getTotalInternalMemorySize() {
-		double blockSize, totalBlocks;	
-		blockSize = dataDirectoryStatus.getBlockSize();
-		totalBlocks = dataDirectoryStatus.getBlockCount();
-		
-		return formatSizeInGb(totalBlocks * blockSize);
+		long totalBytesInternal = dataDirectory.getTotalSpace();
+		return formatSizeInGb(totalBytesInternal);
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
+	/**
+	 * Returns the available external memory size.
+	 * @return - Available external memory size.
+	 */
 	public double getAvailableExternalMemorySize() {
-		double blockSize, availableBlocks;
+		long freeBytesExternal = 0;
 		if (externalMemoryAvailable()) {
-			blockSize = externalDirectoryStatus.getBlockSize();
-			availableBlocks = externalDirectoryStatus.getAvailableBlocks();
-			
-			return formatSizeInGb(availableBlocks * blockSize);
+			for (File dir : externalStorageDirectoryList) {
+				if (!dir.getAbsolutePath().contains(INTERNAL_STORAGE_PATH)) {
+					freeBytesExternal += dir.getFreeSpace();
+				}
+			}
+			return formatSizeInGb(freeBytesExternal);
 		} else {
 			return MEMORY_NOT_AVAILABLE;
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
+	/**
+	 * Returns the total external memory size.
+	 * @return - Total external memory size.
+	 */
 	public double getTotalExternalMemorySize() {
-		double blockSize, totalBlocks;
-		if (externalMemoryAvailable()) {		
-			blockSize = externalDirectoryStatus.getBlockSize();
-			totalBlocks = externalDirectoryStatus.getBlockCount();
-			
-			return formatSizeInGb(totalBlocks * blockSize);
+		long totalBytesExternal = 0;
+		if (externalMemoryAvailable()) {
+			for (File dir : externalStorageDirectoryList) {
+				if (!dir.getAbsolutePath().contains(INTERNAL_STORAGE_PATH)) {
+					totalBytesExternal += dir.getTotalSpace();
+				}
+			}
+			return formatSizeInGb(totalBytesExternal);
 		} else {
 			return MEMORY_NOT_AVAILABLE;
 		}
 	}
 
-	@Override
+	/**
+	 * Returns the string formatted value for the size.
+	 * @param byteValue - Memory in bytes.
+	 * @return - Memory formatted into GB.
+	 */
 	public double formatSizeInGb(double byteValue) {
 		double gbValue = (byteValue / GB_DIVIDER);
 		BigDecimal roundedValue = new BigDecimal(gbValue).setScale(SCALE, RoundingMode.HALF_EVEN);
@@ -125,7 +132,12 @@ public class DeviceStateICS implements DeviceState{
 		return gbValue;
 	}
 
-	@Override
+	/**
+	 * Returns the string formatted value for the size.
+	 * @param byteValue
+	 *            - Memory in bytes.
+	 * @return - Memory formatted into MB.
+	 */
 	public double formatSizeInMb(double byteValue) {
 		double mbValue = (byteValue / MB_DIVIDER);
 		BigDecimal roundedValue = new BigDecimal(mbValue).setScale(SCALE, RoundingMode.HALF_EVEN);
@@ -134,7 +146,10 @@ public class DeviceStateICS implements DeviceState{
 		return mbValue;
 	}
 
-	@Override
+	/**
+	 * Returns true if the device is compatible to run the agent.
+	 * @return - Device compatibility status.
+	 */
 	public Response evaluateCompatibility() {
 		if (!(info.getSdkVersion() >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) &&
 				info.isRooted()) {
@@ -147,20 +162,30 @@ public class DeviceStateICS implements DeviceState{
 		return Response.COMPATIBLE;
 	}
 
-	@Override
+	/**
+	 * Returns the device IP address.
+	 * @return - Device IP address.
+	 */
 	public String getIpAddress() {
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 		return intToIp(wifiInfo.getIpAddress());
 	}
 
-	@Override
+	/**
+	 * Format the integer IP address and return it as a String.
+	 * @param ip - IP address should be passed in as an Integer.
+	 * @return - Formatted IP address.
+	 */
 	public String intToIp(int ip) {
 		return (ip & 0xFF) + "." + ((ip >> 8) & 0xFF) + "." + ((ip >> 16) & 0xFF) + "." +
 		       ((ip >> 24) & 0xFF);
 	}
 
-	@Override
+	/**
+	 * Returns the device battery information.
+	 * @return - Battery level.
+	 */
 	public float getBatteryLevel() {
 		Intent batteryIntent = context.registerReceiver(null,
 		                                                new IntentFilter(
@@ -169,4 +194,5 @@ public class DeviceStateICS implements DeviceState{
 		int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, DEFAULT_LEVEL);
 		return ((float) level / (float) scale) * PRECENTAGE_MULTIPLIER;
 	}
+
 }

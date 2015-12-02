@@ -76,6 +76,7 @@ public class ConfigurationMgtService {
 			}
 			configuration.setConfiguration(configs);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
+			AndroidAPIUtils.getGCMService().resetTenantConfigCache();
 			Response.status(Response.Status.CREATED);
 			responseMsg.setResponseMessage("Android platform configuration saved successfully.");
 			responseMsg.setResponseCode(Response.Status.CREATED.toString());
@@ -148,6 +149,7 @@ public class ConfigurationMgtService {
 			}
 			configuration.setConfiguration(configs);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
+            AndroidAPIUtils.getGCMService().resetTenantConfigCache();
 			Response.status(Response.Status.ACCEPTED);
 			responseMsg.setResponseMessage("Android platform configuration has updated successfully.");
 			responseMsg.setResponseCode(Response.Status.ACCEPTED.toString());

@@ -246,7 +246,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         }
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
-        String wapProvisioningString = null;
+        String wapProvisioningString;
         try {
             builder = domFactory.newDocumentBuilder();
 
