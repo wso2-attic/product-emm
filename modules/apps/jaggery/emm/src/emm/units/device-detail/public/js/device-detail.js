@@ -126,8 +126,7 @@
                 var viewModel = {};
                 if(data != null && data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
-                        data[i].name = data[i].name.replace(/[^\w\s]/gi, ' ');
-                        data[i].name = data[i].name.replace(/[0-9]/g, ' ');
+                        data[i].name = decodeURIComponent(data[i].name);
                     }
                 }
                 viewModel.applications = data;
