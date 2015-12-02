@@ -266,7 +266,7 @@ public class Role {
                 }
             }
         } catch (UserStoreException e) {
-            String msg = "Error occurred while saving the role: " + newRoleName;
+            String msg = e.getMessage();
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }

@@ -101,7 +101,7 @@ $(document).ready(function () {
         } else {
             var addRoleFormData = {};
             addRoleFormData.roleName = roleName;
-            
+
             if (domain != "PRIMARY"){
                 addRoleFormData.roleName = domain + "/" + roleName;
             }
@@ -111,7 +111,6 @@ $(document).ready(function () {
 
             addRoleFormData.users = users;
             var addRoleAPI = "/mdm-admin/roles?rolename=" + currentRoleName;
-
             invokerUtil.put(
                 addRoleAPI,
                 addRoleFormData,
