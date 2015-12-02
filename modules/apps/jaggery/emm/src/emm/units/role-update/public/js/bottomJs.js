@@ -82,7 +82,6 @@ $(document).ready(function () {
         var roleName = $("input#rolename").val();
         var currentRoleName = $("input#rolename").data("currentrole");
         var domain = $("#domain").val();
-        var users = $("#users").val();
 
         var errorMsgWrapper = "#role-create-error-msg";
         var errorMsg = "#role-create-error-msg span";
@@ -105,11 +104,7 @@ $(document).ready(function () {
             if (domain != "PRIMARY"){
                 addRoleFormData.roleName = domain + "/" + roleName;
             }
-            if (users == null){
-                users = [];
-            }
 
-            addRoleFormData.users = users;
             var addRoleAPI = "/mdm-admin/roles?rolename=" + currentRoleName;
             invokerUtil.put(
                 addRoleAPI,

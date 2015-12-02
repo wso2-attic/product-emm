@@ -91,7 +91,7 @@ public class DeviceState {
 		long freeBytesExternal = 0;
 		if (externalMemoryAvailable()) {
 			for (File dir : externalStorageDirectoryList) {
-				if (!dir.getAbsolutePath().contains(INTERNAL_STORAGE_PATH)) {
+				if (dir != null && !dir.getAbsolutePath().contains(INTERNAL_STORAGE_PATH)) {
 					freeBytesExternal += dir.getFreeSpace();
 				}
 			}
@@ -109,7 +109,7 @@ public class DeviceState {
 		long totalBytesExternal = 0;
 		if (externalMemoryAvailable()) {
 			for (File dir : externalStorageDirectoryList) {
-				if (!dir.getAbsolutePath().contains(INTERNAL_STORAGE_PATH)) {
+				if (dir != null && !dir.getAbsolutePath().contains(INTERNAL_STORAGE_PATH)) {
 					totalBytesExternal += dir.getTotalSpace();
 				}
 			}
