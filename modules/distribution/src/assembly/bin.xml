@@ -36,7 +36,6 @@
                 <exclude>**/*.sh</exclude>
                 <exclude>**/README*</exclude>
                 <exclude>**/LICENSE*</exclude>
-                <exclude>**/INSTALL*</exclude>
                 <exclude>**/release-notes.html</exclude>
                 <exclude>**/axis2services/sample01.aar</exclude>
                 <exclude>**/axis2services/echo/**</exclude>
@@ -508,12 +507,6 @@
                     <fileMode>644</fileMode>
                 </file>-->
 
-        <file>
-            <source>INSTALL.txt</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
         <file>
             <source>README.txt</source>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
