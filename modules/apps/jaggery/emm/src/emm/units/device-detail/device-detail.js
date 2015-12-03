@@ -22,7 +22,7 @@ function onRequest(context) {
                     viewModel.AvailableDeviceCapacity = Math.round(deviceInfo.AvailableDeviceCapacity * 100) / 100;
                     viewModel.DeviceCapacityUsed = Math.round((viewModel.DeviceCapacity
                         - viewModel.AvailableDeviceCapacity) * 100) / 100;
-                    viewModel.DeviceCapacityPercentage = Math.round(viewModel.DeviceCapacityUsed
+                    viewModel.DeviceCapacityPercentage = Math.round(viewModel.AvailableDeviceCapacity
                         / viewModel.DeviceCapacity * 10000) / 100;
                 } else if (device.type == "android") {
                     viewModel.imei = device.properties.IMEI;
