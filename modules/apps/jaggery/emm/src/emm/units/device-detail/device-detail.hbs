@@ -4,9 +4,11 @@
             <div class="col-lg-12 wr-secondary-bar">
                 <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
                     Device {{device.name}}
+                    {{#if device.viewModel.model}}
                     <span class="lbl-device">
                         ( {{device.viewModel.vendor}} {{device.viewModel.model}} )
                     </span>
+                    {{/if}}
                 </label>
             </div>
         </div>
@@ -26,8 +28,10 @@
                         {{#defineZone "device-detail-properties"}}
                             <table class="table table-responsive table-striped" id="members">
                                 <tbody>
-                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px; width: 1%;;">Device</td><td style="padding:10px 15px;">{{device.viewModel.vendor}} {{device.properties.model}}</td></tr>
-                                <tr role="row" class="odd"><td class="sorting_1" style="padding:10px 15px;">Model</td><td style="padding:10px 15px;">{{device.viewModel.model}}</td></tr>
+                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px; width: 1%;">Device</td><td style="padding:10px 15px;">{{device.viewModel.vendor}} {{device.properties.model}}</td></tr>
+                                {{#if device.viewModel.model}}
+                                    <tr role="row" class="odd"><td class="sorting_1" style="padding:10px 15px;">Model</td><td style="padding:10px 15px;">{{device.viewModel.model}}</td></tr>
+                                {{/if}}
                                 <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">IMEI</td><td style="padding:10px 15px;">{{device.viewModel.imei}}</td></tr>
                                 {{#if device.viewModel.udid}}
                                     <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">UDID</td><td style="padding:10px 15px;">{{device.viewModel.udid}}</td></tr>

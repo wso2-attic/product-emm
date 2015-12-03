@@ -107,7 +107,7 @@ $(document).ready(function () {
                     }
                 }, function (data) {
                     if (data["status"] == 409) {
-                        $(errorMsg).text("User : " + username + " already exists. You cannot proceed.");
+                        $(errorMsg).text("User : " + username + " already exists. Please pick another username.");
                     } else if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
                     } else {

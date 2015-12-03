@@ -10,7 +10,9 @@
                 </td>
                 <td class="fade-edge" data-search="{{properties.DEVICE_MODEL}},{{properties.VENDOR}}" data-display="{{properties.DEVICE_MODEL}}">
                     <h4>Device {{name}}</h4>
-                    <div>({{properties.VENDOR}} - {{properties.DEVICE_MODEL}})</div>
+                    {{#if properties.DEVICE_MODEL}}
+                        <div>({{properties.VENDOR}} - {{properties.DEVICE_MODEL}})</div>
+                    {{/if}}
                 </td>
                 <td class="fade-edge remove-padding-top" data-search="{{enrolmentInfo.owner}}" data-display="{{enrolmentInfo.owner}}" data-grid-label="Owner">{{enrolmentInfo.owner}}</td>
                 <td class="fade-edge remove-padding-top" data-search="{{enrolmentInfo.status}}" data-display="{{enrolmentInfo.status}}" data-grid-label="Status">

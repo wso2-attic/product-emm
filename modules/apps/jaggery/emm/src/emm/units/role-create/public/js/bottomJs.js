@@ -127,7 +127,11 @@ $(document).ready(function () {
                         $("#role-created-msg").removeClass("hidden");
                     }
                 }, function (data) {
-                    $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
+                    if (JSON.parse(data.responseText).errorMessage.indexOf("RoleExisting") > -1) {
+                        $(errorMsg).text("Role name : " + roleName + " already exists. Please pick another role name.");
+                    } else {
+                        $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
+                    }
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );
