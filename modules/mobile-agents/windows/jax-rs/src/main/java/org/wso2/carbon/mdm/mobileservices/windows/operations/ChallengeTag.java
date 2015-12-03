@@ -36,11 +36,11 @@ public class ChallengeTag {
         this.meta = meta;
     }
 
-    public void buildChallElement(Document doc, Element rootElement) {
-        Element chal = doc.createElement(Constants.CHALLENGE);
-        rootElement.appendChild(chal);
+    public void buildChalElement(Document doc, Element rootElement) {
+        Element challenge = doc.createElement(Constants.CHALLENGE);
+        rootElement.appendChild(challenge);
         if (getMeta() != null) {
-            getMeta().buildMetaElement(doc, chal);
+            getMeta().buildMetaElement(doc, challenge);
         }
     }
 }

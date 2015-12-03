@@ -83,7 +83,7 @@ $(document).ready(function () {
         invokerUtil.put(serviceURL, deviceIdentifier, function(message){
             console.log(message);
         }, function(message){
-                console.log(message);
+                console.log(message.content);
             });
     });
 });
@@ -196,7 +196,7 @@ function loadDevices(searchType, searchParam){
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){
-                console.log(message);
+                console.log(message.content);
             });
     });
 }
@@ -255,7 +255,7 @@ $(document).ready(function () {
         invokerUtil.put(serviceURL, deviceIdentifier, function(message){
             console.log(message);
         }, function(message){
-                console.log(message);
+                console.log(message.content);
             });
     });
 

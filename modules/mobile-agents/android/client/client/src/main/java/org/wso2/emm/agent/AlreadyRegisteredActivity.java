@@ -26,6 +26,7 @@ import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.LocalNotification;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -177,6 +178,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {
+				stopPolling();
 				String serverIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.IP);
 				ServerConfig utils = new ServerConfig();
 				utils.setServerIP(serverIP);
@@ -306,13 +308,17 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
 				if (responseStatus != null && Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+					stopPolling();
 					initiateUnregistration();
 				} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
+					startPolling();
 					displayInternalServerError();
 				} else {
+					startPolling();
 					loadAuthenticationErrorActivity();
 				}
 			} else {
+				startPolling();
 				loadAuthenticationErrorActivity();
 			}
 		}
@@ -326,7 +332,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				} else if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
 					Log.d(TAG, "Device has already enrolled");
 				} else {
+					stopPolling();
 					initiateUnregistration();
+					loadServerDetailsActivity();
 				}
 			}
 		}
@@ -364,7 +372,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-				getResources().getString(R.string.device_admin_enable_alert));
+		                           getResources().getString(R.string.device_admin_enable_alert));
 		startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
 	}
 
@@ -418,7 +426,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this, PinCodeActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-				AlreadyRegisteredActivity.class.getSimpleName());
+		                AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
 	}
 
@@ -433,6 +441,30 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
 				AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
+	}
+
+	/**
+	 * Stops server polling task.
+	 */
+	private void stopPolling() {
+		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
+		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
+			LocalNotification.stopPolling(context);
+		} else if(notifier == null) {
+			LocalNotification.stopPolling(context);
+		}
+	}
+
+	/**
+	 * Starts server polling task.
+	 */
+	private void startPolling() {
+		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
+		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
+			LocalNotification.startPolling(context);
+		} else if(notifier == null) {
+			LocalNotification.startPolling(context);
+		}
 	}
 
 	private void stopProgressDialog() {

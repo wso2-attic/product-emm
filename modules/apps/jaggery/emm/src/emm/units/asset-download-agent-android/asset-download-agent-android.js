@@ -22,7 +22,7 @@ function onRequest (context) {
 
     var mdmProps = require('/config/mdm-props.js').config();
     // setting android agent download URL
-    context["agentDownloadURL"] = mdmProps["httpURL"] + mdmProps["appContext"] +
+    context["agentDownloadURL"] = mdmProps.generalConfig.host + mdmProps["appContext"] +
         "public/asset-download-agent-android/asset/" + mdmProps["androidAgentApp"];
     var companyProps = session.get("COMPANY_DETAILS");
     if (!companyProps) {

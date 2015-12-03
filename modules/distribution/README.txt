@@ -82,7 +82,6 @@ WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
         .
         ├── bin              //executables
         ├── dbscripts        //DBScripts
-        ├── INSTALL.txt
         ├── lib
         ├── LICENSE.txt
         ├── modules          //Jaggery Modules
@@ -152,9 +151,6 @@ WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
 
     - README.txt
       This document.
-
-    - INSTALL.txt
-      This document contains information on installing WSO2 Enterprise Mobility Manager.
 
     - release-notes.html
       Release information for WSO2 Enterprise Mobility Manager 2.0.0-SNAPSHOT

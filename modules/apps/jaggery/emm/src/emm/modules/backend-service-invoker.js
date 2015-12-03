@@ -65,19 +65,16 @@ var backendServiceInvoker = function () {
                 tokenUtil.refreshToken();
                 return execute(count);
             } else if (xmlHttpRequest.status == 500) {
-                return errorCallback(xmlHttpRequest.responseText);
+                return errorCallback(xmlHttpRequest);
             } else {
-                return errorCallback(xmlHttpRequest.responseText);
+                return errorCallback(xmlHttpRequest);
             }
         };
         var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();
         if (accessToken) {
             return execute(1);
         } else {
-            var dummyRespose = {};
-            dummyRespose.status = 401;
-            dummyRespose.responseText = "401";
-            errorCallback(stringify(dummyRespose));
+           response.status = 401;
         }
     }
 

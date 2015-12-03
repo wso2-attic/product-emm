@@ -13,7 +13,7 @@ public class Preference {
 	private static final int DEFAULT_INDEX = 0;
 
 	/**
-	 * Put data to shared preferences in private mode.
+	 * Put string data to shared preferences in private mode.
 	 * @param context - The context of activity which is requesting to put data.
 	 * @param key     - Used to identify the value.
 	 * @param value   - The actual value to be saved.
@@ -30,7 +30,7 @@ public class Preference {
 	}
 
 	/**
-	 * Retrieve data from shared preferences in private mode.
+	 * Retrieve string data from shared preferences in private mode.
 	 * @param context - The context of activity which is requesting to put data.
 	 * @param key     - Used to identify the value to to be retrieved.
 	 */
@@ -44,7 +44,7 @@ public class Preference {
 	}
 
 	/**
-	 * Put data to shared preferences in private mode.
+	 * Put float data to shared preferences in private mode.
 	 * @param context - The context of activity which is requesting to put data.
 	 * @param key     - Used to identify the value.
 	 * @param value   - The actual value to be saved.
@@ -61,7 +61,7 @@ public class Preference {
 	}
 
 	/**
-	 * Retrieve data from shared preferences in private mode.
+	 * Retrieve float data from shared preferences in private mode.
 	 * @param context - The context of activity which is requesting to put data.
 	 * @param key     - Used to identify the value to to be retrieved.
 	 */
@@ -75,7 +75,7 @@ public class Preference {
 	}
 
 	/**
-	 * Put data to shared preferences in private mode.
+	 * Put integer data to shared preferences in private mode.
 	 * @param context - The context of activity which is requesting to put data.
 	 * @param key     - Used to identify the value.
 	 * @param value   - The actual value to be saved.
@@ -92,7 +92,7 @@ public class Preference {
 	}
 
 	/**
-	 * Retrieve data from shared preferences in private mode.
+	 * Retrieve integer data from shared preferences in private mode.
 	 * @param context - The context of activity which is requesting to put data.
 	 * @param key     - Used to identify the value to to be retrieved.
 	 */
@@ -103,6 +103,37 @@ public class Preference {
 				                             Context.MODE_PRIVATE
 				);
 		return mainPref.getInt(key, DEFAULT_INDEX);
+	}
+
+	/**
+	 * Put boolean data to shared preferences in private mode.
+	 * @param context - The context of activity which is requesting to put data.
+	 * @param key     - Used to identify the value.
+	 * @param value   - The actual value to be saved.
+	 */
+	public static void putBoolean(Context context, String key, boolean value) {
+		SharedPreferences mainPref =
+				context.getSharedPreferences(context.getResources()
+						                             .getString(R.string.shared_pref_package),
+				                             Context.MODE_PRIVATE
+				);
+		Editor editor = mainPref.edit();
+		editor.putBoolean(key, value);
+		editor.commit();
+	}
+
+	/**
+	 * Retrieve boolean data from shared preferences in private mode.
+	 * @param context - The context of activity which is requesting to put data.
+	 * @param key     - Used to identify the value to to be retrieved.
+	 */
+	public static boolean getBoolean(Context context, String key) {
+		SharedPreferences mainPref =
+				context.getSharedPreferences(context.getResources()
+						                             .getString(R.string.shared_pref_package),
+				                             Context.MODE_PRIVATE
+				);
+		return mainPref.getBoolean(key, false);
 	}
 
 	/**

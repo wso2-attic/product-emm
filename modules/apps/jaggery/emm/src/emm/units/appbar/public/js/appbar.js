@@ -85,8 +85,8 @@ function loadNotifications(){
     };
 
     invokerUtil.get(serviceURL,
-        successCallback, function(message){
-            console.log(message);
+        successCallback, function(response){
+            console.log(response.content);
     });
 }
 

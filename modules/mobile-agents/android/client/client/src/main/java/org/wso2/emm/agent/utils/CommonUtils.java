@@ -114,7 +114,6 @@ public class CommonUtils {
 		editor.commit();
 		Preference.clearPreferences(context);
 		clearClientCredentials(context);
-
 	}
 
 	/**
