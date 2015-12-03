@@ -96,9 +96,9 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            log.error("Failure occurred at MDMResponse post for GeneralSecurityException",e);
+            log.error("GeneralSecurityException Error occurred while creating an EasySSLProtocolSocketFactory object",e);
         } catch (IOException e) {
-            log.error("Failure occured at MDMResponse post for IOException",e);
+            log.error("Exception occurred while sending the POST request to "+endpoint,e);
         }
         return null;
     }
@@ -121,9 +121,9 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            log.error("Failure occurred at MDMResponse put for GeneralSecurityException",e);
+            log.error("GeneralSecurityException Error occurred while creating an EasySSLProtocolSocketFactory object",e);
         } catch (IOException e) {
-            log.error("Failure occurred at MDMResponse put for IO Exception",e);
+            log.error("Exception occurred while sending the PUT request to "+endpoint,e);
         }
         return null;
     }
@@ -146,9 +146,9 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            log.error("Failure occurred at MDMResponse get for GeneralSecurityException", e);
+            log.error("GeneralSecurityException Error occurred while creating an EasySSLProtocolSocketFactory object", e);
         } catch (IOException e) {
-            log.error("Failure occurred at MDMResponse get for IOException", e);
+            log.error("Exception occurred while sending the GET request to "+endpoint, e);
         }
 
         return null;
@@ -177,10 +177,11 @@ public class MDMHttpClient {
             return mdmResponse;
 
         } catch (GeneralSecurityException e) {
-            log.error("Failure occurred at MDMResponse delete for GeneralSecurityException", e);
+            log.error("GeneralSecurityException occurred while creating an EasySSLProtocolSocketFactory object.", e);
         } catch (IOException e) {
-            log.error("Failure occurred at MDMResponse delete for IOException", e);
+            log.error("Exception occurred while sending the DELETE request to " + endpoint, e);
         }
         return null;
     }
+
 }

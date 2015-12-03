@@ -4,6 +4,6 @@ function onRequest(context) {
     var permissions = userModule.getUIPermissions();
     var mdmProps = require('/config/mdm-props.js').config();
     context.permissions = permissions;
-    context["enrollmentURL"] = mdmProps.enrollmentURL;
+    context["enrollmentURL"] = mdmProps.generalConfig.host + mdmProps.enrollmentDir;
     return context;
 }

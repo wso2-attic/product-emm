@@ -98,9 +98,6 @@ utility = function () {
         userModule.addPermissions([{key: "platform-configs", name: "Platform Configurations"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "platform-configs/view", name: "View Configurations"}], "device-mgt/emm-admin", type);
     };
-
     return publicMethods;
 
 }();
-
-
