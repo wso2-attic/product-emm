@@ -7,7 +7,7 @@
 function onRequest(context) {
     var log = new Log("units/user-create/user-create.js");
     var userModule = require("/modules/user.js")["userModule"];
-    var response = userModule.getRoles();
+    var response = userModule.getRolesByUserStore("PRIMARY");
     var mdmProps = require('/config/mdm-props.js').config();
     context["charLimit"] = mdmProps.usernameLength;
     if (response["status"] == "success") {

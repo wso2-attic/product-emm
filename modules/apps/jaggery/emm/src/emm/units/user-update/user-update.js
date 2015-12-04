@@ -10,6 +10,10 @@ function onRequest(context) {
     var userName = request.getParameter("username");
 
     if (userName) {
+        var userStore = "PRIMARY";
+        if(userName.indexOf("/") > -1) {
+            userStore = userName.substr(0, userName.indexOf('/'));
+        }
         var response = userModule.getUser(userName);
 
         if (response["status"] == "success") {
@@ -20,7 +24,7 @@ function onRequest(context) {
         if (response["status"] == "success") {
             context["usersRoles"] = response["content"];
         }
-        response = userModule.getRoles();
+        response = userModule.getRolesByUserStore(userStore);
         if (response["status"] == "success") {
             context["userRoles"] = response["content"];
         }
