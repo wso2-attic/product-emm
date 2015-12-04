@@ -41,15 +41,6 @@ $( "#userStore" )
                         $('#roles').append(newOption);
                     }
                 }
-            }, function (data) {
-                /*if (data["status"] == 409) {
-                 $(errorMsg).text("User : " + username + " already exists. Please pick another username.");
-                 } else if (data["status"] == 500) {
-                 $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
-                 } else {
-                 $(errorMsg).text(data.errorMessage);
-                 }
-                 $(errorMsgWrapper).removeClass("hidden");*/
             }
         );
     })

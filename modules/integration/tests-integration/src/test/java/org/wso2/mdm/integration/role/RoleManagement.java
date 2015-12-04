@@ -57,13 +57,6 @@ public class RoleManagement extends TestBase {
         MDMResponse response = client.put(url,
                     PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString());
-        File logFile = new File("/home/tharinda/Working/EMM/product-mdm/testUpdateRolePermission.txt");
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
-        writer.write(response.getBody());
-        writer.write(url);
-        writer.write("hello");
-        writer.close();
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
