@@ -43,7 +43,8 @@ $( "#userStore" )
                 }
             }
         );
-    }).change();
+    })
+    .change();
 
 $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
