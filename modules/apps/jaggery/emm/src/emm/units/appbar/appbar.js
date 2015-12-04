@@ -72,6 +72,6 @@ function onRequest(context) {
     // where units are attached to a page zone.
     // eg: {{unit "appbar" pageLink="users" title="User Management"}}
     context["currentActions"] = links[context["pageLink"]];
-    context["enrollmentURL"] = mdmProps.enrollmentURL;
+    context["enrollmentURL"] = mdmProps.generalConfig.host + mdmProps.enrollmentDir;
     return context;
 }

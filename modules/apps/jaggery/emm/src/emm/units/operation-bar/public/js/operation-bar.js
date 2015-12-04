@@ -283,7 +283,7 @@ function runOperation (operationName) {
         }
     } else {
         invokerUtil.post(serviceEndPoint, payload,
-            successCallback, function (jqXHR, textStatus, errorThrown) {
+            successCallback, function (textStatus) {
                 console.log(textStatus);
             });
         $(modalPopupContent).removeData();

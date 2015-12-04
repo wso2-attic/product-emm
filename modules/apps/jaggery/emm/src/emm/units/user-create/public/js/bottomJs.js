@@ -98,20 +98,20 @@ $(document).ready(function () {
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
                         generateQRCode("#user-created-msg .qr-code");
-                    } else if (data["statusCode"] == 409) {
+                    } else if (data["status"] == 409) {
                         $(errorMsg).text(data["messageFromServer"]);
                         $(errorMsgWrapper).removeClass("hidden");
-                    } else if (data["statusCode"] == 500) {
+                    } else if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                         $(errorMsgWrapper).removeClass("hidden");
                     }
                 }, function (data) {
                     if (data["status"] == 409) {
-                        $(errorMsg).text("User : " + username + " already exists. You cannot proceed.");
+                        $(errorMsg).text("User : " + username + " already exists. Please pick another username.");
                     } else if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
                     } else {
-                        $(errorMsg).text("An unexpected error occurred. Please try again later.");
+                        $(errorMsg).text(data.errorMessage);
                     }
                     $(errorMsgWrapper).removeClass("hidden");
                 }

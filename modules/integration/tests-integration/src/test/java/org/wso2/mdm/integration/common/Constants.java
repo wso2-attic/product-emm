@@ -223,6 +223,7 @@ public final class Constants {
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
         public static final String ADD_POLICY_ENDPOINT="/mdm-admin/policies/active-policy";
+
         public static final String POLICY_PAYLOAD_FILE_NAME = "policy-payloads.json";
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
 

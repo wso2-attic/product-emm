@@ -27,7 +27,6 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.RoleWrapper;
-import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.*;
 import org.wso2.carbon.user.core.common.AbstractUserStoreManager;
@@ -56,14 +55,13 @@ public class Role {
     @Produces ({MediaType.APPLICATION_JSON})
     public Response getRoles() throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        AbstractUserStoreManager abstractUserStoreManager = (AbstractUserStoreManager) MDMAPIUtils.getUserStoreManager();
         String[] roles;
         try {
             if (log.isDebugEnabled()) {
                 log.debug("Getting the list of user roles");
             }
-//            roles = userStoreManager.getRoleNames();
-            roles = abstractUserStoreManager.getRoleNames("TESTDOMAIN/*", -1, false, true, true);
+            roles = userStoreManager.getRoleNames();
+
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving the list of user roles.";
             log.error(msg, e);
@@ -72,7 +70,7 @@ public class Role {
         // removing all internal roles and roles created for Service-providers
         List<String> filteredRoles = new ArrayList<String>();
         for (String role : roles) {
-            if (!role.startsWith("Internal/") || !role.startsWith("Application/")) {
+            if (!(role.startsWith("Internal/") || role.startsWith("Application/"))) {
                 filteredRoles.add(role);
             }
         }
@@ -242,7 +240,6 @@ public class Role {
         final AuthorizationManager authorizationManager = MDMAPIUtils.getAuthorizationManager();
         String newRoleName = roleWrapper.getRoleName();
         try {
-
             if (log.isDebugEnabled()) {
                 log.debug("Updating the role to user store");
             }
@@ -252,7 +249,7 @@ public class Role {
             if (roleWrapper.getUsers() != null) {
                 SetReferenceTransformer transformer = new SetReferenceTransformer();
                 transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(newRoleName)),
-                        Arrays.asList(roleWrapper.getUsers()));
+                                      Arrays.asList(roleWrapper.getUsers()));
                 final String[] usersToAdd = (String[])
                         transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
                 final String[] usersToDelete = (String[])
@@ -261,16 +258,16 @@ public class Role {
             }
             if (roleWrapper.getPermissions() != null) {
                 // Delete all authorizations for the current role before authorizing the permission tree
-                authorizationManager.clearRoleAuthorization(newRoleName);
-                if (roleWrapper.getPermissions() != null && roleWrapper.getPermissions().length > 0) {
+                authorizationManager.clearRoleAuthorization(roleName);
+                if (roleWrapper.getPermissions().length > 0) {
                     for (int i = 0; i < roleWrapper.getPermissions().length; i++) {
                         String permission = roleWrapper.getPermissions()[i];
-                        authorizationManager.authorizeRole(newRoleName, permission, CarbonConstants.UI_PERMISSION_ACTION);
+                        authorizationManager.authorizeRole(roleName, permission, CarbonConstants.UI_PERMISSION_ACTION);
                     }
                 }
             }
         } catch (UserStoreException e) {
-            String msg = "Error occurred while saving the role: " + newRoleName;
+            String msg = e.getMessage();
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -334,7 +331,7 @@ public class Role {
         } catch (UserStoreException e) {
             String msg = "Error occurred while saving the users of the role: " + roleName;
             log.error(msg, e);
-            throw new MDMAPIException(msg, e);
+            throw new MDMAPIException(e.getMessage(), e);
         }
         return Response.status(HttpStatus.SC_OK).build();
     }

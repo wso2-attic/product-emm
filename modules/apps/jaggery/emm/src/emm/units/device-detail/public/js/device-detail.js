@@ -32,7 +32,7 @@
             function(message){
                 console.log(message);
             }, function (message) {
-                console.log(message);
+                console.log(message.content);
             });
     }
     $(document).ready(function(){
@@ -105,7 +105,7 @@
             };
             invokerUtil.get(serviceURL,
                 successCallback, function(message){
-                    console.log(message);
+                    console.log(message.content);
             });
         });
 
@@ -126,8 +126,7 @@
                 var viewModel = {};
                 if(data != null && data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
-                        data[i].name = data[i].name.replace(/[^\w\s]/gi, ' ');
-                        data[i].name = data[i].name.replace(/[0-9]/g, ' ');
+                        data[i].name = decodeURIComponent(data[i].name);
                     }
                 }
                 viewModel.applications = data;
@@ -140,7 +139,7 @@
             };
             invokerUtil.get(serviceURL,
                 successCallback, function(message){
-                    console.log(message);
+                    console.log(message.content);
             });
         });
     }
@@ -181,14 +180,14 @@
                     activePolicy = data;
                     invokerUtil.get(serviceURLCompliance,
                         successCallbackCompliance, function(message){
-                            console.log(message);
+                            console.log(message.content);
                     });
                 }
             };
 
             invokerUtil.get(serviceURLPolicy,
                 successCallbackPolicy, function(message){
-                    console.log(message);
+                    console.log(message.content);
             });
         });
 

@@ -126,8 +126,12 @@ $(document).ready(function () {
                         $("#role-create-form").addClass("hidden");
                         $("#role-created-msg").removeClass("hidden");
                     }
-                }, function () {
-                    $(errorMsg).text("An unexpected error occurred. Please try again later.");
+                }, function (data) {
+                    if (JSON.parse(data.responseText).errorMessage.indexOf("RoleExisting") > -1) {
+                        $(errorMsg).text("Role name : " + roleName + " already exists. Please pick another role name.");
+                    } else {
+                        $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
+                    }
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );

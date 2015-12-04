@@ -32,7 +32,6 @@ import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
-import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.CertificateGenerationException;
@@ -122,10 +121,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 headerBinarySecurityToken = element.getFirstChild().getNextSibling().getFirstChild().getTextContent();
             }
         }
-        List<ConfigurationEntry> tenantConfigurations = null;
+        List<ConfigurationEntry> tenantConfigurations;
         try {
-            if (getTenantConfigurationData() != null) {
-                tenantConfigurations = getTenantConfigurationData();
+            if (WindowsAPIUtils.getTenantConfigurationData() != null) {
+                tenantConfigurations = WindowsAPIUtils.getTenantConfigurationData();
                 for (ConfigurationEntry configurationEntry : tenantConfigurations) {
                     if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.
                             NOTIFIER_FREQUENCY)) {
@@ -362,20 +361,5 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         }
         Message message = ((WrappedMessageContext) messageContext).getWrappedMessage();
         return CastUtils.cast((List<?>) message.get(Header.HEADER_LIST));
-    }
-
-    /**
-     * This method is used to get tenant configurations.
-     *
-     * @return List of Configurations entries.
-     * @throws DeviceManagementException
-     */
-    private List<ConfigurationEntry> getTenantConfigurationData() throws DeviceManagementException {
-        if (WindowsAPIUtils.getTenantConfiguration() != null) {
-            TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
-            return configuration.getConfiguration();
-        } else {
-            return null;
-        }
     }
 }

@@ -91,6 +91,7 @@ public final class PluginConstants {
         public static final String ONPREMISE_CERTIFICATE_ENROLLMENT_SERVICE_URL =
                 "/ENROLLMENTSERVER/ONPREMISE/DeviceEnrollmentWebservice.svc";
         public static final String WAB_URL = "/emm/enrollments/windows/login-agent";
+        public static final String HOST_NAME = "HostName";
 
     }
 
@@ -275,6 +276,8 @@ public final class PluginConstants {
         public static final String CONTENT_TYPE_TEXT = "text";
         public static final String NOTIFIER_FREQUENCY = "notifierFrequency";
         public static final String DEFAULT_FREQUENCY = "8";
+        public static final String AUTH_POLICY = "authPolicy";
+        public static final String DEFAULT_AUTH_POLICY = "Federated";
 
     }
 

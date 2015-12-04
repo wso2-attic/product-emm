@@ -156,7 +156,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                     token = syncmlHeader.getCredential().getData();
                     CacheEntry cacheToken = (CacheEntry) DeviceUtil.getCacheEntry(token);
 
-                    if (cacheToken.getUsername().equals(user)) {
+                    if ((cacheToken.getUsername() != null) && (cacheToken.getUsername().equals(user))) {
 
                         if (enrollDevice(request)) {
                             deviceInfoOperations = deviceInfo.getDeviceInfo();

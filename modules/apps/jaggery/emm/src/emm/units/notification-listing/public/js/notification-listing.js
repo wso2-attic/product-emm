@@ -57,8 +57,15 @@ $(document).ready(function () {
                 }
 
                 $(errorMsgWrapper).removeClass("hidden");
-            }, function () {
-                $(errorMsg).text("An unexpected error occurred.");
+            }, function (data) {
+                data = data.status;
+                if (data == 500) {
+                    $(errorMsg).text("Exception occurred at backend.");
+                } else if (data == 403) {
+                    $(errorMsg).text("Action was not permitted.");
+                } else {
+                    $(errorMsg).text("An unexpected error occurred.");
+                }
                 $(errorMsgWrapper).removeClass("hidden");
             }
         );
@@ -86,7 +93,7 @@ function loadNotifications(){
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){
-                console.log(message);
+                console.log(message.content);
         });
     });
 }

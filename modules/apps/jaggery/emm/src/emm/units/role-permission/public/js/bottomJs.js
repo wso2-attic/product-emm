@@ -98,14 +98,14 @@ $(document).ready(function () {
         invokerUtil.put(
             updateRolePermissionAPI,
             updateRolePermissionData,
-            function (data, status, jqXHR) {
-                if (jqXHR.status == 200) {
+            function (jqXHR) {
+                if (JSON.parse(jqXHR).statusCode == 200 || jqXHR.status == 200) {
                     // Refreshing with success message
                     $("#role-create-form").addClass("hidden");
                     $("#role-created-msg").removeClass("hidden");
                 }
-            }, function () {
-                $(errorMsg).text("An unexpected error occurred. Please try again later.");
+            }, function (data) {
+                $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
                 $(errorMsgWrapper).removeClass("hidden");
             }
         );

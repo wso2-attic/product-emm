@@ -107,7 +107,11 @@ public class DynamicClientManager {
         try {
             SendRequest sendRequestTask = new SendRequest();
             Map<String, String> responseParams = sendRequestTask.execute(endPointInfo).get();
-            String statusCode = responseParams.get(Constants.STATUS);
+            String statusCode = null;
+            if(responseParams != null) {
+                statusCode = responseParams.get(Constants.STATUS);
+            }
+
             return Constants.Status.ACCEPT.equalsIgnoreCase(statusCode);
         } catch (InterruptedException e) {
             throw new AndroidAgentException("Error occurred due to thread interruption", e);

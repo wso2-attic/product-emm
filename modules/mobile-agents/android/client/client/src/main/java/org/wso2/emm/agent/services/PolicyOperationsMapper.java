@@ -81,7 +81,7 @@ public class PolicyOperationsMapper {
 		operation.setId(INVALID_FLAG);
 		try {
 			JSONObject payload = new JSONObject(operation.getPayLoad().toString());
-			boolean encrypt = payload.getBoolean("encrypt");
+			boolean encrypt = payload.getBoolean("encrypted");
 			operation.setEnabled(encrypt);
 			return operation;
 		} catch (JSONException e) {

@@ -51,9 +51,8 @@ if (platform != "iOS") {
 
         if (xhr.status == 200) {
             var responseObject = parse(xhr["responseText"]);
-            var deviceID = responseObject["deviceID"];
             response["status"] = 200;
-            response["content"] = {"deviceID" : deviceID};
+            response["content"] = responseObject;
         } else {
             // server only returns 400 in case of bad request
             response["status"] = 200;

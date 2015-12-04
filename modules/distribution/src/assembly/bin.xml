@@ -379,7 +379,6 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
             <includes>
-                <include>**/sso-idp-config.xml</include>
                 <include>**/saml1-assertion-config</include>
                 <include>**/msg-mgt.properties</include>
                 <include>**/entitlement.properties</include>
@@ -595,6 +594,15 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
             <fileMode>644</fileMode>
         </file>
+
+        <!-- Copying sso-idp-config.xml file -->
+        <file>
+            <source>src/repository/conf/sso-idp-config.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
+
 
         <!-- Copying governance.xml -->
         <file>

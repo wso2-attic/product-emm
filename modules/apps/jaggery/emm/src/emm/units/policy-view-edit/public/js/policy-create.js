@@ -1803,8 +1803,8 @@ var updatePolicy = function (policy, state) {
                         $(".policy-message").removeClass("hidden");
                     },
                     // on error
-                    function () {
-
+                    function (daa) {
+                        console.log(data);
                     }
                 );
             }else if(state == "publish"){
@@ -1821,8 +1821,8 @@ var updatePolicy = function (policy, state) {
                         $(".policy-message").removeClass("hidden");
                     },
                     // on error
-                    function () {
-
+                    function (data) {
+                        console.log(data);
                     }
                 );
             }
@@ -2002,7 +2002,8 @@ $(document).ready(function () {
             skipStep["policy-platform"](policyPayloadObj);
         },
         // on error
-        function () {
+        function (data) {
+            console.log(data);
             // should be redirected to an error page
         }
     );

@@ -49,7 +49,7 @@ public class ShellExecutor {
 				shellProcess = Runtime.getRuntime().exec(shellCommand);
 			}
 		} catch (IOException e) {
-			Log.e(LOG_TAG, "Shell command processing failed", e);
+			Log.e(LOG_TAG, "Root check shell command processing failed. The device is not rooted.");
 		}
 
 		if(shellProcess!=null){
