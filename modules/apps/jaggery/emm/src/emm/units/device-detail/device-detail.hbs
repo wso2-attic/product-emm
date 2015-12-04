@@ -84,6 +84,12 @@
                                     <div class="panel-body hidden">
                                         <!-- device summary -->
                                         <div class="row">
+                                            {{#equal device.type "windows"}}
+                                                <div class="panel-body">
+                                                    Not available yet
+                                                </div>
+                                                <br class="c-both" />
+                                            {{/equal}}
                                             {{#if device.viewModel.BatteryLevel}}
                                                 <div class="col-lg-4">
                                                     <div class="wr-stats-board-tile">
