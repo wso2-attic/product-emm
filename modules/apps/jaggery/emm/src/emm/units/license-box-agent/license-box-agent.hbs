@@ -23,7 +23,7 @@ under the License. --}}
                 <br/><br/>
                 <div class="wr-agreement">
                     <h4>{{companyName}} License Agreement</h4>
-                    {{license}}
+                    <p id="license-text">{{license}}</p>
                 </div>
             </div>
         </div>
@@ -33,4 +33,7 @@ under the License. --}}
             </div>
         </div>
     </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/license-box-agent.js"></script>
 {{/zone}}
