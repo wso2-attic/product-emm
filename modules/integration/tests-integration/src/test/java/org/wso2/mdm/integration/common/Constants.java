@@ -216,7 +216,6 @@ public final class Constants {
         public static final String ROLE_ENDPOINT="/mdm-admin/roles";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
 
-
     }
 
     public static final class PolicyManagement {

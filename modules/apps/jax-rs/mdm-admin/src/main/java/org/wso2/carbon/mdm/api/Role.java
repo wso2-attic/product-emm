@@ -30,6 +30,7 @@ import org.wso2.carbon.mdm.beans.RoleWrapper;
 import org.wso2.carbon.mdm.util.MDMUtil;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.*;
+import org.wso2.carbon.user.core.common.AbstractUserStoreManager;
 import org.wso2.carbon.user.mgt.UserRealmProxy;
 import org.wso2.carbon.user.mgt.common.UIPermissionNode;
 import org.wso2.carbon.user.mgt.common.UserAdminException;
@@ -55,12 +56,14 @@ public class Role {
     @Produces ({MediaType.APPLICATION_JSON})
     public Response getRoles() throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        AbstractUserStoreManager abstractUserStoreManager = (AbstractUserStoreManager) MDMAPIUtils.getUserStoreManager();
         String[] roles;
         try {
             if (log.isDebugEnabled()) {
                 log.debug("Getting the list of user roles");
             }
-            roles = userStoreManager.getRoleNames();
+//            roles = userStoreManager.getRoleNames();
+            roles = abstractUserStoreManager.getRoleNames("TESTDOMAIN/*", -1, false, true, true);
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving the list of user roles.";
             log.error(msg, e);
@@ -246,7 +249,6 @@ public class Role {
             if (newRoleName != null && !roleName.equals(newRoleName)) {
                 userStoreManager.updateRoleName(roleName, newRoleName);
             }
-            String newRoleName=roleWrapper.getRoleName();
             if (roleWrapper.getUsers() != null) {
                 SetReferenceTransformer transformer = new SetReferenceTransformer();
                 transformer.transform(Arrays.asList(userStoreManager.getUserListOfRole(newRoleName)),
@@ -255,10 +257,6 @@ public class Role {
                         transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
                 final String[] usersToDelete = (String[])
                         transformer.getObjectsToRemove().toArray(new String[transformer.getObjectsToRemove().size()]);
-<<<<<<< HEAD
-=======
-
->>>>>>> 8afcbb52fa13e92c22c4ef0fad95fdc5614fdf56
                 userStoreManager.updateUserListOfRole(newRoleName, usersToDelete, usersToAdd);
             }
             if (roleWrapper.getPermissions() != null) {

@@ -24,6 +24,10 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * This class contains integration tests for role management backend services.
  */
@@ -53,6 +57,13 @@ public class RoleManagement extends TestBase {
         MDMResponse response = client.put(url,
                     PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString());
+        File logFile = new File("/home/tharinda/Working/EMM/product-mdm/testUpdateRolePermission.txt");
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
+        writer.write(response.getBody());
+        writer.write(url);
+        writer.write("hello");
+        writer.close();
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -65,7 +76,6 @@ public class RoleManagement extends TestBase {
 
     private String GetURL(String endPoint){
         return endPoint+"?rolename="+Constants.RoleManagement.ROLE_NAME;
-
     }
 
 }
