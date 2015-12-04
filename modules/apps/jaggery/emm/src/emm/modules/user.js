@@ -455,6 +455,30 @@ var userModule = function () {
         }
     };
 
+    /*
+     @Updated
+     */
+    /**
+     * Get User Roles from user store (Internal roles not included).
+     */
+    publicMethods.getRolesByUserStore = function (userStore) {
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require('/modules/utility.js')["utility"];
+        if (!carbonUser) {
+            log.error("User object was not found in the session");
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
+        }
+        try {
+            utility.startTenantFlow(carbonUser);
+            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/" + userStore;
+            return privateMethods.callBackend(url, constants.HTTP_GET);
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
+    };
+
     /**
      * Get Platforms.
      */
