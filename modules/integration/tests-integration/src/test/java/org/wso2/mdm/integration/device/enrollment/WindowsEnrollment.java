@@ -42,6 +42,7 @@ public class WindowsEnrollment extends TestBase {
     private static String token = "token";
     private static String UserToken = "UserToken";
     private static final String BSD_PLACEHOLDER = "{BinarySecurityToken}";
+    Base64 base64Encoder;
 
     @BeforeClass(alwaysRun = true, groups = {Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP})
     public void initTest() throws Exception {
@@ -84,13 +85,13 @@ public class WindowsEnrollment extends TestBase {
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post.",
             dependsOnMethods = "testBST")
     public void testMSXCEP() throws Exception {
+        base64Encoder = new Base64();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(bsd);
         JsonNode token = node.get(UserToken);
-        Base64 base64Encoder = new Base64();
-        String baseToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
+        String encodedToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
         String xml = readXML(Constants.WindowsEnrollment.MS_XCEP_FILE, Constants.UTF8);
-        String payload = xml.replace(BSD_PLACEHOLDER, baseToken);
+        String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         MDMResponse response = client.post(Constants.WindowsEnrollment.MS_EXCEP, payload);
         Assert.assertEquals(response.getStatus(), HttpStatus.SC_ACCEPTED);
@@ -99,13 +100,13 @@ public class WindowsEnrollment extends TestBase {
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post.",
             dependsOnMethods = "testMSXCEP")
     public void testWSETP() throws Exception {
+        base64Encoder = new Base64();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(bsd);
         JsonNode token = node.get(UserToken);
-        Base64 base64Encoder = new Base64();
-        String baseToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
+        String encodedToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
         String xml = readXML(Constants.WindowsEnrollment.WS_STEP_FILE, Constants.UTF8);
-        String payload = xml.replace(BSD_PLACEHOLDER, baseToken);
+        String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         MDMResponse response = client.post(Constants.WindowsEnrollment.WSTEP_URL, payload);
         Assert.assertEquals(response.getStatus(), HttpStatus.SC_ACCEPTED);
