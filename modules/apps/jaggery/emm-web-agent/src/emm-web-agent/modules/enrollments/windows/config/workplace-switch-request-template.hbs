@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>
+            Working...
+        </title>
+        <script>
+            function formSubmit() {
+                document.forms[0].submit();
+            }
+            window.onload=formSubmit;
+        </script>
+    </head>
+    <body>
+        <form method="post" action="{{windowsWorkplaceAppID}}">
+            <p><input type="hidden" name="wresult" value="{{windowsBinaryToken}}"/></p>
+            <input type="submit"/>
+        </form>
+    </body>
+</html>

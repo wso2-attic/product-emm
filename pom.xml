@@ -41,6 +41,7 @@
         <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/emm</module>
+	<module>modules/apps/jaggery/emm-web-agent</module>
         <module>modules/tools</module>
         <module>modules/mdm-ui</module>
         <module>modules/features</module>

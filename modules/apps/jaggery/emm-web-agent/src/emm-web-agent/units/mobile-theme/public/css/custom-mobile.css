@@ -1,0 +1,137 @@
+/* forms */
+.input-control {
+	margin-bottom:20px;
+}
+
+.input-control input, .input-control textarea {
+	border: 1px #999 solid;
+	width: 100%;
+	height: 100%;
+	padding: 6px 10px;
+	z-index: 1;
+	-webkit-appearance: none;
+}
+
+.input-control input:focus, .input-control textarea:focus {
+    border-color: #555;
+    box-shadow: 0 0px 0px rgba(229, 103, 23, 0.075) inset, 0 0 0px rgba(229, 103, 23, 0.6);
+    outline: 0 none
+}
+
+.input-control file {
+	border: 1px #d9d9d9 solid !important;
+	width: 100%;
+	height: 100%;
+	padding: 8px 15px;
+	z-index: 1;
+	-webkit-appearance: none;
+}
+
+.input-label {
+	font-weight:100;
+	font-size:18px;
+	color:#555;
+}
+
+.input-label {
+	font-weight:400;
+	font-size:14px;
+	color:#555;	
+}
+
+.help-tip {
+	font-size:14px;
+	padding:0px 10px;
+	color:#666;
+}
+
+.wr-notification {
+	background:#ff5353;
+	padding:10px 20px;
+}
+
+.form-val-error {
+	font-size:13px;
+	color:#ff2353;
+	font-weight:400;
+	display:inline-block;
+	padding-top:3px;
+}
+
+.wr-validation-summary {
+	padding: 15px 0px 10px 0;
+	border-top: 1px solid #ffe8e8;
+	border-bottom: 1px solid #ffe8e8;
+	background: #fff4f4;
+	text-align: center;
+	display:block;
+	margin-bottom:15px;	
+}
+
+span.wr-validation-summary p {
+	font-size:17px;
+	font-weight:400;
+}
+
+/* button group */
+.wr-buttons {
+	margin-top:20px;
+}
+
+/* text content */
+.wr-head h2 {
+	font-weight:400;
+	margin-bottom:20px;
+}
+
+.wr-text p {
+ 	font-size:24px;
+ 	font-weight:100;
+ 	color:#555;
+}
+
+a.btn-download-agent {
+ 	display:block;
+ 	padding:15px 20px;
+ 	background:#11375B;
+ 	color:#fff;
+ 	font-size:18px;
+ 	font-weight:100; 	
+ 	text-align: center;
+    text-decoration: none;
+}
+
+a.btn-download-agent:hover {
+ 	background:#16436D;
+}
+
+.wr-agreement {
+	padding:15px;
+	border:1px solid #f0f0f0;
+	background:#fafafa;
+	height:320px;
+	overflow-y:auto;
+}
+
+.wr-agreement p {
+	font-weight:400;
+	margin-bottom:20px;	
+	font-size:14px;	
+}
+
+h3 {
+	font-weight:400;
+	margin-bottom:20px;	
+	font-size:18px;	
+}
+
+h4 {
+	font-weight:700;
+	margin-bottom:20px;	
+	font-size:15px;
+	text-transform: uppercase;
+}
+
+.itm-wiz {
+    margin-top: 20px;
+}

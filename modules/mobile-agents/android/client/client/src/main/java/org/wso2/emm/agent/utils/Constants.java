@@ -81,6 +81,8 @@ public class Constants {
 	public static final String CLIENT_SECRET = "client_secret";
 	public static final String CLIENT_NAME = "client_name";
 	public static final String IP = "ip";
+	public static final String PROTOCOL = "serverProtocol";
+	public static final String PORT = "serverPort";
 	public static final String GRANT_TYPE = "password refresh_token";
 	public static final String TOKEN_SCOPE = "production";
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
