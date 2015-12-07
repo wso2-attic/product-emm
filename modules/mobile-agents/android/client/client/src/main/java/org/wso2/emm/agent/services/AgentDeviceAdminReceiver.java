@@ -106,7 +106,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		utils.setServerIP(serverIP);
 
 		CommonUtils.callSecuredAPI(context,
-		                           utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+		                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
 		                           HTTP_METHODS.DELETE,
 		                           null, AgentDeviceAdminReceiver.this,
 		                           Constants.UNREGISTER_REQUEST_CODE);

@@ -171,7 +171,7 @@ public class CommonUtils {
 		utils.setServerIP(serverIP);
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		dynamicClientManager.unregisterClient(profile,utils);
+		dynamicClientManager.unregisterClient(profile,utils, context);
 	}
 
 	/**

@@ -184,7 +184,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				utils.setServerIP(serverIP);
 
 				CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-						utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+						utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
 						HTTP_METHODS.DELETE,
 						null, AlreadyRegisteredActivity.this,
 						Constants.UNREGISTER_REQUEST_CODE);
@@ -270,7 +270,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 						utils.setServerIP(serverIP);
 
 						CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-								utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
+								utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
 								HTTP_METHODS.GET,
 								null, AlreadyRegisteredActivity.this,
 								Constants.IS_REGISTERED_REQUEST_CODE);

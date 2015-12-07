@@ -121,7 +121,7 @@ public class MessageProcessor implements APIResultCallBack {
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
-		String url = utils.getAPIServerURL() + Constants.NOTIFICATION_ENDPOINT + deviceId;
+		String url = utils.getAPIServerURL(context) + Constants.NOTIFICATION_ENDPOINT + deviceId;
 		Log.i(TAG, "getMessage: calling-endpoint: " + url);
 
 		String requestParams;

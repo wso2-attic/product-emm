@@ -3,7 +3,7 @@
     "apiContext" : "api",
     "httpsURL" : "%https.ip%",
     "httpURL" : "%http.ip%",
-    "enrollmentDir": "/emm/enrollment",
+    "enrollmentDir": "/emm-web-agent/enrollment",
     "iOSConfigRoot" : "%https.ip%/ios-enrollment/",
     "iOSAPIRoot" : "%https.ip%/ios/",
     "dynamicClientRegistrationEndPoint" : "%https.ip%/dynamic-client-web/register/",
