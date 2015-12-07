@@ -88,9 +88,11 @@ var util = function () {
             tokenPair.refreshToken = data.refresh_token;
             tokenPair.accessToken = data.access_token;
         } else if (xhr.status == 403) {
-            throw "Error in obtaining token with Password grant type";
+            log.error("Error in obtaining token with Password grant type");
+            return null;
         } else {
-            throw "Error in obtaining token with Password grant type";
+            log.error("Error in obtaining token with Password grant type");
+            return null;
         }
         return tokenPair;
     };
