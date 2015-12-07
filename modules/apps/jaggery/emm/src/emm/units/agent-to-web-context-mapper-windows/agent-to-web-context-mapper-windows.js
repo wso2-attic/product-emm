@@ -30,7 +30,7 @@ function onRequest(context) {
         // appru passes app ID of the Windows workplace app
         var windowsWorkplaceAppID = request.getParameter("appru");
         if (!userEmail || !windowsWorkplaceAppID) {
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+            response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
         } else {
             /* allowing to skip first step of windows enrollment by
             setting session.put("lastAccessedPage", "invoke-agent")...

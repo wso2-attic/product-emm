@@ -30,13 +30,13 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform != "iOS") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
 } else if (session.get("lastAccessedPage") != "license-agent") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
 } else {
     var authenticatedUser = session.get("authenticatedUser");
     if (!authenticatedUser) {
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+        response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
     } else {
         var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
         var PostMethod = Packages.org.apache.commons.httpclient.methods.PostMethod;
@@ -71,11 +71,11 @@ if (platform != "iOS") {
                 print(new Stream(byteArrayInputStream));
             } else {
                 // two visible possibilities would be server sending 401 and 500
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
+                response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/ios/login-agent?error=unexpected");
             }
         } catch (e) {
             log.error("Error occurred in enrolling ios device", e);
-            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
+            response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/ios/login-agent?error=unexpected");
         } finally {
             method.releaseConnection();
         }

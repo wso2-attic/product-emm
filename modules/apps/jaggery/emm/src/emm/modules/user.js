@@ -260,7 +260,7 @@ var userModule = function () {
      */
     privateMethods.inviteUserToEnroll = function (username, password) {
         var carbon = require('carbon');
-        var enrollmentURL = mdmProps.httpsURL + mdmProps.appContext + "download-agent";
+        var enrollmentURL = mdmProps.generalConfig.host + mdmProps.webAgentContext + "download-agent";
         var carbonUser = session.get(constants.USER_SESSION_KEY);
         var utility = require('/modules/utility.js').utility;
         if (!carbonUser) {
@@ -320,7 +320,7 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        var enrollmentURL = mdmProps.httpsURL + mdmProps.appContext + "download-agent";
+        var enrollmentURL = mdmProps.generalConfig.host + mdmProps.webAgentContext + "download-agent";
 
         try {
             utility.startTenantFlow(carbonUser);
