@@ -48,6 +48,9 @@ public class ServerDetails extends Activity {
 	private DeviceInfo deviceInfo;
 	private DeviceState state;
 	private TextView txtSeverAddress;
+	private static final String PROTOCOL_HTTPS = "https://";
+	private static final String PROTOCOL_HTTP = "http://";
+	private static final String COLON = ":";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -162,8 +165,30 @@ public class ServerDetails extends Activity {
 			switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (!evServerIP.getText().toString().trim().isEmpty()) {
-						Preference.putString(context.getApplicationContext(), Constants.IP,
-						                     evServerIP.getText().toString().trim());
+						String host = evServerIP.getText().toString().trim();
+                        if (host.indexOf(PROTOCOL_HTTP) > -1) {
+	                        String hostWithPort = host.substring(PROTOCOL_HTTP.length(), host.length());
+	                        Preference.putString(context.getApplicationContext(), Constants.IP,
+	                                             getHostFromUrl(hostWithPort));
+	                        Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTP);
+	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
+	                                             getPortFromUrl(hostWithPort));
+                        } else if (host.indexOf(PROTOCOL_HTTPS) > -1) {
+	                        String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
+	                        Preference.putString(context.getApplicationContext(), Constants.IP,
+	                                             getHostFromUrl(hostWithPort));
+	                        Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTPS);
+	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
+	                                             getPortFromUrl(hostWithPort));
+                        } else if (host.indexOf(COLON) > -1) {
+	                        Preference.putString(context.getApplicationContext(), Constants.IP,
+	                                             getHostFromUrl(host));
+	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
+	                                             getPortFromUrl(host));
+                        } else {
+	                        Preference.putString(context.getApplicationContext(), Constants.IP, host);
+                        }
+
 						startAuthenticationActivity();
 					} else {
 						Toast.makeText(context.getApplicationContext(),
@@ -182,6 +207,22 @@ public class ServerDetails extends Activity {
 			}
 		}
 	};
+
+	private String getHostFromUrl (String url) {
+		if (url.indexOf(COLON) > -1) {
+			return url.substring(0, url.indexOf(COLON));
+		} else {
+			return url;
+		}
+	}
+
+	private String getPortFromUrl (String url) {
+		if (url.indexOf(COLON) > -1) {
+			return url.substring((url.indexOf(COLON) + 1), url.length());
+		} else {
+			return Constants.SERVER_PORT;
+		}
+	}
 
 	/**
 	 * This method is called to open AuthenticationActivity.

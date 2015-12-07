@@ -138,7 +138,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
-		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
+		String url = utils.getAPIServerURL(getContext()) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
 
 		CommonUtils.callSecuredAPI(getContext(), url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
 		                           replyPayload, GCMRegistrationManager.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);

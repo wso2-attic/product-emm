@@ -281,7 +281,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				Preference.getString(AuthenticationActivity.this, Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(serverIP);
-		String serverURL = utils.getServerURL() + Constants.OAUTH_ENDPOINT;
+		String serverURL = utils.getServerURL(context) + Constants.OAUTH_ENDPOINT;
 		Editable tenantDomain = etDomain.getText();
 
 		if (tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
@@ -406,7 +406,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
-				utils.getAPIServerURL() + Constants.LICENSE_ENDPOINT,
+				utils.getAPIServerURL(context) + Constants.LICENSE_ENDPOINT,
 				HTTP_METHODS.GET, null, AuthenticationActivity.this,
 				Constants.LICENSE_REQUEST_CODE
 		);
@@ -439,7 +439,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
-		                           utils.getAPIServerURL() + Constants.CONFIGURATION_ENDPOINT,
+		                           utils.getAPIServerURL(context) + Constants.CONFIGURATION_ENDPOINT,
 		                           HTTP_METHODS.GET, null, AuthenticationActivity.this,
 		                           Constants.CONFIGURATION_REQUEST_CODE
 		);
@@ -847,7 +847,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		profile.setTokenScope(Constants.TOKEN_SCOPE);
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		return dynamicClientManager.getClientCredentials(profile, utils);
+		return dynamicClientManager.getClientCredentials(profile, utils, context);
 	}
 
 	/**
