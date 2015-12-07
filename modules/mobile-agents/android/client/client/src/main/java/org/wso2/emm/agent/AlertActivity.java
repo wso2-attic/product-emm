@@ -113,6 +113,8 @@ public class AlertActivity extends SherlockActivity {
 	private void startRing() {
 		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+		audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING),
+		                      AudioManager.FLAG_PLAY_SOUND);
 		defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE);
 		defaultRingtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
 
