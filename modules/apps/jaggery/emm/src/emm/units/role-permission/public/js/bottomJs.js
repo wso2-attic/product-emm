@@ -10,6 +10,15 @@
  * Tree view function
  * @return {Null}
  */
+var modalPopup = ".wr-modalpopup";
+var modalPopupContent = modalPopup + " .modalpopup-content";
+/*
+ * hide popup function.
+ */
+function hidePopup() {
+    $(modalPopupContent).html('');
+    $(modalPopup).hide();
+}
 
 $.fn.tree_view = function(){
     var tree = $(this);
@@ -77,8 +86,14 @@ $(document).ready(function () {
                         var parentInput = $(this).parents("ul:eq(1) > li").find('input:eq(0)');
                         if(parentInput && parentInput.is(':checked')){
                             event.preventDefault();
-                            $(".modalpopup-content").html("<center><font size ='6'>Can't deselect child permissions when parent permission is selected.</font></center>");
+                            /*$(".modalpopup-content").html("<center><font size ='6'>Can't deselect child permissions " +
+                                "when parent permission is selected.</font></center>");
                             showPopup();
+                        */
+                            $(modalPopupContent).html($('#remove-user-error-content').html());
+                            $("a#remove-user-error-link").click(function () {
+                                hidePopup();
+                            });
                         }
                     });
                     $('#permissionList').tree_view();
