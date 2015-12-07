@@ -36,16 +36,19 @@ deviceModule = function () {
     publicMethods.getLicense = function (deviceType, languageCode) {
         var url;
         var license;
-        if(deviceType != null && deviceType != undefined && deviceType == "windows"){
+        if (deviceType != null && deviceType != undefined && deviceType == "windows") {
             url = mdmProps["httpURL"] + "/mdm-windows-agent/services/device/license";
-        } else{
+        } else if (deviceType != null && deviceType != undefined && deviceType == "ios") {
             url = mdmProps["httpsURL"] + "/ios-enrollment/license/";
         }
-        serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-            license = responsePayload.text;
-        }, function (responsePayload) {
-            return null;
-        });
+
+        if (url != null && url != undefined) {
+            serviceInvokers.XMLHttp.get(url, function (responsePayload) {
+                license = responsePayload.text;
+            }, function (responsePayload) {
+                return null;
+            });
+        }
         return license;
     };
 
