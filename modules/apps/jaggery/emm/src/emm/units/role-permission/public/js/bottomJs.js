@@ -73,6 +73,14 @@ $(document).ready(function () {
                             });
                         });
                     }
+                    $("#permissionList li input").click(function(){
+                        var parentInput = $(this).parents("ul:eq(1) > li").find('input:eq(0)');
+                        if(parentInput && parentInput.is(':checked')){
+                            event.preventDefault();
+                            $(".modalpopup-content").html("<center><font size ='6'>Can't deselect child permissions when parent permission is selected.</font></center>");
+                            showPopup();
+                        }
+                    });
                     $('#permissionList').tree_view();
                 }, function(message){
                     console.log(message);
