@@ -1,0 +1,17 @@
+{{#zone "topCss"}}
+    <link rel="stylesheet" href="{{self.publicURL}}/less/menu.css">
+{{/zone}}
+
+{{#zone "left"}}
+
+    <div>
+        <ul class="{{self.class}} nav nav-pills nav-stacked ">
+            {{#defineZone "menuItem"}}
+                <li class="active"><a href="{{defineZone "link"}}">
+                    {{defineZone "title"}}
+                </a></li>
+            {{/defineZone}}
+        </ul>
+    </div>
+
+{{/zone}}

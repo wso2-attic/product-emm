@@ -140,26 +140,22 @@ public class ServerDetails extends Activity {
 			btnStartRegistration.setEnabled(false);
 		}
 	}
-	
+
 	private void loadStartRegistrationDialog(){
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ServerDetails.this);
 		StringBuilder messageBuilder = new StringBuilder();
-		messageBuilder
-				.append(getResources().getString(R.string.dialog_init_confirmation));
-		messageBuilder.append(context.getResources()
-		                             .getString(R.string.intent_extra_space));
+		messageBuilder.append(getResources().getString(R.string.dialog_init_confirmation));
+		messageBuilder.append(context.getResources().getString(R.string.intent_extra_space));
 		messageBuilder.append(evServerIP.getText().toString());
-		messageBuilder.append(context.getResources()
-		                             .getString(R.string.intent_extra_space));
-		messageBuilder
-				.append(getResources().getString(R.string.dialog_init_end_general));
+		messageBuilder.append(context.getResources().getString(R.string.intent_extra_space));
+		messageBuilder.append(getResources().getString(R.string.dialog_init_end_general));
 		alertBuilder.setMessage(messageBuilder.toString())
 		            .setPositiveButton(getResources().getString(R.string.yes),
 		                               dialogClickListener)
 		            .setNegativeButton(getResources().getString(R.string.no),
 		                               dialogClickListener).show();
 	}
-	
+
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
