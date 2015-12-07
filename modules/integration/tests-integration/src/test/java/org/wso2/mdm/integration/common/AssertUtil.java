@@ -22,15 +22,22 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.testng.Assert;
 
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
- * This class contains methods to make assertions easier and which are not available out of the box, from testng.
+ * This class contains methods to make assertions easier and which are not available out of the box, from testing.
  */
 public class AssertUtil {
     /**
      * This can be used to compare if to json strings are matched or not.
      *
      * @param expectedJsonPayload the expected json string.
-     * @param realPayload     real json string.
+     * @param realPayload         real json string.
      * @param mustMatch           If the real and expected must match, in order to become the test successful or not.
      */
     public static void jsonPayloadCompare(String expectedJsonPayload, String realPayload, boolean mustMatch) {
@@ -43,5 +50,32 @@ public class AssertUtil {
         } else {
             Assert.assertFalse(realPayloadObject.equals(expectedPayloadObject));
         }
+    }
+
+    /**
+     * This can be used to compare expected soap payloads are compare with real payload.
+     *
+     * @param expectedXMLPayload the expected soap payload.
+     * @param realPayload        real soap payload.
+     * @param mustMatch          If the real soap and expected soap must match, in oder to become the test successful
+     *                           or not
+     */
+    public static void soapPayloadCompare(String expectedXMLPayload, String realPayload, boolean mustMatch) {
+        InputStream is = new ByteArrayInputStream(expectedXMLPayload.getBytes());
+        InputStream os = new ByteArrayInputStream(realPayload.getBytes());
+        try {
+            SOAPMessage expectedPayloadObject = MessageFactory.newInstance().createMessage(null, is);
+            SOAPMessage realPayloadObject = MessageFactory.newInstance().createMessage(null, os);
+            if (mustMatch) {
+                Assert.assertTrue(realPayloadObject.equals(expectedPayloadObject));
+            } else {
+                Assert.assertFalse(realPayloadObject.equals(expectedPayloadObject));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SOAPException e) {
+            e.printStackTrace();
+        }
+
     }
 }

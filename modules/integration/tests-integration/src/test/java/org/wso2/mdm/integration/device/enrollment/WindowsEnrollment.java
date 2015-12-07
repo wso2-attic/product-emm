@@ -18,17 +18,16 @@
 package org.wso2.mdm.integration.device.enrollment;
 
 import junit.framework.Assert;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
-import org.wso2.mdm.integration.common.Constants;
-import org.wso2.mdm.integration.common.OAuthUtil;
-import org.wso2.mdm.integration.common.RestClient;
-import org.wso2.mdm.integration.common.TestBase;
+import org.wso2.mdm.integration.common.*;
 
 import java.io.File;
 import java.net.URL;
@@ -38,15 +37,17 @@ import java.net.URL;
  * tests.
  */
 public class WindowsEnrollment extends TestBase {
-    private RestClient client;
+    private MDMHttpClient client;
     private static String bsd;
+    private static String token = "token";
+    private static String UserToken = "UserToken";
     private static final String BSD_PLACEHOLDER = "{BinarySecurityToken}";
 
     @BeforeClass(alwaysRun = true, groups = {Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
-        client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     /**
@@ -57,52 +58,57 @@ public class WindowsEnrollment extends TestBase {
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery get.")
     public void testServerAvailability() throws Exception {
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
-        HttpResponse response = client.get(Constants.WindowsEnrollment.DISCOVERY_GET_URL);
-        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
+        MDMResponse response = client.get(Constants.WindowsEnrollment.DISCOVERY_GET_URL);
+        Assert.assertEquals(response.getStatus(), HttpStatus.SC_OK);
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post.")
     public void testDiscoveryPost() throws Exception {
         String xml = readXML(Constants.WindowsEnrollment.DISCOVERY_POST_FILE, Constants.UTF8);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
-        HttpResponse response = client.post(Constants.WindowsEnrollment.DISCOVERY_POST_URL, xml);
-        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.DISCOVERY_POST_URL, xml);
+        Assert.assertEquals(response.getStatus(), HttpStatus.SC_OK);
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows BST.")
     public void testBST() throws Exception {
-        JSONObject bsdObject = new JSONObject(Constants.WindowsEnrollment.BSD_PAYLOAD);
-        JSONObject childObject = bsdObject.getJSONObject("credentials");
-
-        JSONObject modifiedObject = new JSONObject();
-        modifiedObject.put("token", OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL));
-
-        childObject.put("token", modifiedObject);
-
-        HttpResponse response = client.post(Constants.WindowsEnrollment.BSD_URL, Constants.WindowsEnrollment.BSD_PAYLOAD);
-        bsd = response.getData();
-
-        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(Constants.WindowsEnrollment.BSD_PAYLOAD);
+        JsonNode node = root.path("credentials");
+        ((ObjectNode) node).put(token, OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL));
+        MDMResponse response = client.post(Constants.WindowsEnrollment.BSD_URL, root.toString());
+        bsd = response.getBody();
+        Assert.assertEquals(response.getStatus(), HttpStatus.SC_OK);
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post.",
             dependsOnMethods = "testBST")
     public void testMSXCEP() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(bsd);
+        JsonNode token = node.get(UserToken);
+        Base64 base64Encoder = new Base64();
+        String baseToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
         String xml = readXML(Constants.WindowsEnrollment.MS_XCEP_FILE, Constants.UTF8);
-        String payload = xml.replace(BSD_PLACEHOLDER, bsd);
+        String payload = xml.replace(BSD_PLACEHOLDER, baseToken);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
-        HttpResponse response = client.post(Constants.WindowsEnrollment.MS_EXCEP, payload);
-        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_ACCEPTED);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.MS_EXCEP, payload);
+        Assert.assertEquals(response.getStatus(), HttpStatus.SC_ACCEPTED);
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post.",
             dependsOnMethods = "testMSXCEP")
     public void testWSETP() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(bsd);
+        JsonNode token = node.get(UserToken);
+        Base64 base64Encoder = new Base64();
+        String baseToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
         String xml = readXML(Constants.WindowsEnrollment.WS_STEP_FILE, Constants.UTF8);
-        String payload = xml.replace(BSD_PLACEHOLDER, bsd);
+        String payload = xml.replace(BSD_PLACEHOLDER, baseToken);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
-        HttpResponse response = client.post(Constants.WindowsEnrollment.WSTEP_URL, payload);
-        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_ACCEPTED);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.WSTEP_URL, payload);
+        Assert.assertEquals(response.getStatus(), HttpStatus.SC_ACCEPTED);
     }
 
     private String readXML(String fileName, String characterEncoding) throws Exception {
