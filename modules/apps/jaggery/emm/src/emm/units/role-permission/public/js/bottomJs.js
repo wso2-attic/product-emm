@@ -12,6 +12,7 @@
  */
 var modalPopup = ".wr-modalpopup";
 var modalPopupContent = modalPopup + " .modalpopup-content";
+
 /*
  * hide popup function.
  */
@@ -20,6 +21,13 @@ function hidePopup() {
     $(modalPopup).hide();
 }
 
+/*
+ * show popup function.
+ */
+function showPopup() {
+    $(modalPopup).show();
+    setPopupMaxHeight();
+}
 $.fn.tree_view = function(){
     var tree = $(this);
     tree.find('li').has("ul").each(function () {
@@ -86,12 +94,9 @@ $(document).ready(function () {
                         var parentInput = $(this).parents("ul:eq(1) > li").find('input:eq(0)');
                         if(parentInput && parentInput.is(':checked')){
                             event.preventDefault();
-                            /*$(".modalpopup-content").html("<center><font size ='6'>Can't deselect child permissions " +
-                                "when parent permission is selected.</font></center>");
+                            $(modalPopupContent).html($('#child-deselect-error-content').html());
                             showPopup();
-                        */
-                            $(modalPopupContent).html($('#remove-user-error-content').html());
-                            $("a#remove-user-error-link").click(function () {
+                            $("a#child-deselect-error-link").click(function () {
                                 hidePopup();
                             });
                         }
