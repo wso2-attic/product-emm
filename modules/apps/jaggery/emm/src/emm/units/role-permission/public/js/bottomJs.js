@@ -45,7 +45,6 @@ $.fn.tree_view = function(){
         });
     });
 };
-
 $.fn.toggleAttr = function (attr, val, val2) {
     return this.each(function () {
         var self = $(this);
@@ -68,10 +67,9 @@ $(document).ready(function () {
                         var content = template(treeData);
                         $("#permissionList").html(content);
                         $("#permissionList").on("click", ".permissionTree .permissionItem", function(){
-                            $(this).closest("li").find("li input").each(function(){
-                                var check = $(this).prop('checked');
-                                check = !check;
-                                $(this).prop('checked', check);
+                            var parentValue = $(this).prop('checked');
+                            $(this).closest("li").find("li input").each(function () {
+                                $(this).prop('checked',parentValue);
                             });
                         });
                     }
