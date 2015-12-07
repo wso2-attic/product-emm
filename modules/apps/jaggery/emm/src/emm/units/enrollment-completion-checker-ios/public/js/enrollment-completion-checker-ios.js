@@ -19,18 +19,13 @@
 $(document).ready(function () {
     var iOSCheckUrl = "/emm/enrollment/ios/check";
     setInterval(function () {
-        $.get(iOSCheckUrl, function(data, status){
+        $.post(iOSCheckUrl, function(data, status){
             var parsedData = JSON.parse(data);
-            var extractedData = parsedData["deviceID"];
-            if(extractedData && extractedData.indexOf("_accessToken_") != -1){
-                var result = extractedData.split("_accessToken_");
-                var deviceId =  result[0];
-                var result = result[1].split("_refreshToken_");
-                var accessToken =  result[0];
-                var result = result[1].split("_clientCredentials_");
-                var refreshToken =  result[0];
-                var clientCredentials =  result[1];
-
+            var deviceId = parsedData["deviceID"];
+            var refreshToken = parsedData["refreshToken"];
+            var accessToken = parsedData["accessToken"];
+            var clientCredentials = parsedData["clientCredentials"];
+            if(deviceId){
                 window.location = "/emm/enrollments/ios/thank-you-agent?device-id=" + encodeURI(deviceId) + "&accessToken=" +
                     encodeURI(accessToken) +"&refreshToken=" + encodeURI(refreshToken) + "&clientCredentials=" + encodeURI(clientCredentials);
             }

@@ -65,9 +65,3 @@ var HTTP_GET = "GET";
 var HTTP_POST = "POST";
 var HTTP_PUT = "PUT";
 var HTTP_DELETE = "DELETE";
-
-
-
-
-
-

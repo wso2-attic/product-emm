@@ -127,6 +127,7 @@
                 if(data != null && data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
                         data[i].name = decodeURIComponent(data[i].name);
+                        data[i].platform = deviceType;
                     }
                 }
                 viewModel.applications = data;

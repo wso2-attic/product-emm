@@ -99,13 +99,13 @@ $(document).ready(function () {
             updateRolePermissionAPI,
             updateRolePermissionData,
             function (jqXHR) {
-                if (jqXHR.status == 200) {
+                if (JSON.parse(jqXHR).statusCode == 200 || jqXHR.status == 200) {
                     // Refreshing with success message
                     $("#role-create-form").addClass("hidden");
                     $("#role-created-msg").removeClass("hidden");
                 }
             }, function (data) {
-                $(errorMsg).text(data.errorMessage);
+                $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
                 $(errorMsgWrapper).removeClass("hidden");
             }
         );

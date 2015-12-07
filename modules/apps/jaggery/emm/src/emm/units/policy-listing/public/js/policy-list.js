@@ -299,7 +299,7 @@ $(document).ready(function () {
                 // on success
                 function (data) {
                     data = JSON.parse(data);
-                    if(data.errorMessage != null && data.errorMessage != undefined) {
+                    if(data.errorMessage) {
                         $(modalPopupContent).html($('#remove-policy-error-devices').html());
                         $("a#remove-policy-error-devices").click(function () {
                             hidePopup();
@@ -314,11 +314,18 @@ $(document).ready(function () {
                     }
                 },
                 // on error
-                function () {
-                    $(modalPopupContent).html($('#remove-policy-error-content').html());
-                    $("a#remove-policy-error-link").click(function () {
-                        hidePopup();
-                    });
+                function (data) {
+                    if(JSON.parse(data.responseText).errorMessage) {
+                        $(modalPopupContent).html($('#remove-policy-error-devices').html());
+                        $("a#remove-policy-error-devices").click(function () {
+                            hidePopup();
+                        });
+                    } else {
+                        $(modalPopupContent).html($('#remove-policy-error-content').html());
+                        $("a#remove-policy-error-link").click(function () {
+                            hidePopup();
+                        });
+                    }
                 }
             );
         });

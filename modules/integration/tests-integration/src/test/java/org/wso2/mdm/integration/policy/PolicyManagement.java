@@ -40,7 +40,6 @@ public class PolicyManagement extends TestBase {
 
     @Test(description = "Test add policy.")
     public void testAddPolicy() throws Exception  {
-
         MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());

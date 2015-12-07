@@ -70,7 +70,7 @@ public class OperationManagement extends TestBase {
         operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = rclient.post(Constants.AndroidOperations.INSTALL_APPS_ENDPOINT,
                 operationData.toString());
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+           Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
     @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get device apps with wrong Device ID")
@@ -83,7 +83,24 @@ public class OperationManagement extends TestBase {
 
     @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get operations for device with wrong Device ID")
     public void testGetDeviceOperationsWithWrongDeviceID() throws Exception{
-        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT+Constants.DEVICE_IMEI);
+        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT+
+                                                                            Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
     }
+
+    @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get operations for android device")
+    public void testGetDeviceOperations() throws Exception{
+        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT +
+                Constants.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get device apps for android deviceD")
+    public void testGetDeviceApps() throws Exception{
+        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT+
+                Constants.DEVICE_ID+Constants.OperationManagement.PATH_APPS);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+
+    }
+
 }

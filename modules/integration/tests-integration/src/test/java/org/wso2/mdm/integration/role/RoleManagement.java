@@ -24,6 +24,10 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * This class contains integration tests for role management backend services.
  */
@@ -40,7 +44,8 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test add role.")
     public void testAddRole() throws Exception {
-        MDMResponse response = client.post(Constants.RoleManagement.ADD_ROLE_ENDPOINT,
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT);
+        MDMResponse response = client.post(url,
                 PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
@@ -48,16 +53,16 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test update permission role.", dependsOnMethods = { "testAddRole"})
     public void testUpdateRolePermission() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_PERMISSION_ENDPOINT);
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT);
         MDMResponse response = client.put(url,
-                    PayloadGenerator.getJsonPayload(Constants.RoleManagement.UPDATE_ROLE_PERMISSION_PAYLOAD_FILE_NAME,
+                    PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString());
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test(description = "Test remove user.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRole() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_PERMISSION_ENDPOINT);
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT);
         MDMResponse response = client.delete(url);
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }

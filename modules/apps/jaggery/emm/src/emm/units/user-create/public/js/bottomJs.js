@@ -19,6 +19,31 @@ function emailIsValid(email) {
     var regExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return regExp.test(email);
 }
+$( "#userStore" )
+    .change(function () {
+        var str = "";
+        $( "select option:selected" ).each(function() {
+            str += $( this ).text() + " ";
+        });
+        var addUserAPI = "/mdm-admin/roles/"+ str;
+
+        invokerUtil.get(
+            addUserAPI,
+            function (data) {
+                data = JSON.parse(data);
+                if (data.errorMessage) {
+                    $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
+                    $(errorMsgWrapper).removeClass("hidden");
+                } else if (data["statusCode"] == 200) {
+                    $("#roles").empty();
+                    for(i=0;i<data.responseContent.length;i++){
+                        var newOption = $('<option value="'+data.responseContent[i]+'">'+data.responseContent[i]+'</option>');
+                        $('#roles').append(newOption);
+                    }
+                }
+            }
+        );
+    }).change();
 
 $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
@@ -107,7 +132,7 @@ $(document).ready(function () {
                     }
                 }, function (data) {
                     if (data["status"] == 409) {
-                        $(errorMsg).text("User : " + username + " already exists. You cannot proceed.");
+                        $(errorMsg).text("User : " + username + " already exists. Please pick another username.");
                     } else if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
                     } else {
