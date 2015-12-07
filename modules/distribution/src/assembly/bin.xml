@@ -242,9 +242,10 @@
 
         <!-- Copying API management related dbscripts -->
         <fileSet>
-            <directory>
+            <!--directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt
-            </directory>
+            </directory-->
+            <directory>src/repository/dbscripts/apimgt</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/apimgt</outputDirectory>
             <includes>
                 <include>*/**</include>
