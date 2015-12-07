@@ -28,13 +28,13 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform != "Windows Phone") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
 } else if (session.get("lastAccessedPage") != "license-agent") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
 } else {
     var authenticatedUser = session.get("authenticatedUser");
     if (!authenticatedUser) {
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+        response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
     } else {
         var enrollmentUtils = require("/modules/enrollments/util/utils.js")["methods"];
         var Handlebars = require("/lib/handlebars-v2.0.0.js")["Handlebars"];

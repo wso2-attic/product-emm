@@ -33,15 +33,15 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform != "iOS") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
 } else if (session.get("lastAccessedPage") != "login-agent") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
 } else {
     var username = request.getParameter("username");
     var password = request.getParameter("password");
     var ownership = request.getParameter("ownership");
     if (!username || !password || !ownership) {
-        response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+        response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
     } else {
         apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
@@ -59,13 +59,15 @@ if (platform != "iOS") {
                 session.put("authenticatedUserPassword", password);
                 session.put("authenticatedUserDeviceOwnership", ownership);
                 session.put("iOSChallengeToken", responseContent["challengeToken"]);
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/license-agent");
+                response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/ios/license-agent");
             } else if (xmlHttpRequest.status == 403) {
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=auth-failed");
+                response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/ios/login-agent?error=auth-failed");
             } else {
                 // one visible possibility would be server sending 500
-                response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
+                response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/ios/login-agent?error=unexpected");
             }
+        } else {
+            response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/ios/login-agent?error=auth-failed");
         }
     }
 }

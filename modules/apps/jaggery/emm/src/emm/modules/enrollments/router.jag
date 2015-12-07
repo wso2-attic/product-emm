@@ -30,12 +30,12 @@ var os = parser.getOS();
 var platform = os.name;
 
 if (platform == "Android") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/android/download-agent");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/android/download-agent");
 } else if (platform == "iOS") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/download-agent");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/ios/download-agent");
 } else if (platform == "Windows Phone") {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/windows/invoke-agent");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/windows/invoke-agent");
 } else {
-    response.sendRedirect(mdmProps["appContext"] + "enrollments/error/unintentional-request");
+    response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/error/unintentional-request");
 }
 %>

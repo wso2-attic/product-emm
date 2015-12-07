@@ -827,6 +827,15 @@
             <fileMode>644</fileMode>
         </file>
 
+        <!-- Copying EMM-WEB-AGENT jaggery app -->
+        <file>
+            <source>../apps/jaggery/emm-web-agent/target/emm-web-agent.zip</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/
+            </outputDirectory>
+            <filtered>false</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!-- Copying authenticators.xml -->
         <file>
             <source>

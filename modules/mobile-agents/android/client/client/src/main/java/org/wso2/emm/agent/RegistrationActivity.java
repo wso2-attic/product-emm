@@ -92,7 +92,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			utils.setServerIP(ipSaved);
 
 			CommonUtils.callSecuredAPI(RegistrationActivity.this,
-			                           utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
+			                           utils.getAPIServerURL(context) + Constants.REGISTER_ENDPOINT,
 			                           HTTP_METHODS.POST,
 			                           deviceInfoBuilder.getDeviceInfoPayload(),
 			                           RegistrationActivity.this,
@@ -264,7 +264,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 
-		String url = utils.getAPIServerURL() + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
+		String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
 
 		CommonUtils.callSecuredAPI(context, url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
 		                           replyPayload, RegistrationActivity.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
@@ -298,7 +298,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			utils.setServerIP(ipSaved);
 
 			CommonUtils.callSecuredAPI(RegistrationActivity.this,
-					utils.getAPIServerURL() + Constants.POLICY_ENDPOINT + deviceIdentifier,
+					utils.getAPIServerURL(context) + Constants.POLICY_ENDPOINT + deviceIdentifier,
 					HTTP_METHODS.GET,
 					null,
 					RegistrationActivity.this,

@@ -10,7 +10,24 @@
  * Tree view function
  * @return {Null}
  */
+var modalPopup = ".wr-modalpopup";
+var modalPopupContent = modalPopup + " .modalpopup-content";
 
+/*
+ * hide popup function.
+ */
+function hidePopup() {
+    $(modalPopupContent).html('');
+    $(modalPopup).hide();
+}
+
+/*
+ * show popup function.
+ */
+function showPopup() {
+    $(modalPopup).show();
+    setPopupMaxHeight();
+}
 $.fn.tree_view = function(){
     var tree = $(this);
     tree.find('li').has("ul").each(function () {
@@ -68,13 +85,23 @@ $(document).ready(function () {
                         var content = template(treeData);
                         $("#permissionList").html(content);
                         $("#permissionList").on("click", ".permissionTree .permissionItem", function(){
-                            $(this).closest("li").find("li input").each(function(){
-                                var check = $(this).prop('checked');
-                                check = !check;
-                                $(this).prop('checked', check);
+                            var parentValue = $(this).prop('checked');
+                            $(this).closest("li").find("li input").each(function () {
+                                $(this).prop('checked',parentValue);
                             });
                         });
                     }
+                    $("#permissionList li input").click(function(){
+                        var parentInput = $(this).parents("ul:eq(1) > li").find('input:eq(0)');
+                        if(parentInput && parentInput.is(':checked')){
+                            event.preventDefault();
+                            $(modalPopupContent).html($('#child-deselect-error-content').html());
+                            showPopup();
+                            $("a#child-deselect-error-link").click(function () {
+                                hidePopup();
+                            });
+                        }
+                    });
                     $('#permissionList').tree_view();
                 }, function(message){
                     console.log(message);
