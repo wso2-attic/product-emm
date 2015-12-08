@@ -30,7 +30,7 @@ function inputIsValid(regExp, inputString) {
 /**
  * Get valid param.
  *
- * @param  param
+ * @param  certificate
  * @param cached param (in the registry)
  * @returns {String} Returns the valid param
  */
