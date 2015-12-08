@@ -28,6 +28,21 @@ function inputIsValid(regExp, inputString) {
 }
 
 /**
+ * Get valid certificate.
+ *
+ * @param  certificate
+ * @param cached certificate (in the registry)
+ * @returns {String} Returns the valid certificate
+ */
+function getCertificate(certificate, cachedCertificate) {
+    if (certificate == '' && cachedCertificate != null) {
+        return cachedCertificate;
+    } else {
+        return certificate;
+    }
+}
+
+/**
  * Checks if an email address has the valid format or not.
  *
  * @param email Email address
@@ -37,6 +52,11 @@ function emailIsValid(email) {
     var regExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return regExp.test(email);
 }
+
+var iOSMDMName = null;
+var iOSMDMCertificate = null;
+var iOSAPNSName = null;
+var iOSAPNSCertificate = null;
 
 var notifierTypeConstants = {
     "LOCAL": "1",
@@ -230,8 +250,14 @@ $(document).ready(function () {
                             $("input#ios-config-apns-certificate-password").val(config.value);
                         } else if (config.name == configParams["MDM_CERT_NAME"]) {
                             $("#mdm-cert-file-name").html(config.value);
+                            iOSMDMName = config.value;
+                        } else if (config.name == configParams["MDM_CERT"]) {
+                            iOSMDMCertificate = config.value;
                         } else if (config.name == configParams["APNS_CERT_NAME"]) {
                             $("#apns-cert-file-name").html(config.value);
+                            iOSAPNSName = config.value;
+                        } else if (config.name == configParams["APNS_CERT"]) {
+                            iOSAPNSCertificate = config.value;
                         } else if (config.name == configParams["ORG_DISPLAY_NAME"]) {
                             $("input#ios-org-display-name").val(config.value);
                         } else if (config.name == configParams["IOS_EULA"]) {
@@ -590,6 +616,11 @@ $(document).ready(function () {
         var APNSCertPassword = $("#ios-config-apns-certificate-password").val();
         var configOrgDisplayName = $("#ios-org-display-name").val();
         var iosLicense = tinymce.get('ios-eula').getContent();
+
+        fileNameMDMCert = getCertificate(fileNameMDMCert, iOSMDMName);
+        fileNameAPNSCert = getCertificate(fileNameAPNSCert, iOSAPNSName);
+        base64MDMCert = getCertificate(base64MDMCert, iOSMDMCertificate);
+        base64APNSCert = getCertificate(base64APNSCert, iOSAPNSCertificate);
 
         if (!configCountry) {
             $(errorMsg).text("SCEP country is a required field. It cannot be empty.");
