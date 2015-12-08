@@ -119,6 +119,43 @@ public class Role {
     }
 
     /**
+     * Get user roles by providing a filtering criteria(except all internal roles & system roles) from system.
+     *
+     * @return A list of users
+     * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
+     */
+    @GET
+    @Path ("{filter}")
+    @Produces ({MediaType.APPLICATION_JSON})
+    public Response getMatchingRoles(@PathParam ("filter") String filter) throws MDMAPIException {
+        AbstractUserStoreManager abstractUserStoreManager = (AbstractUserStoreManager) MDMAPIUtils.getUserStoreManager();
+        String[] roles;
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("Getting the list of user roles using filter : " + filter);
+            }
+            roles = abstractUserStoreManager.getRoleNames(filter + "*", -1, true, true, true);
+
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the list of user roles using the filter : " + filter;
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        // removing all internal roles and roles created for Service-providers
+        List<String> filteredRoles = new ArrayList<String>();
+        for (String role : roles) {
+            if (!(role.startsWith("Internal/") || role.startsWith("Application/"))) {
+                filteredRoles.add(role);
+            }
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All matching user roles were successfully retrieved.");
+        responsePayload.setResponseContent(filteredRoles);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    /**
      * Get role permissions.
      *
      * @return list of permissions

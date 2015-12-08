@@ -22,10 +22,10 @@ function onRequest (context) {
 
     var mdmProps = require('/config/mdm-props.js').config();
     // setting iOS certificate download URL
-    context["emmCertificateDownloadURL"] = mdmProps["appContext"] + "enrollment/ios/download-certificate";
+    context["emmCertificateDownloadURL"] = mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollment/ios/download-certificate";
     // setting iOS agent download URL
     context["agentDownloadURL"] = "itms-services://?action=download-manifest&url=" +
-        mdmProps["httpsURL"] + mdmProps["appContext"] + "enrollment/ios/download-agent";
+        mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollment/ios/download-agent";
     var companyProps = session.get("COMPANY_DETAILS");
     if (!companyProps) {
         context.companyName = mdmProps.generalConfig.companyName;
