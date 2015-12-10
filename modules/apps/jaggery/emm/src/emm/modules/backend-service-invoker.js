@@ -74,7 +74,8 @@ var backendServiceInvoker = function () {
         if (accessToken) {
             return execute(1);
         } else {
-           response.status = 401;
+            response.status = 401;
+            response.content = "timeout"
         }
     }
 

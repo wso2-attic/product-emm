@@ -8,19 +8,16 @@
     <div class="container-fluid">
         <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view" id="user-grid">
             <thead>
-            <tr class="sort-row">
-                <th class="no-sort"></th>
-                <th>By Name</th>
-                <th>By Username</th>
-                <th>By Email</th>
-                <th class="no-sort"></th>
-            </tr>
             <tr class="filter-row filter-box">
-                <th class="no-sort"></th>
-                <th data-for="By Name" class="text-filter"></th>
-                <th data-for="By Username" class="text-filter"></th>
-                <th data-for="By Email" class="text-filter"></th>
-                <th class="no-sort"></th>
+                <th colspan="4">
+                    <label class="wr-input-label" for="search-by-username">
+                        By Username
+                    </label>
+                    <input id="search-by-username" type="text" class="form-control" placeholder="Search By Username">
+                </th>
+                <th>
+                    <button id="search-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </th>
             </tr>
             <tr class="bulk-action-row">
                 <th colspan="5">
@@ -38,57 +35,8 @@
                 </th>
             </tr>
             </thead>
+            <tbody id="ast-container">
 
-            <tbody>
-            {{#each users}}
-                <tr data-type="selectable" id="{{userid}}" data-username="{{username}}">
-                    <td class="remove-padding icon-only content-fill">
-                        <div class="thumbnail icon">
-                            <i class="square-element text fw fw-user"></i>
-                        </div>
-                    </td>
-                    <td class="fade-edge" data-search="{{firstname}},{{lastname}}" data-display="{{firstname}} {{lastname}}">
-                        <h4>{{firstname}} {{lastname}}</h4>
-                    </td>
-                    <td class="fade-edge remove-padding-top" data-search="{{username}}" data-display="{{username}}"><i class="fw-user"></i> {{username}}</td>
-                    <td class="fade-edge remove-padding-top" data-search="{{emailAddress}}" data-display="{{emailAddress}}">
-                        <a href="mailto:{{emailAddress}}" class="wr-list-email">
-                            <i class="fw-mail"></i> {{emailAddress}}
-                        </a>
-                    </td>
-                    <td class="text-right content-fill text-left-on-grid-view no-wrap">
-                        <a href="/emm/users/profile?username={{username}}" data-username="{{username}}"
-                           data-click-event="edit-form" class="btn padding-reduce-on-grid-view view-user-link">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-view fw-stack-1x"></i>
-                            </span>
-                            <span class="hidden-xs hidden-on-grid-view">View</span>
-                        </a>
-
-                        <a href="/emm/users/edit-user?username={{username}}" data-username="{{username}}"
-                           data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-user-link">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-edit fw-stack-1x"></i>
-                            </span>
-                            <span class="hidden-xs hidden-on-grid-view">Edit</span>
-                        </a>
-
-                        {{#unequal "admin" username }}
-                            <a href="#" data-username="{{username}}" data-userid="{{userid}}"
-                               data-click-event="remove-form"
-                               class="btn padding-reduce-on-grid-view remove-user-link">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-delete fw-stack-1x"></i>
-                            </span>
-                                <span class="hidden-xs hidden-on-grid-view">Remove</span>
-                            </a>
-                        {{/unequal}}
-                    </td>
-                </tr>
-            {{/each}}
             <br class="c-both" />
             </tbody>
         </table>
@@ -234,5 +182,6 @@
     <!--Later add the navigation menu from here-->
 {{/zone}}
 {{#zone "bottomJs"}}
+    <script id="user-listing" data-current-user="{{currentUser.username}}" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/user-listing.hbs" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/user-listing.js"></script>
 {{/zone}}
