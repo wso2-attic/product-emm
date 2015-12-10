@@ -663,10 +663,10 @@
                                 <!--<id>org.wso2.carbon.user.mgt.feature.group</id>-->
                                 <!--<version>${carbon.commons.version}</version>-->
                                 <!--</feature>-->
-                                <feature>
-                                    <id>org.wso2.carbon.ntask.feature.group</id>
-                                    <version>${carbon.commons.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.ntask.feature.group</id>-->
+                                    <!--<version>${carbon.commons.version}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.tenant.mgt.common.feature.group</id>
                                     <version>${carbon.commons.version}</version>
@@ -895,10 +895,10 @@
                                     <id>org.wso2.carbon.mediation.initializer.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.mediation.ntask.feature.group</id>
-                                    <version>${carbon.mediation.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.mediation.ntask.feature.group</id>-->
+                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.inbound.endpoints.server.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
@@ -911,10 +911,10 @@
                                     <id>org.wso2.carbon.mediation.admin.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.task.server.feature.group</id>
-                                    <version>${carbon.mediation.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.task.server.feature.group</id>-->
+                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.mediation.ui.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
@@ -1162,10 +1162,10 @@
                                 <!--<id>org.wso2.carbon.user.mgt.feature.group</id>-->
                                 <!--<version>${carbon.commons.version}</version>-->
                                 <!--</feature>-->
-                                <feature>
-                                    <id>org.wso2.carbon.ntask.feature.group</id>
-                                    <version>${carbon.commons.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.ntask.feature.group</id>-->
+                                    <!--<version>${carbon.commons.version}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.tenant.mgt.common.server.feature.group</id>
                                     <version>${carbon.commons.version}</version>
@@ -1294,7 +1294,7 @@
                                 </feature-->
 
 
-                        
+
 
                                 <!--<feature>-->
                                 <!--<id>org.wso2.carbon.claim.mgt.feature.group</id>-->
@@ -1368,10 +1368,10 @@
                                 <!--<id>org.wso2.carbon.registry.ui.menu.governance.feature.group</id>-->
                                 <!--<version>${carbon.registry.version}</version>-->
                                 <!--</feature>-->
-                                <feature>
-                                    <id>org.wso2.carbon.registry.task.server.feature.group</id>
-                                    <version>${carbon.registry.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.registry.task.server.feature.group</id>-->
+                                    <!--<version>${carbon.registry.version}</version>-->
+                                <!--</feature>-->
                                 <!-- End of Registry Features -->
 
                                 <!-- Governance Features -->
@@ -1407,10 +1407,10 @@
                                     <id>org.wso2.carbon.mediation.initializer.server.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.mediation.ntask.feature.group</id>
-                                    <version>${carbon.mediation.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.mediation.ntask.feature.group</id>-->
+                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.inbound.endpoints.server.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
@@ -1423,10 +1423,10 @@
                                     <id>org.wso2.carbon.mediation.admin.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.task.server.feature.group</id>
-                                    <version>${carbon.mediation.version}</version>
-                                </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.task.server.feature.group</id>-->
+                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--</feature>-->
                                 <!--<feature>-->
                                 <!--<id>org.wso2.carbon.mediation.ui.feature.group</id>-->
                                 <!--<version>${carbon.mediation.version}</version>-->
