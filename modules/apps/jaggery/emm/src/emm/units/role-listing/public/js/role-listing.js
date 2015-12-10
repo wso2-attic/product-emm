@@ -10,13 +10,21 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
             function(data){
                 data = callback(data);
                 if(data.length > 0){
+                    $('#ast-container').removeClass('hidden');
+                    $('#role-listing-status-msg').text('');
                     var content = template(data.viewModel);
                     $(objectGridContainer).html(content);
                     $("#loading-content").remove();
-                    $('#role-grid').datatables_extended();
+                    if(!isInit) {
+                        $('#role-grid').datatables_extended();
+                    }
                     $("#dt-select-all").addClass("hidden");
                     $(".icon .text").res_text(0.2);
+                }else{
+                    $('#ast-container').addClass('hidden');
+                    $('#role-listing-status-msg').text('No roles are available to be displayed.');
                 }
+
                 //$(objectGridId).datatables_extended();
             }, function(message){
                 console.log(message);
@@ -24,8 +32,11 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
     });
 }
 
-$(function () {
+function loadRoles(searchQuery) {
     var serviceURL = "/mdm-admin/roles";
+    if(searchQuery){
+       serviceURL = serviceURL + "/search?filter=" + searchQuery;
+    }
     var callback = function(data){
         data = JSON.parse(data);
         data = {
@@ -45,13 +56,13 @@ $(function () {
         }
     });
     $(sortableElem).disableSelection();
-});
+}
 
 var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
-var dataTableSelection = '.DTTT_selected';
+var isInit = false;
 
 
 /*
@@ -112,4 +123,18 @@ $("#role-grid").on("click", ".remove-role-link", function () {
     $("a#remove-role-cancel-link").click(function () {
         hidePopup();
     });
+});
+
+$("#search-btn").click(function () {
+    var searchQuery = $("#search-by-name").val();
+    if( ! searchQuery.trim() == "" ){
+        loadRoles(searchQuery);
+    } else {
+        loadRoles();
+    }
+});
+
+$(document).ready(function () {
+    loadRoles();
+    isInit = true;
 });

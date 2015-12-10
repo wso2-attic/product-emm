@@ -17,8 +17,6 @@ var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
-var dataTableSelection = '.DTTT_selected';
-//$('#user-grid').datatables_extended();
 $(".icon .text").res_text(0.2);
 
 /*
@@ -149,61 +147,47 @@ $("a.remove-user-link").click(function () {
 
 $("#search-btn").click(function () {
     var searchQuery = $("#search-by-username").val();
-    console.log(searchQuery);
-    invokerUtil.get("/mdm-admin/users/view-users?username="+searchQuery,
-                    function(data){
-                       console.log(data);
-                    },
-                    function(message){
-                        console.log(message);
-                    }
-    );
+    loadUsers(searchQuery);
 
 });
 
 
-function loadDevices(searchParam){
-    console.log("yes");
+function loadUsers(searchParam){
     var userListing = $("#user-listing");
     var userListingSrc = userListing.attr("src");
-    var imageResource = userListing.data("image-resource");
-    var currentUser = userListing.data("currentUser");
     $.template("user-listing", userListingSrc, function (template) {
         var serviceURL= "/mdm-admin/users";
         if (searchParam){
-           serviceURL = serviceURL + "view-users?username=" + searchParam;
+           serviceURL = serviceURL + "/view-users?username=" + searchParam;
         }
         var successCallback = function (data) {
             data = JSON.parse(data);
+            data = data.responseContent;
             var viewModel = {};
-            viewModel.devices = data;
-            viewModel.imageLocation = imageResource;
+            viewModel.users = data;
             if(data.length > 0){
-                $('#device-grid').removeClass('hidden');
+                $('#user-grid').removeClass('hidden');
                 var content = template(viewModel);
                 $("#ast-container").html(content);
-                /*
-                 * On device checkbox select add parent selected style class
-                 */
-                $(deviceCheckbox).click(function () {
-                    addDeviceSelectedClass(this);
-                });
             } else {
                 $('#user-table').addClass('hidden');
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
             }
             $("#loading-content").remove();
-            $('#user-grid').datatables_extended();
+            if (!searchParam) {
+                $('#user-grid').datatables_extended();
+            }
             $(".icon .text").res_text(0.2);
         };
         invokerUtil.get(serviceURL,
-                        successCallback, function(message){
-                console.log(message.content);
-            });
+                        successCallback,
+                        function(message){
+                            console.log(message.content);
+                        }
+        );
     });
 }
 
 $(document).ready(function () {
-    console.log("ready");
-    loadDevices();
+    loadUsers();
 });
