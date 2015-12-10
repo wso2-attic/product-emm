@@ -23,11 +23,13 @@
 <Authenticators xmlns="http://wso2.org/projects/carbon/authenticators.xml">
 
     <!-- Authenticator Configurations for OAuthAuthenticator -->
-    <Authenticator name="BackEndOAuthAuthenticator" disabled="false">
+    <Authenticator name="OAuthAuthenticator" disabled="false">
         <Priority>10</Priority>
         <Config>
             <Parameter name="isRemote">false</Parameter>
             <Parameter name="hostURL">https://localhost:9443</Parameter>
+            <Parameter name="adminUsername">admin</Parameter>
+            <Parameter name="adminPassword">admin</Parameter>
         </Config>
     </Authenticator>
 

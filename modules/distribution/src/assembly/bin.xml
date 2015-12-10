@@ -242,9 +242,10 @@
 
         <!-- Copying API management related dbscripts -->
         <fileSet>
-            <directory>
+            <!--directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt
-            </directory>
+            </directory-->
+            <directory>src/repository/dbscripts/apimgt</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/apimgt</outputDirectory>
             <includes>
                 <include>*/**</include>
@@ -598,6 +599,13 @@
         <!-- Copying sso-idp-config.xml file -->
         <file>
             <source>src/repository/conf/sso-idp-config.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
+
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/EndpointConfig.properties</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
             <fileMode>644</fileMode>
         </file>

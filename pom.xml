@@ -1031,7 +1031,7 @@
         <carbon.deployment.version>4.6.0</carbon.deployment.version>
 
         <!-- Carbon Identity -->
-        <carbon.identity.version>5.0.2</carbon.identity.version>
+        <carbon.identity.version>5.0.3-SNAPSHOT</carbon.identity.version>
 
         <!-- Carbon Multi-tenancy -->
         <carbon.multitenancy.version>4.5.0</carbon.multitenancy.version>
@@ -1087,6 +1087,10 @@
         <commons-io.version>2.4</commons-io.version>
         <jsr311-api.version>1.1.1</jsr311-api.version>
         <google.gson.version>2.3.1</google.gson.version>
+
+        <!-- Caramel version-->
+
+        <caramel.version>1.0.1</caramel.version>
 
         <!-- App manager version-->
         <appmgt.feature.version>1.1.1</appmgt.feature.version>

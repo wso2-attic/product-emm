@@ -389,7 +389,6 @@ public class User {
         }
     }
 
-
     /**
      * Get the list of all users with all user-related info.
      *
@@ -417,6 +416,45 @@ public class User {
             }
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving the list of users";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All users were successfully retrieved. " +
+                                             "Obtained user count: " + userList.size());
+        responsePayload.setResponseContent(userList);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    /**
+     * Get the list of all users with all user-related info.
+     *
+     * @return A list of users
+     * @throws MDMAPIException
+     */
+    @GET
+    @Path ("{filter}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getMatchingUsers(@PathParam ("filter") String filter) throws MDMAPIException {
+        if (log.isDebugEnabled()) {
+            log.debug("Getting the list of users with all user-related information using the filter : " + filter);
+        }
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        ArrayList<UserWrapper> userList = new ArrayList<UserWrapper>();
+        try {
+            String[] users = userStoreManager.listUsers( filter + "*", -1);
+            UserWrapper user;
+            for (String username : users) {
+                user = new UserWrapper();
+                user.setUsername(username);
+                user.setEmailAddress(getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS));
+                user.setFirstname(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
+                user.setLastname(getClaimValue(username, Constants.USER_CLAIM_LAST_NAME));
+                userList.add(user);
+            }
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the list of users using the filter : " + filter;
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }

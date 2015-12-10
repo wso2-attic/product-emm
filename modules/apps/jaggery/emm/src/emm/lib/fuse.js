@@ -94,7 +94,7 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
                     mainUnit = model.name;
                 } else {
                     log.warn(
-                        '[' + requestId + '] multiple layouts ' + mainUnit + ':' +
+                        'multiple layouts ' + mainUnit + ':' +
                         layout + ' vs ' + model.name + ':' + model.layout
                     );
                 }
@@ -152,8 +152,8 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
         initLookUp(definitions);
         var model = definitions[lookUpTable[unit]];
         if (!model) {
-            log.warn('[' + requestId + '] unit "' + unit + '" does not exits');
-            throw '[' + requestId + '] unit "' + unit + '" does not exits';
+            log.warn(' unit "' + unit + '" does not exits');
+            throw ' unit "' + unit + '" does not exits';
         }
         return model;
     };
@@ -202,10 +202,10 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
                 var definitionFile = new File(fuse.getUnitPath(unitName) + '/' + unitName + '.json');
                 if (definitionFile.isExists() && !definitionFile.isDirectory()) {
                     var path = definitionFile.getPath();
-                    log.debug('[' + requestId + '] reading file "' + path + '"');
+                    log.debug('reading file "' + path + '"');
                     unitModel.definition = require(path);
                 } else {
-                    //log.warn('[' + requestId + '] for unit "' + unitName + '", unable to find a definition file');
+                    //log.warn('unit "' + unitName + '", unable to find a definition file');
                     unitModel.definition = {};
                 }
 
@@ -332,7 +332,7 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
         while (len--) {
             if (toDelete[units[len]]) {
                 log.debug(
-                    '[' + requestId + '] unit "' + units[len] +
+                    'unit "' + units[len] +
                     '" is overridden by "' + toDelete[units[len]] + '"'
                 );
                 units.splice(len, 1);
@@ -385,7 +385,7 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
         var selfFile = new File(getUnitPath(unitName) + slashPath + selfFileName);
         if (selfFile.isExists()) {
             log.debug(
-                '[' + requestId + '] for unit "' + unitName + '" file resolved : "'
+                'unit "' + unitName + '" file resolved : "'
                 + slashPath + selfFileName + '" -> "' + selfFile.getPath() + '"'
             );
 
@@ -401,14 +401,14 @@ var getHbsFile, getFile, toRelativePath, cleanupAncestors,
             var file = new File(getUnitPath(ancestorName) + slashPath + fileName);
             if (file.isExists()) {
                 log.debug(
-                    '[' + requestId + '] for unit "' + unitName + '" file resolved : "'
+                    'unit "' + unitName + '" file resolved : "'
                     + slashPath + selfFileName + '" -> "' + file.getPath() + '"'
                 );
                 return file;
             }
         }
         log.debug(
-            '[' + requestId + '] for unit "' + unitName + '" (non-excising) file resolved : "'
+            'unit "' + unitName + '" (non-excising) file resolved : "'
             + slashPath + selfFileName + '" -> "' + selfFile.getPath() + '"'
         );
         return selfFile;

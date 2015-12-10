@@ -62,6 +62,7 @@ $.fn.tree_view = function(){
         });
     });
 };
+
 $.fn.toggleAttr = function (attr, val, val2) {
     return this.each(function () {
         var self = $(this);
