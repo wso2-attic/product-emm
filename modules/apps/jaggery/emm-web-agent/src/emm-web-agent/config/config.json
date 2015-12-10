@@ -33,7 +33,7 @@
         "keyStoreName" : "/repository/resources/security/wso2carbon.jks"
     },
     "generalConfig" : {
-        "host" : "http://10.10.10.92:9763",
+        "host" : "http://localhost:9763",
         "companyName" : "WSO2 Enterprise Mobility Manager",
         "browserTitle" : "WSO2 EMM",
         "copyrightText" : "\u00A9 %date-year%, WSO2 Inc. (http://www.wso2.org) All Rights Reserved."
