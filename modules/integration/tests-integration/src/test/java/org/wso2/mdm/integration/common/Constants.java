@@ -142,6 +142,19 @@ public final class Constants {
         public static final String WEB_CLIP_ENDPOINT = "/mdm-android-agent/operation/webclip";
     }
 
+    public static final class WindowsOperation {
+        private WindowsOperation () { throw new AssertionError(); }
+
+        public static final String WINDOWS_OPERATION_GROUP = "windows-operations";
+        public static final String DEVICE_ID = "[urn:uuid:FAEFB2D5-1771-5446-A635-797AFC474895]";
+
+        public static final String LOCK_ENDPOINT = "/windows/operations/lock";
+        public static final String WIPE_ENDPOINT = "/windows/operations/data-wipe";
+        public static final String RING_ENDPOINT = "/windows/operations/ring";
+        public static final String DISENROLL_ENDPOINT = "/windows/operations/disenroll";
+        public static final String RESET_ENDPOINT = "/windows/operations/lock-reset";
+    }
+
     public static final class AndroidDeviceManagement {
         private AndroidDeviceManagement() {
             throw new AssertionError();
@@ -213,8 +226,10 @@ public final class Constants {
 
         public static final String ROLE_MANAGEMENT_GROUP = "role-mgt";
         public static final String ROLE_NAME="administration";
+        public static final String UPDATED_ROLE_NAME="manager";
         public static final String ROLE_ENDPOINT="/mdm-admin/roles";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
+        public static final String ROLE_UPDATE_PAYLOAD_FILE_NAME="role-update-payloads.json";
 
     }
 
@@ -223,14 +238,23 @@ public final class Constants {
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
         public static final String ADD_POLICY_ENDPOINT="/mdm-admin/policies/active-policy";
+        public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
-        public static final String POLICY_PAYLOAD_FILE_NAME = "policy-payloads.json";
+        public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
+        public static final String WINDOWS_POLICY_PAYLOAD_FILE_NAME = "windows-policy-payloads.json";
+        public static final String WINDOWS_ADD_SECOND_POLICY_PAYLOAD_FILE_NAME =
+                "windows-add-second-policy-payload.json";
+        public static final String POLICY_PRIORITIES_PAYLOAD_FILE_NAME =
+                "[{\"id\":3,\"priority\":1},{\"id\":2,\"priority\":2}]";
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
+        public static final String POLICY_PRIORITIES_RESPONSE_PAYLOAD_FILE_NAME = "policy-priories-response-payloads.json";
 
-        public static final String UPDATE_POLICY_ENDPOINT="/mdm-admin/policies/1";
+        public static final String UPDATE_ANDROID_POLICY_ENDPOINT ="/mdm-admin/policies/1";
+        public static final String UPDATE_WINDOWS_POLICY_ENDPOINT ="/mdm-admin/policies/2";
 
         public static final String REMOVE_POLICY_ENDPOINT="/mdm-admin/policies/bulk-remove";
-        public static final String REMOVE_POLICY_PAYLOAD_FILE_NAME = "[1]";
+        public static final String REMOVE_ANDROID_POLICY_PAYLOAD_FILE_NAME = "[1]";
+        public static final String REMOVE_WINDOWS_POLICY_PAYLOAD_FILE_NAME = "[1,2]";
 
         public static final String VIEW_POLICY_LIST_ENDPOINT="/mdm-admin/policies";
     }
