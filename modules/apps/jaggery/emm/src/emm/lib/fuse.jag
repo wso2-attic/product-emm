@@ -8,6 +8,7 @@ var fuseState = {
     currentUnit: null
 };
 
+/*
 var requestId = function makeId() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -15,7 +16,7 @@ var requestId = function makeId() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
-}();
+}();*/
 var fuseDebug = false;
 //var fuseDebug = true;
 

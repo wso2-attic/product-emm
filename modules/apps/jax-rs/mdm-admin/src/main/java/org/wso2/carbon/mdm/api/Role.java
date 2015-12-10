@@ -125,9 +125,9 @@ public class Role {
      * @throws org.wso2.carbon.mdm.api.common.MDMAPIException
      */
     @GET
-    @Path ("{filter}")
+    @Path ("search")
     @Produces ({MediaType.APPLICATION_JSON})
-    public Response getMatchingRoles(@PathParam ("filter") String filter) throws MDMAPIException {
+    public Response getMatchingRoles(@QueryParam ("filter") String filter) throws MDMAPIException {
         AbstractUserStoreManager abstractUserStoreManager = (AbstractUserStoreManager) MDMAPIUtils.getUserStoreManager();
         String[] roles;
         try {
