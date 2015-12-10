@@ -60,30 +60,33 @@ public class WindowsEnrollment extends TestBase {
     public void testServerAvailability() throws Exception {
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         MDMResponse response = client.get(Constants.WindowsEnrollment.DISCOVERY_GET_URL);
-        Assert.assertEquals(response.getStatus(), HttpStatus.SC_OK);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post.")
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post.",
+            dependsOnMethods = {"testServerAvailability"})
     public void testDiscoveryPost() throws Exception {
         String xml = readXML(Constants.WindowsEnrollment.DISCOVERY_POST_FILE, Constants.UTF8);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         MDMResponse response = client.post(Constants.WindowsEnrollment.DISCOVERY_POST_URL, xml);
-        Assert.assertEquals(response.getStatus(), HttpStatus.SC_OK);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows BST.")
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows BST.",
+            dependsOnMethods = {"testDiscoveryPost"})
     public void testBST() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(Constants.WindowsEnrollment.BSD_PAYLOAD);
         JsonNode node = root.path("credentials");
         ((ObjectNode) node).put(token, OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL));
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON);
         MDMResponse response = client.post(Constants.WindowsEnrollment.BSD_URL, root.toString());
         bsd = response.getBody();
-        Assert.assertEquals(response.getStatus(), HttpStatus.SC_OK);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post.",
-            dependsOnMethods = "testBST")
+            dependsOnMethods = {"testBST"})
     public void testMSXCEP() throws Exception {
         base64Encoder = new Base64();
         ObjectMapper mapper = new ObjectMapper();
@@ -94,11 +97,11 @@ public class WindowsEnrollment extends TestBase {
         String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         MDMResponse response = client.post(Constants.WindowsEnrollment.MS_EXCEP, payload);
-        Assert.assertEquals(response.getStatus(), HttpStatus.SC_ACCEPTED);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post.",
-            dependsOnMethods = "testMSXCEP")
+            dependsOnMethods = {"testMSXCEP"})
     public void testWSETP() throws Exception {
         base64Encoder = new Base64();
         ObjectMapper mapper = new ObjectMapper();
@@ -109,7 +112,7 @@ public class WindowsEnrollment extends TestBase {
         String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         MDMResponse response = client.post(Constants.WindowsEnrollment.WSTEP_URL, payload);
-        Assert.assertEquals(response.getStatus(), HttpStatus.SC_ACCEPTED);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     private String readXML(String fileName, String characterEncoding) throws Exception {
