@@ -612,6 +612,9 @@ var userModule = function () {
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/platform-configs/view")) {
             permissions["TENANT_CONFIGURATION"] = true;
         }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
+            permissions["LIST_OWN_DEVICES"] = true;
+        }
 
         return permissions;
     };

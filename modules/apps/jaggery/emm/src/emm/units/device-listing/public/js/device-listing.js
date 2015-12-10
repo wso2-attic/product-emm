@@ -157,9 +157,11 @@ function loadDevices(searchType, searchParam){
             serviceURL = "/mdm-admin/devices";
         } else if ($.hasPermission("LIST_OWN_DEVICES")) {
             //Get authenticated users devices
-            serviceURL = "/mdm-admin/user/"+currentUser+"/carbon.super";
+            serviceURL = "/mdm-admin/users/devices?username="+currentUser;
         } else {
-            $("#ast-container").html("Permission denied");
+            $("#loading-content").remove();
+            $('#device-table').addClass('hidden');
+            $('#device-listing-status-msg').text('Permission denied.');
             return;
         }
         if (searchParam){

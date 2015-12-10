@@ -663,26 +663,34 @@ public class Operation implements APIResultCallBack {
 			JSONObject policyData = new JSONObject(operation.getPayLoad().toString());
 			if (!policyData.isNull(resources.getString(R.string.policy_password_max_failed_attempts)) &&
 			    policyData.get(resources.getString(R.string.policy_password_max_failed_attempts)) != null) {
-				attempts = policyData.getInt(resources.getString(R.string.policy_password_max_failed_attempts));
-				devicePolicyManager.setMaximumFailedPasswordsForWipe(cdmDeviceAdmin, attempts);
+				if (!policyData.get(resources.getString(R.string.policy_password_max_failed_attempts)).toString().isEmpty()) {
+					attempts = policyData.getInt(resources.getString(R.string.policy_password_max_failed_attempts));
+					devicePolicyManager.setMaximumFailedPasswordsForWipe(cdmDeviceAdmin, attempts);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_min_length)) &&
 			    policyData.get(resources.getString(R.string.policy_password_min_length)) != null) {
-				length = policyData.getInt(resources.getString(R.string.policy_password_min_length));
-				devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, length);
+				if (!policyData.get(resources.getString(R.string.policy_password_min_length)).toString().isEmpty()) {
+					length = policyData.getInt(resources.getString(R.string.policy_password_min_length));
+					devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, length);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_pin_history)) &&
 			    policyData.get(resources.getString(R.string.policy_password_pin_history)) != null) {
-				history = policyData.getInt(resources.getString(R.string.policy_password_pin_history));
-				devicePolicyManager.setPasswordHistoryLength(cdmDeviceAdmin, history);
+				if (!policyData.get(resources.getString(R.string.policy_password_pin_history)).toString().isEmpty()) {
+					history = policyData.getInt(resources.getString(R.string.policy_password_pin_history));
+					devicePolicyManager.setPasswordHistoryLength(cdmDeviceAdmin, history);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_min_complex_chars)) &&
 			    policyData.get(resources.getString(R.string.policy_password_min_complex_chars)) != null) {
-				specialChars = policyData.getInt(resources.getString(R.string.policy_password_min_complex_chars));
-				devicePolicyManager.setPasswordMinimumSymbols(cdmDeviceAdmin, specialChars);
+				if (!policyData.get(resources.getString(R.string.policy_password_min_complex_chars)).toString().isEmpty()) {
+					specialChars = policyData.getInt(resources.getString(R.string.policy_password_min_complex_chars));
+					devicePolicyManager.setPasswordMinimumSymbols(cdmDeviceAdmin, specialChars);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_require_alphanumeric)) &&
@@ -729,9 +737,11 @@ public class Operation implements APIResultCallBack {
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_pin_age_in_days)) &&
 			    policyData.get(resources.getString(R.string.policy_password_pin_age_in_days)) != null) {
-				int daysOfExp = policyData.getInt(resources.getString(R.string.policy_password_pin_age_in_days));
-				timout = daysOfExp * DAY_MILLISECONDS_MULTIPLIER;
-				devicePolicyManager.setPasswordExpirationTimeout(cdmDeviceAdmin, timout);
+				if (!policyData.get(resources.getString(R.string.policy_password_pin_age_in_days)).toString().isEmpty()) {
+					int daysOfExp = policyData.getInt(resources.getString(R.string.policy_password_pin_age_in_days));
+					timout = daysOfExp * DAY_MILLISECONDS_MULTIPLIER;
+					devicePolicyManager.setPasswordExpirationTimeout(cdmDeviceAdmin, timout);
+				}
 			}
 
 			if (Constants.DEBUG_MODE_ENABLED) {
