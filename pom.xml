@@ -947,11 +947,6 @@
            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.store.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
                 <artifactId>org.wso2.carbon.appmgt.mobile</artifactId>
                 <version>${carbon.appmgt.version}</version>
             </dependency>
@@ -1301,5 +1296,4 @@
             </releases>
         </repository>
     </repositories>
-
 </project>

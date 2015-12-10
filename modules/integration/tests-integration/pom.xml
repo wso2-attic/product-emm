@@ -78,8 +78,6 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-
-
                     <execution>
                         <id>copy-jacoco-dependencies</id>
                         <phase>compile</phase>
@@ -92,8 +90,6 @@
                             <includeArtifactIds>org.jacoco.agent</includeArtifactIds>
                         </configuration>
                     </execution>
-
-
                     <execution>
                         <id>copy-secVerifier</id>
                         <phase>compile</phase>
@@ -107,7 +103,6 @@
                             <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
-
                     <execution>
                         <id>unpack-jks</id>
                         <phase>compile</phase>
@@ -127,18 +122,6 @@
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
