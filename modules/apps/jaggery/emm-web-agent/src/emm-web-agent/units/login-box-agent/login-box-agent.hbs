@@ -37,22 +37,20 @@ under the License. --}}
                     <input id="password" name="password" type="password" class="form-control" maxlength="30" placeholder="Enter your password here"/>
                 </div>
                 <br class="c-both" />
-                {{#excludes loginActionURL "windows"}}
-                    <div id="ownership-content">
-                        <div class="radio">
-                            <label class="input-label">
-                                <input type="radio" name="ownership" value="BYOD" checked>
-                                &nbsp; BYOD (This is my own device)
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label class="input-label">
-                                <input type="radio" name="ownership" value="COPE">
-                                &nbsp; COPE (This is a corporate device)
-                            </label>
-                        </div>
+                <div id="ownership-content" style="visibility:hidden; position:absolute">
+                    <div class="radio">
+                        <label class="input-label">
+                            <input type="radio" name="ownership" value="BYOD" checked>
+                            &nbsp; BYOD (This is my own device)
+                        </label>
                     </div>
-                {{/excludes}}
+                    <div class="radio">
+                        <label class="input-label">
+                            <input type="radio" name="ownership" value="COPE">
+                            &nbsp; COPE (This is a corporate device)
+                        </label>
+                    </div>
+                </div>
         </div>
         <div class="row">
             <div class="container col-md-4 wr-buttons">

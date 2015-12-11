@@ -33,6 +33,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -108,24 +109,29 @@ public class ConfigurationMgtService {
     @GET
     public TenantConfiguration getConfiguration() throws WindowsConfigurationException {
         String msg;
-        TenantConfiguration tenantConfiguration = null;
+        TenantConfiguration tenantConfiguration;
+        List<ConfigurationEntry> configs;
         try {
-            if (WindowsAPIUtils.getDeviceManagementService().
-                    getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS) != null) {
-                tenantConfiguration = WindowsAPIUtils.getDeviceManagementService().
+            tenantConfiguration = WindowsAPIUtils.getDeviceManagementService().
                     getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
-            List<ConfigurationEntry> configs = tenantConfiguration.getConfiguration();
+            if(tenantConfiguration != null) {
+                configs = tenantConfiguration.getConfiguration();
+            } else {
+                tenantConfiguration = new TenantConfiguration();
+                configs = new ArrayList<>();
+            }
+
             ConfigurationEntry entry = new ConfigurationEntry();
             License license = WindowsAPIUtils.getDeviceManagementService().getLicense(
-                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS, PluginConstants.
-                            TenantConfigProperties.LANGUAGE_US);
-            if(license != null) {
+                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS,
+                    PluginConstants.TenantConfigProperties.LANGUAGE_US);
+
+            if(license != null && configs != null) {
                 entry.setContentType(PluginConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
                 entry.setName(PluginConstants.TenantConfigProperties.LICENSE_KEY);
                 entry.setValue(license.getText());
                 configs.add(entry);
                 tenantConfiguration.setConfiguration(configs);
-            }
             }
         } catch (DeviceManagementException e) {
             msg = "Error occurred while retrieving the Windows tenant configuration";

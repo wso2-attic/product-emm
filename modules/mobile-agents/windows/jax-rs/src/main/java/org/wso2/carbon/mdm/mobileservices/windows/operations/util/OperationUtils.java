@@ -35,6 +35,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDevic
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Profile;
+import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.common.ProfileFeature;
 import org.wso2.carbon.policy.mgt.common.monitor.ComplianceFeature;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
@@ -438,64 +439,71 @@ public class OperationUtils {
         boolean isCompliance = false;
         if (profiles.size() != Constants.EMPTY) {
             try {
-                List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().getEffectiveFeatures(
-                        deviceIdentifier);
-                List<ComplianceFeature> complianceFeatures = new ArrayList<>();
-                for (ProfileFeature activeFeature : profileFeatures) {
-                    JSONObject policyContent = new JSONObject(activeFeature.getContent().toString());
+                if (WindowsAPIUtils.getPolicyManagerService().getAppliedPolicyToDevice(deviceIdentifier).getProfile().
+                        getProfileFeaturesList() != null) {
+                    List<ProfileFeature> profileFeatures = WindowsAPIUtils.getPolicyManagerService().
+                            getAppliedPolicyToDevice(deviceIdentifier).getProfile().getProfileFeaturesList();
+                    List<ComplianceFeature> complianceFeatures = new ArrayList<>();
+                    for (ProfileFeature activeFeature : profileFeatures) {
+                        JSONObject policyContent = new JSONObject(activeFeature.getContent().toString());
 
-                    for (Profile deviceFeature : profiles) {
-                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.CAMERA)) {
-                            if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
-                                    POLICY_ENABLE) == (deviceFeature.isEnable())) {
-                                isCompliance = true;
-                                deviceFeature.setCompliance(isCompliance);
-                            } else {
-                                deviceFeature.setCompliance(isCompliance);
+                        for (Profile deviceFeature : profiles) {
+                            if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
+                                    deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.CAMERA)) {
+                                if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
+                                        POLICY_ENABLE) == (deviceFeature.isEnable())) {
+                                    isCompliance = true;
+                                    deviceFeature.setCompliance(isCompliance);
+                                } else {
+                                    deviceFeature.setCompliance(isCompliance);
+                                }
+                                ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature,
+                                        deviceFeature);
+                                complianceFeatures.add(complianceFeature);
                             }
-                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
-                            complianceFeatures.add(complianceFeature);
-                        }
-                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.
-                                        ENCRYPT_STORAGE)) {
-                            if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
-                                    ENCRYPTED_ENABLE) == (deviceFeature.isEnable())) {
-                                isCompliance = true;
-                                deviceFeature.setCompliance(isCompliance);
-                            } else {
-                                deviceFeature.setCompliance(isCompliance);
+                            if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
+                                    deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.
+                                            ENCRYPT_STORAGE)) {
+                                if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
+                                        ENCRYPTED_ENABLE) == (deviceFeature.isEnable())) {
+                                    isCompliance = true;
+                                    deviceFeature.setCompliance(isCompliance);
+                                } else {
+                                    deviceFeature.setCompliance(isCompliance);
+                                }
+                                ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature,
+                                        deviceFeature);
+                                complianceFeatures.add(complianceFeature);
                             }
-                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
-                            complianceFeatures.add(complianceFeature);
-                        }
-                        if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.
-                                        PASSCODE_POLICY)) {
-                            if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
-                                    ENABLE_PASSWORD) == (deviceFeature.isEnable())) {
-                                isCompliance = true;
-                                deviceFeature.setCompliance(isCompliance);
-                            } else {
-                                deviceFeature.setCompliance(isCompliance);
+                            if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
+                                    deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.
+                                            PASSCODE_POLICY)) {
+                                if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
+                                        ENABLE_PASSWORD) == (deviceFeature.isEnable())) {
+                                    isCompliance = true;
+                                    deviceFeature.setCompliance(isCompliance);
+                                } else {
+                                    deviceFeature.setCompliance(isCompliance);
+                                }
+                                ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature,
+                                        deviceFeature);
+                                complianceFeatures.add(complianceFeature);
                             }
-                            ComplianceFeature complianceFeature = setComplianceFeatures(activeFeature, deviceFeature);
-                            complianceFeatures.add(complianceFeature);
                         }
                     }
+                    WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier,
+                            complianceFeatures);
                 }
-                WindowsAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, complianceFeatures);
-            } catch (org.wso2.carbon.policy.mgt.common.FeatureManagementException e) {
-                String msg = "Error occurred while getting effective policy.";
-                log.error(msg, e);
-                throw new FeatureManagementException(msg, e);
             } catch (JSONException e) {
                 String msg = "Error occurred while parsing json object.";
                 log.error(msg);
                 throw new WindowsDeviceEnrolmentException(msg, e);
             } catch (PolicyComplianceException e) {
                 String msg = "Error occurred while setting up policy compliance.";
+                log.error(msg, e);
+                throw new PolicyComplianceException(msg, e);
+            } catch (PolicyManagementException e) {
+                String msg = "Error occurred while getting effective policy.";
                 log.error(msg, e);
                 throw new PolicyComplianceException(msg, e);
             }

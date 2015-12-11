@@ -24,6 +24,10 @@ function onRequest(context) {
                         - viewModel.AvailableDeviceCapacity) * 100) / 100;
                     viewModel.DeviceCapacityPercentage = Math.round(viewModel.AvailableDeviceCapacity
                         / viewModel.DeviceCapacity * 10000) / 100;
+                    viewModel.location = {
+                        latitude: device.properties.LATITUDE,
+                        longitude: device.properties.LONGITUDE
+                    };
                 } else if (device.type == "android") {
                     viewModel.imei = device.properties.IMEI;
                     viewModel.model = device.properties.DEVICE_MODEL;
