@@ -48,7 +48,9 @@ public class AlertActivity extends SherlockActivity {
 	private DeviceInfo deviceInfo;
 	private String type;
 	private Context context;
-
+	private AudioManager audio;
+	private static final int DEFAULT_VOLUME = 0;
+	private static final int DEFAULT_FLAG = 0;
 	private static final String DEVICE_OPERATION_RING = "ring";
 	private static final String TAG = AlertActivity.class.getSimpleName();
 
@@ -62,6 +64,7 @@ public class AlertActivity extends SherlockActivity {
 		txtMessage = (TextView) findViewById(R.id.txtMessage);
 		deviceInfo = new DeviceInfo(this);
 		context = AlertActivity.this.getApplicationContext();
+		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -104,6 +107,8 @@ public class AlertActivity extends SherlockActivity {
 		if (defaultRingtone != null && defaultRingtone.isPlaying()) {
 			defaultRingtone.stop();
 		}
+		audio.setStreamVolume(AudioManager.STREAM_RING, DEFAULT_VOLUME, DEFAULT_FLAG);
+		audio.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 	}
 
 	/**
@@ -111,7 +116,6 @@ public class AlertActivity extends SherlockActivity {
 	 */
 	@TargetApi(21)
 	private void startRing() {
-		AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 		audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING),
 		                      AudioManager.FLAG_PLAY_SOUND);

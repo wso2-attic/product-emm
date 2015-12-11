@@ -1384,7 +1384,7 @@ validateStep["policy-profile"] = function () {
                     // looping through each child input
                     $(apnConfigurationsGridChildInputs).each(function () {
                         childInputCount++;
-                        if (childInputCount % 5 == 1) {
+                        //if (childInputCount % 5 == 1) {
                             // if child input is of first column
                             childInput = $(this).val();
                             childInputArray.push(childInput);
@@ -1393,7 +1393,7 @@ validateStep["policy-profile"] = function () {
                                 // if child input field is empty
                                 emptyChildInputCount++;
                             }
-                        }
+                        //}
                     });
                     // checking for duplicates
                     initialChildInputArrayLength = childInputArray.length;

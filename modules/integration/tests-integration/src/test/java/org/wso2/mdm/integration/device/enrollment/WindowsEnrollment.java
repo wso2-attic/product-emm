@@ -39,7 +39,6 @@ import java.net.URL;
 public class WindowsEnrollment extends TestBase {
     private MDMHttpClient client;
     private static String bsd;
-    private static String token = "token";
     private static String UserToken = "UserToken";
     private static final String BSD_PLACEHOLDER = "{BinarySecurityToken}";
     Base64 base64Encoder;
@@ -75,6 +74,7 @@ public class WindowsEnrollment extends TestBase {
     @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows BST.",
             dependsOnMethods = {"testDiscoveryPost"})
     public void testBST() throws Exception {
+        String token = "token";
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(Constants.WindowsEnrollment.BSD_PAYLOAD);
         JsonNode node = root.path("credentials");

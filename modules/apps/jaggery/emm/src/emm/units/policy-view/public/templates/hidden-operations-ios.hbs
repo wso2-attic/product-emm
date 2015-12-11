@@ -92,7 +92,7 @@
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('vpn', this)">
             <span class="wr-hidden-operations-icon fw-stack">
-                <i class="fw fw-vpn2 fw-stack-2x"></i>
+                <i class="fw fw-vpn fw-stack-2x"></i>
             </span>
             Virtual Private Network
             <span id="vpn-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
@@ -165,7 +165,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-min-length" class="form-control operationDataKeys" data-key="passcodePolicyMinLength" data-default="0" disabled>
-                            <option value="" selected="selected">
+                            <option value="-1" selected="selected">
                                 None
                             </option>
                             <option value="1">01</option>
@@ -195,7 +195,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-min-complex-chars" class="form-control operationDataKeys" data-key="passcodePolicyMinComplexChars" data-default="0" disabled>
-                            <option value="" selected="selected">
+                            <option value="-1" selected="selected">
                                 None
                             </option>
                             <option value="1">01</option>
@@ -235,7 +235,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-max-auto-lock" class="form-control operationDataKeys" data-key="passcodePolicyMaxAutoLock" data-default="0" disabled>
-                            <option value="" selected="selected">
+                            <option value="-1" selected="selected">
                                 None
                             </option>
                             <option value="1">01</option>
@@ -254,7 +254,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-grace-period" class="form-control operationDataKeys" data-key="passcodePolicyGracePeriod" data-default="0" disabled>
-                            <option value="" selected="selected">
+                            <option value="-1" selected="selected">
                                 None
                             </option>
                             <option value="0">Immediately</option>
@@ -275,7 +275,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-max-failed-attempts" class="form-control operationDataKeys" data-key="passcodePolicyMaxFailedAttempts" data-default="0" disabled>
-                            <option value="" selected="selected">
+                            <option value="-1" selected="selected">
                                 None
                             </option>
                             <option value="3">03</option>
@@ -2132,7 +2132,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-air-drop" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAirDrop" data-default="true" checked="checked" disabled/>
@@ -2187,7 +2187,7 @@
                                             </label>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li style="visibility:hidden; position:absolute">
                                         <div class="wr-input-control">
                                             <label class="wr-input-control checkbox">
                                                 <input id="restrictions-allow-assistant-user-generated-content" type="checkbox" class="child-input operationDataKeys" data-key="restrictionsAllowAssistantUserGeneratedContent" data-default="true" checked="checked" disabled/>
@@ -2200,7 +2200,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-account-modification" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAccountModification" data-default="true" checked="checked" disabled/>
@@ -2211,7 +2211,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-app-cellular-data-modification" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAppCellularDataModification" data-default="true" checked="checked" disabled/>
@@ -2222,7 +2222,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-bookstore" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowBookstore" data-default="true" checked="checked" disabled/>
@@ -2233,7 +2233,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-bookstore-erotica" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowBookstoreErotica" data-default="true" checked="checked" disabled/>
@@ -2376,7 +2376,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-find-my-friends-modification" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowFindMyFriendsModification" data-default="true" checked="checked" disabled/>
@@ -2442,7 +2442,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-host-pairing" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowHostPairing" data-default="true" checked="checked" disabled/>
@@ -2607,7 +2607,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-erase-content-and-settings" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowEraseContentAndSettings" data-default="true" checked="checked" disabled/>
@@ -2618,7 +2618,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-spotlight-internet-results" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowSpotlightInternetResults" data-default="true" checked="checked" disabled/>
@@ -2629,7 +2629,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictionsAllowEnablingRestrictions" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowEnablingRestrictions" data-default="true" checked="checked" disabled/>
@@ -2651,7 +2651,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-definition-lookup" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowDefinitionLookup" data-default="true" checked="checked" disabled/>
@@ -2662,7 +2662,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-predictive-keyboard" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowPredictiveKeyboard" data-default="true" checked="checked" disabled/>
@@ -2673,7 +2673,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-auto-correction" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowAutoCorrection" data-default="true" checked="checked" disabled/>
@@ -2684,7 +2684,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-spell-check" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowSpellCheck" data-default="true" checked="checked" disabled/>
@@ -2713,7 +2713,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-podcasts" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowPodcasts" data-default="true" checked="checked" disabled/>
@@ -2807,7 +2807,7 @@
                                     </label>
                                 </div>
                             </li>
-                            <li>
+                            <li style="visibility:hidden; position:absolute">
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="restrictions-allow-game-center" type="checkbox" class="operationDataKeys" data-key="restrictionsAllowGameCenter" data-default="true" checked="checked" disabled/>
@@ -2842,10 +2842,11 @@
                             </li>
                         </ul>
                     </div>
-                    <br>
-                    Other Restrictions :
-                    <hr>
-                    <div id="restrictions-other">
+
+                    <div id="restrictions-other" style="visibility:hidden; position:absolute">
+                        <br>
+                        Other Restrictions :
+                        <hr>
                         <ul class="listing">
                             <li>
                                 <div class="wr-input-control">
