@@ -15,20 +15,18 @@
  ~ limitations under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
 		<groupId>org.wso2.mdm</groupId>
 		<artifactId>wso2mdm-features</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.0-BETA</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>org.wso2.mdm.styles.feature</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.0-BETA</version>
 	<packaging>pom</packaging>
 	<name>WSO2 Mobile Device Manager (MDM) Styles Feature</name>
 	<url>http://wso2.org</url>
@@ -37,7 +35,7 @@
 		<dependency>
 			<groupId>org.wso2.mdm</groupId>
 			<artifactId>org.wso2.mdm.admin.styles</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
+			<version>2.0.0-BETA</version>
 		</dependency>
 	</dependencies>
 
@@ -68,8 +66,8 @@
 							<bundles>
 								<bundleDef>org.wso2.mdm:org.wso2.mdm.admin.styles</bundleDef>
 							</bundles>
-							<importBundles/>
-							<importFeatures/>
+							<importBundles />
+							<importFeatures />
 						</configuration>
 					</execution>
 				</executions>
