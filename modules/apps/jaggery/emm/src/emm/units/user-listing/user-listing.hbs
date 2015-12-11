@@ -17,6 +17,13 @@
             <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view"
                    id="user-grid">
                 <thead>
+                <tr class="sort-row">
+                    <th class="no-sort"></th>
+                    <th class="no-sort"></th>
+                    <th>By Username</th>
+                    <th class="no-sort"></th>
+                    <th class="no-sort"></th>
+                </tr>
                 <tr class="filter-row filter-box">
                     <th colspan="4">
                         <label class="wr-input-label" for="search-by-username">
@@ -25,9 +32,9 @@
                         <input id="search-by-username" type="text" class="form-control"
                                placeholder="Search By Username">
                     </th>
-                    <th class="no-sort" style="vertical-align:bottom;">
-                        <span id="search-btn" class="wr-btn">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <th style="vertical-align:bottom;">
+                        <button id="search-btn" class="wr-btn">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</button>
                     </th>
                 </tr>
                 <tr class="bulk-action-row">
@@ -58,9 +65,7 @@
     <div id="content-filter-types" style="display: none">
         <div class="sort-title">Sort By</div>
         <div class="sort-options">
-            <a href="#">By Name<span class="ico-sort-asc"></span></a>
             <a href="#">By Username</a>
-            <a href="#">By Email</a>
         </div>
     </div>
 
