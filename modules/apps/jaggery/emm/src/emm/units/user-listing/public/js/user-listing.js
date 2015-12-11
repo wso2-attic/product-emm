@@ -104,9 +104,9 @@ $("a.invite-user-link").click(function () {
  * when a user clicks on "Remove" link
  * on User Listing page in WSO2 MDM Console.
  */
-$("a.remove-user-link").click(function () {
-    var username = $(this).data("username");
-    var userid = $(this).data("userid");
+function removeUser(uname, uid) {
+    var username = uname;
+    var userid = uid;
     var removeUserAPI = "/mdm-admin/users?username=" + username;
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
@@ -138,7 +138,7 @@ $("a.remove-user-link").click(function () {
     $("a#remove-user-cancel-link").click(function () {
         hidePopup();
     });
-});
+}
 
 /**
  * Following on click function would execute
@@ -172,6 +172,9 @@ function loadUsers(searchParam){
             data = data.responseContent;
             var viewModel = {};
             viewModel.users = data;
+            for(var i=0; i<viewModel.users.length; i++){
+                viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
+            }
             if(data.length > 0){
                 $('#ast-container').removeClass('hidden');
                 $('#user-listing-status-msg').text("");
@@ -184,6 +187,7 @@ function loadUsers(searchParam){
             $("#loading-content").hide();
             if (isInit) {
                 $('#user-grid').datatables_extended();
+                isInit = false;
             }
             $(".icon .text").res_text(0.2);
         };
@@ -200,5 +204,4 @@ function loadUsers(searchParam){
 
 $(document).ready(function () {
     loadUsers();
-    isInit = false;
 });
