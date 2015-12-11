@@ -441,6 +441,7 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
+	<!--
         <file>
             <source>
                 ../tools/mdm-android-agent-archetype/target/mdm-android-agent-archetype-${mdm.android.agent.archetype.version}.jar
@@ -461,6 +462,7 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
+	-->
         <!-- Copying synapse.properties file -->
         <file>
             <source>src/repository/conf/synapse.properties</source>

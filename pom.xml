@@ -42,7 +42,9 @@
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/emm</module>
 	<module>modules/apps/jaggery/emm-web-agent</module>
+	<!--
         <module>modules/tools</module>
+	-->
         <module>modules/mdm-ui</module>
         <module>modules/features</module>
         <module>modules/p2-profile-gen</module>
@@ -1012,8 +1014,9 @@
         <orbit.h2.engine.version>1.2.140.wso2v3</orbit.h2.engine.version>
 
         <!-- MDM android Agent -->
+	<!--
         <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
-
+	-->	
         <!--CXF properties-->
         <cxf.version>2.7.16</cxf.version>
         <cxf.bindings.version>2.5.11</cxf.bindings.version>
@@ -1038,11 +1041,11 @@
         <carbon.governance.version>4.5.8</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>0.9.2-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>0.9.3</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[0.8.0, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>1.9.2-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>1.9.3</carbon.mobile.device.mgt.version>
         <mdm.version>2.0.0-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
