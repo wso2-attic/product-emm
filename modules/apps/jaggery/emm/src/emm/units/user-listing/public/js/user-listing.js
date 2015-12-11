@@ -163,16 +163,22 @@ function loadUsers(searchParam){
            serviceURL = serviceURL + "/view-users?username=" + searchParam;
         }
         var successCallback = function (data) {
+            if(data == null){
+                $('#ast-container').addClass('hidden');
+                $('#user-listing-status-msg').text('No users are available to be displayed.');
+                return;
+            }
             data = JSON.parse(data);
             data = data.responseContent;
             var viewModel = {};
             viewModel.users = data;
             if(data.length > 0){
-                $('#user-grid').removeClass('hidden');
+                $('#ast-container').removeClass('hidden');
+                $('#user-listing-status-msg').text("");
                 var content = template(viewModel);
                 $("#ast-container").html(content);
             } else {
-                $('#user-table').addClass('hidden');
+                $('#ast-container').addClass('hidden');
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
             }
             $("#loading-content").hide();
@@ -184,7 +190,9 @@ function loadUsers(searchParam){
         invokerUtil.get(serviceURL,
                         successCallback,
                         function(message){
-                            console.log(message.content);
+                            $('#ast-container').addClass('hidden');
+                            $('#user-listing-status-msg').
+                                text('Invalid search query. Try again with a valid search query');
                         }
         );
     });

@@ -9,7 +9,7 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
         invokerUtil.get(serviceURL,
             function(data){
                 data = callback(data);
-                if(data.length > 0){
+                if(data.length > 0 && data != null){
                     $('#ast-container').removeClass('hidden');
                     $('#role-listing-status-msg').text('');
                     var content = template(data.viewModel);
@@ -26,7 +26,8 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
 
                 //$(objectGridId).datatables_extended();
             }, function(message){
-                console.log(message);
+                $('#ast-container').addClass('hidden');
+                $('#role-listing-status-msg').text('Invalid search query. Try again with a valid search query');
             });
     });
 }
@@ -38,12 +39,14 @@ function loadRoles(searchQuery) {
        serviceURL = serviceURL + "/search?filter=" + searchQuery;
     }
     var callback = function(data){
-        data = JSON.parse(data);
-        data = {
-            "viewModel": {
-                "roles": data.responseContent
-            },
-            "length": data.responseContent.length
+        if(data != null || data =="null") {
+            data = JSON.parse(data);
+            data = {
+                "viewModel": {
+                    "roles": data.responseContent
+                },
+                "length": data.responseContent.length
+            }
         }
         return data;
     }
