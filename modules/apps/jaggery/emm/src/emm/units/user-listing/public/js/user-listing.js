@@ -17,8 +17,7 @@ var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
-var dataTableSelection = '.DTTT_selected';
-$('#user-grid').datatables_extended();
+var isInit = true;
 $(".icon .text").res_text(0.2);
 
 /*
@@ -105,9 +104,9 @@ $("a.invite-user-link").click(function () {
  * when a user clicks on "Remove" link
  * on User Listing page in WSO2 MDM Console.
  */
-$("a.remove-user-link").click(function () {
-    var username = $(this).data("username");
-    var userid = $(this).data("userid");
+function removeUser(uname, uid) {
+    var username = uname;
+    var userid = uid;
     var removeUserAPI = "/mdm-admin/users?username=" + username;
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
@@ -139,4 +138,70 @@ $("a.remove-user-link").click(function () {
     $("a#remove-user-cancel-link").click(function () {
         hidePopup();
     });
+}
+
+/**
+ * Following on click function would execute
+ * when a user type on the search field on User Listing page in
+ * WSO2 MDM Console then click on the search button.
+ */
+
+$("#search-btn").click(function () {
+    var searchQuery = $("#search-by-username").val();
+    loadUsers(searchQuery);
+
+});
+
+
+function loadUsers(searchParam){
+    $("#loading-content").show();
+    var userListing = $("#user-listing");
+    var userListingSrc = userListing.attr("src");
+    $.template("user-listing", userListingSrc, function (template) {
+        var serviceURL= "/mdm-admin/users";
+        if (searchParam){
+           serviceURL = serviceURL + "/view-users?username=" + searchParam;
+        }
+        var successCallback = function (data) {
+            if(data == null){
+                $('#ast-container').addClass('hidden');
+                $('#user-listing-status-msg').text('No users are available to be displayed.');
+                return;
+            }
+            data = JSON.parse(data);
+            data = data.responseContent;
+            var viewModel = {};
+            viewModel.users = data;
+            for(var i=0; i<viewModel.users.length; i++){
+                viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
+            }
+            if(data.length > 0){
+                $('#ast-container').removeClass('hidden');
+                $('#user-listing-status-msg').text("");
+                var content = template(viewModel);
+                $("#ast-container").html(content);
+            } else {
+                $('#ast-container').addClass('hidden');
+                $('#user-listing-status-msg').text('No users are available to be displayed.');
+            }
+            $("#loading-content").hide();
+            if (isInit) {
+                $('#user-grid').datatables_extended();
+                isInit = false;
+            }
+            $(".icon .text").res_text(0.2);
+        };
+        invokerUtil.get(serviceURL,
+                        successCallback,
+                        function(message){
+                            $('#ast-container').addClass('hidden');
+                            $('#user-listing-status-msg').
+                                text('Invalid search query. Try again with a valid search query');
+                        }
+        );
+    });
+}
+
+$(document).ready(function () {
+    loadUsers();
 });
