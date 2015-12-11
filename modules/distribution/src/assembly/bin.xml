@@ -326,6 +326,7 @@
                 <include>authenticationendpoint.war</include>
                 <include>oauth2.war</include>
                 <include>dynamic-client-web.war</include>
+                <include>dynamic-client-web-proxy.war</include>
             </includes>
         </fileSet>
         <!--copy jaxrs web app for OAuth feature-->
