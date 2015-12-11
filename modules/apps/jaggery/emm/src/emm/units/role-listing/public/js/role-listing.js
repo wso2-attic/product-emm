@@ -14,7 +14,6 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
                     $('#role-listing-status-msg').text('');
                     var content = template(data.viewModel);
                     $(objectGridContainer).html(content);
-                    $("#loading-content").remove();
                     if(!isInit) {
                         $('#role-grid').datatables_extended();
                     }
@@ -33,6 +32,7 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
 }
 
 function loadRoles(searchQuery) {
+    $("#loading-content").show();
     var serviceURL = "/mdm-admin/roles";
     if(searchQuery){
        serviceURL = serviceURL + "/search?filter=" + searchQuery;
@@ -48,7 +48,7 @@ function loadRoles(searchQuery) {
         return data;
     }
     loadPaginatedObjects("#role-grid", "#ast-container", "#role-listing", serviceURL, callback);
-
+    $("#loading-content").hide();
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
         beforeStop : function () {

@@ -17,6 +17,7 @@ var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
+var isInit = true;
 $(".icon .text").res_text(0.2);
 
 /*
@@ -153,6 +154,7 @@ $("#search-btn").click(function () {
 
 
 function loadUsers(searchParam){
+    $("#loading-content").show();
     var userListing = $("#user-listing");
     var userListingSrc = userListing.attr("src");
     $.template("user-listing", userListingSrc, function (template) {
@@ -173,8 +175,8 @@ function loadUsers(searchParam){
                 $('#user-table').addClass('hidden');
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
             }
-            $("#loading-content").remove();
-            if (!searchParam) {
+            $("#loading-content").hide();
+            if (isInit) {
                 $('#user-grid').datatables_extended();
             }
             $(".icon .text").res_text(0.2);
@@ -190,4 +192,5 @@ function loadUsers(searchParam){
 
 $(document).ready(function () {
     loadUsers();
+    isInit = false;
 });

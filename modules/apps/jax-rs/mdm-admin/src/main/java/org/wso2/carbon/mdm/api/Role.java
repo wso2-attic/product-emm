@@ -134,7 +134,7 @@ public class Role {
             if (log.isDebugEnabled()) {
                 log.debug("Getting the list of user roles using filter : " + filter);
             }
-            roles = abstractUserStoreManager.getRoleNames(filter + "*", -1, true, true, true);
+            roles = abstractUserStoreManager.getRoleNames("*" + filter + "*", -1, true, true, true);
 
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving the list of user roles using the filter : " + filter;
