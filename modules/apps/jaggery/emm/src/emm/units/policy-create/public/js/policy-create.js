@@ -955,28 +955,23 @@ validateStep["policy-profile"] = function () {
 
                 if (continueToCheckNextInputs) {
                     var emailIncomingMailServerPort = $("input#email-incoming-mail-server-port").val();
-                    if (!emailIncomingMailServerPort) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Incoming Mail Server Port is empty. You cannot proceed.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
-                    } else if (!$.isNumeric(emailIncomingMailServerPort)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Incoming Mail Server Port requires a number input. Please check.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
-                    } else if (!inputIsValidAgainstRange(emailIncomingMailServerPort, 0, 65535)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Incoming Mail Server Port is not within the range " +
-                                "of valid port numbers. Please check.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
+                    if (emailIncomingMailServerPort && emailIncomingMailServerPort != '') {
+                        if (!$.isNumeric(emailIncomingMailServerPort)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Incoming Mail Server Port requires a number input. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (!inputIsValidAgainstRange(emailIncomingMailServerPort, 0, 65535)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Incoming Mail Server Port is not within the range " +
+                                    "of valid port numbers. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
                     }
                 }
 
@@ -994,28 +989,23 @@ validateStep["policy-profile"] = function () {
 
                 if (continueToCheckNextInputs) {
                     var emailOutgoingMailServerPort = $("input#email-outgoing-mail-server-port").val();
-                    if (!emailOutgoingMailServerPort) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Outgoing Mail Server Port is empty. You cannot proceed.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
-                    } else if (!$.isNumeric(emailOutgoingMailServerPort)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Outgoing Mail Server Port requires a number input. Please check.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
-                    } else if (!inputIsValidAgainstRange(emailOutgoingMailServerPort, 0, 65535)) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "Outgoing Mail Server Port is not within the range " +
-                                "of valid port numbers. Please check.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
+                    if (emailOutgoingMailServerPort &&  emailOutgoingMailServerPort != '') {
+                        if (!$.isNumeric(emailOutgoingMailServerPort)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Outgoing Mail Server Port requires a number input. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (!inputIsValidAgainstRange(emailOutgoingMailServerPort, 0, 65535)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Outgoing Mail Server Port is not within the range " +
+                                    "of valid port numbers. Please check.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
                     }
                 }
 
