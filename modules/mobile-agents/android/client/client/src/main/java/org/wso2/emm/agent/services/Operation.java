@@ -293,6 +293,8 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void ringDevice(org.wso2.emm.agent.beans.Operation operation) {
+		operation.setStatus(resources.getString(R.string.operation_value_completed));
+		resultBuilder.build(operation);
 		Intent intent = new Intent(context, AlertActivity.class);
 		intent.putExtra(resources.getString(R.string.intent_extra_type),
 				resources.getString(R.string.intent_extra_ring));
@@ -301,8 +303,6 @@ public class Operation implements APIResultCallBack {
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
 				Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
-		operation.setStatus(resources.getString(R.string.operation_value_completed));
-		resultBuilder.build(operation);
 
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Ringing is activated on the device");
@@ -336,13 +336,13 @@ public class Operation implements APIResultCallBack {
 			if (inputPin.trim().equals(savedPin.trim())) {
 				Toast.makeText(context, resources.getString(R.string.toast_message_wipe),
 						Toast.LENGTH_LONG).show();
+				operation.setStatus(resources.getString(R.string.operation_value_completed));
+				resultBuilder.build(operation);
 				try {
 					Thread.sleep(PRE_WIPE_WAIT_TIME);
 				} catch (InterruptedException e) {
 					throw new AndroidAgentException("Wipe pause interrupted.", e);
 				}
-				operation.setStatus(resources.getString(R.string.operation_value_completed));
-				resultBuilder.build(operation);
 				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
 				if (Constants.DEBUG_MODE_ENABLED) {
 					Log.d(TAG, "Started to wipe data");
@@ -389,12 +389,12 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void displayNotification(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		try {
+			operation.setStatus(resources.getString(R.string.operation_value_completed));
+			resultBuilder.build(operation);
 			JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
 			String message = inputData.getString(resources.getString(R.string.intent_extra_message));
 
 			if (message != null && !message.isEmpty()) {
-				operation.setStatus(resources.getString(R.string.operation_value_completed));
-				resultBuilder.build(operation);
 				Intent intent = new Intent(context, AlertActivity.class);
 				intent.putExtra(resources.getString(R.string.intent_extra_message), message);
 				intent.putExtra(resources.getString(R.string.intent_extra_type),
@@ -663,26 +663,34 @@ public class Operation implements APIResultCallBack {
 			JSONObject policyData = new JSONObject(operation.getPayLoad().toString());
 			if (!policyData.isNull(resources.getString(R.string.policy_password_max_failed_attempts)) &&
 			    policyData.get(resources.getString(R.string.policy_password_max_failed_attempts)) != null) {
-				attempts = policyData.getInt(resources.getString(R.string.policy_password_max_failed_attempts));
-				devicePolicyManager.setMaximumFailedPasswordsForWipe(cdmDeviceAdmin, attempts);
+				if (!policyData.get(resources.getString(R.string.policy_password_max_failed_attempts)).toString().isEmpty()) {
+					attempts = policyData.getInt(resources.getString(R.string.policy_password_max_failed_attempts));
+					devicePolicyManager.setMaximumFailedPasswordsForWipe(cdmDeviceAdmin, attempts);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_min_length)) &&
 			    policyData.get(resources.getString(R.string.policy_password_min_length)) != null) {
-				length = policyData.getInt(resources.getString(R.string.policy_password_min_length));
-				devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, length);
+				if (!policyData.get(resources.getString(R.string.policy_password_min_length)).toString().isEmpty()) {
+					length = policyData.getInt(resources.getString(R.string.policy_password_min_length));
+					devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, length);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_pin_history)) &&
 			    policyData.get(resources.getString(R.string.policy_password_pin_history)) != null) {
-				history = policyData.getInt(resources.getString(R.string.policy_password_pin_history));
-				devicePolicyManager.setPasswordHistoryLength(cdmDeviceAdmin, history);
+				if (!policyData.get(resources.getString(R.string.policy_password_pin_history)).toString().isEmpty()) {
+					history = policyData.getInt(resources.getString(R.string.policy_password_pin_history));
+					devicePolicyManager.setPasswordHistoryLength(cdmDeviceAdmin, history);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_min_complex_chars)) &&
 			    policyData.get(resources.getString(R.string.policy_password_min_complex_chars)) != null) {
-				specialChars = policyData.getInt(resources.getString(R.string.policy_password_min_complex_chars));
-				devicePolicyManager.setPasswordMinimumSymbols(cdmDeviceAdmin, specialChars);
+				if (!policyData.get(resources.getString(R.string.policy_password_min_complex_chars)).toString().isEmpty()) {
+					specialChars = policyData.getInt(resources.getString(R.string.policy_password_min_complex_chars));
+					devicePolicyManager.setPasswordMinimumSymbols(cdmDeviceAdmin, specialChars);
+				}
 			}
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_require_alphanumeric)) &&
@@ -729,9 +737,11 @@ public class Operation implements APIResultCallBack {
 
 			if (!policyData.isNull(resources.getString(R.string.policy_password_pin_age_in_days)) &&
 			    policyData.get(resources.getString(R.string.policy_password_pin_age_in_days)) != null) {
-				int daysOfExp = policyData.getInt(resources.getString(R.string.policy_password_pin_age_in_days));
-				timout = daysOfExp * DAY_MILLISECONDS_MULTIPLIER;
-				devicePolicyManager.setPasswordExpirationTimeout(cdmDeviceAdmin, timout);
+				if (!policyData.get(resources.getString(R.string.policy_password_pin_age_in_days)).toString().isEmpty()) {
+					int daysOfExp = policyData.getInt(resources.getString(R.string.policy_password_pin_age_in_days));
+					timout = daysOfExp * DAY_MILLISECONDS_MULTIPLIER;
+					devicePolicyManager.setPasswordExpirationTimeout(cdmDeviceAdmin, timout);
+				}
 			}
 
 			if (Constants.DEBUG_MODE_ENABLED) {

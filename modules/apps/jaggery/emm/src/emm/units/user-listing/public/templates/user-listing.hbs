@@ -1,0 +1,49 @@
+{{#each users}}
+    <tr data-type="selectable" id="{{userid}}" data-username="{{username}}">
+        <td class="remove-padding icon-only content-fill">
+            <div class="thumbnail icon">
+                <i class="square-element text fw fw-user"></i>
+            </div>
+        </td>
+        <td class="fade-edge" data-search="{{firstname}},{{lastname}}" data-display="{{firstname}} {{lastname}}">
+            <h4>{{firstname}} {{lastname}}</h4>
+        </td>
+        <td class="fade-edge remove-padding-top" data-search="{{username}}" data-display="{{username}}"><i class="fw-user"></i> {{username}}</td>
+        <td class="fade-edge remove-padding-top" data-search="{{emailAddress}}" data-display="{{emailAddress}}">
+            <a href="mailto:{{emailAddress}}" class="wr-list-email">
+                <i class="fw-mail"></i> {{emailAddress}}
+            </a>
+        </td>
+        <td class="text-right content-fill text-left-on-grid-view no-wrap">
+            <a href="/emm/users/profile?username={{username}}" data-username="{{username}}"
+               data-click-event="edit-form" class="btn padding-reduce-on-grid-view view-user-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-view fw-stack-1x"></i>
+                            </span>
+                <span class="hidden-xs hidden-on-grid-view">View</span>
+            </a>
+
+            <a href="/emm/users/edit-user?username={{username}}" data-username="{{username}}"
+               data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-user-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-edit fw-stack-1x"></i>
+                            </span>
+                <span class="hidden-xs hidden-on-grid-view">Edit</span>
+            </a>
+
+            {{#unequal "admin" username }}
+                <a href="#" data-username="{{username}}" data-userid="{{userid}}"
+                   data-click-event="remove-form" onclick="javascript:removeUser('{{username}}', '{{userid}}')"
+                   class="btn padding-reduce-on-grid-view remove-user-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-delete fw-stack-1x"></i>
+                            </span>
+                    <span class="hidden-xs hidden-on-grid-view">Remove</span>
+                </a>
+            {{/unequal}}
+        </td>
+    </tr>
+{{/each}}

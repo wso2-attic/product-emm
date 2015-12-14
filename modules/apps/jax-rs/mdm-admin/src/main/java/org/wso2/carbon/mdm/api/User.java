@@ -481,7 +481,7 @@ public class User {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ArrayList<UserWrapper> userList = new ArrayList<UserWrapper>();
         try {
-            String[] users = userStoreManager.listUsers(userName + "*", -1);
+            String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
             UserWrapper user;
             for (String username : users) {
                 user = new UserWrapper();

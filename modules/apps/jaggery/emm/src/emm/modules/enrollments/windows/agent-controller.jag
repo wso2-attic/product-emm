@@ -72,6 +72,8 @@ if (platform != "Windows Phone") {
                 // one visible possibility would be server sending 500
                 response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/windows/login-agent?error=unexpected");
             }
+        } else {
+            response.sendRedirect(mdmProps["generalConfig"]["host"] + mdmProps["webAgentContext"] + "enrollments/windows/login-agent?error=auth-failed");
         }
     }
 }

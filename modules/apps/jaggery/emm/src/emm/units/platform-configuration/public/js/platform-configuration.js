@@ -28,6 +28,17 @@ function inputIsValid(regExp, inputString) {
 }
 
 /**
+ * Checks if provided input is valid against RegEx input.
+ *
+ * @param regExp Regular expression
+ * @param inputString Input string to check
+ * @returns {boolean} Returns true if input matches RegEx
+ */
+function isPositiveInteger(str) {
+    return /^\+?(0|[1-9]\d*)$/.test(str);
+}
+
+/**
  * Get valid param.
  *
  * @param  certificate
@@ -303,7 +314,7 @@ $(document).ready(function () {
         if (notifierType == notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (notifierType == notifierTypeConstants["LOCAL"] && !$.isNumeric(notifierFrequency)) {
+        } else if (notifierType == notifierTypeConstants["LOCAL"] && !isPositiveInteger(notifierFrequency)) {
             $(errorMsg).text("Provided notifier frequency is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (notifierType == notifierTypeConstants["GCM"] && !gcmAPIKey) {
@@ -415,8 +426,8 @@ $(document).ready(function () {
         if (!notifierFrequency) {
             $(errorMsg).text("Monitoring frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!$.isNumeric(notifierFrequency)) {
-            $(errorMsg).text("Provided monitoring frequency is invalid. It must be a number.");
+        } else if (!isPositiveInteger(notifierFrequency)) {
+            $(errorMsg).text("Provided monitoring frequency is invalid. Please check.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
 

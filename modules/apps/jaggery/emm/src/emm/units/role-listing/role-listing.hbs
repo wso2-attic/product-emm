@@ -12,27 +12,33 @@
             Loading roles . . .
             <br>
         </div>
-        <table class="table table-striped table-hover list-table display responsive nowrap data-table" id="role-grid">
-            <thead>
-            <tr class="sort-row">
-                <th class="no-sort"></th>
-                <th>By Role name</th>
-                <th class="no-sort"></th>
-            </tr>
-            <tr class="filter-row filter-box">
-                <th></th>
-                <th data-for="By Role name" class="text-filter"></th>
-                <th></th>
-            </tr>
-            <tr class="bulk-action-row">
-                <th colspan="3"></th>
-            </tr>
-            </thead>
-            <tbody id="ast-container">
-                <br class="c-both" />
-            </tbody>
-        </table>
+        <span id="role-listing-status-msg"></span>
 
+        <div id="role-table">
+            <table class="table table-striped table-hover list-table display responsive nowrap data-table"
+                   id="role-grid">
+                <thead>
+                <tr class="filter-row filter-box">
+                    <th colspan="4">
+                        <label class="wr-input-label" for="search-by-name">
+                            By Role Name
+                        </label>
+                        <input id="search-by-name" type="text" class="form-control" placeholder="Search By Role Name">
+                    </th>
+                    <th class="no-sort" style="vertical-align:bottom;">
+                        <button id="search-btn" class="wr-btn">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    </th>
+                </tr>
+                <tr class="bulk-action-row">
+                    <th colspan="3"></th>
+                </tr>
+                </thead>
+                <tbody id="ast-container">
+                <br class="c-both"/>
+                </tbody>
+            </table>
+        </div>
     </div>
     <br class="c-both"/>
     <div id="content-filter-types" style="display: none">
@@ -48,6 +54,7 @@
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>Do you really want to remove this role from EMM User Store ?</h3>
+
                     <div class="buttons">
                         <a href="#" id="remove-role-yes-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;
@@ -67,6 +74,7 @@
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>Done. Role was successfully removed.</h3>
+
                     <div class="buttons">
                         <a href="#" id="remove-role-success-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
@@ -82,6 +90,7 @@
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>An unexpected error occurred. Please try again later.</h3>
+
                     <div class="buttons">
                         <a href="#" id="remove-role-error-link" class="btn-operations">
                             &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
@@ -98,6 +107,7 @@
 {{/zone}}
 
 {{#zone "bottomJs"}}
-    <script id="role-listing" data-current-user="{{currentUser.username}}"  src="{{self.publicURL}}/templates/role-listing.hbs" type="text/x-handlebars-template" ></script>
+    <script id="role-listing" data-current-user="{{currentUser.username}}"
+            src="{{self.publicURL}}/templates/role-listing.hbs" type="text/x-handlebars-template"></script>
     <script src="{{self.publicURL}}/js/role-listing.js"></script>
 {{/zone}}

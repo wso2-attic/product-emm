@@ -51,7 +51,7 @@ var invokerUtil = function () {
         data.data = JSON.stringify(paramValue);
         $.ajax(data).fail(function (jqXHR) {
             if (jqXHR.status == "401") {
-                window.location.replace("/emm");
+                window.location.replace("/emm/login");
             } else {
                 errorCallback(jqXHR);
             }
