@@ -1,0 +1,26 @@
+{
+  "POST": {
+    "policyName": "Encryption",
+    "description": "",
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "profile": {
+      "profileName": "Encryption",
+      "deviceType": {
+        "id": 2
+      },
+      "profileFeaturesList": [
+        {
+          "featureCode": "ENCRYPT_STORAGE",
+          "deviceTypeId": 2,
+          "content": {
+            "encrypted": true
+          }
+        }
+      ]
+    },
+    "roles": [
+      "ANY"
+    ]
+  }
+}

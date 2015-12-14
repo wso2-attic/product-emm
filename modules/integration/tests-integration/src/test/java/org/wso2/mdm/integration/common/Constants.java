@@ -18,7 +18,6 @@
 package org.wso2.mdm.integration.common;
 
 import java.io.File;
-
 /**
  * Constants used through out the test suite are defined here.
  */
@@ -142,6 +141,19 @@ public final class Constants {
         public static final String WEB_CLIP_ENDPOINT = "/mdm-android-agent/operation/webclip";
     }
 
+    public static final class WindowsOperation {
+        private WindowsOperation () { throw new AssertionError(); }
+
+        public static final String WINDOWS_OPERATION_GROUP = "windows-operations";
+        public static final String DEVICE_ID = "[urn:uuid:FAEFB2D5-1771-5446-A635-797AFC474895]";
+
+        public static final String LOCK_ENDPOINT = "/windows/operations/lock";
+        public static final String WIPE_ENDPOINT = "/windows/operations/data-wipe";
+        public static final String RING_ENDPOINT = "/windows/operations/ring";
+        public static final String DISENROLL_ENDPOINT = "/windows/operations/disenroll";
+        public static final String RESET_ENDPOINT = "/windows/operations/lock-reset";
+    }
+
     public static final class AndroidDeviceManagement {
         private AndroidDeviceManagement() {
             throw new AssertionError();
@@ -187,7 +199,7 @@ public final class Constants {
     public static final class MobileDeviceManagement {
         private MobileDeviceManagement(){ throw new AssertionError();}
         public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
-        public static final String GET_DEVICE_COUNT_ENDPOINT ="/mdm-admin/devices/count";
+        public static final String GET_DEVICE_COUNT_ENDPOINT = "/mdm-admin/devices/count";
         public static final String NO_OF_DEVICES = "1";
         public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
@@ -200,11 +212,11 @@ public final class Constants {
         private UserManagement() { throw new AssertionError(); }
 
         public static final String USER_MANAGEMENT_GROUP = "user-mgt";
-        public static final String USER_NAME="username123";
-        public static final String USER_ENDPOINT="/mdm-admin/users";
+        public static final String USER_NAME = "username123";
+        public static final String USER_ENDPOINT = "/mdm-admin/users";
         public static final String USER_PAYLOAD_FILE_NAME = "user-payloads.json";
         public static final String USER_RESPONSE_PAYLOAD_FILE_NAME = "user-response-payloads.json";
-        public static final String VIEW_USER_ENDPOINT="/mdm-admin/users/view";
+        public static final String VIEW_USER_ENDPOINT = "/mdm-admin/users/view";
 
     }
 
@@ -212,9 +224,11 @@ public final class Constants {
         private RoleManagement() { throw new AssertionError();}
 
         public static final String ROLE_MANAGEMENT_GROUP = "role-mgt";
-        public static final String ROLE_NAME="administration";
-        public static final String ROLE_ENDPOINT="/mdm-admin/roles";
+        public static final String ROLE_NAME = "administration";
+        public static final String UPDATED_ROLE_NAME = "manager";
+        public static final String ROLE_ENDPOINT = "/mdm-admin/roles";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
+        public static final String ROLE_UPDATE_PAYLOAD_FILE_NAME = "role-update-payloads.json";
 
     }
 
@@ -222,31 +236,42 @@ public final class Constants {
         private PolicyManagement() { throw new AssertionError();}
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
-        public static final String ADD_POLICY_ENDPOINT="/mdm-admin/policies/active-policy";
+        public static final String ADD_POLICY_ENDPOINT= "/mdm-admin/policies/active-policy";
+        public static final String GET_ALL_POLICIES_ENDPOINT = "/mdm-admin/policies";
+        public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
-        public static final String POLICY_PAYLOAD_FILE_NAME = "policy-payloads.json";
+        public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
+        public static final String WINDOWS_POLICY_PAYLOAD_FILE_NAME = "windows-policy-payloads.json";
+        public static String WINDOWS_POLICY_DEVICE_ID = "";
+        public static String WINDOWS_POLICY_SECOND_DEVICE_ID = "";
+        public static final String WINDOWS_ADD_SECOND_POLICY_PAYLOAD_FILE_NAME =
+                "windows-add-second-policy-payload.json";
+        public static String POLICY_PRIORITIES_PAYLOAD_FILE_NAME = "";
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
+        public static final String POLICY_PRIORITIES_RESPONSE_PAYLOAD_FILE_NAME = "policy-priories-response-payloads.json";
 
-        public static final String UPDATE_POLICY_ENDPOINT="/mdm-admin/policies/1";
+        public static final String UPDATE_ANDROID_POLICY_ENDPOINT = "/mdm-admin/policies/1";
+        public static String UPDATE_WINDOWS_POLICY_ENDPOINT = "";
 
-        public static final String REMOVE_POLICY_ENDPOINT="/mdm-admin/policies/bulk-remove";
-        public static final String REMOVE_POLICY_PAYLOAD_FILE_NAME = "[1]";
+        public static final String REMOVE_POLICY_ENDPOINT = "/mdm-admin/policies/bulk-remove";
+        public static final String REMOVE_ANDROID_POLICY_PAYLOAD_FILE_NAME = "[1]";
+        public static String REMOVE_WINDOWS_POLICY_PAYLOAD_FILE_NAME = "";
 
-        public static final String VIEW_POLICY_LIST_ENDPOINT="/mdm-admin/policies";
+        public static final String VIEW_POLICY_LIST_ENDPOINT = "/mdm-admin/policies";
     }
 
     public static final class FeatureManagement {
         private FeatureManagement() { throw new AssertionError(); }
 
         public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
-        public static final String VIEW_FEATURES_ENDPOINT="/mdm-admin/features/android";
+        public static final String VIEW_FEATURES_ENDPOINT = "/mdm-admin/features/android";
     }
 
     public static final class LicenseManagement {
         private LicenseManagement() { throw new AssertionError(); }
 
         public static final String LICENSE_MANAGEMENT_GROUP = "license-mgt";
-        public static final String GET_LICENSE_ENDPOINT="/mdm-admin/license/android/en_US";
+        public static final String GET_LICENSE_ENDPOINT = "/mdm-admin/license/android/en_US";
         public static final String LICENSE_RESPONSE_PAYLOAD_FILE_NAME = "license-response-payloads.json";
 
     }
@@ -255,7 +280,7 @@ public final class Constants {
         private ConfigurationManagement() { throw new AssertionError(); }
 
         public static final String CONFIGURATION_MANAGEMENT_GROUP = "configuration-mgt";
-        public static final String CONFIGURATION_ENDPOINT="/mdm-admin/configuration";
+        public static final String CONFIGURATION_ENDPOINT = "/mdm-admin/configuration";
         public static final String CONFIGURATION_PAYLOAD_FILE_NAME = "configuration-payloads.json";
         public static final String CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME = "configuration-response-payloads.json";
     }
@@ -264,11 +289,11 @@ public final class Constants {
         private NotificationManagement() { throw new AssertionError(); }
 
         public static final String NOTIFICATION_MANAGEMENT_GROUP = "notification-mgt";
-        public static final String NOTIFICATION_ENDPOINT="/mdm-admin/notifications";
+        public static final String NOTIFICATION_ENDPOINT = "/mdm-admin/notifications";
         public static final String NOTIFICATION_PAYLOAD_FILE_NAME = "notification-payloads.json";
         public static final String NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "notification-response-payloads.json";
 
-        public static final String NOTIFICATION_UPDATE_ENDPOINT="/mdm-admin/notifications/1234/NEW";
+        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/mdm-admin/notifications/1234/NEW";
 
     }
 }

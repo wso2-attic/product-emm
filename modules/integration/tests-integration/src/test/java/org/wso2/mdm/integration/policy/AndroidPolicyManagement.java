@@ -25,9 +25,9 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
 /**
- * This class contains integration tests for policy management backend services.
+ * This class contains integration tests for android policy management backend services.
  */
-public class PolicyManagement extends TestBase {
+public class AndroidPolicyManagement extends TestBase {
 
     private MDMHttpClient client;
 
@@ -41,7 +41,7 @@ public class PolicyManagement extends TestBase {
     @Test(description = "Test add policy.")
     public void testAddPolicy() throws Exception  {
         MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
-                PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
+                PayloadGenerator.getJsonPayload(Constants.PolicyManagement.ANDROID_POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
@@ -59,9 +59,9 @@ public class PolicyManagement extends TestBase {
     @Test(description = "Test update policy.", dependsOnMethods = { "testViewPolicyList"})
     public void testUpdatePolicy() throws Exception {
 
-        MDMResponse response = client.put(Constants.PolicyManagement.UPDATE_POLICY_ENDPOINT,
+        MDMResponse response = client.put(Constants.PolicyManagement.UPDATE_ANDROID_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
-                        Constants.PolicyManagement.POLICY_PAYLOAD_FILE_NAME,
+                        Constants.PolicyManagement.ANDROID_POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
@@ -70,7 +70,7 @@ public class PolicyManagement extends TestBase {
     public void testRemovePolicy() throws Exception {
 
         MDMResponse response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
-                Constants.PolicyManagement.REMOVE_POLICY_PAYLOAD_FILE_NAME);
+                Constants.PolicyManagement.REMOVE_ANDROID_POLICY_PAYLOAD_FILE_NAME);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_DELETE).toString(), response.getBody());
