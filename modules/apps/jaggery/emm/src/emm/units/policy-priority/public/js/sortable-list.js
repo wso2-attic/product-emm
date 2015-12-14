@@ -16,9 +16,9 @@
  * under the License.
  */
 
-var sortableListFunction = (function(){
+var sortableListFunction = (function () {
     var returnObj = {};
-    returnObj.init = function(){
+    returnObj.init = function () {
 
         var sortableElem = '.wr-sortable',
             sortUpdateBtn = '#sortUpdateBtn',
@@ -30,30 +30,32 @@ var sortableListFunction = (function(){
         /**
          * create list of available index numbers for autocomplete listing
          */
-        for(var i = 1; i <= sortableElemLength; i++){
+        for (var i = 1; i <= sortableElemLength; i++) {
             sortableElemList.push(i.toString());
         }
 
         /**
          * sort index number reset function
          */
-        function addSortableIndexNumbers(){
-            $(sortableElem + ' .list-group-item').not('.ui-sortable-placeholder').each(function(i){
-                $('.wr-sort-index input.index', this).val(i+1);
-                $(this).attr('data-sort-index', i+1);
+        function addSortableIndexNumbers() {
+            $(sortableElem + ' .list-group-item').not('.ui-sortable-placeholder').each(function (i) {
+                $('.wr-sort-index input.index', this).val(i + 1);
+                $(this).attr('data-sort-index', i + 1);
+                $(this).attr('data-sort-index', i + 1);
+                $(this).attr('place', 'place_' + (i + 1));
             });
         }
 
         /**
          * on input text field focus autocomplete bind function
          */
-        $(sortableElem).on('focus', '.wr-sort-index input.index', function(){
+        $(sortableElem).on('focus', '.wr-sort-index input.index', function () {
             currentElemId = $(this).val();
             $(this).autocomplete({
                 source: sortableElemList,
                 minLength: 0,
-                close: function(event, ui){
-                    if($.inArray($(this).val(), sortableElemList) !== -1){
+                close: function (event, ui) {
+                    if ($.inArray($(this).val(), sortableElemList) !== -1) {
                         $(this).removeClass('has-error');
                     }
                 }
@@ -63,7 +65,7 @@ var sortableListFunction = (function(){
         /**
          * on index edit icon click focusing input text field function
          */
-        $(sortableElem).on('click', '.wr-sort-index .icon', function(){
+        $(sortableElem).on('click', '.wr-sort-index .icon', function () {
             $(sortableElem + ' .wr-sort-index input.index').focusout();
             $(this).siblings('input.index').focus();
         });
@@ -71,12 +73,12 @@ var sortableListFunction = (function(){
         /**
          * on input key press validation function
          */
-        $(sortableElem).on('keyup', '.wr-sort-index input.index', function(e){
+        $(sortableElem).on('keyup', '.wr-sort-index input.index', function (e) {
             $(".ui-autocomplete").addClass("hidden");
             if (e.which == 13) {
                 $(this).focusout();
             }
-            else if ($.inArray($(this).val(), sortableElemList) == -1){
+            else if ($.inArray($(this).val(), sortableElemList) == -1) {
                 $(this).addClass('has-error');
             }
             else {
@@ -87,23 +89,25 @@ var sortableListFunction = (function(){
         /**
          * on input text value enter re-sorting function with validation
          */
-        $(sortableElem).on('blur', '.wr-sort-index input.index', function(){
-            if(($(this).val() > 0) && ($(this).val() < sortableElemLength+1)){
-
-                $(this).closest('.list-group-item').attr('data-sort-index', $(this).val());
-
-                $(sortableElem + ' .list-group-item').not('.ui-sortable-placeholder').sort(function(a, b) {
-                    return parseInt($(a).data('sort-index')) < parseInt($(b).data('sort-index'));
-                }).each(function(){
-                    var elem = $(this);
-                    elem.remove();
-                    $(elem).prependTo(sortableElem);
-                });
-                $(sortUpdateBtn).prop('disabled', false);
-                sortedIDs =  $(sortableElem).sortable('toArray');
-                addSortableIndexNumbers();
+        $(sortableElem).on('blur', '.wr-sort-index input.index', function () {
+            if (($(this).val() > 0) && ($(this).val() < sortableElemLength + 1)) {
+                var isUnChanged = $(this).closest('.list-group-item').attr('data-sort-index') == $(this).val();
+                if (!isUnChanged) {
+                    $(this).closest('.list-group-item').attr('data-sort-index', $(this).val());
+                    var newValue = $(this).val();
+                    if (currentElemId < newValue) {
+                        $('span[place="place_' + currentElemId + '"]').
+                            insertAfter('span[place="place_' + newValue + '"]');
+                    } else {
+                        $('span[place="place_' + currentElemId + '"]').
+                            insertBefore('span[place="place_' + newValue + '"]');
+                    }
+                    $(sortUpdateBtn).prop('disabled', false);
+                    sortedIDs = $(sortableElem).sortable('toArray');
+                    addSortableIndexNumbers();
+                }
             }
-            else{
+            else {
                 $(this).val(currentElemId);
             }
             $(this).removeClass('has-error');
@@ -114,11 +118,11 @@ var sortableListFunction = (function(){
          *          add sortable list index numbers
          *          enable drag & drop sortable function
          */
-        $(function() {
+        $(function () {
             addSortableIndexNumbers();
 
             $(sortableElem).sortable({
-                beforeStop: function(event, ui){
+                beforeStop: function (event, ui) {
                     sortedIDs = $(this).sortable('toArray');
                     addSortableIndexNumbers();
                     $(sortUpdateBtn).prop('disabled', false);
@@ -127,13 +131,13 @@ var sortableListFunction = (function(){
             $(sortableElem).disableSelection();
         });
 
-        returnObj.getSortedItems = function (){
+        returnObj.getSortedItems = function () {
             return sortedIDs;
         }
     };
     return returnObj;
 })();
 
-$(function(){
+$(function () {
     sortableListFunction.init();
 });
