@@ -82,16 +82,11 @@ import java.util.List;
 @Addressing(enabled = true, required = true)
 @BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentService {
-
-    private static final int REQUEST_ID = 0;
-    private static final int CA_CERTIFICATE_POSITION = 0;
-    private static final int SIGNED_CERTIFICATE_POSITION = 1;
-    private static final int APPAUTH_USERNAME_POSITION = 21;
-    private static final int APPAUTH_PASSWORD_POSITION = 22;
-    private static final int POLLING_FREQUENCY_POSITION = 27;
     private static Log log = LogFactory.getLog(CertificateEnrollmentServiceImpl.class);
     private X509Certificate rootCACertificate;
     private String pollingFrequency;
+    private String provisioningURL;
+    private String domainName;
 
     @Resource
     private WebServiceContext context;
@@ -113,6 +108,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             WindowsDeviceEnrolmentException, UnsupportedEncodingException, WAPProvisioningException {
 
         String headerBinarySecurityToken = null;
+        String headerTo = null;
         List<Header> headers = getHeaders();
         for (Header headerElement : headers != null ? headers : null) {
             String nodeName = headerElement.getName().getLocalPart();
@@ -120,7 +116,23 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 Element element = (Element) headerElement.getObject();
                 headerBinarySecurityToken = element.getFirstChild().getNextSibling().getFirstChild().getTextContent();
             }
+            if (nodeName.equals(PluginConstants.TO)) {
+                Element toElement = (Element) headerElement.getObject();
+                headerTo = toElement.getFirstChild().getTextContent();
+            }
         }
+        String[] splitEmail = headerTo.split("(/ENROLLMENTSERVER)");
+        String email = splitEmail[PluginConstants.CertificateEnrolment.EMAIL_SEGMENT];
+
+        String[] splitDomain = email.split("(EnterpriseEnrollment.)");
+        String domain = splitDomain[PluginConstants.CertificateEnrolment.DOMAIN_SEGMENT];
+
+        String[] splitDomainName = domain.split("(\\.)");
+        domainName = splitDomainName[PluginConstants.CertificateEnrolment.EMAIL_SEGMENT];
+
+        provisioningURL = PluginConstants.CertificateEnrolment.ENROLL_SUBDOMAIN + domain +
+                PluginConstants.CertificateEnrolment.SYNCML_PROVISIONING_SERVICE_URL;
+
         List<ConfigurationEntry> tenantConfigurations;
         try {
             if (WindowsAPIUtils.getTenantConfigurationData() != null) {
@@ -165,7 +177,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             binarySecToken.setToken(encodedWap);
             requestedSecurityToken.setBinarySecurityToken(binarySecToken);
             requestSecurityTokenResponse.setRequestedSecurityToken(requestedSecurityToken);
-            requestSecurityTokenResponse.setRequestID(REQUEST_ID);
+            requestSecurityTokenResponse.setRequestID(PluginConstants.CertificateEnrolment.REQUEST_ID);
             response.value = requestSecurityTokenResponse;
         } catch (CertificateGenerationException e) {
             String msg = "Problem occurred in generating certificate.";
@@ -251,7 +263,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
             Document document = builder.parse(wapProvisioningFilePath);
             NodeList wapParm = document.getElementsByTagName(PluginConstants.CertificateEnrolment.PARM);
-            Node caCertificatePosition = wapParm.item(CA_CERTIFICATE_POSITION);
+            Node caCertificatePosition = wapParm.item(PluginConstants.CertificateEnrolment.CA_CERTIFICATE_POSITION);
 
             //Adding SHA1 CA certificate finger print to wap-provisioning xml.
             caCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
@@ -269,7 +281,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 log.debug("Root certificate: " + rootCertEncodedString);
             }
 
-            Node signedCertificatePosition = wapParm.item(SIGNED_CERTIFICATE_POSITION);
+            Node signedCertificatePosition = wapParm.item(PluginConstants.CertificateEnrolment.
+                    SIGNED_CERTIFICATE_POSITION);
 
             //Adding SHA1 signed certificate finger print to wap-provisioning xml.
             signedCertificatePosition.getParentNode().getAttributes().getNamedItem(PluginConstants.
@@ -288,8 +301,21 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 log.debug("Signed certificate: " + signedCertEncodedString);
             }
 
-            // Adding user name auth token to wap-provisioning xml
-            Node userNameAuthPosition = wapParm.item(APPAUTH_USERNAME_POSITION);
+            //Adding domainName to wap-provisioning xml.
+            Node domainPosition = wapParm.item(PluginConstants.CertificateEnrolment.DOMAIN_POSITION);
+            NamedNodeMap domainAttribute = domainPosition.getAttributes();
+            Node domainNode = domainAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+            domainNode.setTextContent(domainName);
+
+            //Adding Next provisioning service URL to wap-provisioning xml.
+            Node syncmlServicePosition = wapParm.item(PluginConstants.CertificateEnrolment.
+                    SYNCML_PROVISIONING_ADDR_POSITION);
+            NamedNodeMap syncmlServiceAttribute = syncmlServicePosition.getAttributes();
+            Node syncmlServiceNode = syncmlServiceAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
+            syncmlServiceNode.setTextContent(provisioningURL);
+
+            // Adding user name auth token to wap-provisioning xml.
+            Node userNameAuthPosition = wapParm.item(PluginConstants.CertificateEnrolment.APPAUTH_USERNAME_POSITION);
             NamedNodeMap appServerAttribute = userNameAuthPosition.getAttributes();
             Node authNameNode = appServerAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             CacheEntry cacheEntry = (CacheEntry) DeviceUtil.getCacheEntry(headerBst);
@@ -297,7 +323,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             authNameNode.setTextContent(cacheEntry.getUsername());
             DeviceUtil.removeToken(headerBst);
             String password = DeviceUtil.generateRandomToken();
-            Node passwordAuthPosition = wapParm.item(APPAUTH_PASSWORD_POSITION);
+            Node passwordAuthPosition = wapParm.item(PluginConstants.CertificateEnrolment.APPAUTH_PASSWORD_POSITION);
             NamedNodeMap appSrvPasswordAttribute = passwordAuthPosition.getAttributes();
             Node authPasswordNode = appSrvPasswordAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             authPasswordNode.setTextContent(password);
@@ -305,7 +331,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             DeviceUtil.persistChallengeToken(requestSecurityTokenResponse, null, userName);
 
             // Get device polling frequency from the tenant Configurations.
-            Node numberOfFirstRetries = wapParm.item(POLLING_FREQUENCY_POSITION);
+            Node numberOfFirstRetries = wapParm.item(PluginConstants.CertificateEnrolment.POLLING_FREQUENCY_POSITION);
             NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
             Node pollValue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             pollValue.setTextContent(pollingFrequency);

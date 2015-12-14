@@ -18,13 +18,17 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.beans;
 
+import java.io.Serializable;
+
 /**
  * Class for java CacheEntry
  */
-public class CacheEntry {
+public class CacheEntry implements Serializable {
     private String deviceID;
     private String username;
     private String ownership;
+
+    private static final long serialVersionUID = 19981017L;
 
     public String getOwnership() {
         return ownership;
