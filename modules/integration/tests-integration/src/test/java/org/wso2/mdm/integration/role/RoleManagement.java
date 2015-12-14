@@ -44,16 +44,24 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test add role.")
     public void testAddRole() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT);
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
         MDMResponse response = client.post(url,
                 PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
-    @Test(description = "Test update permission role.", dependsOnMethods = { "testAddRole"})
+    @Test(description = "Test update role.", dependsOnMethods = { "testAddRole"})
+    public void testUpdateUser() throws Exception {
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
+        MDMResponse response = client.put(url, PayloadGenerator.getJsonPayload(Constants.RoleManagement.
+                ROLE_UPDATE_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_PUT).toString());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(description = "Test update permission role.", dependsOnMethods = { "testUpdateUser"})
     public void testUpdateRolePermission() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT);
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
         MDMResponse response = client.put(url,
                     PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString());
@@ -62,13 +70,13 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test remove user.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRole() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT);
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
         MDMResponse response = client.delete(url);
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    private String GetURL(String endPoint){
-        return endPoint+"?rolename="+Constants.RoleManagement.ROLE_NAME;
+    private String GetURL(String endPoint,String param){
+        return endPoint+"?rolename="+param;
     }
 
 }
