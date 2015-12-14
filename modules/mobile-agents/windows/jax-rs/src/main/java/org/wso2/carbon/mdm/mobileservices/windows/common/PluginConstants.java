@@ -65,6 +65,7 @@ public final class PluginConstants {
     //Message handler constants
     public static final String CONTENT_LENGTH = "Content-Length";
     public static final String SECURITY = "Security";
+    public static final String TO = "To";
     public static final String CXF_REQUEST_URI = "org.apache.cxf.request.uri";
 
     //Web services media types
@@ -151,6 +152,19 @@ public final class PluginConstants {
         public static final String CREATED = "Created";
         public static final String EXPIRES = "Expires";
         public static final String UTF_8 = "utf-8";
+
+        public static final int DOMAIN_SEGMENT = 1;
+        public static final int EMAIL_SEGMENT = 0;
+        public static final int REQUEST_ID = 0;
+        public static final int CA_CERTIFICATE_POSITION = 0;
+        public static final int SIGNED_CERTIFICATE_POSITION = 1;
+        public static final int APPAUTH_USERNAME_POSITION = 21;
+        public static final int APPAUTH_PASSWORD_POSITION = 22;
+        public static final int POLLING_FREQUENCY_POSITION = 27;
+        public static final int SYNCML_PROVISIONING_ADDR_POSITION = 8;
+        public static final int DOMAIN_POSITION = 7;
+        public static final String ENROLL_SUBDOMAIN = "https://EnterpriseEnrollment.";
+        public static final String SYNCML_PROVISIONING_SERVICE_URL = "/Syncml/initialquery";
     }
 
     /**
