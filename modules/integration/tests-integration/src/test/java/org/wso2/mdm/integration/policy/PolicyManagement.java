@@ -48,7 +48,6 @@ public class PolicyManagement extends TestBase {
                 Constants.HTTP_METHOD_POST).toString(),response.getBody());
 
     }
-
     @Test(description = "Test view policy list.", dependsOnMethods = { "testAddPolicy"})
     public void testViewPolicyList() throws Exception {
         MDMResponse response = client.get(Constants.PolicyManagement.VIEW_POLICY_LIST_ENDPOINT);

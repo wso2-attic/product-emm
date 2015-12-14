@@ -51,7 +51,6 @@ public class ConfigurationManagement extends TestBase {
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(), response.getData().toString(), true);
     }
-
     @Test(description = "Test get configuration.", dependsOnMethods = { "testSaveConfiguration"})
     public void testGetConfiguration() throws Exception {
         HttpResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT);
