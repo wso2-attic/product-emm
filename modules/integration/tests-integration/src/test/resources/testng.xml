@@ -41,14 +41,14 @@
             <class name="org.wso2.mdm.integration.device.operation.AndroidOperation"/>
         </classes>
     </test>
-    <test name="windows-operation" preserve-order="false" parallel="true">
-        <classes>
-            <class name="org.wso2.mdm.integration.device.operation.WindowsOperation"/>
-        </classes>
-    </test>
     <test name="windows-enrollment" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.device.enrollment.WindowsEnrollment"/>
+        </classes>
+    </test>
+    <test name="windows-operation" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.operation.WindowsOperation"/>
         </classes>
     </test>
     <test name="android-device-mgt" preserve-order="false" parallel="true">

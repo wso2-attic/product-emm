@@ -45,4 +45,5 @@ public class PayloadGenerator {
         String returnString = IOUtils.toString(fisTargetFile, Constants.UTF8);
         return returnString;
     }
+
 }

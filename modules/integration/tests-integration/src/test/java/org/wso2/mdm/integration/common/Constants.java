@@ -18,7 +18,6 @@
 package org.wso2.mdm.integration.common;
 
 import java.io.File;
-
 /**
  * Constants used through out the test suite are defined here.
  */
@@ -238,23 +237,25 @@ public final class Constants {
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
         public static final String ADD_POLICY_ENDPOINT="/mdm-admin/policies/active-policy";
+        public static final String GET_ALL_POLICIES_ENDPOINT = "/mdm-admin/policies";
         public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
         public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
         public static final String WINDOWS_POLICY_PAYLOAD_FILE_NAME = "windows-policy-payloads.json";
+        public static String WINDOWS_POLICY_DEVICE_ID = "";
+        public static String WINDOWS_POLICY_SECOND_DEVICE_ID = "";
         public static final String WINDOWS_ADD_SECOND_POLICY_PAYLOAD_FILE_NAME =
                 "windows-add-second-policy-payload.json";
-        public static final String POLICY_PRIORITIES_PAYLOAD_FILE_NAME =
-                "[{\"id\":3,\"priority\":1},{\"id\":2,\"priority\":2}]";
+        public static String POLICY_PRIORITIES_PAYLOAD_FILE_NAME ="";
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
         public static final String POLICY_PRIORITIES_RESPONSE_PAYLOAD_FILE_NAME = "policy-priories-response-payloads.json";
 
         public static final String UPDATE_ANDROID_POLICY_ENDPOINT ="/mdm-admin/policies/1";
-        public static final String UPDATE_WINDOWS_POLICY_ENDPOINT ="/mdm-admin/policies/2";
+        public static String UPDATE_WINDOWS_POLICY_ENDPOINT ="";
 
         public static final String REMOVE_POLICY_ENDPOINT="/mdm-admin/policies/bulk-remove";
         public static final String REMOVE_ANDROID_POLICY_PAYLOAD_FILE_NAME = "[1]";
-        public static final String REMOVE_WINDOWS_POLICY_PAYLOAD_FILE_NAME = "[1,2]";
+        public static String REMOVE_WINDOWS_POLICY_PAYLOAD_FILE_NAME = "";
 
         public static final String VIEW_POLICY_LIST_ENDPOINT="/mdm-admin/policies";
     }
