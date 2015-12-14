@@ -36,7 +36,7 @@
             <class name="org.wso2.mdm.integration.device.enrollment.AndroidEnrollment"/>
         </classes>
     </test>
-    <test name="android-operation" preserve-order="false" parallel="true">
+    <test name="operation" preserve-order="false" parallel="true">
         <classes>
             <class name="org.wso2.mdm.integration.device.operation.AndroidOperation"/>
         </classes>
@@ -44,6 +44,11 @@
     <test name="windows-enrollment" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.device.enrollment.WindowsEnrollment"/>
+        </classes>
+    </test>
+    <test name="windows-operation" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.operation.WindowsOperation"/>
         </classes>
     </test>
     <test name="android-device-mgt" preserve-order="false" parallel="true">
@@ -83,7 +88,12 @@
     </test>
     <test name="policy-mgt" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.mdm.integration.policy.PolicyManagement"/>
+            <class name="org.wso2.mdm.integration.policy.AndroidPolicyManagement"/>
+        </classes>
+    </test>
+    <test name="windows-policy-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.policy.WindowsPolicyManagement"/>
         </classes>
     </test>
     <test name="feature-mgt" preserve-order="true" parallel="false">
