@@ -44,7 +44,8 @@ public final class Constants {
     public static final String APPLICATION_SOAP_XML = "application/soap+xml; charset=utf-8";
     public static final String UTF8 = "UTF-8";
     public static final String ZERO = "0";
-    public static final String NULL = "[]";
+    public static final String EMPTY_ARRAY = "[]";
+    public static final String NULL = "{}";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
