@@ -268,12 +268,21 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 					} else {
 						ServerConfig utils = new ServerConfig();
 						utils.setServerIP(serverIP);
-
-						CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-								utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
-								HTTP_METHODS.GET,
-								null, AlreadyRegisteredActivity.this,
-								Constants.IS_REGISTERED_REQUEST_CODE);
+						if(utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
+							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+							                           utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
+							                           HTTP_METHODS.GET,
+							                           null, AlreadyRegisteredActivity.this,
+							                           Constants.IS_REGISTERED_REQUEST_CODE);
+						} else {
+							try {
+								CommonUtils.clearAppData(context);
+							} catch (AndroidAgentException e) {
+								String msg = "Device already dis-enrolled.";
+								Log.e(TAG, msg, e);
+							}
+							loadServerDetailsActivity();
+						}
 					}
 				}
 			} else {
