@@ -149,58 +149,141 @@ function toTitleCase(str) {
 function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
     var deviceListingSrc = deviceListing.attr("src");
-    var imageResource = deviceListing.data("image-resource");
     var currentUser = deviceListing.data("currentUser");
-    $.template("device-listing", deviceListingSrc, function (template) {
-        var serviceURL;
-        if ($.hasPermission("LIST_DEVICES")) {
-            serviceURL = "/mdm-admin/devices";
-        } else if ($.hasPermission("LIST_OWN_DEVICES")) {
-            //Get authenticated users devices
-            serviceURL = "/mdm-admin/users/devices?username="+currentUser;
-        } else {
-            $("#loading-content").remove();
-            $('#device-table').addClass('hidden');
-            $('#device-listing-status-msg').text('Permission denied.');
-            return;
+
+    var serviceURL;
+    if ($.hasPermission("LIST_DEVICES")) {
+        serviceURL = "/mdm-admin/devices";
+    } else if ($.hasPermission("LIST_OWN_DEVICES")) {
+        //Get authenticated users devices
+        serviceURL = "/mdm-admin/users/devices?username="+currentUser;
+    } else {
+        $("#loading-content").remove();
+        $('#device-table').addClass('hidden');
+        $('#device-listing-status-msg').text('Permission denied.');
+        return;
+    }
+    if (searchParam){
+        if(searchType == "users"){
+            serviceURL = serviceURL + "?user=" + searchParam;
+        }else if(searchType == "user-roles"){
+            serviceURL = serviceURL + "?role=" + searchParam;
+        }else{
+            serviceURL = serviceURL + "?type=" + searchParam;
         }
-        if (searchParam){
-            if(searchType == "users"){
-                serviceURL = serviceURL + "?user=" + searchParam;
-            }else if(searchType == "user-roles"){
-                serviceURL = serviceURL + "?role=" + searchParam;
-            }else{
-                serviceURL = serviceURL + "?type=" + searchParam;
+    }
+
+    function getPropertyValue(deviceProperties, propertyName) {
+        var property;
+        for (var i =0; i < deviceProperties.length; i++) {
+            property = deviceProperties[i];
+            if (property.name == propertyName) {
+                return property.value;
             }
         }
-        var successCallback = function (data) {
-            data = JSON.parse(data);
-            var viewModel = {};
-            viewModel.devices = data;
-            viewModel.imageLocation = imageResource;
-            if(data.length > 0){
-                $('#device-grid').removeClass('hidden');
-                var content = template(viewModel);
-                $("#ast-container").html(content);
-                /*
-                 * On device checkbox select add parent selected style class
-                 */
-                $(deviceCheckbox).click(function () {
-                    addDeviceSelectedClass(this);
-                });
-            } else {
-                $('#device-table').addClass('hidden');
-                $('#device-listing-status-msg').text('No device is available to be displayed.');
-            }
-            $("#loading-content").remove();
-            $('#device-grid').datatables_extended();
-            $(".icon .text").res_text(0.2);
-        };
-        invokerUtil.get(serviceURL,
-            successCallback, function(message){
-                console.log(message.content);
+        return {};
+    }
+
+    $('#device-grid').datatables_extended({
+        serverSide: true,
+        processing: false,
+        pageLength : 16,
+        ajax: { url : '/emm/api/devices', data : {url : serviceURL}},
+        columnDefs: [
+            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill' , render: function ( data, type, row, meta ) {
+                return '<div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
+            }},
+            { targets: 1, data: 'name', className: 'fade-edge' , render: function ( name, type, row, meta ) {
+                var model = getPropertyValue(row.properties, 'DEVICE_MODEL');
+                var vendor = getPropertyValue(row.properties, 'VENDOR');
+                var html = '<h4>Device ' + name + '</h4>';
+                if (model) {
+                    html += '<div>(' + vendor + '-' + model + ')</div>';
+                }
+                return html;
+            }},
+            { targets: 2, data: 'enrolmentInfo.owner', className: 'fade-edge remove-padding-top'},
+            { targets: 3, data: 'enrolmentInfo.status', className: 'fade-edge remove-padding-top' ,
+                render: function ( status, type, row, meta ) {
+                var html;
+                switch (status) {
+                    case 'ACTIVE' :
+                        html = '<span><i class="fw fw-ok icon-success"></i> Active</span>';
+                        break;
+                    case 'INACTIVE' :
+                        html = '<span><i class="fw fw-warning icon-warning"></i> Inactive</span>';
+                        break;
+                    case 'BLOCKED' :
+                        html = '<span><i class="fw fw-remove icon-danger"></i> Blocked</span>';
+                        break;
+                    case 'REMOVED' :
+                        html = '<span><i class="fw fw-delete icon-danger"></i> Removed</span>';
+                        break;
+                }
+                return html;
+            }},
+            { targets: 4, data: 'type' , className: 'fade-edge remove-padding-top' },
+            { targets: 5, data: 'enrolmentInfo.ownership' , className: 'fade-edge remove-padding-top' },
+            { targets: 6, data: 'enrolmentInfo.status' , className: 'text-right content-fill text-left-on-grid-view no-wrap' ,
+                render: function ( status, type, row, meta ) {
+                var deviceType = row.type;
+                var deviceIdentifier = row.deviceIdentifier;
+                var html;
+                if (status != 'REMOVED') {
+                    html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
+                    ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +
+                        '<i class="fw fw-view fw-stack-1x"></i></span><span class="hidden-xs hidden-on-grid-view">View</span></a>';
+                }
+                return html;
+            }}
+        ],
+        "createdRow": function( row, data, dataIndex ) {
+            $(row).attr('data-type', 'selectable');
+            $(row).attr('data-deviceid', data.deviceIdentifier);
+            $(row).attr('data-devicetype', data.type);
+            var model = getPropertyValue(data.properties, 'DEVICE_MODEL');
+            var vendor = getPropertyValue(data.properties, 'VENDOR');
+            var owner = data.enrolmentInfo.owner;
+            var status = data.enrolmentInfo.status;
+            var ownership = data.enrolmentInfo.ownership;
+            var deviceType = data.type;
+            $.each($('td', row), function (colIndex) {
+                switch(colIndex) {
+                    case 1:
+                        $(this).attr('data-search', model + ',' + vendor);
+                        $(this).attr('data-display', model);
+                        break;
+                    case 2:
+                        $(this).attr('data-grid-label', owner);
+                        $(this).attr('data-search', owner);
+                        $(this).attr('data-display', owner);
+                        break;
+                    case 3:
+                        $(this).attr('data-grid-label', "Status");
+                        $(this).attr('data-search', status);
+                        $(this).attr('data-display', status);
+                        break;
+                    case 4:
+                        $(this).attr('data-grid-label', "Type");
+                        $(this).attr('data-search', deviceType);
+                        $(this).attr('data-display', deviceType);
+                        break;
+                    case 5:
+                        $(this).attr('data-grid-label', "Ownership");
+                        $(this).attr('data-search', ownership);
+                        $(this).attr('data-display', ownership);
+                        break;
+                }
             });
+        }
     });
+    $(deviceCheckbox).click(function () {
+        addDeviceSelectedClass(this);
+    });
+
+    $('#device-grid').removeClass('hidden');
+    $(".icon .text").res_text(0.2);
+    $("#loading-content").remove();
 }
 
 /*
