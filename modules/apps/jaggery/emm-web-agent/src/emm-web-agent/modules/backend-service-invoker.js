@@ -25,11 +25,25 @@ var backendServiceInvoker = function () {
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
-    var TOKEN_EXPIRED = "Access token has expired";
+    var TOKEN_EXPIRED = "Access token expired";
     var TOKEN_INVALID = "Invalid input. Access token validation failed";
     var constants = require("/modules/constants.js");
     var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
+    var mdmProps = require('/config/mdm-props.js').config();
 
+    /**
+     * This methoad reads the token pair from the session and return the access token.
+     * If the token pair s not set in the session this will send a redirect to the login page.
+     */
+    function getAccessToken() {
+        var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
+        if (tokenPair) {
+            return tokenPair.accessToken ;
+        } else {
+            response.sendRedirect( mdmProps["httpsURL"]+"/emm/login");
+        }
+
+    }
 
     /**
      * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
@@ -46,14 +60,13 @@ var backendServiceInvoker = function () {
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
             xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
             if (IS_OAUTH_ENABLED) {
-                var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
+                var accessToken = getAccessToken();
                 xmlHttpRequest.setRequestHeader(
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
             xmlHttpRequest.send((payload));
             log.debug("Service Invoker-URL: " + url);
             log.debug("Service Invoker-Method: " + method);
-
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
                 if (xmlHttpRequest.responseText != null) {
                     return successCallback(parse(xmlHttpRequest.responseText));
@@ -63,18 +76,18 @@ var backendServiceInvoker = function () {
             } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
                                                         xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5 ) {
                 tokenUtil.refreshToken();
-                return execute(count);
+                return execute(count+1);
             } else if (xmlHttpRequest.status == 500) {
                 return errorCallback(xmlHttpRequest);
             } else {
                 return errorCallback(xmlHttpRequest);
             }
         };
-        var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken.trim();
+        var accessToken = getAccessToken();
         if (accessToken) {
-            return execute(1);
+            return execute(0);
         } else {
-           response.status = 401;
+            response.sendRedirect( mdmProps["httpsURL"]+"/emm/login");
         }
     }
 
@@ -119,7 +132,7 @@ var backendServiceInvoker = function () {
         header.setValue(constants.APPLICATION_JSON);
         httpMethodObject.addRequestHeader(header);
         if (IS_OAUTH_ENABLED) {
-            var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
+            var accessToken = getAccessToken();
             if (!(!accessToken.trim())) {
                 header = new Header();
                 header.setName(constants.AUTHORIZATION_HEADER);
@@ -160,7 +173,7 @@ var backendServiceInvoker = function () {
         var wsRequest = new ws.WSRequest();
         var options = new Array();
         if (IS_OAUTH_ENABLED) {
-            var accessToken = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER).accessToken;
+            var accessToken = getAccessToken();
             if (!(!accessToken)) {
                 var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
                 var authenticationHeaderValue = String(constants.BEARER_PREFIX + accessToken);
