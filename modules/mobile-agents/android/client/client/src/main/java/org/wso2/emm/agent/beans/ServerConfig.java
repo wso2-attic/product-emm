@@ -54,7 +54,7 @@ public class ServerConfig {
 		return APIServerURL;
 	}
 
-	private String getProtocolFromPreferences (Context context) {
+	public String getProtocolFromPreferences (Context context) {
 		if (Preference.getString(context, Constants.PROTOCOL) != null) {
 			return Preference.getString(context, Constants.PROTOCOL);
 		} else {
@@ -62,7 +62,7 @@ public class ServerConfig {
 		}
 	}
 
-	private String getPortFromPreferences (Context context) {
+	public String getPortFromPreferences (Context context) {
 		if (Preference.getString(context, Constants.PORT) != null) {
 			return Preference.getString(context, Constants.PORT);
 		} else {
@@ -70,7 +70,7 @@ public class ServerConfig {
 		}
 	}
 
-	private String getHostFromPreferences (Context context) {
+	public String getHostFromPreferences (Context context) {
 		if (Preference.getString(context, Constants.IP) != null) {
 			return Preference.getString(context, Constants.IP);
 		} else {

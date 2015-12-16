@@ -28,10 +28,29 @@ var log = new Log("api/device-api.jag");
 
 var deviceModule = require("/modules/device.js").deviceModule;
 var userModule = require("/modules/user.js").userModule;
+var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
+var mdmProps = require('/config/mdm-props.js').config();
 
 var result;
 
-if (uriMatcher.match("/{context}/api/devices/")) {
+if (uriMatcher.match("/{context}/api/devices")) {
+    var url = request.getParameter("url");
+    var targetURL;
+    if (url.indexOf("?") > 0) {
+        targetURL = mdmProps.httpsURL + request.getParameter("url") + request.getQueryString();
+    } else {
+        targetURL = mdmProps.httpsURL + request.getParameter("url") + "?" + request.getQueryString();
+    }
+    serviceInvokers.XMLHttp.get(
+            targetURL, function (responsePayload) {
+                response.status = 200;
+                result =  responsePayload;
+            },
+            function (responsePayload) {
+                response.status = responsePayload.status;
+                result =  responsePayload.responseText;
+            });
+} else if (uriMatcher.match("/{context}/api/devices/")) {
     if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")) {
         result = deviceModule.listDevices();
     } else {

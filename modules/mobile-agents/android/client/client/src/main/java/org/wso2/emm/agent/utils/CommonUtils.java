@@ -70,6 +70,7 @@ public class CommonUtils {
 									  APIResultCallBack apiResultCallBack, int requestCode) {
 
 		EndPointInfo apiUtilities = new EndPointInfo();
+		ServerConfig utils = new ServerConfig();
 		apiUtilities.setEndPoint(endpoint);
 		apiUtilities.setHttpMethod(methodType);
 		if (requestParams != null) {
@@ -78,7 +79,8 @@ public class CommonUtils {
 		APIController apiController;
 		String clientKey = Preference.getString(context, Constants.CLIENT_ID);
 		String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
-		if (clientKey!=null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
+		if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty() &&
+		    clientKey != null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
 			apiController = new APIController(clientKey, clientSecret);
 			apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
 					context.getApplicationContext());
