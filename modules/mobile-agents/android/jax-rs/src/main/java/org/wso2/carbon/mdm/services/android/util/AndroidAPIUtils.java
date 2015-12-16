@@ -172,17 +172,19 @@ public class AndroidAPIUtils {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setId(deviceId);
         deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+
         if (AndroidConstants.OperationCodes.MONITOR.equals(operation.getCode())) {
             if (log.isDebugEnabled()) {
                 log.info("Received compliance status from MONITOR operation ID: " + operation.getId());
             }
-            getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, operation.getOperationResponse());
+            getPolicyManagerService().checkPolicyCompliance(deviceIdentifier, operation.getPayLoad());
         } else if (AndroidConstants.OperationCodes.APPLICATION_LIST.equals(operation.getCode())) {
             if (log.isDebugEnabled()) {
                 log.info("Received applications list from device '" + deviceId + "'");
             }
             updateApplicationList(operation, deviceIdentifier);
         }
+
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
 
