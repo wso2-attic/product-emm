@@ -30,18 +30,24 @@ import org.wso2.mdm.integration.common.*;
  */
 public class FeatureManagement extends TestBase{
 
-    private RestClient client;
+    private MDMHttpClient client;
 
     @BeforeClass(alwaysRun = true, groups = { Constants.FeatureManagement.FEATURE_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     @Test(description = "Test view features.")
     public void testViewFeatures() throws Exception {
-        HttpResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        MDMResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(description = "Test view features with erroneous end point.")
+    public void testViewFeaturesWithErroneousEndPoint() throws Exception {
+        MDMResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ERRONEOUS_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatus());
     }
 }

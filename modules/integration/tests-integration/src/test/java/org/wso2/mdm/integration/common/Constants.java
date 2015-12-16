@@ -215,7 +215,9 @@ public final class Constants {
         public static final String USER_NAME = "username123";
         public static final String USER_ENDPOINT = "/mdm-admin/users";
         public static final String USER_PAYLOAD_FILE_NAME = "user-payloads.json";
+        public static final String USER_ERRONEOUS_PAYLOAD_FILE_NAME = "user-erroneous-payloads.json";
         public static final String USER_RESPONSE_PAYLOAD_FILE_NAME = "user-response-payloads.json";
+        public static final String USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME = "user-erroneous-response-payloads.json";
         public static final String VIEW_USER_ENDPOINT = "/mdm-admin/users/view";
 
     }
@@ -228,6 +230,8 @@ public final class Constants {
         public static final String UPDATED_ROLE_NAME = "manager";
         public static final String ROLE_ENDPOINT = "/mdm-admin/roles";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
+        public static final String ROLE_RESPONSE_PAYLOAD_FILE_NAME = "role-response-payloads.json";
+        public static final String ROLE_ERRONEOUS_PAYLOAD_FILE_NAME = "role-erroneous-payloads.json";
         public static final String ROLE_UPDATE_PAYLOAD_FILE_NAME = "role-update-payloads.json";
 
     }
@@ -241,12 +245,15 @@ public final class Constants {
         public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
         public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
+        public static final String ANDROID_POLICY_ERRONEOUS_PAYLOAD_FILE_NAME = "policy-erroneous-payloads.json";
         public static final String WINDOWS_POLICY_PAYLOAD_FILE_NAME = "windows-policy-payloads.json";
         public static String WINDOWS_POLICY_DEVICE_ID = "";
         public static String WINDOWS_POLICY_SECOND_DEVICE_ID = "";
         public static final String WINDOWS_ADD_SECOND_POLICY_PAYLOAD_FILE_NAME =
                 "windows-add-second-policy-payload.json";
         public static String POLICY_PRIORITIES_PAYLOAD_FILE_NAME = "";
+        public static final String POLICY_ERRONEOUS_PAYLOAD_FILE_NAME = "[{\"id\":1,\"priority\":1}," +
+                "{\"id\":1,\"priority\":2}]";;
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
         public static final String POLICY_PRIORITIES_RESPONSE_PAYLOAD_FILE_NAME = "policy-priories-response-payloads.json";
 
@@ -265,6 +272,7 @@ public final class Constants {
 
         public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
         public static final String VIEW_FEATURES_ENDPOINT = "/mdm-admin/features/android";
+        public static final String VIEW_FEATURES_ERRONEOUS_ENDPOINT = "/mdm-admin/features";
     }
 
     public static final class LicenseManagement {
@@ -272,6 +280,7 @@ public final class Constants {
 
         public static final String LICENSE_MANAGEMENT_GROUP = "license-mgt";
         public static final String GET_LICENSE_ENDPOINT = "/mdm-admin/license/android/en_US";
+        public static final String GET_LICENSE_ERRONEOUS_ENDPOINT = "/mdm-admin/license";
         public static final String LICENSE_RESPONSE_PAYLOAD_FILE_NAME = "license-response-payloads.json";
 
     }
@@ -281,8 +290,10 @@ public final class Constants {
 
         public static final String CONFIGURATION_MANAGEMENT_GROUP = "configuration-mgt";
         public static final String CONFIGURATION_ENDPOINT = "/mdm-admin/configuration";
+        public static final String CONFIGURATION_ERRONEOUS_ENDPOINT = "/mdm-admin/configuration/android";
         public static final String CONFIGURATION_PAYLOAD_FILE_NAME = "configuration-payloads.json";
         public static final String CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME = "configuration-response-payloads.json";
+        public static final String CONFIGURATION_ERRONEOUS_RESPONSE = "Scope validation failed";
     }
 
     public static final class NotificationManagement {
@@ -291,9 +302,10 @@ public final class Constants {
         public static final String NOTIFICATION_MANAGEMENT_GROUP = "notification-mgt";
         public static final String NOTIFICATION_ENDPOINT = "/mdm-admin/notifications";
         public static final String NOTIFICATION_PAYLOAD_FILE_NAME = "notification-payloads.json";
+        public static final String NOTIFICATION_ERRONEOUS_PAYLOAD_FILE_NAME = "notification-erroneous-payloads.json";
         public static final String NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "notification-response-payloads.json";
 
-        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/mdm-admin/notifications/1234/NEW";
+        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/mdm-admin/notifications/1234567/NEW";
 
     }
 }

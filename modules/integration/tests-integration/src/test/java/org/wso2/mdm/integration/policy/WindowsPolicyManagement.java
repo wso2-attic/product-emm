@@ -82,6 +82,13 @@ public class WindowsPolicyManagement extends TestBase {
                 Constants.HTTP_METHOD_PUT).toString(),response.getBody());
     }
 
+    @Test(description = "Test policy priorities with erroneous payload." , dependsOnMethods = { "testGetAllPolicies"})
+    public void testPolicyPrioritiesWithErroneousPayload() throws Exception  {
+        MDMResponse response = client.put(Constants.PolicyManagement.POLICY_PRIORITIES_ENDPOINT,
+                Constants.PolicyManagement.POLICY_ERRONEOUS_PAYLOAD_FILE_NAME);
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+    }
+
     @Test(description = "Test update policy.", dependsOnMethods = { "testPolicyPriorities"})
     public void testUpdatePolicy() throws Exception {
 
