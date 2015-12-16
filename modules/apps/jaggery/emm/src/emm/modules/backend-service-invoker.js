@@ -38,9 +38,9 @@ var backendServiceInvoker = function () {
     function getAccessToken() {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
         if (tokenPair) {
-            return tokenPair.accessToken ;
+            return tokenPair.accessToken;
         } else {
-            response.sendRedirect( mdmProps["httpsURL"]+"/emm/login");
+            response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
         }
 
     }
@@ -71,12 +71,12 @@ var backendServiceInvoker = function () {
                 if (xmlHttpRequest.responseText != null) {
                     return successCallback(parse(xmlHttpRequest.responseText));
                 } else {
-                    return successCallback({"statusCode":200,"messageFromServer":"Operation Completed"});
+                    return successCallback({"statusCode": 200, "messageFromServer": "Operation Completed"});
                 }
             } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
-                                                        xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5 ) {
+                                                        xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5) {
                 tokenUtil.refreshToken();
-                return execute(count+1);
+                return execute(count + 1);
             } else if (xmlHttpRequest.status == 500) {
                 return errorCallback(xmlHttpRequest);
             } else {
@@ -87,7 +87,7 @@ var backendServiceInvoker = function () {
         if (accessToken) {
             return execute(0);
         } else {
-            response.sendRedirect( mdmProps["httpsURL"]+"/emm/login");
+            response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
         }
     }
 
