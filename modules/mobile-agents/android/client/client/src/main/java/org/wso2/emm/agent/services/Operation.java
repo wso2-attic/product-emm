@@ -79,7 +79,7 @@ public class Operation implements APIResultCallBack {
 	private static final int DEFAULT_PASSWORD_LENGTH = 0;
 	private static final int DEFAULT_VOLUME = 0;
 	private static final int DEFAULT_FLAG = 0;
-	private static final int DEFAULT_PASSWORD_MIN_LENGTH = 3;
+	private static final int DEFAULT_PASSWORD_MIN_LENGTH = 4;
 	private static final long DAY_MILLISECONDS_MULTIPLIER = 24 * 60 * 60 * 1000;
 
 	public Operation(Context context) {
@@ -667,6 +667,8 @@ public class Operation implements APIResultCallBack {
 				if (!policyData.get(resources.getString(R.string.policy_password_min_length)).toString().isEmpty()) {
 					length = policyData.getInt(resources.getString(R.string.policy_password_min_length));
 					devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, length);
+				} else {
+					devicePolicyManager.setPasswordMinimumLength(cdmDeviceAdmin, DEFAULT_PASSWORD_MIN_LENGTH);
 				}
 			}
 
@@ -675,6 +677,8 @@ public class Operation implements APIResultCallBack {
 				if (!policyData.get(resources.getString(R.string.policy_password_pin_history)).toString().isEmpty()) {
 					history = policyData.getInt(resources.getString(R.string.policy_password_pin_history));
 					devicePolicyManager.setPasswordHistoryLength(cdmDeviceAdmin, history);
+				} else {
+					devicePolicyManager.setPasswordHistoryLength(cdmDeviceAdmin, DEFAULT_PASSWORD_LENGTH);
 				}
 			}
 
@@ -683,6 +687,8 @@ public class Operation implements APIResultCallBack {
 				if (!policyData.get(resources.getString(R.string.policy_password_min_complex_chars)).toString().isEmpty()) {
 					specialChars = policyData.getInt(resources.getString(R.string.policy_password_min_complex_chars));
 					devicePolicyManager.setPasswordMinimumSymbols(cdmDeviceAdmin, specialChars);
+				} else {
+					devicePolicyManager.setPasswordMinimumSymbols(cdmDeviceAdmin, DEFAULT_PASSWORD_LENGTH);
 				}
 			}
 
