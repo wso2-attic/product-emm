@@ -76,14 +76,11 @@ public class Operation implements APIResultCallBack {
 	private static final String APP_INFO_TAG_NAME = "name";
 	private static final String APP_INFO_TAG_PACKAGE = "package";
 	private static final String APP_INFO_TAG_ICON = "icon";
-	private static final int PRE_WIPE_WAIT_TIME = 4000;
-	private static final int ACTIVATION_REQUEST = 47;
 	private static final int DEFAULT_PASSWORD_LENGTH = 0;
 	private static final int DEFAULT_VOLUME = 0;
 	private static final int DEFAULT_FLAG = 0;
 	private static final int DEFAULT_PASSWORD_MIN_LENGTH = 3;
 	private static final long DAY_MILLISECONDS_MULTIPLIER = 24 * 60 * 60 * 1000;
-	private Map<String, String> bundleParams;
 
 	public Operation(Context context) {
 		this.context = context;
@@ -318,12 +315,13 @@ public class Operation implements APIResultCallBack {
 		String inputPin;
 		String savedPin = Preference.getString(context, resources.getString(R.string.shared_pref_pin));
 		JSONObject result = new JSONObject();
+		String ownershipType = Preference.getString(context, Constants.DEVICE_TYPE);
 
 		try {
 			JSONObject wipeKey = new JSONObject(operation.getPayLoad().toString());
 			inputPin = (String) wipeKey.get(resources.getString(R.string.shared_pref_pin));
 			String status;
-			if (inputPin.trim().equals(savedPin.trim())) {
+			if (Constants.OWNERSHIP_COPE.equals(ownershipType.trim()) || (inputPin != null && inputPin.trim().equals(savedPin.trim()))) {
 				status = resources.getString(R.string.shared_pref_default_status);
 				result.put(resources.getString(R.string.operation_status), status);
 			} else {
@@ -333,17 +331,12 @@ public class Operation implements APIResultCallBack {
 
 			operation.setPayLoad(result.toString());
 
-			if (inputPin.trim().equals(savedPin.trim())) {
+			if (status.equals(resources.getString(R.string.shared_pref_default_status))) {
 				Toast.makeText(context, resources.getString(R.string.toast_message_wipe),
 						Toast.LENGTH_LONG).show();
 				operation.setStatus(resources.getString(R.string.operation_value_completed));
 				resultBuilder.build(operation);
-				try {
-					Thread.sleep(PRE_WIPE_WAIT_TIME);
-				} catch (InterruptedException e) {
-					throw new AndroidAgentException("Wipe pause interrupted.", e);
-				}
-				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
+
 				if (Constants.DEBUG_MODE_ENABLED) {
 					Log.d(TAG, "Started to wipe data");
 				}
