@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import android.app.admin.DevicePolicyManager;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.DeviceInfo;
@@ -55,6 +56,10 @@ public class MessageProcessor implements APIResultCallBack {
 	private static List<org.wso2.emm.agent.beans.Operation> replyPayload;
 	private org.wso2.emm.agent.services.Operation operation;
 	private ObjectMapper mapper;
+	private boolean isWipeTriggered = false;
+	private DevicePolicyManager devicePolicyManager;
+	private static final int ACTIVATION_REQUEST = 47;
+	private static final String ERROR_STATE = "ERROR";
 
 	/**
 	 * Local notification message handler.
@@ -69,6 +74,8 @@ public class MessageProcessor implements APIResultCallBack {
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		this.devicePolicyManager =
+				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 
 		if (deviceId == null) {
 			DeviceInfo deviceInfo = new DeviceInfo(context.getApplicationContext());
@@ -128,6 +135,14 @@ public class MessageProcessor implements APIResultCallBack {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			requestParams =  mapper.writeValueAsString(replyPayload);
+			if (replyPayload != null) {
+				for (org.wso2.emm.agent.beans.Operation operation : replyPayload) {
+					if (operation.getCode().equals(Constants.Operation.WIPE_DATA) && !operation.getStatus().
+							equals(ERROR_STATE)) {
+						isWipeTriggered = true;
+					}
+				}
+			}
 		} catch (JsonMappingException e) {
 			throw new AndroidAgentException("Issue in json mapping", e);
 		} catch (JsonGenerationException e) {
@@ -153,6 +168,10 @@ public class MessageProcessor implements APIResultCallBack {
 		String responseStatus;
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
+			if(isWipeTriggered) {
+				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
+			}
+
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
