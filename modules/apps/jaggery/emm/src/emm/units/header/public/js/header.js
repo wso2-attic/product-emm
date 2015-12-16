@@ -65,7 +65,7 @@ $(document).ready(function () {
                             $(errorMsgWrapper).removeClass("hidden");
                         }
                     }, function (data) {
-                        if (data.statusCode == 400) {
+                        if (data.status == 400) {
                             $(errorMsg).text("Old password does not match with the entered value. Please check.");
                             $(errorMsgWrapper).removeClass("hidden");
                         }else {
