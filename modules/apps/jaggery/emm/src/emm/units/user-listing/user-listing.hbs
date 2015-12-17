@@ -6,6 +6,9 @@
     </div>
     <!-- content -->
     <div id="loading-content" class="col-centered">
+        {{#if removePermitted}}
+            <input type="hidden" id="can-remove" value="true"/>
+        {{/if}}
         <i class="fw fw-settings fw-spin fw-2x"></i>
         &nbsp;&nbsp;&nbsp;
         Loading users . . .
