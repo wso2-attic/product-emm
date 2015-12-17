@@ -17,6 +17,9 @@
  */
 package org.wso2.emm.agent.proxy.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.util.Log;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -61,6 +64,7 @@ import java.util.Map.Entry;
  * and authorization server.
  */
 public class ServerUtilities {
+	private final static String PACKAGE_NAME = "com.mdm";
 	private final static String TAG = "ServerUtilities";
 	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
 	                                                                  Locale.getDefault());
@@ -177,6 +181,12 @@ public class ServerUtilities {
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
+		} catch (IllegalArgumentException e) {
+			String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+			Log.e(TAG, errorMsg);
+			throw new IDPTokenManagerException(errorMsg, e);
 		}
 
 		return responseParams;
@@ -211,6 +221,12 @@ public class ServerUtilities {
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
+        } catch (IllegalArgumentException e) {
+	        String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+	        responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+	        responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+	        Log.e(TAG, errorMsg);
+	        throw new IDPTokenManagerException(errorMsg, e);
         }
 
         return responseParams;
@@ -250,6 +266,12 @@ public class ServerUtilities {
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
+        } catch (IllegalArgumentException e) {
+	        String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+	        responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+	        responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+	        Log.e(TAG, errorMsg);
+	        throw new IDPTokenManagerException(errorMsg, e);
         }
 
         return responseParams;
@@ -288,6 +310,12 @@ public class ServerUtilities {
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
+        } catch (IllegalArgumentException e) {
+	        String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+	        responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+	        responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+	        Log.e(TAG, errorMsg);
+	        throw new IDPTokenManagerException(errorMsg, e);
         }
         return responseParams;
     }
@@ -323,6 +351,12 @@ public class ServerUtilities {
 				throw new IDPTokenManagerException(errorMsg, e);
 			} catch (IOException e) {
 				String errorMsg = "Error occurred while sending 'Post' request due to failure of server connection";
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
+				Log.e(TAG, errorMsg);
+				throw new IDPTokenManagerException(errorMsg, e);
+			} catch (IllegalArgumentException e) {
+				String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
 				Log.e(TAG, errorMsg);
@@ -461,4 +495,5 @@ public class ServerUtilities {
 		}
 		return charSet;
 	}
+
 }
