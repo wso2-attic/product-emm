@@ -52,6 +52,7 @@ public final class Constants {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String APPLICATION_SOAP_XML = "application/soap+xml; charset=utf-8";
     public static final String UTF8 = "UTF-8";
+    public static final String UTF16 = "UTF-16";
     public static final String ZERO = "0";
     public static final String EMPTY_ARRAY = "[]";
 
@@ -121,6 +122,8 @@ public final class Constants {
                 "windows" + File.separator + "enrollment" + File.separator + "ms_xcep.xml";
         public static final String WS_STEP_FILE =
                 "windows" + File.separator + "enrollment" + File.separator + "wstep.xml";
+        public static final String SYNCML_FILE =
+                "windows" + File.separator + "enrollment" + File.separator + "inital_device_info.xml";
         public static final String BSD_PAYLOAD = "{\"credentials\" : {\"username\" : \"admin\", \"email\" : \"admin@wso2.com\", " +
                                                  "\"password\" : \"admin\", \"ownership\" : \"BYOD\", " +
                                                  "\"token\" : \"cbe53efd46ec612c456540f8dfef5428\"}}";
