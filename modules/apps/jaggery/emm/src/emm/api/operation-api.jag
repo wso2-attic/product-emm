@@ -27,9 +27,31 @@ var uriMatcher = new URIMatcher(String(uri));
 var log = new Log("api/operation-api.jag");
 
 var deviceModule = require("/modules/device.js").deviceModule;
+var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
+var mdmProps = require('/config/mdm-props.js').config();
 
 if (uriMatcher.match("/{context}/api/operation")) {
     payload = request.getContent();
     result = deviceModule.performOperation(payload.devices, payload.operation);
+} else if (uriMatcher.match("/{context}/api/operation/paginate")) {
+    var deviceType = request.getParameter("deviceType");
+    var deviceId = request.getParameter("deviceId");
+    var index = request.getParameter("start");
+    var length = request.getParameter("length");
+    var targetURL = mdmProps.httpsURL + "/mdm-admin/operations/paginate/"+deviceType+"/"+deviceId + "?start=" + index +
+                    "&length=" + length;
+    serviceInvokers.XMLHttp.get(
+            targetURL, function (responsePayload) {
+                response.status = 200;
+                result =  responsePayload;
+            },
+            function (responsePayload) {
+                response.status = responsePayload.status;
+                result =  responsePayload.responseText;
+            });
+}
+
+if (result){
+    print(result);
 }
 %>
