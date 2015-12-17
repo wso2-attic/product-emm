@@ -71,8 +71,9 @@
             serverSide: true,
             processing: false,
             searching: true,
-            ordering:  true,
+            ordering:  false,
             pageLength : 10,
+            order: [],
             ajax: {
                 url : '/emm/api/operation/paginate',
                 data : {deviceId : deviceIdentifier, deviceType: deviceType},
@@ -83,7 +84,7 @@
                 }
             },
             columnDefs: [
-                { targets: 0, data: 'code'},
+                { targets: 0, data: 'code' },
                 { targets: 1, data: 'status', render: function ( status, type, row, meta ) {
                     var html;
                     switch (status) {
