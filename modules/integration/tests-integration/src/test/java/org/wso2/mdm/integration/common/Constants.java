@@ -47,7 +47,6 @@ public final class Constants {
     public static final String UTF8 = "UTF-8";
     public static final String ZERO = "0";
     public static final String EMPTY_ARRAY = "[]";
-    public static final String NULL = "{}";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
@@ -66,11 +65,22 @@ public final class Constants {
 		private AndroidEnrollment() {
 			throw new AssertionError();
 		}
+        public static final String DEVICE_TWO_ENROLLMENT = "DEVICE_TWO";
+        public static final String DEVICE_THREE_ENROLLMENT = "DEVICE_THREE";
+        public static final String DEVICE_FOUR_ENROLLMENT = "DEVICE_FOUR";
+        public static final String DEVICE_FIVE_ENROLLMENT = "DEVICE_FIVE";
+        public static final String DEVICE_SIX_ENROLLMENT = "DEVICE_SIX";
+        public static final String DEVICE_SEVEN_ENROLLMENT = "DEVICE_SEVEN";
+        public static final String DEVICE_EIGHT_ENROLLMENT = "DEVICE_EIGHT";
+        public static final String DEVICE_NINE_ENROLLMENT = "DEVICE_NINE";
+        public static final String DEVICE_TEN_ENROLLMENT = "DEVICE_TEN";
+
         public static final String ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
         public static final String ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME = "android-enrollment-erroneous-payloads.json";
         public static final String ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
         public static final String ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME =
                                                                 "android-enrollment-erroneous-response-payloads.json";
+        public static final String ENROLLMENT_ADDITIONAL_DEVICES_PAYLOAD_FILE_NAME = "android-enrollment-additional-devices-payloads.json";
         public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
         public static final String ENROLLMENT_GROUP = "android-enrollment";
 	}

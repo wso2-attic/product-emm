@@ -67,9 +67,6 @@ var backendServiceInvoker = function () {
             xmlHttpRequest.send((payload));
             log.debug("Service Invoker-URL: " + url);
             log.debug("Service Invoker-Method: " + method);
-            log.info(accessToken+"             :    " + method + " : " + url + " : " + stringify(payload) +
-                " : :  :  :    "  +stringify(xmlHttpRequest.responseText) );
-
             if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
                 if (xmlHttpRequest.responseText != null) {
                     return successCallback(parse(xmlHttpRequest.responseText));
