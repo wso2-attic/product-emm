@@ -1,0 +1,9 @@
+{
+  "POST":{
+    "status": "NEW"
+  },
+  "PUT":{
+    "descriptions": "test notification changed",
+    "states": "NEW"
+  }
+}

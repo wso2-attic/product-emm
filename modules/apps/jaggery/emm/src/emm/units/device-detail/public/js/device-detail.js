@@ -62,7 +62,12 @@
 
     function loadOperationsLog(update) {
         var operationsLog = $("#operations-log");
-        $('#operations-log-table').datatables_extended({
+        if (update) {
+            operationTable = $('#operations-log-table').DataTable();
+            operationTable.ajax.reload(null, false);
+            return;
+        }
+        operationTable =  $('#operations-log-table').datatables_extended({
             serverSide: true,
             processing: false,
             searching: true,

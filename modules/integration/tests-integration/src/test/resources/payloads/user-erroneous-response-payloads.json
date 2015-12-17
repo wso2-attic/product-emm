@@ -1,0 +1,16 @@
+{
+  "POST": {
+    "errorMessage": "Exception in trying to add user by username: null"
+  },
+  "PUT": {
+    "errorMessage": "Exception in trying to update user by username: null"
+  },
+  "DELETE": {
+    "statusCode": 400,
+    "messageFromServer": "User by username: username123 does not exist for removal."
+  },
+  "GET": {
+    "statusCode": 400,
+    "messageFromServer": "User by username: username123 does not exist."
+  }
+}

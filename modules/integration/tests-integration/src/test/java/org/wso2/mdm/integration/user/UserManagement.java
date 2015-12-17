@@ -26,63 +26,128 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.IOException;
+
 /**
  * This class contains integration tests for user management backend services.
  */
 public class UserManagement extends TestBase {
 
-    private RestClient client;
+    private MDMHttpClient client;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.UserManagement.USER_MANAGEMENT_GROUP})
+    @BeforeClass(alwaysRun = true, groups = {Constants.UserManagement.USER_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
-    @Test(description = "Test add user.")
-    public void testAddUser() throws Exception {
-        HttpResponse response = client.post(Constants.UserManagement.USER_ENDPOINT,
-                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(), response.getData().toString(), true);
+    @Test(description = "Test view users without users.")
+    public void testViewUserWithoutUsers() throws Exception {
+        String url = GetURL(Constants.UserManagement.VIEW_USER_ENDPOINT);
+        MDMResponse response = client.get(url);
+        Assert.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
     }
 
-    @Test(description = "Test update user.", dependsOnMethods = { "testAddUser"})
-    public void testUpdateUser() throws Exception {
-        String url=GetURL(Constants.UserManagement.USER_ENDPOINT);
-        HttpResponse response = client.put(url,
-                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_PAYLOAD_FILE_NAME ,
+    @Test(description = "Test update user without a user", dependsOnMethods = {"testViewUserWithoutUsers"})
+    public void testUpdateUserWithoutUser() throws Exception {
+        String url = GetURL(Constants.UserManagement.USER_ENDPOINT);
+        MDMResponse response = client.put(url,
+                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_ERRONEOUS_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString(), response.getData().toString(), true);
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_PUT).toString(), response.getBody(), true);
 
     }
 
-    @Test(description = "Test view user.", dependsOnMethods = { "testUpdateUser"})
+    @Test(description = "Test add user.", dependsOnMethods = {"testUpdateUserWithoutUser"})
+    public void testAddUser() throws Exception {
+        MDMResponse response = client.post(Constants.UserManagement.USER_ENDPOINT,
+                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
+    }
+
+    @Test(description = "Test add user with erroneous payload")
+    public void testAddUserWithErroneousPayload() throws IOException {
+        MDMResponse response = client.post(Constants.UserManagement.USER_ENDPOINT,
+                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_ERRONEOUS_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString());
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
+
+    }
+
+    @Test(description = "Test update user.", dependsOnMethods = {"testAddUser"})
+    public void testUpdateUser() throws Exception {
+        String url = GetURL(Constants.UserManagement.USER_ENDPOINT);
+        MDMResponse response = client.put(url,
+                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_PUT).toString(), response.getBody(), true);
+
+    }
+
+    @Test(description = "Test update user with erroneous payload", dependsOnMethods = {"testAddUser"})
+    public void testUpdateUserWithErroneousPayload() throws Exception {
+        String url = GetURL(Constants.UserManagement.USER_ENDPOINT);
+        MDMResponse response = client.put(url,
+                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_ERRONEOUS_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString());
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_PUT).toString(), response.getBody(), true);
+
+    }
+
+    @Test(description = "Test view user.", dependsOnMethods = {"testUpdateUser"})
     public void testViewUser() throws Exception {
-        String url=GetURL(Constants.UserManagement.VIEW_USER_ENDPOINT);
-        HttpResponse response = client.get(url);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_GET).toString(), response.getData().toString(), true);
+        String url = GetURL(Constants.UserManagement.VIEW_USER_ENDPOINT);
+        MDMResponse response = client.get(url);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
     }
 
-    @Test(description = "Test remove user.", dependsOnMethods = { "testViewUser" })
+    @Test(description = "Test remove user.", dependsOnMethods = {"testViewUser"})
     public void testRemoveUser() throws Exception {
-        String url=GetURL(Constants.UserManagement.USER_ENDPOINT);
-        HttpResponse response = client.delete(url);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_DELETE).toString(), response.getData().toString(), true);
+        String url = GetURL(Constants.UserManagement.USER_ENDPOINT);
+        MDMResponse response = client.delete(url);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_DELETE).toString(), response.getBody(), true);
 
     }
 
-    private String GetURL(String endPoint){
-        return endPoint+"?username="+Constants.UserManagement.USER_NAME;
+    @Test(description = "Test remove user with erroneous.", dependsOnMethods = {"testRemoveUser"})
+    public void testRemoveUserWithErroneous() throws Exception {
+        String url = GetURL(Constants.UserManagement.USER_ENDPOINT);
+        MDMResponse response = client.delete(url);
+        Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_DELETE).toString(), response.getBody(), true);
+
+    }
+
+    private String GetURL(String endPoint) {
+        return endPoint + "?username=" + Constants.UserManagement.USER_NAME;
     }
 
 }
