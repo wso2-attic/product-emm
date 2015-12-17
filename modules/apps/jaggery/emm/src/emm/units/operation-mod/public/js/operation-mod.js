@@ -74,7 +74,7 @@ var operationModule = function () {
             "DEVICE_LOCK": "lock",
             "ALARM": "alarm",
             "LOCATION": "location",
-            "NOTIFICATION": "message",
+            "NOTIFICATION": "notification",
             "AIR_PLAY": "airplay",
             "RESTRICTION": "restriction",
             "CELLULAR": "cellular",
