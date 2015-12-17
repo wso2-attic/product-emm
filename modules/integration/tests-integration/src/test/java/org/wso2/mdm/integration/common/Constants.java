@@ -24,6 +24,9 @@ import java.io.File;
 public final class Constants {
 
     public static final String DEVICE_ID = "1234";
+    public static final String DEVICE_ID_2 = "1235";
+    public static final String DEVICE_ID_3 = "1236";
+    public static final String DEVICE_ID_4 = "1237";
     public static final String NUMBER_NOT_EQUAL_TO_DEVICE_ID = "1111";
     public static final String DEVICE_IMEI ="123123123";
     public static final String AUTOMATION_CONTEXT = "MDM";

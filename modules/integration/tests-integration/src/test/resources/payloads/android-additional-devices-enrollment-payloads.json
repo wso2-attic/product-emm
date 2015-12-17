@@ -1,0 +1,65 @@
+{
+  "DEVICE_TWO":{
+    "name": "harshan",
+    "type": "android",
+    "description": "harshan123",
+    "deviceIdentifier": "1235",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "124124124"
+      },
+      {
+        "name": "IMSI",
+        "value": "124124124"
+      }
+    ]
+  },
+  "DEVICE_THREE":{
+    "name": "kasun",
+    "type": "android",
+    "description": "kasun123",
+    "deviceIdentifier": "1236",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "125125125"
+      },
+      {
+        "name": "IMSI",
+        "value": "125125125"
+      }
+    ]
+  },
+  "DEVICE_FOUR":{
+    "name": "geeth",
+    "type": "android",
+    "description": "geeth123",
+    "deviceIdentifier": "1237",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "126126126"
+      },
+      {
+        "name": "IMSI",
+        "value": "126126126"
+      }
+    ]
+  }
+}
