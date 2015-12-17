@@ -187,6 +187,8 @@ function loadDevices(searchType, searchParam){
     $('#device-grid').datatables_extended({
         serverSide: true,
         processing: false,
+        searching: true,
+        ordering:  true,
         pageLength : 16,
         ajax: { url : '/emm/api/devices', data : {url : serviceURL}},
         columnDefs: [

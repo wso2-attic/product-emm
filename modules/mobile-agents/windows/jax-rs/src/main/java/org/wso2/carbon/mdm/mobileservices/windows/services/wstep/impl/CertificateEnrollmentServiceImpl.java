@@ -86,7 +86,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
     private X509Certificate rootCACertificate;
     private String pollingFrequency;
     private String provisioningURL;
-    private String domainName;
+    private String domain;
 
     @Resource
     private WebServiceContext context;
@@ -121,15 +121,12 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 headerTo = toElement.getFirstChild().getTextContent();
             }
         }
+
         String[] splitEmail = headerTo.split("(/ENROLLMENTSERVER)");
         String email = splitEmail[PluginConstants.CertificateEnrolment.EMAIL_SEGMENT];
 
         String[] splitDomain = email.split("(EnterpriseEnrollment.)");
-        String domain = splitDomain[PluginConstants.CertificateEnrolment.DOMAIN_SEGMENT];
-
-        String[] splitDomainName = domain.split("(\\.)");
-        domainName = splitDomainName[PluginConstants.CertificateEnrolment.EMAIL_SEGMENT];
-
+        domain = splitDomain[PluginConstants.CertificateEnrolment.DOMAIN_SEGMENT];
         provisioningURL = PluginConstants.CertificateEnrolment.ENROLL_SUBDOMAIN + domain +
                 PluginConstants.CertificateEnrolment.SYNCML_PROVISIONING_SERVICE_URL;
 
@@ -260,7 +257,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         String wapProvisioningString;
         try {
             builder = domFactory.newDocumentBuilder();
-
             Document document = builder.parse(wapProvisioningFilePath);
             NodeList wapParm = document.getElementsByTagName(PluginConstants.CertificateEnrolment.PARM);
             Node caCertificatePosition = wapParm.item(PluginConstants.CertificateEnrolment.CA_CERTIFICATE_POSITION);
@@ -305,7 +301,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             Node domainPosition = wapParm.item(PluginConstants.CertificateEnrolment.DOMAIN_POSITION);
             NamedNodeMap domainAttribute = domainPosition.getAttributes();
             Node domainNode = domainAttribute.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
-            domainNode.setTextContent(domainName);
+            domainNode.setTextContent(domain);
 
             //Adding Next provisioning service URL to wap-provisioning xml.
             Node syncmlServicePosition = wapParm.item(PluginConstants.CertificateEnrolment.

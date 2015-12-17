@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.Platform;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
@@ -69,11 +70,32 @@ public class Operation {
         return operations;
     }
 
+    @GET
+    @Path("paginate/{type}/{id}")
+    public PaginationResult getDeviceOperations(
+            @PathParam("type") String type,	@PathParam("id") String id, @QueryParam("start") int startIdx,
+            @QueryParam("length") int length, @QueryParam("search") String search)
+            throws MDMAPIException {
+        PaginationResult operations;
+        DeviceManagementProviderService dmService;
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        try {
+            deviceIdentifier.setType(type);
+            deviceIdentifier.setId(id);
+            dmService = MDMAPIUtils.getDeviceManagementService();
+            operations = dmService.getOperations(deviceIdentifier, startIdx, length);
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while fetching the operations for the device.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return operations;
+    }
+
 	@GET
 	@Path("{type}/{id}")
 	public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getDeviceOperations(
-			@PathParam("type") String type,
-			@PathParam("id") String id)
+			@PathParam("type") String type,	@PathParam("id") String id)
 			throws MDMAPIException {
 		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
 		DeviceManagementProviderService dmService;

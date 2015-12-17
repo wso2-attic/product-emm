@@ -1,0 +1,13 @@
+{
+  "POST" : {
+    "firstname":"userfirstname",
+    "lastname":"userlastname",
+    "emailAddress":"user123@gmail.com",
+    "roles":["admin"]
+  },
+  "PUT" : {
+    "lastname":"userlname",
+    "emailAddress":"user1234@gmail.com",
+    "roles":["admin","Internal/everyone"]
+  }
+}
