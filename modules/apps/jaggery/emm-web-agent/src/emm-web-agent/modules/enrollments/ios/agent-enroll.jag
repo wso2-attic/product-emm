@@ -55,9 +55,10 @@ if (platform != "iOS") {
 
         var username = authenticatedUser;
         var password = session.get("authenticatedUserPassword");
+        var tenantDomain = session.get("authenticatedUserDomain");
         var challengeToken = session.get("iOSChallengeToken");
 
-        var inputs = {"username": username, "password": password, "challengeToken": challengeToken};
+        var inputs = {"username": username, "password": password, "challengeToken": challengeToken, "tenantDomain": tenantDomain};
         var stringRequestEntity = new StringRequestEntity(stringify(inputs));
         method.setRequestEntity(stringRequestEntity);
         try {
