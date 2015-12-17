@@ -38,8 +38,9 @@ if (uriMatcher.match("/{context}/api/operation")) {
     var deviceId = request.getParameter("deviceId");
     var index = request.getParameter("start");
     var length = request.getParameter("length");
+    var search = request.getParameter("search[value]");
     var targetURL = mdmProps.httpsURL + "/mdm-admin/operations/paginate/"+deviceType+"/"+deviceId + "?start=" + index +
-                    "&length=" + length;
+                    "&length=" + length + "&search=" +search;
     serviceInvokers.XMLHttp.get(
             targetURL, function (responsePayload) {
                 response.status = 200;
