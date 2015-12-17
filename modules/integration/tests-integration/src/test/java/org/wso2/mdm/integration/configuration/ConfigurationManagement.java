@@ -31,33 +31,39 @@ import org.wso2.mdm.integration.common.*;
  */
 public class ConfigurationManagement extends TestBase {
 
-    private RestClient client;
+    private MDMHttpClient client;
 
     @BeforeClass(alwaysRun = true, groups = { Constants.ConfigurationManagement.CONFIGURATION_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
-
     @Test(description = "Test save configuration.")
     public void testSaveConfiguration() throws Exception {
-        HttpResponse response = client.post(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT,
+        MDMResponse response = client.post(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(), response.getData().toString(), true);
+                        Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
     }
-
     @Test(description = "Test get configuration.", dependsOnMethods = { "testSaveConfiguration"})
     public void testGetConfiguration() throws Exception {
-        HttpResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        MDMResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_GET).toString(), response.getData().toString(), true);
+                        Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
+    }
+
+    @Test(description = "Test get configuration with erroneous end point.",
+            dependsOnMethods = { "testSaveConfiguration"})
+    public void testGetConfigurationWithErroneousEndPoint() throws Exception {
+        MDMResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ERRONEOUS_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatus());
+        Assert.assertEquals(Constants.ConfigurationManagement.CONFIGURATION_ERRONEOUS_RESPONSE, response.getBody());
     }
 }

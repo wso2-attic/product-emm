@@ -31,13 +31,13 @@ import org.wso2.mdm.integration.common.*;
  */
 public class NotificationManagement extends TestBase {
 
-    private RestClient client;
+    private MDMHttpClient client;
 
     @BeforeTest(alwaysRun = true, groups = { Constants.NotificationManagement.NOTIFICATION_MANAGEMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
         //Enroll a device
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
@@ -48,33 +48,42 @@ public class NotificationManagement extends TestBase {
 
     @Test(description = "Test add notification.")
     public void testAddNotification() throws Exception {
-        HttpResponse response = client.post(Constants.NotificationManagement.NOTIFICATION_ENDPOINT,
+        MDMResponse response = client.post(Constants.NotificationManagement.NOTIFICATION_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME ,
                         Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(),
-                response.getData().toString(), true);
+                response.getBody(), true);
+    }
+
+    @Test(description = "Test add notification with erroneous payload.")
+    public void testAddNotificationWithErroneousPayload() throws Exception {
+        MDMResponse response = client.post(Constants.NotificationManagement.NOTIFICATION_ENDPOINT,
+                PayloadGenerator.getJsonPayload(
+                        Constants.NotificationManagement.NOTIFICATION_ERRONEOUS_PAYLOAD_FILE_NAME ,
+                        Constants.HTTP_METHOD_POST).toString());
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
     }
 
     @Test(description = "Test update notification.", dependsOnMethods = { "testAddNotification"})
     public void testUpdateNotification() throws Exception {
-        HttpResponse response = client.put(Constants.NotificationManagement.NOTIFICATION_UPDATE_ENDPOINT,
+        MDMResponse response = client.put(Constants.NotificationManagement.NOTIFICATION_UPDATE_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString(),
-                response.getData().toString(), true);
+                response.getBody(), true);
 
     }
 
     @Test(description = "Test get notification.", dependsOnMethods = { "testUpdateNotification"})
     public void testGetNotification() throws Exception {
-        HttpResponse response = client.get(Constants.NotificationManagement.NOTIFICATION_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        MDMResponse response = client.get(Constants.NotificationManagement.NOTIFICATION_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 }

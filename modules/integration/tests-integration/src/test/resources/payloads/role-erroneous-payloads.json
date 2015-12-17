@@ -1,0 +1,12 @@
+{
+  "POST": {
+    "users": [
+      "admin"
+    ]
+  },
+  "PUT": {
+    "users": [
+      "admin"
+    ]
+  }
+}

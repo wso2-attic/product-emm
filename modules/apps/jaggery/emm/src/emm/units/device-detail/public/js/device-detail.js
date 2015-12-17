@@ -62,12 +62,18 @@
 
     function loadOperationsLog(update) {
         var operationsLog = $("#operations-log");
-        $('#operations-log-table').datatables_extended({
+        if (update) {
+            operationTable = $('#operations-log-table').DataTable();
+            operationTable.ajax.reload(null, false);
+            return;
+        }
+        operationTable =  $('#operations-log-table').datatables_extended({
             serverSide: true,
             processing: false,
             searching: true,
-            ordering:  true,
+            ordering:  false,
             pageLength : 10,
+            order: [],
             ajax: {
                 url : '/emm/api/operation/paginate',
                 data : {deviceId : deviceIdentifier, deviceType: deviceType},
@@ -78,7 +84,7 @@
                 }
             },
             columnDefs: [
-                { targets: 0, data: 'code'},
+                { targets: 0, data: 'code' },
                 { targets: 1, data: 'status', render: function ( status, type, row, meta ) {
                     var html;
                     switch (status) {
