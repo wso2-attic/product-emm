@@ -62,53 +62,64 @@
 
     function loadOperationsLog(update) {
         var operationsLog = $("#operations-log");
-        var deviceListingSrc = operationsLog.attr("src");
-        var deviceId = operationsLog.data("device-id");
-        var deviceType = operationsLog.data("device-type");
-
-        $.template("operations-log", deviceListingSrc, function (template) {
-            var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId;
-
-            var successCallback = function (data) {
-                data = JSON.parse(data);
-                $('#operations-spinner').addClass('hidden');
-                var viewModel = {};
-                viewModel.operations = data;
-                if(data.length > 0){
-                    var content = template(viewModel);
-                    if(!update) {
-                        $("#operations-log-container").html(content);
-                        operationTable = $('#operations-log-table').datatables_extended();
-                    }else{
-                        $('#operations-log-table').dataTable().fnClearTable();
-                        for(var i=0; i < data.length; i++) {
-                            var status;
-                            if(data[i].status == "COMPLETED") {
-                                status = "<span><i class='fw fw-ok icon-success'></i> Completed</span>";
-                            } else if(data[i].status == "PENDING") {
-                                status = "<span><i class='fw fw-warning icon-warning'></i> Pending</span>";
-                            } else if(data[i].status == "ERROR") {
-                                status = "<span><i class='fw fw-error icon-danger'></i> Error</span>";
-                            } else if(data[i].status == "IN_PROGRESS") {
-                                status = "<span><i class='fw fw-ok icon-warning'></i> In Progress</span>";
-                            }
-
-                            $('#operations-log-table').dataTable().fnAddData([
-                                data[i].code,
-                                status,
-                                data[i].createdTimeStamp
-                            ]);
-                        }
-                    }
+        $('#operations-log-table').datatables_extended({
+            serverSide: true,
+            processing: false,
+            searching: true,
+            ordering:  true,
+            pageLength : 10,
+            ajax: {
+                url : '/emm/api/operation/paginate',
+                data : {deviceId : deviceIdentifier, deviceType: deviceType},
+                dataSrc: function ( json ) {
+                    $('#operations-spinner').addClass('hidden');
+                    $("#operations-log-container").empty();
+                    return json.data;
                 }
-
-            };
-            invokerUtil.get(serviceURL,
-                successCallback, function(message){
-                    console.log(message.content);
-            });
+            },
+            columnDefs: [
+                { targets: 0, data: 'code'},
+                { targets: 1, data: 'status', render: function ( status, type, row, meta ) {
+                    var html;
+                    switch (status) {
+                        case 'COMPLETED' :
+                            html = '<span><i class="fw fw-ok icon-success"></i> Completed</span>';
+                            break;
+                        case 'PENDING' :
+                            html = '<span><i class="fw fw-warning icon-warning"></i> Pending</span>';
+                            break;
+                        case 'ERROR' :
+                            html = '<span><i class="fw fw-error icon-danger"></i> Error</span>';
+                            break;
+                        case 'IN_PROGRESS' :
+                            html = '<span><i class="fw fw-ok icon-warning"></i> In Progress</span>';
+                            break;
+                    }
+                    return html;
+                }},
+                { targets: 2, data: 'createdTimeStamp'}
+            ],
+            "createdRow": function( row, data, dataIndex ) {
+                $(row).attr('data-type', 'selectable');
+                $(row).attr('data-id', data.id);
+                $.each($('td', row), function (colIndex) {
+                    switch(colIndex) {
+                        case 1:
+                            $(this).attr('data-grid-label', 'Code');
+                            $(this).attr('data-display', data.code);
+                            break;
+                        case 2:
+                            $(this).attr('data-grid-label', 'Status');
+                            $(this).attr('data-display', data.status);
+                            break;
+                        case 3:
+                            $(this).attr('data-grid-label', "Created Timestamp");
+                            $(this).attr('data-display', data.createdTimeStamp);
+                            break;
+                    }
+                });
+            }
         });
-
     }
 
     function loadApplicationsList() {
