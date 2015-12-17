@@ -41,11 +41,11 @@ public class AndroidOperation extends TestBase {
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
         this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
         //Enroll a device
-        JsonObject deviceOneenrollmentData = PayloadGenerator.getJsonPayload(
+        JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST);
-        deviceOneenrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
-        client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, deviceOneenrollmentData.toString());
+            enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
+        client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device lock operation.")
@@ -61,7 +61,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.LOCK_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -86,7 +86,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.LOCATION_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -115,7 +115,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.CLEAR_PASSWORD_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -156,7 +156,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.CAMERA_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -175,8 +175,8 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.CAMERA_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
-                .getData().toString());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device information " +
@@ -195,7 +195,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.DEVICE_INFO_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -206,7 +206,7 @@ public class AndroidOperation extends TestBase {
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
         Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
-                                                                                    response.getData().toString());
+                                                                                        response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android enterprise-wipe operation.")
@@ -222,7 +222,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.ENTERPRISE_WIPE_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -263,7 +263,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.WIPE_DATA_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -299,7 +299,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.APPLICATION_LIST_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -326,7 +326,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.RING_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                   .getData().toString());
     }
 
@@ -353,7 +353,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.MUTE_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -394,7 +394,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.INSTALL_APPS_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -444,7 +444,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.UNINSTALL_APPS_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -494,7 +494,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.BLACKLIST_APPS_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                  .getData().toString());
     }
 
@@ -513,8 +513,8 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.BLACKLIST_APPS_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
-                .getData().toString());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android notification operation.")
@@ -544,7 +544,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.NOTIFICATION_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -563,8 +563,8 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.NOTIFICATION_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
-                .getData().toString());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android WiFi operation.")
@@ -594,7 +594,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.WIFI_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                  .getData().toString());
     }
 
@@ -644,7 +644,7 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.ENCRYPT_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
                                                                                                 .getData().toString());
     }
 
@@ -663,8 +663,8 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.ENCRYPT_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
-                .getData().toString());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android change lock operation.")
@@ -694,8 +694,8 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.CHANGE_LOCK_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
-                .getData().toString());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
+                                                                                                .getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android change lock operation for" +
@@ -744,8 +744,8 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.PASSWORD_POLICY_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
-                .getData().toString());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
+                                                                                                .getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android password policy operation" +
@@ -794,8 +794,8 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.WEB_CLIP_ENDPOINT,
                 operationData.toString());
         Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
-        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
-                .getData().toString());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID, response
+                                                                                                .getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android web clip operation for " +

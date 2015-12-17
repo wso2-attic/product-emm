@@ -72,15 +72,15 @@ public final class Constants {
 		private AndroidEnrollment() {
 			throw new AssertionError();
 		}
-        public static final String DEVICE_TWO_ENROLLMENT = "DEVICE_TWO";
-        public static final String DEVICE_THREE_ENROLLMENT = "DEVICE_THREE";
-        public static final String DEVICE_FOUR_ENROLLMENT = "DEVICE_FOUR";
-        public static final String DEVICE_FIVE_ENROLLMENT = "DEVICE_FIVE";
-        public static final String DEVICE_SIX_ENROLLMENT = "DEVICE_SIX";
-        public static final String DEVICE_SEVEN_ENROLLMENT = "DEVICE_SEVEN";
-        public static final String DEVICE_EIGHT_ENROLLMENT = "DEVICE_EIGHT";
-        public static final String DEVICE_NINE_ENROLLMENT = "DEVICE_NINE";
-        public static final String DEVICE_TEN_ENROLLMENT = "DEVICE_TEN";
+        public static final String DEVICE_TWO_ENROLLMENT_DATA = "DEVICE_TWO";
+        public static final String DEVICE_THREE_ENROLLMENT_DATA = "DEVICE_THREE";
+        public static final String DEVICE_FOUR_ENROLLMENT_DATA = "DEVICE_FOUR";
+        public static final String DEVICE_FIVE_ENROLLMENT_DATA = "DEVICE_FIVE";
+        public static final String DEVICE_SIX_ENROLLMENT_DATA= "DEVICE_SIX";
+        public static final String DEVICE_SEVEN_ENROLLMENT_DATA= "DEVICE_SEVEN";
+        public static final String DEVICE_EIGHT_ENROLLMENT_DATA = "DEVICE_EIGHT";
+        public static final String DEVICE_NINE_ENROLLMENT_DATA = "DEVICE_NINE";
+        public static final String DEVICE_TEN_ENROLLMENT_DATA = "DEVICE_TEN";
 
         public static final String ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
         public static final String ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME = "android-enrollment-erroneous-payloads.json";
