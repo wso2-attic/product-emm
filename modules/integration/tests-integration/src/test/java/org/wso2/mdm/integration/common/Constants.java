@@ -64,7 +64,10 @@ public final class Constants {
 			throw new AssertionError();
 		}
         public static final String ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
+        public static final String ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME = "android-enrollment-erroneous-payloads.json";
         public static final String ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
+        public static final String ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME =
+                                                                "android-enrollment-erroneous-response-payloads.json";
         public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
         public static final String ENROLLMENT_GROUP = "android-enrollment";
 	}
@@ -74,6 +77,7 @@ public final class Constants {
             throw new AssertionError();
         }
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "android-policy-response-payloads.json";
+        public static final String POLICY_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME = "android-policy-erroneous-response-payloads.json";
         public static final String POLICY_ENDPOINT = "/mdm-android-agent/policy/";
         public static final String POLICY_GROUP = "android-policy";
         public static final String GET_EFFECTIVE_POLICY = "getEffectivePolicy";
@@ -110,6 +114,12 @@ public final class Constants {
         public static final String OPERATION_PAYLOAD_FILE_NAME = "android-operation-payloads.json";
         public static final String OPERATIONS_GROUP = "operations";
         public static final String COMMAND_OPERATION_PAYLOAD = "[\"" + DEVICE_ID + "\"]";
+        public static final String COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID = "[\"" + NUMBER_NOT_EQUAL_TO_DEVICE_ID + "\"]";
+        public static final String COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID =
+                "["+ DEVICE_ID + ", " + NUMBER_NOT_EQUAL_TO_DEVICE_ID + "]";
+        public static final String OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID = "Device Id not found for device found at 1";
+        public static final String OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID =
+                                                                            "Device Id not found for device found at 2";
         public static final String CAMERA_OPERATION = "camera";
         public static final String WIPE_DATA_OPERATION = "wipe_data";
         public static final String INSTALL_APPS_OPERATION = "install_apps";

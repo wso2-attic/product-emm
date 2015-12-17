@@ -54,6 +54,16 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device lock operation " +
+                                                                                            "for invalid device id.")
+    public void testLockWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.LOCK_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
 /*
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android getPendingOperations.")
     public void testGetPendingOperations() throws Exception {
@@ -69,12 +79,53 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location " +
+            "                                                                          operation for invalid device id")
+    public void testLocationWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.LOCATION_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location " +
+                                        "operation for two device ids including an invalid device id as the second one")
+    public void testLocationForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.LOCATION_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
+    }
+
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device clear password " +
                                                                         "operation.")
     public void testClearPassword() throws Exception {
         HttpResponse response = client.post(Constants.AndroidOperations.CLEAR_PASSWORD_ENDPOINT,
                                             Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device clear password " +
+                                                                        "operation for invalid device id.")
+    public void testClearPasswordWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.CLEAR_PASSWORD_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device clear password " +
+            "operation for two device ids including an invalid device id as the second one")
+    public void testClearPasswordForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.CLEAR_PASSWORD_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device camera operation.")
@@ -91,7 +142,44 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
-    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device information operation.")
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device camera operation " +
+                                                                                                "for invalid device id.")
+    public void testCameraWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.CAMERA_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.CAMERA_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device camera operation " +
+            "for two device ids including an invalid device id as the second one")
+    public void testCameraForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.CAMERA_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.CAMERA_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
+                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device information " +
+                                                                                                            "operation.")
     public void testDeviceInfo() throws Exception {
 
         HttpResponse response = client.post(Constants.AndroidOperations.DEVICE_INFO_ENDPOINT,
@@ -99,11 +187,52 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP,
+                                                            description = "Test Android device information operation.")
+    public void testDeviceInfoWithInvalidDeviceId() throws Exception {
+
+        HttpResponse response = client.post(Constants.AndroidOperations.DEVICE_INFO_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device device information" +
+            "operation for two device ids including an invalid device id as the second one")
+    public void testDeviceInfoForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.DEVICE_INFO_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                response.getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android enterprise-wipe operation.")
     public void testEnterpriseWipe() throws Exception {
         HttpResponse response = client.post(Constants.AndroidOperations.ENTERPRISE_WIPE_ENDPOINT,
                                             Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP,
+                                        description = "Test Android enterprise-wipe operation for invalid device id.")
+    public void testEnterpriseWipeWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.ENTERPRISE_WIPE_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location " +
+            "operation for two device ids including an invalid device id as the second one")
+    public void testEnterpriseWipeForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.ENTERPRISE_WIPE_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android wipe data operation.")
@@ -120,11 +249,67 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP,
+                                                description = "Test Android wipe data operation for invalid device id.")
+    public void testWipeDataWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WIPE_DATA_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.WIPE_DATA_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android wipe data operation for " +
+                                                    "two device ids including an invalid device id as the second one.")
+    public void testWipeDataForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WIPE_DATA_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.WIPE_DATA_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android application list operation.")
     public void testApplicationList() throws Exception {
         HttpResponse response = client.post(Constants.AndroidOperations.APPLICATION_LIST_ENDPOINT,
                                             Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android application list " +
+                                                                                    "operation for invalid device id.")
+    public void testApplicationListWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.APPLICATION_LIST_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location " +
+            "operation for two device ids including an invalid device id as the second one")
+    public void testApplicationListForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.APPLICATION_LIST_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android ring operation.")
@@ -134,11 +319,51 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android ring operation for" +
+                                                                                                "invalid device id.")
+    public void testRingWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.RING_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                  .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location " +
+            "operation for two device ids including an invalid device id as the second one")
+    public void testRingForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.RING_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                response.getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android mute operation.")
     public void testMute() throws Exception {
         HttpResponse response = client.post(Constants.AndroidOperations.MUTE_ENDPOINT,
                                             Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android mute operation " +
+                                                                                            "for invalid device id.")
+    public void testMuteWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.MUTE_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location " +
+            "operation for two device ids including an invalid device id as the second one")
+    public void testMuteForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        HttpResponse response = client.post(Constants.AndroidOperations.MUTE_ENDPOINT,
+                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                response.getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android install apps operation.")
@@ -155,6 +380,42 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android install apps operation for" +
+                                                                                                    "invalid device id")
+    public void testInstallAppsWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.INSTALL_APPS_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android install apps operation for" +
+            "two device ids including an invalid device id as the second one")
+    public void testInstallAppsForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.INSTALL_APPS_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                response.getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android uninstall apps operation.")
     public void testUninstallApps() throws Exception {
         JsonObject operationData = PayloadGenerator.getJsonPayload(
@@ -167,6 +428,42 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.UNINSTALL_APPS_ENDPOINT,
                                             operationData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android uninstall apps operation " +
+                                                                                                "for invalid device id")
+    public void testUninstallAppsWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.UNINSTALL_APPS_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android uninstall apps operation " +
+            "for two device ids including an invalid device id as the second one")
+    public void testUninstallAppsForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.UNINSTALL_APPS_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
+                .getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android blacklist apps operation.")
@@ -183,6 +480,42 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android blacklist apps operation" +
+                                                                                             "for invalid device id")
+    public void testBlacklistAppsWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.BLACKLIST_APPS_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                 .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android blacklist apps operation" +
+            "for two device ids including an invalid device id as the second one")
+    public void testBlacklistAppsForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.BLACKLIST_APPS_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
+                .getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android notification operation.")
     public void testNotification() throws Exception {
         JsonObject operationData = PayloadGenerator.getJsonPayload(
@@ -195,6 +528,42 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.NOTIFICATION_ENDPOINT,
                                             operationData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android notification operation" +
+                                                                                                "for invalid device id")
+    public void testNotificationWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.NOTIFICATION_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.NOTIFICATION_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android notification operation" +
+            "for two device ids including an invalid device id as the second one")
+    public void testNotificationForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.NOTIFICATION_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.NOTIFICATION_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
+                .getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android WiFi operation.")
@@ -211,6 +580,42 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android WiFi operation for" +
+                                                                                                "invalid device id")
+    public void testWiFiWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WIFI_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.WIFI_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                 .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android WiFi operation for" +
+            "two device ids including an invalid device id as the second one")
+    public void testWiFiForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WIFI_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.WIFI_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android encrypt operation.")
     public void testEncrypt() throws Exception {
         JsonObject operationData = PayloadGenerator.getJsonPayload(
@@ -223,6 +628,42 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.ENCRYPT_ENDPOINT,
                                             operationData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android encrypt operation for" +
+                                                                                                    "invalid device id")
+    public void testEncryptWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.ENCRYPT_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.ENCRYPT_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                                                                                                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android encrypt operation for" +
+            "two device ids including an invalid device id as the second one")
+    public void testEncryptForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.ENCRYPT_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.ENCRYPT_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,response
+                .getData().toString());
     }
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android change lock operation.")
@@ -239,6 +680,42 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android change lock operation for" +
+                                                                                                    "invalid device id")
+    public void testChangeLockWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.CHANGE_LOCK_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.CHANGE_LOCK_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android change lock operation for" +
+            "two device ids including an invalid device id as the second one")
+    public void testChangeLockForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.CHANGE_LOCK_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.CHANGE_LOCK_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android password policy operation.")
     public void testPasswordPolicy() throws Exception {
         JsonObject operationData = PayloadGenerator.getJsonPayload(
@@ -253,6 +730,42 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android password policy operation" +
+                                                                                                "for invalid device id")
+    public void testPasswordPolicyWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.PASSWORD_POLICY_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.PASSWORD_POLICY_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android password policy operation" +
+            "for two device ids including an invalid device id as the second one")
+    public void testPasswordPolicyForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.PASSWORD_POLICY_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.PASSWORD_POLICY_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                         response.getData().toString());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android web clip operation.")
     public void testWebClip() throws Exception {
         JsonObject operationData = PayloadGenerator.getJsonPayload(
@@ -265,5 +778,41 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.WEB_CLIP_ENDPOINT,
                                             operationData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android web clip operation for " +
+                                                                                                    "invalid device id")
+    public void testWebClipWithInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WEB_CLIP_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.WEB_CLIP_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID,response
+                .getData().toString());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android web clip operation for " +
+            "invalid device id")
+    public void testWebClipForTwoDevicesWithOneInvalidDeviceId() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.WEB_CLIP_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID1 = new JsonPrimitive(Constants.DEVICE_ID);
+        JsonPrimitive deviceID2 = new JsonPrimitive(Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        deviceIds.add(deviceID1);
+        deviceIds.add(deviceID2);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.WEB_CLIP_ENDPOINT,
+                operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_MULTI_STATUS, response.getResponseCode());
+        Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
+                                                                                        response.getData().toString());
     }
 }

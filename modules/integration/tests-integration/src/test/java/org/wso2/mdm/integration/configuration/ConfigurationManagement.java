@@ -39,14 +39,6 @@ public class ConfigurationManagement extends TestBase {
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
         this.client = new RestClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
-
-    @Test(description = "Test initial get configuration")
-    public void testInitialGetConfiguration() throws Exception{
-        HttpResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(Constants.NULL,response.getData().toString(),true);
-    }
-
     @Test(description = "Test save configuration.")
     public void testSaveConfiguration() throws Exception {
         HttpResponse response = client.post(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT,
@@ -58,7 +50,6 @@ public class ConfigurationManagement extends TestBase {
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(), response.getData().toString(), true);
     }
-
     @Test(description = "Test get configuration.", dependsOnMethods = { "testSaveConfiguration"})
     public void testGetConfiguration() throws Exception {
         HttpResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT);

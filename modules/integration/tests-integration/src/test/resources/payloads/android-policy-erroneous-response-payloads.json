@@ -1,0 +1,6 @@
+{
+  "getEffectivePolicy":
+  {
+    "errorMessage": "Error occurred while getting the policy."
+  }
+}
