@@ -55,7 +55,6 @@ public class AndroidPolicyManagement extends TestBase {
                         Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
     }
-
     @Test(description = "Test view policy list.", dependsOnMethods = { "testAddPolicy"})
     public void testViewPolicyList() throws Exception {
         MDMResponse response = client.get(Constants.PolicyManagement.VIEW_POLICY_LIST_ENDPOINT);

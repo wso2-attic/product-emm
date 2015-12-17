@@ -1,0 +1,191 @@
+{
+  "DEVICE_TWO":{
+    "name": "harshan",
+    "type": "android",
+    "description": "harshan123",
+    "deviceIdentifier": "1235",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "124124124"
+      },
+      {
+        "name": "IMSI",
+        "value": "124124124"
+      }
+    ]
+  },
+  "DEVICE_THREE":{
+    "name": "kasun",
+    "type": "android",
+    "description": "kasun123",
+    "deviceIdentifier": "1236",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "125125125"
+      },
+      {
+        "name": "IMSI",
+        "value": "125125125"
+      }
+    ]
+  },
+  "DEVICE_FOUR":{
+    "name": "geeth",
+    "type": "android",
+    "description": "geeth123",
+    "deviceIdentifier": "1237",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "126126126"
+      },
+      {
+        "name": "IMSI",
+        "value": "126126126"
+      }
+    ]
+  },
+  "DEVICE_FIVE":{
+    "name": "inosh",
+    "type": "android",
+    "description": "inosh123",
+    "deviceIdentifier": "1238",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "127127127"
+      },
+      {
+        "name": "IMSI",
+        "value": "127127127"
+      }
+    ]
+  },
+  "DEVICE_SIX":{
+    "name": "prabath",
+    "type": "android",
+    "description": "prabath123",
+    "deviceIdentifier": "1239",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "128128128"
+      },
+      {
+        "name": "IMSI",
+        "value": "128128128"
+      }
+    ]
+  },
+  "DEVICE_SEVEN":{
+    "name": "dileesha",
+    "type": "android",
+    "description": "dileesha123",
+    "deviceIdentifier": "1240",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "129129129"
+      },
+      {
+        "name": "IMSI",
+        "value": "129129129"
+      }
+    ]
+  },
+  "DEVICE_EIGHT":{
+    "name": "kamindu",
+    "type": "android",
+    "description": "kamindu123",
+    "deviceIdentifier": "1241",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "130130130"
+      },
+      {
+        "name": "IMSI",
+        "value": "130130130"
+      }
+    ]
+  },
+  "DEVICE_NINE":{
+    "name": "dilshan",
+    "type": "android",
+    "description": "dilshan123",
+    "deviceIdentifier": "1242",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "131131131"
+      },
+      {
+        "name": "IMSI",
+        "value": "131131131"
+      }
+    ]
+  },
+  "DEVICE_TEN":{
+    "name": "hasuni",
+    "type": "android",
+    "description": "hasuni123",
+    "deviceIdentifier": "1243",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "132132132"
+      },
+      {
+        "name": "IMSI",
+        "value": "132132132"
+      }
+    ]
+  }
+}
