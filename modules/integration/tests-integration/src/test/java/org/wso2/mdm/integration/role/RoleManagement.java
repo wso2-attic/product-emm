@@ -24,10 +24,6 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-
 /**
  * This class contains integration tests for role management backend services.
  */
@@ -51,12 +47,39 @@ public class RoleManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
+    @Test(description = "Test view roles")
+    public void testViewRoles() throws Exception {
+        MDMResponse response = client.get(Constants.RoleManagement.ROLE_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.RoleManagement.
+                        ROLE_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
+    }
+
+    @Test(description = "Test add role with erroneous payload.")
+    public void testAddRoleWithErroneousPayload() throws Exception {
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
+        MDMResponse response = client.post(url,
+                PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_ERRONEOUS_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString());
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+    }
+
     @Test(description = "Test update role.", dependsOnMethods = { "testAddRole"})
     public void testUpdateUser() throws Exception {
         String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
         MDMResponse response = client.put(url, PayloadGenerator.getJsonPayload(Constants.RoleManagement.
                 ROLE_UPDATE_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(description = "Test update role with erroneous payload.", dependsOnMethods = { "testAddRole"})
+    public void testUpdateRoleWithErroneousPayload() throws Exception {
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
+        MDMResponse response = client.put(url,
+                PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_ERRONEOUS_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString());
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
     }
 
     @Test(description = "Test update permission role.", dependsOnMethods = { "testUpdateUser"})
@@ -68,11 +91,27 @@ public class RoleManagement extends TestBase {
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(description = "Test remove user.", dependsOnMethods = { "testUpdateRolePermission" })
+    @Test(description = "Test update role with erroneous payload.", dependsOnMethods = { "testUpdateUser"})
+    public void testUpdateRolePermissionWithErroneousPayload() throws Exception {
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
+        MDMResponse response = client.put(url,
+                PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_ERRONEOUS_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString());
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+    }
+
+    @Test(description = "Test remove role.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRole() throws Exception {
         String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
         MDMResponse response = client.delete(url);
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(description = "Test remove role without roles.", dependsOnMethods = { "testUpdateRolePermission" })
+    public void testRemoveRoleWithoutRoles() throws Exception {
+        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
+        MDMResponse response = client.delete(url);
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
     }
 
     private String GetURL(String endPoint,String param){
