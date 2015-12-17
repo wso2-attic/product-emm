@@ -422,7 +422,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username";
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username?username=";
             return privateMethods.callBackend(url, constants.HTTP_GET)
         } catch (e) {
             throw e;
