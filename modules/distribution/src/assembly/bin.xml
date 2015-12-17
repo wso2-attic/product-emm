@@ -399,11 +399,21 @@
                 <include>**/default.xml</include>
             </includes>
         </fileSet>
+        <!-- Copying EMM jaggery app -->
+        <fileSet>
+            <directory>../apps/jaggery/emm/src/emm</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm/
+            </outputDirectory>
+        </fileSet>
 
+        <!-- Copying EMM-WEB-AGENT jaggery app -->
+        <fileSet>
+            <directory>../apps/jaggery/emm-web-agent/src/emm-web-agent</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm-web-agent/
+            </outputDirectory>
+        </fileSet>
 
     </fileSets>
-
-
 
     <dependencySets>
         <dependencySet>
@@ -825,24 +835,6 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!-- Copying EMM jaggery app -->
-        <file>
-            <source>../apps/jaggery/emm/target/emm.zip</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/
-            </outputDirectory>
-            <filtered>false</filtered>
-            <fileMode>644</fileMode>
-        </file>
-
-        <!-- Copying EMM-WEB-AGENT jaggery app -->
-        <file>
-            <source>../apps/jaggery/emm-web-agent/target/emm-web-agent.zip</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/
-            </outputDirectory>
-            <filtered>false</filtered>
-            <fileMode>644</fileMode>
-        </file>
-
         <!-- Copying authenticators.xml -->
         <file>
             <source>
@@ -871,4 +863,5 @@
         </file>
 
     </files>
+
 </assembly>
