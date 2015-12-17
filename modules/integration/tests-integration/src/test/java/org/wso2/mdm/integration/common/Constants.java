@@ -27,6 +27,13 @@ public final class Constants {
     public static final String DEVICE_ID_2 = "1235";
     public static final String DEVICE_ID_3 = "1236";
     public static final String DEVICE_ID_4 = "1237";
+    public static final String DEVICE_ID_5 = "1238";
+    public static final String DEVICE_ID_6 = "1239";
+    public static final String DEVICE_ID_7 = "1240";
+    public static final String DEVICE_ID_8 = "1241";
+    public static final String DEVICE_ID_9 = "1242";
+    public static final String DEVICE_ID_10 = "1243";
+
     public static final String NUMBER_NOT_EQUAL_TO_DEVICE_ID = "1111";
     public static final String DEVICE_IMEI ="123123123";
     public static final String AUTOMATION_CONTEXT = "MDM";
