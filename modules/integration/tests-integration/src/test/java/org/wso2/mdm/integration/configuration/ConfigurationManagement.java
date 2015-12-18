@@ -38,7 +38,6 @@ public class ConfigurationManagement extends TestBase {
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPSURL, backendHTTPSURL);
         this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
-
     @Test(description = "Test save configuration.")
     public void testSaveConfiguration() throws Exception {
         MDMResponse response = client.post(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT,
@@ -50,7 +49,6 @@ public class ConfigurationManagement extends TestBase {
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
     }
-
     @Test(description = "Test get configuration.", dependsOnMethods = { "testSaveConfiguration"})
     public void testGetConfiguration() throws Exception {
         MDMResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT);

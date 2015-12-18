@@ -47,7 +47,7 @@ public class OperationManagement extends TestBase {
     }
 
     @Test(description = "Add an Android device.")
-    public void testEnrollment() throws Exception {
+    public void enrollAndroidDevice() throws Exception {
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST);
@@ -59,7 +59,7 @@ public class OperationManagement extends TestBase {
                 Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
     }
 
-    @Test(dependsOnMethods = {"testEnrollment"}, description = "Test Android install apps operation.")
+    @Test(dependsOnMethods = {"enrollAndroidDevice"}, description = "Install an app to enrolled android device")
     public void testInstallApps() throws Exception {
         JsonObject operationData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,

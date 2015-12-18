@@ -23,6 +23,15 @@ under the License. --}}
                     <span></span>
                 </div>
                 <!-- end of validation -->
+                {{#excludes loginActionURL "windows"}}
+                    <div class="wr-input-control">
+                        <label class="input-label" for="domain">
+                            Domain *
+                        </label>
+                        <input id="domain" name="domain" type="text" class="form-control" maxlength="30"
+                               placeholder="Enter your tenant domain here"/>
+                    </div>
+                {{/excludes}}
                 <div class="wr-input-control">
                     <label class="input-label" for="username">
                         Username *

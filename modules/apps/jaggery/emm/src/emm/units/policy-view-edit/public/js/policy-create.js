@@ -2013,7 +2013,7 @@ $(document).ready(function () {
     });
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
-    $("#user-roles-input").select2({
+    $("#user-roles-input,#user-input").select2({
         "tags": false
     }).on("select2:select", function (e) {
         if (e.params.data.id == "ANY") {

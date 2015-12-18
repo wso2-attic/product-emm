@@ -24,6 +24,16 @@ import java.io.File;
 public final class Constants {
 
     public static final String DEVICE_ID = "1234";
+    public static final String DEVICE_ID_2 = "1235";
+    public static final String DEVICE_ID_3 = "1236";
+    public static final String DEVICE_ID_4 = "1237";
+    public static final String DEVICE_ID_5 = "1238";
+    public static final String DEVICE_ID_6 = "1239";
+    public static final String DEVICE_ID_7 = "1240";
+    public static final String DEVICE_ID_8 = "1241";
+    public static final String DEVICE_ID_9 = "1242";
+    public static final String DEVICE_ID_10 = "1243";
+
     public static final String NUMBER_NOT_EQUAL_TO_DEVICE_ID = "1111";
     public static final String DEVICE_IMEI ="123123123";
     public static final String AUTOMATION_CONTEXT = "MDM";
@@ -42,8 +52,9 @@ public final class Constants {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String APPLICATION_SOAP_XML = "application/soap+xml; charset=utf-8";
     public static final String UTF8 = "UTF-8";
+    public static final String UTF16 = "UTF-16";
     public static final String ZERO = "0";
-    public static final String NULL = "[]";
+    public static final String EMPTY_ARRAY = "[]";
 
     public static final class DynamicClientAuthentication {
         private DynamicClientAuthentication() {
@@ -62,8 +73,22 @@ public final class Constants {
 		private AndroidEnrollment() {
 			throw new AssertionError();
 		}
+        public static final String DEVICE_TWO_ENROLLMENT_DATA = "DEVICE_TWO";
+        public static final String DEVICE_THREE_ENROLLMENT_DATA = "DEVICE_THREE";
+        public static final String DEVICE_FOUR_ENROLLMENT_DATA = "DEVICE_FOUR";
+        public static final String DEVICE_FIVE_ENROLLMENT_DATA = "DEVICE_FIVE";
+        public static final String DEVICE_SIX_ENROLLMENT_DATA= "DEVICE_SIX";
+        public static final String DEVICE_SEVEN_ENROLLMENT_DATA= "DEVICE_SEVEN";
+        public static final String DEVICE_EIGHT_ENROLLMENT_DATA = "DEVICE_EIGHT";
+        public static final String DEVICE_NINE_ENROLLMENT_DATA = "DEVICE_NINE";
+        public static final String DEVICE_TEN_ENROLLMENT_DATA = "DEVICE_TEN";
+
         public static final String ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
+        public static final String ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME = "android-enrollment-erroneous-payloads.json";
         public static final String ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
+        public static final String ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME =
+                                                                "android-enrollment-erroneous-response-payloads.json";
+        public static final String ENROLLMENT_ADDITIONAL_DEVICES_PAYLOAD_FILE_NAME = "android-enrollment-additional-devices-payloads.json";
         public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
         public static final String ENROLLMENT_GROUP = "android-enrollment";
 	}
@@ -73,6 +98,7 @@ public final class Constants {
             throw new AssertionError();
         }
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "android-policy-response-payloads.json";
+        public static final String POLICY_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME = "android-policy-erroneous-response-payloads.json";
         public static final String POLICY_ENDPOINT = "/mdm-android-agent/policy/";
         public static final String POLICY_GROUP = "android-policy";
         public static final String GET_EFFECTIVE_POLICY = "getEffectivePolicy";
@@ -96,6 +122,8 @@ public final class Constants {
                 "windows" + File.separator + "enrollment" + File.separator + "ms_xcep.xml";
         public static final String WS_STEP_FILE =
                 "windows" + File.separator + "enrollment" + File.separator + "wstep.xml";
+        public static final String SYNCML_FILE =
+                "windows" + File.separator + "enrollment" + File.separator + "inital_device_info.xml";
         public static final String BSD_PAYLOAD = "{\"credentials\" : {\"username\" : \"admin\", \"email\" : \"admin@wso2.com\", " +
                                                  "\"password\" : \"admin\", \"ownership\" : \"BYOD\", " +
                                                  "\"token\" : \"cbe53efd46ec612c456540f8dfef5428\"}}";
@@ -109,6 +137,12 @@ public final class Constants {
         public static final String OPERATION_PAYLOAD_FILE_NAME = "android-operation-payloads.json";
         public static final String OPERATIONS_GROUP = "operations";
         public static final String COMMAND_OPERATION_PAYLOAD = "[\"" + DEVICE_ID + "\"]";
+        public static final String COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID = "[\"" + NUMBER_NOT_EQUAL_TO_DEVICE_ID + "\"]";
+        public static final String COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID =
+                "["+ DEVICE_ID + ", " + NUMBER_NOT_EQUAL_TO_DEVICE_ID + "]";
+        public static final String OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID = "Device Id not found for device found at 1";
+        public static final String OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID =
+                                                                            "Device Id not found for device found at 2";
         public static final String CAMERA_OPERATION = "camera";
         public static final String WIPE_DATA_OPERATION = "wipe_data";
         public static final String INSTALL_APPS_OPERATION = "install_apps";

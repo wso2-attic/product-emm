@@ -49,7 +49,7 @@ public class MobileDeviceManagementWithNoDevices extends TestBase {
     public void testViewDevicesWithNoDevices() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(response.getBody(), Constants.NULL);
+        Assert.assertEquals(response.getBody(), Constants.EMPTY_ARRAY);
     }
 
 }

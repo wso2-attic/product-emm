@@ -422,7 +422,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username";
+            var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username?username=";
             return privateMethods.callBackend(url, constants.HTTP_GET)
         } catch (e) {
             throw e;
@@ -596,6 +596,9 @@ var userModule = function () {
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
             permissions["ADD_USER"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/remove")) {
+            permissions["REMOVE_USER"] = true;
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/roles/add")) {
             permissions["ADD_ROLE"] = true;

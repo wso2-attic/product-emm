@@ -1,11 +1,11 @@
-WSO2 Mobile Device Manager (MDM)
+WSO2 Enterprise Mobility Manager (EMM)
 ----------------------
-Welcome to the WSO2 Mobile Device Manager Manager (MDM) 2.0.0-SNAPSHOT release
+Welcome to the WSO2 Enterprise Mobility Manager (EMM) 2.0.0-SNAPSHOT release
 =======
 
 Key Features
 ------------
-1.  Self-service device enrollment and management with end-user MDM console
+1.  Self-service device enrollment and management with end-user EMM console
 
 
 Installation & Running
@@ -14,21 +14,9 @@ Installation & Running
 2. Run the wso2server.sh or wso2server.bat file in the bin directory
 3. Once the server starts, point your Web browser to
    https://localhost:9443/
-4. An external API manager is necessary to access the APIs MDM exposes for Android agent.
-   Create the following APIs,
-	i. http://<HOST_NAME>:9763/cdm-android-api/enrollment/
-   	   Keeps the context as /enroll and version as 1.0.0
-	ii. http://<HOST_NAME>:9763/cdm-android-ap/devices/license
-           Keeps the context as /license and version as 1.0.0
-	iii. http://<HOST_NAME>:9763/cdm-android-ap/operations/
-   	   Keeps the context as /operation and version as 1.0.0
-
-5. After publishing these APIs, subscribe to these APIs with default app/any app.
-   In API store, go to my subscriptions and find client ID and secret.
-
-6. Please find the maven-archetype in <PRODUCT_HOME>repository/tools to generate the mdm-android-agent project & follow the README file.
-
-7. Go to MDM admin console.
+6. Please find the maven-archetype in <PRODUCT_HOME>repository/tools to generate the mdm-android-agent project for any specific changes from the default agent provided.
+    Make sure to follow the README file.
+7. Go to EMM admin console.
     Add a license with following properties.
     Ex -: Provider -: Any text
              Name -: android
@@ -38,7 +26,7 @@ Installation & Running
              License -: License Text
 
 8. Configure email account.
-   Go to Following path and open CARBON_HOME/repository/conf/axis2 and open axis2_client.xml.
+   Go to Following path and open CARBON_HOME/repository/conf/axis2 and open axis2.xml.
    Un comment following entry and give correct credentials for email account.
 
  <transportSender name="mailto"
@@ -54,14 +42,14 @@ Installation & Running
     </transportSender>
 
 9. Install following features using carbon admin features.
-   MDM - iOS APNS Server 1.9.2.SNAPSHOT More Info.
-   MDM - iOS Device Management JAX-RS Web Application 1.9.2.SNAPSHOT More Info.
-   MDM - iOS Device Management Server.
+   EMM - iOS APNS Server 1.9.2.SNAPSHOT More Info.
+   EMM - iOS Device Management JAX-RS Web Application 1.9.2.SNAPSHOT More Info.
+   EMM - iOS Device Management Server.
 
 10. Change Urls and settings in ios-config.xml found in CARBON_HOME/repository/conf.
 
 11. Follow the instructions in following document to generate keys.
-    https://docs.wso2.com/display/EMM110/iOS+Server+Configurations
+    https://docs.wso2.com/display/EMM200/iOS+Server+Configurations
 
 
 For more details, see the Installation Guide
@@ -75,7 +63,7 @@ System Requirements
 For known issues see
 https://wso2.org/jira/issues/?filter=12190
 
-WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
+WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
 -----------------------------------------------------
 
   EMM_HOME
