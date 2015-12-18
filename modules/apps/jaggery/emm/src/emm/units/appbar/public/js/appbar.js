@@ -77,7 +77,7 @@ function loadNotifications(){
     var serviceURL = "/mdm-admin/notifications/NEW";
 
     var successCallback = function (data) {
-        if(data){
+        if(!data){
             data = "[]";
         }
         data = JSON.parse(data);
