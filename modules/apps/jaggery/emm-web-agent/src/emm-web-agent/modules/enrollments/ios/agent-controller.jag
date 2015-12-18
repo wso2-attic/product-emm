@@ -56,8 +56,6 @@ if (platform != "iOS") {
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open("POST", authUrl);
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
-            log.info(stringify({"username": username, "password": password, "ownership": ownership,
-                                 "tenantDomain": domain}));
             xmlHttpRequest.send(stringify({"username": username, "password": password, "ownership": ownership,
             "tenantDomain": domain}));
 
