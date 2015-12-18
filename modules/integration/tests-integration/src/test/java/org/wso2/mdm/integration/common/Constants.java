@@ -154,7 +154,6 @@ public final class Constants {
         public static final String WEB_CLIP_OPERATION = "web_clip";
         public static final String DEVICE_LIST_START_INDEX = "1";
         public static final String DEVICE_LIST_LENGTH = "10";
-
         public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
         public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
         public static final String LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
