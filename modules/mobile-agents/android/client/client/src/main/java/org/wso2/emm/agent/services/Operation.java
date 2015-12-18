@@ -743,6 +743,17 @@ public class Operation implements APIResultCallBack {
 				}
 			}
 
+			if (!devicePolicyManager.isActivePasswordSufficient()) {
+				Intent intent = new Intent(context, AlertActivity.class);
+				intent.putExtra(resources.getString(R.string.intent_extra_type),
+				                resources.getString(R.string.intent_extra_password_setting));
+				intent.putExtra(resources.getString(R.string.intent_extra_message),
+				                resources.getString(R.string.policy_violation_password_tail));
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+				                Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intent);
+			}
+
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "Password policy set");
 			}
