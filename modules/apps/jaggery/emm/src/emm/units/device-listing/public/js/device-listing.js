@@ -190,7 +190,17 @@ function loadDevices(searchType, searchParam){
         ordering:  false,
         filter: false,
         pageLength : 16,
-        ajax: { url : '/emm/api/devices', data : {url : serviceURL}},
+        ajax: { url : '/emm/api/devices', data : {url : serviceURL},
+                dataSrc: function ( json ) {
+                    $('#device-grid').removeClass('hidden');
+                    $("#loading-content").remove();
+                    var $list = $("#device-table :input[type='search']");
+                    $list.each(function(){
+                        $(this).addClass("hidden");
+                    });
+                    return json.data;
+                }
+        },
         columnDefs: [
             { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill' , render: function ( data, type, row, meta ) {
                 return '<div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
@@ -277,15 +287,14 @@ function loadDevices(searchType, searchParam){
                         break;
                 }
             });
+        },
+        "fnDrawCallback": function( oSettings ) {
+            $(".icon .text").res_text(0.2);
         }
     });
     $(deviceCheckbox).click(function () {
         addDeviceSelectedClass(this);
     });
-
-    $('#device-grid').removeClass('hidden');
-    $(".icon .text").res_text(0.2);
-    $("#loading-content").remove();
 }
 
 /*

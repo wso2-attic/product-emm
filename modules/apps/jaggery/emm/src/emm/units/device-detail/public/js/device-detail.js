@@ -70,7 +70,7 @@
         operationTable =  $('#operations-log-table').datatables_extended({
             serverSide: true,
             processing: false,
-            searching: true,
+            searching: false,
             ordering:  false,
             pageLength : 10,
             order: [],
