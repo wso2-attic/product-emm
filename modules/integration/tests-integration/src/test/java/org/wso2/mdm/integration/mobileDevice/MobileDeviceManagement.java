@@ -115,7 +115,8 @@ public class MobileDeviceManagement extends TestBase {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?type=android");
         Assert.assertEquals(HttpStatus.SC_OK,response.getStatus());
         JsonArray jsonArray = parser.parse(response.getBody()).getAsJsonArray();
-        Assert.assertTrue("number of android devices in response not equal to the actual enrolled number.", String.valueOf(jsonArray.size()).equals("10"));
+        Assert.assertTrue("number of android devices in response not equal to the actual enrolled number.",
+                                                                        String.valueOf(jsonArray.size()).equals("10"));
     }
 
     @Test(dependsOnMethods = "addEnrollment", description = "Get all windows devices")
@@ -130,7 +131,8 @@ public class MobileDeviceManagement extends TestBase {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?role=admin");
         Assert.assertEquals(HttpStatus.SC_OK,response.getStatus());
         JsonArray jsonArray = parser.parse(response.getBody()).getAsJsonArray();
-        Assert.assertTrue("number of devices in response not equal to the actual owned number.", String.valueOf(jsonArray.size()).equals("10"));
+        Assert.assertTrue("number of devices in response not equal to the actual owned number.",
+                                                                        String.valueOf(jsonArray.size()).equals("10"));
     }
 
     @Test(dependsOnMethods = "addEnrollment", description = "Test response for invalid start record number")
@@ -144,7 +146,8 @@ public class MobileDeviceManagement extends TestBase {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?start=0&length=-2");
         Assert.assertEquals(HttpStatus.SC_OK,response.getStatus());
         JsonArray jsonArray = parser.parse(response.getBody()).getAsJsonArray();
-        Assert.assertTrue("number of android devices in response not equal to the actual enrolled number.", String.valueOf(jsonArray.size()).equals("10"));
+        Assert.assertTrue("number of android devices in response not equal to the actual enrolled number.",
+                                                                        String.valueOf(jsonArray.size()).equals("10"));
     }
     // End of pagination testing for GetAllDevices
 
