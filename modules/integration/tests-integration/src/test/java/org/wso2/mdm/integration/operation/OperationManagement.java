@@ -102,5 +102,4 @@ public class OperationManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
 
     }
-
 }
