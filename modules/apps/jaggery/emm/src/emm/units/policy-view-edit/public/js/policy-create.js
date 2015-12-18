@@ -1751,6 +1751,15 @@ var updatePolicy = function (policy, state) {
             });
         }
     }
+
+    $.each(profilePayloads, function(i, item) {
+        $.each(item.content, function(key, value){
+            if (value === "" || value === undefined){
+                item.content[key] = null;
+            }
+        });
+    });
+
     var payload = {
         "policyName": policy["policyName"],
         "description": policy["description"],
