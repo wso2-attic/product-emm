@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.Platform;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
@@ -79,11 +80,14 @@ public class Operation {
         PaginationResult operations;
         DeviceManagementProviderService dmService;
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        PaginationRequest paginationRequest = new PaginationRequest();
+        paginationRequest.setStartIndex(startIdx);
+        paginationRequest.setRowCount(length);
         try {
             deviceIdentifier.setType(type);
             deviceIdentifier.setId(id);
             dmService = MDMAPIUtils.getDeviceManagementService();
-            operations = dmService.getOperations(deviceIdentifier, startIdx, length);
+            operations = dmService.getOperations(deviceIdentifier, paginationRequest);
         } catch (OperationManagementException e) {
             String msg = "Error occurred while fetching the operations for the device.";
             log.error(msg, e);

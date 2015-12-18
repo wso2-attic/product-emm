@@ -40,7 +40,8 @@ public class MobileDevice {
     private static Log log = LogFactory.getLog(MobileDevice.class);
 
     /**
-     * Get all devices.
+     * Get all devices. We have to use accept all the necessary query parameters sent by datatable.
+     * Hence had to put lot of query params here.
      *
      * @return Device List
      * @throws MDMAPIException
@@ -49,34 +50,43 @@ public class MobileDevice {
     public Object getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
                                 @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status,
                                 @QueryParam("start") int startIdx, @QueryParam("length") int length,
-                                @QueryParam("search") String search) throws MDMAPIException {
+                                @QueryParam("device-name") String deviceName,
+                                @QueryParam("ownership") EnrolmentInfo.OwnerShip ownership
+                                ) throws MDMAPIException {
         try {
             DeviceManagementProviderService service = MDMAPIUtils.getDeviceManagementService();
-            List<Device> allDevices = null;
-            PaginationResult paginationResult = null;
-            if ((type != null) && !type.isEmpty()) {
-                if (length > 0) {
-                    paginationResult = service.getAllDevices(type, startIdx, length);
-                } else {
-                    allDevices = service.getAllDevices(type);
+            //Length > 0 means this is a pagination request.
+            if (length > 0) {
+                PaginationRequest paginationRequest = new PaginationRequest();
+                paginationRequest.setStartIndex(startIdx);
+                paginationRequest.setRowCount(length);
+                paginationRequest.setDeviceName(deviceName);
+                paginationRequest.setOwner(user);
+                if (ownership != null) {
+                    paginationRequest.setOwnership(ownership.toString());
                 }
+                if (status != null) {
+                    paginationRequest.setStatus(status.toString());
+                }
+                paginationRequest.setType(type);
+                return service.getAllDevices(paginationRequest);
+            }
+
+            List<Device> allDevices = null;
+            if ((type != null) && !type.isEmpty()) {
+                allDevices = service.getAllDevices(type);
             } else if ((user != null) && !user.isEmpty()) {
                 allDevices = service.getDevicesOfUser(user);
             } else if ((role != null) && !role.isEmpty()) {
                 allDevices = service.getAllDevicesOfRole(role);
             } else if (status != null) {
                 allDevices = service.getDevicesByStatus(status);
+            } else if (deviceName != null) {
+                allDevices = service.getDevicesByName(deviceName);
             } else {
-                if (length > 0) {
-                    paginationResult = service.getAllDevices(startIdx, length);
-                } else {
-                    allDevices = service.getAllDevices();
-                }
+                allDevices = service.getAllDevices();
             }
-            if(paginationResult != null) {
-                return paginationResult;
-            }
-            return allDevices;
+             return allDevices;
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while fetching the device list.";
             log.error(msg, e);
