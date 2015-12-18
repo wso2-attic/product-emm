@@ -42,7 +42,7 @@
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/emm</module>
 	<module>modules/apps/jaggery/emm-web-agent</module>
-        <module>modules/tools</module>
+        <!--<module>modules/tools</module>-->
         <module>modules/mdm-ui</module>
         <module>modules/features</module>
         <module>modules/p2-profile-gen</module>
@@ -1012,7 +1012,7 @@
         <orbit.h2.engine.version>1.2.140.wso2v3</orbit.h2.engine.version>
 
         <!-- MDM android Agent -->
-        <mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>
+        <!--<mdm.android.agent.archetype.version>1.0.0-SNAPSHOT</mdm.android.agent.archetype.version>-->
 
         <!--CXF properties-->
         <cxf.version>2.7.16</cxf.version>
