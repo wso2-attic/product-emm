@@ -86,8 +86,6 @@ var backendServiceInvoker = function () {
         var accessToken = getAccessToken();
         if (accessToken) {
             return execute(0);
-        } else {
-            response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
         }
     }
 

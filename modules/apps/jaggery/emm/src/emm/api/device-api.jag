@@ -35,12 +35,52 @@ var result;
 
 if (uriMatcher.match("/{context}/api/devices")) {
     var url = request.getParameter("url");
+    var draw = request.getParameter("draw");
+    var length = request.getParameter("length");
+    var start = request.getParameter("start");
+    var search = request.getParameter("search[value]");
+    var deviceName = request.getParameter("columns[1][search][value]");
+    var owner = request.getParameter("columns[2][search][value]");
+    var status = request.getParameter("columns[3][search][value]");
+    var platform = request.getParameter("columns[4][search][value]");
+    var ownership = request.getParameter("columns[5][search][value]");
     var targetURL;
-    if (url.indexOf("?") > 0) {
-        targetURL = mdmProps.httpsURL + request.getParameter("url") + request.getQueryString();
-    } else {
-        targetURL = mdmProps.httpsURL + request.getParameter("url") + "?" + request.getQueryString();
+
+    function appendQueryParam (url, queryParam , value) {
+        if (url.indexOf("?") > 0) {
+            return url + "&" + queryParam + "=" + value;
+        }
+        return url + "?" + queryParam + "=" + value;
     }
+    targetURL = mdmProps.httpsURL + request.getParameter("url");
+    targetURL = appendQueryParam(targetURL, "draw", draw);
+    targetURL = appendQueryParam(targetURL, "start", start);
+    targetURL = appendQueryParam(targetURL, "length", length);
+
+    if (search && search !== "") {
+        targetURL = appendQueryParam(targetURL, "search", search);
+    }
+
+    if (deviceName && deviceName !== "") {
+        targetURL = appendQueryParam(targetURL, "device-name", deviceName);
+    }
+
+    if (owner && owner !== "") {
+        targetURL = appendQueryParam(targetURL, "user", owner);
+    }
+
+    if (status && status !== "") {
+        targetURL = appendQueryParam(targetURL, "status", status);
+    }
+
+    if (platform && platform !== "") {
+        targetURL = appendQueryParam(targetURL, "type", platform);
+    }
+
+    if (ownership && ownership !== "") {
+        targetURL = appendQueryParam(targetURL, "ownership", ownership);
+    }
+
     serviceInvokers.XMLHttp.get(
             targetURL, function (responsePayload) {
                 response.status = 200;

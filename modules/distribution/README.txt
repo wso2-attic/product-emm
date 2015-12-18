@@ -61,7 +61,7 @@ System Requirements
 2. Portal app requires full Javascript enablement of the Web browser
 
 For known issues see
-https://wso2.org/jira/issues/?filter=12190
+https://wso2.org/jira/issues/?filter=12593
 
 WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
 -----------------------------------------------------
@@ -77,7 +77,7 @@ WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
         ├── release-notes.html
         ├── repository       // repository
         ├── tmp
-        ├── webapp-mode
+        ├── resources
 
 
     - bin
@@ -95,12 +95,9 @@ WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
       The repository where Carbon artifacts & Axis2 services and
       modules deployed in WSO2 Carbon are stored.
       In addition to this other custom deployers such as
-      dataservices and axis1services are also stored.
+      data services and axis1services are also stored.
 
-        - carbonapps
-          Carbon Application hot deployment directory.
-
-      - components
+        - components
           Contains all OSGi related libraries and configurations.
 
         - conf
@@ -122,17 +119,16 @@ WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
         - resources
           Contains additional resources that may be required.
 
-  - tenants
-    Directory will contain relevant tenant artifacts
-    in the case of a multitenant deployment.
+        - tools
+          Contains the Script to generate WSO2 MDM Android agent.
+
+        - tenants
+          Directory will contain relevant tenant artifacts
+          in the case of a multitenant deployment.
 
     - tmp
       Used for storing temporary files, and is pointed to by the
       java.io.tmpdir System property.
-
-    - webapp-mode
-      The user has the option of running WSO2 Carbon in webapp mode (hosted as a web-app in an application server).
-      This directory contains files required to run Carbon in webapp mode.
 
     - LICENSE.txt
       Apache License 2.0 under which WSO2 Carbon is distributed.

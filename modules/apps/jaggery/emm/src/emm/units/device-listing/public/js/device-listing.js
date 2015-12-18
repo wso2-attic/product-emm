@@ -150,6 +150,7 @@ function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
     var deviceListingSrc = deviceListing.attr("src");
     var currentUser = deviceListing.data("currentUser");
+    var frontEndPagination = false;
 
     var serviceURL;
     if ($.hasPermission("LIST_DEVICES")) {
@@ -157,20 +158,12 @@ function loadDevices(searchType, searchParam){
     } else if ($.hasPermission("LIST_OWN_DEVICES")) {
         //Get authenticated users devices
         serviceURL = "/mdm-admin/users/devices?username="+currentUser;
+        frontEndPagination = true;
     } else {
         $("#loading-content").remove();
         $('#device-table').addClass('hidden');
         $('#device-listing-status-msg').text('Permission denied.');
         return;
-    }
-    if (searchParam){
-        if(searchType == "users"){
-            serviceURL = serviceURL + "?user=" + searchParam;
-        }else if(searchType == "user-roles"){
-            serviceURL = serviceURL + "?role=" + searchParam;
-        }else{
-            serviceURL = serviceURL + "?type=" + searchParam;
-        }
     }
 
     function getPropertyValue(deviceProperties, propertyName) {
@@ -184,11 +177,18 @@ function loadDevices(searchType, searchParam){
         return {};
     }
 
+    if (frontEndPagination) {
+
+    } else {
+
+    }
+
     $('#device-grid').datatables_extended({
         serverSide: true,
         processing: false,
         searching: true,
-        ordering:  true,
+        ordering:  false,
+        filter: false,
         pageLength : 16,
         ajax: { url : '/emm/api/devices', data : {url : serviceURL}},
         columnDefs: [
@@ -230,7 +230,7 @@ function loadDevices(searchType, searchParam){
                 render: function ( status, type, row, meta ) {
                 var deviceType = row.type;
                 var deviceIdentifier = row.deviceIdentifier;
-                var html;
+                var html = '<span></span>';
                 if (status != 'REMOVED') {
                     html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
                     ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +

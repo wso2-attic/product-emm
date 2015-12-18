@@ -98,7 +98,11 @@ public class AndroidEnrollment extends TestBase {
     public void testDisEnrollDeviceWithWrongDeviceId() throws Exception {
         MDMResponse response = client.delete(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT +
                                                                             Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
-        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.AndroidEnrollment.ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_DELETE).toString(),
+                                      response.getBody(), true);
     }
 
     @Test(description = "Test disenrollment for already disenrolled device.", dependsOnMethods = { "testDisEnrollDevice" })

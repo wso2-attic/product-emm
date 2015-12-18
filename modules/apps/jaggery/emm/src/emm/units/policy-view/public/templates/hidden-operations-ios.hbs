@@ -167,7 +167,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-min-length" class="form-control operationDataKeys" data-key="passcodePolicyMinLength" data-default="0" disabled>
-                            <option value="-1" selected="selected">
+                            <option value="" selected="selected">
                                 None
                             </option>
                             <option value="1">01</option>
@@ -197,7 +197,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-min-complex-chars" class="form-control operationDataKeys" data-key="passcodePolicyMinComplexChars" data-default="0" disabled>
-                            <option value="-1" selected="selected">
+                            <option value="" selected="selected">
                                 None
                             </option>
                             <option value="1">01</option>
@@ -237,7 +237,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-max-auto-lock" class="form-control operationDataKeys" data-key="passcodePolicyMaxAutoLock" data-default="0" disabled>
-                            <option value="-1" selected="selected">
+                            <option value="" selected="selected">
                                 None
                             </option>
                             <option value="1">01</option>
@@ -256,7 +256,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-grace-period" class="form-control operationDataKeys" data-key="passcodePolicyGracePeriod" data-default="0" disabled>
-                            <option value="-1" selected="selected">
+                            <option value="" selected="selected">
                                 None
                             </option>
                             <option value="0">Immediately</option>
@@ -277,7 +277,7 @@
                             </span>
                         </label>
                         <select id="passcode-policy-max-failed-attempts" class="form-control operationDataKeys" data-key="passcodePolicyMaxFailedAttempts" data-default="0" disabled>
-                            <option value="-1" selected="selected">
+                            <option value="" selected="selected">
                                 None
                             </option>
                             <option value="3">03</option>
@@ -1345,6 +1345,7 @@
                             This configuration can be used to define settings for connecting to AirPlay destinations.
                             Once this configuration profile is installed on an iOS device,
                             corresponding users will not be able to modify these settings on their devices.
+                            <br><br>(This feature is supported only on iOS 7.0 and later.)
                         </div>
                     </h2>
                 </div>
@@ -1829,6 +1830,7 @@
                             These configurations can be used to specify Access Point Names ( APN ).
                             Once this configuration profile is installed on an iOS device, corresponding users will not
                             be able to modify these settings on their devices.
+                            <br><br>(This feature is not supported on iOS 7.0 and later.)
                         </div>
                     </h2>
                 </div>
@@ -1934,6 +1936,7 @@
                             Cellular settings cannot be installed if an APN setting is already installed and
                             upon successful installation, corresponding users will not be able to modify these
                             settings on their devices.
+                            <br><br>(This feature is supported only on iOS 7.0 and later.)
                         </div>
                     </h2>
                 </div>
