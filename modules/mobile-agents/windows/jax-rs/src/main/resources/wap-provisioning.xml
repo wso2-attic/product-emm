@@ -72,7 +72,7 @@
             <!-- ProviderID in DMClient CSP must match to PROVIDER-ID in w7 APPLICATION characteristics -->
             <characteristic type="MobiCDMServer">
                 <characteristic type="Poll">
-                    <parm name="NumberOfFirstRetries" value="8" datatype="integer" />
+                    <parm name="NumberOfFirstRetries" value="" datatype="integer" />
                     <parm name="IntervalForFirstSetOfRetries" value="15" datatype="integer" />
                     <parm name="NumberOfSecondRetries" value="5" datatype="integer" />
                     <parm name="IntervalForSecondSetOfRetries" value="3" datatype="integer" />
