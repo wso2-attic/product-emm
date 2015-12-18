@@ -347,6 +347,20 @@
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
+        <name>Get all usernames</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users/users-by-username</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get filtered usernames</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users/users-by-username/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
         <name>Send invitation</name>
         <path>/device-mgt/users/invite</path>
         <url>/users/email-invitation</url>
@@ -510,18 +524,18 @@
 
     <!-- License related APIs -->
     <!--<Permission>-->
-        <!--<name>Get license</name>-->
-        <!--<path>/device-mgt/license/view</path>-->
-        <!--<url>/license/*/*</url>-->
-        <!--<method>GET</method>-->
-        <!--<scope>emm_admin</scope>-->
+    <!--<name>Get license</name>-->
+    <!--<path>/device-mgt/license/view</path>-->
+    <!--<url>/license/*/*</url>-->
+    <!--<method>GET</method>-->
+    <!--<scope>emm_admin</scope>-->
     <!--</Permission>-->
     <!--<Permission>-->
-        <!--<name>Add license</name>-->
-        <!--<path>/device-mgt/license/add</path>-->
-        <!--<url>/license</url>-->
-        <!--<method>POST</method>-->
-        <!--<scope>emm_admin</scope>-->
+    <!--<name>Add license</name>-->
+    <!--<path>/device-mgt/license/add</path>-->
+    <!--<url>/license</url>-->
+    <!--<method>POST</method>-->
+    <!--<scope>emm_admin</scope>-->
     <!--</Permission>-->
     <!-- End of License related APIs -->
 

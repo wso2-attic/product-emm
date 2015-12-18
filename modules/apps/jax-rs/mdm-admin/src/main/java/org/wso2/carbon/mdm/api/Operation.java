@@ -74,7 +74,7 @@ public class Operation {
     @Path("paginate/{type}/{id}")
     public PaginationResult getDeviceOperations(
             @PathParam("type") String type,	@PathParam("id") String id, @QueryParam("start") int startIdx,
-            @QueryParam("length") int length)
+            @QueryParam("length") int length, @QueryParam("search") String search)
             throws MDMAPIException {
         PaginationResult operations;
         DeviceManagementProviderService dmService;

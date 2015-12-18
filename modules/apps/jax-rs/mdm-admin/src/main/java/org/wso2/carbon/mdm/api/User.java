@@ -505,6 +505,39 @@ public class User {
     }
 
     /**
+     * Get the list of user names in the system.
+     *
+     * @return A list of user names.
+     * @throws MDMAPIException
+     */
+    @GET
+    @Path("users-by-username")
+    public Response getAllUserNamesByUsername(@QueryParam("username") String userName) throws MDMAPIException {
+        if (log.isDebugEnabled()) {
+            log.debug("Getting the list of users by name");
+        }
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        ArrayList<String> userList = new ArrayList<String>();
+        try {
+            String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
+            UserWrapper user;
+            for (String username : users) {
+                userList.add(username);
+            }
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the list of users";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
+                                             "Obtained user count: " + userList.size());
+        responsePayload.setResponseContent(userList);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    /**
      * Gets a claim-value from user-store.
      *
      * @param username Username of the user

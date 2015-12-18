@@ -40,15 +40,16 @@ public class MobileDevice {
     private static Log log = LogFactory.getLog(MobileDevice.class);
 
     /**
-     * Get all devices
+     * Get all devices.
      *
      * @return Device List
      * @throws MDMAPIException
      */
     @GET
     public Object getAllDevices(@QueryParam("type") String type, @QueryParam("user") String user,
-                                    @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status,
-                                        @QueryParam("start") int startIdx, @QueryParam("length") int length) throws MDMAPIException {
+                                @QueryParam("role") String role, @QueryParam("status") EnrolmentInfo.Status status,
+                                @QueryParam("start") int startIdx, @QueryParam("length") int length,
+                                @QueryParam("search") String search) throws MDMAPIException {
         try {
             DeviceManagementProviderService service = MDMAPIUtils.getDeviceManagementService();
             List<Device> allDevices = null;

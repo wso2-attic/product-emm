@@ -168,12 +168,16 @@ function loadUsers(searchParam){
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
                 return;
             }
+            var canRemove = $("#can-remove").val();
             data = JSON.parse(data);
             data = data.responseContent;
             var viewModel = {};
             viewModel.users = data;
             for(var i=0; i<viewModel.users.length; i++){
                 viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
+                if(canRemove != null && canRemove != undefined) {
+                    viewModel.users[i].canRemove = true;
+                }
             }
             if(data.length > 0){
                 $('#ast-container').removeClass('hidden');

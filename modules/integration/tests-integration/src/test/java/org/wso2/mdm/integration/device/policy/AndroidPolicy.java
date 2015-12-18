@@ -49,4 +49,14 @@ public class AndroidPolicy extends TestBase {
                                               Constants.AndroidPolicy.GET_EFFECTIVE_POLICY).toString(),
                                       response.getData().toString(), true);
     }
+
+    @Test(groups = Constants.AndroidPolicy.POLICY_GROUP, description = "Test Android getEffectivePolicy for invalid " +
+                                                                                                            "device id.")
+    public void testGetEffectivePolicyWithInvalidDeviceId() throws Exception {
+        HttpResponse response = client.get(Constants.AndroidPolicy.POLICY_ENDPOINT + Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                        Constants.AndroidPolicy.POLICY_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.AndroidPolicy.GET_EFFECTIVE_POLICY).toString(),
+                response.getData().toString(), true);
+    }
 }

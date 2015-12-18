@@ -51,7 +51,7 @@
         <parm name="BACKCOMPATRETRYDISABLED"/>
         <parm name="DEFAULTENCODING" value="application/vnd.syncml.dm+xml"/>
         <parm name="SSLCLIENTCERTSEARCHCRITERIA"
-              value="Subject=CN%3Dmdmcn&amp;Stores=My%5CUser"/>
+              value="Subject=CN%3Dmdm&amp;Stores=My%5CUser"/>
         <characteristic type="APPAUTH">
             <parm name="AAUTHLEVEL" value="CLIENT"/>
             <parm name="AAUTHTYPE" value="DIGEST"/>
