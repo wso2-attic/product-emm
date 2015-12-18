@@ -1751,6 +1751,15 @@ var updatePolicy = function (policy, state) {
             });
         }
     }
+
+    $.each(profilePayloads, function(i, item) {
+        $.each(item.content, function(key, value){
+            if (value === "" || value === undefined){
+                item.content[key] = null;
+            }
+        });
+    });
+
     var payload = {
         "policyName": policy["policyName"],
         "description": policy["description"],
@@ -2013,7 +2022,7 @@ $(document).ready(function () {
     });
 
     // Support for special input type "ANY" on user(s) & user-role(s) selection
-    $("#user-roles-input").select2({
+    $("#user-roles-input,#user-input").select2({
         "tags": false
     }).on("select2:select", function (e) {
         if (e.params.data.id == "ANY") {

@@ -94,12 +94,12 @@ $(document).ready(function () {
                     $("#permissionList li input").click(function(){
                         var parentInput = $(this).parents("ul:eq(1) > li").find('input:eq(0)');
                         if(parentInput && parentInput.is(':checked')){
-                            event.preventDefault();
                             $(modalPopupContent).html($('#child-deselect-error-content').html());
                             showPopup();
                             $("a#child-deselect-error-link").click(function () {
                                 hidePopup();
                             });
+                            return false;
                         }
                     });
                     $('#permissionList').tree_view();
@@ -108,6 +108,7 @@ $(document).ready(function () {
                 });
         });
     });
+
     /**
      * Following click function would execute
      * when a user clicks on "Add Role" button
