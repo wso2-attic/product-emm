@@ -234,7 +234,7 @@ public final class Constants {
         private MobileDeviceManagement(){ throw new AssertionError();}
         public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
         public static final String GET_DEVICE_COUNT_ENDPOINT = "/mdm-admin/devices/count";
-        public static final String NO_OF_DEVICES = "1";
+        public static final String NO_OF_DEVICES = "10";
         public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
         public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
