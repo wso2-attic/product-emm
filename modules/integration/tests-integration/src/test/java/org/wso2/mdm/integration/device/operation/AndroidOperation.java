@@ -19,6 +19,7 @@ package org.wso2.mdm.integration.device.operation;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import junit.framework.Assert;
 import org.apache.commons.httpclient.HttpStatus;
@@ -33,12 +34,15 @@ import org.wso2.mdm.integration.common.*;
  */
 public class AndroidOperation extends TestBase {
     private RestClient client;
+    private MDMHttpClient mdmHttpClient;
+    private static JsonParser parser = new JsonParser();
 
     @BeforeTest(alwaysRun = true, groups = { Constants.AndroidEnrollment.ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
         this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.mdmHttpClient = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
         //Enroll a device
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
@@ -265,5 +269,40 @@ public class AndroidOperation extends TestBase {
         HttpResponse response = client.post(Constants.AndroidOperations.WEB_CLIP_ENDPOINT,
                                             operationData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP,
+            description = "Test get operations for list of android device")
+    public void testGetListOfDevicesOperations() throws Exception {
+        for (int i=0 ; i < 10 ; i++) {
+            client.post(Constants.AndroidOperations.RING_ENDPOINT,
+                    Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
+        }
+        String url = getDeviceOperationsURL(Constants.OperationManagement.GET_DEVICE_LIST_OPERATIONS_END_POINT);
+        MDMResponse response = mdmHttpClient.get(url);
+        JsonObject jsonObject = parser.parse(response.getBody()).getAsJsonObject();
+        if(!jsonObject.has("recordsTotal")){
+            throw new Exception("\"recordsTotal\" attribute is missing in the response");
+        }
+        if(!jsonObject.has("recordsFiltered")){
+            throw new Exception("\"recordsFiltered\" attribute is missing in the response");
+        }
+        if(!jsonObject.has("draw")){
+            throw new Exception("\"draw\" attribute is missing in the response");
+        }
+        if(!jsonObject.has("data")){
+            throw new Exception("\"data\" attribute is missing in the response");
+        }
+        JsonArray jsonArray = jsonObject.getAsJsonArray("data");
+        if (!Constants.AndroidOperations.DEVICE_LIST_LENGTH.equals(String.valueOf(jsonArray.size()))) {
+            throw new Exception("response array length is not equal to request length");
+        }
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    private String getDeviceOperationsURL (String EndPoint) {
+        return EndPoint + Constants.DEVICE_ID + "?start=" +
+                Constants.AndroidOperations.DEVICE_LIST_START_INDEX + "&length=" +
+                Constants.AndroidOperations.DEVICE_LIST_LENGTH ;
     }
 }
