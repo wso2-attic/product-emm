@@ -59,7 +59,7 @@ $.fn.datatables_extended = function(settings){
                                 );
 
                                 column
-                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .search(val ? val : '', true, false)
                                     .draw();
 
                                 if (filterColumn.eq(column.index()).hasClass('data-platform')){
@@ -100,9 +100,7 @@ $.fn.datatables_extended = function(settings){
                         $(filterColumn.eq(column.index()).empty()).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
 
                         filterColumn.eq(column.index()).find('input').on('keyup change', function () {
-                            column
-                                .search($(this).val())
-                                .draw();
+                            column.search($(this).val()).draw();
                             if($('.dataTables_empty').length > 0) {
                                 $('.bulk-action-row').addClass("hidden");
                             } else {

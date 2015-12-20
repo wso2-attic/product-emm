@@ -160,7 +160,7 @@ public final class PluginConstants {
         public static final int SIGNED_CERTIFICATE_POSITION = 1;
         public static final int APPAUTH_USERNAME_POSITION = 21;
         public static final int APPAUTH_PASSWORD_POSITION = 22;
-        public static final int POLLING_FREQUENCY_POSITION = 27;
+        public static final int POLLING_FREQUENCY_POSITION = 24;
         public static final int SYNCML_PROVISIONING_ADDR_POSITION = 8;
         public static final int DOMAIN_POSITION = 7;
         public static final String ENROLL_SUBDOMAIN = "https://EnterpriseEnrollment.";

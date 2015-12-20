@@ -136,6 +136,7 @@
     <string name="intent_extra_stop_ringing">Your phone is ringing</string>
     <string name="intent_extra_alert">alert</string>
     <string name="intent_extra_ring">ring</string>
+    <string name="intent_extra_password_setting">lock_settings</string>
 
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>
@@ -230,7 +231,7 @@
     <string name="dialog_enrolling">Enrolling Device</string>
     <string name="dialog_pin_confirmation">Are you sure you want to set </string>
     <string name="dialog_pin_confirmation_end"> as your PIN code?</string>
-    <string name="dialog_init_confirmation">You have set your domain to </string>
+    <string name="dialog_init_confirmation">You have set your server address to </string>
     <string name="dialog_init_middle">Your device is a </string>
     <string name="dialog_init_device_type">Device type</string>
     <string name="dialog_init_end"> device, are you sure you want to proceed ?</string>
@@ -310,7 +311,7 @@
     <string name="title_activity_log">LogActivity</string>
 
     <!-- Headings -->
-    <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com</string>
+    <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com. If your server runs on a special port, server address should be in following format. i.e : www.abc.com:9763</string>
 
     <!-- Validation Errors -->
     <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>

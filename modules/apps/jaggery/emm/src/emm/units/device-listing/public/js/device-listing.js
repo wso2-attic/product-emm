@@ -150,6 +150,7 @@ function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
     var deviceListingSrc = deviceListing.attr("src");
     var currentUser = deviceListing.data("currentUser");
+    var frontEndPagination = false;
 
     var serviceURL;
     if ($.hasPermission("LIST_DEVICES")) {
@@ -157,20 +158,12 @@ function loadDevices(searchType, searchParam){
     } else if ($.hasPermission("LIST_OWN_DEVICES")) {
         //Get authenticated users devices
         serviceURL = "/mdm-admin/users/devices?username="+currentUser;
+        frontEndPagination = true;
     } else {
         $("#loading-content").remove();
         $('#device-table').addClass('hidden');
         $('#device-listing-status-msg').text('Permission denied.');
         return;
-    }
-    if (searchParam){
-        if(searchType == "users"){
-            serviceURL = serviceURL + "?user=" + searchParam;
-        }else if(searchType == "user-roles"){
-            serviceURL = serviceURL + "?role=" + searchParam;
-        }else{
-            serviceURL = serviceURL + "?type=" + searchParam;
-        }
     }
 
     function getPropertyValue(deviceProperties, propertyName) {
@@ -184,13 +177,30 @@ function loadDevices(searchType, searchParam){
         return {};
     }
 
+    if (frontEndPagination) {
+
+    } else {
+
+    }
+
     $('#device-grid').datatables_extended({
         serverSide: true,
         processing: false,
         searching: true,
-        ordering:  true,
+        ordering:  false,
+        filter: false,
         pageLength : 16,
-        ajax: { url : '/emm/api/devices', data : {url : serviceURL}},
+        ajax: { url : '/emm/api/devices', data : {url : serviceURL},
+                dataSrc: function ( json ) {
+                    $('#device-grid').removeClass('hidden');
+                    $("#loading-content").remove();
+                    var $list = $("#device-table :input[type='search']");
+                    $list.each(function(){
+                        $(this).addClass("hidden");
+                    });
+                    return json.data;
+                }
+        },
         columnDefs: [
             { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill' , render: function ( data, type, row, meta ) {
                 return '<div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
@@ -230,7 +240,7 @@ function loadDevices(searchType, searchParam){
                 render: function ( status, type, row, meta ) {
                 var deviceType = row.type;
                 var deviceIdentifier = row.deviceIdentifier;
-                var html;
+                var html = '<span></span>';
                 if (status != 'REMOVED') {
                     html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
                     ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +
@@ -277,15 +287,14 @@ function loadDevices(searchType, searchParam){
                         break;
                 }
             });
+        },
+        "fnDrawCallback": function( oSettings ) {
+            $(".icon .text").res_text(0.2);
         }
     });
     $(deviceCheckbox).click(function () {
         addDeviceSelectedClass(this);
     });
-
-    $('#device-grid').removeClass('hidden');
-    $(".icon .text").res_text(0.2);
-    $("#loading-content").remove();
 }
 
 /*

@@ -31,10 +31,10 @@ public class Constants {
 	public static final String NOTIFIER_LOCAL = "LOCAL";
 	public static final String NOTIFIER_GCM = "GCM";
 
-	public static final String SERVER_PORT = "9763";
+	public static final String SERVER_PORT = "80";
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String API_VERSION = "1.0.0/";
-	public static final String API_SERVER_PORT = "9763";
+	public static final String API_SERVER_PORT = "80";
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";

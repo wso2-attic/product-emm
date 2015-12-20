@@ -18,7 +18,9 @@
 package org.wso2.emm.agent;
 
 import android.annotation.TargetApi;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -52,6 +54,7 @@ public class AlertActivity extends SherlockActivity {
 	private static final int DEFAULT_VOLUME = 0;
 	private static final int DEFAULT_FLAG = 0;
 	private static final String DEVICE_OPERATION_RING = "ring";
+	private static final String OPEN_LOCK_SETTINGS = "lock_settings";
 	private static final String TAG = AlertActivity.class.getSimpleName();
 
 
@@ -87,6 +90,9 @@ public class AlertActivity extends SherlockActivity {
 			public void onClick(View v) {
 				if (DEVICE_OPERATION_RING.equalsIgnoreCase(type)) {
 					stopRing();
+					AlertActivity.this.finish();
+				} else if (OPEN_LOCK_SETTINGS.equalsIgnoreCase(type)) {
+					openPasswordSettings();
 					AlertActivity.this.finish();
 				} else {
 					AlertActivity.this.finish();
@@ -132,6 +138,14 @@ public class AlertActivity extends SherlockActivity {
 			defaultRingtone.setStreamType(AudioManager.STREAM_NOTIFICATION);
 		}
 		defaultRingtone.play();
+	}
+
+	/**
+	 * This method is used to open screen lock password settings screen.
+	 */
+	private void openPasswordSettings() {
+		Intent intent = new Intent(DevicePolicyManager.ACTION_SET_NEW_PASSWORD);
+		startActivity(intent);
 	}
 
 	/**

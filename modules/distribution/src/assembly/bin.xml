@@ -451,26 +451,26 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
-        <file>
-            <source>
-                ../tools/mdm-android-agent-archetype/target/mdm-android-agent-archetype-${mdm.android.agent.archetype.version}.jar
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/tools
-            </outputDirectory>
-            <fileMode>755</fileMode>
-        </file>
-        <file>
-            <source>../tools/mdm-android-agent-archetype/README.txt</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/tools
-            </outputDirectory>
-            <fileMode>755</fileMode>
-        </file>
-        <file>
-            <source>../tools/mdm-android-agent-archetype/android-agent.sh</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/tools
-            </outputDirectory>
-            <fileMode>755</fileMode>
-        </file>
+        <!--<file>-->
+            <!--<source>-->
+                <!--../tools/mdm-android-agent-archetype/target/mdm-android-agent-archetype-${mdm.android.agent.archetype.version}.jar-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/tools-->
+            <!--</outputDirectory>-->
+            <!--<fileMode>755</fileMode>-->
+        <!--</file>-->
+        <!--<file>-->
+            <!--<source>../tools/mdm-android-agent-archetype/README.txt</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/tools-->
+            <!--</outputDirectory>-->
+            <!--<fileMode>755</fileMode>-->
+        <!--</file>-->
+        <!--<file>-->
+            <!--<source>../tools/mdm-android-agent-archetype/android-agent.sh</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/tools-->
+            <!--</outputDirectory>-->
+            <!--<fileMode>755</fileMode>-->
+        <!--</file>-->
         <!-- Copying synapse.properties file -->
         <file>
             <source>src/repository/conf/synapse.properties</source>

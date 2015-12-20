@@ -152,7 +152,8 @@ public final class Constants {
         public static final String CHANGE_LOCK_OPERATION = "change_lock";
         public static final String PASSWORD_POLICY_OPERATION = "password_policy";
         public static final String WEB_CLIP_OPERATION = "web_clip";
-
+        public static final String DEVICE_LIST_START_INDEX = "1";
+        public static final String DEVICE_LIST_LENGTH = "10";
         public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
         public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
         public static final String LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
@@ -228,13 +229,14 @@ public final class Constants {
         public static final String OPERATION_MANAGEMENT_GROUP = "api-policy-mgt";
         public static final String GET_DEVICE_APPS_ENDPOINT = "/mdm-admin/operations/android/";
         public static final String GET_DEVICE_OPERATIONS_ENDPOINT = "/mdm-admin/operations/android/";
+        public static final String GET_DEVICE_LIST_OPERATIONS_END_POINT = "/mdm-admin/operations/paginate/android/";
     }
 
     public static final class MobileDeviceManagement {
         private MobileDeviceManagement(){ throw new AssertionError();}
         public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
         public static final String GET_DEVICE_COUNT_ENDPOINT = "/mdm-admin/devices/count";
-        public static final String NO_OF_DEVICES = "1";
+        public static final String NO_OF_DEVICES = "10";
         public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
         public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
