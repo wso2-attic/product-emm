@@ -80,9 +80,7 @@ public class Operation {
         PaginationResult operations;
         DeviceManagementProviderService dmService;
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-        PaginationRequest paginationRequest = new PaginationRequest();
-        paginationRequest.setStartIndex(startIdx);
-        paginationRequest.setRowCount(length);
+        PaginationRequest paginationRequest = new PaginationRequest(startIdx, length);
         try {
             deviceIdentifier.setType(type);
             deviceIdentifier.setId(id);

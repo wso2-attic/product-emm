@@ -24,9 +24,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
+import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -658,11 +658,17 @@ public class User {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("devices")
-    public List<Device> getAllDeviceOfUser(@QueryParam("username") String username)
+    public Object getAllDeviceOfUser(@QueryParam("username") String username, @QueryParam("start") int startIdx,
+                                           @QueryParam("length") int length )
             throws MDMAPIException {
         DeviceManagementProviderService dmService;
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
+            if (length > 0 ) {
+                PaginationRequest request = new PaginationRequest(startIdx, length);
+                request.setOwner(username);
+                return dmService.getDevicesOfUser(request);
+            }
             return dmService.getDevicesOfUser(username);
         } catch (DeviceManagementException e) {
             String errorMsg = "Device management error";
