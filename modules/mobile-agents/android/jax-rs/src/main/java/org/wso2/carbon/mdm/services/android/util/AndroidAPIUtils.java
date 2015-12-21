@@ -108,12 +108,14 @@ public class AndroidAPIUtils {
         AndroidDeviceUtils deviceUtils = new AndroidDeviceUtils();
         DeviceIDHolder deviceIDHolder = deviceUtils.validateDeviceIdentifiers(deviceIDs,
                 message, responseMediaType);
-        int status = getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
+
+        List<DeviceIdentifier> validDeviceIds = deviceIDHolder.getValidDeviceIDList();
+        int status = getDeviceManagementService().addOperation(operation, validDeviceIds);
         if (status > 0) {
             GCMService gcmService = getGCMService();
             if (gcmService.isGCMEnabled()) {
-                List<Device> devices = new ArrayList<Device>();
-                for (DeviceIdentifier deviceIdentifier : deviceIDHolder.getValidDeviceIDList()) {
+                List<Device> devices = new ArrayList<Device>(validDeviceIds.size());
+                for (DeviceIdentifier deviceIdentifier : validDeviceIds) {
                     devices.add(getDeviceManagementService().getDevice(deviceIdentifier));
                 }
                 getGCMService().sendNotification(operation.getCode(), devices);
