@@ -157,12 +157,12 @@ public class MDMOperationsImpl implements MDMOperations {
             String platformVersion, boolean isSampleDevicesEnabled,
             HashMap<String, String> configProperties) {
 
-        List<Device> devices = new ArrayList<>();
+        List<Device> devices = null;
         Device device = null;
         try {
             List<org.wso2.carbon.device.mgt.common.Device> deviceList =
                     MDMServiceAPIUtils.getDeviceManagementService(tenantId).getAllDevices();
-
+            devices = new ArrayList<>(deviceList.size());
             for (org.wso2.carbon.device.mgt.common.Device commondevice : deviceList) {
                 device = new Device();
                 device.setId(commondevice.getDeviceIdentifier() + "---" + commondevice.getType());

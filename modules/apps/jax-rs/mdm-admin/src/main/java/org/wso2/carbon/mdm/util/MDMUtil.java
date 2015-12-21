@@ -32,7 +32,7 @@ public class MDMUtil {
         profile.setDeviceType(mdmProfile.getDeviceType());
 
         List<org.wso2.carbon.policy.mgt.common.ProfileFeature> profileFeatures = new ArrayList<org.wso2.carbon.policy
-                .mgt.common.ProfileFeature>();
+                .mgt.common.ProfileFeature>(mdmProfile.getProfileFeaturesList().size());
         for(ProfileFeature mdmProfileFeature:mdmProfile.getProfileFeaturesList()){
             profileFeatures.add(convertProfileFeature(mdmProfileFeature));
         }
