@@ -158,7 +158,6 @@ function loadDevices(searchType, searchParam){
     } else if ($.hasPermission("LIST_OWN_DEVICES")) {
         //Get authenticated users devices
         serviceURL = "/mdm-admin/users/devices?username="+currentUser;
-        frontEndPagination = true;
     } else {
         $("#loading-content").remove();
         $('#device-table').addClass('hidden');
@@ -175,12 +174,6 @@ function loadDevices(searchType, searchParam){
             }
         }
         return {};
-    }
-
-    if (frontEndPagination) {
-
-    } else {
-
     }
 
     $('#device-grid').datatables_extended({
