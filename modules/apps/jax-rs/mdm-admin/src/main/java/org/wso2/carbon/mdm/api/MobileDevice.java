@@ -57,9 +57,7 @@ public class MobileDevice {
             DeviceManagementProviderService service = MDMAPIUtils.getDeviceManagementService();
             //Length > 0 means this is a pagination request.
             if (length > 0) {
-                PaginationRequest paginationRequest = new PaginationRequest();
-                paginationRequest.setStartIndex(startIdx);
-                paginationRequest.setRowCount(length);
+                PaginationRequest paginationRequest = new PaginationRequest(startIdx, length);
                 paginationRequest.setDeviceName(deviceName);
                 paginationRequest.setOwner(user);
                 if (ownership != null) {
@@ -68,7 +66,7 @@ public class MobileDevice {
                 if (status != null) {
                     paginationRequest.setStatus(status.toString());
                 }
-                paginationRequest.setType(type);
+                paginationRequest.setDeviceType(type);
                 return service.getAllDevices(paginationRequest);
             }
 
