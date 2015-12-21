@@ -232,7 +232,7 @@ public class Policy {
             throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         List<org.wso2.carbon.policy.mgt.common.Policy> policiesToUpdate =
-                new ArrayList<org.wso2.carbon.policy.mgt.common.Policy>();
+                new ArrayList<org.wso2.carbon.policy.mgt.common.Policy>(priorityUpdatedPolicies.size());
         int i;
         for (i = 0; i < priorityUpdatedPolicies.size(); i++) {
             org.wso2.carbon.policy.mgt.common.Policy policyObj = new org.wso2.carbon.policy.mgt.common.Policy();
