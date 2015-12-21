@@ -14,8 +14,9 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
                     $('#role-listing-status-msg').text('');
                     var content = template(data.viewModel);
                     $(objectGridContainer).html(content);
-                    if(!isInit) {
+                    if(isInit) {
                         $('#role-grid').datatables_extended();
+                        isInit = false;
                     }
                     $("#dt-select-all").addClass("hidden");
                     $(".icon .text").res_text(0.2);
@@ -65,7 +66,7 @@ var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
-var isInit = false;
+var isInit = true;
 
 
 /*
