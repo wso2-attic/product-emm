@@ -114,8 +114,9 @@ public class AndroidAPIUtils {
         if (status > 0) {
             GCMService gcmService = getGCMService();
             if (gcmService.isGCMEnabled()) {
-                List<Device> devices = new ArrayList<Device>(deviceIDHolder.getValidDeviceIDList().size());
-                for (DeviceIdentifier deviceIdentifier : deviceIDHolder.getValidDeviceIDList()) {
+                List<DeviceIdentifier> deviceIDList = deviceIDHolder.getValidDeviceIDList();
+                List<Device> devices = new ArrayList<Device>(deviceIDList.size());
+                for (DeviceIdentifier deviceIdentifier : deviceIDList) {
                     devices.add(getDeviceManagementService().getDevice(deviceIdentifier));
                 }
                 getGCMService().sendNotification(operation.getCode(), devices);
