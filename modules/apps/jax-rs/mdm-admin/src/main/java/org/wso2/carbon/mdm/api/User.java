@@ -402,9 +402,10 @@ public class User {
             log.debug("Getting the list of users with all user-related information");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList = new ArrayList<UserWrapper>();
+        ArrayList<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*", -1);
+            userList = new ArrayList<UserWrapper>(users.length);
             UserWrapper user;
             for (String username : users) {
                 user = new UserWrapper();
@@ -421,8 +422,12 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
+        int count = 0;
+        if(userList != null){
+            count = userList.size();
+        }
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                                             "Obtained user count: " + userList.size());
+                                             "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -441,9 +446,10 @@ public class User {
             log.debug("Getting the list of users with all user-related information using the filter : " + filter);
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList = new ArrayList<UserWrapper>();
+        ArrayList<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers( filter + "*", -1);
+            userList = new ArrayList<UserWrapper>(users.length);
             UserWrapper user;
             for (String username : users) {
                 user = new UserWrapper();
@@ -460,8 +466,12 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
+        int count = 0;
+        if(userList != null){
+            count = userList.size();
+        }
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                                             "Obtained user count: " + userList.size());
+                                             "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -479,9 +489,10 @@ public class User {
             log.debug("Getting the list of users by name");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList = new ArrayList<UserWrapper>();
+        ArrayList<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
+            userList = new ArrayList<UserWrapper>(users.length);
             UserWrapper user;
             for (String username : users) {
                 user = new UserWrapper();
@@ -498,8 +509,12 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
+        int count = 0;
+        if(userList != null){
+            count = userList.size();
+        }
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
-                                             "Obtained user count: " + userList.size());
+                                             "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -517,9 +532,10 @@ public class User {
             log.debug("Getting the list of users by name");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<String> userList = new ArrayList<String>();
+        ArrayList<String> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
+            userList = new ArrayList<String>(users.length);
             UserWrapper user;
             for (String username : users) {
                 userList.add(username);
@@ -531,8 +547,12 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
+        int count = 0;
+        if(userList != null){
+            count = userList.size();
+        }
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
-                                             "Obtained user count: " + userList.size());
+                                             "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }

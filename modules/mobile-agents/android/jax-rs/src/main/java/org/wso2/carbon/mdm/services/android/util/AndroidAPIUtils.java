@@ -112,7 +112,7 @@ public class AndroidAPIUtils {
         if (status > 0) {
             GCMService gcmService = getGCMService();
             if (gcmService.isGCMEnabled()) {
-                List<Device> devices = new ArrayList<Device>();
+                List<Device> devices = new ArrayList<Device>(deviceIDHolder.getValidDeviceIDList().size());
                 for (DeviceIdentifier deviceIdentifier : deviceIDHolder.getValidDeviceIDList()) {
                     devices.add(getDeviceManagementService().getDevice(deviceIdentifier));
                 }
@@ -198,11 +198,11 @@ public class AndroidAPIUtils {
 
     private static void updateApplicationList(Operation operation, DeviceIdentifier deviceIdentifier)
             throws ApplicationManagementException {
-        List<Application> applications = new ArrayList<Application>();
         // Parsing json string to get applications list.
         JsonElement jsonElement = new JsonParser().parse(operation.getOperationResponse());
         JsonArray jsonArray = jsonElement.getAsJsonArray();
         Application app;
+        List<Application> applications = new ArrayList<Application>(jsonArray.size());
         for (JsonElement element : jsonArray) {
             app = new Application();
             app.setName(element.getAsJsonObject().

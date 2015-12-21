@@ -19,7 +19,7 @@ public class SetReferenceTransformer<T>{
      */
         public void transform(List<T> currentList, List<T> nextList){
             TreeSet<T> existingSet = new TreeSet<T>(currentList);
-            TreeSet<T> newSet = new TreeSet<T>(nextList);;
+            TreeSet<T> newSet = new TreeSet<T>(nextList);
 
             existingSet.removeAll(newSet);
 
