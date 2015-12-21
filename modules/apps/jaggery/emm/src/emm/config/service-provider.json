@@ -3,7 +3,7 @@
   "saasApp" : true,
   "tokenScope": "admin",
   "requireDynamicClientRegistration" : true,
-  "audience" : "https://10.10.10.203:9443/oauth2/token",
+  "audience" : "https://localhost:9443/oauth2/token",
   "assertionConsumerURL" : "https://localhost:9443/emm/sso/acs",
-  "recepientValidationURL" : "https://10.100.5.37:9443/oauth2/token"
+  "recepientValidationURL" : "https://localhost:9443/oauth2/token"
 }
