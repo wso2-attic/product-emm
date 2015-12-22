@@ -123,7 +123,7 @@ public class MobileDeviceManagement extends TestBase {
     public void testGetWindowsDevices() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?type=windows");
         Assert.assertEquals(HttpStatus.SC_OK,response.getStatus());
-        Assert.assertEquals(response.getBody().toString(),Constants.EMPTY_ARRAY);
+        Assert.assertEquals(Constants.EMPTY_ARRAY, response.getBody().toString());
     }
 
     @Test(dependsOnMethods = "addEnrollment", description = "Get all devices belongs to role admin")
