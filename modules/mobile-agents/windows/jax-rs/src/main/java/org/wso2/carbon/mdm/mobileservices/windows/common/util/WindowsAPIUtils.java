@@ -45,6 +45,8 @@ import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
+import org.wso2.carbon.webapp.authenticator.framework.config.AuthenticatorConfig;
+import org.wso2.carbon.webapp.authenticator.framework.config.AuthenticatorConfigService;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -200,6 +202,19 @@ public class WindowsAPIUtils {
             throw new IllegalStateException(msg);
         }
         return oAuth2TokenValidationService;
+    }
+
+    public static AuthenticatorConfig getBSTAuthenticatorConfig() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        AuthenticatorConfigService authenticatorConfigService =
+                (AuthenticatorConfigService) ctx.getOSGiService(AuthenticatorConfigService.class, null);
+        AuthenticatorConfig authenticatorConfig = authenticatorConfigService.getAuthenticatorConfig("BST");
+        if (authenticatorConfig == null) {
+            String msg = "BST authenticatorConfig has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return authenticatorConfig;
     }
 
     public static void startTenantFlow(String userName) {

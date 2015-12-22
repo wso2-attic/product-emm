@@ -28,15 +28,15 @@ import org.apache.ws.security.validate.Credential;
 import org.apache.ws.security.validate.Validator;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.identity.oauth2.dto.OAuth2TokenValidationRequestDTO;
-import org.wso2.carbon.identity.oauth2.dto.OAuth2TokenValidationResponseDTO;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
+import org.wso2.carbon.mdm.mobileservices.windows.common.authenticator.OAuthValidatorFactory;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.OAuthTokenValidationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
-import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 /**
  * Validator class for user authentication checking the default carbon user store.
@@ -46,6 +46,7 @@ public class BSTValidator implements Validator {
     private static Log log = LogFactory.getLog(BSTValidator.class);
     private static final String BEARER_TOKEN_TYPE = "bearer";
     private static final String RESOURCE_KEY = "resource";
+    private static final Pattern PATTERN = Pattern.compile("[B|b]earer\\s");
 
     /**
      * This method validates the binary security token in SOAP message coming from the device.
@@ -57,19 +58,19 @@ public class BSTValidator implements Validator {
      */
     @Override
     public Credential validate(Credential credential, RequestData requestData) throws WSSecurityException {
-        String encodedBinarySecurityToken;
+        String bearerToken;
         String requestedUri;
-        Credential returnCredentials;
+        Credential returnCredentials = null;
 
         HashMap msgContext = (HashMap) requestData.getMsgContext();
         requestedUri = msgContext.get(PluginConstants.CXF_REQUEST_URI).toString();
         BinarySecurity binarySecurityTokenObject = credential.getBinarySecurityToken();
         String binarySecurityToken = binarySecurityTokenObject.getElement().getFirstChild().getTextContent();
         Base64 base64 = new Base64();
-        encodedBinarySecurityToken = new String(base64.decode(binarySecurityToken));
+        bearerToken = new String(base64.decode(binarySecurityToken));
         AuthenticationInfo authenticationInfo;
         try {
-            authenticationInfo = validateRequest(requestedUri, encodedBinarySecurityToken);
+            authenticationInfo = validateRequest(requestedUri, bearerToken);
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
             privilegedCarbonContext.setTenantId(authenticationInfo.getTenantId());
@@ -89,6 +90,10 @@ public class BSTValidator implements Validator {
             throw new WSSecurityException(msg, e);
         } catch (WindowsDeviceEnrolmentException e) {
             String msg = "Authentication Failure occurred due to binary security token.";
+            log.error(msg, e);
+            throw new WSSecurityException(msg, e);
+        } catch (OAuthTokenValidationException e) {
+            String msg = "Failed to authenticate the incoming request due to oauth token validation error.";
             log.error(msg, e);
             throw new WSSecurityException(msg, e);
         }
@@ -113,44 +118,28 @@ public class BSTValidator implements Validator {
     /**
      * Validate SOAP request token.
      *
-     * @param requestedUri-                     Requested endpoint URI.
-     * @param encodedBinarySecurityToken-Binary security token comes from the soap request message.
+     * @param requestedUri-              Requested endpoint URI.
+     * @param binarySecurityToken-Binary security token comes from the soap request message.
      * @return returns authorized user information.
      * @throws WindowsDeviceEnrolmentException
      */
-    public AuthenticationInfo validateRequest(String requestedUri, String encodedBinarySecurityToken)
-            throws WindowsDeviceEnrolmentException {
+    public AuthenticationInfo validateRequest(String requestedUri, String binarySecurityToken)
+            throws WindowsDeviceEnrolmentException, OAuthTokenValidationException {
 
         AuthenticationInfo authenticationInfo = new AuthenticationInfo();
-        // Create a OAuth2TokenValidationRequestDTO object for validating access token
-        OAuth2TokenValidationRequestDTO dto = new OAuth2TokenValidationRequestDTO();
-        //Set the access token info
-        OAuth2TokenValidationRequestDTO.OAuth2AccessToken oAuth2AccessToken = dto.new OAuth2AccessToken();
-        oAuth2AccessToken.setTokenType(BSTValidator.BEARER_TOKEN_TYPE);
-        oAuth2AccessToken.setIdentifier(encodedBinarySecurityToken);
-        dto.setAccessToken(oAuth2AccessToken);
-
-        //Set the resource context param. This will be used in scope validation.
-        OAuth2TokenValidationRequestDTO.TokenValidationContextParam
-                resourceContextParam = dto.new TokenValidationContextParam();
-        resourceContextParam.setKey(BSTValidator.RESOURCE_KEY);
-        resourceContextParam.setValue(requestedUri + ":POST");
-
-        OAuth2TokenValidationRequestDTO.TokenValidationContextParam[]
-                tokenValidationContextParams =
-                new OAuth2TokenValidationRequestDTO.TokenValidationContextParam[1];
-        tokenValidationContextParams[0] = resourceContextParam;
-        dto.setContext(tokenValidationContextParams);
+        String resource = requestedUri + ":POST";
+        OAuthValidationResponse oAuthValidationResponse = OAuthValidatorFactory.getValidator().
+                validateToken(binarySecurityToken, resource);
         try {
-            OAuth2TokenValidationResponseDTO oAuth2TokenValidationResponseDTO =
-                    WindowsAPIUtils.getOAuth2TokenValidationService().validate(dto);
-            if (oAuth2TokenValidationResponseDTO.isValid()) {
-                String username = oAuth2TokenValidationResponseDTO.getAuthorizedUser();
+            if (oAuthValidationResponse.isValid()) {
+                String username = oAuthValidationResponse.getUserName();
+                String tenantDomain = oAuthValidationResponse.getTenantDomain();
+
                 authenticationInfo.setUsername(username);
-                authenticationInfo.setTenantDomain(MultitenantUtils.getTenantDomain(username));
-                authenticationInfo.setTenantId(WindowsAPIUtils.getTenantIdOFUser(username));
+                authenticationInfo.setTenantDomain(tenantDomain);
+                authenticationInfo.setTenantId(WindowsAPIUtils.getTenantIdOFUser(username + "@" + tenantDomain));
             } else {
-                authenticationInfo.setMessage(oAuth2TokenValidationResponseDTO.getErrorMsg());
+                authenticationInfo.setMessage(oAuthValidationResponse.getErrorMsg());
             }
         } catch (DeviceManagementException e) {
             String msg = "Authentication failure due to invalid binary security token.";
