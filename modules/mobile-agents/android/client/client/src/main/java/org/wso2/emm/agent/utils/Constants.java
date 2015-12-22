@@ -85,6 +85,7 @@ public class Constants {
 	public static final String PORT = "serverPort";
 	public static final String GRANT_TYPE = "password refresh_token";
 	public static final String TOKEN_SCOPE = "production";
+	public static final String APPLICATION_TYPE = "device";
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
 	public static final String PACKAGE_NAME = "com.mdm";
 
