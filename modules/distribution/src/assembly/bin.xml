@@ -56,6 +56,7 @@
                 <exclude>**/lib/encoder*</exclude>
                 <exclude>**/plugins/jaxb*</exclude>
                 <exclude>**/security/authenticators.xml</exclude>
+                <exclude>**/conf/log4j.properties</exclude>
 
                 <exclude>**/plugins/org.wso2.carbon.localentry.ui*</exclude>
                 <exclude>**/plugins/org.wso2.carbon.mediation.security.ui*</exclude>
@@ -851,17 +852,29 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
             <fileMode>755</fileMode>
         </file>
+
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.bat</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
             <fileMode>644</fileMode>
         </file>
+
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/org.wso2.ciphertool-${cipher.tool.version}.jar</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/lib</outputDirectory>
             <fileMode>644</fileMode>
         </file>
 
+        <!-- Copying product specific log4j.properties that has unnecessary logs printed by third parties
+        components suppressed -->
+        <file>
+            <source>
+                src/repository/conf/log4j.properties
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
     </files>
 
 </assembly>
