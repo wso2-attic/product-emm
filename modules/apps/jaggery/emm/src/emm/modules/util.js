@@ -32,6 +32,7 @@ var util = function () {
             "clientName": "emm",
             "tokenScope": "admin",
             "owner": adminUserName,
+            "applicationType": "webapp", 
             "grantType": "password refresh_token urn:ietf:params:oauth:grant-type:saml2-bearer",
             "saasApp" :true
         };

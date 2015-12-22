@@ -845,6 +845,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		profile.setGrantType(Constants.GRANT_TYPE);
 		profile.setOwner(usernameVal);
 		profile.setTokenScope(Constants.TOKEN_SCOPE);
+		profile.setApplicationType(Constants.APPLICATION_TYPE);
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
 		return dynamicClientManager.getClientCredentials(profile, utils, context);
