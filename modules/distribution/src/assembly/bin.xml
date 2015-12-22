@@ -707,7 +707,7 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!--Webapp Authenticator Config file-->
+        <!--Webapp authenticator Config file-->
         <file>
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/webapp-authenticator-config.xml

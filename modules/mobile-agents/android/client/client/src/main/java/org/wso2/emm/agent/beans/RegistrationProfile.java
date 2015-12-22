@@ -31,6 +31,7 @@ public class RegistrationProfile {
     private String tokenScope;
     private String owner;
     private String grantType;
+    private String applicationType;
 
     private static final String TAG = RegistrationProfile.class.getSimpleName();
 
@@ -72,6 +73,14 @@ public class RegistrationProfile {
 
     public void setGrantType(String grantType) {
         this.grantType = grantType;
+    }
+
+    public String getApplicationType() {
+        return applicationType;
+    }
+
+    public void setApplicationType(String applicationType) {
+        this.applicationType = applicationType;
     }
 
     public String toJSON() throws AndroidAgentException {

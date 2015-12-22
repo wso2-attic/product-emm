@@ -323,9 +323,11 @@ public class SyncmlServiceImpl implements SyncmlService {
         String deviceName;
         int msgID;
         SyncmlDocument syncmlDocument;
+        SyncmlHeader syncmlHeader;
 
         try {
             syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
+            syncmlHeader = syncmlDocument.getHeader();
             msgID = syncmlDocument.getHeader().getMsgID();
             if (msgID == PluginConstants.SyncML.SYNCML_FIRST_MESSAGE_ID) {
                 Replace replace = syncmlDocument.getBody().getReplace();
@@ -344,6 +346,12 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
                 Device generateDevice = generateDevice(DeviceManagementConstants.MobileDeviceTypes.
                         MOBILE_DEVICE_TYPE_WINDOWS, devID, modVersion, imsi, imei, devMan, devMod, user);
+                DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlHeader.getSource()
+                        .getLocURI());
+               // Device existingDevice = WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+                if (WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier) != null) {
+                    WindowsAPIUtils.getDeviceManagementService().modifyEnrollment(generateDevice);
+                }
                 status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(generateDevice);
                 WindowsAPIUtils.startTenantFlow(user);
                 return status;

@@ -39,9 +39,9 @@
         </ServiceProvider>
         <ServiceProvider>
             <Issuer>mdm</Issuer>
-	    <AssertionConsumerServiceURLs>
-     		<AssertionConsumerServiceURL>https://localhost:9443/emm/sso/acs</AssertionConsumerServiceURL>
-   	    </AssertionConsumerServiceURLs>
+	        <AssertionConsumerServiceURLs>
+     		    <AssertionConsumerServiceURL>https://localhost:9443/emm/sso/acs</AssertionConsumerServiceURL>
+   	        </AssertionConsumerServiceURLs>
             <DefaultAssertionConsumerServiceURL>https://localhost:9443/emm/sso/acs</DefaultAssertionConsumerServiceURL>
             <SignAssertion>true</SignAssertion>
             <SignResponse>true</SignResponse>
@@ -54,9 +54,13 @@
             <EnableSingleLogout>false</EnableSingleLogout>
             <SingleLogoutUrl></SingleLogoutUrl>
             <EnableAudienceRestriction>true</EnableAudienceRestriction>
+            <EnableRecipients>true</EnableRecipients>
             <AudiencesList>
-                <Audience>carbonServer</Audience>
+                <Audience>https://localhost:9443/oauth2/token</Audience>
             </AudiencesList>
+            <RecipientList>
+                <Recipient>https://localhost:9443/oauth2/token</Recipient>
+            </RecipientList>
             <ConsumingServiceIndex></ConsumingServiceIndex>
         </ServiceProvider>
         <ServiceProvider>
