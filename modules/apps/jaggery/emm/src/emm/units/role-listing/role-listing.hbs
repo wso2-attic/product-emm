@@ -15,17 +15,21 @@
         <span id="role-listing-status-msg"></span>
 
         <div id="role-table">
-            <table class="table table-striped table-hover list-table display responsive nowrap data-table"
-                   id="role-grid">
+            <table class="table table-striped table-hover list-table display responsive nowrap data-table row-view" id="role-grid">
                 <thead>
+                <tr class="sort-row">
+                    <th class="no-sort"></th>
+                    <th>By Username</th>
+                    <th class="no-sort"></th>
+                </tr>
                 <tr class="filter-row filter-box">
-                    <th colspan="4">
+                    <th colspan="2">
                         <label class="wr-input-label" for="search-by-name">
                             By Role Name
                         </label>
                         <input id="search-by-name" type="text" class="form-control" placeholder="Search By Role Name">
                     </th>
-                    <th class="no-sort" style="vertical-align:bottom;">
+                    <th style="vertical-align:bottom;">
                         <button id="search-btn" class="wr-btn">
                             &nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</button>
                     </th>
