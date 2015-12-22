@@ -93,29 +93,34 @@ public class CommonUtils {
 	 * @param context - Application context.
 	 */
 	public static void clearAppData(Context context) throws AndroidAgentException {
-		revokePolicy(context);
-		Resources resources = context.getResources();
-		SharedPreferences mainPref = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
-		Editor editor = mainPref.edit();
-		editor.putString(context.getResources().getString(R.string.shared_pref_policy),
-				resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_isagreed),
-				resources.getString(R.string.shared_pref_reg_fail));
-		editor.putString(context.getResources().getString(R.string.shared_pref_regId),
-				resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_registered),
-				resources.getString(R.string.shared_pref_reg_fail));
-		editor.putString(context.getResources().getString(R.string.shared_pref_ip),
-				resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
-		                 resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_eula),
-		                 resources.getString(R.string.shared_pref_default_string));
-		editor.putString(resources.getString(R.string.shared_pref_device_active),
-		                 resources.getString(R.string.shared_pref_reg_fail));
-		editor.commit();
-		Preference.clearPreferences(context);
-		clearClientCredentials(context);
+		try {
+			revokePolicy(context);
+		} catch (SecurityException e) {
+			throw new AndroidAgentException("Error occurred while revoking policy", e);
+		} finally {
+			Resources resources = context.getResources();
+			SharedPreferences mainPref = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
+			Editor editor = mainPref.edit();
+			editor.putString(context.getResources().getString(R.string.shared_pref_policy),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_isagreed),
+			                 resources.getString(R.string.shared_pref_reg_fail));
+			editor.putString(context.getResources().getString(R.string.shared_pref_regId),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_registered),
+			                 resources.getString(R.string.shared_pref_reg_fail));
+			editor.putString(context.getResources().getString(R.string.shared_pref_ip),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_eula),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(resources.getString(R.string.shared_pref_device_active),
+			                 resources.getString(R.string.shared_pref_reg_fail));
+			editor.commit();
+			Preference.clearPreferences(context);
+			clearClientCredentials(context);
+		}
 	}
 
 	/**
