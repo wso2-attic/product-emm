@@ -348,7 +348,13 @@ public class User {
         }
     }
 
-
+    /**
+     * get all the roles except for the internal/xxx and application/xxx
+     * @param userStoreManager
+     * @param username
+     * @return the list of filtered roles
+     * @throws UserStoreException
+     */
     private List<String> getFilteredRoles(UserStoreManager userStoreManager, String username)
             throws UserStoreException {
         String[] roleListOfUser = userStoreManager.getRoleListOfUser(username);
