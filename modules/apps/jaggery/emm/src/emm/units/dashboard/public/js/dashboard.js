@@ -3,7 +3,7 @@ var updateStats = function (serviceURL, id) {
         serviceURL,
         function (data) {
             if (!data) {
-                updateStats(serviceURL,id);
+                updateStats(serviceURL, id);
             } else {
                 data = JSON.parse(data);
                 $(id).html(data);
@@ -14,13 +14,13 @@ var updateStats = function (serviceURL, id) {
     );
 };
 //TODO : Refactor the users/count API to remove tenant-domain parameter
-$(document).ready(function(){
+$(document).ready(function () {
     updateStats("/mdm-admin/devices/count", "#device-count");
     updateStats("/mdm-admin/policies/count", "#policy-count");
     updateStats("/mdm-admin/users/count", "#user-count");
 });
 
-function toggleEnrollment(){
+function toggleEnrollment() {
     $(".modalpopup-content").html($("#qr-code-modal").html());
     generateQRCode(".modalpopup-content .qr-code");
     showPopup();

@@ -18,7 +18,7 @@
 var modalPopup = '.wr-modalpopup',
     modalPopupContainer = modalPopup + ' .modalpopup-container',
     modalPopupContent = modalPopup + ' .modalpopup-content';
-function openCollapsedNav(){
+function openCollapsedNav() {
     $(".wr-hidden-nav-toggle-btn").addClass("active");
     $("#hiddenNav").slideToggle("slideDown", function () {
         if ($(this).css("display") == "none") {
@@ -35,8 +35,8 @@ function setPopupMaxHeight() {
     var maxHeight = "max-height";
     var marginTop = "margin-top";
     var body = "body";
-    $(modalPopupContent).css(maxHeight, ($(body).height() - ($(body).height()/100 * 30)));
-    $(modalPopupContainer).css(marginTop, (-($(modalPopupContainer).height()/2)));
+    $(modalPopupContent).css(maxHeight, ($(body).height() - ($(body).height() / 100 * 30)));
+    $(modalPopupContainer).css(marginTop, (-($(modalPopupContainer).height() / 2)));
 }
 
 /*
@@ -57,40 +57,40 @@ function hidePopup() {
 }
 
 
-function generateQRCode(qrCodeClass){
+function generateQRCode(qrCodeClass) {
     var enrollmentURL = $("#qr-code-modal").data("enrollment-url");
     $(qrCodeClass).qrcode({
-        text	: enrollmentURL,
+        text: enrollmentURL,
         width: 200,
         height: 200
     });
 }
 
-function toggleEnrollment(){
+function toggleEnrollment() {
     $(".modalpopup-content").html($("#qr-code-modal").html());
     generateQRCode(".modalpopup-content .qr-code");
     showPopup();
 }
 
-function loadNotifications(){
+function loadNotifications() {
 
     var serviceURL = "/mdm-admin/notifications/NEW";
 
     var successCallback = function (data) {
-        if(!data){
+        if (!data) {
             data = "[]";
         }
         data = JSON.parse(data);
-        if(data.length > 0){
+        if (data.length > 0) {
             $("#notification-bubble").html(data.length);
         }
 
     };
 
     invokerUtil.get(serviceURL,
-        successCallback, function(response){
+                    successCallback, function (response) {
             console.log(response.content);
-    });
+        });
 }
 
 $(document).ready(function () {

@@ -3,30 +3,30 @@
  * listed on Role Management page in WSO2 MDM Console.
  */
 
-var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGridTemplateSrc, serviceURL, callback){
+var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGridTemplateSrc, serviceURL, callback) {
     var templateSrc = $(objectGridTemplateSrc).attr("src");
     $.template(objectGridId, templateSrc, function (template) {
         invokerUtil.get(serviceURL,
-            function(data){
-                data = callback(data);
-                if(data.length > 0 && data != null){
-                    $('#ast-container').removeClass('hidden');
-                    $('#role-listing-status-msg').text('');
-                    var content = template(data.viewModel);
-                    $(objectGridContainer).html(content);
-                    if(isInit) {
-                        $('#role-grid').datatables_extended();
-                        isInit = false;
-                    }
-                    $("#dt-select-all").addClass("hidden");
-                    $(".icon .text").res_text(0.2);
-                }else{
-                    $('#ast-container').addClass('hidden');
-                    $('#role-listing-status-msg').text('No roles are available to be displayed.');
-                }
+                        function (data) {
+                            data = callback(data);
+                            if (data.length > 0 && data != null) {
+                                $('#ast-container').removeClass('hidden');
+                                $('#role-listing-status-msg').text('');
+                                var content = template(data.viewModel);
+                                $(objectGridContainer).html(content);
+                                if (isInit) {
+                                    $('#role-grid').datatables_extended();
+                                    isInit = false;
+                                }
+                                $("#dt-select-all").addClass("hidden");
+                                $(".icon .text").res_text(0.2);
+                            } else {
+                                $('#ast-container').addClass('hidden');
+                                $('#role-listing-status-msg').text('No roles are available to be displayed.');
+                            }
 
-                //$(objectGridId).datatables_extended();
-            }, function(message){
+                            //$(objectGridId).datatables_extended();
+                        }, function (message) {
                 $('#ast-container').addClass('hidden');
                 $('#role-listing-status-msg').text('Invalid search query. Try again with a valid search query');
             });
@@ -36,11 +36,11 @@ var loadPaginatedObjects = function(objectGridId, objectGridContainer, objectGri
 function loadRoles(searchQuery) {
     $("#loading-content").show();
     var serviceURL = "/mdm-admin/roles";
-    if(searchQuery){
-       serviceURL = serviceURL + "/search?filter=" + searchQuery;
+    if (searchQuery) {
+        serviceURL = serviceURL + "/search?filter=" + searchQuery;
     }
-    var callback = function(data){
-        if(data != null || data =="null") {
+    var callback = function (data) {
+        if (data != null || data == "null") {
             data = JSON.parse(data);
             data = {
                 "viewModel": {
@@ -55,8 +55,9 @@ function loadRoles(searchQuery) {
     $("#loading-content").hide();
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
-        beforeStop : function () {
-            var sortedIDs = $(this).sortable('toArray');;
+        beforeStop: function () {
+            var sortedIDs = $(this).sortable('toArray');
+            ;
         }
     });
     $(sortableElem).disableSelection();
@@ -73,8 +74,8 @@ var isInit = true;
  * set popup maximum height function.
  */
 function setPopupMaxHeight() {
-    $(modalPopupContent).css('max-height', ($(body).height() - ($(body).height()/100 * 30)));
-    $(modalPopupContainer).css('margin-top', (-($(modalPopupContainer).height()/2)));
+    $(modalPopupContent).css('max-height', ($(body).height() - ($(body).height() / 100 * 30)));
+    $(modalPopupContainer).css('margin-top', (-($(modalPopupContainer).height() / 2)));
 }
 
 /*
@@ -131,7 +132,7 @@ $("#role-grid").on("click", ".remove-role-link", function () {
 
 $("#search-btn").click(function () {
     var searchQuery = $("#search-by-name").val();
-    if( ! searchQuery.trim() == "" ){
+    if (!searchQuery.trim() == "") {
         loadRoles(searchQuery);
     } else {
         loadRoles();

@@ -14,7 +14,7 @@ $(document).ready(function () {
     var modalPopupContainer = modalPopup + " .modalpopup-container";
     var modalPopupContent = modalPopup + " .modalpopup-content";
 
-    $("#change-password").click(function() {
+    $("#change-password").click(function () {
 
         $(modalPopupContent).html($('#change-password-window').html());
         showPopup();
@@ -68,7 +68,7 @@ $(document).ready(function () {
                         if (data.status == 400) {
                             $(errorMsg).text("Old password does not match with the entered value. Please check.");
                             $(errorMsgWrapper).removeClass("hidden");
-                        }else {
+                        } else {
                             $(errorMsg).text("An unexpected error occurred. Please try again later.");
                             $(errorMsgWrapper).removeClass("hidden");
                         }
