@@ -1,4 +1,3 @@
-
 function utf8_to_b64(stringValue) {
     return window.btoa(unescape(encodeURIComponent(stringValue)));
 }
@@ -16,8 +15,8 @@ function post(path, params, method) {
     form.setAttribute("method", method);
     form.setAttribute("action", path);
 
-    for(var key in params) {
-        if(params.hasOwnProperty(key)) {
+    for (var key in params) {
+        if (params.hasOwnProperty(key)) {
             var hiddenField = document.createElement("input");
             hiddenField.setAttribute("type", "hidden");
             hiddenField.setAttribute("name", key);
@@ -53,38 +52,38 @@ function submitLoginForm() {
     });
 }
 
-$( document ).ready(function() {
+$(document).ready(function () {
 
     $("input#username").focus();
-    $("input#username").bind('keydown',function (e) {
-        if(e.which == 10 || e.which == 13){
+    $("input#username").bind('keydown', function (e) {
+        if (e.which == 10 || e.which == 13) {
             e.preventDefault();
             $("input#password").focus();
         }
     });
 
     var currentHash = window.location.hash;
-    if(currentHash=="#auth-failed") {
+    if (currentHash == "#auth-failed") {
         $('.wr-validation-summary p').text("Sorry!, Please make sure to enter correct username and password");
         $('.wr-validation-summary').removeClass("hidden");
-    }else if(currentHash=="#error"){
+    } else if (currentHash == "#error") {
         $('.wr-validation-summary p').text("Sorry!, Error occured");
         $('.wr-validation-summary').removeClass("hidden");
     }
-    $('.btn-download-agent').click(function(){
+    $('.btn-download-agent').click(function () {
         var username = $("input#username").val();
         var password = $("input#password").val();
 
         if (!username) {
             $('.wr-validation-summary p').text("Sorry!, Username cannot be empty.");
             $('.wr-validation-summary').removeClass("hidden");
-        } else if (!password){
+        } else if (!password) {
             $('.wr-validation-summary p').text("Sorry!, Password cannot be empty.");
             $('.wr-validation-summary').removeClass("hidden");
         } else {
             var username = utf8_to_b64($("input#username").val());
             var password = utf8_to_b64($("input#password").val());
-            post($("#login").attr("action"),{"username":username,password:password},"POST");
+            post($("#login").attr("action"), {"username": username, password: password}, "POST");
         }
     });
 });

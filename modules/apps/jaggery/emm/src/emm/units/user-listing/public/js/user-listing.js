@@ -1,7 +1,6 @@
-/**
+*
  * Sorting function of users
  * listed on User Management page in WSO2 MDM Console.
- */
 $(function () {
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
