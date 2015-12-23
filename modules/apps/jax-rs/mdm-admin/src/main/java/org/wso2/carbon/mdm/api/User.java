@@ -37,6 +37,7 @@ import org.wso2.carbon.mdm.util.Constants;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -101,7 +102,7 @@ public class User {
                 userStoreManager.addUser(userWrapper.getUsername(), initialUserPassword,
                                          userWrapper.getRoles(), defaultUserClaims, null);
                 // invite newly added user to enroll device
-                inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername(),initialUserPassword);
+                inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername(), initialUserPassword);
                 // Outputting debug message upon successful addition of user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() + " was successfully added.");
@@ -197,7 +198,9 @@ public class User {
                                                              new String(decodedBytes, "UTF-8"));
                     log.debug("User credential of username: " + userWrapper.getUsername() + " has been changed");
                 }
-                final String[] existingRoles = userStoreManager.getRoleListOfUser(userWrapper.getUsername());
+                List<String> listofFilteredRoles = getFilteredRoles(userStoreManager, userWrapper.getUsername());
+                final String[] existingRoles = listofFilteredRoles.toArray(new String[listofFilteredRoles.size()]);
+
                 /*
                     Use the Set theory to find the roles to delete and roles to add
                     The difference of roles in existingRolesSet and newRolesSet needed to be deleted
@@ -345,6 +348,20 @@ public class User {
         }
     }
 
+
+    private List<String> getFilteredRoles(UserStoreManager userStoreManager, String username)
+            throws UserStoreException {
+        String[] roleListOfUser = userStoreManager.getRoleListOfUser(username);
+        List<String> filteredRoles = new ArrayList<String>();
+        for (String role : roleListOfUser) {
+            if (!(role.startsWith("Internal/") || role.startsWith("Application/"))) {
+                filteredRoles.add(role);
+            }
+        }
+        return filteredRoles;
+    }
+
+
     /**
      * Get user's roles by username
      *
@@ -360,8 +377,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(username)) {
-                String[] roleListOfUser = userStoreManager.getRoleListOfUser(username);
-                responsePayload.setResponseContent(Arrays.asList(roleListOfUser));
+                responsePayload.setResponseContent(Arrays.asList(getFilteredRoles(userStoreManager, username)));
                 // Outputting debug message upon successful removal of user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " was successfully removed.");
@@ -423,7 +439,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         int count = 0;
-        if(userList != null){
+        if (userList != null) {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
@@ -439,16 +455,16 @@ public class User {
      * @throws MDMAPIException
      */
     @GET
-    @Path ("{filter}")
+    @Path("{filter}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getMatchingUsers(@PathParam ("filter") String filter) throws MDMAPIException {
+    public Response getMatchingUsers(@PathParam("filter") String filter) throws MDMAPIException {
         if (log.isDebugEnabled()) {
             log.debug("Getting the list of users with all user-related information using the filter : " + filter);
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ArrayList<UserWrapper> userList;
         try {
-            String[] users = userStoreManager.listUsers( filter + "*", -1);
+            String[] users = userStoreManager.listUsers(filter + "*", -1);
             userList = new ArrayList<UserWrapper>(users.length);
             UserWrapper user;
             for (String username : users) {
@@ -467,7 +483,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         int count = 0;
-        if(userList != null){
+        if (userList != null) {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
@@ -510,7 +526,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         int count = 0;
-        if(userList != null){
+        if (userList != null) {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
@@ -548,7 +564,7 @@ public class User {
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         int count = 0;
-        if(userList != null){
+        if (userList != null) {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
@@ -576,9 +592,10 @@ public class User {
      * @param username Username of the user
      * @throws MDMAPIException, UserStoreException, DeviceManagementException
      */
-    private void inviteNewlyAddedUserToEnrollDevice(String username,String password) throws
-                                                                     MDMAPIException, UserStoreException,
-                                                                     DeviceManagementException {
+    private void inviteNewlyAddedUserToEnrollDevice(String username, String password) throws
+                                                                                      MDMAPIException,
+                                                                                      UserStoreException,
+                                                                                      DeviceManagementException {
         if (log.isDebugEnabled()) {
             log.debug("Sending invitation mail to user by username: " + username);
         }
@@ -587,7 +604,7 @@ public class User {
             tennentDomain = "";
         }
         if (!username.contains("/")) {
-            username = "/"+username;
+            username = "/" + username;
         }
         String[] usernameBits = username.split("/");
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
@@ -659,12 +676,12 @@ public class User {
     @Produces({MediaType.APPLICATION_JSON})
     @Path("devices")
     public Object getAllDeviceOfUser(@QueryParam("username") String username, @QueryParam("start") int startIdx,
-                                           @QueryParam("length") int length )
+                                     @QueryParam("length") int length)
             throws MDMAPIException {
         DeviceManagementProviderService dmService;
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            if (length > 0 ) {
+            if (length > 0) {
                 PaginationRequest request = new PaginationRequest(startIdx, length);
                 request.setOwner(username);
                 return dmService.getDevicesOfUser(request);
