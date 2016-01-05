@@ -580,6 +580,15 @@
         </file>
 
 
+        <!-- Coping pass true properties file-->
+
+        <file>
+            <source>src/repository/conf/passthru-http.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!-- Copying thrift-authentication.xml -->
         <file>
             <source>
