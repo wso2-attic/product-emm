@@ -259,7 +259,7 @@ function loadDevices(searchType, searchParam){
                         $(this).attr('data-display', model);
                         break;
                     case 2:
-                        $(this).attr('data-grid-label', owner);
+                        $(this).attr('data-grid-label', "Owner");
                         $(this).attr('data-search', owner);
                         $(this).attr('data-display', owner);
                         break;
