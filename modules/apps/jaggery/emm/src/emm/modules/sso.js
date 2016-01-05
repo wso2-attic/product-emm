@@ -64,7 +64,7 @@ var log = new Log();
         if (log.isDebugEnabled()) {
             log.debug("Request sent to IdP");
         }
-        print("<div><p>You are now being redirected to SSO Provider. If the redirection fails, please click on the "+
+        print("<div><p>You are now being redirected to SSO Provider. If the redirection fails, click on the "+
             "button below.</p> <form method='post' action='" + postUrl + "'><p><input type='hidden' " +
             "name='SAMLRequest' value='" + sso.encodedSAMLAuthRequest + "'/><input type='hidden' " +
             "name='RelayState' value='" + sso.relayState + "'/><input type='hidden' name='SSOAuthSessionID' " +
@@ -86,7 +86,7 @@ var log = new Log();
         if (log.isDebugEnabled()) {
             sso.log.debug("Logout request recieved from session id ::: " + sso.sessionId);
         }
-        print("<div><p>You are now redirected to Stratos Identity. If theredirection fails, please click the post " +
+        print("<div><p>You are now redirected to Stratos Identity. If theredirection fails, click the post " +
             "button.</p> <form id='logoutForm' method='post' action='" + postUrl + "'> <p> <input type='hidden' " +
             "name='SAMLRequest' value='" + sso.encodedSAMLLogoutRequest + "'/> <input type='hidden' " +
             "name='RelayState' value='" + sso.relayState + "'/> <input type='hidden' name='SSOAuthSessionID' " +

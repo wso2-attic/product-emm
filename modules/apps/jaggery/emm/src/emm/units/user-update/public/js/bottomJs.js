@@ -49,19 +49,19 @@ $(document).ready(function () {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"0-9]{1,30}$/, firstname)) {
-            $(errorMsg).text("Provided firstname is invalid. Please check.");
+            $(errorMsg).text("Provided firstname is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!lastname) {
             $(errorMsg).text("Lastname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>.,'"0-9]{1,30}$/, lastname)) {
-            $(errorMsg).text("Provided lastname is invalid. Please check.");
+            $(errorMsg).text("Provided lastname is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailAddress) {
             $(errorMsg).text("Email is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailIsValid(emailAddress)) {
-            $(errorMsg).text("Provided email is invalid. Please check.");
+            $(errorMsg).text("Provided email is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             var addUserFormData = {};
