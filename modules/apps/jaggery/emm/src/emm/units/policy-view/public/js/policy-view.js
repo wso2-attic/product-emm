@@ -49,7 +49,7 @@ var windowsOperationConstants = {
     "CAMERA_OPERATION": "camera",
     "CAMERA_OPERATION_CODE": "CAMERA",
     "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
-    "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
+    "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE"
 };
 
 // Constants to define iOS Operation Constants
