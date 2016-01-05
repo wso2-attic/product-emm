@@ -315,7 +315,7 @@ $(document).ready(function () {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (notifierType == notifierTypeConstants["LOCAL"] && !isPositiveInteger(notifierFrequency)) {
-            $(errorMsg).text("Provided notifier frequency is invalid. Please check.");
+            $(errorMsg).text("Provided notifier frequency is invalid. ");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (notifierType == notifierTypeConstants["GCM"] && !gcmAPIKey) {
             $(errorMsg).text("GCM API Key is a required field. It cannot be empty.");
@@ -427,7 +427,7 @@ $(document).ready(function () {
             $(errorMsg).text("Monitoring frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!isPositiveInteger(notifierFrequency)) {
-            $(errorMsg).text("Provided monitoring frequency is invalid. Please check.");
+            $(errorMsg).text("Provided monitoring frequency is invalid. ");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
 
@@ -462,7 +462,7 @@ $(document).ready(function () {
              $(errorMsg).text("Sender Email Address is a required field. It cannot be empty.");
              //$(errorMsgWrapper).removeClass("hidden");
              } else if (!emailIsValid(emailSenderAddress)) {
-             $(errorMsg).text("Provided sender email is invalid. Please check.");
+             $(errorMsg).text("Provided sender email is invalid. ");
              //$(errorMsgWrapper).removeClass("hidden");
              } */
 

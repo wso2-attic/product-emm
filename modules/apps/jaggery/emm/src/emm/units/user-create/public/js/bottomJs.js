@@ -73,25 +73,25 @@ $(document).ready(function () {
             $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(/^[a-zA-Z0-9\-\\\/\@\.\_]+$/, username)) {
-            $(errorMsg).text("Provided username is invalid. Please check.");
+            $(errorMsg).text("Provided username is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"]{1,30}$/, firstname)) {
-            $(errorMsg).text("Provided firstname is invalid. Please check.");
+            $(errorMsg).text("Provided firstname is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!lastname) {
             $(errorMsg).text("Lastname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>.,'"]{1,30}$/, lastname)) {
-            $(errorMsg).text("Provided lastname is invalid. Please check.");
+            $(errorMsg).text("Provided lastname is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailAddress) {
             $(errorMsg).text("Email is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailIsValid(emailAddress)) {
-            $(errorMsg).text("Provided email is invalid. Please check.");
+            $(errorMsg).text("Provided email is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             var addUserFormData = {};
@@ -132,7 +132,7 @@ $(document).ready(function () {
                     }
                 }, function (data) {
                     if (data["status"] == 409) {
-                        $(errorMsg).text("User : " + username + " already exists. Please pick another username.");
+                        $(errorMsg).text("User : " + username + " already exists. Pick another username.");
                     } else if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
                     } else {
