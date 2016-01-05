@@ -73,6 +73,8 @@ if (platform != "iOS") {
                 // one visible possibility would be server sending 500
                 response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=unexpected");
             }
+        } else {
+            response.sendRedirect(mdmProps["appContext"] + "enrollments/ios/login-agent?error=auth-failed");
         }
     }
 }

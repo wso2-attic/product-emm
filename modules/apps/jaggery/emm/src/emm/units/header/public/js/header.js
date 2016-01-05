@@ -40,7 +40,7 @@ $(document).ready(function () {
                 $(errorMsg).text("New password doesn't match the confirmation.");
                 $(errorMsgWrapper).removeClass("hidden");
             } else if (!inputIsValid(/^[\S]{5,30}$/, confirmedPassword)) {
-                $(errorMsg).text("Password should be minimum 5 characters long, should not include any whitespaces. Please check.");
+                $(errorMsg).text("Password should be minimum 5 characters long, should not include any whitespaces.");
                 $(errorMsgWrapper).removeClass("hidden");
             } else {
                 var changePasswordFormData = {};
@@ -61,12 +61,12 @@ $(document).ready(function () {
                                 hidePopup();
                             });
                         } else if (data.statusCode == 400) {
-                            $(errorMsg).text("Old password does not match with the entered value. Please check.");
+                            $(errorMsg).text("Old password does not match with the provided value.");
                             $(errorMsgWrapper).removeClass("hidden");
                         }
                     }, function (data) {
                         if (data.status == 400) {
-                            $(errorMsg).text("Old password does not match with the entered value. Please check.");
+                            $(errorMsg).text("Old password does not match with the provided value.");
                             $(errorMsgWrapper).removeClass("hidden");
                         } else {
                             $(errorMsg).text("An unexpected error occurred. Please try again later.");

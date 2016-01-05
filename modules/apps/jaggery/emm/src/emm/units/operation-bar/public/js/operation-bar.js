@@ -265,13 +265,12 @@ function runOperation (operationName) {
 //        payload = operationModule.generatePayload("TemperatureController", operationName, list["TemperatureController"]);
 //        serviceEndPoint = operationModule.getTemperatureControllerServiceEndpoint(operationName);
 //    }
-    console.log(payload);
     if(operationName == "NOTIFICATION"){
         var errorMsgWrapper = "#notification-error-msg";
         var errorMsg = "#notification-error-msg span";
         var message = $("#message").val();
         if (!message) {
-            $(errorMsg).text("Please enter a message. It cannot be empty.");
+            $(errorMsg).text("Enter a message. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             invokerUtil.post(serviceEndPoint, payload,
