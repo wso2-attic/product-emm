@@ -57,7 +57,7 @@ var windowsOperationConstants = {
     "CAMERA_OPERATION": "camera",
     "CAMERA_OPERATION_CODE": "CAMERA",
     "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
-    "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
+    "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE"
 };
 
 // Constants to define iOS Operation Constants
@@ -1651,6 +1651,15 @@ stepForwardFrom["policy-profile"] = function () {
     policy["profile"] = operationModule.generateProfile(policy["platform"], configuredOperations);
     // updating next-page wizard title with selected platform
     $("#policy-criteria-page-wizard-title").text("EDIT " + policy["platform"] + " POLICY - " + policy["name"]);
+    // updating ownership type options according to platform
+    if (policy["platform"] == platformTypeConstants["IOS"] ||
+        policy["platform"] == platformTypeConstants["WINDOWS"]) {
+        var ownershipTypeSelectOptions = $("#ownership-input");
+        ownershipTypeSelectOptions.empty();
+        ownershipTypeSelectOptions.append($("<option></option>").
+            attr("value", "BYOD").text("BYOD (Bring Your Own Device)"));
+        ownershipTypeSelectOptions.attr("disabled", true);
+    }
 };
 
 stepForwardFrom["policy-criteria"] = function () {
