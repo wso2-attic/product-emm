@@ -12,6 +12,6 @@
     "lastname":"userlname",
     "emailAddress":"user1234@gmail.com",
     "password":"username",
-    "roles":["admin","Internal/everyone"]
+    "roles":["admin"]
   }
 }

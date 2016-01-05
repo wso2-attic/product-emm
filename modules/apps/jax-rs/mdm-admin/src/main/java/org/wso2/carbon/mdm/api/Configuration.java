@@ -50,6 +50,8 @@ public class Configuration {
 		try {
 			MDMAPIUtils.getTenantConfigurationManagementService().saveConfiguration(configuration,
                                     MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
+            //Schedule the task service
+            MDMAPIUtils.scheduleTaskService(MDMAPIUtils.getNotifierFrequency(configuration));
 			Response.status(HttpStatus.SC_CREATED);
 			responseMsg.setMessageFromServer("Tenant configuration saved successfully.");
 			responseMsg.setStatusCode(HttpStatus.SC_CREATED);
@@ -80,6 +82,8 @@ public class Configuration {
 		try {
 			MDMAPIUtils.getTenantConfigurationManagementService().saveConfiguration(configuration,
                                     MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
+            //Schedule the task service
+            MDMAPIUtils.scheduleTaskService(MDMAPIUtils.getNotifierFrequency(configuration));
 			Response.status(HttpStatus.SC_CREATED);
 			responseMsg.setMessageFromServer("Tenant configuration updated successfully.");
 			responseMsg.setStatusCode(HttpStatus.SC_CREATED);

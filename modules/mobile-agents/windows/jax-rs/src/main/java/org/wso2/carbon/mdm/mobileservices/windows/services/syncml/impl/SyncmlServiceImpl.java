@@ -361,7 +361,6 @@ public class SyncmlServiceImpl implements SyncmlService {
                 DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlDocument.
                         getHeader().getSource().getLocURI());
                 Device existingDevice = WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
-
                 if (!existingDevice.getProperties().isEmpty()) {
                     List<Device.Property> existingProperties = new ArrayList<>();
 

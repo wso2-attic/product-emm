@@ -56,5 +56,4 @@ public class MDMUtil {
         return profileFeature;
 
     }
-
 }
