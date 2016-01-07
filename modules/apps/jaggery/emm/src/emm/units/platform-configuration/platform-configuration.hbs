@@ -12,11 +12,7 @@
                 <br>
                 <br>
                 <div class="wr-advance-operations">
-                    <div class="row no-gutter" id="typeDiv" typeData="
-                    {{#each types}}
-                        {{name}},
-                    {{/each}}
-                    ">
+                    <div class="row no-gutter" id="typeDiv" typeData="{{#each types}}{{name}},{{/each}}">
                         <div class="wr-hidden-operations-nav col-lg-4">
                             <a id=generalConfigLink href="javascript:void(0)" onclick="showAdvanceOperation('general', this)" class="selected">
                                 <span class="wr-hidden-operations-icon fw-stack">
@@ -61,17 +57,17 @@
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
                                         <h4>
-                                            Policy Monitoring
+                                            Policy Compliance Monitoring
                                             <hr>
                                         </h4>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="config-frequency">
-                                                Monitoring Frequency
-                                                <span class="helper" title="Monitoring frequency for EMM server to contact devices to monitor policies applied on devices">
+                                                Compliance Monitoring Time Interval
+                                                <span class="helper" title="Time Interval after which EMM server will contact devices and monitor the compliance of policies applied to them">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                                 <br>
-                                                ( Should be in milliseconds )
+                                                ( Should be in minutes )
                                             </label>
                                             <input id="monitoring-config-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
                                         </div>
@@ -184,7 +180,7 @@
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                     <br>
-                                                    ( Should be in milliseconds )
+                                                    ( Should be in minutes )
                                                 </label>
                                                 <input id="android-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
                                             </div>
@@ -212,7 +208,7 @@
                                             </div>
                                         </div>
                                         <h4>
-                                            End User License Agreement (EULA)
+                                            End User License Agreement ( EULA )
                                             <hr>
                                         </h4>
 
@@ -447,7 +443,7 @@
                                             </div>
                                         </div>
                                         <h4>
-                                            End User License Agreement (EULA)
+                                            End User License Agreement ( EULA )
                                             <hr>
                                         </h4>
                                         <div class="wr-input-control">
