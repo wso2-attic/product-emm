@@ -158,7 +158,7 @@ $(document).ready(function () {
                     for (var i = 0; i < data.configuration.length; i++) {
                         var config = data.configuration[i];
                         if (config.name == configParams["NOTIFIER_TYPE"]) {
-                            $("#android-config-notifier").val(config.value / 1000);
+                            $("#android-config-notifier").val(config.value);
                             if (config.value != notifierTypeConstants["GCM"]) {
                                 $("#gcm-inputs").hide();
                                 $("#local-inputs").show();
@@ -338,7 +338,7 @@ $(document).ready(function () {
 
             var frequency = {
                 "name": configParams["NOTIFIER_FREQUENCY"],
-                "value": (notifierFrequency * 1000),
+                "value": String(notifierFrequency * 1000),
                 "contentType": "text"
             };
 
@@ -438,7 +438,7 @@ $(document).ready(function () {
 
             var monitorFrequency = {
                 "name": configParams["NOTIFIER_FREQUENCY"],
-                "value": notifierFrequency,
+                "value": String((notifierFrequency * 1000)),
                 "contentType": "text"
             };
 
@@ -875,7 +875,7 @@ $(document).ready(function () {
 
             var paramNotifierFrequency = {
                 "name": configParams["NOTIFIER_FREQUENCY"],
-                "value": (notifierFrequency * 1000),
+                "value": String(notifierFrequency * 1000),
                 "contentType": "text"
             };
 
