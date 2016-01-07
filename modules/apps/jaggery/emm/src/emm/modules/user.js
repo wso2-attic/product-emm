@@ -68,20 +68,20 @@ var userModule = function () {
         switch (method) {
             case constants.HTTP_GET:
                 var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                        var response = {};
-                        response.content = responsePayload["responseContent"];
-                        if(responsePayload["responseContent"] == null && responsePayload != null){
-                            response.content = responsePayload;
-                        }
-                        response.status = "success";
-                        return response;
-                    },
-                    function (responsePayload) {
-                        var response = {};
-                        response.content = responsePayload;
-                        response.status = "error";
-                        return response;
-                    });
+                                                               var response = {};
+                                                               response.content = responsePayload["responseContent"];
+                                                               if (responsePayload["responseContent"] == null && responsePayload != null) {
+                                                                   response.content = responsePayload;
+                                                               }
+                                                               response.status = "success";
+                                                               return response;
+                                                           },
+                                                           function (responsePayload) {
+                                                               var response = {};
+                                                               response.content = responsePayload;
+                                                               response.status = "error";
+                                                               return response;
+                                                           });
                 return response;
                 break;
             case constants.HTTP_POST:
@@ -538,130 +538,125 @@ var userModule = function () {
         try {
             // check if the user is an authenticated user.
             var isAuthenticated = carbonServer.authenticate(username, password);
-            if (isAuthenticated) {
-                var tenantUser = carbonModule.server.tenantUser(username);
-                session.put(constants.USER_SESSION_KEY, tenantUser);
-                successCallback(tenantUser);
-            } else {
-                failureCallback();
+            if (!isAuthenticated) {
+                failureCallback("authentication");
+                return;
             }
-        } catch (e) {
-            throw e;
+            var tenantUser = carbonModule.server.tenantUser(username);
+            var isAuthorizedToLogin = privateMethods.isAuthorizedToLogin(tenantUser);
+            if (!isAuthorizedToLogin) {
+                failureCallback("authorization");
+                return;
+            }
         }
-    };
+        session.put(constants.USER_SESSION_KEY, tenantUser);
+        successCallback(tenantUser);
 
-    publicMethods.logout = function (successCallback) {
-        session.invalidate();
-        successCallback();
-    };
 
-    publicMethods.isAuthorized = function (permission) {
-        var carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
-            exit();
+        if (isAuthenticated) {
+            var tenantUser = carbonModule.server.tenantUser(username);
+            session.put(constants.USER_SESSION_KEY, tenantUser);
+            successCallback(tenantUser);
+        } else {
+            failureCallback();
         }
+    }
+    catch
+    (e)
+    {
+        throw e;
+    }
+};
 
+publicMethods.logout = function (successCallback) {
+    session.invalidate();
+    successCallback();
+};
+
+publicMethods.isAuthorized = function (permission) {
+    var carbon = require("carbon");
+    var carbonServer = application.get("carbonServer");
+    var carbonUser = session.get(constants.USER_SESSION_KEY);
+    var utility = require('/modules/utility.js').utility;
+    if (!carbonUser) {
+        log.error("User object was not found in the session");
+        response.sendError(401, constants.ERRORS.USER_NOT_FOUND);
+        exit();
+    }
+
+    try {
+        utility.startTenantFlow(carbonUser);
+        var tenantId = carbon.server.tenantId();
+        var userManager = new carbon.user.UserManager(server, tenantId);
+        var user = new carbon.user.User(userManager, carbonUser.username);
+        return user.isAuthorized(permission, "ui.execute");
+    } catch (e) {
+        throw e;
+    } finally {
+        utility.endTenantFlow();
+    }
+};
+
+publicMethods.getUIPermissions = function () {
+    var permissions = {};
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
+        publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
+        permissions["LIST_DEVICES"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
+        permissions["LIST_USERS"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/roles/list")) {
+        permissions["LIST_ROLES"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
+        permissions["LIST_POLICIES"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
+        permissions["ADD_USER"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/remove")) {
+        permissions["REMOVE_USER"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/roles/add")) {
+        permissions["ADD_ROLE"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
+        permissions["ADD_POLICY"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/priority")) {
+        permissions["CHANGE_POLICY_PRIORITY"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
+        permissions["VIEW_DASHBOARD"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/platform-configs/view")) {
+        permissions["TENANT_CONFIGURATION"] = true;
+    }
+    if (publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
+        permissions["LIST_OWN_DEVICES"] = true;
+    }
+
+    return permissions;
+};
+
+publicMethods.addPermissions = function (permissionList, path, init) {
+    var registry, carbon = require("carbon");
+    var carbonServer = application.get("carbonServer");
+    var utility = require('/modules/utility.js').utility;
+    var options = {system: true};
+    if (init == "login") {
         try {
+            var carbonUser = session.get(constants.USER_SESSION_KEY);
+            if (!carbonUser) {
+                log.error("User object was not found in the session");
+                throw constants.ERRORS.USER_NOT_FOUND;
+            }
             utility.startTenantFlow(carbonUser);
             var tenantId = carbon.server.tenantId();
-            var userManager = new carbon.user.UserManager(server, tenantId);
-            var user = new carbon.user.User(userManager, carbonUser.username);
-            return user.isAuthorized(permission, "ui.execute");
-        } catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-    };
-
-    publicMethods.getUIPermissions = function () {
-        var permissions = {};
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
-            publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
-            permissions["LIST_DEVICES"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
-            permissions["LIST_USERS"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/roles/list")) {
-            permissions["LIST_ROLES"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")) {
-            permissions["LIST_POLICIES"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/add")) {
-            permissions["ADD_USER"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/remove")) {
-            permissions["REMOVE_USER"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/roles/add")) {
-            permissions["ADD_ROLE"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/add")) {
-            permissions["ADD_POLICY"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/priority")) {
-            permissions["CHANGE_POLICY_PRIORITY"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/dashboard/view")) {
-            permissions["VIEW_DASHBOARD"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/platform-configs/view")) {
-            permissions["TENANT_CONFIGURATION"] = true;
-        }
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
-            permissions["LIST_OWN_DEVICES"] = true;
-        }
-
-        return permissions;
-    };
-
-    publicMethods.addPermissions = function (permissionList, path, init) {
-        var registry, carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var utility = require('/modules/utility.js').utility;
-        var options = {system: true};
-        if (init == "login") {
-            try {
-                var carbonUser = session.get(constants.USER_SESSION_KEY);
-                if (!carbonUser) {
-                    log.error("User object was not found in the session");
-                    throw constants.ERRORS.USER_NOT_FOUND;
-                }
-                utility.startTenantFlow(carbonUser);
-                var tenantId = carbon.server.tenantId();
-                if (carbonUser) {
-                    options.tenantId = tenantId;
-                }
-                registry = new carbon.registry.Registry(carbonServer, options);
-                var i, permission, resource;
-                for (i = 0; i < permissionList.length; i++) {
-                    permission = permissionList[i];
-                    resource = {
-                        collection: true,
-                        name: permission.name,
-                        properties: {
-                            name: permission.name
-                        }
-                    };
-                    if (path != "") {
-                        registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
-                    } else {
-                        registry.put("/_system/governance/permission/admin/" + permission.key, resource);
-                    }
-                }
-            } catch (e) {
-                throw e;
-            } finally {
-                utility.endTenantFlow();
+            if (carbonUser) {
+                options.tenantId = tenantId;
             }
-        } else {
             registry = new carbon.registry.Registry(carbonServer, options);
             var i, permission, resource;
             for (i = 0; i < permissionList.length; i++) {
@@ -679,32 +674,62 @@ var userModule = function () {
                     registry.put("/_system/governance/permission/admin/" + permission.key, resource);
                 }
             }
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
         }
-    };
-
-    /**
-     * Private method to be used by addUser() to
-     * retrieve secondary user stores.
-     * This needs Authentication since the method access admin services.
-     *
-     * @returns {string array} Array of secondary user stores.
-     */
-    publicMethods.getSecondaryUserStores = function () {
-        var returnVal = [];
-        var endpoint = mdmProps.adminService + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
-        var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
-        serviceInvokers.WS.soapRequest(
-            "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
-                var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
-                if (domainIDs != "\"\"") {
-                    var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
-                    domainIDs = domainIDs.replace(regExpForSearch, "");
-                    returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
+    } else {
+        registry = new carbon.registry.Registry(carbonServer, options);
+        var i, permission, resource;
+        for (i = 0; i < permissionList.length; i++) {
+            permission = permissionList[i];
+            resource = {
+                collection: true,
+                name: permission.name,
+                properties: {
+                    name: permission.name
                 }
-            }, function (e) {
-                log.error("Error retrieving secondary user stores", e);
-            }, constants.SOAP_VERSION);
-        return returnVal;
-    };
-    return publicMethods;
-}();
+            };
+            if (path != "") {
+                registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
+            } else {
+                registry.put("/_system/governance/permission/admin/" + permission.key, resource);
+            }
+        }
+    }
+};
+
+/**
+ * Private method to be used by addUser() to
+ * retrieve secondary user stores.
+ * This needs Authentication since the method access admin services.
+ *
+ * @returns {string array} Array of secondary user stores.
+ */
+publicMethods.getSecondaryUserStores = function () {
+    var returnVal = [];
+    var endpoint = mdmProps.adminService + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
+    var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
+    serviceInvokers.WS.soapRequest(
+        "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
+            var domainIDs = stringify(wsResponse. *
+            ::
+            ['return']. *
+            ::
+            domainId.text()
+            )
+            ;
+            if (domainIDs != "\"\"") {
+                var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
+                domainIDs = domainIDs.replace(regExpForSearch, "");
+                returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
+            }
+        }, function (e) {
+            log.error("Error retrieving secondary user stores", e);
+        }, constants.SOAP_VERSION);
+    return returnVal;
+};
+return publicMethods;
+}
+();
