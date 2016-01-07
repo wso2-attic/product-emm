@@ -50,8 +50,12 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
             } else {
                 response.sendRedirect(constants.WEB_APP_CONTEXT + "/device-mgt");
             }
-        }, function () {
-            response.sendRedirect(mdmProps.appContext + "login?#auth-failed");
+        }, function (failureCotext) {
+            if (failureCotext == "authentication") {
+                response.sendRedirect(mdmProps.appContext + "login?#authentication-failed");
+            } else if (failureCotext == "authorization") {
+                response.sendRedirect(mdmProps.appContext + "login?#authorization-failed");
+            }
         });
     } catch (e) {
         log.error("Exception occurred while a user tried to login to MDM", e);

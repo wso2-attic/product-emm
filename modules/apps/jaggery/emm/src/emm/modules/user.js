@@ -539,7 +539,6 @@ var userModule = function () {
             // check if the user is an authenticated user.
             var isAuthenticated = carbonServer.authenticate(username, password);
             if (isAuthenticated) {
-
                 var tenantUser = carbonModule.server.tenantUser(username);
                 session.put(constants.USER_SESSION_KEY, tenantUser);
                 successCallback(tenantUser);

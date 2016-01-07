@@ -63,8 +63,11 @@ $(document).ready(function () {
     });
 
     var currentHash = window.location.hash;
-    if (currentHash == "#auth-failed") {
+    if (currentHash == "#authentication-failed") {
         $('.wr-validation-summary p').text("Make sure to enter correct username and password");
+        $('.wr-validation-summary').removeClass("hidden");
+    } else if (currentHash == "#authorization-failed") {
+        $('.wr-validation-summary p').text("Sorry!, You do not have permission to login");
         $('.wr-validation-summary').removeClass("hidden");
     } else if (currentHash == "#error") {
         $('.wr-validation-summary p').text("Sorry!, Error occurred");
