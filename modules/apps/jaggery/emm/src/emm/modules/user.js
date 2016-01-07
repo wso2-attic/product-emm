@@ -538,13 +538,18 @@ var userModule = function () {
         try {
             // check if the user is an authenticated user.
             var isAuthenticated = carbonServer.authenticate(username, password);
-            if (isAuthenticated) {
-                var tenantUser = carbonModule.server.tenantUser(username);
-                session.put(constants.USER_SESSION_KEY, tenantUser);
-                successCallback(tenantUser);
-            } else {
-                failureCallback();
+            if (!isAuthenticated) {
+                failureCallback("authentication");
+                return;
             }
+            var tenantUser = carbonModule.server.tenantUser(username);
+            var isAuthorizedToLogin = privateMethods.isAuthorizedToLogin(tenantUser);
+            if (!isAuthorizedToLogin) {
+                failureCallback("authorization");
+                return;
+            }
+            session.put(constants.USER_SESSION_KEY, tenantUser);
+            successCallback(tenantUser);
         } catch (e) {
             throw e;
         }
@@ -577,6 +582,13 @@ var userModule = function () {
         } finally {
             utility.endTenantFlow();
         }
+    };
+
+    privateMethods.isAuthorizedToLogin = function(carbonUser) {
+        var tenantId = carbon.server.tenantId();
+        var userManager = new carbon.user.UserManager(server, tenantId);
+        var user = new carbon.user.User(userManager, carbonUser.username);
+        return user.isAuthorized("/permission/admin/login", "ui.execute");
     };
 
     publicMethods.getUIPermissions = function () {
