@@ -4,7 +4,10 @@
 <product name="Carbon Product" uid="carbon.product.id" id="carbon.product" application="carbon.application" version="4.4.3" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
+
    </configIni>
+
+   <launcher name="wso2emm"/>
 
    <launcherArgs>
    </launcherArgs>

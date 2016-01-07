@@ -49,10 +49,10 @@ function hidePopup() {
  */
 function getSelectedUsernames() {
     var usernameList = [];
-    var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
-    thisTable.api().rows().every(function(){
-        if($(this.node()).hasClass('DTTT_selected')){
-			usernameList.push($(thisTable.api().row(this).node())[0].getAttribute('data-username'));
+    var userList = $("#user-grid").find('> tbody > tr');
+    userList.each(function() {
+        if($(this).hasClass('DTTT_selected')){
+           usernameList.push($(this).attr('data-username'));
         }
     });
     return usernameList;
@@ -148,6 +148,7 @@ function removeUser(uname, uid) {
 
 $("#search-btn").click(function () {
     var searchQuery = $("#search-by-username").val();
+    $("#ast-container").empty();
     loadUsers(searchQuery);
 
 });

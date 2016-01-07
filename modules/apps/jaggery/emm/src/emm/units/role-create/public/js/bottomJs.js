@@ -87,13 +87,13 @@ $(document).ready(function () {
             $(errorMsg).text("Role name is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "]{3,30}$/, roleName)) {
-            $(errorMsg).text("Provided role name is invalid. Please check.");
+            $(errorMsg).text("Provided role name is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!domain) {
             $(errorMsg).text("Domain is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"0-9]{1,30}$/, domain)) {
-            $(errorMsg).text("Provided domain is invalid. Please check.");
+            $(errorMsg).text("Provided domain is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             var addRoleFormData = {};
@@ -128,7 +128,7 @@ $(document).ready(function () {
                     }
                 }, function (data) {
                     if (JSON.parse(data.responseText).errorMessage.indexOf("RoleExisting") > -1) {
-                        $(errorMsg).text("Role name : " + roleName + " already exists. Please pick another role name.");
+                        $(errorMsg).text("Role name : " + roleName + " already exists. Pick another role name.");
                     } else {
                         $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
                     }

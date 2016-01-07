@@ -22,7 +22,7 @@
 
 var operations = '.wr-operations',
     modalPopup = '.wr-modalpopup',
-    modalPopupContainer = modalPopup + ' .modalpopup-container',
+    // modalPopupContainer = modalPopup + ' .modalpopup-container',
     modalPopupContent = modalPopup + ' .modalpopup-content',
     // deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]',
     // showOperationsBtn = '#showOperationsBtn',
@@ -31,9 +31,9 @@ var operations = '.wr-operations',
     offset = (headerHeight + navHeight),
     // maxOperationsLimit = 15,
     // hiddenOperation = '.wr-hidden-operations-content > div',
-    deviceSelection = '.device-select',
-    dataTableSelection = '.DTTT_selected',
-    currentOperationList = [];
+    deviceSelection = '.device-select';
+    // dataTableSelection = '.DTTT_selected',
+    // currentOperationList = [];
 
 /*
 * On window resize functions.
@@ -231,12 +231,12 @@ function runOperation (operationName) {
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
 
-    var notificationBubble = ".wr-notification-bubble";
+//      var notificationBubble = ".wr-notification-bubble";
     var successCallback = function (data) {
         console.log(data);
-//        $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
-//        'class="wr-notification-operation">' + currentOperationList[operationName].name +
-//        '- Operation Successful!</div><hr /></div>');
+//      $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
+//      'class="wr-notification-operation">' + currentOperationList[operationName].name +
+//      '- Operation Successful!</div><hr /></div>');
         /*var notificationCount = parseInt($(notificationBubble).html());
         notificationCount++;
         $(notificationBubble).html(notificationCount);*/
@@ -265,13 +265,12 @@ function runOperation (operationName) {
 //        payload = operationModule.generatePayload("TemperatureController", operationName, list["TemperatureController"]);
 //        serviceEndPoint = operationModule.getTemperatureControllerServiceEndpoint(operationName);
 //    }
-    console.log(payload);
     if(operationName == "NOTIFICATION"){
         var errorMsgWrapper = "#notification-error-msg";
         var errorMsg = "#notification-error-msg span";
         var message = $("#message").val();
         if (!message) {
-            $(errorMsg).text("Please enter a message. It cannot be empty.");
+            $(errorMsg).text("Enter a message. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             invokerUtil.post(serviceEndPoint, payload,

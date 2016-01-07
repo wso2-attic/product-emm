@@ -30,10 +30,10 @@
                         <i class="fw fw-ring fw-stack-2x"></i>
                         <i class="fw fw-check fw-stack-1x"></i>
                     </span>
-                    Operation performed successfully !
+                    Operation queued successfully !
                 </h3>
                 <h4>
-                    Operation has been queued to be sent to the device.
+                    Operation has been queued successfully to be sent to the device.
                 </h4>
                 <div class="buttons">
                     <a href="javascript:hidePopup()" class="btn-operations">
@@ -69,7 +69,7 @@
     </div>
 </div>
 {{#each features}}
-    <a href="javascript:operationSelect('{{code}}')">
+    <a href="javascript:operationSelect('{{code}}')" title="{{description}}">
         <i class="fw {{icon}}"></i>
         <span>{{name}}</span>
     </a>
