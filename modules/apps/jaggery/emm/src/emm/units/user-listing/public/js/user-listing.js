@@ -170,6 +170,7 @@ function loadUsers(searchParam){
                 return;
             }
             var canRemove = $("#can-remove").val();
+            var canEdit = $("#can-edit").val();
             data = JSON.parse(data);
             data = data.responseContent;
             var viewModel = {};
@@ -178,6 +179,10 @@ function loadUsers(searchParam){
                 viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
                 if(canRemove != null && canRemove != undefined) {
                     viewModel.users[i].canRemove = true;
+                }
+
+                if(canEdit != null && canEdit != undefined) {
+                    viewModel.users[i].canEdit = true;
                 }
             }
             if(data.length > 0){

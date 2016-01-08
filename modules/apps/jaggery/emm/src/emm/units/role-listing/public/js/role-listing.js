@@ -42,11 +42,25 @@ function loadRoles(searchQuery) {
     var callback = function (data) {
         if (data != null || data == "null") {
             data = JSON.parse(data);
+            var canRemove = $("#can-remove").val();
+            var canEdit = $("#can-edit").val();
+            var roles = [];
+            for(var i=0; i<data.responseContent.length; i++){
+                roles.push({"roleName":data.responseContent[i]});
+                if(canRemove != null && canRemove != undefined) {
+                    roles[i].canRemove = true;
+                }
+
+                if(canEdit != null && canEdit != undefined) {
+                    roles[i].canEdit = true;
+                }
+            }
+
             data = {
                 "viewModel": {
-                    "roles": data.responseContent
+                    "roles": roles
                 },
-                "length": data.responseContent.length
+                "length": roles.length
             }
         }
         return data;
