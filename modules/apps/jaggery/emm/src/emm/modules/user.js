@@ -585,10 +585,18 @@ var userModule = function () {
     };
 
     privateMethods.isAuthorizedToLogin = function(carbonUser) {
-        var tenantId = carbon.server.tenantId();
-        var userManager = new carbon.user.UserManager(server, tenantId);
-        var user = new carbon.user.User(userManager, carbonUser.username);
-        return user.isAuthorized("/permission/admin/login", "ui.execute");
+        var utility = require('/modules/utility.js').utility;
+        try {
+            utility.startTenantFlow(carbonUser);
+            var tenantId = carbon.server.tenantId();
+            var userManager = new carbon.user.UserManager(server, tenantId);
+            var user = new carbon.user.User(userManager, carbonUser.username);
+            return user.isAuthorized("/permission/admin/login", "ui.execute");
+        } catch (e) {
+            throw e;
+        } finally {
+            utility.endTenantFlow();
+        }
     };
 
     publicMethods.getUIPermissions = function () {
