@@ -21,5 +21,10 @@ function onRequest(context) {
             context["userRoles"] = response["content"];
         }
     }
+
+    if(userModule.isAuthorized("/permission/admin/device-mgt/users/update")){
+        context["editPermitted"] = true;
+    }
+
     return context;
 }
