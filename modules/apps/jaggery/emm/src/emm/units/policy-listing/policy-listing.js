@@ -1,6 +1,7 @@
 function onRequest(context) {
     // var log = new Log("policy-listing.js");
     var policyModule = require("/modules/policy.js")["policyModule"];
+    var userModule = require("/modules/user.js")["userModule"];
     var response = policyModule.getAllPolicies();
     if (response["status"] == "success") {
         var policyListToView = response["content"];
@@ -26,5 +27,10 @@ function onRequest(context) {
         context["saveNewPrioritiesButtonEnabled"] = false;
         context["noPolicy"] = true;
     }
+
+    if(userModule.isAuthorized("/permission/admin/device-mgt/policies/delete")){
+        context["removePermitted"] = true;
+    }
+
     return context;
 }

@@ -284,8 +284,8 @@ org.wso2.carbon.databridge.commons_5.0.5.jar                                    
 org.wso2.carbon.device.mgt.common_1.0.3.jar                                     bundle         apache2   6469
 org.wso2.carbon.device.mgt.core_1.0.3.jar                                       bundle         apache2   6468
 org.wso2.carbon.device.mgt.extensions_1.0.3.jar                                 bundle         apache2   6467
-org.wso2.carbon.device.mgt.mobile.impl_2.0.2.jar                                bundle         apache2   6466
-org.wso2.carbon.device.mgt.mobile.url.printer_2.0.2.jar                         bundle         apache2   6465
+org.wso2.carbon.device.mgt.mobile.impl_2.0.3.jar                                bundle         apache2   6466
+org.wso2.carbon.device.mgt.mobile.url.printer_2.0.3.jar                         bundle         apache2   6465
 org.wso2.carbon.device.mgt.oauth.extensions_1.0.3.jar                           bundle         apache2   6464
 org.wso2.carbon.directory.server.manager.common_5.0.7.jar                       bundle         apache2   6463
 org.wso2.carbon.directory.server.manager_5.0.7.jar                              bundle         apache2   6462

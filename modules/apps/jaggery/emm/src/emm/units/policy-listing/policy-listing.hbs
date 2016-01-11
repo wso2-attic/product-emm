@@ -46,15 +46,17 @@
             <tr class="bulk-action-row">
                     <th colspan="9">
                         <ul class="tiles">
-                            <li class="square">
-                                <a href="#" data-click-event="remove-form" class="btn square-element policy-remove-link" data-toggle="modal" data-target="#modalDemo">
-                                        <span class="icon fw-stack">
-                                            <i class="fw fw-ring fw-stack-2x"></i>
-                                            <i class="fw fw-delete fw-stack-1x"></i>
-                                        </span>
-                                    Remove
-                                </a>
-                            </li>
+                            {{#if removePermitted}}
+                                <li class="square">
+                                    <a href="#" data-click-event="remove-form" class="btn square-element policy-remove-link" data-toggle="modal" data-target="#modalDemo">
+                                            <span class="icon fw-stack">
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                                <i class="fw fw-delete fw-stack-1x"></i>
+                                            </span>
+                                        Remove
+                                    </a>
+                                </li>
+                            {{/if}}
                             <li class="square">
                                 <a href="#" data-click-event="remove-form" class="btn square-element policy-publish-link" data-toggle="modal" data-target="#modalDemo">
                                         <span class="icon fw-stack">
@@ -125,6 +127,7 @@
                             </span>
                             <span class="hidden-xs hidden-on-grid-view">View</span>
                         </a>
+
                         <a href="/emm/policies/view-edit-policy?id={{id}}" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-update-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
@@ -132,6 +135,7 @@
                             </span>
                             <span class="hidden-xs hidden-on-grid-view">Re-Configure</span>
                         </a>
+
                     </td>
                 </tr>
             {{/each}}

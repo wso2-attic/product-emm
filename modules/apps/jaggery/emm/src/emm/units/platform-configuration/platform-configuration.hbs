@@ -67,7 +67,7 @@
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                                 <br>
-                                                ( Should be in minutes )
+                                                ( Should be in seconds )
                                             </label>
                                             <input id="monitoring-config-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
                                         </div>
@@ -161,26 +161,26 @@
                                         </h4>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="android-config-notifier">
-                                                Notifier Type
-                                                <span class="helper" title="Notifier type for the agent to contact EMM server">
+                                                Type of Communication
+                                                <span class="helper" title="Communication method of android agent to contact EMM server">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
                                             <select id="android-config-notifier" class="form-control" data-default="0">
-                                                <option value="1">LOCAL</option>
-                                                <option value="2">GCM</option>
+                                                <option value="1">Local Polling</option>
+                                                <option value="2">Google Cloud Messaging ( GCM )</option>
                                             </select>
                                         </div>
 
                                         <div id="local-inputs">
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label" for="android-config-notifier-frequency">
-                                                    Notifier Frequency
-                                                    <span class="helper" title="Notifier frequency for the agent to contact EMM server">
+                                                    Polling Interval
+                                                    <span class="helper" title="Time interval after which Android agent will contact EMM server each time to fetch data">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                     <br>
-                                                    ( Should be in minutes )
+                                                    ( Should be in seconds )
                                                 </label>
                                                 <input id="android-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
                                             </div>
@@ -426,18 +426,18 @@
                                             <i class="icon fw fw-error"></i><span></span>
                                         </div>
                                         <h4>
-                                            Device Notifier Configuration
+                                            Device Polling Configuration
                                             <hr>
                                         </h4>
                                         <div id="local-inputs">
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label" for="windows-config-notifier-frequency">
-                                                    Notifier Frequency
-                                                    <span class="helper" title="Notifier frequency for the device to contact EMM server">
+                                                    Polling Interval
+                                                    <span class="helper" title="Time interval after which windows agent will contact EMM server each time to fetch data">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                     <br>
-                                                    ( Should be in minutes )
+                                                    ( Should be in seconds )
                                                 </label>
                                                 <input id="windows-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
                                             </div>

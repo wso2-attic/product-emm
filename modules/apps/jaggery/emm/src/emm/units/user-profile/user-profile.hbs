@@ -38,7 +38,9 @@
                     </div>
                 </div>
                 <div class="media">
-                    <button class="wr-btn" onclick="location.href='/emm/users/edit-user?username={{user.username}}';" id="sortUpdateBtn" style="width: 290px; background-color: #7fa030;"><span><i class="fw fw-edit"></i> Edit</span></button>
+                    {{#if editPermitted}}
+                        <button class="wr-btn" onclick="location.href='/emm/users/edit-user?username={{user.username}}';" id="sortUpdateBtn" style="width: 290px; background-color: #7fa030;"><span><i class="fw fw-edit"></i> Edit</span></button>
+                    {{/if}}        
                 </div>
                 <div class="media">
                     <div class="media-left col-xs-12 col-sm-2 col-md-2 col-lg-2">

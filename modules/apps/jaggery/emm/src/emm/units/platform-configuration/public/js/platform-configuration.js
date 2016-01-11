@@ -121,12 +121,14 @@ var configParams = {
 };
 
 $(document).ready(function () {
+
     var platformsSupported = $("#typeDiv").attr("typeData");
     $("#gcm-inputs").hide();
     tinymce.init({
         selector: "textarea",
         theme: "modern",
         plugins: [
+            "autoresize",
             "advlist autolink lists link image charmap print preview anchor",
             "searchreplace visualblocks code fullscreen",
             "insertdatetime image table contextmenu paste"
@@ -165,7 +167,7 @@ $(document).ready(function () {
                                 $("#local-inputs").hide();
                             }
                         } else if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                            $("input#android-config-notifier-frequency").val(config.value);
+                            $("input#android-config-notifier-frequency").val(config.value / 1000);
                         } else if (config.name == configParams["GCM_API_KEY"]) {
                             $("input#android-config-gcm-api-key").val(config.value);
                         } else if (config.name == configParams["GCM_SENDER_ID"]) {
@@ -190,7 +192,7 @@ $(document).ready(function () {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
                     if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                        $("input#monitoring-config-frequency").val(config.value);
+                        $("input#monitoring-config-frequency").val(config.value / 1000 );
                     }
                     /*if(config.name == configParams["GENERAL_EMAIL_HOST"]){
                      $("input#email-config-host").val(config.value);
@@ -222,7 +224,7 @@ $(document).ready(function () {
                     for (var i = 0; i < data.configuration.length; i++) {
                         var config = data.configuration[i];
                         if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                            $("input#windows-config-notifier-frequency").val(config.value);
+                            $("input#windows-config-notifier-frequency").val(config.value / 1000);
                         } else if (config.name == configParams["WINDOWS_EULA"]) {
                             $("#windows-eula").val(config.value);
                         }
@@ -336,7 +338,7 @@ $(document).ready(function () {
 
             var frequency = {
                 "name": configParams["NOTIFIER_FREQUENCY"],
-                "value": notifierFrequency,
+                "value": String(notifierFrequency * 1000),
                 "contentType": "text"
             };
 
@@ -436,7 +438,7 @@ $(document).ready(function () {
 
             var monitorFrequency = {
                 "name": configParams["NOTIFIER_FREQUENCY"],
-                "value": notifierFrequency,
+                "value": String((notifierFrequency * 1000)),
                 "contentType": "text"
             };
 
@@ -859,7 +861,7 @@ $(document).ready(function () {
         var windowsLicense = tinymce.get('windows-eula').getContent();
 
         if (!notifierFrequency) {
-            $(errorMsgWindows).text("Notifier Frequency is a required field. It cannot be empty.");
+            $(errorMsgWindows).text("Polling Interval is a required field. It cannot be empty.");
             $(errorMsgWrapperWindows).removeClass("hidden");
         } else if (!windowsLicense) {
             $(errorMsgWindows).text("License is a required field. It cannot be empty.");
@@ -873,7 +875,7 @@ $(document).ready(function () {
 
             var paramNotifierFrequency = {
                 "name": configParams["NOTIFIER_FREQUENCY"],
-                "value": notifierFrequency,
+                "value": String(notifierFrequency * 1000),
                 "contentType": "text"
             };
 
