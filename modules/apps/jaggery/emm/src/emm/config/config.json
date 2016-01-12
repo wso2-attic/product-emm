@@ -23,6 +23,14 @@
         "identityAlias" : "wso2carbon",
         "keyStoreName" : "/repository/resources/security/wso2carbon.jks"
     },
+    "userValidationConfig" : {
+        "usernameJSRegEx" : "^[\\S]{3,30}$",
+        "usernameRegExViolationErrorMsg" : "Provided username is invalid.",
+        "firstnameJSRegEx" : "^[\\S]{3,30}$",
+        "firstnameRegExViolationErrorMsg" : "Provided firstname is invalid.",
+        "lastnameJSRegEx" : "^[\\S]{3,30}$",
+        "lastnameRegExViolationErrorMsg" : "Provided firstname is invalid."
+    },
     "generalConfig" : {
         "host" : "https://localhost:9443",
         "companyName" : "WSO2 Enterprise Mobility Manager",

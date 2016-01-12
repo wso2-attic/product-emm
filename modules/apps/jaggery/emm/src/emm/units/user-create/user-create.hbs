@@ -30,15 +30,15 @@
                                 ( should be in minimum 3 characters long and do not include any whitespaces or special characters )
                             </label>
                             <div class="wr-input-control">
-                                <input limit="{{charLimit}}" type="text" id="username" class="form-control" placeholder="[ Required field ]"/>
+                                <input limit="{{charLimit}}" type="text" id="username" regEX="{{usernameJSRegEx}}" errorMsg="{{usernameRegExViolationErrorMsg}}" class="form-control" placeholder="[ Required field ]"/>
                             </div>
                             <label class="wr-input-label">First Name *</label>
                             <div class="wr-input-control">
-                                <input type="text" id="firstname" class="form-control" placeholder="[ Required field ]"/>
+                                <input type="text" id="firstname"  regEX="{{firstnameJSRegEx}}" errorMsg="{{firstnameRegExViolationErrorMsg}}" class="form-control" placeholder="[ Required field ]"/>
                             </div>
                             <label class="wr-input-label">Last Name *</label>
                             <div class="wr-input-control">
-                                <input type="text" id="lastname" class="form-control" placeholder="[ Required field ]"/>
+                                <input type="text" id="lastname"  regEX="{{lastnameJSRegEx}}" errorMsg="{{lastnameRegExViolationErrorMsg}}" class="form-control" placeholder="[ Required field ]"/>
                             </div>
                             <label class="wr-input-label">
                                 Email Address * <br>
