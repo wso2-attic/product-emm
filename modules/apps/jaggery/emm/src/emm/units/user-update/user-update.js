@@ -6,7 +6,7 @@
  */
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
-    var mdmProps = require('/config/mdm-props.js').config();
+    var mdmProps = require("/config/mdm-props.js").config();
     var userName = request.getParameter("username");
 
     if (userName) {

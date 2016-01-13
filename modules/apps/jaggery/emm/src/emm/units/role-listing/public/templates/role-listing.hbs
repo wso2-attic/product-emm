@@ -9,7 +9,7 @@
         <td class="text-right content-fill text-left-on-grid-view no-wrap">
             {{#unequal "admin" roleName }}
             {{#if canEdit}}
-                <a href="/emm/roles/edit-role?rolename={{roleName}}" data-role="{{roleName}}" data-click-event="edit-form"
+                <a onclick="javascript:triggerUrl('edit-role', '{{roleName}}')" data-role="{{roleName}}" data-click-event="edit-form"
                    class="btn padding-reduce-on-grid-view edit-role-link">
                                 <span class="fw-stack">
                                     <i class="fw fw-ring fw-stack-2x"></i>
@@ -17,7 +17,7 @@
                                 </span>
                     <span class="hidden-xs hidden-on-grid-view">Edit</span>
                 </a>
-                <a onclick="javascript:initEditRole('{{roleName}}')" data-role="{{roleName}}"
+                <a onclick="javascript:triggerUrl('edit-role-permission', '{{roleName}}')" data-role="{{roleName}}"
                    data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-permission-link">
                                 <span class="fw-stack">
                                     <i class="fw fw-ring fw-stack-2x"></i>

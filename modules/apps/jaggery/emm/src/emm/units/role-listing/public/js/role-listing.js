@@ -1,4 +1,13 @@
 /**
+ *This method redirect the browser to edit role page.
+ *The functionality was moved to here for URI ENCODING need to be done.
+ */
+var triggerUrl = function (method, rolename) {
+    var href = $("#ast-container").data("app-context") + "roles/" + method + "?rolename=" + rolename;
+    $(location).attr('href', href);
+};
+
+/**
  * Sorting function of roles
  * listed on Role Management page in WSO2 MDM Console.
  */
@@ -31,10 +40,11 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
                 $('#role-listing-status-msg').text('Invalid search query. Try again with a valid search query');
             });
     });
-}
+};
 
 function loadRoles(searchQuery) {
-    $("#loading-content").show();
+    var loadingContent = $("#loading-content");
+    loadingContent.show();
     var serviceURL = "/mdm-admin/roles";
     if (searchQuery) {
         serviceURL = serviceURL + "/search?filter=" + searchQuery;
@@ -64,9 +74,10 @@ function loadRoles(searchQuery) {
             }
         }
         return data;
-    }
+    };
+
     loadPaginatedObjects("#role-grid", "#ast-container", "#role-listing", serviceURL, callback);
-    $("#loading-content").hide();
+    loadingContent.hide();
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
         beforeStop: function () {

@@ -7,7 +7,7 @@
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
     var roleName = request.getParameter("rolename");
-    var mdmProps = require('/config/mdm-props.js').config();
+    var mdmProps = require("/config/mdm-props.js").config();
     if (roleName) {
         var response = userModule.getRole(roleName);
         if (response["status"] == "success") {
