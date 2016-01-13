@@ -23,7 +23,7 @@
                                 ( should be in minimum 3 characters long, lower-case and not include any whitespaces )
                             </label>
                             <div class="wr-input-control">
-                                <input type="text" id="rolename" class="form-control" data-currentrole="{{role.roleName}}" placeholder="[ Required field ]"
+                                <input type="text" id="rolename" regEX="{{rolenameJSRegEx}}" errorMsg="{{rolenameRegExViolationErrorMsg}}" class="form-control" data-currentrole="{{role.roleName}}" placeholder="[ Required field ]"
                                         value="{{role.roleName}}"/>
                             </div>
                         </div>

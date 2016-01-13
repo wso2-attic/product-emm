@@ -7,7 +7,7 @@
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
     var roleName = request.getParameter("rolename");
-
+    var mdmProps = require('/config/mdm-props.js').config();
     if (roleName) {
         var response = userModule.getRole(roleName);
         if (response["status"] == "success") {
@@ -17,5 +17,7 @@ function onRequest(context) {
         context["userStores"] = userStores;
     }
     //TODO: error scenario
+    context["rolenameJSRegEx"] = mdmProps.roleValidationConfig.rolenameJSRegEx;
+    context["rolenameRegExViolationErrorMsg"] = mdmProps.roleValidationConfig.rolenameRegExViolationErrorMsg;
     return context;
 }

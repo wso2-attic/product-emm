@@ -71,7 +71,6 @@ function loadRoles(searchQuery) {
     $(sortableElem).sortable({
         beforeStop: function () {
             var sortedIDs = $(this).sortable('toArray');
-            ;
         }
     });
     $(sortableElem).disableSelection();

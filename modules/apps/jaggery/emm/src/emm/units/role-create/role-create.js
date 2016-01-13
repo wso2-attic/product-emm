@@ -6,11 +6,14 @@
  */
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
+    var mdmProps = require('/config/mdm-props.js').config();
     var response = userModule.getRoles();
     if (response["status"] == "success") {
         context["roles"] = response["content"];
     }
     var userStores = userModule.getSecondaryUserStores();
     context["userStores"] = userStores;
+    context["rolenameJSRegEx"] = mdmProps.roleValidationConfig.rolenameJSRegEx;
+    context["rolenameRegExViolationErrorMsg"] = mdmProps.roleValidationConfig.rolenameRegExViolationErrorMsg;
     return context;
 }

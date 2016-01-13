@@ -20,6 +20,15 @@ var body = "body";
 var isInit = true;
 $(".icon .text").res_text(0.2);
 
+/**
+ *This method redirect the browser to edit role page.
+ *The functionality was moved to here for URI ENCODING need to be done.
+ */
+function initEditRole(roleName) {
+    var href="/emm/roles/edit-role-permission?rolename="+roleName;
+    $(location).attr('href',encodeURIComponent(href));
+}
+
 /*
  * set popup maximum height function.
  */
