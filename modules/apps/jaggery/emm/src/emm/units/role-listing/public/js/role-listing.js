@@ -2,8 +2,8 @@
  *This method redirect the browser to edit role page.
  *The functionality was moved to here for URI ENCODING need to be done.
  */
-var triggerUrl = function (method, rolename) {
-    var href = $("#ast-container").data("app-context") + "roles/" + method + "?rolename=" + rolename;
+var loadRoleBasedActionURL = function (action, rolename) {
+    var href = $("#ast-container").data("app-context") + "roles/" + action + "?rolename=" + rolename;
     $(location).attr('href', href);
 };
 
