@@ -17,7 +17,7 @@ function onRequest(context) {
         context["userStores"] = userStores;
     }
     //TODO: error scenario
-    context["rolenameJSRegEx"] = mdmProps.roleValidationConfig.rolenameJSRegEx;
-    context["rolenameRegExViolationErrorMsg"] = mdmProps.roleValidationConfig.rolenameRegExViolationErrorMsg;
+    context["roleNameJSRegEx"] = mdmProps.roleValidationConfig.rolenameJSRegEx;
+    context["roleNameRegExViolationErrorMsg"] = mdmProps.roleValidationConfig.rolenameRegExViolationErrorMsg;
     return context;
 }

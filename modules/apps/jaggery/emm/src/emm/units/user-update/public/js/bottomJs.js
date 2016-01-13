@@ -53,20 +53,20 @@ $(document).ready(function () {
         } else if (username.length > charLimit || username.length < 3) {
             $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(usernameInput.attr("regEX"), username)) {
-            $(errorMsg).text(usernameInput.attr("errorMsg"));
+        } else if (!inputIsValid(usernameInput.data("regex"), username)) {
+            $(errorMsg).text(usernameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(firstnameInput.attr("regEX"), firstname)) {
-            $(errorMsg).text(firstnameInput.attr("errorMsg"));
+        } else if (!inputIsValid(firstnameInput.data("regex"), firstname)) {
+            $(errorMsg).text(firstnameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!lastname) {
             $(errorMsg).text("Lastname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(lastnameInput.attr("regEX"), lastname)) {
-            $(errorMsg).text(lastnameInput.attr("errorMsg"));
+        } else if (!inputIsValid(lastnameInput.data("regex"), lastname)) {
+            $(errorMsg).text(lastnameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailAddress) {
             $(errorMsg).text("Email is a required field. It cannot be empty.");

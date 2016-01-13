@@ -88,8 +88,8 @@ $(document).ready(function () {
         if (!roleName) {
             $(errorMsg).text("Role name is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(rolenameInput.attr("regEX"), roleName)) {
-            $(errorMsg).text(rolenameInput.attr("errorMsg"));
+        } else if (!inputIsValid(rolenameInput.data("regex"), roleName)) {
+            $(errorMsg).text(rolenameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!domain) {
             $(errorMsg).text("Domain is a required field. It cannot be empty.");
