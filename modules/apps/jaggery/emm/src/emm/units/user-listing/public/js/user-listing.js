@@ -20,6 +20,7 @@ var body = "body";
 var isInit = true;
 $(".icon .text").res_text(0.2);
 
+
 /*
  * set popup maximum height function.
  */

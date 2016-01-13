@@ -73,7 +73,7 @@ $(document).ready(function () {
     var listPartialSrc = $("#list-partial").attr("src");
     var treeTemplateSrc = $("#tree-template").attr("src");
     var roleName = $("#permissionList").data("currentrole");
-    var serviceUrl = "/mdm-admin/roles/permissions?rolename=" + roleName;
+    var serviceUrl = "/mdm-admin/roles/permissions?rolename=" + encodeURIComponent(roleName);
     $.registerPartial("list", listPartialSrc, function(){
         $.template("treeTemplate", treeTemplateSrc, function (template) {
             invokerUtil.get(serviceUrl,

@@ -13,7 +13,11 @@ function onRequest(context) {
     if (response["status"] == "success") {
         context["roles"] = response["content"];
     }
-    var userStores = userModule.getSecondaryUserStores();
-    context["userStores"] = userStores;
+    context["usernameJSRegEx"] = mdmProps.userValidationConfig.usernameJSRegEx;
+    context["usernameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.usernameRegExViolationErrorMsg;
+    context["firstnameJSRegEx"] = mdmProps.userValidationConfig.firstnameJSRegEx;
+    context["firstnameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.firstnameRegExViolationErrorMsg;
+    context["lastnameJSRegEx"] = mdmProps.userValidationConfig.lastnameJSRegEx;
+    context["lastnameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.lastnameRegExViolationErrorMsg;
     return context;
 }

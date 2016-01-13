@@ -6,7 +6,7 @@
  */
 function onRequest(context) {
     var userModule = require("/modules/user.js")["userModule"];
-
+    var mdmProps = require("/config/mdm-props.js").config();
     var userName = request.getParameter("username");
 
     if (userName) {
@@ -28,6 +28,13 @@ function onRequest(context) {
         if (response["status"] == "success") {
             context["userRoles"] = response["content"];
         }
+
     }
+    context["usernameJSRegEx"] = mdmProps.userValidationConfig.usernameJSRegEx;
+    context["usernameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.usernameRegExViolationErrorMsg;
+    context["firstnameJSRegEx"] = mdmProps.userValidationConfig.firstnameJSRegEx;
+    context["firstnameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.firstnameRegExViolationErrorMsg;
+    context["lastnameJSRegEx"] = mdmProps.userValidationConfig.lastnameJSRegEx;
+    context["lastnameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.lastnameRegExViolationErrorMsg;
     return context;
 }

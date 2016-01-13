@@ -6,6 +6,7 @@
  * @returns {boolean} Returns true if input matches RegEx
  */
 function inputIsValid(regExp, inputString) {
+    regExp = new RegExp(regExp);
     return regExp.test(inputString);
 }
 
@@ -56,14 +57,17 @@ $(document).ready(function () {
      * on Add User page in WSO2 MDM Console.
      */
     $("button#add-user-btn").click(function () {
+
+        var usernameInput = $("input#username");
+        var firstnameInput = $("input#firstname");
+        var lastnameInput = $("input#lastname");
         var charLimit = parseInt($("input#username").attr("limit"));
         var domain = $("#userStore").val();
-        var username = $("input#username").val().trim();
-        var firstname = $("input#firstname").val();
-        var lastname = $("input#lastname").val();
+        var username = usernameInput.val().trim();
+        var firstname = firstnameInput.val();
+        var lastname = lastnameInput.val();
         var emailAddress = $("input#emailAddress").val();
         var roles = $("select#roles").val();
-
         var errorMsgWrapper = "#user-create-error-msg";
         var errorMsg = "#user-create-error-msg span";
         if (!username) {
@@ -72,20 +76,20 @@ $(document).ready(function () {
         } else if (username.length > charLimit || username.length < 3) {
             $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[a-zA-Z0-9\-\\\/\@\.\_]+$/, username)) {
-            $(errorMsg).text("Provided username is invalid.");
+        } else if (!inputIsValid(usernameInput.data("regex"), username)) {
+            $(errorMsg).text(usernameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!firstname) {
             $(errorMsg).text("Firstname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"]{1,30}$/, firstname)) {
-            $(errorMsg).text("Provided firstname is invalid.");
+        } else if (!inputIsValid(firstnameInput.data("regex"), firstname)) {
+            $(errorMsg).text(firstnameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!lastname) {
             $(errorMsg).text("Lastname is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>.,'"]{1,30}$/, lastname)) {
-            $(errorMsg).text("Provided lastname is invalid.");
+        } else if (!inputIsValid(lastnameInput.data("regex"), lastname)) {
+            $(errorMsg).text(lastnameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!emailAddress) {
             $(errorMsg).text("Email is a required field. It cannot be empty.");
