@@ -16,7 +16,8 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.wso2.mdm</groupId>
         <artifactId>wso2mdm-parent</artifactId>
@@ -56,25 +57,25 @@
                         </configuration>
                     </execution>
 
-                    <!--<execution>-->
-                    <!--<id>unpack-equinox-executable</id>-->
-                    <!--<phase>test</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>unpack</goal>-->
-                    <!--</goals>-->
-                    <!--<configuration>-->
-                    <!--<artifactItems>-->
-                    <!--<artifactItem>-->
-                    <!--<groupId>org.eclipse.equinox</groupId>-->
-                    <!--<artifactId>org.eclipse.equinox.executable</artifactId>-->
-                    <!--<version>3.5.0.v20110530-7P7NFUFFLWUl76mart</version>-->
-                    <!--<type>zip</type>-->
-                    <!--<overWrite>true</overWrite>-->
-                    <!--<outputDirectory>target</outputDirectory>-->
-                    <!--</artifactItem>-->
-                    <!--</artifactItems>-->
-                    <!--</configuration>-->
-                    <!--</execution>-->
+                    <execution>
+                        <id>unpack-equinox-executable</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.eclipse.equinox</groupId>
+                                    <artifactId>org.eclipse.equinox.executable</artifactId>
+                                    <version>3.5.0.v20110530-7P7NFUFFLWUl76mart</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -663,8 +664,8 @@
                                 <!--<version>${carbon.commons.version}</version>-->
                                 <!--</feature>-->
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.ntask.feature.group</id>-->
-                                    <!--<version>${carbon.commons.version}</version>-->
+                                <!--<id>org.wso2.carbon.ntask.feature.group</id>-->
+                                <!--<version>${carbon.commons.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.tenant.mgt.common.feature.group</id>
@@ -895,8 +896,8 @@
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.mediation.ntask.feature.group</id>-->
-                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--<id>org.wso2.carbon.mediation.ntask.feature.group</id>-->
+                                <!--<version>${carbon.mediation.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.inbound.endpoints.server.feature.group</id>
@@ -911,8 +912,8 @@
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.task.server.feature.group</id>-->
-                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--<id>org.wso2.carbon.task.server.feature.group</id>-->
+                                <!--<version>${carbon.mediation.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.mediation.ui.feature.group</id>
@@ -1162,8 +1163,8 @@
                                 <!--<version>${carbon.commons.version}</version>-->
                                 <!--</feature>-->
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.ntask.feature.group</id>-->
-                                    <!--<version>${carbon.commons.version}</version>-->
+                                <!--<id>org.wso2.carbon.ntask.feature.group</id>-->
+                                <!--<version>${carbon.commons.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.tenant.mgt.common.server.feature.group</id>
@@ -1203,8 +1204,6 @@
                                     <id>org.wso2.carbon.security.mgt.server.feature.group</id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
-
-
 
 
                                 <!--<feature>-->
@@ -1293,8 +1292,6 @@
                                 </feature-->
 
 
-
-
                                 <!--<feature>-->
                                 <!--<id>org.wso2.carbon.claim.mgt.feature.group</id>-->
                                 <!--<version>${carbon.identity.version}</version>-->
@@ -1368,8 +1365,8 @@
                                 <!--<version>${carbon.registry.version}</version>-->
                                 <!--</feature>-->
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.registry.task.server.feature.group</id>-->
-                                    <!--<version>${carbon.registry.version}</version>-->
+                                <!--<id>org.wso2.carbon.registry.task.server.feature.group</id>-->
+                                <!--<version>${carbon.registry.version}</version>-->
                                 <!--</feature>-->
                                 <!-- End of Registry Features -->
 
@@ -1407,8 +1404,8 @@
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.mediation.ntask.feature.group</id>-->
-                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--<id>org.wso2.carbon.mediation.ntask.feature.group</id>-->
+                                <!--<version>${carbon.mediation.version}</version>-->
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.inbound.endpoints.server.feature.group</id>
@@ -1423,8 +1420,8 @@
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
                                 <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.task.server.feature.group</id>-->
-                                    <!--<version>${carbon.mediation.version}</version>-->
+                                <!--<id>org.wso2.carbon.task.server.feature.group</id>-->
+                                <!--<version>${carbon.mediation.version}</version>-->
                                 <!--</feature>-->
                                 <!--<feature>-->
                                 <!--<id>org.wso2.carbon.mediation.ui.feature.group</id>-->
@@ -1529,8 +1526,9 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <replace token="false" value="true" dir="target/wso2carbon-core-${carbon.kernel.version}/repository/components">
-                                    <include name="**/bundles.info" />
+                                <replace token="false" value="true"
+                                         dir="target/wso2carbon-core-${carbon.kernel.version}/repository/components">
+                                    <include name="**/bundles.info"/>
                                 </replace>
                             </tasks>
                         </configuration>
