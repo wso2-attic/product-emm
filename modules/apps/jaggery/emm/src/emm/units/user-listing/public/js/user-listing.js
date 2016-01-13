@@ -25,8 +25,8 @@ $(".icon .text").res_text(0.2);
  *The functionality was moved to here for URI ENCODING need to be done.
  */
 function initEditRole(roleName) {
-    var href="/emm/roles/edit-role-permission?rolename="+roleName;
-    $(location).attr('href',encodeURIComponent(href));
+    var href="/emm/roles/edit-role-permission?rolename=" + encodeURIComponent(roleName);
+    $(location).attr('href',href);
 }
 
 /*

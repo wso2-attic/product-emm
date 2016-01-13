@@ -27,13 +27,13 @@
         "usernameJSRegEx" : "^[\\S]{3,30}$",
         "usernameRegExViolationErrorMsg" : "Provided username is invalid.",
         "firstnameJSRegEx" : "^[\\S]{3,30}$",
-        "firstnameRegExViolationErrorMsg" : "Provided firstname is invalid.",
+        "firstnameRegExViolationErrorMsg" : "Provided first name is invalid.",
         "lastnameJSRegEx" : "^[\\S]{3,30}$",
-        "lastnameRegExViolationErrorMsg" : "Provided lastname is invalid."
+        "lastnameRegExViolationErrorMsg" : "Provided last name is invalid."
     },
     "roleValidationConfig" : {
         "rolenameJSRegEx" : "^[\\S]{3,30}$",
-        "rolenameRegExViolationErrorMsg" : "Provided rolename is invalid."
+        "rolenameRegExViolationErrorMsg" : "Provided role name is invalid."
     },
     "generalConfig" : {
         "host" : "https://localhost:9443",
