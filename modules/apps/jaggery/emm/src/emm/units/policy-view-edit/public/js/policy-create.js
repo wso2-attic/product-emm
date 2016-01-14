@@ -1688,6 +1688,44 @@ var inputIsValidAgainstLength = function (input, minLength, maxLength) {
     return (length == minLength || (length > minLength && length < maxLength) || length == maxLength);
 };
 
+validateStep["policy-criteria"] = function () {
+    var validationStatus = {};
+    var selectedAssignees;
+    var selectedField = "Role(s)";
+
+    $("input[type='radio'].select-users-radio").each(function () {
+        if ($(this).is(":checked")) {
+            if ($(this).attr("id") == "users-radio-btn") {
+                selectedAssignees = $("#users-input").val();
+                selectedField = "User(s)";
+            } else if ($(this).attr("id") == "user-roles-radio-btn") {
+                selectedAssignees = $("#user-roles-input").val();
+            }
+            return false;
+        }
+    });
+
+    if (selectedAssignees) {
+        validationStatus["error"] = false;
+    } else {
+        validationStatus["error"] = true;
+        validationStatus["mainErrorMsg"] = selectedField + " is a required field. It cannot be empty";
+    }
+
+    var wizardIsToBeContinued;
+    if (validationStatus["error"]) {
+        wizardIsToBeContinued = false;
+        var mainErrorMsgWrapper = "#policy-criteria-main-error-msg";
+        var mainErrorMsg = mainErrorMsgWrapper + " span";
+        $(mainErrorMsg).text(validationStatus["mainErrorMsg"]);
+        $(mainErrorMsgWrapper).removeClass("hidden");
+    } else {
+        wizardIsToBeContinued = true;
+    }
+
+    return wizardIsToBeContinued;
+};
+
 validateStep["policy-naming"] = function () {
     var validationStatus = {};
 
