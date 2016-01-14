@@ -6,6 +6,7 @@
  * @returns {boolean} Returns true if input matches RegEx
  */
 function inputIsValid(regExp, inputString) {
+    regExp = new RegExp(regExp);
     return regExp.test(inputString);
 }
 function formatRepo (user) {
@@ -77,7 +78,8 @@ $(document).ready(function () {
      * on Add Role page in WSO2 MDM Console.
      */
     $("button#add-role-btn").click(function() {
-        var roleName = $("input#rolename").val();
+        var rolenameInput = $("input#rolename");
+        var roleName = rolenameInput.val();
         var domain = $("#domain").val();
         var users = $("#users").val();
 
@@ -86,8 +88,8 @@ $(document).ready(function () {
         if (!roleName) {
             $(errorMsg).text("Role name is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"" "]{3,30}$/, roleName)) {
-            $(errorMsg).text("Provided role name is invalid.");
+        } else if (!inputIsValid(rolenameInput.data("regex"), roleName)) {
+            $(errorMsg).text(rolenameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!domain) {
             $(errorMsg).text("Domain is a required field. It cannot be empty.");
