@@ -101,7 +101,6 @@ var updateGroupedInputVisibility = function (domElement) {
 };
 
 skipStep["policy-platform"] = function (policyPayloadObj) {
-    console.log(policyPayloadObj);
     policy["name"] = policyPayloadObj["policyName"];
     policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
     policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
@@ -1796,8 +1795,7 @@ var updatePolicy = function (policy, state) {
         payload["users"] = [];
         payload["roles"] = [];
     }
-
-    console.log(JSON.stringify(payload));
+    
     var serviceURL = "/mdm-admin/policies/" + getParameterByName("id");
     invokerUtil.put(
         serviceURL,
