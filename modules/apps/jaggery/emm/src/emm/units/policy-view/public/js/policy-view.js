@@ -1795,14 +1795,13 @@ var updatePolicy = function (policy, state) {
         payload["users"] = [];
         payload["roles"] = [];
     }
-    
     var serviceURL = "/mdm-admin/policies/" + getParameterByName("id");
     invokerUtil.put(
         serviceURL,
         payload,
         // on success
         function () {
-            if (state == "save"){
+     q       if (state == "save"){
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
                 serviceURL = "/mdm-admin/policies/inactivate";

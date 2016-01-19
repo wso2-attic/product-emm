@@ -39,6 +39,9 @@
         "host" : "https://localhost:9443",
         "companyName" : "WSO2 Enterprise Mobility Manager",
         "browserTitle" : "WSO2 EMM",
-        "copyrightText" : "\u00A9 %date-year%, WSO2 Inc. (http://www.wso2.org) All Rights Reserved."
+        "copyrightPrefix" : "\u00A9 %date-year%, ",
+        "copyrightOwner" : "WSO2 Inc.",
+        "copyrightOwnersSite" : "http://www.wso2.org",
+        "copyrightSuffix" : " All Rights Reserved."
     }
 }
