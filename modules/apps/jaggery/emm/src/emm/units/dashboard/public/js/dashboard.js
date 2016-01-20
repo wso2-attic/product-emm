@@ -7,6 +7,9 @@ var updateStats = function (serviceURL, id) {
             } else {
                 data = JSON.parse(data);
                 $(id).html(data);
+                if (data <= 0) {
+                    $("#deviceView").remove();
+                }
             }
         }, function (message) {
             console.log(message.content);
