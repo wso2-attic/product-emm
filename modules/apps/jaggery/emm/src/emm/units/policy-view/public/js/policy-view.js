@@ -1801,7 +1801,7 @@ var updatePolicy = function (policy, state) {
         payload,
         // on success
         function () {
-     q       if (state == "save"){
+            if (state == "save"){
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
                 serviceURL = "/mdm-admin/policies/inactivate";
@@ -1818,7 +1818,7 @@ var updatePolicy = function (policy, state) {
                         console.log(data);
                     }
                 );
-            }else if(state == "publish"){
+            } else if(state == "publish"){
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
                 serviceURL = "/mdm-admin/policies/activate";
@@ -2155,7 +2155,6 @@ $(document).ready(function () {
 
         // adding class .child-input to capture text-input-array-values
         $("input, select", clonedForm).addClass("child-input");
-
         $(addFormContainer).append(clonedForm);
         setId(addFormContainer);
         showHideHelpText(addFormContainer);
@@ -2164,7 +2163,6 @@ $(document).ready(function () {
     // remove form entry click function for grid inputs
     $(advanceOperations).on("click", "[data-click-event=remove-form]", function () {
         var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
-
         $(this).closest("[data-add-form-element=clone]").remove();
         setId(addFormContainer);
         showHideHelpText(addFormContainer);
@@ -2227,7 +2225,6 @@ $(document).ready(function () {
 
             // adding next update of wizard-steps.
             $("#" + nextStep + "-wizard-steps").html($(".wr-steps").html());
-
             // hiding current section of the wizard and showing next section.
             $("." + currentStep).addClass("hidden");
             $("." + nextStep).removeClass("hidden");
