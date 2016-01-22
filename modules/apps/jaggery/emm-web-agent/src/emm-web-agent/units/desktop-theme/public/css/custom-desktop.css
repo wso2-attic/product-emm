@@ -2261,6 +2261,7 @@ a.show-operations-btn .btn-text:before {
     display: block;
     overflow: hidden;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .tile-buttons li a.selected,.tile-buttons li a.selected:hover {
