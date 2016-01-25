@@ -7,8 +7,9 @@ var updateStats = function (serviceURL, id) {
             } else {
                 data = JSON.parse(data);
                 $(id).html(data);
-                if (data <= 0) {
-                    $("#deviceView").remove();
+                console.log(data);
+                if (Number(data) <= 0) {
+                    $(id + "-view-btn").hide();
                 }
             }
         }, function (message) {
@@ -16,7 +17,7 @@ var updateStats = function (serviceURL, id) {
         }
     );
 };
-//TODO : Refactor the users/count API to remove tenant-domain parameter
+
 $(document).ready(function () {
     updateStats("/mdm-admin/devices/count", "#device-count");
     updateStats("/mdm-admin/policies/count", "#policy-count");
