@@ -115,7 +115,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                 tenantConfigurations = WindowsAPIUtils.getTenantConfigurationData();
 
                 for (ConfigurationEntry configurationEntry : tenantConfigurations) {
-                    if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.AUTH_POLICY)) {
+                    if (PluginConstants.TenantConfigProperties.AUTH_POLICY.equals(configurationEntry.getName())) {
                         authPolicy = configurationEntry.getValue().toString();
                     } else {
                         authPolicy = PluginConstants.TenantConfigProperties.DEFAULT_AUTH_POLICY;

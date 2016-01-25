@@ -69,7 +69,7 @@ public class OperationUtils {
 
         pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED) || status.getData().equals
+        if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()) || status.getData().equals
                 (Constants.SyncMLResponseCodes.ACCEPTED_FOR_PROCESSING)) {
             for (Operation operation : pendingDataOperations) {
                 if (operation.getId() == status.getCommandReference()) {
@@ -77,7 +77,7 @@ public class OperationUtils {
                 }
             }
             updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
-        } else if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
+        } else if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
             for (Operation operation : pendingDataOperations) {
                 if (operation.getId() == status.getCommandReference() && operation.
                         getCode().equals(String.valueOf(OperationCode.Command.DEVICE_LOCK))) {
@@ -134,7 +134,7 @@ public class OperationUtils {
 
         pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+        if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData())) {
             for (Operation operation : pendingDataOperations) {
                 if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode())
                         && operation.getId() == status.getCommandReference()) {
@@ -144,7 +144,7 @@ public class OperationUtils {
                 }
             }
         }
-        if (status.getData().equals(Constants.SyncMLResponseCodes.PIN_NOTFOUND)) {
+        if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
             for (Operation operation : pendingDataOperations) {
 
                 if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode()) &&
@@ -184,7 +184,7 @@ public class OperationUtils {
                      DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException {
 
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+        if ((Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()))) {
             pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                     .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
             for (Operation operation : pendingDataOperations) {
@@ -211,7 +211,7 @@ public class OperationUtils {
                          DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException {
 
-        if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+        if ((Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()))) {
             pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                     .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
             for (Operation operation : pendingDataOperations) {
@@ -284,32 +284,32 @@ public class OperationUtils {
 
         for (Status status : statuses) {
 
-            if (status.getCommand().equals(Constants.EXECUTE)) {
+            if ((Constants.EXECUTE.equals(status.getCommand()))) {
                 if (status.getTargetReference() == null) {
                     operationUtils.updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
                 } else {
-                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_LOCK)) {
+                    if ((OperationCode.Command.DEVICE_LOCK.equals(status.getTargetReference()))) {
                         operationUtils.lockOperationUpdate(status, syncmlDocument, deviceIdentifier);
                     }
-                    if (status.getTargetReference().equals(OperationCode.Command.DEVICE_RING)) {
+                    if ((OperationCode.Command.DEVICE_RING.equals(status.getTargetReference()))) {
                         operationUtils.ring(status, syncmlDocument, deviceIdentifier);
                     }
-                    if (status.getTargetReference().equals(OperationCode.Command.WIPE_DATA)) {
+                    if (equals(OperationCode.Command.WIPE_DATA.equals(status.getTargetReference()))) {
                         operationUtils.dataWipe(status, syncmlDocument, deviceIdentifier);
                     }
                 }
             }
-            if (status.getCommand().equals(Constants.SEQUENCE)) {
-                if (status.getData().equals(Constants.SyncMLResponseCodes.ACCEPTED)) {
+            if ((Constants.SEQUENCE.equals(status.getCommand()))) {
+                if ((Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()))) {
 
                     pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                             .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
                     for (Operation operation : pendingDataOperations) {
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE) &&
+                        if ((PluginConstants.OperationCodes.POLICY_BUNDLE.equals(operation.getCode())) &&
                                 operation.getId() == status.getCommandReference()) {
                             operation.setStatus(Operation.Status.COMPLETED);
                         }
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.MONITOR) &&
+                        if ((PluginConstants.OperationCodes.MONITOR.equals(operation.getCode())) &&
                                 operation.getId() == status.getCommandReference()) {
                             operation.setStatus(Operation.Status.COMPLETED);
                         }
@@ -321,11 +321,11 @@ public class OperationUtils {
                             .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
                     for (Operation operation : pendingDataOperations) {
 
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE) &&
+                        if ((PluginConstants.OperationCodes.POLICY_BUNDLE.equals(operation.getCode())) &&
                                 operation.getId() == status.getCommandReference()) {
                             operation.setStatus(Operation.Status.ERROR);
                         }
-                        if (operation.getCode().equals(PluginConstants.OperationCodes.MONITOR) &&
+                        if ((PluginConstants.OperationCodes.MONITOR.equals(operation.getCode())) &&
                                 operation.getId() == status.getCommandReference()) {
                             operation.setStatus(Operation.Status.ERROR);
                         }
@@ -363,20 +363,20 @@ public class OperationUtils {
             }
             for (Item item : results) {
                 for (OperationCode.Info info : OperationCode.Info.values()) {
-                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.CAMERA_STATUS)) {
+                    if (item.getSource().getLocURI().equals(info.getCode()) &&
+                            PluginConstants.OperationCodes.CAMERA_STATUS.equals(info.name())) {
                         Profile cameraProfile = new Profile();
                         cameraProfile.setFeatureCode(PluginConstants.OperationCodes.CAMERA);
                         cameraProfile.setData(item.getData());
-                        if (item.getData().equals(PluginConstants.SyncML.SYNCML_DATA_ONE)) {
+                        if ((PluginConstants.SyncML.SYNCML_DATA_ONE.equals(item.getData()))) {
                             cameraProfile.setEnable(true);
                         } else {
                             cameraProfile.setEnable(false);
                         }
                         profiles.add(cameraProfile);
                     }
-                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.ENCRYPT_STORAGE_STATUS)) {
+                    if (item.getSource().getLocURI().equals(info.getCode()) &&
+                            PluginConstants.OperationCodes.ENCRYPT_STORAGE_STATUS.equals(info.name())) {
                         Profile encryptStorage = new Profile();
                         encryptStorage.setFeatureCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
                         encryptStorage.setData(item.getData());
@@ -387,12 +387,12 @@ public class OperationUtils {
                         }
                         profiles.add(encryptStorage);
                     }
-                    if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
-                            PluginConstants.OperationCodes.DEVICE_PASSWORD_STATUS)) {
+                    if (item.getSource().getLocURI().equals(info.getCode()) &&
+                            PluginConstants.OperationCodes.DEVICE_PASSWORD_STATUS.equals(info.name())) {
                         Profile encryptStorage = new Profile();
                         encryptStorage.setFeatureCode(PluginConstants.OperationCodes.PASSCODE_POLICY);
                         encryptStorage.setData(item.getData());
-                        if (item.getData().equals(PluginConstants.SyncML.SYNCML_DATA_ZERO)) {
+                        if ((PluginConstants.SyncML.SYNCML_DATA_ZERO.equals(item.getData()))) {
                             encryptStorage.setEnable(true);
                         } else {
                             encryptStorage.setEnable(false);
@@ -449,7 +449,7 @@ public class OperationUtils {
 
                         for (Profile deviceFeature : profiles) {
                             if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                    deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.CAMERA)) {
+                                    (PluginConstants.OperationCodes.CAMERA.equals(deviceFeature.getFeatureCode()))) {
                                 if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
                                         POLICY_ENABLE) == (deviceFeature.isEnable())) {
                                     isCompliance = true;
@@ -462,8 +462,8 @@ public class OperationUtils {
                                 complianceFeatures.add(complianceFeature);
                             }
                             if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                    deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.
-                                            ENCRYPT_STORAGE)) {
+                                    (PluginConstants.OperationCodes.
+                                            ENCRYPT_STORAGE.equals(deviceFeature.getFeatureCode()))) {
                                 if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
                                         ENCRYPTED_ENABLE) == (deviceFeature.isEnable())) {
                                     isCompliance = true;
@@ -476,8 +476,8 @@ public class OperationUtils {
                                 complianceFeatures.add(complianceFeature);
                             }
                             if (deviceFeature.getFeatureCode().equals(activeFeature.getFeatureCode()) &&
-                                    deviceFeature.getFeatureCode().equals(PluginConstants.OperationCodes.
-                                            PASSCODE_POLICY)) {
+                                    (PluginConstants.OperationCodes.
+                                            PASSCODE_POLICY.equals(deviceFeature.getFeatureCode()))) {
                                 if (policyContent.getBoolean(PluginConstants.PolicyConfigProperties.
                                         ENABLE_PASSWORD) == (deviceFeature.isEnable())) {
                                     isCompliance = true;
