@@ -79,7 +79,7 @@ public final class PluginConstants {
             throw new AssertionError();
         }
 
-        public static final String ENROLL_SUBDOMAIN = "https://EnterpriseEnrollment.";
+        public static final String DEVICE_ENROLLMENT_SUBDOMAIN = "https://EnterpriseEnrollment.";
         public static final String CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL =
                 "/ENROLLMENTSERVER/PolicyEnrollmentWebservice" +
                         ".svc";

@@ -215,8 +215,8 @@ public class OperationReply {
                 switch (type) {
                     case POLICY:
                         if (this.syncmlDocument.getBody().getAlert() != null) {
-                            if (this.syncmlDocument.getBody().getAlert().getData().equals
-                                    (Constants.INITIAL_ALERT_DATA)) {
+                            if ((Constants.INITIAL_ALERT_DATA.equals(this.syncmlDocument.getBody()
+                                    .getAlert().getData()))) {
                                 SequenceTag policySequence = new SequenceTag();
                                 policySequence = buildSequence(operation, policySequence);
                                 syncmlBody.setSequence(policySequence);
@@ -237,42 +237,36 @@ public class OperationReply {
                         getElements.add(itemGet);
                         break;
                     case COMMAND:
-                        if (operation.getCode().equals(PluginConstants
-                                .OperationCodes.DEVICE_LOCK)) {
+                        if ((PluginConstants.OperationCodes.DEVICE_LOCK.equals(operation.getCode()))) {
                             ExecuteTag execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
-                        if (operation.getCode().equals(PluginConstants
-                                .OperationCodes.DEVICE_RING)) {
+                        if ((PluginConstants.OperationCodes.DEVICE_RING.equals(operation.getCode()))) {
                             ExecuteTag execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
-                        if (operation.getCode().equals(PluginConstants
-                                .OperationCodes.DISENROLL)) {
+                        if ((PluginConstants.OperationCodes.DISENROLL.equals(operation.getCode()))) {
                             ExecuteTag execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
-                        if (operation.getCode().equals(PluginConstants
-                                .OperationCodes.WIPE_DATA)) {
+                        if ((PluginConstants.OperationCodes.WIPE_DATA.equals(operation.getCode()))) {
                             ExecuteTag execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
-                        if (operation.getCode().equals(PluginConstants
-                                .OperationCodes.LOCK_RESET)) {
+                        if ((PluginConstants.OperationCodes.LOCK_RESET.equals(operation.getCode()))) {
                             SequenceTag sequenceElement = new SequenceTag();
                             SequenceTag sequence = buildSequence(operation, sequenceElement);
                             syncmlBody.setSequence(sequence);
                         }
-                        if (operation.getCode().equals(PluginConstants
-                                .OperationCodes.MONITOR)) {
+                        if ((PluginConstants.OperationCodes.MONITOR.equals(operation.getCode()))) {
 
                             Get monitorGetElement = new Get();
                             List<Item> monitorItems;
                             List<ProfileFeature> profileFeatures;
 
                             if (this.syncmlDocument.getBody().getAlert() != null) {
-                                if (this.syncmlDocument.getBody().getAlert().getData().equals
-                                        (Constants.INITIAL_ALERT_DATA)) {
+                                if (Constants.INITIAL_ALERT_DATA.equals(this.syncmlDocument.getBody().
+                                        getAlert().getData())) {
 
                                     monitorSequence.setCommandId(operation.getId());
                                     DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
@@ -322,8 +316,8 @@ public class OperationReply {
             if (operationCode != null && operationCode.equals(command.name())) {
                 Target target = new Target();
                 target.setLocURI(command.getCode());
-                if (operation.getCode().equals(PluginConstants
-                        .OperationCodes.DISENROLL)) {
+                if ((PluginConstants
+                        .OperationCodes.DISENROLL.equals(operation.getCode()))) {
                     MetaTag meta = new MetaTag();
                     meta.setFormat(Constants.META_FORMAT_CHARACTER);
                     item.setMeta(meta);
@@ -345,8 +339,8 @@ public class OperationReply {
                 item.setTarget(target);
             }
         }
-        if ((operationCode != null) && operationCode.equals(
-                PluginConstants.OperationCodes.LOCK_RESET)) {
+        if ((operationCode != null) &&
+                PluginConstants.OperationCodes.LOCK_RESET.equals(operationCode)) {
             operation.setCode(PluginConstants.OperationCodes.PIN_CODE);
             for (Info getInfo : Info.values()) {
                 if (operation.getCode().equals(getInfo.name())) {
@@ -371,8 +365,7 @@ public class OperationReply {
             if (operationCode != null && operationCode.equals(command.name())) {
                 target.setLocURI(command.getCode());
 
-                if (operation.getCode().equals(PluginConstants
-                        .OperationCodes.CAMERA)) {
+                if ((PluginConstants.OperationCodes.CAMERA.equals(operation.getCode()))) {
 
                     if (payload.getBoolean("enabled")) {
                         MetaTag meta = new MetaTag();
@@ -388,8 +381,8 @@ public class OperationReply {
                         item.setData(policyDisallowData);
                     }
                 }
-                if (operation.getCode().equals(PluginConstants
-                        .OperationCodes.ENCRYPT_STORAGE)) {
+                if ((PluginConstants.OperationCodes.ENCRYPT_STORAGE.
+                        equals(operation.getCode()))) {
 
                     if (payload.getBoolean("encrypted")) {
                         MetaTag meta = new MetaTag();
@@ -415,7 +408,7 @@ public class OperationReply {
         List<AddTag> addList = new ArrayList<>();
         Gson gson = new Gson();
 
-        if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
+        if ((PluginConstants.OperationCodes.PASSCODE_POLICY.equals(operation.getCode()))) {
 
             PasscodePolicy passcodeObject = gson.fromJson((String) operation.getPayLoad(), PasscodePolicy.class);
 
@@ -525,7 +518,7 @@ public class OperationReply {
         sequenceElement.setCommandId(operation.getId());
         List<Replace> replaceItems = new ArrayList<>();
 
-        if (operation.getCode().equals(PluginConstants.OperationCodes.LOCK_RESET)) {
+        if ((PluginConstants.OperationCodes.LOCK_RESET.equals(operation.getCode()))) {
             ExecuteTag execElement = executeCommand(operation);
             Get getElements = new Get();
             getElements.setCommandId(operation.getId());
@@ -538,7 +531,7 @@ public class OperationReply {
             sequenceElement.setGet(getElements);
             return sequenceElement;
 
-        } else if (operation.getCode().equals(PluginConstants.OperationCodes.POLICY_BUNDLE)) {
+        } else if ((PluginConstants.OperationCodes.POLICY_BUNDLE.equals(operation.getCode()))) {
             List<? extends Operation> policyOperations;
             try {
                 policyOperations = (List<? extends Operation>) operation.getPayLoad();
@@ -546,7 +539,7 @@ public class OperationReply {
                 throw new ClassCastException();
             }
             for (Operation policy : policyOperations) {
-                if (policy.getCode().equals(PluginConstants.OperationCodes.CAMERA)) {
+                if ((PluginConstants.OperationCodes.CAMERA.equals(policy.getCode()))) {
                     Replace replaceCameraConfig = new Replace();
                     Item cameraItem;
                     List<Item> cameraItems = new ArrayList<>();
@@ -560,7 +553,7 @@ public class OperationReply {
                     replaceCameraConfig.setItems(cameraItems);
                     replaceItems.add(replaceCameraConfig);
                 }
-                if (policy.getCode().equals(PluginConstants.OperationCodes.ENCRYPT_STORAGE)) {
+                if ((PluginConstants.OperationCodes.ENCRYPT_STORAGE.equals(policy.getCode()))) {
 
                     Replace replaceStorageConfig = new Replace();
                     Item storageItem;
@@ -576,7 +569,7 @@ public class OperationReply {
                     replaceItems.add(replaceStorageConfig);
 
                 }
-                if (policy.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
+                if ((PluginConstants.OperationCodes.PASSCODE_POLICY.equals(policy.getCode()))) {
                     AtomicTag atomicTagElement = new AtomicTag();
                     List<AddTag> addConfig;
                     DeleteTag deleteTag = new DeleteTag();
@@ -609,8 +602,8 @@ public class OperationReply {
         Operation monitorOperation;
         for (ProfileFeature profileFeature : effectiveMonitoringFeature) {
 
-            if (profileFeature.getFeatureCode().equals(PluginConstants
-                    .OperationCodes.CAMERA)) {
+            if ((PluginConstants.OperationCodes.CAMERA.equals
+                    (profileFeature.getFeatureCode()))) {
                 String cameraStatus = PluginConstants
                         .OperationCodes.CAMERA_STATUS;
 
@@ -619,8 +612,8 @@ public class OperationReply {
                 Item item = appendGetInfo(monitorOperation);
                 monitorItems.add(item);
             }
-            if (profileFeature.getFeatureCode().equals(PluginConstants
-                    .OperationCodes.ENCRYPT_STORAGE)) {
+            if (PluginConstants.OperationCodes.ENCRYPT_STORAGE.equals
+                    (profileFeature.getFeatureCode())) {
                 String encryptStorageStatus = PluginConstants
                         .OperationCodes.ENCRYPT_STORAGE_STATUS;
 
@@ -629,8 +622,8 @@ public class OperationReply {
                 Item item = appendGetInfo(monitorOperation);
                 monitorItems.add(item);
             }
-            if (profileFeature.getFeatureCode().equals(PluginConstants
-                    .OperationCodes.PASSCODE_POLICY)) {
+            if ((PluginConstants.OperationCodes.PASSCODE_POLICY.equals
+                    (profileFeature.getFeatureCode()))) {
                 String passcodeStatus = PluginConstants
                         .OperationCodes.DEVICE_PASSWORD_STATUS;
 
@@ -647,7 +640,7 @@ public class OperationReply {
         List<Item> deleteItems = new ArrayList<>();
         Item deleteItem = new Item();
         Target target = new Target();
-        if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
+        if ((PluginConstants.OperationCodes.PASSCODE_POLICY.equals(operation.getCode()))) {
             operation.setCode(PluginConstants.OperationCodes.DEVICE_PASSCODE_DELETE);
             for (Command command : Command.values()) {
                 if (operation.getCode() != null && operation.getCode().equals(command.name())) {
