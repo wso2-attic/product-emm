@@ -23,18 +23,19 @@ import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.Constants;
 
 /**
- * Credentials passed between the device and the server for security purposes.
+ * Inform an event occurred from device to server.
  */
-public class Credential {
-    MetaTag meta;
+public class AlertTag {
+
+    int commandId = -1;
     String data;
 
-    public MetaTag getMeta() {
-        return meta;
+    public int getCommandId() {
+        return commandId;
     }
 
-    public void setMeta(MetaTag meta) {
-        this.meta = meta;
+    public void setCommandId(int commandId) {
+        this.commandId = commandId;
     }
 
     public String getData() {
@@ -45,16 +46,18 @@ public class Credential {
         this.data = data;
     }
 
-    public void buildCredentialElement(Document doc, Element rootElement) {
-        Element credentials = doc.createElement(Constants.CREDENTIAL);
-        rootElement.appendChild(credentials);
-        if (getMeta() != null) {
-            getMeta().buildMetaElement(doc, credentials);
+    public void buildAlertElement(Document doc, Element rootElement) {
+        Element alert = doc.createElement(Constants.ALERT);
+        rootElement.appendChild(alert);
+        if (getCommandId() != -1) {
+            Element commandId = doc.createElement(Constants.COMMAND_ID);
+            commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
+            alert.appendChild(commandId);
         }
         if (getData() != null) {
             Element data = doc.createElement(Constants.DATA);
             data.appendChild(doc.createTextNode(getData()));
-            credentials.appendChild(data);
+            alert.appendChild(data);
         }
     }
 }

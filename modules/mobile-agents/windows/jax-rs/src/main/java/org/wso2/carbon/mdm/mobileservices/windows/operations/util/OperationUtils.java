@@ -62,7 +62,7 @@ public class OperationUtils {
      * @throws OperationManagementException
      * @throws DeviceManagementException
      */
-    public void updateDeviceOperations(Status status, SyncmlDocument syncmlDocument,
+    public void updateDeviceOperations(StatusTag status, SyncmlDocument syncmlDocument,
                                        DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException, NotificationManagementException,
             WindowsOperationException {
@@ -129,7 +129,7 @@ public class OperationUtils {
      * @throws DeviceManagementException
      * @throws NotificationManagementException
      */
-    public void lockOperationUpdate(Status status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+    public void lockOperationUpdate(StatusTag status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException, NotificationManagementException {
 
         pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
@@ -180,7 +180,7 @@ public class OperationUtils {
      * @throws OperationManagementException
      * @throws DeviceManagementException
      */
-    public void ring(Status status, SyncmlDocument syncmlDocument,
+    public void ring(StatusTag status, SyncmlDocument syncmlDocument,
                      DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException {
 
@@ -207,7 +207,7 @@ public class OperationUtils {
      * @throws OperationManagementException
      * @throws DeviceManagementException
      */
-    public void dataWipe(Status status, SyncmlDocument syncmlDocument,
+    public void dataWipe(StatusTag status, SyncmlDocument syncmlDocument,
                          DeviceIdentifier deviceIdentifier)
             throws OperationManagementException, DeviceManagementException {
 
@@ -279,10 +279,10 @@ public class OperationUtils {
             NotificationManagementException, OperationManagementException, WindowsOperationException {
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
-        List<Status> statuses = syncmlDocument.getBody().getStatus();
+        List<StatusTag> statuses = syncmlDocument.getBody().getStatus();
         OperationUtils operationUtils = new OperationUtils();
 
-        for (Status status : statuses) {
+        for (StatusTag status : statuses) {
 
             if (status.getCommand().equals(Constants.EXECUTE)) {
                 if (status.getTargetReference() == null) {
@@ -350,18 +350,18 @@ public class OperationUtils {
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
         String lockUri = null;
-        Results result = syncmlDocument.getBody().getResults();
+        ResultsTag result = syncmlDocument.getBody().getResults();
 
         List<Profile> profiles = new ArrayList<>();
         if (result != null) {
-            List<Item> results = result.getItem();
+            List<ItemTag> results = result.getItem();
             for (OperationCode.Info info : OperationCode.Info.values()) {
                 if (PluginConstants.OperationCodes.PIN_CODE.equals(info
                         .name())) {
                     lockUri = info.getCode();
                 }
             }
-            for (Item item : results) {
+            for (ItemTag item : results) {
                 for (OperationCode.Info info : OperationCode.Info.values()) {
                     if (item.getSource().getLocURI().equals(info.getCode()) && info.name().equals(
                             PluginConstants.OperationCodes.CAMERA_STATUS)) {

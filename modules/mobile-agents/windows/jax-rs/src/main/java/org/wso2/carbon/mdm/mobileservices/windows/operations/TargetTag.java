@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
 /**
  * Target details of syncml header's.
  */
-public class Target {
+public class TargetTag {
 
     private String LocURI;
     private String LocName;

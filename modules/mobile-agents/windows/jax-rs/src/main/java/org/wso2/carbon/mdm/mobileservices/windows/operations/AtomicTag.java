@@ -31,13 +31,13 @@ import java.util.List;
 public class AtomicTag {
     int commandId = -1;
     List<AddTag> adds;
-    List<Replace> replaces;
+    List<ReplaceTag> replaces;
 
-    public List<Replace> getReplaces() {
+    public List<ReplaceTag> getReplaces() {
         return replaces;
     }
 
-    public void setReplaces(List<Replace> replaces) {
+    public void setReplaces(List<ReplaceTag> replaces) {
         this.replaces = replaces;
     }
 
@@ -74,8 +74,8 @@ public class AtomicTag {
             }
         }
         if (getReplaces() != null) {
-            for (Iterator<Replace> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
-                Replace add = replaceIterator.next();
+            for (Iterator<ReplaceTag> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
+                ReplaceTag add = replaceIterator.next();
                 if (add != null) {
                     add.buildReplaceElement(doc, atomic);
                 }
