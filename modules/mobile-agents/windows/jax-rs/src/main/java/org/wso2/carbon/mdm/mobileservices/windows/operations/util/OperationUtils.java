@@ -69,8 +69,8 @@ public class OperationUtils {
 
         pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-        if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()) || status.getData().equals
-                (Constants.SyncMLResponseCodes.ACCEPTED_FOR_PROCESSING)) {
+        if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()) || (Constants.SyncMLResponseCodes.
+                ACCEPTED_FOR_PROCESSING.equals(status.getData()))) {
             for (Operation operation : pendingDataOperations) {
                 if (operation.getId() == status.getCommandReference()) {
                     operation.setStatus(Operation.Status.COMPLETED);
@@ -79,8 +79,8 @@ public class OperationUtils {
             updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
         } else if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
             for (Operation operation : pendingDataOperations) {
-                if (operation.getId() == status.getCommandReference() && operation.
-                        getCode().equals(String.valueOf(OperationCode.Command.DEVICE_LOCK))) {
+                if (operation.getId() == status.getCommandReference() && (OperationCode.Command.DEVICE_LOCK.equals(
+                        operation.getCode()))) {
                     operation.setStatus(Operation.Status.ERROR);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
                     try {
@@ -136,7 +136,7 @@ public class OperationUtils {
                 .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
         if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData())) {
             for (Operation operation : pendingDataOperations) {
-                if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode())
+                if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()))
                         && operation.getId() == status.getCommandReference()) {
                     operation.setStatus(Operation.Status.COMPLETED);
                     new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
@@ -147,8 +147,8 @@ public class OperationUtils {
         if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
             for (Operation operation : pendingDataOperations) {
 
-                if (operation.getCode().equals(OperationCode.Command.DEVICE_LOCK.getCode()) &&
-                        operation.getId() == status.getCommandReference()) {
+                if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()) &&
+                        operation.getId() == status.getCommandReference())) {
                     operation.setStatus(Operation.Status.ERROR);
                     new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
@@ -188,7 +188,7 @@ public class OperationUtils {
             pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
                     .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
             for (Operation operation : pendingDataOperations) {
-                if (operation.getCode().equals(OperationCode.Command.DEVICE_RING) &&
+                if ((OperationCode.Command.DEVICE_RING.equals(operation.getCode())) &&
                         (operation.getId() == status.getCommandReference())) {
                     operation.setStatus(Operation.Status.COMPLETED);
                     new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
@@ -216,7 +216,7 @@ public class OperationUtils {
                     .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
             for (Operation operation : pendingDataOperations) {
 
-                if (operation.getCode().equals(OperationCode.Command.WIPE_DATA) &&
+                if ((OperationCode.Command.WIPE_DATA.equals(operation.getCode())) &&
                         (operation.getId() == status.getCommandReference())) {
                     operation.setStatus(Operation.Status.COMPLETED);
                     updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
@@ -380,7 +380,7 @@ public class OperationUtils {
                         Profile encryptStorage = new Profile();
                         encryptStorage.setFeatureCode(PluginConstants.OperationCodes.ENCRYPT_STORAGE);
                         encryptStorage.setData(item.getData());
-                        if (item.getData().equals(PluginConstants.SyncML.SYNCML_DATA_ONE)) {
+                        if ((PluginConstants.SyncML.SYNCML_DATA_ONE.equals(item.getData()))) {
                             encryptStorage.setEnable(true);
                         } else {
                             encryptStorage.setEnable(false);

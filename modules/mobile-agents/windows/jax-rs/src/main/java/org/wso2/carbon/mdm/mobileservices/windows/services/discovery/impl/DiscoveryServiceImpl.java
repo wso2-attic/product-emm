@@ -71,13 +71,13 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         DiscoveryResponse discoveryResponse = new DiscoveryResponse();
         if (FEDERATED.equals(getAuthPolicy())) {
             discoveryResponse.setAuthPolicy(FEDERATED);
-            discoveryResponse.setEnrollmentPolicyServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
+            discoveryResponse.setEnrollmentPolicyServiceUrl(PluginConstants.Discovery.DEVICE_ENROLLMENT_SUBDOMAIN +
                     domain + PluginConstants.Discovery.
                     CERTIFICATE_ENROLLMENT_POLICY_SERVICE_URL);
-            discoveryResponse.setEnrollmentServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
+            discoveryResponse.setEnrollmentServiceUrl(PluginConstants.Discovery.DEVICE_ENROLLMENT_SUBDOMAIN +
                     domain + PluginConstants.Discovery.
                     CERTIFICATE_ENROLLMENT_SERVICE_URL);
-            discoveryResponse.setAuthenticationServiceUrl(PluginConstants.Discovery.ENROLL_SUBDOMAIN +
+            discoveryResponse.setAuthenticationServiceUrl(PluginConstants.Discovery.DEVICE_ENROLLMENT_SUBDOMAIN +
                     domain + PluginConstants.Discovery.WAB_URL);
         }
         response.value = discoveryResponse;
