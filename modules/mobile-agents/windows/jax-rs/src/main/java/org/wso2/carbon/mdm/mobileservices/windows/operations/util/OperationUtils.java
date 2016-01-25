@@ -56,9 +56,9 @@ public class OperationUtils {
     /**
      * Update the operations using device status payload.
      *
-     * @param status           Client side status for the specific operations
-     * @param syncmlDocument   syncml payload for operation status which parse through  the syncml engine
-     * @param deviceIdentifier specific device identifier for each device
+     * @param status           Client side status for the specific operations.
+     * @param syncmlDocument   syncml payload for operation status which parse through  the syncml engine.
+     * @param deviceIdentifier specific device identifier for each device.
      * @throws OperationManagementException
      * @throws DeviceManagementException
      */
@@ -101,10 +101,10 @@ public class OperationUtils {
     }
 
     /**
-     * Update operation statuses
+     * Update operation statuses.
      *
-     * @param deviceId   specific device Id
-     * @param operations operation list to be update
+     * @param deviceId   specific device Id.
+     * @param operations operation list to be update.
      * @throws OperationManagementException
      */
     public void updateOperations(String deviceId,
@@ -201,7 +201,7 @@ public class OperationUtils {
     /***
      * Update the status of the DataWipe operation.
      *
-     * @param status           Status of the datawipe.
+     * @param status           Status of the data wipe.
      * @param syncmlDocument   Parsed syncml payload from the syncml engine.
      * @param deviceIdentifier specific device id to be wiped.
      * @throws OperationManagementException
@@ -423,7 +423,7 @@ public class OperationUtils {
     }
 
     /**
-     * Generate Compliance Features
+     * Generate Compliance Features.
      *
      * @param syncmlDocument syncmlDocument object parsed from the syncml engine.
      * @throws NotificationManagementException
