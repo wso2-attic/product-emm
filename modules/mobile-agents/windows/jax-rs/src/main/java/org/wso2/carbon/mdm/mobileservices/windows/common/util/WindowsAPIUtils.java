@@ -224,21 +224,6 @@ public class WindowsAPIUtils {
         privilegedCarbonContext.setUsername(userName);
     }
 
-//    /**
-//     * Get the host name from the carbon.xml file.
-//     *
-//     * @return
-//     */
-//    public static String getHostName() {
-//        ServerConfiguration serverConfiguration = CarbonUtils.getServerConfiguration();
-//        String[] hostNameCharacters = serverConfiguration.getProperties(PluginConstants.Discovery.HOST_NAME);
-//        StringBuilder builder = new StringBuilder();
-//        for (String s : hostNameCharacters) {
-//            builder.append(s);
-//        }
-//        return builder.toString();
-//    }
-
     /**
      * This method is used to get tenant configurations.
      *
