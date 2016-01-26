@@ -57,7 +57,7 @@ public class AddTag {
                 commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
                 add.appendChild(commandId);
             }
-            for (Iterator<ItemTag> itemIterator = getItems().iterator(); itemIterator.hasNext(); ) {
+            for (Iterator<ItemTag> itemIterator = getItems().iterator(); itemIterator.hasNext();) {
                 ItemTag item = itemIterator.next();
                 if (item != null) {
                     item.buildItemElement(doc, add);
