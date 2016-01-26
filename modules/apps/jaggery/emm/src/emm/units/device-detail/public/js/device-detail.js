@@ -103,7 +103,11 @@
                     }
                     return html;
                 }},
-                { targets: 2, data: 'createdTimeStamp'}
+                { targets: 2, data: 'createdTimeStamp', render: function (date, type, row, meta) {;
+                    var value = String(date);
+                    return value.slice(0,16);
+                    }
+                }
             ],
             "createdRow": function( row, data, dataIndex ) {
                 $(row).attr('data-type', 'selectable');

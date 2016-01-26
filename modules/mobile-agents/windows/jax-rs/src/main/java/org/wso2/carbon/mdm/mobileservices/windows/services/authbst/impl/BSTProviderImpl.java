@@ -44,7 +44,6 @@ import javax.ws.rs.core.Response;
 public class BSTProviderImpl implements BSTProvider {
 
     private static Log log = LogFactory.getLog(BSTProviderImpl.class);
-    private static final String DELIMITER = "@";
 
     /**
      * This method validates the device user, checking passed credentials and returns the corresponding
