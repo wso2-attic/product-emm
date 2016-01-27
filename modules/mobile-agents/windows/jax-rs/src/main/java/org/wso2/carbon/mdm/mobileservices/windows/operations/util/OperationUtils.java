@@ -279,14 +279,8 @@ public class OperationUtils {
             NotificationManagementException, OperationManagementException, WindowsOperationException {
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
-<<<<<<< HEAD
-        List<Status> statuses = syncmlDocument.getBody().getStatus();
 
-=======
         List<StatusTag> statuses = syncmlDocument.getBody().getStatus();
-        OperationUtils operationUtils = new OperationUtils();
->>>>>>> 80e4ce7413de47be340ff5a4243ec4de99c12b1b
-
         for (StatusTag status : statuses) {
 
             if ((Constants.EXECUTE.equals(status.getCommand()))) {
