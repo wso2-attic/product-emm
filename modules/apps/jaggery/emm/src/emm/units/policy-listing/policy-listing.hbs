@@ -113,11 +113,17 @@
                         {{/equal}}
                     </td>
                     <td class="fade-edge remove-padding-top" data-search="{{platform}}" data-display="{{platform}}"></td>
-                    <td class="fade-edge remove-padding-top" data-search="{{ownershipType}}" data-display="{{ownershipType}}" data-grid-label="Ownership">{{ownershipType}}</td>
-                    <td class="fade-edge remove-padding-top" data-search="{{roles}}" data-display="{{roles}}" data-grid-label="Role(s)">{{roles}}</td>
-                    <td class="fade-edge remove-padding-top" data-search="{{users}}" data-display="{{users}}" data-grid-label="User(s)">{{users}}</td>
-                    <td class="fade-edge remove-padding-top" data-search="{{compliance}}" data-display="{{compliance}}" data-grid-label="Compliance">{{compliance}}</td>
-                    <td id = "policy-status" class="fade-edge remove-padding-top" data-search="{{status}}" data-display="{{status}}">
+                    <td class="fade-edge remove-padding-top" data-search="{{ownershipType}}"
+                        data-display="{{ownershipType}}" data-grid-label="Ownership">{{ownershipType}}</td>
+                    <td id="policy-roles" class="fade-edge remove-padding-top" data-search="{{roles}}"
+                        data-display="{{roles}}"
+                        data-grid-label="Role(s)">{{roles}}</td>
+                    <td id="policy-users" class="fade-edge remove-padding-top" data-search="{{users}}"
+                        data-display="{{users}}" data-grid-label="User(s)">{{users}}</td>
+                    <td class="fade-edge remove-padding-top" data-search="{{compliance}}"
+                        data-display="{{compliance}}" data-grid-label="Compliance">{{compliance}}</td>
+                    <td id = "policy-status" class="fade-edge remove-padding-top" data-search="{{status}}"
+                        data-display="{{status}}">
                     </td>
                     <td class="text-right content-fill text-left-on-grid-view no-wrap">
                         <a href="/emm/policies/view?id={{id}}" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-view-link">
