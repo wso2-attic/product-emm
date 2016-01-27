@@ -28,9 +28,9 @@ import org.w3c.dom.Element;
 public class SyncmlHeader {
     private int sessionId = -1;
     private int MsgID = -1;
-    private Target target;
-    private Source source;
-    private Credential credential;
+    private TargetTag target;
+    private SourceTag source;
+    private CredentialTag credential;
     private String hexadecimalSessionId;
 
     public String getHexadecimalSessionId() {
@@ -41,11 +41,11 @@ public class SyncmlHeader {
         this.hexadecimalSessionId = hexSessionId;
     }
 
-    public Credential getCredential() {
+    public CredentialTag getCredential() {
         return credential;
     }
 
-    public void setCredential(Credential credential) {
+    public void setCredential(CredentialTag credential) {
         this.credential = credential;
     }
 
@@ -65,19 +65,19 @@ public class SyncmlHeader {
         this.MsgID = msgID;
     }
 
-    public Target getTarget() {
+    public TargetTag getTarget() {
         return target;
     }
 
-    public void setTarget(Target target) {
+    public void setTarget(TargetTag target) {
         this.target = target;
     }
 
-    public Source getSource() {
+    public SourceTag getSource() {
         return source;
     }
 
-    public void setSource(Source source) {
+    public void setSource(SourceTag source) {
         this.source = source;
     }
 

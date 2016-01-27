@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class ExecuteTag {
     int commandId = -1;
-    List<Item> items;
+    List<ItemTag> items;
 
     public int getCommandId() {
         return commandId;
@@ -40,11 +40,11 @@ public class ExecuteTag {
         this.commandId = commandId;
     }
 
-    public List<Item> getItems() {
+    public List<ItemTag> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<ItemTag> items) {
         this.items = items;
     }
 
@@ -57,8 +57,8 @@ public class ExecuteTag {
                 commandId.appendChild(doc.createTextNode(String.valueOf(getCommandId())));
                 exec.appendChild(commandId);
             }
-            for (Iterator<Item> itemIterator = getItems().iterator(); itemIterator.hasNext(); ) {
-                Item item = itemIterator.next();
+            for (Iterator<ItemTag> itemIterator = getItems().iterator(); itemIterator.hasNext(); ) {
+                ItemTag item = itemIterator.next();
                 if (item != null) {
                     item.buildItemElement(doc, exec);
                 }

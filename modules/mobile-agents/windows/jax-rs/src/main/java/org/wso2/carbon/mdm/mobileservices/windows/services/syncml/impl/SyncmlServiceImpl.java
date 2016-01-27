@@ -322,8 +322,8 @@ public class SyncmlServiceImpl implements SyncmlService {
             syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
             msgID = syncmlDocument.getHeader().getMsgID();
             if (msgID == PluginConstants.SyncML.SYNCML_FIRST_MESSAGE_ID) {
-                Replace replace = syncmlDocument.getBody().getReplace();
-                List<Item> itemList = replace.getItems();
+                ReplaceTag replace = syncmlDocument.getBody().getReplace();
+                List<ItemTag> itemList = replace.getItems();
                 devID = itemList.get(PluginConstants.SyncML.DEVICE_ID_POSITION).getData();
                 devMan = itemList.get(PluginConstants.SyncML.DEVICE_MAN_POSITION).getData();
                 devMod = itemList.get(PluginConstants.SyncML.DEVICE_MODEL_POSITION).getData();
@@ -352,7 +352,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 return status;
 
             } else if (msgID == PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID) {
-                List<Item> itemList = syncmlDocument.getBody().getResults().getItem();
+                List<ItemTag> itemList = syncmlDocument.getBody().getResults().getItem();
                 osVersion = itemList.get(PluginConstants.SyncML.OSVERSION_POSITION).getData();
                 imsi = itemList.get(PluginConstants.SyncML.IMSI_POSITION).getData();
                 imei = itemList.get(PluginConstants.SyncML.IMEI_POSITION).getData();

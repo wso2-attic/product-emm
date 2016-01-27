@@ -29,12 +29,12 @@ import java.util.List;
  * Represents the body details of a syncml.
  */
 public class SyncmlBody {
-    Get getCommands;
+    GetTag getCommands;
     List<ExecuteTag> exec;
-    List<Status> status;
-    Alert alert;
-    Replace replace;
-    Results results;
+    List<StatusTag> status;
+    AlertTag alert;
+    ReplaceTag replace;
+    ResultsTag results;
     SequenceTag sequence;
     AtomicTag atomicTag;
 
@@ -62,43 +62,43 @@ public class SyncmlBody {
         this.exec = exec;
     }
 
-    public Results getResults() {
+    public ResultsTag getResults() {
         return results;
     }
 
-    public void setResults(Results results) {
+    public void setResults(ResultsTag results) {
         this.results = results;
     }
 
-    public Replace getReplace() {
+    public ReplaceTag getReplace() {
         return replace;
     }
 
-    public void setReplace(Replace replace) {
+    public void setReplace(ReplaceTag replace) {
         this.replace = replace;
     }
 
-    public List<Status> getStatus() {
+    public List<StatusTag> getStatus() {
         return status;
     }
 
-    public void setStatus(List<Status> status) {
+    public void setStatus(List<StatusTag> status) {
         this.status = status;
     }
 
-    public Alert getAlert() {
+    public AlertTag getAlert() {
         return alert;
     }
 
-    public void setAlert(Alert alert) {
+    public void setAlert(AlertTag alert) {
         this.alert = alert;
     }
 
-    public Get getGet() {
+    public GetTag getGet() {
         return getCommands;
     }
 
-    public void setGet(Get get) {
+    public void setGet(GetTag get) {
         this.getCommands = get;
     }
 

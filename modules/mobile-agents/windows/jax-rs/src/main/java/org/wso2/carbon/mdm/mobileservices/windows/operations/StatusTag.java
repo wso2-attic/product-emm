@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
 /**
  * Status of a previously sent message to device;
  */
-public class Status {
+public class StatusTag {
     int commandId = -1;
     int messageReference = -1;
     int commandReference = -1;
@@ -34,8 +34,8 @@ public class Status {
     String data;
     ChallengeTag challenge;
 
-    public Status(int commandId, int messageReference, int commandReference, String command,
-                  String targetReference, String data) {
+    public StatusTag(int commandId, int messageReference, int commandReference, String command,
+                     String targetReference, String data) {
         this.commandId = commandId;
         this.messageReference = messageReference;
         this.commandReference = commandReference;
@@ -44,7 +44,7 @@ public class Status {
         this.data = data;
     }
 
-    public Status() {
+    public StatusTag() {
     }
 
     public ChallengeTag getChallenge() {

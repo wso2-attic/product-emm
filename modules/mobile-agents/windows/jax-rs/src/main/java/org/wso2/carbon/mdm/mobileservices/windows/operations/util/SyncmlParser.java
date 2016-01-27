@@ -108,9 +108,9 @@ public class SyncmlParser {
 
         String sessionID = null;
         String messageID = null;
-        Target target = null;
-        Source source = null;
-        Credential credential = null;
+        TargetTag target = null;
+        SourceTag source = null;
+        CredentialTag credential = null;
         SyncmlHeader header = new SyncmlHeader();
 
         NodeList headerElements = syncHeader.getChildNodes();
@@ -170,10 +170,10 @@ public class SyncmlParser {
      */
     private static SyncmlBody generateSyncmlBody(Node syncBody) {
 
-        Alert alert = null;
-        Replace replace = null;
-        Results results = null;
-        List<Status> status = new ArrayList<>();
+        AlertTag alert = null;
+        ReplaceTag replace = null;
+        ResultsTag results = null;
+        List<StatusTag> status = new ArrayList<>();
         NodeList bodyElements = syncBody.getChildNodes();
 
         for (int i = 0; i < bodyElements.getLength(); i++) {
@@ -207,9 +207,9 @@ public class SyncmlParser {
      * @param node - XML node which represents Source
      * @return - Source object
      */
-    private static Source generateSource(Node node) {
+    private static SourceTag generateSource(Node node) {
 
-        Source source = new Source();
+        SourceTag source = new SourceTag();
         Node sourceURIItem = node.getChildNodes().item(0);
         Node sourceNameItem = node.getChildNodes().item(1);
         String sourceURI = null;
@@ -232,9 +232,9 @@ public class SyncmlParser {
      * @param node - XML node which represents Target
      * @return - Target object
      */
-    private static Target generateTarget(Node node) {
+    private static TargetTag generateTarget(Node node) {
 
-        Target target = new Target();
+        TargetTag target = new TargetTag();
         Node targetURIItem = node.getChildNodes().item(0);
         Node targetNameItem = node.getChildNodes().item(1);
         String targetURI = null;
@@ -257,10 +257,10 @@ public class SyncmlParser {
      * @param node - XML node which represents Results
      * @return - Results object
      */
-    private static Results generateResults(Node node) {
+    private static ResultsTag generateResults(Node node) {
 
-        Results results = new Results();
-        List<Item> item = new ArrayList<>();
+        ResultsTag results = new ResultsTag();
+        List<ItemTag> item = new ArrayList<>();
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
 
@@ -298,9 +298,9 @@ public class SyncmlParser {
      * @param node - XML node which represents Status
      * @return - Status object
      */
-    private static Status generateStatus(Node node) {
+    private static StatusTag generateStatus(Node node) {
 
-        Status status = new Status();
+        StatusTag status = new StatusTag();
         for (int x = 0; x < node.getChildNodes().getLength(); x++) {
             String nodeName = node.getChildNodes().item(x).getNodeName();
             switch (nodeName) {
@@ -352,11 +352,11 @@ public class SyncmlParser {
      * @param node - XML node which represents Replace
      * @return - Replace object
      */
-    private static Replace generateReplace(Node node) {
+    private static ReplaceTag generateReplace(Node node) {
 
-        Replace replace = new Replace();
+        ReplaceTag replace = new ReplaceTag();
         String commandId = node.getChildNodes().item(0).getTextContent().trim();
-        List<Item> items = new ArrayList<>();
+        List<ItemTag> items = new ArrayList<>();
         for (int i = 0; i < node.getChildNodes().getLength() - 1; i++) {
             items.add(generateItem(node.getChildNodes().item(i + 1)));
         }
@@ -371,8 +371,8 @@ public class SyncmlParser {
      * @param node - XML node which represents Alert
      * @return - Alert object
      */
-    private static Alert generateAlert(Node node) {
-        Alert alert = new Alert();
+    private static AlertTag generateAlert(Node node) {
+        AlertTag alert = new AlertTag();
         String commandID = node.getChildNodes().item(0).getTextContent().trim();
         String data = node.getChildNodes().item(1).getTextContent().trim();
         alert.setCommandId(Integer.valueOf(commandID));
@@ -386,9 +386,9 @@ public class SyncmlParser {
      * @param node - XML node which represents Item
      * @return - Item object
      */
-    private static Item generateItem(Node node) {
-        Item item = new Item();
-        Source source = new Source();
+    private static ItemTag generateItem(Node node) {
+        ItemTag item = new ItemTag();
+        SourceTag source = new SourceTag();
         String data;
         String nodeName;
         String childNodeName;
@@ -432,8 +432,8 @@ public class SyncmlParser {
      * @param node - XML node which represents Credential
      * @return - Credential object
      */
-    private static Credential generateCredential(Node node) {
-        Credential credential = new Credential();
+    private static CredentialTag generateCredential(Node node) {
+        CredentialTag credential = new CredentialTag();
         MetaTag meta = generateMeta(node.getChildNodes().item(0));
         String data = node.getChildNodes().item(1).getTextContent().trim();
         credential.setMeta(meta);
