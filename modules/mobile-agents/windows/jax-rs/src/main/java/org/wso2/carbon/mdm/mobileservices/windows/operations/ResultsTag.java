@@ -28,11 +28,11 @@ import java.util.List;
 /**
  * Results sent for the requests made to the device.
  */
-public class Results {
+public class ResultsTag {
     int commandId = -1;
     int messageReference = -1;
     int commandReference = -1;
-    List<Item> item;
+    List<ItemTag> item;
 
     public int getCommandId() {
         return commandId;
@@ -58,11 +58,11 @@ public class Results {
         this.commandReference = commandReference;
     }
 
-    public List<Item> getItem() {
+    public List<ItemTag> getItem() {
         return item;
     }
 
-    public void setItem(List<Item> item) {
+    public void setItem(List<ItemTag> item) {
         this.item = item;
     }
 
@@ -85,8 +85,8 @@ public class Results {
             results.appendChild(messageReference);
         }
         if (getItem() != null) {
-            for (Iterator<Item> itemIterator = getItem().iterator(); itemIterator.hasNext(); ) {
-                Item item = itemIterator.next();
+            for (Iterator<ItemTag> itemIterator = getItem().iterator(); itemIterator.hasNext(); ) {
+                ItemTag item = itemIterator.next();
                 if (item != null) {
                     item.buildItemElement(doc, results);
                 }

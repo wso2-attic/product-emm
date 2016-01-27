@@ -25,10 +25,10 @@ import org.w3c.dom.Element;
 /**
  * Represents an items that should be retrieved from the device or a command.
  */
-public class Item {
+public class ItemTag {
 
-    Target target;
-    Source source;
+    TargetTag target;
+    SourceTag source;
     String data;
     MetaTag meta;
 
@@ -48,19 +48,19 @@ public class Item {
         this.data = data;
     }
 
-    public Source getSource() {
+    public SourceTag getSource() {
         return source;
     }
 
-    public void setSource(Source source) {
+    public void setSource(SourceTag source) {
         this.source = source;
     }
 
-    public Target getTarget() {
+    public TargetTag getTarget() {
         return target;
     }
 
-    public void setTarget(Target target) {
+    public void setTarget(TargetTag target) {
         this.target = target;
     }
 

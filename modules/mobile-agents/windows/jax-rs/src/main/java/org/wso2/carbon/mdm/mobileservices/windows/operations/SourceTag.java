@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
 /**
  * Source details of syncml header's.
  */
-public class Source {
+public class SourceTag {
 
     private String LocURI;
     private String LocName;
