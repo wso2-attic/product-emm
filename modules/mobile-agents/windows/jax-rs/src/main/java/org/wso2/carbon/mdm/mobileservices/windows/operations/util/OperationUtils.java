@@ -139,7 +139,7 @@ public class OperationUtils {
                 if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()))
                         && operation.getId() == status.getCommandReference()) {
                     operation.setStatus(Operation.Status.COMPLETED);
-                    new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 }
             }
@@ -150,7 +150,7 @@ public class OperationUtils {
                 if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()) &&
                         operation.getId() == status.getCommandReference())) {
                     operation.setStatus(Operation.Status.ERROR);
-                    new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                     try {
                         NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
@@ -191,7 +191,7 @@ public class OperationUtils {
                 if ((OperationCode.Command.DEVICE_RING.equals(operation.getCode())) &&
                         (operation.getId() == status.getCommandReference())) {
                     operation.setStatus(Operation.Status.COMPLETED);
-                    new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 }
             }
@@ -280,22 +280,22 @@ public class OperationUtils {
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
         List<Status> statuses = syncmlDocument.getBody().getStatus();
-        OperationUtils operationUtils = new OperationUtils();
+
 
         for (Status status : statuses) {
 
             if ((Constants.EXECUTE.equals(status.getCommand()))) {
                 if (status.getTargetReference() == null) {
-                    operationUtils.updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
+                    updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
                 } else {
                     if ((OperationCode.Command.DEVICE_LOCK.equals(status.getTargetReference()))) {
-                        operationUtils.lockOperationUpdate(status, syncmlDocument, deviceIdentifier);
+                        lockOperationUpdate(status, syncmlDocument, deviceIdentifier);
                     }
                     if ((OperationCode.Command.DEVICE_RING.equals(status.getTargetReference()))) {
-                        operationUtils.ring(status, syncmlDocument, deviceIdentifier);
+                        ring(status, syncmlDocument, deviceIdentifier);
                     }
                     if (equals(OperationCode.Command.WIPE_DATA.equals(status.getTargetReference()))) {
-                        operationUtils.dataWipe(status, syncmlDocument, deviceIdentifier);
+                        dataWipe(status, syncmlDocument, deviceIdentifier);
                     }
                 }
             }
@@ -314,7 +314,7 @@ public class OperationUtils {
                             operation.setStatus(Operation.Status.COMPLETED);
                         }
                     }
-                    operationUtils.updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 } else {
                     pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
@@ -330,7 +330,7 @@ public class OperationUtils {
                             operation.setStatus(Operation.Status.ERROR);
                         }
                     }
-                    operationUtils.updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 }
             }
