@@ -117,6 +117,17 @@ function getSelectedPolicies() {
 $(document).ready(function () {
     sortElements();
     $("#loading-content").remove();
+
+    var policyRoles = $("#policy-roles").text();
+    var policyUsers = $("#policy-users").text();
+
+    if (!policyRoles) {
+        $("#policy-roles").hide();
+    }
+    if (!policyUsers) {
+        $("#policy-users").hide();
+    }
+
     $("#policy-listing-status-msg").removeClass("hidden");
     // Click functions related to Policy Listing
     var isUpdated = $('#is-updated').val();

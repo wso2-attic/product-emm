@@ -288,9 +288,14 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.identity.application.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
-                                <!--<featureArtifactDef>-->
-                                <!--org.wso2.carbon.identity:org.wso2.carbon.identity.mgt.feature:${carbon.identity.version}-->
-                                <!--</featureArtifactDef>-->
+
+                                <featureArtifactDef>
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.mgt.feature:${carbon.identity.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.application.authenticator.samlsso.server.feature:${carbon.identity.version}
+                                </featureArtifactDef>
+
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.claim.mgt.server.feature:${carbon.identity.version}
                                 </featureArtifactDef>
@@ -799,24 +804,15 @@
                                     <id>org.wso2.carbon.identity.notification.mgt.feature.group</id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
-
                                 <feature>
                                     <id>org.wso2.carbon.identity.xacml.server.feature.group</id>
                                     <version>${carbon.identity.version}</version>
                                 </feature>
 
-                                <!--       <feature>
-                                           <id>org.wso2.carbon.identity.authenticator.iwa.ui.feature.group</id>
-                                           <version>${carbon.identity.version}</version>
-                                       </feature>
-                                       <feature>
-                                           <id>org.wso2.carbon.identity.xacml.server.feature.group</id>
-                                           <version>${carbon.identity.version}</version>
-                                       </feature>
-                                       <feature>
-                                           <id>org.wso2.carbon.identity.notification.mgt.server.feature.group</id>
-                                           <version>${carbon.identity.version}</version>
-                                       </feature>-->
+                                <feature>
+                                    <id>org.wso2.carbon.identity.application.authenticator.samlsso.server.feature.group</id>
+                                    <version>${carbon.identity.version}</version>
+                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.identity.user.registration.feature.group</id>
                                     <version>${carbon.identity.version}</version>
