@@ -399,13 +399,13 @@ public class SyncmlParser {
             } else {
                 throw new IllegalFormatCodePointException(2);
             }
-            if (nodeName == PluginConstants.SyncML.SYNCML_SOURCE) {
+            if (PluginConstants.SyncML.SYNCML_SOURCE.equals(nodeName)) {
                 if (node.getChildNodes().item(x).getChildNodes().item(x).getNodeName() != null) {
                     childNodeName = node.getChildNodes().item(x).getChildNodes().item(x).getNodeName();
                 } else {
                     throw new IllegalFormatCodePointException(2);
                 }
-                if (childNodeName == PluginConstants.SyncML.SYNCML_LOCATION_URI) {
+                if ((PluginConstants.SyncML.SYNCML_LOCATION_URI.equals(childNodeName))) {
                     if (node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim() != null) {
                         locUri = node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim();
                     } else {
@@ -414,7 +414,7 @@ public class SyncmlParser {
                     source.setLocURI(locUri);
                     item.setSource(source);
                 }
-            } else if (nodeName == PluginConstants.SyncML.SYNCML_DATA) {
+            } else if (PluginConstants.SyncML.SYNCML_DATA.equals(nodeName)) {
                 if (node.getChildNodes().item(x).getTextContent().trim() != null) {
                     data = node.getChildNodes().item(x).getTextContent().trim();
                 } else {
