@@ -225,10 +225,10 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         String signedCertEncodedString;
         X509Certificate signedCertificate;
 
-        CertificateManagementServiceImpl impl = CertificateManagementServiceImpl.getInstance();
+        CertificateManagementServiceImpl certMgtServiceImpl = CertificateManagementServiceImpl.getInstance();
         Base64 base64Encoder = new Base64();
         try {
-            rootCACertificate = (X509Certificate) impl.getCACertificate();
+            rootCACertificate = (X509Certificate) certMgtServiceImpl.getCACertificate();
             rootCertEncodedString = base64Encoder.encodeAsString(rootCACertificate.getEncoded());
         } catch (KeystoreException e) {
             String msg = "CA certificate cannot be generated.";
@@ -241,7 +241,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         }
 
         try {
-            signedCertificate = impl.getSignedCertificateFromCSR(binarySecurityToken);
+            signedCertificate = certMgtServiceImpl.getSignedCertificateFromCSR(binarySecurityToken);
             signedCertEncodedString = base64Encoder.encodeAsString(signedCertificate.getEncoded());
         } catch (CertificateEncodingException e) {
             String msg = "Singed certificate cannot be encoded.";
