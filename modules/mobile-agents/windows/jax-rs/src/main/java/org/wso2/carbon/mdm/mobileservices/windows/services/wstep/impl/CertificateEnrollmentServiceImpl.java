@@ -208,7 +208,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
     }
 
     /**
-     * This method prepares the wap-provisioning file by including relevant certificates etc
+     * This method prepares the wap-provisioning file by including relevant certificates etc.
      *
      * @param binarySecurityToken     - CSR from device
      * @param wapProvisioningFilePath - File path of wap-provisioning file
@@ -231,7 +231,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             rootCACertificate = (X509Certificate) impl.getCACertificate();
             rootCertEncodedString = base64Encoder.encodeAsString(rootCACertificate.getEncoded());
         } catch (KeystoreException e) {
-            String msg = "CA certificate cannot be generated";
+            String msg = "CA certificate cannot be generated.";
             log.error(msg, e);
             throw new CertificateGenerationException(msg, e);
         } catch (CertificateEncodingException e) {
@@ -248,7 +248,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             log.error(msg, e);
             throw new CertificateGenerationException(msg, e);
         } catch (KeystoreException e) {
-            String msg = "CA certificate cannot be generated";
+            String msg = "CA certificate cannot be generated.";
             log.error(msg, e);
             throw new CertificateGenerationException(msg, e);
         }
@@ -372,7 +372,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
     }
 
     /**
-     * This method get the soap request header contents
+     * This method get the soap request header contents.
      *
      * @return Header object type,soap header tag list
      */

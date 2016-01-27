@@ -186,7 +186,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                         try {
                             return Response.ok().entity(generateReply(syncmlDocument, null)).build();
                         } catch (SyncmlOperationException e) {
-                            String msg = "Error occurred in while getting effective feature";
+                            String msg = "Error occurred in while getting effective feature.";
                             log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         }
@@ -210,7 +210,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (FeatureManagementException e) {
-                                String msg = "Error occurred in getting effective features. ";
+                                String msg = "Error occurred in getting effective features.";
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (PolicyComplianceException e) {
