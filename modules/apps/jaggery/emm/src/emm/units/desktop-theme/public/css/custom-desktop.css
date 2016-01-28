@@ -3910,3 +3910,6 @@ ul.tiles .icon {
 .tree-view .radio-inline input[type=radio] {
     margin-top: 6px;
 }
+.navbar-wrapper{
+    min-height:53px;
+}
