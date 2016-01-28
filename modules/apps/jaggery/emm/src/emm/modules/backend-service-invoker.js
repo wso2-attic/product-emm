@@ -37,7 +37,7 @@ var backendServiceInvoker = function () {
      */
     function getAccessToken() {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
-        if (tokenPair) {
+        if (tokenPair != null) {
             return tokenPair.accessToken;
         } else {
             response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
@@ -84,7 +84,7 @@ var backendServiceInvoker = function () {
             }
         };
         var accessToken = getAccessToken();
-        if (accessToken) {
+        if (accessToken != null || accessToken != "") {
             return execute(0);
         }
     }
@@ -131,7 +131,7 @@ var backendServiceInvoker = function () {
         httpMethodObject.addRequestHeader(header);
         if (IS_OAUTH_ENABLED) {
             var accessToken = getAccessToken();
-            if (accessToken) {
+            if (accessToken != null || accessToken != "") {
                 header = new Header();
                 header.setName(constants.AUTHORIZATION_HEADER);
                 header.setValue(constants.BEARER_PREFIX + accessToken);
@@ -172,7 +172,7 @@ var backendServiceInvoker = function () {
         var options = new Array();
         if (IS_OAUTH_ENABLED) {
             var accessToken = getAccessToken();
-            if (accessToken) {
+            if (accessToken != null || accessToken != "") {
                 var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
                 var authenticationHeaderValue = String(constants.BEARER_PREFIX + accessToken);
                 var headers = [];
