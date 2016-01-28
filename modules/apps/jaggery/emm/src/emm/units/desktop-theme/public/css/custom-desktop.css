@@ -3118,8 +3118,6 @@ body.inverse .fade-edge:after {
 .table.list-table {
     min-width: 100%;
     width: auto;
-    margin-right: -15px;
-    margin-left: -15px;
     display: block;
 }
 
@@ -3129,13 +3127,10 @@ body.inverse .fade-edge:after {
 }
 
 .table.list-table:not(.grid-view) tbody {
-    margin: 0 15px;
+    margin: 0;
 }
 .table.list-table thead {
     display: block;
-}
-.table.list-table thead {
-    margin: 0 -15px;
 }
 .table.list-table > tbody > tr > td,
 .table.list-table > tbody > tr > th,
@@ -3172,6 +3167,7 @@ body.inverse .fade-edge:after {
 .table.list-table > tbody > tr:nth-of-type(odd),
 .table.list-table > tbody > tr:nth-of-type(even) {
     background-color: transparent;
+
 }
 .table.list-table > tbody > tr.child ul {
     text-align: left;
@@ -3231,7 +3227,7 @@ body.inverse .fade-edge:after {
 }
 .table.list-table thead tr.bulk-action-row {
     display: block;
-    padding: 15px;
+    padding: 10px 0px;
 }
 .table.list-table thead tr.bulk-action-row > th,
 .table.list-table thead tr.bulk-action-row > td {
@@ -3259,9 +3255,6 @@ body.inverse .fade-edge:after {
 .table.list-table:not(.grid-view) .thumbnail {
     max-width: 60px;
     min-width: 60px;
-}
-.table.list-table > thead > tr {
-    margin: 0 15px;
 }
 .table.list-table.grid-view > thead > tr {
     width: auto;
@@ -3319,7 +3312,7 @@ body.inverse .fade-edge:after {
 .table.list-table.grid-view .filter-row,
 .table.list-table .filter-row.filter-box {
     background: #e4e4e4;
-    margin: 0 20px 0 30px;
+    margin: 0;
     display: block;
 }
 .table.list-table .filter-row.filter-box tr {
@@ -3439,7 +3432,7 @@ table.dataTable tr td.dataTables_empty {
 }
 .dataTablesTop,
 .dataTablesBottom {
-    margin: 0 0 20px;
+    margin: 0 0 10px;
 }
 .dataTablesTop:after,
 .dataTablesBottom:after {
