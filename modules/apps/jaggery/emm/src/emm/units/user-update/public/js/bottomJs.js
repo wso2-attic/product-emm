@@ -23,10 +23,10 @@ function emailIsValid(email) {
 
 $(document).ready(function () {
     $("select.select2[multiple=multiple]").select2({
-        tags : false
+        tags: false
     });
-    var roleList = $("#roles").attr("selectedVals").trim().replace(/ /g,"");
-    roleList = roleList.replace(/(\r\n|\n|\r)/gm,"");
+    var roleList = $("#roles").attr("selectedVals").trim().replace(/ /g, "");
+    roleList = roleList.replace(/(\r\n|\n|\r)/gm, "");
     var roleArr = roleList.split(",");
     $("#roles").val(roleArr).trigger("change");
 
@@ -35,7 +35,7 @@ $(document).ready(function () {
      * when a user clicks on "Add User" button
      * on Add User page in WSO2 MDM Console.
      */
-    $("button#add-user-btn").click(function() {
+    $("button#add-user-btn").click(function () {
         var usernameInput = $("input#username");
         var firstnameInput = $("input#firstname");
         var lastnameInput = $("input#lastname");
@@ -82,7 +82,7 @@ $(document).ready(function () {
             addUserFormData.lastname = lastname;
             addUserFormData.emailAddress = emailAddress;
 
-            if (roles == null){
+            if (roles == null) {
                 roles = [];
             }
             addUserFormData.roles = roles;

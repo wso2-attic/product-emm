@@ -131,7 +131,7 @@ var backendServiceInvoker = function () {
         httpMethodObject.addRequestHeader(header);
         if (IS_OAUTH_ENABLED) {
             var accessToken = getAccessToken();
-            if (!(!accessToken.trim())) {
+            if (accessToken) {
                 header = new Header();
                 header.setName(constants.AUTHORIZATION_HEADER);
                 header.setValue(constants.BEARER_PREFIX + accessToken);
@@ -172,7 +172,7 @@ var backendServiceInvoker = function () {
         var options = new Array();
         if (IS_OAUTH_ENABLED) {
             var accessToken = getAccessToken();
-            if (!(!accessToken)) {
+            if (accessToken) {
                 var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
                 var authenticationHeaderValue = String(constants.BEARER_PREFIX + accessToken);
                 var headers = [];

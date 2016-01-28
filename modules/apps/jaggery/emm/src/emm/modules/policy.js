@@ -45,7 +45,7 @@ policyModule = function () {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
             var isUpdated = false;
-            var response = serviceInvokers.XMLHttp.get(url,function(responsePayload){
+            var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
                 var response = {};
                 var policyListFromRestEndpoint = responsePayload["responseContent"];
                 var policyListToView = [];
@@ -66,15 +66,15 @@ policyModule = function () {
                         getElementsInAString(policyObjectFromRestEndpoint["users"]);
                     policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
 
-                    if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == true) {
+                    if (policyObjectFromRestEndpoint["active"] == true && policyObjectFromRestEndpoint["updated"] == true) {
                         policyObjectToView["status"] = "Active/Updated";
                         isUpdated = true;
-                    } else if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == false) {
+                    } else if (policyObjectFromRestEndpoint["active"] == true && policyObjectFromRestEndpoint["updated"] == false) {
                         policyObjectToView["status"] = "Active";
-                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == true) {
+                    } else if (policyObjectFromRestEndpoint["active"] == false && policyObjectFromRestEndpoint["updated"] == true) {
                         policyObjectToView["status"] = "Inactive/Updated";
                         isUpdated = true;
-                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == false) {
+                    } else if (policyObjectFromRestEndpoint["active"] == false && policyObjectFromRestEndpoint["updated"] == false) {
                         policyObjectToView["status"] = "Inactive";
                     }
                     // push view-objects to list
@@ -85,10 +85,10 @@ policyModule = function () {
                 response.status = "success";
                 response.content = policyListToView;
                 return response;
-            },function(responsePayload){
+            }, function (responsePayload) {
                 var response = {};
                 response.status = "error";
-                if(responsePayload  == "Scope validation failed"){
+                if (responsePayload == "Scope validation failed") {
                     response.content = "Permission Denied";
                 } else {
                     response.content = responsePayload;
@@ -128,7 +128,7 @@ policyModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var policyManagementService = utility.getPolicyManagementService();
             var policyAdminPoint = policyManagementService.getPAP();
@@ -143,7 +143,7 @@ policyModule = function () {
                 profileList.push(profileObject);
             }
             return profileList;
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -160,7 +160,7 @@ policyModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var policyManagementService = utility.getPolicyManagementService();
             var policyAdminPoint = policyManagementService.getPAP();
@@ -174,7 +174,7 @@ policyModule = function () {
                 policyList.add(policyObject);
             }
             policyAdminPoint.updatePolicyPriorities(policyList);
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
@@ -192,7 +192,7 @@ policyModule = function () {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
         }
-        try{
+        try {
             utility.startTenantFlow(carbonUser);
             var policyManagementService = utility.getPolicyManagementService();
             var policyAdminPoint = policyManagementService.getPAP();
@@ -204,7 +204,7 @@ policyModule = function () {
                 // http status code 409 refers to - conflict.
                 return 409;
             }
-        }catch (e) {
+        } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();

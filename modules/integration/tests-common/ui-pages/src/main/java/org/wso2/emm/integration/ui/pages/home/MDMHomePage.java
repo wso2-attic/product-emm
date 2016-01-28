@@ -39,7 +39,7 @@ public class MDMHomePage {
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
         if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.dashboard.device.div.xpath"))).getText()
-                   .contains("DEVICES")) {
+                .contains("DEVICES")) {
             throw new IllegalStateException("This is not the home page");
         }
     }

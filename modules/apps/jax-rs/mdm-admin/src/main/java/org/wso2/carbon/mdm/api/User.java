@@ -350,6 +350,7 @@ public class User {
 
     /**
      * get all the roles except for the internal/xxx and application/xxx
+     *
      * @param userStoreManager
      * @param username
      * @return the list of filtered roles
@@ -617,8 +618,6 @@ public class User {
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(usernameBits[1]);
         emailMessageProperties.setDomainName(tennentDomain);
-        //TODO: move this to a config
-        // emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
         emailMessageProperties.setPassword(password);
         String[] mailAddress = new String[1];
