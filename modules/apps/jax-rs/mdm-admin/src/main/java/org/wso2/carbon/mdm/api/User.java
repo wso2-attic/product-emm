@@ -190,8 +190,6 @@ public class User {
                         buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
                                                userWrapper.getEmailAddress());
                 if (StringUtils.isNotEmpty(userWrapper.getPassword())) {
-                    //TODO: return correct error codes Eg:- password policy not complied
-                    //TODO: use the base64 string directly
                     // Decoding Base64 encoded password
                     byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
                     userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(),
@@ -223,7 +221,6 @@ public class User {
                 // Now we have the roles to add
                 String[] rolesToAdd = newRolesSet.toArray(new String[newRolesSet.size()]);
                 userStoreManager.updateRoleListOfUser(userWrapper.getUsername(), rolesToDelete, rolesToAdd);
-                //TODO: find what happens when the profileName is null
                 userStoreManager.setUserClaimValues(userWrapper.getUsername(), defaultUserClaims, null);
                 // Outputting debug message upon successful addition of user
                 if (log.isDebugEnabled()) {
@@ -257,7 +254,6 @@ public class User {
         }
     }
 
-
     /**
      * Private method to be used by addUser() to
      * generate an initial user password for a user.
@@ -282,7 +278,6 @@ public class User {
         if (log.isDebugEnabled()) {
             log.debug("Initial user password is created for new user: " + initialUserPassword);
         }
-        //TODO: Use a byte array
         return initialUserPassword.toString();
     }
 
@@ -367,7 +362,6 @@ public class User {
         }
         return filteredRoles;
     }
-
 
     /**
      * Get user's roles by username
@@ -644,7 +638,6 @@ public class User {
             int i;
             for (i = 0; i < usernames.size(); i++) {
                 EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-//		        emailMessageProperties.setEnrolmentUrl("https://download-agent");
                 emailMessageProperties
                         .setFirstName(getClaimValue(usernames.get(i), Constants.USER_CLAIM_FIRST_NAME));
                 emailMessageProperties.setUserName(usernames.get(i));
