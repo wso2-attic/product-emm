@@ -135,8 +135,8 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             if (WindowsAPIUtils.getTenantConfigurationData() != null) {
                 tenantConfigurations = WindowsAPIUtils.getTenantConfigurationData();
                 for (ConfigurationEntry configurationEntry : tenantConfigurations) {
-                    if (configurationEntry.getName().equals(PluginConstants.TenantConfigProperties.
-                            NOTIFIER_FREQUENCY)) {
+                    if ((PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY.equals(
+                            configurationEntry.getName()))) {
                         pollingFrequency = configurationEntry.getValue().toString();
                     } else {
                         pollingFrequency = PluginConstants.TenantConfigProperties.DEFAULT_FREQUENCY;

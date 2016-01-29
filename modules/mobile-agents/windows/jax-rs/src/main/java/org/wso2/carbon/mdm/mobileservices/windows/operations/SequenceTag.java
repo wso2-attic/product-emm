@@ -32,10 +32,10 @@ public class SequenceTag {
 
     int commandId;
     ExecuteTag exec;
-    Get get;
+    GetTag get;
     DeleteTag deleteTag;
     AtomicTag atomicTag;
-    List<Replace> replaces;
+    List<ReplaceTag> replaces;
 
     public DeleteTag getDeleteTag() {
         return deleteTag;
@@ -45,11 +45,11 @@ public class SequenceTag {
         this.deleteTag = deleteTag;
     }
 
-    public List<Replace> getReplaces() {
+    public List<ReplaceTag> getReplaces() {
         return replaces;
     }
 
-    public void setReplaces(List<Replace> replaces) {
+    public void setReplaces(List<ReplaceTag> replaces) {
         this.replaces = replaces;
     }
 
@@ -77,11 +77,11 @@ public class SequenceTag {
         this.commandId = commandId;
     }
 
-    public Get getGet() {
+    public GetTag getGet() {
         return get;
     }
 
-    public void setGet(Get get) {
+    public void setGet(GetTag get) {
         this.get = get;
     }
 
@@ -100,8 +100,8 @@ public class SequenceTag {
             getGet().buildGetElement(doc, sequence);
         }
         if (getReplaces() != null) {
-            for (Iterator<Replace> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
-                Replace replace = replaceIterator.next();
+            for (Iterator<ReplaceTag> replaceIterator = getReplaces().iterator(); replaceIterator.hasNext(); ) {
+                ReplaceTag replace = replaceIterator.next();
                 if (replace != null) {
                     replace.buildReplaceElement(doc, sequence);
                 }

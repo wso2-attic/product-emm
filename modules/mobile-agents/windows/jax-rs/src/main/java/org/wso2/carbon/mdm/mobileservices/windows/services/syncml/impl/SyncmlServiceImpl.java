@@ -38,6 +38,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.util.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
+import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.WindowsDevice;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -59,38 +60,31 @@ public class SyncmlServiceImpl implements SyncmlService {
      * This method is used to generate and return Device object from the received information at
      * the Syncml step.
      *
-     * @param deviceID     - Unique device ID received from the Device
-     * @param osVersion    - Device OS version
-     * @param imsi         - Device IMSI
-     * @param imei         - Device IMEI
-     * @param manufacturer - Device Manufacturer name
-     * @param model        - Device Model
      * @return - Generated device object
      */
-    private Device generateDevice(String type, String deviceID, String osVersion, String imsi,
-                                  String imei, String manufacturer, String model, String user) {
+    private Device generateDevice(WindowsDevice windowsDevice) {
 
         Device generatedDevice = new Device();
 
         Device.Property OSVersionProperty = new Device.Property();
         OSVersionProperty.setName(PluginConstants.SyncML.OS_VERSION);
-        OSVersionProperty.setValue(osVersion);
+        OSVersionProperty.setValue(windowsDevice.getOsVersion());
 
         Device.Property IMSEIProperty = new Device.Property();
         IMSEIProperty.setName(PluginConstants.SyncML.IMSI);
-        IMSEIProperty.setValue(imsi);
+        IMSEIProperty.setValue(windowsDevice.getImsi());
 
         Device.Property IMEIProperty = new Device.Property();
         IMEIProperty.setName(PluginConstants.SyncML.IMEI);
-        IMEIProperty.setValue(imei);
+        IMEIProperty.setValue(windowsDevice.getImei());
 
         Device.Property DevManProperty = new Device.Property();
         DevManProperty.setName(PluginConstants.SyncML.VENDOR);
-        DevManProperty.setValue(manufacturer);
+        DevManProperty.setValue(windowsDevice.getManufacturer());
 
         Device.Property DevModProperty = new Device.Property();
         DevModProperty.setName(PluginConstants.SyncML.MODEL);
-        DevModProperty.setValue(model);
+        DevModProperty.setValue(windowsDevice.getModel());
 
         List<Device.Property> propertyList = new ArrayList<>();
         propertyList.add(OSVersionProperty);
@@ -100,14 +94,14 @@ public class SyncmlServiceImpl implements SyncmlService {
         propertyList.add(DevModProperty);
 
         EnrolmentInfo enrolmentInfo = new EnrolmentInfo();
-        enrolmentInfo.setOwner(user);
+        enrolmentInfo.setOwner(windowsDevice.getUser());
         enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
         enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
 
         generatedDevice.setEnrolmentInfo(enrolmentInfo);
-        generatedDevice.setDeviceIdentifier(deviceID);
+        generatedDevice.setDeviceIdentifier(windowsDevice.getDeviceId());
         generatedDevice.setProperties(propertyList);
-        generatedDevice.setType(type);
+        generatedDevice.setType(windowsDevice.getDeviceType());
 
         return generatedDevice;
     }
@@ -328,8 +322,8 @@ public class SyncmlServiceImpl implements SyncmlService {
             syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
             msgID = syncmlDocument.getHeader().getMsgID();
             if (msgID == PluginConstants.SyncML.SYNCML_FIRST_MESSAGE_ID) {
-                Replace replace = syncmlDocument.getBody().getReplace();
-                List<Item> itemList = replace.getItems();
+                ReplaceTag replace = syncmlDocument.getBody().getReplace();
+                List<ItemTag> itemList = replace.getItems();
                 devID = itemList.get(PluginConstants.SyncML.DEVICE_ID_POSITION).getData();
                 devMan = itemList.get(PluginConstants.SyncML.DEVICE_MAN_POSITION).getData();
                 devMod = itemList.get(PluginConstants.SyncML.DEVICE_MODEL_POSITION).getData();
@@ -342,14 +336,23 @@ public class SyncmlServiceImpl implements SyncmlService {
                             "OS Version:" + modVersion + ", DevID: " + devID + ", DevMan: " + devMan +
                                     ", DevMod: " + devMod + ", DevLang: " + devLang);
                 }
-                Device generateDevice = generateDevice(DeviceManagementConstants.MobileDeviceTypes.
-                        MOBILE_DEVICE_TYPE_WINDOWS, devID, modVersion, imsi, imei, devMan, devMod, user);
+                WindowsDevice windowsDevice = new WindowsDevice();
+                windowsDevice.setDeviceType(DeviceManagementConstants.MobileDeviceTypes.
+                        MOBILE_DEVICE_TYPE_WINDOWS);
+                windowsDevice.setDeviceId(devID);
+                windowsDevice.setImei(imei);
+                windowsDevice.setImsi(imsi);
+                windowsDevice.setManufacturer(devMan);
+                windowsDevice.setOsVersion(modVersion);
+                windowsDevice.setModel(devMod);
+                windowsDevice.setUser(user);
+                Device generateDevice = generateDevice(windowsDevice);
                 status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(generateDevice);
                 WindowsAPIUtils.startTenantFlow(user);
                 return status;
 
             } else if (msgID == PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID) {
-                List<Item> itemList = syncmlDocument.getBody().getResults().getItem();
+                List<ItemTag> itemList = syncmlDocument.getBody().getResults().getItem();
                 osVersion = itemList.get(PluginConstants.SyncML.OSVERSION_POSITION).getData();
                 imsi = itemList.get(PluginConstants.SyncML.IMSI_POSITION).getData();
                 imei = itemList.get(PluginConstants.SyncML.IMEI_POSITION).getData();
