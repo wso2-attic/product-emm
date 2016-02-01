@@ -22,6 +22,7 @@
 var backendServiceInvoker = function () {
     var log = new Log("modules/backend-service-invoker.js")
     var publicXMLHTTPInvokers = {};
+    var privateMethods = {};
     var publicWSInvokers = {};
     var publicHTTPClientInvokers = {};
     var IS_OAUTH_ENABLED = true;
@@ -35,7 +36,7 @@ var backendServiceInvoker = function () {
      * This methoad reads the token pair from the session and return the access token.
      * If the token pair s not set in the session this will send a redirect to the login page.
      */
-    function getAccessToken() {
+    privateMethods.getAccessToken = function () {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
         if (tokenPair != null) {
             return tokenPair.accessToken;
@@ -53,14 +54,14 @@ var backendServiceInvoker = function () {
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
-    function initiateXMLHTTPRequest(method, url, payload, successCallback, errorCallback) {
+    privateMethods.initiateXMLHTTPRequest = function (method, url, payload, successCallback, errorCallback) {
         var execute = function (count) {
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open(method, url);
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
             xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
             if (IS_OAUTH_ENABLED) {
-                var accessToken = getAccessToken();
+                var accessToken = privateMethods.getAccessToken();
                 xmlHttpRequest.setRequestHeader(
                     constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
@@ -83,8 +84,8 @@ var backendServiceInvoker = function () {
                 return errorCallback(xmlHttpRequest);
             }
         };
-        var accessToken = getAccessToken();
-        if (accessToken != null || accessToken != "") {
+        var accessToken = privateMethods.getAccessToken();
+        if (accessToken) {
             return execute(0);
         }
     }
@@ -97,7 +98,7 @@ var backendServiceInvoker = function () {
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
-    function initiateHTTPClientRequest(method, url, payload, successCallback, errorCallback) {
+    privateMethods.initiateHTTPClientRequest = function (method, url, payload, successCallback, errorCallback) {
         var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
         var httpMethodObject;
         switch (method) {
@@ -130,8 +131,8 @@ var backendServiceInvoker = function () {
         header.setValue(constants.APPLICATION_JSON);
         httpMethodObject.addRequestHeader(header);
         if (IS_OAUTH_ENABLED) {
-            var accessToken = getAccessToken();
-            if (accessToken != null || accessToken != "") {
+            var accessToken = privateMethods.getAccessToken();
+            if (accessToken) {
                 header = new Header();
                 header.setName(constants.AUTHORIZATION_HEADER);
                 header.setValue(constants.BEARER_PREFIX + accessToken);
@@ -166,13 +167,13 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      * @param soapVersion soapVersion which need to used.
      */
-    function initiateWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion) {
+    privateMethods.initiateWSRequest = function (action, endpoint, payload, successCallback, errorCallback, soapVersion) {
         var ws = require('ws');
         var wsRequest = new ws.WSRequest();
         var options = new Array();
         if (IS_OAUTH_ENABLED) {
-            var accessToken = getAccessToken();
-            if (accessToken != null || accessToken != "") {
+            var accessToken = privateMethods.getAccessToken();
+            if (accessToken) {
                 var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
                 var authenticationHeaderValue = String(constants.BEARER_PREFIX + accessToken);
                 var headers = [];
@@ -205,7 +206,7 @@ var backendServiceInvoker = function () {
      */
     publicXMLHTTPInvokers.get = function (url, successCallback, errorCallback) {
         var payload = null;
-        return initiateXMLHTTPRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
     };
 
     /**
@@ -216,7 +217,7 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicXMLHTTPInvokers.post = function (url, payload, successCallback, errorCallback) {
-        return initiateXMLHTTPRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
     };
 
     /**
@@ -227,7 +228,7 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicXMLHTTPInvokers.put = function (url, payload, successCallback, errorCallback) {
-        return initiateXMLHTTPRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
     };
 
     /**
@@ -238,7 +239,7 @@ var backendServiceInvoker = function () {
      */
     publicXMLHTTPInvokers.delete = function (url, successCallback, errorCallback) {
         var payload = null;
-        return initiateXMLHTTPRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
     };
 
     /**
@@ -250,7 +251,7 @@ var backendServiceInvoker = function () {
      * @param soapVersion soapVersion which need to used.
      */
     publicWSInvokers.soapRequest = function (action, endpoint, payload, successCallback, errorCallback, soapVersion) {
-        return initiateWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion);
+        return privateMethods.initiateWSRequest(action, endpoint, payload, successCallback, errorCallback, soapVersion);
     };
 
 
@@ -262,7 +263,7 @@ var backendServiceInvoker = function () {
      */
     publicHTTPClientInvokers.get = function (url, successCallback, errorCallback) {
         var payload = null;
-        return initiateHTTPClientRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateHTTPClientRequest(constants.HTTP_GET, url, payload, successCallback, errorCallback);
     };
 
     /**
@@ -273,7 +274,7 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.post = function (url, payload, successCallback, errorCallback) {
-        return initiateHTTPClientRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateHTTPClientRequest(constants.HTTP_POST, url, payload, successCallback, errorCallback);
     };
 
     /**
@@ -284,7 +285,7 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.put = function (url, payload, successCallback, errorCallback) {
-        return initiateHTTPClientRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateHTTPClientRequest(constants.HTTP_PUT, url, payload, successCallback, errorCallback);
     };
 
     /**
@@ -295,7 +296,7 @@ var backendServiceInvoker = function () {
      */
     publicHTTPClientInvokers.delete = function (url, successCallback, errorCallback) {
         var payload = null;
-        return initiateHTTPClientRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
+        return privateMethods.initiateHTTPClientRequest(constants.HTTP_DELETE, url, payload, successCallback, errorCallback);
     };
 
     var publicInvokers = {};

@@ -31,6 +31,61 @@ policyModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
+    privateMethods.getAllPoliciesOnError = function (responsePayload) {
+        var response = {};
+        response.status = "error";
+        if (responsePayload == "Scope validation failed") {
+            response.content = "Permission Denied";
+        } else {
+            response.content = responsePayload;
+        }
+        return response;
+    }
+
+    privateMethods.getAllPoliciesOnSuccess = function (responsePayload) {
+        var response = {};
+        var policyListFromRestEndpoint = responsePayload["responseContent"];
+        var policyListToView = [];
+        var i, policyObjectFromRestEndpoint, policyObjectToView;
+        for (i = 0; i < policyListFromRestEndpoint.length; i++) {
+            // get list object
+            policyObjectFromRestEndpoint = policyListFromRestEndpoint[i];
+            // populate list object values to view-object
+            policyObjectToView = {};
+            policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
+            policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
+            policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
+            policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
+            policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
+            policyObjectToView["roles"] = privateMethods.
+                getElementsInAString(policyObjectFromRestEndpoint["roles"]);
+            policyObjectToView["users"] = privateMethods.
+                getElementsInAString(policyObjectFromRestEndpoint["users"]);
+            policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
+
+            if (policyObjectFromRestEndpoint["active"] == true && policyObjectFromRestEndpoint["updated"] == true) {
+                policyObjectToView["status"] = "Active/Updated";
+                isUpdated = true;
+            } else if (policyObjectFromRestEndpoint["active"] == true &&
+                       policyObjectFromRestEndpoint["updated"] == false) {
+                policyObjectToView["status"] = "Active";
+            } else if (policyObjectFromRestEndpoint["active"] == false &&
+                       policyObjectFromRestEndpoint["updated"] == true) {
+                policyObjectToView["status"] = "Inactive/Updated";
+                isUpdated = true;
+            } else if (policyObjectFromRestEndpoint["active"] == false &&
+                       policyObjectFromRestEndpoint["updated"] == false) {
+                policyObjectToView["status"] = "Inactive";
+            }
+            // push view-objects to list
+            policyListToView.push(policyObjectToView);
+        }
+        // generate response
+        response.updated = isUpdated;
+        response.status = "success";
+        response.content = policyListToView;
+        return response;
+    }
     /*
      @Updated
      */
@@ -45,57 +100,10 @@ policyModule = function () {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
             var isUpdated = false;
-            var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                var response = {};
-                var policyListFromRestEndpoint = responsePayload["responseContent"];
-                var policyListToView = [];
-                var i, policyObjectFromRestEndpoint, policyObjectToView;
-                for (i = 0; i < policyListFromRestEndpoint.length; i++) {
-                    // get list object
-                    policyObjectFromRestEndpoint = policyListFromRestEndpoint[i];
-                    // populate list object values to view-object
-                    policyObjectToView = {};
-                    policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
-                    policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
-                    policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
-                    policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
-                    policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
-                    policyObjectToView["roles"] = privateMethods.
-                        getElementsInAString(policyObjectFromRestEndpoint["roles"]);
-                    policyObjectToView["users"] = privateMethods.
-                        getElementsInAString(policyObjectFromRestEndpoint["users"]);
-                    policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
-
-                    if (policyObjectFromRestEndpoint["active"] == true && policyObjectFromRestEndpoint["updated"] == true) {
-                        policyObjectToView["status"] = "Active/Updated";
-                        isUpdated = true;
-                    } else if (policyObjectFromRestEndpoint["active"] == true && policyObjectFromRestEndpoint["updated"] == false) {
-                        policyObjectToView["status"] = "Active";
-                    } else if (policyObjectFromRestEndpoint["active"] == false && policyObjectFromRestEndpoint["updated"] == true) {
-                        policyObjectToView["status"] = "Inactive/Updated";
-                        isUpdated = true;
-                    } else if (policyObjectFromRestEndpoint["active"] == false && policyObjectFromRestEndpoint["updated"] == false) {
-                        policyObjectToView["status"] = "Inactive";
-                    }
-                    // push view-objects to list
-                    policyListToView.push(policyObjectToView);
-                }
-                // generate response
-                response.updated = isUpdated;
-                response.status = "success";
-                response.content = policyListToView;
-                return response;
-            }, function (responsePayload) {
-                var response = {};
-                response.status = "error";
-                if (responsePayload == "Scope validation failed") {
-                    response.content = "Permission Denied";
-                } else {
-                    response.content = responsePayload;
-                }
-                return response;
-            });
+            var response = serviceInvokers.XMLHttp.
+                get(url, privateMethods.getAllPoliciesOnSuccess(),privateMethods.getAllPoliciesOnError());
             return response;
+
         } catch (e) {
             throw e;
         } finally {

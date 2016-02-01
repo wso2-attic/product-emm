@@ -118,8 +118,8 @@ var log = new Log();
                 // validating the signature
                 if (sso.responseSign) {
                     if (ssoMod.client.validateSignature(samlRespObj, sso.keyStoreProps)) {
-                        var sessionObj = ssoMod.client.decodeSAMLLoginResponse(samlRespObj, samlResponse,
-                                                                               sso.sessionId);
+                        var sessionObj = ssoMod.client.
+                            decodeSAMLLoginResponse(samlRespObj, samlResponse, sso.sessionId);
                         if (log.isDebugEnabled()) {
                             sso.log.debug("Saml object session ID :::" + sessionObj.sessionId);
                         }
