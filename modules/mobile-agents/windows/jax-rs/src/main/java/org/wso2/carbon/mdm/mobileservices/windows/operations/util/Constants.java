@@ -91,7 +91,7 @@ public class Constants {
         public static final String PIN_NOTFOUND = "405";
         public static final String CREDENTIALS_MISSING = "407";
         public static final String INVALID_CREDENTIALS = "401";
-        public static final String LOCKRESET_NOTIFICATION = "Error occurred in Device Lock Operation. " +
+        public static final String LOCK_RESET_NOTIFICATION = "Error occurred in Device Lock Operation. " +
                 "Please trigger lock-reset operation.";
     }
 

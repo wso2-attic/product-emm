@@ -31,6 +31,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 
 import javax.jws.WebService;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -39,8 +40,8 @@ import java.util.List;
  * All end points supports JSON, XMl with content negotiation.
  */
 @WebService
-@Produces({"application/json", "application/xml"})
-@Consumes({"application/json", "application/xml"})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class DeviceManagementService {
 
     private static Log log = LogFactory.getLog(DeviceManagementService.class);
