@@ -27,8 +27,8 @@ var operations = '.wr-operations',
     headerHeight = $('header').height(),
     offset = (headerHeight + navHeight),
     deviceSelection = '.device-select',
-    IOS = 'ios' ,
-    WINDOWS = 'windows' ,
+    IOS = 'ios',
+    WINDOWS = 'windows',
     ANDROID = 'android';
 
 /*
@@ -166,8 +166,7 @@ function runOperation(operationName) {
             $(errorMsg).text("Enter a message. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
-            invokerUtil.post(serviceEndPoint, payload,
-                             successCallback, function (jqXHR, textStatus, errorThrown) {
+            invokerUtil.post(serviceEndPoint, payload, successCallback, function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus);
                 });
             $(modalPopupContent).removeData();
