@@ -165,7 +165,7 @@ function loadUsers(searchParam) {
             serviceURL = serviceURL + "/view-users?username=" + searchParam;
         }
         var successCallback = function (data) {
-            if (data == null) {
+            if (data) {
                 $('#ast-container').addClass('hidden');
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
                 return;

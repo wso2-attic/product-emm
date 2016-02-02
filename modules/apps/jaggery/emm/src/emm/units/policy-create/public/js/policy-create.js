@@ -1992,7 +1992,6 @@ function formatRepo(user) {
 
 function formatRepoSelection(user) {
     return user.username || user.text;
-    ;
 }
 
 // End of functions related to grid-input-view

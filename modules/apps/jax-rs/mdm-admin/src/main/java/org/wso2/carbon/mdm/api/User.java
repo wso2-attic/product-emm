@@ -635,8 +635,7 @@ public class User {
         }
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         try {
-            int i;
-            for (i = 0; i < usernames.size(); i++) {
+            for (int i = 0; i < usernames.size(); i++) {
                 EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
                 emailMessageProperties
                         .setFirstName(getClaimValue(usernames.get(i), Constants.USER_CLAIM_FIRST_NAME));
