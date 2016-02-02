@@ -44,7 +44,7 @@ var backendServiceInvoker = function () {
             response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
         }
 
-    }
+    };
 
     /**
      * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
@@ -88,7 +88,7 @@ var backendServiceInvoker = function () {
         if (accessToken) {
             return execute(0);
         }
-    }
+    };
 
     /**
      * This method add Oauth authentication header to outgoing HTTPClient Requests if Oauth authentication is enabled.
@@ -156,7 +156,7 @@ var backendServiceInvoker = function () {
         } finally {
             method.releaseConnection();
         }
-    }
+    };
 
     /**
      * This method add Oauth authentication header to outgoing WS Requests if Oauth authentication is enabled.
@@ -196,7 +196,7 @@ var backendServiceInvoker = function () {
             return errorCallback(e);
         }
         return successCallback(wsResponse);
-    }
+    };
 
     /**
      * This method invokes return initiateXMLHttpRequest for get calls
