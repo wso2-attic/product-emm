@@ -126,6 +126,7 @@ $(document).ready(function () {
     $("#gcm-inputs").hide();
     tinymce.init({
         selector: "textarea",
+        height:500,
         theme: "modern",
         plugins: [
             "autoresize",
