@@ -43,7 +43,6 @@ var backendServiceInvoker = function () {
         } else {
             response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
         }
-
     };
 
     /**
