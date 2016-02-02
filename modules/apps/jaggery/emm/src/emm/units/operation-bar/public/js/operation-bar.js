@@ -126,7 +126,7 @@ function loadOperationBar(deviceType) {
             $(".wr-operations").html(content);
         };
         invokerUtil.get(serviceURL, successCallback, function (message) {
-                console.log(message);
+            $(".wr-operations").html(message);
             });
     });
 }
@@ -141,6 +141,10 @@ function runOperation(operationName) {
         } else {
             $(modalPopupContent).html($("#operationSuccess").html());
         }
+        showPopup();
+    };
+    var errorCallback = function (data) {
+        $(modalPopupContent).html($("#errorOperationUnexpected").html());
         showPopup();
     };
 
@@ -165,16 +169,12 @@ function runOperation(operationName) {
             $(errorMsg).text("Enter a message. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
-            invokerUtil.post(serviceEndPoint, payload, successCallback, function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
-                });
+            invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
             $(modalPopupContent).removeData();
             hidePopup();
         }
     } else {
-        invokerUtil.post(serviceEndPoint, payload, successCallback, function (textStatus) {
-                console.log(textStatus);
-            });
+        invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
         $(modalPopupContent).removeData();
         hidePopup();
     }
