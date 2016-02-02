@@ -995,7 +995,7 @@ validateStep["policy-profile"] = function () {
 
                 if (continueToCheckNextInputs) {
                     var emailOutgoingMailServerPort = $("input#email-outgoing-mail-server-port").val();
-                    if (emailOutgoingMailServerPort && emailOutgoingMailServerPort != '') {
+                    if (emailOutgoingMailServerPort) {
                         if (!$.isNumeric(emailOutgoingMailServerPort)) {
                             validationStatus = {
                                 "error": true,
@@ -1805,7 +1805,7 @@ var savePolicy = function (policy, state) {
 
     $.each(profilePayloads, function (i, item) {
         $.each(item.content, function (key, value) {
-            if (value === "" || value === undefined) {
+            if (!value) {
                 item.content[key] = null;
             }
         });
@@ -1971,7 +1971,7 @@ var showHideHelpText = function (addFormContainer) {
 
 function formatRepo(user) {
     if (user.loading) {
-        return user.text
+        return user.text;
     }
     if (!user.username) {
         return;

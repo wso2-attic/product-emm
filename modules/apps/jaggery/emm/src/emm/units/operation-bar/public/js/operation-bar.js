@@ -107,15 +107,19 @@ function loadOperationBar(deviceType) {
             var viewModel = {};
             data = JSON.parse(data).filter(function (current) {
                 var iconName;
-                if (deviceType == ANDROID) {
-                    iconName = operationModule.getAndroidIconForFeature(current.code);
-                    current.type = deviceType;
+                switch(deviceType) {
+                    case ANDROID:
+                        iconName = operationModule.getAndroidIconForFeature(current.code);
+                        current.type = deviceType;
+                        break;
+                    case WINDOWS:
+                        iconName = operationModule.getWindowsIconForFeature(current.code);
+                        break;
+                    case IOS:
+                        iconName = operationModule.getIOSIconForFeature(current.code);
+                        break;
                 }
-                if (deviceType == WINDOWS) {
-                    iconName = operationModule.getWindowsIconForFeature(current.code);
-                } else if (deviceType == IOS) {
-                    iconName = operationModule.getIOSIconForFeature(current.code);
-                }
+
                 if (iconName) {
                     current.icon = iconName;
                     return current;
@@ -152,12 +156,10 @@ function runOperation(operationName) {
     if (list[IOS]) {
         payload = operationModule.generatePayload(IOS, operationName, list[IOS]);
         serviceEndPoint = operationModule.getIOSServiceEndpoint(operationName);
-    }
-    if (list[ANDROID]) {
+    } else if (list[ANDROID]) {
         payload = operationModule.generatePayload(ANDROID, operationName, list[ANDROID]);
         serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
-    }
-    if (list[WINDOWS]) {
+    } else if (list[WINDOWS]) {
         payload = operationModule.generatePayload(WINDOWS, operationName, list[WINDOWS]);
         serviceEndPoint = operationModule.getWindowsServiceEndpoint(operationName);
     }

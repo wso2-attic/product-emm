@@ -187,7 +187,7 @@ $(document).ready(function () {
         getGeneralConfigAPI,
         function (data) {
             data = JSON.parse(data);
-            if (data != null && data.configuration != null) {
+            if (data && data.configuration) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
                     if (config.name == configParams["NOTIFIER_FREQUENCY"]) {

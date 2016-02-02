@@ -38,7 +38,7 @@ var backendServiceInvoker = function () {
      */
     privateMethods.getAccessToken = function () {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
-        if (tokenPair != null) {
+        if (tokenPair) {
             return tokenPair.accessToken;
         } else {
             response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
@@ -60,9 +60,8 @@ var backendServiceInvoker = function () {
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
             xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
             if (IS_OAUTH_ENABLED) {
-                var accessToken = privateMethods.getAccessToken();
                 xmlHttpRequest.setRequestHeader(
-                    constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
+                    constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX +  privateMethods.getAccessToken());
             }
             if (payload) {
                 xmlHttpRequest.send(payload);
@@ -87,8 +86,7 @@ var backendServiceInvoker = function () {
                 return errorCallback(xmlHttpRequest);
             }
         };
-        var accessToken = privateMethods.getAccessToken();
-        if (accessToken) {
+        if (privateMethods.getAccessToken()) {
             return execute(0);
         }
     };
