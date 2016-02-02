@@ -40,7 +40,7 @@ policyModule = function () {
             response.content = responsePayload;
         }
         return response;
-    }
+    };
 
     privateMethods.getAllPoliciesOnSuccess = function (responsePayload) {
         var response = {};
@@ -85,7 +85,7 @@ policyModule = function () {
         response.status = "success";
         response.content = policyListToView;
         return response;
-    }
+    };
     /*
      @Updated
      */

@@ -125,8 +125,7 @@ function loadOperationBar(deviceType) {
             var content = template(viewModel);
             $(".wr-operations").html(content);
         };
-        invokerUtil.get(serviceURL,
-                        successCallback, function (message) {
+        invokerUtil.get(serviceURL, successCallback, function (message) {
                 console.log(message);
             });
     });
@@ -173,8 +172,7 @@ function runOperation(operationName) {
             hidePopup();
         }
     } else {
-        invokerUtil.post(serviceEndPoint, payload,
-                         successCallback, function (textStatus) {
+        invokerUtil.post(serviceEndPoint, payload, successCallback, function (textStatus) {
                 console.log(textStatus);
             });
         $(modalPopupContent).removeData();
