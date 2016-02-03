@@ -26,6 +26,7 @@ import org.wso2.emm.agent.beans.RegistrationProfile;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.beans.UnregisterProfile;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
+import org.wso2.emm.agent.proxy.IdentityProxy;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import org.wso2.emm.agent.utils.Constants;
@@ -57,6 +58,7 @@ public class DynamicClientManager {
      */
     public String getClientCredentials(RegistrationProfile profile, ServerConfig utils, Context context)
             throws AndroidAgentException {
+        IdentityProxy.getInstance().setContext(context);
         EndPointInfo endPointInfo = new EndPointInfo();
         String endPoint = utils.getAPIServerURL(context) +
                 org.wso2.emm.agent.utils.Constants.DYNAMIC_CLIENT_REGISTER_ENDPOINT;
