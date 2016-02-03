@@ -76,6 +76,11 @@
             <class name="org.wso2.mdm.integration.mobileDevice.MobileDeviceManagement"/>
         </classes>
     </test>
+    <test name="mobile-device-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.mobileDevice.OracleMobileDeviceManagement"/>
+        </classes>
+    </test>
     <test name="user-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.user.UserManagement"/>
