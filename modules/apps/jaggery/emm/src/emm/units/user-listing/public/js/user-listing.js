@@ -165,7 +165,7 @@ function loadUsers(searchParam) {
             serviceURL = serviceURL + "/view-users?username=" + searchParam;
         }
         var successCallback = function (data) {
-            if (data == null) {
+            if (data) {
                 $('#ast-container').addClass('hidden');
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
                 return;
@@ -178,11 +178,11 @@ function loadUsers(searchParam) {
             viewModel.users = data;
             for (var i = 0; i < viewModel.users.length; i++) {
                 viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
-                if (canRemove != null && canRemove != undefined) {
+                if (!canRemove) {
                     viewModel.users[i].canRemove = true;
                 }
 
-                if (canEdit != null && canEdit != undefined) {
+                if (!canEdit) {
                     viewModel.users[i].canEdit = true;
                 }
             }

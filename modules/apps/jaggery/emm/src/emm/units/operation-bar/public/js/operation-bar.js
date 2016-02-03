@@ -26,7 +26,12 @@ var operations = '.wr-operations',
     navHeight = $('#nav').height(),
     headerHeight = $('header').height(),
     offset = (headerHeight + navHeight),
-    deviceSelection = '.device-select';
+    deviceSelection = '.device-select',
+    var platformTypeConstants = {
+        "ANDROID": "android",
+        "IOS": "ios",
+        "WINDOWS": "windows"
+    };
 
 /*
  * Function to get selected devices ID's
@@ -78,11 +83,12 @@ function operationSelect(selection) {
 function getDevicesByTypes(deviceList) {
     var deviceTypes = {};
     $.each(deviceList, function (index, item) {
-        if (deviceTypes[item.type] == null || deviceTypes[item.type] == undefined) {
+        if (deviceTypes[item.type]) {
             deviceTypes[item.type] = [];
         }
 
-        if (item.type == "android" || item.type == "ios" || item.type == "windows") {
+        if (item.type == platformTypeConstants.ANDROID ||
+            item.type == platformTypeConstants.IOS || item.type == platformTypeConstants.WINDOWS) {
             deviceTypes[item.type].push(item.id);
         }
     });
@@ -104,15 +110,19 @@ function loadOperationBar(deviceType) {
             var viewModel = {};
             data = JSON.parse(data).filter(function (current) {
                 var iconName;
-                if (deviceType == "android") {
-                    iconName = operationModule.getAndroidIconForFeature(current.code);
-                    current.type = deviceType;
+                switch(deviceType) {
+                    case platformTypeConstants.ANDROID:
+                        iconName = operationModule.getAndroidIconForFeature(current.code);
+                        current.type = deviceType;
+                        break;
+                    case platformTypeConstants.WINDOWS:
+                        iconName = operationModule.getWindowsIconForFeature(current.code);
+                        break;
+                    case platformTypeConstants.IOS:
+                        iconName = operationModule.getIOSIconForFeature(current.code);
+                        break;
                 }
-                if (deviceType == "windows") {
-                    iconName = operationModule.getWindowsIconForFeature(current.code);
-                } else if (deviceType == "ios") {
-                    iconName = operationModule.getIOSIconForFeature(current.code);
-                }
+
                 if (iconName) {
                     current.icon = iconName;
                     return current;
@@ -122,9 +132,8 @@ function loadOperationBar(deviceType) {
             var content = template(viewModel);
             $(".wr-operations").html(content);
         };
-        invokerUtil.get(serviceURL,
-                        successCallback, function (message) {
-                console.log(message);
+        invokerUtil.get(serviceURL, successCallback, function (message) {
+            $(".wr-operations").html(message);
             });
     });
 }
@@ -141,18 +150,23 @@ function runOperation(operationName) {
         }
         showPopup();
     };
+    var errorCallback = function (data) {
+        $(modalPopupContent).html($("#errorOperationUnexpected").html());
+        showPopup();
+    };
 
     var payload, serviceEndPoint;
-    if (list["ios"]) {
-        payload = operationModule.generatePayload("ios", operationName, list["ios"]);
+    if (list[platformTypeConstants.IOS]) {
+        payload = operationModule.
+            generatePayload(platformTypeConstants.IOS, operationName, list[platformTypeConstants.IOS]);
         serviceEndPoint = operationModule.getIOSServiceEndpoint(operationName);
-    }
-    if (list["android"]) {
-        payload = operationModule.generatePayload("android", operationName, list["android"]);
+    } else if (list[platformTypeConstants.ANDROID]) {
+        payload = operationModule
+            .generatePayload(platformTypeConstants.ANDROID, operationName, list[platformTypeConstants.ANDROID]);
         serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
-    }
-    if (list["windows"]) {
-        payload = operationModule.generatePayload("windows", operationName, list["windows"]);
+    } else if (list[platformTypeConstants.WINDOWS]) {
+        payload = operationModule.
+            generatePayload(platformTypeConstants.WINDOWS, operationName, list[platformTypeConstants.WINDOWS]);
         serviceEndPoint = operationModule.getWindowsServiceEndpoint(operationName);
     }
     if (operationName == "NOTIFICATION") {
@@ -163,18 +177,12 @@ function runOperation(operationName) {
             $(errorMsg).text("Enter a message. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
-            invokerUtil.post(serviceEndPoint, payload,
-                             successCallback, function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
-                });
+            invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
             $(modalPopupContent).removeData();
             hidePopup();
         }
     } else {
-        invokerUtil.post(serviceEndPoint, payload,
-                         successCallback, function (textStatus) {
-                console.log(textStatus);
-            });
+        invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
         $(modalPopupContent).removeData();
         hidePopup();
     }

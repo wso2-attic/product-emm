@@ -37,4 +37,4 @@ Steps to install on a rooted device:
        apk-filename-here
        adb reboot
 
-[1] - https://docs.google.com/uc?id=0BxzxgoCRhSfzZ3p6VmFoT1VYaUU&export=download
+[1] - https://github.com/anggrayudi/android-hidden-api

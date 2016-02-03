@@ -82,7 +82,7 @@ $(document).ready(function () {
             addUserFormData.lastname = lastname;
             addUserFormData.emailAddress = emailAddress;
 
-            if (roles == null) {
+            if (!roles) {
                 roles = [];
             }
             addUserFormData.roles = roles;

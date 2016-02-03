@@ -995,7 +995,7 @@ validateStep["policy-profile"] = function () {
 
                 if (continueToCheckNextInputs) {
                     var emailOutgoingMailServerPort = $("input#email-outgoing-mail-server-port").val();
-                    if (emailOutgoingMailServerPort && emailOutgoingMailServerPort != '') {
+                    if (emailOutgoingMailServerPort) {
                         if (!$.isNumeric(emailOutgoingMailServerPort)) {
                             validationStatus = {
                                 "error": true,
@@ -1777,21 +1777,22 @@ stepForwardFrom["policy-naming-publish"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
-    savePolicy(policy, "publish");
+    savePolicy(policy, "/mdm-admin/policies/active-policy");
 };
 stepForwardFrom["policy-naming"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
-    savePolicy(policy, "save");
+    savePolicy(policy, "/mdm-admin/policies/inactive-policy");
 };
 
-var savePolicy = function (policy, state) {
+var savePolicy = function (policy, serviceURL) {
     var profilePayloads = [];
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if (policy["platformId"] == platformTypeIds["WINDOWS"] && key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
+        if (policy["platformId"] == platformTypeIds["WINDOWS"] &&
+            key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
             policy["profile"][key].enablePassword = true;
         }
         if (policy["profile"].hasOwnProperty(key)) {
@@ -1805,7 +1806,7 @@ var savePolicy = function (policy, state) {
 
     $.each(profilePayloads, function (i, item) {
         $.each(item.content, function (key, value) {
-            if (value === "" || value === undefined) {
+            if (!value) {
                 item.content[key] = null;
             }
         });
@@ -1834,12 +1835,6 @@ var savePolicy = function (policy, state) {
         payload["roles"] = [];
     }
 
-    var serviceURL;
-    if (state == "save") {
-        serviceURL = "/mdm-admin/policies/inactive-policy"
-    } else if (state == "publish") {
-        serviceURL = "/mdm-admin/policies/active-policy"
-    }
     invokerUtil.post(
         serviceURL,
         payload,
@@ -1971,7 +1966,7 @@ var showHideHelpText = function (addFormContainer) {
 
 function formatRepo(user) {
     if (user.loading) {
-        return user.text
+        return user.text;
     }
     if (!user.username) {
         return;
@@ -1992,7 +1987,6 @@ function formatRepo(user) {
 
 function formatRepoSelection(user) {
     return user.username || user.text;
-    ;
 }
 
 // End of functions related to grid-input-view

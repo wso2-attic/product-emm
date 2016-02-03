@@ -32,8 +32,8 @@ public class MDMUtil {
         profile.setDeviceType(mdmProfile.getDeviceType());
 
         List<org.wso2.carbon.policy.mgt.common.ProfileFeature> profileFeatures =
-                new ArrayList<org.wso2.carbon.policy
-                .mgt.common.ProfileFeature>(mdmProfile.getProfileFeaturesList().size());
+                new ArrayList<org.wso2.carbon.policy.
+                        mgt.common.ProfileFeature>(mdmProfile.getProfileFeaturesList().size());
         for (ProfileFeature mdmProfileFeature : mdmProfile.getProfileFeaturesList()) {
             profileFeatures.add(convertProfileFeature(mdmProfileFeature));
         }
@@ -47,8 +47,8 @@ public class MDMUtil {
     public static org.wso2.carbon.policy.mgt.common.ProfileFeature convertProfileFeature(ProfileFeature
                                                                                                  mdmProfileFeature) {
 
-        org.wso2.carbon.policy.mgt.common.ProfileFeature profileFeature = new org.wso2.carbon.policy.mgt.common
-                .ProfileFeature();
+        org.wso2.carbon.policy.mgt.common.ProfileFeature profileFeature =
+                new org.wso2.carbon.policy.mgt.common.ProfileFeature();
         profileFeature.setProfileId(mdmProfileFeature.getProfileId());
         profileFeature.setContent(mdmProfileFeature.getPayLoad());
         profileFeature.setDeviceTypeId(mdmProfileFeature.getDeviceTypeId());
