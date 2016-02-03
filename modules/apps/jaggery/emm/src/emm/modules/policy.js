@@ -31,11 +31,20 @@ policyModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
-    privateMethods.getAllPoliciesOnError = function (responsePayload) {
+    privateMethods.handleGetAllPoliciesError = function (responsePayload) {
         var response = {};
         response.status = "error";
-        /* the status message used other than the status code because the status code return from IS for different
-         occasions with under status messages. */
+        /* responsePayload == "Scope validation failed"
+        Here the response.context("Scope validation failed") is used other then response.status(401).
+        Reason for this is IDP return 401 as the status in 4 different situations such as,
+        1. UnAuthorized.
+        2. Scope Validation Failed.
+        3. Permission Denied.
+        4. Access Token Expired.
+        5. Access Token Invalid.
+        In these cases in order to identify the correct situation we have to compare the unique value from status and
+        context which is context.
+         */
         if (responsePayload == "Scope validation failed") {
             response.content = "Permission Denied";
         } else {
@@ -44,8 +53,7 @@ policyModule = function () {
         return response;
     };
 
-    privateMethods.getAllPoliciesOnSuccess = function (responsePayload) {
-        var response = {};
+    privateMethods.handleGetAllPoliciesSuccess = function (responsePayload) {
         var policyListFromRestEndpoint = responsePayload["responseContent"];
         var policyListToView = [];
         var i, policyObjectFromRestEndpoint, policyObjectToView;
@@ -83,6 +91,7 @@ policyModule = function () {
             policyListToView.push(policyObjectToView);
         }
         // generate response
+        var response = {};
         response.updated = isUpdated;
         response.status = "success";
         response.content = policyListToView;

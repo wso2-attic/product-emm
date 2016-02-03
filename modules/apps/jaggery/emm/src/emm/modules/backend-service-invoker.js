@@ -37,11 +37,52 @@ var backendServiceInvoker = function () {
      * If the token pair s not set in the session this will send a redirect to the login page.
      */
     privateMethods.getAccessToken = function () {
-        var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
-        if (tokenPair) {
-            return tokenPair.accessToken;
+        return session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
+    };
+
+    /**
+     * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
+     * @param method HTTP request type.
+     * @param url target url.
+     * @param payload payload/data which need to be send.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
+     * @param count a counter which hold the number of recursive execution
+     */
+    privateMethods.execute = function (method, url, successCallback, errorCallback, payload, count) {
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open(method, url);
+        xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+        xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
+        if (IS_OAUTH_ENABLED) {
+            var accessToken = privateMethods.getAccessToken();
+            if (accessToken) {
+                response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
+            } else {
+                xmlHttpRequest.setRequestHeader(constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
+            }
+        }
+        if (payload) {
+            xmlHttpRequest.send(payload);
         } else {
-            response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
+            xmlHttpRequest.send();
+        }
+        log.debug("Service Invoker-URL: " + url);
+        log.debug("Service Invoker-Method: " + method);
+        if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
+            if (xmlHttpRequest.responseText != null) {
+                return successCallback(parse(xmlHttpRequest.responseText));
+            } else {
+                return successCallback({"statusCode": 200, "messageFromServer": "Operation Completed"});
+            }
+        } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
+                                                    xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5) {
+            tokenUtil.refreshToken();
+            return privateMethods.execute(method, url, successCallback, errorCallback, payload, (count + 1));
+        } else if (xmlHttpRequest.status == 500) {
+            return errorCallback(xmlHttpRequest);
+        } else {
+            return errorCallback(xmlHttpRequest);
         }
     };
 
@@ -54,40 +95,8 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     privateMethods.initiateXMLHTTPRequest = function (method, url, successCallback, errorCallback, payload) {
-        var execute = function (count) {
-            var xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.open(method, url);
-            xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
-            xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
-            if (IS_OAUTH_ENABLED) {
-                xmlHttpRequest.setRequestHeader(
-                    constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX +  privateMethods.getAccessToken());
-            }
-            if (payload) {
-                xmlHttpRequest.send(payload);
-            } else {
-                xmlHttpRequest.send();
-            }
-            log.debug("Service Invoker-URL: " + url);
-            log.debug("Service Invoker-Method: " + method);
-            if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
-                if (xmlHttpRequest.responseText != null) {
-                    return successCallback(parse(xmlHttpRequest.responseText));
-                } else {
-                    return successCallback({"statusCode": 200, "messageFromServer": "Operation Completed"});
-                }
-            } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
-                                                        xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5) {
-                tokenUtil.refreshToken();
-                return execute(count + 1);
-            } else if (xmlHttpRequest.status == 500) {
-                return errorCallback(xmlHttpRequest);
-            } else {
-                return errorCallback(xmlHttpRequest);
-            }
-        };
         if (privateMethods.getAccessToken()) {
-            return execute(0);
+            return privateMethods.execute(method, url, successCallback, errorCallback, payload, 0);
         }
     };
 
@@ -138,6 +147,8 @@ var backendServiceInvoker = function () {
                 header.setName(constants.AUTHORIZATION_HEADER);
                 header.setValue(constants.BEARER_PREFIX + accessToken);
                 httpMethodObject.addRequestHeader(header);
+            } else {
+                response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
             }
 
         }
@@ -183,6 +194,8 @@ var backendServiceInvoker = function () {
                 oAuthAuthenticationData.value = authenticationHeaderValue;
                 headers.push(oAuthAuthenticationData);
                 options.HTTPHeaders = headers;
+            } else {
+                response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
             }
         }
         options.useSOAP = soapVersion;

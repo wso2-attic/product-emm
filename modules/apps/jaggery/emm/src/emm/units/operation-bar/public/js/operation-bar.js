@@ -27,9 +27,11 @@ var operations = '.wr-operations',
     headerHeight = $('header').height(),
     offset = (headerHeight + navHeight),
     deviceSelection = '.device-select',
-    IOS = 'ios',
-    WINDOWS = 'windows',
-    ANDROID = 'android';
+    var platformTypeConstants = {
+        "ANDROID": "android",
+        "IOS": "ios",
+        "WINDOWS": "windows"
+    };
 
 /*
  * Function to get selected devices ID's
@@ -85,7 +87,8 @@ function getDevicesByTypes(deviceList) {
             deviceTypes[item.type] = [];
         }
 
-        if (item.type == ANDROID || item.type == IOS || item.type == WINDOWS) {
+        if (item.type == platformTypeConstants.ANDROID ||
+            item.type == platformTypeConstants.IOS || item.type == platformTypeConstants.WINDOWS) {
             deviceTypes[item.type].push(item.id);
         }
     });
@@ -108,14 +111,14 @@ function loadOperationBar(deviceType) {
             data = JSON.parse(data).filter(function (current) {
                 var iconName;
                 switch(deviceType) {
-                    case ANDROID:
+                    case platformTypeConstants.ANDROID:
                         iconName = operationModule.getAndroidIconForFeature(current.code);
                         current.type = deviceType;
                         break;
-                    case WINDOWS:
+                    case platformTypeConstants.WINDOWS:
                         iconName = operationModule.getWindowsIconForFeature(current.code);
                         break;
-                    case IOS:
+                    case platformTypeConstants.IOS:
                         iconName = operationModule.getIOSIconForFeature(current.code);
                         break;
                 }
@@ -153,14 +156,17 @@ function runOperation(operationName) {
     };
 
     var payload, serviceEndPoint;
-    if (list[IOS]) {
-        payload = operationModule.generatePayload(IOS, operationName, list[IOS]);
+    if (list[platformTypeConstants.IOS]) {
+        payload = operationModule.
+            generatePayload(platformTypeConstants.IOS, operationName, list[platformTypeConstants.IOS]);
         serviceEndPoint = operationModule.getIOSServiceEndpoint(operationName);
-    } else if (list[ANDROID]) {
-        payload = operationModule.generatePayload(ANDROID, operationName, list[ANDROID]);
+    } else if (list[platformTypeConstants.ANDROID]) {
+        payload = operationModule
+            .generatePayload(platformTypeConstants.ANDROID, operationName, list[platformTypeConstants.ANDROID]);
         serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
-    } else if (list[WINDOWS]) {
-        payload = operationModule.generatePayload(WINDOWS, operationName, list[WINDOWS]);
+    } else if (list[platformTypeConstants.WINDOWS]) {
+        payload = operationModule.
+            generatePayload(platformTypeConstants.WINDOWS, operationName, list[platformTypeConstants.WINDOWS]);
         serviceEndPoint = operationModule.getWindowsServiceEndpoint(operationName);
     }
     if (operationName == "NOTIFICATION") {

@@ -1777,21 +1777,22 @@ stepForwardFrom["policy-naming-publish"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
-    savePolicy(policy, "publish");
+    savePolicy(policy, "/mdm-admin/policies/active-policy");
 };
 stepForwardFrom["policy-naming"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
-    savePolicy(policy, "save");
+    savePolicy(policy, "/mdm-admin/policies/inactive-policy");
 };
 
-var savePolicy = function (policy, state) {
+var savePolicy = function (policy, serviceURL) {
     var profilePayloads = [];
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if (policy["platformId"] == platformTypeIds["WINDOWS"] && key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
+        if (policy["platformId"] == platformTypeIds["WINDOWS"] &&
+            key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
             policy["profile"][key].enablePassword = true;
         }
         if (policy["profile"].hasOwnProperty(key)) {
@@ -1834,12 +1835,6 @@ var savePolicy = function (policy, state) {
         payload["roles"] = [];
     }
 
-    var serviceURL;
-    if (state == "save") {
-        serviceURL = "/mdm-admin/policies/inactive-policy"
-    } else if (state == "publish") {
-        serviceURL = "/mdm-admin/policies/active-policy"
-    }
     invokerUtil.post(
         serviceURL,
         payload,
