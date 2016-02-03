@@ -18,11 +18,7 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.MultitenantConstants;
-import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -36,12 +32,9 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.identity.core.util.IdentityTenantUtil;
 import org.wso2.carbon.identity.oauth2.OAuth2TokenValidationService;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.MDMAPIException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.TenantManager;
 import org.wso2.carbon.user.api.UserStoreException;
-import org.wso2.carbon.user.api.UserStoreManager;
-import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 import org.wso2.carbon.webapp.authenticator.framework.config.AuthenticatorConfig;
 import org.wso2.carbon.webapp.authenticator.framework.config.AuthenticatorConfigService;
@@ -55,8 +48,6 @@ import java.util.List;
  */
 public class WindowsAPIUtils {
 
-    private static Log log = LogFactory.getLog(WindowsAPIUtils.class);
-
     public static DeviceIdentifier convertToDeviceIdentifierObject(String deviceId) {
         DeviceIdentifier identifier = new DeviceIdentifier();
         identifier.setId(deviceId);
@@ -64,48 +55,14 @@ public class WindowsAPIUtils {
         return identifier;
     }
 
-    public static CertificateManagementService getCertificateManagementService() {
-        CertificateManagementService cmService;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        cmService =
-                (CertificateManagementService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-        PrivilegedCarbonContext.endTenantFlow();
-        return cmService;
-    }
-
     public static DeviceManagementProviderService getDeviceManagementService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         DeviceManagementProviderService deviceManagementProviderService =
                 (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
         if (deviceManagementProviderService == null) {
-            String msg = "Device Management service has not initialized.";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException("Device Management service has not initialized.");
         }
         return deviceManagementProviderService;
-    }
-
-
-    public static UserStoreManager getUserStoreManager() throws MDMAPIException {
-        RealmService realmService;
-        UserStoreManager userStoreManager;
-        try {
-            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
-            if (realmService == null) {
-                String msg = "Realm service has not initialized.";
-                throw new IllegalStateException(msg);
-            }
-            int tenantId = ctx.getTenantId();
-            userStoreManager = realmService.getTenantUserRealm(tenantId).getUserStoreManager();
-        } catch (UserStoreException e) {
-            String msg = "Error occurred while retrieving current user store manager";
-            throw new MDMAPIException(msg, e);
-        }
-        return userStoreManager;
     }
 
     public static NotificationManagementService getNotificationManagementService() {
@@ -114,9 +71,7 @@ public class WindowsAPIUtils {
         notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
                 NotificationManagementService.class, null);
         if (notificationManagementService == null) {
-            String msg = "Notification Management service not initialized.";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException("Notification Management service not initialized.");
         }
         return notificationManagementService;
     }
@@ -138,11 +93,11 @@ public class WindowsAPIUtils {
         DeviceIDHolder deviceIDHolder = deviceUtils.validateDeviceIdentifiers(deviceIDs,
                 message, responseMediaType);
         getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
-        if (!deviceIDHolder.getErrorDeviceIdList().isEmpty()) {
+        if (!deviceIDHolder.getInvalidDeviceIdList().isEmpty()) {
             return javax.ws.rs.core.Response.status(PluginConstants.StatusCodes.
                     MULTI_STATUS_HTTP_CODE).type(
                     responseMediaType).entity(deviceUtils.
-                    convertErrorMapIntoErrorMessage(deviceIDHolder.getErrorDeviceIdList())).build();
+                    convertErrorMapIntoErrorMessage(deviceIDHolder.getInvalidDeviceIdList())).build();
         }
         return javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.CREATED).
                 type(responseMediaType).build();
@@ -153,9 +108,7 @@ public class WindowsAPIUtils {
         PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
                 PolicyManagerService.class, null);
         if (policyManagerService == null) {
-            String msg = "Policy Manager service has not initialized";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException("Policy Manager service has not initialized");
         }
         return policyManagerService;
     }
@@ -181,9 +134,7 @@ public class WindowsAPIUtils {
                 TenantManager tenantManager = IdentityTenantUtil.getRealmService().getTenantManager();
                 tenantId = tenantManager.getTenantId(domainName);
             } catch (UserStoreException e) {
-                String errorMsg = "Error when getting the tenant id from the tenant domain : " +
-                        domainName;
-                log.error(errorMsg, e);
+                String errorMsg = "Error when getting the tenant id from the tenant domain : " + domainName;
                 throw new DeviceManagementException(errorMsg, e);
             }
         }
@@ -195,9 +146,7 @@ public class WindowsAPIUtils {
         OAuth2TokenValidationService oAuth2TokenValidationService =
                 (OAuth2TokenValidationService) ctx.getOSGiService(OAuth2TokenValidationService.class, null);
         if (oAuth2TokenValidationService == null) {
-            String msg = "OAuth2TokenValidation service has not initialized.";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException("OAuth2TokenValidation service has not initialized.");
         }
         return oAuth2TokenValidationService;
     }
@@ -208,9 +157,7 @@ public class WindowsAPIUtils {
                 (AuthenticatorConfigService) ctx.getOSGiService(AuthenticatorConfigService.class, null);
         AuthenticatorConfig authenticatorConfig = authenticatorConfigService.getAuthenticatorConfig("BST");
         if (authenticatorConfig == null) {
-            String msg = "BST authenticatorConfig has not initialized.";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException("BST authenticatorConfig has not initialized.");
         }
         return authenticatorConfig;
     }

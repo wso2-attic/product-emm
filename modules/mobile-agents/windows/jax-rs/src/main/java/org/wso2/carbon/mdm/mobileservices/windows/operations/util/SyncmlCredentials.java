@@ -26,7 +26,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Class for generate security token for client and server.
+ * Generate security token to client and server.
  */
 public class SyncmlCredentials {
 

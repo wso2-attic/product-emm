@@ -60,7 +60,8 @@ public class SyncmlServiceImpl implements SyncmlService {
      * This method is used to generate and return Device object from the received information at
      * the Syncml step.
      *
-     * @return - Generated device object
+     * @param windowsDevice Windows specific property object.
+     * @return - Generated device object.
      */
     private Device generateDevice(WindowsDevice windowsDevice) {
 
@@ -358,7 +359,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 imei = itemList.get(PluginConstants.SyncML.IMEI_POSITION).getData();
                 vender = itemList.get(PluginConstants.SyncML.VENDER_POSITION).getData();
                 devMod = itemList.get(PluginConstants.SyncML.MODEL_POSITION).getData();
-                macAddress = itemList.get(PluginConstants.SyncML.MACADDRESS_POSITION).getData();
+                macAddress = itemList.get(PluginConstants.SyncML.MAC_ADDRESS_POSITION).getData();
                 resolution = itemList.get(PluginConstants.SyncML.RESOLUTION_POSITION).getData();
                 deviceName = itemList.get(PluginConstants.SyncML.DEVICE_NAME_POSITION).getData();
                 DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlDocument.

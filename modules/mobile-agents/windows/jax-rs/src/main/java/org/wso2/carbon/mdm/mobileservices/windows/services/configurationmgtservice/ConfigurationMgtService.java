@@ -86,8 +86,7 @@ public class ConfigurationMgtService {
                 responseMsg.setResponseMessage("Windows platform configuration saved successfully.");
                 responseMsg.setResponseCode(Response.Status.CREATED.toString());
                 return responseMsg;
-            }
-            else {
+            } else {
                 Response.status(Response.Status.BAD_REQUEST);
                 responseMsg.setResponseMessage("Windows platform configuration can not be saved.");
                 responseMsg.setResponseCode(Response.Status.CREATED.toString());
@@ -114,7 +113,7 @@ public class ConfigurationMgtService {
         try {
             tenantConfiguration = WindowsAPIUtils.getDeviceManagementService().
                     getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
-            if(tenantConfiguration != null) {
+            if (tenantConfiguration != null) {
                 configs = tenantConfiguration.getConfiguration();
             } else {
                 tenantConfiguration = new TenantConfiguration();
@@ -126,7 +125,7 @@ public class ConfigurationMgtService {
                     DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS,
                     PluginConstants.TenantConfigProperties.LANGUAGE_US);
 
-            if(license != null && configs != null) {
+            if (license != null && configs != null) {
                 entry.setContentType(PluginConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
                 entry.setName(PluginConstants.TenantConfigProperties.LICENSE_KEY);
                 entry.setValue(license.getText());

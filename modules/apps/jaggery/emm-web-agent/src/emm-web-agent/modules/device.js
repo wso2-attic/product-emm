@@ -33,7 +33,7 @@ deviceModule = function () {
     /*
      @Updated
      */
-    publicMethods.getLicense = function (deviceType, languageCode) {
+    publicMethods.getLicense = function (deviceType) {
         var url;
         var license;
         if (deviceType != null && deviceType != undefined && deviceType == "windows") {

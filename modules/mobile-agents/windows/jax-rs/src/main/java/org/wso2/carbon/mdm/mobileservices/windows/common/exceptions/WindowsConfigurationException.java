@@ -19,7 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 
 /**
- * Custom class for windows API configurations.
+ * Custom class for windows device configurations.
  */
 public class WindowsConfigurationException extends Exception {
 

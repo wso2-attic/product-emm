@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Sequence data that use to execute tag list
+ * Class used to build syncml SequenceTag.
  */
 public class SequenceTag {
 

@@ -132,7 +132,7 @@ public class StatusTag {
             status.appendChild(targetReference);
         }
         if (getChallenge() != null) {
-            getChallenge().buildChalElement(doc, status);
+            getChallenge().buildChallengeElement(doc, status);
         }
         if (getData() != null) {
             Element data = doc.createElement(Constants.DATA);

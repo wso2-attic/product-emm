@@ -112,11 +112,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         List<Header> headers = getHeaders();
         for (Header headerElement : headers != null ? headers : null) {
             String nodeName = headerElement.getName().getLocalPart();
-            if (nodeName.equals(PluginConstants.SECURITY)) {
+            if (PluginConstants.SECURITY.equals(nodeName)) {
                 Element element = (Element) headerElement.getObject();
                 headerBinarySecurityToken = element.getFirstChild().getNextSibling().getFirstChild().getTextContent();
             }
-            if (nodeName.equals(PluginConstants.TO)) {
+            if (PluginConstants.TO.equals(nodeName)) {
                 Element toElement = (Element) headerElement.getObject();
                 headerTo = toElement.getFirstChild().getTextContent();
             }
@@ -331,40 +331,33 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
             Node pollValue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             pollValue.setTextContent(pollingFrequency);
-            if (log.isDebugEnabled()) {
-                log.debug("Username: " + userName + "Password: " + requestSecurityTokenResponse);
-            }
             wapProvisioningString = convertDocumentToString(document);
         } catch (ParserConfigurationException e) {
-            String msg = "Problem occurred in parsing wap-provisioning.xml file.";
+            String msg = "Problem occurred parsing wap-provisioning.xml file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
-        } catch (DeviceManagementException e) {
-            String msg = "Error occurred in while getting CA and Root certificates.";
-            log.error(msg, e);
-            throw new WindowsDeviceEnrolmentException(msg, e);
         } catch (CertificateEncodingException e) {
-            String msg = "Error occurred in while encoding certificates.";
+            String msg = "Error occurred while encoding certificates.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
         } catch (UnsupportedEncodingException e) {
-            String msg = "Error occurred in while encoding wap-provisioning file.";
+            String msg = "Error occurred while encoding wap-provisioning file.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
         } catch (SAXException e) {
-            String msg = "Error occurred in while parsing wap-provisioning.xml file.";
+            String msg = "Error occurred while parsing wap-provisioning.xml file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
         } catch (TransformerException e) {
-            String msg = "Error occurred in while transforming wap-provisioning.xml file.";
+            String msg = "Error occurred while transforming wap-provisioning.xml file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
         } catch (IOException e) {
-            String msg = "Error occurred in while getting wap-provisioning.xml file.";
+            String msg = "Error occurred while getting wap-provisioning.xml file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
         } catch (SyncmlMessageFormatException e) {
-            String msg = "Error occurred in while getting CA and Root certificates.";
+            String msg = "Error occurred while encoding CA and Root certificates.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
         }
@@ -374,7 +367,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
     /**
      * This method get the soap request header contents.
      *
-     * @return Header object type,soap header tag list
+     * @return List of SOAP headers.
      */
     private List<Header> getHeaders() {
         MessageContext messageContext = context.getMessageContext();

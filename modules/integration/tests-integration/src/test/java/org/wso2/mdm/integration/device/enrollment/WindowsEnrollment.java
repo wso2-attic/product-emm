@@ -117,7 +117,7 @@ public class WindowsEnrollment extends TestBase {
 
     private String readXML(String fileName, String characterEncoding) throws Exception {
         URL url = ClassLoader.getSystemResource(fileName);
-        File folder = new File(url.toURI());
-        return FileUtils.readFileToString(folder, characterEncoding);
+        File file = new File(url.toURI());
+        return FileUtils.readFileToString(file, characterEncoding);
     }
 }

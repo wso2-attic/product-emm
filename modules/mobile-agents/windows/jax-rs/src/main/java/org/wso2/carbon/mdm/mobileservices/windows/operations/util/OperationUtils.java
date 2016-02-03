@@ -90,7 +90,7 @@ public class OperationUtils {
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(
-                                Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
+                                Constants.SyncMLResponseCodes.LOCK_RESET_NOTIFICATION);
                         nmService.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
                         throw new WindowsOperationException("Failure occurred in getting notification service", e);
@@ -158,7 +158,7 @@ public class OperationUtils {
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
-                        lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
+                        lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCK_RESET_NOTIFICATION);
 
                         nmService.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {

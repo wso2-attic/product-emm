@@ -35,8 +35,6 @@ public class Constants {
     public static final String UTF_8 = "UTF-8";
     public static final String MD5 = "MD5";
     public static final String YES = "yes";
-    public static final String ERROR = "Error";
-    public static final String INFORMATION = "information";
 
     public static final String EXECUTE = "Exec";
     public static final String ATOMIC = "Atomic";
@@ -82,15 +80,13 @@ public class Constants {
     public static final String META_FORMAT_CHARACTER = "chr";
 
     /**
-     * SynclML service related constants
+     * SynclML service related constants.
      */
     public final class SyncMLResponseCodes {
         public static final String AUTHENTICATION_ACCEPTED = "212";
         public static final String ACCEPTED = "200";
         public static final String ACCEPTED_FOR_PROCESSING = "202";
         public static final String PIN_NOTFOUND = "405";
-        public static final String CREDENTIALS_MISSING = "407";
-        public static final String INVALID_CREDENTIALS = "401";
         public static final String LOCK_RESET_NOTIFICATION = "Error occurred in Device Lock Operation. " +
                 "Please trigger lock-reset operation.";
     }

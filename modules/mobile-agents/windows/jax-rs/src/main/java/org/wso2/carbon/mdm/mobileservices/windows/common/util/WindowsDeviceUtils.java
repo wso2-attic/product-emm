@@ -75,7 +75,7 @@ public class WindowsDeviceUtils {
         }
         DeviceIDHolder deviceIDHolder = new DeviceIDHolder();
         deviceIDHolder.setValidDeviceIDList(validDeviceIDList);
-        deviceIDHolder.setErrorDeviceIdList(errorDeviceIdList);
+        deviceIDHolder.setInvalidDeviceIdList(errorDeviceIdList);
         return deviceIDHolder;
     }
 

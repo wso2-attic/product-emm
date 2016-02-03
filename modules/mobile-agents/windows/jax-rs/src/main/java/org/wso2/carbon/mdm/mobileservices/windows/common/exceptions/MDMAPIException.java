@@ -19,7 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
 
 /**
- * MDMAPIUtils class provides utility function used by CDM REST-API classes.
+ * MDMAPIUtils class provides utility function which are used by CDM REST-API classes.
  */
 public class MDMAPIException extends Exception {
 

@@ -65,8 +65,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             throws WindowsDeviceEnrolmentException {
 
         String emailId = discoveryRequest.getEmailId();
-        String[] domainUserArray = emailId.split(DELIMITER);
-        String domain = domainUserArray[DOMAIN_SEGMENT];
+        String[] userDomains = emailId.split(DELIMITER);
+        String domain = userDomains[DOMAIN_SEGMENT];
 
         DiscoveryResponse discoveryResponse = new DiscoveryResponse();
         if (FEDERATED.equals(getAuthPolicy())) {
