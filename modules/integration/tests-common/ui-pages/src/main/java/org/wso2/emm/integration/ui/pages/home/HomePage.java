@@ -26,6 +26,7 @@ import org.openqa.selenium.WebElement;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
+
 import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 
 /**
@@ -53,10 +54,10 @@ public class HomePage {
         return new ManagementConsoleLoginPage(driver);
     }
 
-    public void checkNotificationCount(String value){
+    public void checkNotificationCount(String value) {
         WebElement notificationBubble = driver.findElement(By.id(uiElementMapper.
                 getElement("emm.notification.bubble.identifier")));
-        if(!notificationBubble.getText().contains(value)){
+        if (!notificationBubble.getText().contains(value)) {
             throw new IllegalStateException("Invalid amount of notification in home page");
         }
     }

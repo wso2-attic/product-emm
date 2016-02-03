@@ -41,16 +41,16 @@ public class NotificationView {
         }
     }
 
-    public void viewNotification(){
+    public void viewNotification() {
         WebElement unReadNotificationTab = driver.findElement(By.id(uiElementMapper.
                 getElement("emm.notification.unread.identifier")));
         WebElement notificationTab = driver.findElement(By.id(uiElementMapper.
                 getElement("emm.notification.all.identifier")));
 
-        if(!unReadNotificationTab.isDisplayed()){
+        if (!unReadNotificationTab.isDisplayed()) {
             throw new IllegalStateException("Notification View must be having two tabs");
         }
-        if(!notificationTab.isDisplayed()){
+        if (!notificationTab.isDisplayed()) {
             throw new IllegalStateException("Notification View must be having two tabs");
         }
     }

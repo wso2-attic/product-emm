@@ -22,40 +22,16 @@
 
 var operations = '.wr-operations',
     modalPopup = '.wr-modalpopup',
-    // modalPopupContainer = modalPopup + ' .modalpopup-container',
     modalPopupContent = modalPopup + ' .modalpopup-content',
-    // deviceCheckbox = '#ast-container .ctrl-wr-asset .itm-select input[type="checkbox"]',
-    // showOperationsBtn = '#showOperationsBtn',
     navHeight = $('#nav').height(),
     headerHeight = $('header').height(),
     offset = (headerHeight + navHeight),
-    // maxOperationsLimit = 15,
-    // hiddenOperation = '.wr-hidden-operations-content > div',
-    deviceSelection = '.device-select';
-    // dataTableSelection = '.DTTT_selected',
-    // currentOperationList = [];
-
-/*
-* On window resize functions.
-*/
-//$(window).resize(function(){
-//    toggleMoreOperationsHeight();
-//});
-
-/*
- * On main div.container resize functions.
- * @required  jquery.resize.js
- */
-//$('.container').resize(function(){
-//    toggleMoreOperationsHeight();
-//});
-
-/*
- * On Show Operations click operation show toggling function.
- */
-//function showOperations(){
-//    $(operations).toggle('slide');
-//}
+    deviceSelection = '.device-select',
+    var platformTypeConstants = {
+        "ANDROID": "android",
+        "IOS": "ios",
+        "WINDOWS": "windows"
+    };
 
 /*
  * Function to get selected devices ID's
@@ -67,11 +43,11 @@ function getSelectedDeviceIds() {
         var deviceId = device.data('deviceid');
         var deviceType = device.data('type');
         deviceIdentifierList.push({
-            "id" : deviceId,
-            "type" : deviceType
+            "id": deviceId,
+            "type": deviceType
         });
     });
-    if(deviceIdentifierList.length == 0) {
+    if (deviceIdentifierList.length == 0) {
         var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').dataTable();
         thisTable.api().rows().every(function () {
             if ($(this.node()).hasClass('DTTT_selected')) {
@@ -92,7 +68,7 @@ function getSelectedDeviceIds() {
  * On operation click function.
  * @param selection: Selected operation
  */
-function operationSelect (selection) {
+function operationSelect(selection) {
     var deviceIdList = getSelectedDeviceIds();
     if (deviceIdList == 0) {
         $(modalPopupContent).html($("#errorOperations").html());
@@ -104,91 +80,50 @@ function operationSelect (selection) {
     showPopup();
 }
 
-/*
- * Function to open hidden device operations list
- */
-//function toggleMoreOperations(){
-//    $('.wr-hidden-operations, .wr-page-content').toggleClass('toggled');
-//    $(showOperationsBtn).toggleClass('selected');
-//    //$('.footer').toggleClass('wr-hidden-operations-toggled');
-//}
-
-/*
- * Function to fit hidden device operation window height with the screen
- */
-//function toggleMoreOperationsHeight(){
-//    $('.wr-hidden-operations').css('min-height', $('html').height() - (offset+140));
-//}
-
-/*
- * Advance operations sub categories show/hide toggle function
- */
-//function showAdvanceOperation(operation, button){
-//    $(button).addClass('selected');
-//    $(button).siblings().removeClass('selected');
-//    $(hiddenOperation + '[data-operation-code="' + operation + '"]').show();
-//    $(hiddenOperation + '[data-operation-code="' + operation + '"]').siblings().hide();
-//}
-
-function getDevicesByTypes (deviceList) {
+function getDevicesByTypes(deviceList) {
     var deviceTypes = {};
     $.each(deviceList, function (index, item) {
-        if(deviceTypes[item.type] == null || deviceTypes[item.type] == undefined) {
+        if (deviceTypes[item.type]) {
             deviceTypes[item.type] = [];
         }
 
-        if (item.type == "android" || item.type == "ios" || item.type == "windows") {
+        if (item.type == platformTypeConstants.ANDROID ||
+            item.type == platformTypeConstants.IOS || item.type == platformTypeConstants.WINDOWS) {
             deviceTypes[item.type].push(item.id);
         }
-//        if(item.type == "TemperatureController"){
-//            deviceTypes[item.type].push(item.id);
-//        }
     });
     return deviceTypes;
 }
 
-function unloadOperationBar(){
+function unloadOperationBar() {
     $("#showOperationsBtn").addClass("hidden");
     $(".wr-operations").html("");
 }
 
-function loadOperationBar (deviceType) {
+function loadOperationBar(deviceType) {
     var operationBar = $("#operations-bar");
     var operationBarSrc = operationBar.attr("src");
     var platformType = deviceType;
     $.template("operations-bar", operationBarSrc, function (template) {
         var serviceURL = "/mdm-admin/features/" + platformType;
-//        if (deviceType == "TemperatureController") {
-//            serviceURL = "/mdm-admin/features/android";
-//        }
         var successCallback = function (data) {
             var viewModel = {};
-            // var iconMap = {};
-//            if (deviceType == "TemperatureController") {
-//                data = [{
-//                    "id": 0,
-//                    "code": "BUZZER",
-//                    "name": "Buzz",
-//                    "description": "Buzz the device",
-//                    "deviceType": "TemperatureController",
-//                    "metadataEntries": null
-//                }];
-//                currentOperationList = viewModel.features = data.reduce(function (total, current) {
-//                    total[current.code] = current;
-//                    return total;
-//                }, {});
-//            }
             data = JSON.parse(data).filter(function (current) {
                 var iconName;
-                if (deviceType == "android"){
-                    iconName = operationModule.getAndroidIconForFeature(current.code);
-                    current.type = deviceType;
-                } if (deviceType == "windows"){
-                    iconName = operationModule.getWindowsIconForFeature(current.code);
-                } else if (deviceType == "ios"){
-                    iconName = operationModule.getIOSIconForFeature(current.code);
+                switch(deviceType) {
+                    case platformTypeConstants.ANDROID:
+                        iconName = operationModule.getAndroidIconForFeature(current.code);
+                        current.type = deviceType;
+                        break;
+                    case platformTypeConstants.WINDOWS:
+                        iconName = operationModule.getWindowsIconForFeature(current.code);
+                        break;
+                    case platformTypeConstants.IOS:
+                        iconName = operationModule.getIOSIconForFeature(current.code);
+                        break;
                 }
-                if (iconName){
+
+                if (iconName) {
                     current.icon = iconName;
                     return current;
                 }
@@ -197,75 +132,44 @@ function loadOperationBar (deviceType) {
             var content = template(viewModel);
             $(".wr-operations").html(content);
         };
-        invokerUtil.get(serviceURL,
-            successCallback, function(message){
-                console.log(message);
+        invokerUtil.get(serviceURL, successCallback, function (message) {
+            $(".wr-operations").html(message);
             });
     });
-    // var hiddenOperationBar = $("#hidden-operations-bar-" + deviceType);
-    // var hiddenOperationBarSrc = hiddenOperationBar.attr("src");
-//    if (hiddenOperationBarSrc){
-//        $.template("hidden-operations-bar-" + deviceType, hiddenOperationBarSrc, function (template) {
-//            var serviceURL = "/mdm-admin/features/" + platformType;
-//            var successCallback = function (data) {
-//                var viewModel = {};
-//                viewModel.features = data.reduce(function (total, current) {
-//                    total[current.code] = current;
-//                    return total;
-//                }, {});
-//                currentOperationList = viewModel.features;
-//                var content = template(viewModel);
-//                $(".wr-hidden-operations").html(content);
-//            };
-//            invokerUtil.get(serviceURL,
-//                successCallback, function(message){
-//                    console.log(message);
-//                });
-//        });
-//        $("#showOperationsBtn").removeClass("hidden");
-//    }
-
 }
 
-function runOperation (operationName) {
+function runOperation(operationName) {
     var deviceIdList = getSelectedDeviceIds();
     var list = getDevicesByTypes(deviceIdList);
 
-//      var notificationBubble = ".wr-notification-bubble";
     var successCallback = function (data) {
-        console.log(data);
-//      $(".wr-notification-bar").append('<div class="wr-notification-desc new"><div ' +
-//      'class="wr-notification-operation">' + currentOperationList[operationName].name +
-//      '- Operation Successful!</div><hr /></div>');
-        /*var notificationCount = parseInt($(notificationBubble).html());
-        notificationCount++;
-        $(notificationBubble).html(notificationCount);*/
-        if(operationName == "NOTIFICATION"){
+        if (operationName == "NOTIFICATION") {
             $(modalPopupContent).html($("#messageSuccess").html());
-        }else {
+        } else {
             $(modalPopupContent).html($("#operationSuccess").html());
         }
         showPopup();
     };
+    var errorCallback = function (data) {
+        $(modalPopupContent).html($("#errorOperationUnexpected").html());
+        showPopup();
+    };
 
     var payload, serviceEndPoint;
-    if(list["ios"]){
-        payload = operationModule.generatePayload("ios", operationName, list["ios"]);
+    if (list[platformTypeConstants.IOS]) {
+        payload = operationModule.
+            generatePayload(platformTypeConstants.IOS, operationName, list[platformTypeConstants.IOS]);
         serviceEndPoint = operationModule.getIOSServiceEndpoint(operationName);
-    }
-    if(list["android"]){
-        payload = operationModule.generatePayload("android", operationName, list["android"]);
+    } else if (list[platformTypeConstants.ANDROID]) {
+        payload = operationModule
+            .generatePayload(platformTypeConstants.ANDROID, operationName, list[platformTypeConstants.ANDROID]);
         serviceEndPoint = operationModule.getAndroidServiceEndpoint(operationName);
-    }
-    if(list["windows"]){
-        payload = operationModule.generatePayload("windows", operationName, list["windows"]);
+    } else if (list[platformTypeConstants.WINDOWS]) {
+        payload = operationModule.
+            generatePayload(platformTypeConstants.WINDOWS, operationName, list[platformTypeConstants.WINDOWS]);
         serviceEndPoint = operationModule.getWindowsServiceEndpoint(operationName);
     }
-//    if(list["TemperatureController"]){
-//        payload = operationModule.generatePayload("TemperatureController", operationName, list["TemperatureController"]);
-//        serviceEndPoint = operationModule.getTemperatureControllerServiceEndpoint(operationName);
-//    }
-    if(operationName == "NOTIFICATION"){
+    if (operationName == "NOTIFICATION") {
         var errorMsgWrapper = "#notification-error-msg";
         var errorMsg = "#notification-error-msg span";
         var message = $("#message").val();
@@ -273,18 +177,12 @@ function runOperation (operationName) {
             $(errorMsg).text("Enter a message. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
-            invokerUtil.post(serviceEndPoint, payload,
-                successCallback, function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
-                });
+            invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
             $(modalPopupContent).removeData();
             hidePopup();
         }
     } else {
-        invokerUtil.post(serviceEndPoint, payload,
-            successCallback, function (textStatus) {
-                console.log(textStatus);
-            });
+        invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
         $(modalPopupContent).removeData();
         hidePopup();
     }
@@ -293,25 +191,6 @@ function runOperation (operationName) {
 /*
  * DOM ready functions.
  */
-$(document).ready(function(){
-//    if($(operations + "> a").length > maxOperationsLimit){
-//        $(showOperationsBtn).show();
-//    }
-//    else{
-//        $(operations).show();
-//    }
+$(document).ready(function () {
     $(operations).show();
-    // toggleMoreOperationsHeight();
-    //loadOperationBar("ios");
-    /**
-     * Android App type javascript
-     */
-//    $(".wr-modalpopup").on("click", ".appTypesInput", function(){
-//        var appType = $(".appTypesInput").val();
-//        if (appType == "Public") {
-//            $('.appURLInput').prop( "disabled", true );
-//        }else if (appType == "Enterprise"){
-//            $('.appURLInput').prop( "disabled", false );
-//        }
-//    }).trigger("change");
 });
