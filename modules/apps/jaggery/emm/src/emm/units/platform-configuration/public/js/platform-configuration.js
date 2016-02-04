@@ -126,6 +126,7 @@ $(document).ready(function () {
     $("#gcm-inputs").hide();
     tinymce.init({
         selector: "textarea",
+        height:500,
         theme: "modern",
         plugins: [
             "autoresize",
@@ -185,28 +186,14 @@ $(document).ready(function () {
 
     invokerUtil.get(
         getGeneralConfigAPI,
-
         function (data) {
             data = JSON.parse(data);
-            if (data != null && data.configuration != null) {
+            if (data && data.configuration) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
                     if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                        $("input#monitoring-config-frequency").val(config.value / 1000 );
+                        $("input#monitoring-config-frequency").val(config.value / 1000);
                     }
-                    /*if(config.name == configParams["GENERAL_EMAIL_HOST"]){
-                     $("input#email-config-host").val(config.value);
-                     } else if(config.name == configParams["GENERAL_EMAIL_PORT"]){
-                     $("input#email-config-port").val(config.value);
-                     } else if(config.name == configParams["GENERAL_EMAIL_USERNAME"]){
-                     $("input#email-config-username").val(config.value);
-                     } else if(config.name == configParams["GENERAL_EMAIL_PASSWORD"]){
-                     $("input#email-config-password").val(config.value);
-                     } else if(config.name == configParams["GENERAL_EMAIL_SENDER_ADDRESS"]){
-                     $("input#email-config-sender-email").val(config.value);
-                     } else if(config.name == configParams["GENERAL_EMAIL_TEMPLATE"]){
-                     $("input#email-config-template").val(config.value);
-                     }*/
                 }
             }
 
@@ -415,13 +402,6 @@ $(document).ready(function () {
      */
     $("button#save-general-btn").click(function () {
         var notifierFrequency = $("input#monitoring-config-frequency").val();
-        /*var emailHost = $("input#email-config-host").val();
-         var emailPort = $("input#email-config-port").val();
-         var emailUsername = $("input#email-config-username").val();
-         var emailPassword = $("input#email-config-password").val();
-         var emailSenderAddress = $("input#email-config-sender-email").val();
-         var emailTemplate = $("input#email-config-template").val();*/
-
         var errorMsgWrapper = "#email-config-error-msg";
         var errorMsg = "#email-config-error-msg span";
 
@@ -432,7 +412,6 @@ $(document).ready(function () {
             $(errorMsg).text("Provided monitoring frequency is invalid. ");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
-
             var addConfigFormData = {};
             var configList = new Array();
 
@@ -442,80 +421,10 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
-            /*if (!emailHost) {
-             $(errorMsg).text("Email Host is a required field. It cannot be empty.");
-             //$(errorMsgWrapper).removeClass("hidden");
-             } else if (!notifierFrequency) {
-             $(errorMsg).text("Monitoring frequency is a required field. It cannot be empty.");
-             $(errorMsgWrapper).removeClass("hidden");
-             } else if (!$.isNumeric(notifierFrequency)) {
-             $(errorMsg).text("Provided monitoring frequency is invalid. It must be a number.");
-             $(errorMsgWrapper).removeClass("hidden");
-             }else if (!emailPort) {
-             $(errorMsg).text("Email Port is a required field. It cannot be empty.");
-             //$(errorMsgWrapper).removeClass("hidden");
-             } else if (!emailUsername) {
-             $(errorMsg).text("Username is a required field. It cannot be empty.");
-             //$(errorMsgWrapper).removeClass("hidden");
-             } else if (!emailPassword) {
-             $(errorMsg).text("Password is a required field. It cannot be empty.");
-             //$(errorMsgWrapper).removeClass("hidden");
-             } else if (!emailSenderAddress) {
-             $(errorMsg).text("Sender Email Address is a required field. It cannot be empty.");
-             //$(errorMsgWrapper).removeClass("hidden");
-             } else if (!emailIsValid(emailSenderAddress)) {
-             $(errorMsg).text("Provided sender email is invalid. ");
-             //$(errorMsgWrapper).removeClass("hidden");
-             } */
-
-            /*var host = {
-             "name": configParams["GENERAL_EMAIL_HOST"],
-             "value": emailHost,
-             "contentType": "text"
-             };
-
-             var port = {
-             "name": configParams["GENERAL_EMAIL_PORT"],
-             "value": emailPort,
-             "contentType": "text"
-             };
-
-             var username = {
-             "name": configParams["GENERAL_EMAIL_USERNAME"],
-             "value": emailUsername,
-             "contentType": "text"
-             };
-
-             var password = {
-             "name": configParams["GENERAL_EMAIL_PASSWORD"],
-             "value": emailPassword,
-             "contentType": "text"
-             };
-
-             var sender = {
-             "name": configParams["GENERAL_EMAIL_SENDER_ADDRESS"],
-             "value": emailSenderAddress,
-             "contentType": "text"
-             };
-
-             var template = {
-             "name": configParams["GENERAL_EMAIL_TEMPLATE"],
-             "value": emailTemplate,
-             "contentType": "text"
-             };*/
-
             configList.push(monitorFrequency);
-            /*configList.push(host);
-             configList.push(port);
-             configList.push(username);
-             configList.push(password);
-             configList.push(sender);
-             configList.push(template);*/
-
             addConfigFormData.configuration = configList;
 
             var addConfigAPI = "/mdm-admin/configuration";
-
             invokerUtil.post(
                 addConfigAPI,
                 addConfigFormData,
