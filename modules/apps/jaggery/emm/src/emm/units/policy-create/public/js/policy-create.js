@@ -1770,7 +1770,8 @@ var savePolicy = function (policy, state) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if(policy["platformId"] == platformTypeIds["WINDOWS"] && key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
+        if (policy["platformId"] == platformTypeIds["WINDOWS"] && key == windowsOperationConstants[
+                "PASSCODE_POLICY_OPERATION_CODE"]) {
             policy["profile"][key].enablePassword = true;
         }
         if (policy["profile"].hasOwnProperty(key)) {
