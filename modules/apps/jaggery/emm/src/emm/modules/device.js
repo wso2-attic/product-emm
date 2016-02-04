@@ -323,7 +323,7 @@ deviceModule = function () {
             switch (deviceType) {
                 case PLATFORM_WINDOWS :
                     url = mdmProps[httpURL] + "/mdm-windows-agent/services/device/license";
-                case PLATFORM_ANDROID :
+                case PLATFORM_IOS :
                     url = mdmProps[httpsURL] + "/ios-enrollment/license/";
             }
         }
