@@ -2,10 +2,10 @@
  * Sorting function of users
  * listed on User Management page in WSO2 MDM Console.
  */
- $(function () {
+$(function () {
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
-        beforeStop : function () {
+        beforeStop: function () {
             var sortedIDs = $(this).sortable('toArray');
             console.log(sortedIDs);
         }
@@ -25,8 +25,8 @@ $(".icon .text").res_text(0.2);
  * set popup maximum height function.
  */
 function setPopupMaxHeight() {
-    $(modalPopupContent).css('max-height', ($(body).height() - ($(body).height()/100 * 30)));
-    $(modalPopupContainer).css('margin-top', (-($(modalPopupContainer).height()/2)));
+    $(modalPopupContent).css('max-height', ($(body).height() - ($(body).height() / 100 * 30)));
+    $(modalPopupContainer).css('margin-top', (-($(modalPopupContainer).height() / 2)));
 }
 
 /*
@@ -51,9 +51,9 @@ function hidePopup() {
 function getSelectedUsernames() {
     var usernameList = [];
     var userList = $("#user-grid").find('> tbody > tr');
-    userList.each(function() {
-        if($(this).hasClass('DTTT_selected')){
-           usernameList.push($(this).attr('data-username'));
+    userList.each(function () {
+        if ($(this).hasClass('DTTT_selected')) {
+            usernameList.push($(this).attr('data-username'));
         }
     });
     return usernameList;
@@ -155,17 +155,17 @@ $("#search-btn").click(function () {
 });
 
 
-function loadUsers(searchParam){
+function loadUsers(searchParam) {
     $("#loading-content").show();
     var userListing = $("#user-listing");
     var userListingSrc = userListing.attr("src");
     $.template("user-listing", userListingSrc, function (template) {
-        var serviceURL= "/mdm-admin/users";
-        if (searchParam){
-           serviceURL = serviceURL + "/view-users?username=" + searchParam;
+        var serviceURL = "/mdm-admin/users";
+        if (searchParam) {
+            serviceURL = serviceURL + "/view-users?username=" + searchParam;
         }
         var successCallback = function (data) {
-            if(data == null){
+            if (data) {
                 $('#ast-container').addClass('hidden');
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
                 return;
@@ -176,17 +176,17 @@ function loadUsers(searchParam){
             data = data.responseContent;
             var viewModel = {};
             viewModel.users = data;
-            for(var i=0; i<viewModel.users.length; i++){
+            for (var i = 0; i < viewModel.users.length; i++) {
                 viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
-                if(canRemove != null && canRemove != undefined) {
+                if (!canRemove) {
                     viewModel.users[i].canRemove = true;
                 }
 
-                if(canEdit != null && canEdit != undefined) {
+                if (!canEdit) {
                     viewModel.users[i].canEdit = true;
                 }
             }
-            if(data.length > 0){
+            if (data.length > 0) {
                 $('#ast-container').removeClass('hidden');
                 $('#user-listing-status-msg').text("");
                 var content = template(viewModel);
@@ -204,7 +204,7 @@ function loadUsers(searchParam){
         };
         invokerUtil.get(serviceURL,
                         successCallback,
-                        function(message){
+                        function (message) {
                             $('#ast-container').addClass('hidden');
                             $('#user-listing-status-msg').
                                 text('Invalid search query. Try again with a valid search query');

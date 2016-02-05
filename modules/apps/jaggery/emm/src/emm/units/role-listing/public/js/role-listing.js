@@ -156,7 +156,7 @@ $("#role-grid").on("click", ".remove-role-link", function () {
 
 $("#search-btn").click(function () {
     var searchQuery = $("#search-by-name").val();
-    if (!searchQuery.trim() == "") {
+    if (searchQuery.trim() != "") {
         loadRoles(searchQuery);
     } else {
         loadRoles();

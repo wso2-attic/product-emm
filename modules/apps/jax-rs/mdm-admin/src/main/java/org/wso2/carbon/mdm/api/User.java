@@ -190,8 +190,6 @@ public class User {
                         buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
                                                userWrapper.getEmailAddress());
                 if (StringUtils.isNotEmpty(userWrapper.getPassword())) {
-                    //TODO: return correct error codes Eg:- password policy not complied
-                    //TODO: use the base64 string directly
                     // Decoding Base64 encoded password
                     byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
                     userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(),
@@ -223,7 +221,6 @@ public class User {
                 // Now we have the roles to add
                 String[] rolesToAdd = newRolesSet.toArray(new String[newRolesSet.size()]);
                 userStoreManager.updateRoleListOfUser(userWrapper.getUsername(), rolesToDelete, rolesToAdd);
-                //TODO: find what happens when the profileName is null
                 userStoreManager.setUserClaimValues(userWrapper.getUsername(), defaultUserClaims, null);
                 // Outputting debug message upon successful addition of user
                 if (log.isDebugEnabled()) {
@@ -257,7 +254,6 @@ public class User {
         }
     }
 
-
     /**
      * Private method to be used by addUser() to
      * generate an initial user password for a user.
@@ -282,7 +278,6 @@ public class User {
         if (log.isDebugEnabled()) {
             log.debug("Initial user password is created for new user: " + initialUserPassword);
         }
-        //TODO: Use a byte array
         return initialUserPassword.toString();
     }
 
@@ -350,6 +345,7 @@ public class User {
 
     /**
      * get all the roles except for the internal/xxx and application/xxx
+     *
      * @param userStoreManager
      * @param username
      * @return the list of filtered roles
@@ -366,7 +362,6 @@ public class User {
         }
         return filteredRoles;
     }
-
 
     /**
      * Get user's roles by username
@@ -617,8 +612,6 @@ public class User {
         EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
         emailMessageProperties.setUserName(usernameBits[1]);
         emailMessageProperties.setDomainName(tennentDomain);
-        //TODO: move this to a config
-        // emailMessageProperties.setEnrolmentUrl("https://localhost:9443/mdm/enrollment");
         emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
         emailMessageProperties.setPassword(password);
         String[] mailAddress = new String[1];
@@ -642,10 +635,8 @@ public class User {
         }
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         try {
-            int i;
-            for (i = 0; i < usernames.size(); i++) {
+            for (int i = 0; i < usernames.size(); i++) {
                 EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-//		        emailMessageProperties.setEnrolmentUrl("https://download-agent");
                 emailMessageProperties
                         .setFirstName(getClaimValue(usernames.get(i), Constants.USER_CLAIM_FIRST_NAME));
                 emailMessageProperties.setUserName(usernames.get(i));
