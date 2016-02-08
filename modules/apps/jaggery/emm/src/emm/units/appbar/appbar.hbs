@@ -13,6 +13,14 @@
                         <span class="fw-stack"></span>
                         {{pageTitle}}
                     </a><!--
+                     -->{{#equal pageTitle "Device Management"}}
+                    <a href="javascript:toggleEnrollment()" class="cu-btn">
+                        <span class="fw-stack">
+                            <i class="fw fw-bpmn fw-stack-1-5x"></i>
+                        </span>
+                        Enroll Device
+                    </a><!--
+                {{/equal}}
                  -->{{#if enableBack}}<!--
                      --><a href="javascript:history.back()" class="cu-btn">
                             <span class="fw-stack">
@@ -38,15 +46,6 @@
                         &nbsp;
                         <span class="wr-notification-bubble" id="notification-bubble">0</span>
                     </a>
-                    {{#equal pageTitle "Device Management"}}
-                        <a href="javascript:toggleEnrollment()" class="cu-btn wr-notification-toggle-btn">
-                            <span class="fw-stack-md">
-                                <i class="fw fw-bpmn fw-stack-1-5x"></i>
-                            </span>
-                            &nbsp;
-                            Enroll Device
-                        </a>
-                    {{/equal}}
                 </div>
             </div>
         </div>
