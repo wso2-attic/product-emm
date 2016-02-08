@@ -52,7 +52,6 @@ public class OperationUtils {
     private static Log log = LogFactory.getLog(OperationUtils.class);
     List<? extends Operation> pendingDataOperations;
 
-
     /**
      * Update the operations using device status payload.
      *
@@ -162,9 +161,8 @@ public class OperationUtils {
 
                         nmService.addNotification(lockResetNotification);
                     } catch (NotificationManagementException e) {
-                        String msg = "Failure occurred in getting notification service";
-                        log.error(msg, e);
-                        throw new NotificationManagementException(msg, e);
+                        throw new NotificationManagementException(
+                                "Failure occurred in getting notification service", e);
                     }
                 }
             }

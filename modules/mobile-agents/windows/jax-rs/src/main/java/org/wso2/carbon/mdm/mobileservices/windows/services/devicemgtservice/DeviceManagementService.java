@@ -80,9 +80,8 @@ public class DeviceManagementService {
     @Path("{id}")
     public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id)
             throws WindowsConfigurationException {
-
         String msg;
-        org.wso2.carbon.device.mgt.common.Device device;
+        Device device;
 
         try {
             DeviceIdentifier deviceIdentifier = WindowsAPIUtils.convertToDeviceIdentifierObject(id);

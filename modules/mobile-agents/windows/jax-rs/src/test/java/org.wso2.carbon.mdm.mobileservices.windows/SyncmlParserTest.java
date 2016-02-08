@@ -51,13 +51,13 @@ public class SyncmlParserTest {
 
     @Test
     public void parseSyncML() throws IOException, SyncmlMessageFormatException, SyncmlOperationException {
-
         SyncmlParser syncmlParser = new SyncmlParser();
         File syncmlTestMessage = new File(getClass().getClassLoader().getResource("syncml-test-message.xml").getFile());
-
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
         Document document = null;
+        Document documentInputSyncML;
+        String inputSyncmlMessage = null;
 
         try {
             docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -71,20 +71,14 @@ public class SyncmlParserTest {
         } catch (IOException e) {
             Assert.fail("Test failure while accessing syncml-test-message.xml.");
         }
-
         SyncmlGenerator generator = new SyncmlGenerator();
         String fileInputSyncmlMsg = FileUtils.readFileToString(syncmlTestMessage);
-        String inputSyncmlMessage = null;
-
         String generatedSyncmlMsg = generator.generatePayload(syncmlParser.parseSyncmlPayload(document));
-
-        Document documentInputSyncML;
         try {
             DocumentBuilder documentBuilderInputSyncML = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             InputSource inputSourceInputSyncML = new InputSource();
             inputSourceInputSyncML.setCharacterStream(new StringReader(fileInputSyncmlMsg));
             documentInputSyncML = documentBuilderInputSyncML.parse(inputSourceInputSyncML);
-
             inputSyncmlMessage = convertToString(documentInputSyncML);
         } catch (Exception e) {
             log.info("Failure occurred in input test XML file parsing.");
@@ -93,7 +87,6 @@ public class SyncmlParserTest {
     }
 
     public String convertToString(Document doc) throws TransformerException {
-
         DOMSource domSource = new DOMSource(doc);
         StringWriter stringWriter = new StringWriter();
         StreamResult streamResult = new StreamResult(stringWriter);

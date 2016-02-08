@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlOperationException;
@@ -36,11 +34,9 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
 /**
- * Generates the response syncml xml file that should be sent to the phone.
+ * Generates the response syncml xml file that should be sent to the Device.
  */
 public class SyncmlGenerator {
-
-    private static Log log = LogFactory.getLog(SyncmlGenerator.class);
 
     public String generatePayload(SyncmlDocument syncmlDocument) throws SyncmlOperationException {
         Document doc = generateDocument();
@@ -58,9 +54,7 @@ public class SyncmlGenerator {
         try {
             docBuilder = documentFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            String message = "Error while generating a new document of syncml";
-            log.error(message, e);
-            throw new SyncmlOperationException(message, e);
+            throw new SyncmlOperationException("Error occurred while generating a new document of syncml", e);
         }
         return docBuilder.newDocument();
     }
@@ -79,9 +73,7 @@ public class SyncmlGenerator {
         try {
             transformer = transformerFactory.newTransformer();
         } catch (TransformerConfigurationException e) {
-            String message = "Error while retrieving a new transformer";
-            log.error(message, e);
-            throw new SyncmlOperationException(message, e);
+            throw new SyncmlOperationException("Error occurred while retrieving a new transformer", e);
         }
         transformer.setOutputProperty(OutputKeys.ENCODING, Constants.UTF_8);
         transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
@@ -91,9 +83,7 @@ public class SyncmlGenerator {
         try {
             transformer.transform(domSource, streamResult);
         } catch (TransformerException e) {
-            String message = "Error while transforming document to a string";
-            log.error(message, e);
-            throw new SyncmlOperationException(message, e);
+            throw new SyncmlOperationException("Error occurred while transforming document to a string", e);
         }
         return stringWriter.toString();
     }

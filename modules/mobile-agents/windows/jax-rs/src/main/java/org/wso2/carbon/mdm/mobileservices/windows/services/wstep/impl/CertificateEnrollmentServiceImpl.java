@@ -148,7 +148,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 log.error(msg);
             }
         } catch (DeviceManagementException e) {
-            String msg = "Error occurred in while getting tenant configurations.";
+            String msg = "Error occurred while getting tenant configurations.";
             log.error(msg);
             throw new WindowsDeviceEnrolmentException(msg, e);
         }
@@ -177,11 +177,11 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             requestSecurityTokenResponse.setRequestID(PluginConstants.CertificateEnrolment.REQUEST_ID);
             response.value = requestSecurityTokenResponse;
         } catch (CertificateGenerationException e) {
-            String msg = "Problem occurred in generating certificate.";
+            String msg = "Problem occurred while generating certificate.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
         } catch (WAPProvisioningException e) {
-            String msg = "Problem occurred in generating wap-provisioning file.";
+            String msg = "Problem occurred while generating wap-provisioning file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
         } finally {
@@ -254,7 +254,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
         }
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
-        String wapProvisioningString;
+        String provisioningXmlString;
         try {
             builder = domFactory.newDocumentBuilder();
             Document document = builder.parse(wapProvisioningFilePath);
@@ -331,9 +331,9 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             NamedNodeMap pollingAttributes = numberOfFirstRetries.getAttributes();
             Node pollValue = pollingAttributes.getNamedItem(PluginConstants.CertificateEnrolment.VALUE);
             pollValue.setTextContent(pollingFrequency);
-            wapProvisioningString = convertDocumentToString(document);
+            provisioningXmlString = convertDocumentToString(document);
         } catch (ParserConfigurationException e) {
-            String msg = "Problem occurred parsing wap-provisioning.xml file.";
+            String msg = "Problem occurred while parsing wap-provisioning.xml file.";
             log.error(msg, e);
             throw new WAPProvisioningException(msg, e);
         } catch (CertificateEncodingException e) {
@@ -361,7 +361,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
         }
-        return base64Encoder.encodeAsString(wapProvisioningString.getBytes());
+        return base64Encoder.encodeAsString(provisioningXmlString.getBytes());
     }
 
     /**

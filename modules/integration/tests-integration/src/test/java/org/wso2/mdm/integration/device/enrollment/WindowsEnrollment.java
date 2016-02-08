@@ -55,15 +55,16 @@ public class WindowsEnrollment extends TestBase {
      *
      * @throws Exception
      */
-    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery get.")
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery get " +
+            "request.")
     public void testServerAvailability() throws Exception {
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
         MDMResponse response = client.get(Constants.WindowsEnrollment.DISCOVERY_GET_URL);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post.",
-            dependsOnMethods = {"testServerAvailability"})
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post" +
+            " request.", dependsOnMethods = {"testServerAvailability"})
     public void testDiscoveryPost() throws Exception {
         String xml = readXML(Constants.WindowsEnrollment.DISCOVERY_POST_FILE, Constants.UTF8);
         client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
@@ -85,8 +86,8 @@ public class WindowsEnrollment extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post.",
-            dependsOnMethods = {"testBST"})
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post" +
+            " request.", dependsOnMethods = {"testBST"})
     public void testMSXCEP() throws Exception {
         base64Encoder = new Base64();
         ObjectMapper mapper = new ObjectMapper();
@@ -100,8 +101,8 @@ public class WindowsEnrollment extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post.",
-            dependsOnMethods = {"testMSXCEP"})
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post " +
+            "request.", dependsOnMethods = {"testMSXCEP"})
     public void testWSETP() throws Exception {
         base64Encoder = new Base64();
         ObjectMapper mapper = new ObjectMapper();

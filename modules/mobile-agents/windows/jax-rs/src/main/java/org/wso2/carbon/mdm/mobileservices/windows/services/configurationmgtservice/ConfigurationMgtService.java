@@ -92,7 +92,7 @@ public class ConfigurationMgtService {
                 responseMsg.setResponseCode(Response.Status.CREATED.toString());
             }
         } catch (DeviceManagementException e) {
-            message = "Error Occurred in while configuring Windows Platform.";
+            message = "Error Occurred while configuring Windows Platform.";
             log.error(message, e);
             throw new WindowsConfigurationException(message, e);
         }

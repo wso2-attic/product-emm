@@ -579,7 +579,7 @@ public class OperationReply {
                         addConfig = appendAddInfo(policy);
                         atomicTagElement.setAdds(addConfig);
                         atomicTagElement.setCommandId(operation.getId());
-                        List<ItemTag> deleteItems = buildDeletePassCode(policy);
+                        List<ItemTag> deleteItems = buildDeletePasscodeData(policy);
                         deleteTag.setCommandId(operation.getId());
                         deleteTag.setItems(deleteItems);
                         sequenceElement.setDeleteTag(deleteTag);
@@ -639,7 +639,7 @@ public class OperationReply {
     }
 
 
-    public List<ItemTag> buildDeletePassCode(Operation operation) {
+    public List<ItemTag> buildDeletePasscodeData(Operation operation) {
         List<ItemTag> deleteItems = new ArrayList<>();
         ItemTag deleteItem = new ItemTag();
         TargetTag target = new TargetTag();

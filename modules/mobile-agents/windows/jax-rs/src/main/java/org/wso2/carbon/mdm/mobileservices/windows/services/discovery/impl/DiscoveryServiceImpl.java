@@ -127,7 +127,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                 log.error(msg);
             }
         } catch (DeviceManagementException e) {
-            String msg = "Error occurred in while getting tenant configurations.";
+            String msg = "Error occurred while getting tenant configurations.";
             log.error(msg);
             throw new WindowsDeviceEnrolmentException(msg, e);
         }

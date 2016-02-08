@@ -20,7 +20,6 @@ package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONException;
 import org.w3c.dom.Document;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
@@ -161,11 +160,11 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 policyManagerService.getEffectivePolicy(deviceIdentifier);
                                 return Response.status(Response.Status.OK).entity(response).build();
                             } catch (PolicyManagementException e) {
-                                String msg = "Error occurred in while getting effective policy.";
+                                String msg = "Error occurred while getting effective policy.";
                                 log.error(msg, e);
                                 throw new WindowsConfigurationException(msg, e);
                             } catch (SyncmlOperationException e) {
-                                String msg = "Error occurred in while generating hash value.";
+                                String msg = "Error occurred while generating hash value.";
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             }
@@ -187,7 +186,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                         try {
                             return Response.ok().entity(generateReply(syncmlDocument, null)).build();
                         } catch (SyncmlOperationException e) {
-                            String msg = "Error occurred in while getting effective feature.";
+                            String msg = "Error occurred while getting effective feature.";
                             log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         }
@@ -211,18 +210,18 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (FeatureManagementException e) {
-                                String msg = "Error occurred in getting effective features.";
+                                String msg = "Error occurred while getting effective features.";
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (PolicyComplianceException e) {
-                                String msg = "Error occurred in setting policy compliance.";
+                                String msg = "Error occurred while setting policy compliance.";
                                 log.error(msg, e);
                                 throw new WindowsConfigurationException(msg, e);
                             } catch (NotificationManagementException e) {
-                                String msg = "Error occurred in while getting notification service";
+                                String msg = "Error occurred while getting notification service";
                                 throw new WindowsOperationException(msg, e);
                             } catch (SyncmlOperationException e) {
-                                String msg = "Error occurred in while encoding hash value.";
+                                String msg = "Error occurred while encoding hash value.";
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             }
@@ -241,7 +240,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             } catch (SyncmlOperationException e) {
-                                String msg = "Error occurred in while generating hash value.";
+                                String msg = "Error occurred while generating hash value.";
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             }
@@ -260,19 +259,19 @@ public class SyncmlServiceImpl implements SyncmlService {
                             log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         } catch (FeatureManagementException e) {
-                            String msg = "Error occurred in getting effective features. ";
+                            String msg = "Error occurred while getting effective features. ";
                             log.error(msg, e);
                             throw new WindowsConfigurationException(msg, e);
                         } catch (PolicyComplianceException e) {
-                            String msg = "Error occurred in setting policy compliance.";
+                            String msg = "Error occurred while setting policy compliance.";
                             log.error(msg, e);
                             throw new WindowsConfigurationException(msg, e);
                         } catch (NotificationManagementException e) {
-                            String msg = "Error occurred in while getting notification service.";
+                            String msg = "Error occurred while getting notification service.";
                             log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         } catch (SyncmlOperationException e) {
-                            String msg = "Error occurred in while getting effective feature.";
+                            String msg = "Error occurred while getting effective feature.";
                             log.error(msg, e);
                             throw new WindowsConfigurationException(msg, e);
                         }
@@ -284,7 +283,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
             }
         } catch (SyncmlMessageFormatException e) {
-            String msg = "Error occurred in parsing syncml request.";
+            String msg = "Error occurred while parsing syncml request.";
             log.error(msg, e);
             throw new WindowsOperationException(msg, e);
         }
@@ -347,8 +346,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                 windowsDevice.setOsVersion(modVersion);
                 windowsDevice.setModel(devMod);
                 windowsDevice.setUser(user);
-                Device generateDevice = generateDevice(windowsDevice);
-                status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(generateDevice);
+                Device device = generateDevice(windowsDevice);
+                status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(device);
                 WindowsAPIUtils.startTenantFlow(user);
                 return status;
 
@@ -427,7 +426,7 @@ public class SyncmlServiceImpl implements SyncmlService {
             log.error(msg, e);
             throw new WindowsOperationException(msg, e);
         } catch (PolicyManagementException e) {
-            String msg = "Error occurred in getting effective policy.";
+            String msg = "Error occurred while getting effective policy.";
             log.error(msg, e);
             throw new WindowsOperationException(msg, e);
         } finally {
@@ -443,7 +442,6 @@ public class SyncmlServiceImpl implements SyncmlService {
      * @param operations     operations for generate payload.
      * @return String type syncml payload.
      * @throws WindowsOperationException
-     * @throws JSONException
      * @throws PolicyManagementException
      * @throws org.wso2.carbon.policy.mgt.common.FeatureManagementException
      */

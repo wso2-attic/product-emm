@@ -56,9 +56,12 @@ public class WindowsAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
+        DeviceManagementProviderService deviceManagementProviderService = null;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        DeviceManagementProviderService deviceManagementProviderService =
-                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        if (ctx.getOSGiService(DeviceManagementProviderService.class, null) != null) {
+            deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        }
         if (deviceManagementProviderService == null) {
             throw new IllegalStateException("Device Management service has not initialized.");
         }
@@ -66,10 +69,12 @@ public class WindowsAPIUtils {
     }
 
     public static NotificationManagementService getNotificationManagementService() {
-        NotificationManagementService notificationManagementService;
+        NotificationManagementService notificationManagementService = null;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
-                NotificationManagementService.class, null);
+        if (ctx.getOSGiService(DeviceManagementProviderService.class, null) != null) {
+            notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
+                    NotificationManagementService.class, null);
+        }
         if (notificationManagementService == null) {
             throw new IllegalStateException("Notification Management service not initialized.");
         }
@@ -104,9 +109,12 @@ public class WindowsAPIUtils {
     }
 
     public static PolicyManagerService getPolicyManagerService() {
+        PolicyManagerService policyManagerService = null;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
-                PolicyManagerService.class, null);
+        if (ctx.getOSGiService(DeviceManagementProviderService.class, null) != null) {
+            policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+        }
         if (policyManagerService == null) {
             throw new IllegalStateException("Policy Manager service has not initialized");
         }
@@ -131,8 +139,10 @@ public class WindowsAPIUtils {
         String domainName = MultitenantUtils.getTenantDomain(username);
         if (domainName != null) {
             try {
-                TenantManager tenantManager = IdentityTenantUtil.getRealmService().getTenantManager();
-                tenantId = tenantManager.getTenantId(domainName);
+                if (IdentityTenantUtil.getRealmService() != null) {
+                    TenantManager tenantManager = IdentityTenantUtil.getRealmService().getTenantManager();
+                    tenantId = tenantManager.getTenantId(domainName);
+                }
             } catch (UserStoreException e) {
                 String errorMsg = "Error when getting the tenant id from the tenant domain : " + domainName;
                 throw new DeviceManagementException(errorMsg, e);
@@ -143,8 +153,11 @@ public class WindowsAPIUtils {
 
     public static OAuth2TokenValidationService getOAuth2TokenValidationService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        OAuth2TokenValidationService oAuth2TokenValidationService =
-                (OAuth2TokenValidationService) ctx.getOSGiService(OAuth2TokenValidationService.class, null);
+        OAuth2TokenValidationService oAuth2TokenValidationService = null;
+        if (ctx.getOSGiService(OAuth2TokenValidationService.class, null) != null) {
+            oAuth2TokenValidationService =
+                    (OAuth2TokenValidationService) ctx.getOSGiService(OAuth2TokenValidationService.class, null);
+        }
         if (oAuth2TokenValidationService == null) {
             throw new IllegalStateException("OAuth2TokenValidation service has not initialized.");
         }
@@ -153,9 +166,12 @@ public class WindowsAPIUtils {
 
     public static AuthenticatorConfig getBSTAuthenticatorConfig() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        AuthenticatorConfigService authenticatorConfigService =
-                (AuthenticatorConfigService) ctx.getOSGiService(AuthenticatorConfigService.class, null);
-        AuthenticatorConfig authenticatorConfig = authenticatorConfigService.getAuthenticatorConfig("BST");
+        AuthenticatorConfig authenticatorConfig = null;
+        if (ctx.getOSGiService(AuthenticatorConfigService.class, null) != null) {
+            AuthenticatorConfigService authenticatorConfigService =
+                    (AuthenticatorConfigService) ctx.getOSGiService(AuthenticatorConfigService.class, null);
+            authenticatorConfig = authenticatorConfigService.getAuthenticatorConfig("BST");
+        }
         if (authenticatorConfig == null) {
             throw new IllegalStateException("BST authenticatorConfig has not initialized.");
         }

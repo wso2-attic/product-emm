@@ -52,7 +52,7 @@ public class BSTValidator implements Validator {
     public Credential validate(Credential credential, RequestData requestData) throws WSSecurityException {
         String bearerToken;
         String requestedUri;
-        Credential returnCredentials;
+        Credential userCredentials;
 
         HashMap msgContext = (HashMap) requestData.getMsgContext();
         requestedUri = msgContext.get(PluginConstants.CXF_REQUEST_URI).toString();
@@ -70,7 +70,7 @@ public class BSTValidator implements Validator {
             privilegedCarbonContext.setUsername(authenticationInfo.getUsername());
 
             if (authenticate(binarySecurityToken)) {
-                returnCredentials = credential;
+                userCredentials = credential;
             } else {
                 throw new WindowsDeviceEnrolmentException(
                         "Authentication failure due to invalid binary security token.");
@@ -85,14 +85,14 @@ public class BSTValidator implements Validator {
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
-        return returnCredentials;
+        return userCredentials;
     }
 
     /**
      * This method authenticates the client who comes with binary security token.
      *
      * @param binarySecurityToken - Binary security token received in the SOAP message header.
-     * @return - Authentication status
+     * @return - Authentication status.
      * @throws AuthenticationException
      */
     private boolean authenticate(String binarySecurityToken) throws
