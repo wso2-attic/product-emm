@@ -35,6 +35,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.TenantManager;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 import org.wso2.carbon.webapp.authenticator.framework.config.AuthenticatorConfig;
 import org.wso2.carbon.webapp.authenticator.framework.config.AuthenticatorConfigService;
@@ -56,12 +57,9 @@ public class WindowsAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
-        DeviceManagementProviderService deviceManagementProviderService = null;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        if (ctx.getOSGiService(DeviceManagementProviderService.class, null) != null) {
-            deviceManagementProviderService =
-                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-        }
+        DeviceManagementProviderService deviceManagementProviderService =
+                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
         if (deviceManagementProviderService == null) {
             throw new IllegalStateException("Device Management service has not initialized.");
         }
@@ -69,12 +67,10 @@ public class WindowsAPIUtils {
     }
 
     public static NotificationManagementService getNotificationManagementService() {
-        NotificationManagementService notificationManagementService = null;
+        NotificationManagementService notificationManagementService;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        if (ctx.getOSGiService(DeviceManagementProviderService.class, null) != null) {
-            notificationManagementService = (NotificationManagementService) ctx.getOSGiService(
-                    NotificationManagementService.class, null);
-        }
+        notificationManagementService =
+                (NotificationManagementService) ctx.getOSGiService(NotificationManagementService.class, null);
         if (notificationManagementService == null) {
             throw new IllegalStateException("Notification Management service not initialized.");
         }
@@ -109,12 +105,9 @@ public class WindowsAPIUtils {
     }
 
     public static PolicyManagerService getPolicyManagerService() {
-        PolicyManagerService policyManagerService = null;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        if (ctx.getOSGiService(DeviceManagementProviderService.class, null) != null) {
-            policyManagerService = (PolicyManagerService) ctx.getOSGiService(
-                    PolicyManagerService.class, null);
-        }
+        PolicyManagerService policyManagerService =
+                (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
         if (policyManagerService == null) {
             throw new IllegalStateException("Policy Manager service has not initialized");
         }
@@ -136,16 +129,20 @@ public class WindowsAPIUtils {
 
     public static int getTenantIdOFUser(String username) throws DeviceManagementException {
         int tenantId = 0;
+        RealmService realmService;
         String domainName = MultitenantUtils.getTenantDomain(username);
         if (domainName != null) {
             try {
-                if (IdentityTenantUtil.getRealmService() != null) {
-                    TenantManager tenantManager = IdentityTenantUtil.getRealmService().getTenantManager();
+                if ((realmService = IdentityTenantUtil.getRealmService()) != null) {
+                    TenantManager tenantManager = realmService.getTenantManager();
                     tenantId = tenantManager.getTenantId(domainName);
                 }
+                if (realmService == null) {
+                    throw new IllegalStateException("Realm service has not initialized.");
+                }
             } catch (UserStoreException e) {
-                String errorMsg = "Error when getting the tenant id from the tenant domain : " + domainName;
-                throw new DeviceManagementException(errorMsg, e);
+                throw new DeviceManagementException("Error when getting the tenant id from the tenant domain : "
+                        + domainName, e);
             }
         }
         return tenantId;
@@ -153,11 +150,8 @@ public class WindowsAPIUtils {
 
     public static OAuth2TokenValidationService getOAuth2TokenValidationService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        OAuth2TokenValidationService oAuth2TokenValidationService = null;
-        if (ctx.getOSGiService(OAuth2TokenValidationService.class, null) != null) {
-            oAuth2TokenValidationService =
-                    (OAuth2TokenValidationService) ctx.getOSGiService(OAuth2TokenValidationService.class, null);
-        }
+        OAuth2TokenValidationService oAuth2TokenValidationService =
+                (OAuth2TokenValidationService) ctx.getOSGiService(OAuth2TokenValidationService.class, null);
         if (oAuth2TokenValidationService == null) {
             throw new IllegalStateException("OAuth2TokenValidation service has not initialized.");
         }
@@ -166,11 +160,11 @@ public class WindowsAPIUtils {
 
     public static AuthenticatorConfig getBSTAuthenticatorConfig() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        AuthenticatorConfig authenticatorConfig = null;
-        if (ctx.getOSGiService(AuthenticatorConfigService.class, null) != null) {
-            AuthenticatorConfigService authenticatorConfigService =
-                    (AuthenticatorConfigService) ctx.getOSGiService(AuthenticatorConfigService.class, null);
-            authenticatorConfig = authenticatorConfigService.getAuthenticatorConfig("BST");
+        AuthenticatorConfigService authenticatorConfigService =
+                (AuthenticatorConfigService) ctx.getOSGiService(AuthenticatorConfigService.class, null);
+        AuthenticatorConfig authenticatorConfig = authenticatorConfigService.getAuthenticatorConfig("BST");
+        if (authenticatorConfigService == null) {
+            throw new IllegalStateException("AuthenticatorConfiguration service has not initialized.");
         }
         if (authenticatorConfig == null) {
             throw new IllegalStateException("BST authenticatorConfig has not initialized.");
@@ -178,13 +172,17 @@ public class WindowsAPIUtils {
         return authenticatorConfig;
     }
 
-    public static void startTenantFlow(String userName) {
+    public static void startTenantFlow(AuthenticationInfo authenticationInfo) {
         PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.
-                getThreadLocalCarbonContext();
-        privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        privilegedCarbonContext.setUsername(userName);
+        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        if (authenticationInfo.getTenantId() == 0 && authenticationInfo.getTenantDomain().equals(null)) {
+            privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+            privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        } else {
+            privilegedCarbonContext.setTenantId(authenticationInfo.getTenantId());
+            privilegedCarbonContext.setTenantDomain(authenticationInfo.getTenantDomain());
+        }
+        privilegedCarbonContext.setUsername(authenticationInfo.getUsername());
     }
 
     /**
@@ -194,9 +192,9 @@ public class WindowsAPIUtils {
      * @throws DeviceManagementException
      */
     public static List<ConfigurationEntry> getTenantConfigurationData() throws DeviceManagementException {
-        if (WindowsAPIUtils.getTenantConfiguration() != null) {
-            TenantConfiguration configuration = WindowsAPIUtils.getTenantConfiguration();
-            return configuration.getConfiguration();
+        TenantConfiguration tenantConfiguration;
+        if ((tenantConfiguration = WindowsAPIUtils.getTenantConfiguration()) != null) {
+            return tenantConfiguration.getConfiguration();
         } else {
             return null;
         }

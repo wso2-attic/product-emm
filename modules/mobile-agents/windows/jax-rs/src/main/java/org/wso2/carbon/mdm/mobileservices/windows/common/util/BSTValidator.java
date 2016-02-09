@@ -43,9 +43,9 @@ public class BSTValidator implements Validator {
     /**
      * This method validates the binary security token in SOAP message coming from the device.
      *
-     * @param credential  - binary security token credential object
-     * @param requestData - Request data associated with the request
-     * @return - Credential object if authentication is success, or null if not success
+     * @param credential  - binary security token credential object.
+     * @param requestData - Request data associated with the request.
+     * @return - Credential object if authentication is success, or null if not success.
      * @throws WSSecurityException
      */
     @Override
@@ -63,11 +63,7 @@ public class BSTValidator implements Validator {
         AuthenticationInfo authenticationInfo;
         try {
             authenticationInfo = validateRequest(requestedUri, bearerToken);
-            PrivilegedCarbonContext.startTenantFlow();
-            PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            privilegedCarbonContext.setTenantId(authenticationInfo.getTenantId());
-            privilegedCarbonContext.setTenantDomain(authenticationInfo.getTenantDomain());
-            privilegedCarbonContext.setUsername(authenticationInfo.getUsername());
+            WindowsAPIUtils.startTenantFlow(authenticationInfo);
 
             if (authenticate(binarySecurityToken, authenticationInfo)) {
                 userCredentials = credential;
@@ -78,7 +74,7 @@ public class BSTValidator implements Validator {
         } catch (AuthenticationException e) {
             throw new WSSecurityException("Failure occurred in the BST validator.", e);
         } catch (WindowsDeviceEnrolmentException e) {
-            throw new WSSecurityException("Authentication Failure occurred due to binary security token.", e);
+            throw new WSSecurityException("Authentication failure occurred due to binary security token.", e);
         } catch (OAuthTokenValidationException e) {
             throw new WSSecurityException(
                     "Failed to authenticate the incoming request due to oauth token validation error.", e);
@@ -97,11 +93,7 @@ public class BSTValidator implements Validator {
      */
     private boolean authenticate(String binarySecurityToken, AuthenticationInfo authenticationInfo) throws
             AuthenticationException {
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        privilegedCarbonContext.setTenantId(authenticationInfo.getTenantId());
-        privilegedCarbonContext.setTenantDomain(authenticationInfo.getTenantDomain());
-        privilegedCarbonContext.setUsername(authenticationInfo.getUsername());
+        WindowsAPIUtils.startTenantFlow(authenticationInfo);
         if (DeviceUtil.getCacheEntry(binarySecurityToken) != null) {
             CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(binarySecurityToken);
             String username = cacheentry.getUsername();
@@ -114,8 +106,8 @@ public class BSTValidator implements Validator {
     /**
      * Validate SOAP request token.
      *
-     * @param requestedUri-              Requested endpoint URI.
-     * @param binarySecurityToken-Binary security token comes from the soap request message.
+     * @param requestedUri        -Requested endpoint URI.
+     * @param binarySecurityToken -Binary security token comes from the soap request message.
      * @return returns authorized user information.
      * @throws WindowsDeviceEnrolmentException
      */

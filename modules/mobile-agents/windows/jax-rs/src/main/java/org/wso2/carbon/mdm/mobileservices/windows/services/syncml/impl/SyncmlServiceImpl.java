@@ -32,6 +32,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessag
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlOperationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsConfigurationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
+import org.wso2.carbon.mdm.mobileservices.windows.common.util.AuthenticationInfo;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.DeviceUtil;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
@@ -330,6 +331,9 @@ public class SyncmlServiceImpl implements SyncmlService {
                 modVersion = itemList.get(PluginConstants.SyncML.DEVICE_MOD_VER_POSITION).getData();
                 devLang = itemList.get(PluginConstants.SyncML.DEVICE_LANG_POSITION).getData();
                 user = syncmlDocument.getHeader().getSource().getLocName();
+                AuthenticationInfo authenticationInfo = new AuthenticationInfo();
+                authenticationInfo.setUsername(user);
+                WindowsAPIUtils.startTenantFlow(authenticationInfo);
 
                 if (log.isDebugEnabled()) {
                     log.debug(
@@ -348,7 +352,6 @@ public class SyncmlServiceImpl implements SyncmlService {
                 windowsDevice.setUser(user);
                 Device device = generateDevice(windowsDevice);
                 status = WindowsAPIUtils.getDeviceManagementService().enrollDevice(device);
-                WindowsAPIUtils.startTenantFlow(user);
                 return status;
 
             } else if (msgID == PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID) {
