@@ -3910,3 +3910,9 @@ ul.tiles .icon {
 .navbar-wrapper{
     min-height:53px;
 }
+.inline-warning {
+    color: red;
+    opacity: 0.6;
+    text-transform: uppercase;
+    font-weight: bold;
+}

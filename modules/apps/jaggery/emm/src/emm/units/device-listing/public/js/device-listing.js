@@ -305,15 +305,31 @@ function openCollapsedNav(){
     });
 }
 
-
+function initPage() {
+    invokerUtil.get(
+        "/mdm-admin/devices/count",
+        function (data) {
+            if (data) {
+                data = JSON.parse(data);
+                if (Number(data) > 0) {
+                    loadDevices();
+                } else {
+                    $("#loading-content").remove();
+                    $("#device-listing-status-msg").text("No enrolled devices found.");
+                }
+            }
+        }, function (message) {
+            initPage();
+        }
+    );
+}
 
 /*
  * DOM ready functions.
  */
 $(document).ready(function () {
 
-    loadDevices();
-    //$('#device-grid').datatables_extended();
+    initPage();
 
     /* Adding selected class for selected devices */
     $(deviceCheckbox).each(function () {

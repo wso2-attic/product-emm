@@ -17,6 +17,7 @@
  */
 
 var validateStep = {};
+var validateInline = {};
 var stepForwardFrom = {};
 var stepBackFrom = {};
 var policy = {};
@@ -103,6 +104,23 @@ var updateGroupedInputVisibility = function (domElement) {
         });
     }
 };
+
+validateInline["policy-name"] = function () {
+    var policyName = $("input#policy-name-input").val();
+    if (policyName && inputIsValidAgainstLength(policyName, 1, 30)) {
+        $("#policyNameValidationText").removeClass("inline-warning");
+    } else {
+        $("#policyNameValidationText").addClass("inline-warning");
+    }
+};
+
+$("#policy-name-input").focus(function(){
+    $("#policyNameValidationText").removeClass("inline-warning");
+});
+
+$("#policy-name-input").blur(function(){
+    validateInline["policy-name"]();
+});
 
 stepForwardFrom["policy-platform"] = function (actionButton) {
     policy["platform"] = $(actionButton).data("platform");
