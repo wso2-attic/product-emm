@@ -69,7 +69,7 @@ public class BSTValidator implements Validator {
             privilegedCarbonContext.setTenantDomain(authenticationInfo.getTenantDomain());
             privilegedCarbonContext.setUsername(authenticationInfo.getUsername());
 
-            if (authenticate(binarySecurityToken)) {
+            if (authenticate(binarySecurityToken, authenticationInfo)) {
                 userCredentials = credential;
             } else {
                 throw new WindowsDeviceEnrolmentException(
@@ -95,8 +95,13 @@ public class BSTValidator implements Validator {
      * @return - Authentication status.
      * @throws AuthenticationException
      */
-    private boolean authenticate(String binarySecurityToken) throws
+    private boolean authenticate(String binarySecurityToken, AuthenticationInfo authenticationInfo) throws
             AuthenticationException {
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        privilegedCarbonContext.setTenantId(authenticationInfo.getTenantId());
+        privilegedCarbonContext.setTenantDomain(authenticationInfo.getTenantDomain());
+        privilegedCarbonContext.setUsername(authenticationInfo.getUsername());
         if (DeviceUtil.getCacheEntry(binarySecurityToken) != null) {
             CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(binarySecurityToken);
             String username = cacheentry.getUsername();
