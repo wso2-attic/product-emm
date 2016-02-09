@@ -37,7 +37,12 @@ var backendServiceInvoker = function () {
      * If the token pair s not set in the session this will send a redirect to the login page.
      */
     privateMethods.getAccessToken = function () {
-        return session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
+        var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
+        if (tokenPair) {
+            return tokenPair.accessToken;
+        } else {
+            return null;
+        }
     };
 
     /**
@@ -56,7 +61,7 @@ var backendServiceInvoker = function () {
         xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
         if (IS_OAUTH_ENABLED) {
             var accessToken = privateMethods.getAccessToken();
-            if (accessToken) {
+            if (!accessToken) {
                 response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
             } else {
                 xmlHttpRequest.setRequestHeader(constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
@@ -69,6 +74,7 @@ var backendServiceInvoker = function () {
         }
         log.debug("Service Invoker-URL: " + url);
         log.debug("Service Invoker-Method: " + method);
+
         if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
             if (xmlHttpRequest.responseText != null) {
                 return successCallback(parse(xmlHttpRequest.responseText));
