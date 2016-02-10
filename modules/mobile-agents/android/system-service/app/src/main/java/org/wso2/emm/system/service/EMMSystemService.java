@@ -75,17 +75,12 @@ public class EMMSystemService extends IntentService {
 		(and will not block the application's main thread), but only one request will be processed at a time.*/
 
         Log.d(TAG, "Entered onHandleIntent of the Command Runner Service.");
-
         Bundle extras = intent.getExtras();
         if (extras != null) {
             operationCode = extras.getString("code");
 
             if(extras.containsKey("command")) {
                 shellCommand = extras.getString("command");
-            }
-
-            if(extras.containsKey("package")) {
-                appUri = extras.getString("package");
             }
         }
 
@@ -94,10 +89,10 @@ public class EMMSystemService extends IntentService {
             Log.d(TAG, "The operation code is: " + operationCode);
 
             Log.i(TAG, "Will now executing the command ..." + operationCode);
-            Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
-
-            doTask(operationCode);
-
+            //Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
+            if(intent.getPackage().equals(Constants.AGENT_APP_PACKAGE_NAME)) {
+                doTask(operationCode);
+            }
         }
 
     }
@@ -158,11 +153,14 @@ public class EMMSystemService extends IntentService {
                        Toast.LENGTH_SHORT).show();
         try {
             Thread.sleep(5000);
+            Runtime.getRuntime().exec("su -c reboot");
         } catch (InterruptedException e) {
             Log.e(TAG, "Reboot initiating thread interrupted." + e);
+        } catch (IOException e) {
+            Log.e(TAG, "Reboot interrupted." + e);
         }
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        powerManager.reboot(null);
+        /*PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        powerManager.reboot(null);*/
     }
 
     /**
