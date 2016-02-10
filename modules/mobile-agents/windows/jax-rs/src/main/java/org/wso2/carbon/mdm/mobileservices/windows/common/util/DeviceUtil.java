@@ -69,12 +69,12 @@ public class DeviceUtil {
         CacheManager contextCacheManager = Caching.getCacheManager(TOKEN_CACHE_MANAGER).
                 getCache(TOKEN_CACHE).getCacheManager();
         if (!isContextCacheInitialized) {
+            return Caching.getCacheManager(TOKEN_CACHE_MANAGER).getCache(TOKEN_CACHE);
+        } else {
             isContextCacheInitialized = true;
             return contextCacheManager.createCacheBuilder(TOKEN_CACHE_MANAGER).setExpiry(
                     CacheConfiguration.ExpiryType.MODIFIED,
                     new CacheConfiguration.Duration(TimeUnit.MINUTES, CACHE_DURATION)).setStoreByValue(false).build();
-        } else {
-            return Caching.getCacheManager(TOKEN_CACHE_MANAGER).getCache(TOKEN_CACHE);
         }
     }
 }
