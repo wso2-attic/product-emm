@@ -64,7 +64,7 @@ import java.util.Map.Entry;
  * and authorization server.
  */
 public class ServerUtilities {
-	private final static String PACKAGE_NAME = "com.mdm";
+	private final static String PACKAGE_NAME = "org.wso2.emm.agent";
 	private final static String TAG = "ServerUtilities";
 	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
 	                                                                  Locale.getDefault());

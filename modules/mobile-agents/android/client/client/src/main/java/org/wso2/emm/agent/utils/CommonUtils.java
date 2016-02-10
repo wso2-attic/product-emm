@@ -17,6 +17,7 @@
  */
 package org.wso2.emm.agent.utils;
 
+import android.content.Intent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -236,6 +237,24 @@ public class CommonUtils {
 		editor.putString(Constants.CLIENT_ID, null);
 		editor.putString(Constants.CLIENT_SECRET, null);
 		editor.commit();
+	}
 
+	/**
+	 * Call EMM system app in COPE mode.
+	 * @param context - Application context.
+	 * @param operation - Operation code.
+	 * @param command - Shell command to be executed.
+	 */
+	public static void callSystemApp(Context context, String operation, String command) {
+		if(Constants.SYSTEM_APP_ENABLED) {
+			Intent intent = new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
+			intent.putExtra("code", operation);
+			if (command != null) {
+				intent.putExtra("command", command);
+			}
+			context.startService(intent);
+		} else {
+			Log.e(TAG, "System app not enabled.");
+		}
 	}
 }
