@@ -20,7 +20,6 @@ package org.wso2.emm.agent.api;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
 import android.support.v4.content.ContextCompat;
 import org.wso2.emm.agent.utils.Response;
 import android.content.Context;
@@ -154,7 +153,7 @@ public class DeviceState {
 		if (!(info.getSdkVersion() >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) &&
 				info.isRooted()) {
 			return Response.INCOMPATIBLE;
-		} else if (info.getSdkVersion() < android.os.Build.VERSION_CODES.FROYO) {
+		} else if (info.getSdkVersion() < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 			return Response.INCOMPATIBLE_OS;
 		} else if (info.isRooted()) {
 			return Response.INCOMPATIBLE_ROOT;
