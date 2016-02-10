@@ -111,7 +111,7 @@ policyModule = function () {
             var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
             var isUpdated = false;
             var response = serviceInvokers.XMLHttp.
-                get(url, privateMethods.getAllPoliciesOnSuccess(),privateMethods.getAllPoliciesOnError());
+                get(url, privateMethods.handleGetAllPoliciesSuccess(),privateMethods.handleGetAllPoliciesError());
             return response;
 
         } catch (e) {
