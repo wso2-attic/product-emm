@@ -90,7 +90,7 @@ public class EMMSystemService extends IntentService {
 
             Log.i(TAG, "Will now executing the command ..." + operationCode);
             //Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
-            if(intent.getPackage().equals(Constants.AGENT_APP_PACKAGE_NAME)) {
+            if(Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                 doTask(operationCode);
             }
         }
