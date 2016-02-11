@@ -150,7 +150,9 @@ body {
     font-size: 14px;
     margin:0;
     padding:0;
-    height: 100%;
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 50px;
 }
 
 .container {
@@ -220,9 +222,11 @@ h2.app-title {
 	height:53px;    
 }
 
+/*
 header {
 	height:50px;
 }
+*/
 
 #nav.affix {
     position: fixed;
@@ -259,6 +263,7 @@ header {
 
 
 /* sticky footer styles */
+/*
 .footer {
 	height: 40px;
 	background-color: #222;
@@ -277,6 +282,7 @@ header {
     padding-top: 5px;
     margin: 0;
 }
+*/
 
 /* misc */
 br.c-both {

@@ -15,7 +15,7 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wso2.emm.system.service" android:sharedUserId="android.uid.system">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wso2.emm.system.service">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -27,13 +27,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <permission android:name="android.permission.REBOOT" />
     <permission android:name="android.permission.READ_LOGS" />
-    <permission android:name="org.wso2.emm.system.service.EMMSystemService.permission.Access" android:protectionLevel="signature"/>
+    <!--<permission android:name="org.wso2.emm.system.service.EMMSystemService.permission.Access" android:protectionLevel="signature"/>-->
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
 
     <application android:allowBackup="true" android:label="@string/app_name">
-        <service android:name="org.wso2.emm.system.service.EMMSystemService">
+        <service android:name="org.wso2.emm.system.service.EMMSystemService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.wso2.emm.system.service.START_SERVICE" />
+            </intent-filter>
         </service>
-
     </application>
-
 </manifest>
