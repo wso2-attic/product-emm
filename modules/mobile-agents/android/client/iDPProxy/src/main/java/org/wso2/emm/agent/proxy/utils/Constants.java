@@ -47,7 +47,7 @@ public class Constants {
 	public final static String EXPIRE_LABEL = "expires_in";
 	public static final String ERROR_LABEL = "error";
 	public static final String ERROR_DESCRIPTION_LABEL = "error_description";
-	public final static String APPLICATION_PACKAGE = "com.mdm";
+	public final static String APPLICATION_PACKAGE = "org.wso2.emm.agent";
 	public final static String ID_TOKEN = "id_token";
 	public final static String CLIENT_ID = "client_id";
 	public final static String CLIENT_SECRET = "client_secret";

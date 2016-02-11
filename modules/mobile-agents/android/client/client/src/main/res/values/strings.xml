@@ -87,7 +87,9 @@
     <string name="toast_error_username">Please enter username</string>
     <string name="toast_error_password">Please enter password</string>
     <string name="toast_message_wipe">Device is being wiped</string>
+    <string name="toast_message_reboot">Device is being rebooted</string>
     <string name="toast_message_wipe_failed">Device wipe failed due to wrong PIN</string>
+    <string name="toast_message_reboot_failed">Device reboot failed due to insufficient privileges</string>
     <string name="toast_message_disenroll">Device disenrolled</string>
 
 
@@ -165,7 +167,7 @@
     <string name="policy_violation_apps_number">. </string>
 
     <!-- SHARED PREF KEYS -->
-    <string name="shared_pref_package">com.mdm</string>
+    <string name="shared_pref_package">org.wso2.emm.agent</string>
     <string name="shared_pref_policy">policy</string>
     <string name="shared_pref_configuration">configuration</string>
     <string name="shared_pref_notifier">notifierType</string>
@@ -181,6 +183,7 @@
     <string name="shared_pref_regId">regId</string>
     <string name="shared_pref_username">username</string>
     <string name="shared_pref_pin">pin</string>
+    <string name="shared_pref_command">command</string>
     <string name="shared_pref_reg_success">1</string>
     <string name="shared_pref_reg_fail">0</string>
     <string name="shared_pref_reg_type">deviceType</string>
