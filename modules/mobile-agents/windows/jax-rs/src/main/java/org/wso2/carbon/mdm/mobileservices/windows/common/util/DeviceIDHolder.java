@@ -23,7 +23,7 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import java.util.List;
 
 /**
- * Class for holding device valid and invalid devices.
+ * Class for holding valid and invalid devices.
  */
 public class DeviceIDHolder {
 
