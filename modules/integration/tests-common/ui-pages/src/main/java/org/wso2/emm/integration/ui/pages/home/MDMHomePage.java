@@ -38,14 +38,9 @@ public class MDMHomePage {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.dashboard.device.div.xpath"))).getText()
-                   .contains("DEVICES")) {
+        if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.dashboard.device.div.xpath"))).getText().
+                contains("DEVICES")) {
             throw new IllegalStateException("This is not the home page");
         }
     }
-
-    //        public MDMLoginPage logout() throws IOException {
-    //            driver.findElement(By.xpath("/html/body/div[3]/header/div/div[2]/div/div/div[3]/a")).click();
-    //            return new MDMLoginPage(driver);
-    //        }
 }

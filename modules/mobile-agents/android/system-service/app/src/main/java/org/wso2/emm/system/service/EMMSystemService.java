@@ -17,8 +17,6 @@
  */
 package org.wso2.emm.system.service;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.IntentService;
 import android.app.PackageInstallObserver;
 import android.content.Context;
@@ -28,10 +26,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.os.RemoteException;
-import android.os.UserHandle;
-import android.os.UserManager;
 import android.util.Log;
 import android.widget.Toast;
 import org.wso2.emm.system.service.api.OTADownload;
@@ -47,18 +42,12 @@ import java.io.IOException;
  */
 public class EMMSystemService extends IntentService {
 
-    private static final String URL = "urlpath";
-    private static final String FILENAME = "filename";
-    private static final String FILEPATH = "filepath";
-    private static final String RESULT = "result";
-    private static final String NOTIFICATION = "NotifyActivity";
     private static final String TAG = "EMMSystemService";
     private static final int DELETE_ALL_USERS = 0x00000002;
     private static final int INSTALL_ALL_USERS = 0x00000040;
     private static final int INSTALL_FORWARD_LOCK = 0x00000001;
     private static final int INSTALL_ALLOW_DOWNGRADE = 0x00000080;
     private static final int INSTALL_REPLACE_EXISTING = 0x00000002;
-    private int result = Activity.RESULT_CANCELED;
     private String operationCode = null;
     private String shellCommand = null;
     private String appUri = null;
@@ -75,17 +64,12 @@ public class EMMSystemService extends IntentService {
 		(and will not block the application's main thread), but only one request will be processed at a time.*/
 
         Log.d(TAG, "Entered onHandleIntent of the Command Runner Service.");
-
         Bundle extras = intent.getExtras();
         if (extras != null) {
             operationCode = extras.getString("code");
 
             if(extras.containsKey("command")) {
                 shellCommand = extras.getString("command");
-            }
-
-            if(extras.containsKey("package")) {
-                appUri = extras.getString("package");
             }
         }
 
@@ -94,10 +78,10 @@ public class EMMSystemService extends IntentService {
             Log.d(TAG, "The operation code is: " + operationCode);
 
             Log.i(TAG, "Will now executing the command ..." + operationCode);
-            Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
-
-            doTask(operationCode);
-
+            //Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
+            if(Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
+                doTask(operationCode);
+            }
         }
 
     }
@@ -158,11 +142,14 @@ public class EMMSystemService extends IntentService {
                        Toast.LENGTH_SHORT).show();
         try {
             Thread.sleep(5000);
+            Runtime.getRuntime().exec("su -c reboot");
         } catch (InterruptedException e) {
             Log.e(TAG, "Reboot initiating thread interrupted." + e);
+        } catch (IOException e) {
+            Log.e(TAG, "Reboot interrupted." + e);
         }
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        powerManager.reboot(null);
+        /*PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        powerManager.reboot(null);*/
     }
 
     /**
@@ -207,24 +194,6 @@ public class EMMSystemService extends IntentService {
                 return null;
             }
         }, DELETE_ALL_USERS);
-    }
-
-    private void publishResults(String outputPath, int result) {
-        //Sample code to publish results from the service and interact with the activity.
-        Intent intent = new Intent(NOTIFICATION);
-        intent.putExtra(FILEPATH, outputPath);
-        intent.putExtra(RESULT, result);
-        sendBroadcast(intent);
-        Log.i(TAG, "Broadcast sent");
-    }
-
-    private void showMessageToCurrentUser(Context context, String message) {
-        Intent intent = new Intent(Constants.AGENT_APP_PACKAGE_NAME + Constants.AGENT_APP_ALERT_ACTIVITY);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("message", message);
-        UserManager userManager = (UserManager) getSystemService(Context.USER_SERVICE);
-        UserHandle userHandle = userManager.getUserForSerialNumber(ActivityManager.getCurrentUser());
-        context.startActivityAsUser(intent, userHandle);
     }
 
 }

@@ -19,7 +19,7 @@
 <resources>
 
     <string name="app_name">IDPProxy</string>
-    <string name="shared_pref_package">com.mdm</string>
+    <string name="shared_pref_package">org.wso2.emm.agent</string>
     <string name="shared_pref_policy">policy</string>
     <string name="shared_pref_configuration">configuration</string>
     <string name="shared_pref_notifier">notifierType</string>

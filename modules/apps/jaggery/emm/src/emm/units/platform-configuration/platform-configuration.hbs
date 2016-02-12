@@ -62,14 +62,14 @@
                                         </h4>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="config-frequency">
-                                                Compliance Monitoring Time Interval
+                                                Compliance Monitoring Time Interval*
                                                 <span class="helper" title="Time Interval after which EMM server will contact devices and monitor the compliance of policies applied to them">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                                 <br>
                                                 ( Should be in seconds )
                                             </label>
-                                            <input id="monitoring-config-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="monitoring-config-frequency" type="text" class="form-control" >
                                         </div>
                                         <div class="wr-input-control wr-btn-grp">
                                             <button id="save-general-btn" class="wr-btn">
@@ -175,36 +175,36 @@
                                         <div id="local-inputs">
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label" for="android-config-notifier-frequency">
-                                                    Polling Interval
+                                                    Polling Interval*
                                                     <span class="helper" title="Time interval after which Android agent will contact EMM server each time to fetch data">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                     <br>
                                                     ( Should be in seconds )
                                                 </label>
-                                                <input id="android-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
+                                                <input id="android-config-notifier-frequency" type="text" class="form-control" >
                                             </div>
                                         </div>
 
                                         <div id="gcm-inputs">
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label" for="android-config-gcm-api-key">
-                                                    API Key
+                                                    API Key*
                                                     <span class="helper" title="GCM API Key">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                 </label>
-                                                <input id="android-config-gcm-api-key" type="text" class="form-control" placeholder="[ Required Field ]">
+                                                <input id="android-config-gcm-api-key" type="text" class="form-control" >
                                             </div>
 
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label" for="android-config-gcm-sender-id">
-                                                    Sender ID
+                                                    Sender ID*
                                                     <span class="helper" title="GCM Sender ID">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                 </label>
-                                                <input id="android-config-gcm-sender-id" type="text" class="form-control" placeholder="[ Required Field ]">
+                                                <input id="android-config-gcm-sender-id" type="text" class="form-control">
                                             </div>
                                         </div>
                                         <h4>
@@ -240,52 +240,52 @@
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-country">
-                                                Country (C)
+                                                Country (C)*
                                                 <span class="helper" title="Country code (ex: LK, US)">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-country" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-country" type="text" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-state">
-                                                State (ST)
+                                                State (ST)*
                                                 <span class="helper" title="State">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-state" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-state" type="text" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-locality">
-                                                Locality (L)
+                                                Locality (L)*
                                                 <span class="helper" title="Locality">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-locality" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-locality" type="text" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-organization">
-                                                Organization (O)
+                                                Organization (O)*
                                                 <span class="helper" title="Organization Name">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-organization" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-organization" type="text" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-organization-unit">
-                                                Organization Unit (OU)
+                                                Organization Unit (OU)*
                                                 <span class="helper" title="Organization Unit">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-organization-unit" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-organization-unit" type="text" class="form-control">
                                         </div>
 
                                         <h4>
@@ -298,12 +298,12 @@
                                         </div>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-org-display-name">
-                                                Organization Display Name
+                                                Organization Display Name*
                                                 <span class="helper" title="Organization display name">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-org-display-name" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-org-display-name" type="text" class="form-control">
                                         </div>
 
                                         <h4>
@@ -316,34 +316,34 @@
                                         </div>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-mdm-certificate">
-                                                MDM Certificate
+                                                MDM Certificate*
                                                 <span class="helper" title="Upload MDM Certificate">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label><br>
                                             <label class="wr-input-label" id="mdm-cert-file-name">
                                             </label>
-                                            <input id="ios-config-mdm-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-mdm-certificate" type="file" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-mdm-certificate-password">
-                                                MDM Certificate Password
+                                                MDM Certificate Password*
                                                 <span class="helper" title="MDM Certificate Password">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-mdm-certificate-password" type="password" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-mdm-certificate-password" type="password" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-mdm-certificate-topic-id">
-                                                MDM Certificate Topic ID
+                                                MDM Certificate Topic ID*
                                                 <span class="helper" title="MDM Certificate Topic ID">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-mdm-certificate-topic-id" type="text" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-mdm-certificate-topic-id" type="text" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
@@ -369,24 +369,24 @@
                                         </div>
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-apns-certificate">
-                                                APNS Certificate
+                                                APNS Certificate*
                                                 <span class="helper" title="Upload APNS Certificate">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label><br>
                                             <label class="wr-input-label" id="apns-cert-file-name">
                                             </label>
-                                            <input id="ios-config-apns-certificate" type="file" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-apns-certificate" type="file" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
                                             <label class="wr-input-label" for="ios-config-apns-certificate-password">
-                                                APNS Certificate Password
+                                                APNS Certificate Password*
                                                 <span class="helper" title="APNS Certificate Password">
                                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                 </span>
                                             </label>
-                                            <input id="ios-config-apns-certificate-password" type="password" class="form-control" placeholder="[ Required Field ]">
+                                            <input id="ios-config-apns-certificate-password" type="password" class="form-control">
                                         </div>
 
                                         <div class="wr-input-control">
@@ -432,14 +432,14 @@
                                         <div id="local-inputs">
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label" for="windows-config-notifier-frequency">
-                                                    Polling Interval
+                                                    Polling Interval*
                                                     <span class="helper" title="Time interval after which windows agent will contact EMM server each time to fetch data">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                     <br>
                                                     ( Should be in seconds )
                                                 </label>
-                                                <input id="windows-config-notifier-frequency" type="text" class="form-control" placeholder="[ Required Field ]">
+                                                <input id="windows-config-notifier-frequency" type="text" class="form-control">
                                             </div>
                                         </div>
                                         <h4>

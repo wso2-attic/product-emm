@@ -1,86 +1,109 @@
 {{#zone "main"}}
-    <!-- secondary header - app bar -->
+    <!-- navbar -->
     <div class="navbar-wrapper">
-        <div id="nav" class="row wr-app-bar">
-            <div class="wr-action-container">
-                <div class="wr-action-btn-bar">
-                    <a href="javascript:openCollapsedNav()" class="cu-btn wr-hidden-nav-toggle-btn">
-                        <span class="fw-stack">
-                            <i class="fw fw-tiles fw-stack-1-5x"></i>
+        <nav class="navbar navbar-default" data-spy="affix" data-offset-top="80" data-offset-bottom="40">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-menu-toggle collapsed" data-toggle="collapse" data-target="#navbar2"  aria-expanded="false" aria-controls="navbar2">
+                        <span class="icon fw-stack">
+                            <i class="fw fw-tiles fw-stack-1x toggle-icon-up"></i>
                         </span>
-                    </a><!--
-                 --><a class="cu-btn page-title">
-                        <span class="fw-stack"></span>
-                        {{pageTitle}}
-                    </a><!--
-                 -->{{#if enableBack}}<!--
-                     --><a href="javascript:history.back()" class="cu-btn">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-left-arrow fw-stack-1x"></i>
-                            </span>
-                            Go Back
-                        </a><!--
-                 -->{{/if}}<!--
-                 -->{{#each currentActions}}<!--
-                     --><a href="{{url}}" class="cu-btn" id="appbar-btn-{{id}}" title="{{tooltip}}">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw {{icon}} fw-stack-1x"></i>
-                            </span>
-                            {{title}}
-                        </a><!--
-                 -->{{/each}}
-                    <a href="/emm/notification-listing" class="cu-btn wr-notification-toggle-btn" title="Failures of operations on the device side will be listed here">
-                        <span class="fw-stack-md">
-                            <i class="glyphicon glyphicon-bell"></i>
-                        </span>
-                        &nbsp;
-                        <span class="wr-notification-bubble" id="notification-bubble">0</span>
                     </a>
-                    {{#equal pageTitle "Device Management"}}
-                        <a href="javascript:toggleEnrollment()" class="cu-btn wr-notification-toggle-btn">
-                            <span class="fw-stack-md">
-                                <i class="fw fw-bpmn fw-stack-1-5x"></i>
-                            </span>
-                            &nbsp;
-                            Enroll Device
-                        </a>
-                    {{/equal}}
+                    <div class="navbar-brand">
+                        {{pageTitle}}
+                    </div>
                 </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        {{#if enableBack}}
+                        <li>
+                            <a href="javascript:history.back()">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                    <i class="fw fw-left-arrow fw-stack-1x"></i>
+                                </span>
+                                Go Back
+                            </a>
+                        </li>
+                        {{/if}}
+                        
+                        {{#each currentActions}}
+                        <li>
+                            <a href="{{url}}" id="appbar-btn-{{id}}" title="{{tooltip}}">
+                                <span class="fw-stack">
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                    <i class="fw {{icon}} fw-stack-1x"></i>
+                                </span>
+                                {{title}}
+                            </a>
+                        </li>
+                        {{/each}}
+                        
+                        {{#equal pageTitle "Device Management"}}
+                        <li>
+                            <a href="javascript:toggleEnrollment()">
+                                <span class="fw-stack">
+                                   <i class="fw fw-ring fw-stack-2x"></i>
+                                   <i class="fw fw-mobile fw-stack-1x"></i>
+                                   <span class="fw-stack fw-move-right fw-move-bottom">
+                                      <i class="fw fw-circle fw-stack-2x fw-stroke fw-inverse"></i>
+                                       <i class="fw fw-circle fw-stack-2x"></i>
+                                      <i class="fw fw-add fw-stack-1x"></i>
+                                   </span>
+                                </span>
+                                Enroll Device
+                            </a>
+                        </li>
+                        {{/equal}}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="visible-inline-block">
+                            <a href="/emm/notification-listing" title="Failures of operations on the device side will be listed here">
+                            <!--<a data-toggle="sidebar" data-target="#right-sidebar" data-container=".page-content" aria-expanded="false" rel="notifications-sidebar">-->
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-notification fw-stack-1x"></i>
+                                </span>
+                                <span class="hidden-xs">Notifications</span>
+                                <span class="badge notifications" id="notification-bubble">4</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
             </div>
-        </div>
+            <div id="navbar2" class="collapse navbar-collapse dropdown tiles"><!-- nav-collapse -->
+                <ul class="nav navbar-nav">
+                    <!--Below area is used to add navigational links from other units-->
+                    {{defineZone "common-navigation"}}
+
+                    {{#if permissions.VIEW_DASHBOARD}}
+                        <li><a href="/emm"><i class="fw fw-dashboard"></i>Admin Dashboard</a></li>
+                    {{/if}}
+                    {{#if permissions.LIST_DEVICES}}
+                        <li><a href="/emm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
+                    {{/if}}
+                    {{#if permissions.LIST_USERS}}
+                        <li><a href="/emm/users"><i class="fw fw-user"></i>User Management</a></li>
+                    {{/if}}
+
+                    {{#if permissions.LIST_ROLES}}
+                        <li><a href="/emm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
+                    {{/if}}
+                    {{#if permissions.LIST_POLICIES}}
+                        <li><a href="/emm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
+                    {{/if}}
+                    {{#if permissions.TENANT_CONFIGURATION}}
+                        <li><a href="/emm/platform-configuration"><i class="fw fw-settings"></i>Platform Configurations</a></li>
+                    {{/if}}
+                </ul>
+            </div><!--/ .nav-collapse -->
+        </nav>
     </div>
-    <!-- secondary header - app bar -->
-
-    <!-- common navigation -->
-    <div id="hiddenNav" class="wr-hidden-nav">
-        <ul>
-            <!--Below area is used to add navigational links from other units-->
-            {{defineZone "common-navigation"}}
-
-            {{#if permissions.VIEW_DASHBOARD}}
-                <li><a href="/emm"><i class="fw fw-dashboard"></i>Admin Dashboard</a></li>
-            {{/if}}
-            {{#if permissions.LIST_DEVICES}}
-                <li><a href="/emm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
-            {{/if}}
-            {{#if permissions.LIST_USERS}}
-                <li><a href="/emm/users"><i class="fw fw-user"></i>User Management</a></li>
-            {{/if}}
-
-            {{#if permissions.LIST_ROLES}}
-                <li><a href="/emm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
-            {{/if}}
-            {{#if permissions.LIST_POLICIES}}
-                <li><a href="/emm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
-            {{/if}}
-            {{#if permissions.TENANT_CONFIGURATION}}
-                <li><a href="/emm/platform-configuration"><i class="fw fw-settings"></i>Platform Configurations</a></li>
-            {{/if}}
-        </ul>
-    </div>
-    <!-- /common navigation -->
 
     <div id="qr-code-modal" data-enrollment-url="{{enrollmentURL}}" class="hidden">
 

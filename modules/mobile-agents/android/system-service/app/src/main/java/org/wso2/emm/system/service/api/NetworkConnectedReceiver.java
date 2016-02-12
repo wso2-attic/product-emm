@@ -30,9 +30,9 @@ import android.util.Log;
 import org.wso2.emm.system.service.utils.Constants;
 
 /**
- * This class handles all the functionalities required for monitoring device network connectivity.
+ * This class handles all the functionality required for monitoring device network connectivity.
  * This can be used to invoke the agent application when the user connects the device to the network for
- * the forst time.
+ * the first time.
  */
 public class NetworkConnectedReceiver extends BroadcastReceiver {
 
@@ -79,7 +79,7 @@ public class NetworkConnectedReceiver extends BroadcastReceiver {
 
                     Editor editor = prefs.edit();
                     editor.putBoolean(EMM_AGENT_HAS_BEEN_CALLED, true);
-                    editor.commit();
+                    editor.apply();
                     Log.i(TAG, "EMM agent has been called");
                 }
             }

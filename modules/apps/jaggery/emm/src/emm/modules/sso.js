@@ -64,12 +64,12 @@ var log = new Log();
         if (log.isDebugEnabled()) {
             log.debug("Request sent to IdP");
         }
-        print("<div><p>You are now being redirected to SSO Provider. If the redirection fails, click on the "+
-            "button below.</p> <form method='post' action='" + postUrl + "'><p><input type='hidden' " +
-            "name='SAMLRequest' value='" + sso.encodedSAMLAuthRequest + "'/><input type='hidden' " +
-            "name='RelayState' value='" + sso.relayState + "'/><input type='hidden' name='SSOAuthSessionID' " +
-            "value='" + sso.sessionId + "'/><button type='submit'>Redirect manually</button></p></form></div>" +
-            "<script type = 'text/javascript' >document.forms[0].submit();</script>");
+        print("<div><p>You are now being redirected to SSO Provider. If the redirection fails, click on the " +
+              "button below.</p> <form method='post' action='" + postUrl + "'><p><input type='hidden' " +
+              "name='SAMLRequest' value='" + sso.encodedSAMLAuthRequest + "'/><input type='hidden' " +
+              "name='RelayState' value='" + sso.relayState + "'/><input type='hidden' name='SSOAuthSessionID' " +
+              "value='" + sso.sessionId + "'/><button type='submit'>Redirect manually</button></p></form></div>" +
+              "<script type = 'text/javascript' >document.forms[0].submit();</script>");
     };
 
     sso.logout = function (user) {
@@ -87,11 +87,11 @@ var log = new Log();
             sso.log.debug("Logout request recieved from session id ::: " + sso.sessionId);
         }
         print("<div><p>You are now redirected to Stratos Identity. If theredirection fails, click the post " +
-            "button.</p> <form id='logoutForm' method='post' action='" + postUrl + "'> <p> <input type='hidden' " +
-            "name='SAMLRequest' value='" + sso.encodedSAMLLogoutRequest + "'/> <input type='hidden' " +
-            "name='RelayState' value='" + sso.relayState + "'/> <input type='hidden' name='SSOAuthSessionID' " +
-            "value='" + sso.sessionId + "'/> <button type='submit'>POST</button> </p> </form> </div> <script " +
-            "type = 'text/javascript' > document.forms[0].submit(); </script>");
+              "button.</p> <form id='logoutForm' method='post' action='" + postUrl + "'> <p> <input type='hidden' " +
+              "name='SAMLRequest' value='" + sso.encodedSAMLLogoutRequest + "'/> <input type='hidden' " +
+              "name='RelayState' value='" + sso.relayState + "'/> <input type='hidden' name='SSOAuthSessionID' " +
+              "value='" + sso.sessionId + "'/> <button type='submit'>POST</button> </p> </form> </div> <script " +
+              "type = 'text/javascript' > document.forms[0].submit(); </script>");
     };
 
     sso.acs = function (loginCallback, logoutCallback) {
@@ -118,8 +118,8 @@ var log = new Log();
                 // validating the signature
                 if (sso.responseSign) {
                     if (ssoMod.client.validateSignature(samlRespObj, sso.keyStoreProps)) {
-                        var sessionObj = ssoMod.client.decodeSAMLLoginResponse(samlRespObj, samlResponse,
-                            sso.sessionId);
+                        var sessionObj = ssoMod.client.
+                            decodeSAMLLoginResponse(samlRespObj, samlResponse, sso.sessionId);
                         if (log.isDebugEnabled()) {
                             sso.log.debug("Saml object session ID :::" + sessionObj.sessionId);
                         }

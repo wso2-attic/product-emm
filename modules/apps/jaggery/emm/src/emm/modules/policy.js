@@ -31,6 +31,72 @@ policyModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
+    privateMethods.handleGetAllPoliciesError = function (responsePayload) {
+        var response = {};
+        response.status = "error";
+        /* responsePayload == "Scope validation failed"
+        Here the response.context("Scope validation failed") is used other then response.status(401).
+        Reason for this is IDP return 401 as the status in 4 different situations such as,
+        1. UnAuthorized.
+        2. Scope Validation Failed.
+        3. Permission Denied.
+        4. Access Token Expired.
+        5. Access Token Invalid.
+        In these cases in order to identify the correct situation we have to compare the unique value from status and
+        context which is context.
+         */
+        if (responsePayload == "Scope validation failed") {
+            response.content = "Permission Denied";
+        } else {
+            response.content = responsePayload;
+        }
+        return response;
+    };
+
+    privateMethods.handleGetAllPoliciesSuccess = function (responsePayload) {
+        var policyListFromRestEndpoint = responsePayload["responseContent"];
+        var policyListToView = [];
+        var i, policyObjectFromRestEndpoint, policyObjectToView;
+        for (i = 0; i < policyListFromRestEndpoint.length; i++) {
+            // get list object
+            policyObjectFromRestEndpoint = policyListFromRestEndpoint[i];
+            // populate list object values to view-object
+            policyObjectToView = {};
+            policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
+            policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
+            policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
+            policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
+            policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
+            policyObjectToView["roles"] = privateMethods.
+                getElementsInAString(policyObjectFromRestEndpoint["roles"]);
+            policyObjectToView["users"] = privateMethods.
+                getElementsInAString(policyObjectFromRestEndpoint["users"]);
+            policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
+
+            if (policyObjectFromRestEndpoint["active"] == true && policyObjectFromRestEndpoint["updated"] == true) {
+                policyObjectToView["status"] = "Active/Updated";
+                isUpdated = true;
+            } else if (policyObjectFromRestEndpoint["active"] == true &&
+                       policyObjectFromRestEndpoint["updated"] == false) {
+                policyObjectToView["status"] = "Active";
+            } else if (policyObjectFromRestEndpoint["active"] == false &&
+                       policyObjectFromRestEndpoint["updated"] == true) {
+                policyObjectToView["status"] = "Inactive/Updated";
+                isUpdated = true;
+            } else if (policyObjectFromRestEndpoint["active"] == false &&
+                       policyObjectFromRestEndpoint["updated"] == false) {
+                policyObjectToView["status"] = "Inactive";
+            }
+            // push view-objects to list
+            policyListToView.push(policyObjectToView);
+        }
+        // generate response
+        var response = {};
+        response.updated = isUpdated;
+        response.status = "success";
+        response.content = policyListToView;
+        return response;
+    };
     /*
      @Updated
      */
@@ -42,64 +108,14 @@ policyModule = function () {
         }
         var utility = require('/modules/utility.js')["utility"];
         try {
-            utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
             var isUpdated = false;
-            var response = serviceInvokers.XMLHttp.get(url,function(responsePayload){
-                var response = {};
-                var policyListFromRestEndpoint = responsePayload["responseContent"];
-                var policyListToView = [];
-                var i, policyObjectFromRestEndpoint, policyObjectToView;
-                for (i = 0; i < policyListFromRestEndpoint.length; i++) {
-                    // get list object
-                    policyObjectFromRestEndpoint = policyListFromRestEndpoint[i];
-                    // populate list object values to view-object
-                    policyObjectToView = {};
-                    policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
-                    policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
-                    policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
-                    policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
-                    policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
-                    policyObjectToView["roles"] = privateMethods.
-                        getElementsInAString(policyObjectFromRestEndpoint["roles"]);
-                    policyObjectToView["users"] = privateMethods.
-                        getElementsInAString(policyObjectFromRestEndpoint["users"]);
-                    policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
-
-                    if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == true) {
-                        policyObjectToView["status"] = "Active/Updated";
-                        isUpdated = true;
-                    } else if(policyObjectFromRestEndpoint["active"] == true &&  policyObjectFromRestEndpoint["updated"] == false) {
-                        policyObjectToView["status"] = "Active";
-                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == true) {
-                        policyObjectToView["status"] = "Inactive/Updated";
-                        isUpdated = true;
-                    } else if(policyObjectFromRestEndpoint["active"] == false &&  policyObjectFromRestEndpoint["updated"] == false) {
-                        policyObjectToView["status"] = "Inactive";
-                    }
-                    // push view-objects to list
-                    policyListToView.push(policyObjectToView);
-                }
-                // generate response
-                response.updated = isUpdated;
-                response.status = "success";
-                response.content = policyListToView;
-                return response;
-            },function(responsePayload){
-                var response = {};
-                response.status = "error";
-                if(responsePayload  == "Scope validation failed"){
-                    response.content = "Permission Denied";
-                } else {
-                    response.content = responsePayload;
-                }
-                return response;
-            });
+            var response = serviceInvokers.XMLHttp.
+                get(url, privateMethods.getAllPoliciesOnSuccess(),privateMethods.getAllPoliciesOnError());
             return response;
+
         } catch (e) {
             throw e;
-        } finally {
-            utility.endTenantFlow();
         }
     };
 
@@ -116,99 +132,6 @@ policyModule = function () {
             }
         }
         return elementsInAString;
-    };
-
-    /*
-     @Deprecated
-     */
-    publicMethods.getProfiles = function () {
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
-        }
-        try{
-            utility.startTenantFlow(carbonUser);
-            var policyManagementService = utility.getPolicyManagementService();
-            var policyAdminPoint = policyManagementService.getPAP();
-            var profiles = policyAdminPoint.getProfiles();
-            var profileList = [];
-            var i, profile, profileObject;
-            for (i = 0; i < profiles.size(); i++) {
-                profile = profiles.get(i);
-                profileObject = {};
-                profileObject.name = profile.getProfileName();
-                profileObject.id = profile.getProfileId();
-                profileList.push(profileObject);
-            }
-            return profileList;
-        }catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-    };
-
-    /*
-     @Deprecated
-     */
-    publicMethods.updatePolicyPriorities = function (payload) {
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
-        }
-        try{
-            utility.startTenantFlow(carbonUser);
-            var policyManagementService = utility.getPolicyManagementService();
-            var policyAdminPoint = policyManagementService.getPAP();
-            var policyCount = payload.length;
-            var policyList = new java.util.ArrayList();
-            var i, policyObject;
-            for (i = 0; i < policyCount; i++) {
-                policyObject = new Policy();
-                policyObject.setId(payload[i].id);
-                policyObject.setPriorityId(payload[i].priority);
-                policyList.add(policyObject);
-            }
-            policyAdminPoint.updatePolicyPriorities(policyList);
-        }catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
-    };
-
-    /*
-     @Deprecated
-     */
-    publicMethods.deletePolicy = function (policyId) {
-        var isDeleted;
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
-        if (!carbonUser) {
-            log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
-        }
-        try{
-            utility.startTenantFlow(carbonUser);
-            var policyManagementService = utility.getPolicyManagementService();
-            var policyAdminPoint = policyManagementService.getPAP();
-            isDeleted = policyAdminPoint.deletePolicy(policyId);
-            if (isDeleted) {
-                // http status code 200 refers to - success.
-                return 200;
-            } else {
-                // http status code 409 refers to - conflict.
-                return 409;
-            }
-        }catch (e) {
-            throw e;
-        } finally {
-            utility.endTenantFlow();
-        }
     };
 
     return publicMethods;

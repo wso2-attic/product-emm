@@ -209,29 +209,29 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="passcode-policy-max-passcode-age-in-days">
-                            Maximum passcode age in days <br>
+                            Maximum passcode age in days* <br>
                             ( Should be in between 1-to-730 days or none )
                             <span class="helper" title="Number of days after which a passcode must be changed">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" maxlength="3" data-default="" placeholder="[ Requires Number Input ]" />
+                        <input id="passcode-policy-max-passcode-age-in-days" type="text" class="form-control operationDataKeys" data-key="passcodePolicyMaxPasscodeAgeInDays" maxlength="3" data-default=""/>
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="passcode-policy-passcode-history">
-                            Passcode history <br>
+                            Passcode history* <br>
                             ( Should be in between 1-to-50 passcodes or none )
                             <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" maxlength="2" data-default="" placeholder="[ Requires Number Input ]">
+                        <input id="passcode-policy-passcode-history" type="text" class="form-control operationDataKeys" data-key="passcodePolicyPasscodeHistory" maxlength="2" data-default="">
                     </div>
 
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="passcode-policy-max-auto-lock">
-                            Auto Lock Time in minutes
+                            Auto Lock Time in minutes*
                             <span class="helper" title="A device will be automatically locked when this time period elapses">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
@@ -250,7 +250,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="passcode-policy-grace-period">
-                            Grace period in minutes for device lock
+                            Grace period in minutes for device lock*
                             <span class="helper" title="Amount of time the device will be locked without prompting for passcode on unlock">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
@@ -271,7 +271,7 @@
 
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="passcode-policy-max-failed-attempts">
-                            Maximum number of failed attempts
+                            Maximum number of failed attempts*
                             <span class="helper" title="Maximum number of passcode entry attempts allowed before all data on a device will be erased">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
@@ -326,7 +326,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" maxlength="100" data-default="" placeholder="[ Required field if no domain name is given ]">
+                        <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" maxlength="100" data-default="">
                     </div>
 
                     <div class="wr-input-control">
@@ -338,7 +338,7 @@
                             <br>
                             ( For Wi-Fi Hotspot 2.0 negotiation )
                         </label>
-                        <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" maxlength="100" data-default="" placeholder="[ Required field if no SSID is given ]">
+                        <input id="wifi-domain-name" type="text" class="form-control operationDataKeys" data-key="wifiDomainName" maxlength="100" data-default="">
                     </div>
 
                     <div class="wr-input-control">
@@ -388,7 +388,7 @@
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" maxlength="100" data-default="" placeholder="[ Optional field ]">
+                        <input id="wifi-displayed-operator-name" type="text" class="form-control operationDataKeys" data-key="wifiDisplayedOperatorName" maxlength="100" data-default="">
                     </div>
 
                     <div class="wr-input-control">
@@ -421,7 +421,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" maxlength="100" data-default="" placeholder="[ Required field ]" />
+                            <input id="wifi-proxy-server" type="text" class="form-control operationDataKeys" data-key="wifiProxyServer" maxlength="100" data-default=""/>
                         </div>
 
                         <div class="wr-input-control">
@@ -431,7 +431,7 @@
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                             </label>
-                            <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" maxlength="5" data-default="" placeholder="[ Required field which requires Number Input ]" />
+                            <input id="wifi-proxy-port" type="text" class="form-control operationDataKeys" data-key="wifiProxyPort" maxlength="5" data-default=""/>
                         </div>
 
                         <div class="wr-input-control">

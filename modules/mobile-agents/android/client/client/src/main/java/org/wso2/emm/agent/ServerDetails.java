@@ -64,7 +64,6 @@ public class ServerDetails extends Activity {
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
-
 		Response compatibility = state.evaluateCompatibility();
 
 		if (!compatibility.getCode()) {
