@@ -23,11 +23,14 @@
                                 </select>
                             </div>
                             <label class="wr-input-label">
-                                Role Name * <br>
-                                ( should be in minimum 3 characters long, lower-case and not include any whitespaces )
+                                Role Name *
+                            </label>
+                            <br>
+                            <label class="wr-input-label" id="roleNameValidationText">
+                                ( {{roleNameHelpText}} )
                             </label>
                             <div class="wr-input-control">
-                                <input type="text" id="rolename" data-regex="{{roleNameJSRegEx}}" data-errormsg="{{roleNameRegExViolationErrorMsg}}" class="form-control" placeholder="[ Required field ]"/>
+                                <input type="text" id="rolename" data-regex="{{roleNameJSRegEx}}" data-errormsg="{{roleNameRegExViolationErrorMsg}}" class="form-control"/>
                             </div>
                             <label class="wr-input-label">
                                 User list

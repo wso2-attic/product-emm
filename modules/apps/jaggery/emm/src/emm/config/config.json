@@ -26,6 +26,7 @@
     "userValidationConfig" : {
         "usernameJSRegEx" : "^[\\S]{3,30}$",
         "usernameRegExViolationErrorMsg" : "Provided username is invalid.",
+        "usernameHelpMsg" : "should be in minimum 3 characters long and do not include any whitespaces.",
         "firstnameJSRegEx" : "^[\\S]{3,30}$",
         "firstnameRegExViolationErrorMsg" : "Provided first name is invalid.",
         "lastnameJSRegEx" : "^[\\S]{3,30}$",
@@ -33,7 +34,8 @@
     },
     "roleValidationConfig" : {
         "rolenameJSRegEx" : "^[\\S]{3,30}$",
-        "rolenameRegExViolationErrorMsg" : "Provided role name is invalid."
+        "rolenameRegExViolationErrorMsg" : "Provided role name is invalid.",
+        "rolenameHelpMsg" : "should be in minimum 3 characters long and do not include any whitespaces."
     },
     "generalConfig" : {
         "host" : "https://localhost:9443",

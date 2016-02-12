@@ -14,6 +14,7 @@ function onRequest(context) {
         context["roles"] = response["content"];
     }
     context["usernameJSRegEx"] = mdmProps.userValidationConfig.usernameJSRegEx;
+    context["usernameHelpText"] = mdmProps.userValidationConfig.usernameHelpMsg;
     context["usernameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.usernameRegExViolationErrorMsg;
     context["firstnameJSRegEx"] = mdmProps.userValidationConfig.firstnameJSRegEx;
     context["firstnameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.firstnameRegExViolationErrorMsg;

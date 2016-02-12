@@ -27,7 +27,7 @@ var operations = '.wr-operations',
     headerHeight = $('header').height(),
     offset = (headerHeight + navHeight),
     deviceSelection = '.device-select',
-    var platformTypeConstants = {
+    platformTypeConstants = {
         "ANDROID": "android",
         "IOS": "ios",
         "WINDOWS": "windows"
