@@ -32,37 +32,31 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
- * This class handles all the functionalities required for reading device build
+ * This class handles all the functionality required for reading device build
  * properties which is required in OTA (Over The Air) update process.
  */
 public class BuildPropParser {
     private static final String TAG = "OTA_BPP";
     private static final String TEMP_FILE_PREFIX = "buildprop";
     private static final String TEMP_FILE_SUFFIX = "ss";
-    private File tmpFile;
     private Context context;
     private HashMap<String, String> properties = null;
 
     BuildPropParser(ByteArrayOutputStream out, Context context) {
         this.context = context;
-        properties = new HashMap<String, String>();
+        properties = new HashMap<>();
         setByteArrayStream(out);
     }
 
     BuildPropParser(File file, Context context) throws IOException {
         this.context = context;
-        properties = new HashMap<String, String>();
+        properties = new HashMap<>();
         setFile(file);
     }
 
-    public HashMap<String, String> getPropMap() {
-        return properties;
-    }
-
-
     public String getProp(String propName) {
         if (properties != null) {
-            return (String) properties.get(propName);
+            return properties.get(propName);
         } else {
             return null;
         }
@@ -77,33 +71,48 @@ public class BuildPropParser {
     }
 
     private void setByteArrayStream(ByteArrayOutputStream out) {
+        FileOutputStream fileOutputStream = null;
+        File tmpFile;
         try {
             File tmpDir = null;
             if (context != null) {
                 tmpDir = context.getFilesDir();
             }
-            Log.d(TAG, "tmpDir:" + tmpDir.toString());
-            tmpFile = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX, tmpDir);
 
-            tmpFile.deleteOnExit();
-            FileOutputStream fileOutputStream = new FileOutputStream(tmpFile);
-            out.writeTo(fileOutputStream);
-            fileOutputStream.close();
-            setFile(tmpFile);
-            tmpFile.delete();
+            if(tmpDir != null) {
+                Log.d(TAG, "tmpDir:" + tmpDir.toString());
+                tmpFile = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX, tmpDir);
+
+                tmpFile.deleteOnExit();
+                fileOutputStream = new FileOutputStream(tmpFile);
+                out.writeTo(fileOutputStream);
+                setFile(tmpFile);
+                boolean isDeleted = tmpFile.delete();
+                if(!isDeleted) {
+                    Log.e(TAG, "Temp file " + tmpFile.getName() + " failed to delete.");
+                }
+            }
         } catch (IOException e) {
             Log.e(TAG, "Writing to file failed." + e);
+        } finally {
+            try {
+                if(fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to close file output stream." + e);
+            }
         }
     }
 
     private void setFile(File file) throws IOException {
+        FileReader reader = new FileReader(file);
+        BufferedReader in = new BufferedReader(reader);
         try {
-            FileReader reader = new FileReader(file);
-            BufferedReader in = new BufferedReader(reader);
             String string;
             while ((string = in.readLine()) != null) {
 
-                if (string.startsWith("#") == true) {
+                if (string.startsWith("#")) {
                     continue;
                 }
 
@@ -120,37 +129,29 @@ public class BuildPropParser {
                         continue;
                     }
 
-                    String val;
+                    String val = null;
                     if (scan.hasNext()) {
                         val = scan.next();
                     } else {
                         Log.e(TAG, "No value to read for key " + key +
                                    " from line " + string);
-                        continue;
                     }
 
                     Log.d(TAG, "Placing " + val + " into key " + key);
                     properties.put(key, val);
                 } catch (NoSuchElementException e) {
                     Log.e(TAG, "Parsing Problem: " + e);
-                    continue;
                 }
             }
 
-            Log.d(TAG, "Bulid Property Parser inserted " + properties.size()
-                       + " into the property hashmap ");
-            in.close();
+            Log.d(TAG, "Build Property Parser inserted " + properties.size()
+                       + " into the property map.");
         } catch (IOException e) {
             Log.e(TAG, "Reading from file failed." + e);
             throw e;
-        }
-    }
-
-    public String getRelease() {
-        if (properties != null) {
-            return properties.get("ro.build.version.release");
-        } else {
-            return null;
+        } finally {
+            reader.close();
+            in.close();
         }
     }
 
