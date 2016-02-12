@@ -18,17 +18,12 @@
 package org.wso2.emm.system.service.api;
 
 import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.Log;
-import org.wso2.emm.system.service.api.BuildPropParser;
-import org.wso2.emm.system.service.api.OTAServerConfig;
-import org.wso2.emm.system.service.api.OTAServerManager;
 import org.wso2.emm.system.service.utils.Constants;
 
 import java.net.MalformedURLException;
@@ -39,14 +34,8 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     private static final String TAG = "OTADownload";
     private static final String SI_UNITS_INDEX = "kMGTPE";
     private static final String BINARY_UNITS_INDEX = "KMGTPE";
-    private AlarmManager alarmManager;
     private Context context;
-    private OTAServerConfig otaServerConfig;
     private OTAServerManager otaServerManager;
-    private int updateState = 0;
-    /* State change will be 0 -> Checked(1) -> Downloading(2) -> Upgrading(3) */
-    private Intent updateIntent;
-    private PendingIntent pendingIntent;
 
     public OTADownload(Context context) {
 
@@ -58,7 +47,6 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
             Log.e(TAG, "OTA server manager threw exception ..." + e);
         }
         otaServerManager.setStateChangeListener(this);
-        otaServerConfig = otaServerManager.getConfig();
     }
 
     /**
@@ -82,34 +70,32 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         otaServerManager.startCheckingVersion();
     }
 
-    public void onStateOrProgress(int message, int error, Object info) {
+    public void onStateOrProgress(int message, int error, BuildPropParser parser, long info) {
         Log.d(TAG, "onStateOrProgress: " + "message: " + message + " error:" + error + " info: " + info);
+        /* State change will be 0 -> Checked(1) -> Downloading(2) -> Upgrading(3) */
         switch (message) {
             case STATE_IN_CHECKED:
-                onStateChecked(error, info);
+                onStateChecked(error, parser);
                 break;
             case STATE_IN_DOWNLOADING:
-                updateState = STATE_IN_DOWNLOADING;
                 onStateDownload(error, info);
                 break;
             case STATE_IN_UPGRADING:
-                updateState = STATE_IN_UPGRADING;
-                onStateUpgrade(error, info);
+                onStateUpgrade(error);
                 break;
             case MESSAGE_DOWNLOAD_PROGRESS:
                 break;
             case MESSAGE_VERIFY_PROGRESS:
-                onProgress(message, error, info);
+                onProgress(info);
                 break;
         }
     }
 
-    public void onStateChecked(int error, Object info) {
+    public void onStateChecked(int error, BuildPropParser parser) {
         if (error == 0) {
-            if (otaServerManager.compareLocalVersionToServer() == false) {
+            if (!otaServerManager.compareLocalVersionToServer()) {
                 Log.i(TAG, "Software is up to date:" + Build.VERSION.RELEASE + ", " + Build.ID);
-            } else if (otaServerManager.compareLocalVersionToServer() == true) {
-                final BuildPropParser parser = (BuildPropParser) info;
+            } else if (otaServerManager.compareLocalVersionToServer()) {
                 final long bytes = otaServerManager.getUpgradePackageSize();
                 Log.i(TAG, "New release found " + Build.VERSION.RELEASE + ", " + Build.ID);
                 String length = "Unknown";
@@ -125,7 +111,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                 //Downloading the new update package if a new version is available.
                 otaServerManager.startDownloadUpgradePackage();
             }
-        } else if (error == ERROR_WIFI_NOT_AVALIBLE) {
+        } else if (error == ERROR_WIFI_NOT_AVAILABLE) {
             Log.e(TAG, "OTA failed due to WIFI connection failure.");
         } else if (error == ERROR_CANNOT_FIND_SERVER) {
             Log.e(TAG, "OTA failed due to OTA server not accessible.");
@@ -135,6 +121,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     }
 
     public void onStateDownload(int error, Object info) {
+        Log.i(TAG, "Printing package information " + info.toString());
         if (error == ERROR_CANNOT_FIND_SERVER) {
             Log.e(TAG, "Error: server does not have an upgrade package.");
         } else if (error == ERROR_WRITE_FILE_ERROR) {
@@ -148,14 +135,13 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
-                Log.e(TAG, "Thread interrupted."+e);
+                Log.e(TAG, "Thread interrupted." + e);
             }
             otaServerManager.startInstallUpgradePackage();
         }
     }
 
-    public void onStateUpgrade(int error, Object info) {
-
+    public void onStateUpgrade(int error) {
         if (error == ERROR_PACKAGE_VERIFY_FAILED) {
             Log.e(TAG, "Package verification failed, signature does not match.");
         } else if (error == ERROR_PACKAGE_INSTALL_FAILED) {
@@ -163,8 +149,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         }
     }
 
-    public void onProgress(int message, int error, Object info) {
-        final Long progress = new Long((Long) info);
+    public void onProgress(Long progress) {
         Log.v(TAG, "Progress : " + progress);
     }
 
