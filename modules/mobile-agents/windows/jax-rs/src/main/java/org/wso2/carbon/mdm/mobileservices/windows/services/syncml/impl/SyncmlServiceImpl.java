@@ -40,7 +40,6 @@ import org.wso2.carbon.mdm.mobileservices.windows.operations.util.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.SyncmlService;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.WindowsDevice;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.ws.rs.core.Response;
@@ -128,7 +127,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         SyncmlDocument syncmlDocument;
         List<Operation> deviceInfoOperations;
         List<? extends Operation> pendingOperations;
-        OperationUtils operationUtils = new OperationUtils();
+        OperationHandler operationHandler = new OperationHandler();
         DeviceInfo deviceInfo = new DeviceInfo();
 
         try {
@@ -157,19 +156,12 @@ public class SyncmlServiceImpl implements SyncmlService {
                             deviceInfoOperations = deviceInfo.getDeviceInfo();
                             try {
                                 response = generateReply(syncmlDocument, deviceInfoOperations);
-                                PolicyManagerService policyManagerService = WindowsAPIUtils.getPolicyManagerService();
-                                policyManagerService.getEffectivePolicy(deviceIdentifier);
                                 return Response.status(Response.Status.OK).entity(response).build();
-                            } catch (PolicyManagementException e) {
-                                String msg = "Error occurred while getting effective policy.";
-                                log.error(msg, e);
-                                throw new WindowsConfigurationException(msg, e);
                             } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred while generating hash value.";
                                 log.error(msg, e);
                                 throw new WindowsOperationException(msg, e);
                             }
-
                         } else {
                             String msg = "Error occurred in device enrollment.";
                             log.error(msg);
@@ -200,26 +192,11 @@ public class SyncmlServiceImpl implements SyncmlService {
                     if ((syncmlDocument.getBody().getAlert() != null)) {
                         if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
                             try {
-                                pendingOperations = operationUtils.getPendingOperations(syncmlDocument);
+                                pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
                                 return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
                             } catch (OperationManagementException e) {
                                 String msg = "Cannot access operation management service.";
                                 log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
-                            } catch (DeviceManagementException e) {
-                                String msg = "Cannot access Device management service.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
-                            } catch (FeatureManagementException e) {
-                                String msg = "Error occurred while getting effective features.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
-                            } catch (PolicyComplianceException e) {
-                                String msg = "Error occurred while setting policy compliance.";
-                                log.error(msg, e);
-                                throw new WindowsConfigurationException(msg, e);
-                            } catch (NotificationManagementException e) {
-                                String msg = "Error occurred while getting notification service";
                                 throw new WindowsOperationException(msg, e);
                             } catch (SyncmlOperationException e) {
                                 String msg = "Error occurred while encoding hash value.";
@@ -248,27 +225,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                         }
                     } else {
                         try {
-                            pendingOperations = operationUtils.getPendingOperations(syncmlDocument);
-                            return Response.ok().entity(generateReply(syncmlDocument, pendingOperations))
-                                    .build();
+                            pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
+                            return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
                         } catch (OperationManagementException e) {
                             String msg = "Cannot access operation management service.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
-                        } catch (DeviceManagementException e) {
-                            String msg = "Cannot access Device management service.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
-                        } catch (FeatureManagementException e) {
-                            String msg = "Error occurred while getting effective features. ";
-                            log.error(msg, e);
-                            throw new WindowsConfigurationException(msg, e);
-                        } catch (PolicyComplianceException e) {
-                            String msg = "Error occurred while setting policy compliance.";
-                            log.error(msg, e);
-                            throw new WindowsConfigurationException(msg, e);
-                        } catch (NotificationManagementException e) {
-                            String msg = "Error occurred while getting notification service.";
                             log.error(msg, e);
                             throw new WindowsOperationException(msg, e);
                         } catch (SyncmlOperationException e) {
@@ -314,7 +274,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         String resolution;
         String modVersion;
         boolean status = false;
-        String user;
+        String user = null;
         String deviceName;
         int msgID;
         SyncmlDocument syncmlDocument;
@@ -355,6 +315,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 return status;
 
             } else if (msgID == PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID) {
+
                 List<ItemTag> itemList = syncmlDocument.getBody().getResults().getItem();
                 osVersion = itemList.get(PluginConstants.SyncML.OSVERSION_POSITION).getData();
                 imsi = itemList.get(PluginConstants.SyncML.IMSI_POSITION).getData();
@@ -441,8 +402,8 @@ public class SyncmlServiceImpl implements SyncmlService {
     /**
      * Generate Device payloads.
      *
-     * @param syncmlDocument parsed syncml payload from the syncml engine.
-     * @param operations     operations for generate payload.
+     * @param syncmlDocument Parsed syncml payload from the syncml engine.
+     * @param operations     Operations for generate payload.
      * @return String type syncml payload.
      * @throws WindowsOperationException
      * @throws PolicyManagementException

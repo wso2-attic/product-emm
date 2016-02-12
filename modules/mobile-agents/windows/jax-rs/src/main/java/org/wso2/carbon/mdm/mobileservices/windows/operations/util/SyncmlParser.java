@@ -25,9 +25,7 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
-import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
-import java.util.List;
+import java.util.*;
 
 /**
  * Parses the receiving SyncML payload and generates the SyncML document object from it.
@@ -122,31 +120,31 @@ public class SyncmlParser {
 
                 if (SyncMLHeaderParameter.MSG_ID.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         messageID = node.getTextContent().trim();
                     }
                 } else if (SyncMLHeaderParameter.SESSION_ID.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         sessionID = node.getTextContent().trim();
                     }
                 } else if (SyncMLHeaderParameter.TARGET.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         target = generateTarget(node);
                     }
                 } else if (SyncMLHeaderParameter.SOURCE.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         source = generateSource(node);
                     }
                 } else if (SyncMLHeaderParameter.CRED.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         credential = generateCredential(node);
                     }
@@ -394,31 +392,33 @@ public class SyncmlParser {
         String childNodeName;
         String locUri;
         for (int x = 0; x < node.getChildNodes().getLength(); x++) {
-            if (node.getChildNodes().item(x).getNodeName() != null) {
+            Node itemNode;
+            itemNode = node.getChildNodes().item(x);
+            if (itemNode.getNodeName() != null) {
                 nodeName = node.getChildNodes().item(x).getNodeName();
             } else {
-                throw new IllegalFormatCodePointException(2);
+                throw new IllegalStateException();
             }
             if (PluginConstants.SyncML.SYNCML_SOURCE.equals(nodeName)) {
-                if (node.getChildNodes().item(x).getChildNodes().item(x).getNodeName() != null) {
-                    childNodeName = node.getChildNodes().item(x).getChildNodes().item(x).getNodeName();
+                if (itemNode.getChildNodes().item(x).getNodeName() != null) {
+                    childNodeName = itemNode.getChildNodes().item(x).getNodeName();
                 } else {
-                    throw new IllegalFormatCodePointException(2);
+                    throw new IllegalStateException();
                 }
                 if ((PluginConstants.SyncML.SYNCML_LOCATION_URI.equals(childNodeName))) {
-                    if (node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim() != null) {
-                        locUri = node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim();
+                    if (itemNode.getChildNodes().item(x).getTextContent().trim() != null) {
+                        locUri = itemNode.getChildNodes().item(x).getTextContent().trim();
                     } else {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     }
                     source.setLocURI(locUri);
                     item.setSource(source);
                 }
             } else if (PluginConstants.SyncML.SYNCML_DATA.equals(nodeName)) {
-                if (node.getChildNodes().item(x).getTextContent().trim() != null) {
-                    data = node.getChildNodes().item(x).getTextContent().trim();
+                if (itemNode.getTextContent().trim() != null) {
+                    data = itemNode.getTextContent().trim();
                 } else {
-                    throw new IllegalFormatCodePointException(2);
+                    throw new IllegalStateException();
                 }
                 item.setData(data);
             }

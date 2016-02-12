@@ -296,4 +296,13 @@ public final class PluginConstants {
         public static final String ENCRYPTED_ENABLE = "encrypted";
         public static final String ENABLE_PASSWORD = "enablePassword";
     }
+
+    /**
+     * Authentication related constants.
+     */
+    public final class AuthenticatorProperties {
+        private AuthenticatorProperties() { throw new AssertionError(); }
+         public static final String MAX_CONNECTION_PER_HOST = "MaxConnectionsPerHost";
+         public static final String MAX_TOTAL_CONNECTIONS = "MaxTotalConnections";
+    }
 }

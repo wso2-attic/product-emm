@@ -82,4 +82,5 @@ public class WindowsDeviceUtils {
     public String convertErrorMapIntoErrorMessage(List<String> errorDeviceIdList) {
         return StringUtils.join(errorDeviceIdList.iterator(), COMMA_SEPARATION_PATTERN);
     }
+
 }

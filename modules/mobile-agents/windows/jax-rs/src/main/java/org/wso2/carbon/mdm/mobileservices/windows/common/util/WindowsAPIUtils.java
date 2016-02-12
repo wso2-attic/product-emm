@@ -122,6 +122,14 @@ public class WindowsAPIUtils {
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
 
+    public static List<? extends Operation> getPendingOperations(DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException, DeviceManagementException {
+        List<? extends Operation> pendingDataOperations;
+        pendingDataOperations = WindowsAPIUtils.getDeviceManagementService().getOperationsByDeviceAndStatus(
+                deviceIdentifier, Operation.Status.PENDING);
+        return pendingDataOperations;
+    }
+
     public static TenantConfiguration getTenantConfiguration() throws DeviceManagementException {
         return getDeviceManagementService().getConfiguration(
                 DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
@@ -175,7 +183,7 @@ public class WindowsAPIUtils {
     public static void startTenantFlow(AuthenticationInfo authenticationInfo) {
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        if (authenticationInfo.getTenantId() == 0 && authenticationInfo.getTenantDomain().equals(null)) {
+        if (authenticationInfo.getTenantDomain() == null) {
             privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
             privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
         } else {

@@ -89,6 +89,8 @@ public class Constants {
         public static final String PIN_NOTFOUND = "405";
         public static final String LOCK_RESET_NOTIFICATION = "Error occurred in Device Lock Operation. " +
                 "Please trigger lock-reset operation.";
+        public static final String POSITIVE_CSP_DATA = "1";
+        public static final String NEGATIVE_CSP_DATA = "0";
     }
 
 }

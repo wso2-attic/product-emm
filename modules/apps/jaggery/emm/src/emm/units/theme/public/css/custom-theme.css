@@ -92,6 +92,7 @@ h1, .h1 {
 
 
 /* sorting */
+/*
 .dropdown-menu {
 	position: absolute;
 	top: 40px;
@@ -115,6 +116,7 @@ h1, .h1 {
 	box-shadow: 0 0 0 rgba(0,0,0,.175);
 
 }
+*/
 
 .dropdown-menu-content {
 	background-color: #e4e4e4;
@@ -139,6 +141,7 @@ h1, .h1 {
 }
 
 /* filter */
+/*
 .dropdown-menu {
 	position: absolute;
 	top: 40px;
@@ -162,6 +165,7 @@ h1, .h1 {
 	box-shadow: 0 0 0 rgba(0,0,0,.175);
 
 }
+*/
 
 .dropdown-menu-content {
 	background-color: #e4e4e4;

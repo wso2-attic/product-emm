@@ -271,7 +271,7 @@ deviceModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
 
-            var url = mdmProps[httpsURL] + "/mdm-admin/devices/view?type=" + deviceType + "&id=" + deviceId;
+            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/view?type=" + deviceType + "&id=" + deviceId;
             var dataNew = serviceInvokers.XMLHttp.get(
                 url, function (responsePayload) {
                     var device = responsePayload.responseContent;
@@ -319,14 +319,12 @@ deviceModule = function () {
     publicMethods.getLicense = function (deviceType) {
         var url;
         var license;
-        if (deviceType != null && deviceType != undefined) {
-            switch (deviceType) {
-                case PLATFORM_WINDOWS :
-                    url = mdmProps[httpURL] + "/mdm-windows-agent/services/device/license";
-                case PLATFORM_IOS :
-                    url = mdmProps[httpsURL] + "/ios-enrollment/license/";
-            }
+        if (deviceType == "windows") {
+            url = mdmProps["httpURL"] + "/mdm-windows-agent/services/device/license";
+        } else if (deviceType == "ios") {
+            url = mdmProps["httpsURL"] + "/ios-enrollment/license/";
         }
+
         if (url != null && url != undefined) {
             serviceInvokers.XMLHttp.get(url, function (responsePayload) {
                 license = responsePayload.text;
