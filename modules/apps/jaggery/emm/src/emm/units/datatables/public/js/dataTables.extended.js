@@ -59,7 +59,7 @@ $.fn.datatables_extended = function(settings){
                                 );
 
                                 column
-                                    .search(val ? val : '', true, false)
+                                    .search(val ? '^' + val + '$' : '', true, false)
                                     .draw();
 
                                 if (filterColumn.eq(column.index()).hasClass('data-platform')){
