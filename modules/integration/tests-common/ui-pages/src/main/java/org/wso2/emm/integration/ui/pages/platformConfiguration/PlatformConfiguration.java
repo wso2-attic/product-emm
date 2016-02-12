@@ -24,8 +24,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
+
 import java.io.IOException;
 
+/**
+ * Class to represent the Platform Configuration Page.
+ */
 public class PlatformConfiguration {
 
     private WebDriver driver;
@@ -41,32 +45,41 @@ public class PlatformConfiguration {
         }
     }
 
-    public void changeGeneralConfig(String value){
+    /**
+     * This page imitate the general configuration changing scenario.
+     * @param value new value for the configuration.
+     */
+    public void changeGeneralConfig(String value) {
         WebElement generalConfigButton = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.general.tab.identifier"))));
         WebElement inputGeneralConfig = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.general.input.monitoringFr.identifier"))));
         WebElement buttonSaveConfig = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.general.button.save.identifier"))));
-
         generalConfigButton.click();
         inputGeneralConfig.sendKeys(value);
         buttonSaveConfig.click();
     }
 
-    public void changeAndroidConfig(String value){
+    /**
+     * This page imitate the android configuration changing scenario.
+     * @param value new value for the configuration.
+     */
+    public void changeAndroidConfig(String value) {
         WebElement androidConfigButton = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.android.tab.identifier"))));
         WebElement inputAndroidConfig = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.android.input.identifier"))));
         WebElement buttonSaveConfig = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.android.button.save.identifier"))));
-
         androidConfigButton.click();
         inputAndroidConfig.sendKeys(value);
         buttonSaveConfig.click();
 
     }
 
-    public void changeWindowsConfig(String value){
+    /**
+     * This page imitate the windows configuration changing scenario.
+     * @param value new value for the configuration.
+     */
+    public void changeWindowsConfig(String value) {
         WebElement windowsConfigButton = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.widows.tab.identifier"))));
         WebElement inputWindowsConfig = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.windows.input.identifier"))));
         WebElement buttonSaveConfig = driver.findElement(By.xpath((uiElementMapper.getElement("emm.configuration.windows.button.save.identifier"))));
-
         windowsConfigButton.click();
         inputWindowsConfig.sendKeys(value);
         buttonSaveConfig.click();

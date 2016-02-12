@@ -419,7 +419,7 @@ public class User {
             log.debug("Getting the list of users with all user-related information");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList;
+        List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*", -1);
             userList = new ArrayList<UserWrapper>(users.length);
@@ -463,7 +463,7 @@ public class User {
             log.debug("Getting the list of users with all user-related information using the filter : " + filter);
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList;
+        List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers(filter + "*", -1);
             userList = new ArrayList<UserWrapper>(users.length);
@@ -506,7 +506,7 @@ public class User {
             log.debug("Getting the list of users by name");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList;
+        List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
             userList = new ArrayList<UserWrapper>(users.length);
@@ -549,7 +549,7 @@ public class User {
             log.debug("Getting the list of users by name");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<String> userList;
+        List<String> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
             userList = new ArrayList<String>(users.length);
@@ -601,7 +601,7 @@ public class User {
             log.debug("Sending invitation mail to user by username: " + username);
         }
         String tennentDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        if (tennentDomain.equalsIgnoreCase("carbon.super")) {
+        if ("carbon.super".equalsIgnoreCase(tennentDomain)) {
             tennentDomain = "";
         }
         if (!username.contains("/")) {

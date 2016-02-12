@@ -28,8 +28,10 @@ import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 
 import java.io.IOException;
 
+/**
+ * class represent MDM home page and its behaviors.
+ */
 public class MDMHomePage {
-
     private static final Log log = LogFactory.getLog(MDMHomePage.class);
     private WebDriver driver;
     private UIElementMapper uiElementMapper;

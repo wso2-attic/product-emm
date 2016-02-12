@@ -146,14 +146,11 @@ function removeUser(uname, uid) {
  * when a user type on the search field on User Listing page in
  * WSO2 MDM Console then click on the search button.
  */
-
 $("#search-btn").click(function () {
     var searchQuery = $("#search-by-username").val();
     $("#ast-container").empty();
     loadUsers(searchQuery);
-
 });
-
 
 function loadUsers(searchParam) {
     $("#loading-content").show();

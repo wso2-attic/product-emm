@@ -121,7 +121,6 @@ var configParams = {
 };
 
 $(document).ready(function () {
-
     var platformsSupported = $("#typeDiv").attr("typeData");
     $("#gcm-inputs").hide();
     tinymce.init({
@@ -152,7 +151,6 @@ $(document).ready(function () {
     if (platformsSupported.indexOf('android') != -1) {
         invokerUtil.get(
             getAndroidConfigAPI,
-
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
@@ -180,8 +178,7 @@ $(document).ready(function () {
                 }
             }, function (data) {
                 console.log(data);
-            }
-        );
+            });
     }
 
     invokerUtil.get(
@@ -196,11 +193,9 @@ $(document).ready(function () {
                     }
                 }
             }
-
         }, function (data) {
             console.log(data);
-        }
-    );
+        });
 
     if (platformsSupported.indexOf('windows') != -1) {
         invokerUtil.get(
@@ -217,7 +212,6 @@ $(document).ready(function () {
                         }
                     }
                 }
-
             }, function (data) {
                 console.log(data);
             }
@@ -265,7 +259,6 @@ $(document).ready(function () {
                         }
                     }
                 }
-
             }, function (data) {
                 console.log(data);
             }
@@ -286,6 +279,7 @@ $(document).ready(function () {
             $("#gcm-inputs").show();
         }
     });
+
     /**
      * Following click function would execute
      * when a user clicks on "Save" button

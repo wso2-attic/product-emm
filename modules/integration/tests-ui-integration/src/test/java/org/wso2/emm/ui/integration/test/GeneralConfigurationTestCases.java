@@ -25,8 +25,6 @@ import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
 import org.wso2.emm.integration.ui.pages.platformConfiguration.PlatformConfiguration;
 
-
-
 public class GeneralConfigurationTestCases extends EMMIntegrationUiBaseTestCase {
     private WebDriver driver;
     private static String configValue = "3600";
