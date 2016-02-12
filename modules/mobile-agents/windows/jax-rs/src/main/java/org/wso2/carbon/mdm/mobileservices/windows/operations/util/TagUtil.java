@@ -28,16 +28,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains utility methods which are used while creating Syncml Messages
+ * Contains utility methods which are used while creating Syncml Messages.
  */
 public class TagUtil {
     /**
-     * Build syncml AddTag for response message.
+     * Build syncml AddTag for Device response message.
+     *
      * @param operation Policy operation
-     * @param data windows configuration service provider data value 1/0
+     * @param data      Configuration service provider(CSP) data value 1/0
      * @return Syncml AddTag type object.
      */
-    public static AddTag buildAddTag(Operation operation,String data) {
+    public static AddTag buildAddTag(Operation operation, String data) {
         TargetTag target = new TargetTag();
         MetaTag meta = new MetaTag();
         AddTag add = new AddTag();
