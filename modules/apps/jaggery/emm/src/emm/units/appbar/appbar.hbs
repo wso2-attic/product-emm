@@ -13,23 +13,6 @@
                         <span class="fw-stack"></span>
                         {{pageTitle}}
                     </a><!--
-                 -->{{#equal pageTitle "Device Management"}}<!--
-                     --><a href="javascript:toggleEnrollment()" class="cu-btn">
-                        <span class="fw-stack">
-                            <i class="fw fw-bpmn fw-stack-1-5x"></i>
-                        </span>
-                        Enroll Device
-                        </a><!--
-                 -->{{/equal}}<!--
-                 -->{{#if enableBack}}<!--
-                     --><a href="javascript:history.back()" class="cu-btn">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-left-arrow fw-stack-1x"></i>
-                            </span>
-                            Go Back
-                        </a><!--
-                 -->{{/if}}<!--
                  -->{{#each currentActions}}<!--
                      --><a href="{{url}}" class="cu-btn" id="appbar-btn-{{id}}" title="{{tooltip}}">
                             <span class="fw-stack">
