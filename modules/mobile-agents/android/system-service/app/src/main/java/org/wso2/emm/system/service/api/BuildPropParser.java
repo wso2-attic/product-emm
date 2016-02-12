@@ -79,7 +79,7 @@ public class BuildPropParser {
                 tmpDir = context.getFilesDir();
             }
 
-            if(tmpDir != null) {
+            if (tmpDir != null) {
                 Log.d(TAG, "tmpDir:" + tmpDir.toString());
                 tmpFile = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX, tmpDir);
 

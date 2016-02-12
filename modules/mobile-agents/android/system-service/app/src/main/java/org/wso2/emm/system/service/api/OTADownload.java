@@ -38,7 +38,6 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     private OTAServerManager otaServerManager;
 
     public OTADownload(Context context) {
-
         this.context = context;
         try {
             otaServerManager = new OTAServerManager(this.context);
@@ -103,11 +102,11 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                     length = byteCountToDisplaySize(bytes, false);
                 }
 
-                Log.i(TAG, "version" + ":" +
+                Log.i(TAG, "version :" +
                            parser.getProp("ro.build.id") + "\n" +
-                           "full_version" + ":" +
+                           "full_version :" +
                            parser.getProp("ro.build.description") + "\n" +
-                           "size:" + " " + length);
+                           "size : " + length);
                 //Downloading the new update package if a new version is available.
                 otaServerManager.startDownloadUpgradePackage();
             }
