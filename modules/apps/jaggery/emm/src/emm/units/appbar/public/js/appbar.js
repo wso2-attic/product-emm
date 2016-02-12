@@ -72,25 +72,26 @@ function toggleEnrollment() {
     showPopup();
 }
 
-function loadNotifications() {
-
-    var serviceURL = "/mdm-admin/notifications/NEW";
-
-    var successCallback = function (data) {
-        if (!data) {
-            data = "[]";
-        }
+var successCallback = function (data) {
+    if (!data) {
         data = JSON.parse(data);
         if (data.length > 0) {
             $("#notification-bubble").html(data.length);
+        } else {
+            hideNotificationCount();
         }
+    } else {
+        hideNotificationCount();
+    }
+};
 
-    };
+function loadNotifications() {
+    var serviceURL = "/mdm-admin/notifications/NEW";
+    invokerUtil.get(serviceURL, successCallback, hideNotificationCount);
+}
 
-    invokerUtil.get(serviceURL,
-                    successCallback, function (response) {
-            console.log(response.content);
-        });
+function hideNotificationCount() {
+    $("#notification-bubble").hide();
 }
 
 $(document).ready(function () {

@@ -54,6 +54,7 @@ policyModule = function () {
     };
 
     privateMethods.handleGetAllPoliciesSuccess = function (responsePayload) {
+        var isUpdated = false;
         var policyListFromRestEndpoint = responsePayload["responseContent"];
         var policyListToView = [];
         var i, policyObjectFromRestEndpoint, policyObjectToView;
@@ -109,11 +110,9 @@ policyModule = function () {
         var utility = require('/modules/utility.js')["utility"];
         try {
             var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
-            var isUpdated = false;
             var response = serviceInvokers.XMLHttp.
-                get(url, privateMethods.getAllPoliciesOnSuccess(),privateMethods.getAllPoliciesOnError());
+                get(url, privateMethods.handleGetAllPoliciesSuccess,privateMethods.handleGetAllPoliciesError);
             return response;
-
         } catch (e) {
             throw e;
         }
@@ -133,6 +132,5 @@ policyModule = function () {
         }
         return elementsInAString;
     };
-
     return publicMethods;
 }();
