@@ -69,7 +69,7 @@ var userModule = function () {
             var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
                 var response = {};
                 response.content = responsePayload["responseContent"];
-                if(responsePayload["responseContent"] == null && responsePayload != null){
+                if (responsePayload["responseContent"] == null && responsePayload != null) {
                     response.content = responsePayload;
                 }
                 response.status = "success";

@@ -44,18 +44,13 @@ import org.wso2.emm.integration.ui.pages.UIElementMapper;
 import java.io.IOException;
 
 /**
- * Class to represents Notification View.
+ * This class represents the state and behavior of the Notification View User interface.
  */
 public class NotificationView {
     private WebDriver driver;
     private UIElementMapper uiElementMapper;
     private static final Log log = LogFactory.getLog(NotificationView.class);
 
-    /**
-     * Constructor
-     * @param driver current driver instance.
-     * @throws IOException
-     */
     public NotificationView(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();

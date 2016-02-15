@@ -29,7 +29,7 @@ import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 import java.io.IOException;
 
 /**
- * class represent MDM home page and its behaviors.
+ * This class represents the state and behavior of the MDM Home User interface.
  */
 public class MDMHomePage {
     private static final Log log = LogFactory.getLog(MDMHomePage.class);

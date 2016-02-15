@@ -46,7 +46,7 @@ public class PlatformConfiguration {
     }
 
     /**
-     * This page imitate the general configuration changing scenario.
+     * This page imitates the general configuration changing scenario.
      * @param value new value for the configuration.
      */
     public void changeGeneralConfig(String value) {
@@ -59,7 +59,7 @@ public class PlatformConfiguration {
     }
 
     /**
-     * This page imitate the android configuration changing scenario.
+     * This page imitates the android configuration changing scenario.
      * @param value new value for the configuration.
      */
     public void changeAndroidConfig(String value) {
@@ -73,7 +73,7 @@ public class PlatformConfiguration {
     }
 
     /**
-     * This page imitate the windows configuration changing scenario.
+     * This page imitates the windows configuration changing scenario.
      * @param value new value for the configuration.
      */
     public void changeWindowsConfig(String value) {
