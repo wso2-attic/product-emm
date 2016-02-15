@@ -7,7 +7,6 @@ var updateStats = function (serviceURL, id) {
             } else {
                 data = JSON.parse(data);
                 $(id).html(data);
-                console.log(data);
                 if (Number(data) <= 0) {
                     $(id + "-view-btn").hide();
                 }

@@ -78,7 +78,7 @@ public class Operation implements APIResultCallBack {
 	private static final String LOCATION_INFO_TAG_LATITUDE = "latitude";
 	private static final String APP_INFO_TAG_NAME = "name";
 	private static final String APP_INFO_TAG_PACKAGE = "package";
-	private static final String APP_INFO_TAG_ICON = "icon";
+	private static final String APP_INFO_TAG_VERSION = "version";
 	private static final int DEFAULT_PASSWORD_LENGTH = 0;
 	private static final int DEFAULT_VOLUME = 0;
 	private static final int DEFAULT_FLAG = 0;
@@ -267,7 +267,7 @@ public class Operation implements APIResultCallBack {
 			try {
 				app.put(APP_INFO_TAG_NAME, Uri.encode(infoApp.getAppname()));
 				app.put(APP_INFO_TAG_PACKAGE, infoApp.getPackagename());
-				app.put(APP_INFO_TAG_ICON, infoApp.getIcon());
+				app.put(APP_INFO_TAG_VERSION, infoApp.getVersionCode());
 				result.put(app);
 			} catch (JSONException e) {
 				operation.setStatus(resources.getString(R.string.operation_value_error));

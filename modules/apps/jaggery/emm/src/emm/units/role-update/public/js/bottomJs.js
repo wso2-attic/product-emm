@@ -9,6 +9,21 @@ function inputIsValid(regExp, inputString) {
     regExp = new RegExp(regExp);
     return regExp.test(inputString);
 }
+
+var validateInline = {};
+
+/**
+ * Validate if provided username is valid against RegEx configures.
+ */
+validateInline["role-name"] = function () {
+    var rolenameinput = $("input#rolename");
+    if (inputIsValid( rolenameinput.data("regex"), rolenameinput.val())) {
+        $("#roleNameValidationText").removeClass("inline-warning");
+    } else {
+        $("#roleNameValidationText").addClass("inline-warning");
+    }
+};
+
 function formatRepo (user) {
     if (user.loading) {
         return user.text
@@ -124,5 +139,13 @@ $(document).ready(function () {
                 }
             );
         }
+    });
+
+    $("#rolename").focus(function() {
+        $("#roleNameValidationText").removeClass("inline-warning");
+    });
+
+    $("#rolename").blur(function() {
+        validateInline["role-name"]();
     });
 });

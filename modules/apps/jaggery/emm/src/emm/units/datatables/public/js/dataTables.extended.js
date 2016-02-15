@@ -59,7 +59,7 @@ $.fn.datatables_extended = function(settings){
                                 );
 
                                 column
-                                    .search(val ? val : '', true, false)
+                                    .search(val ? '^' + val + '$' : '', true, false)
                                     .draw();
 
                                 if (filterColumn.eq(column.index()).hasClass('data-platform')){
@@ -132,7 +132,8 @@ $.fn.datatables_extended = function(settings){
                  */
                 $('.dataTable.list-table').closest('.dataTables_wrapper').find('.dataTablesTop .dataTables_toolbar').html('' +
                         '<ul class="nav nav-pills navbar-right remove-margin" role="tablist">' +
-                        '<li><button data-click-event="toggle-selected" id="dt-select-all" class="btn btn-default btn-primary">Select All</li>' +
+                        '<li><button data-click-event="toggle-selectable" class="btn btn-default btn-primary">Select</li>' +
+                        '<li><button data-click-event="toggle-selected" id="dt-select-all" class="btn btn-default btn-primary disabled">Select All</li>' +
                         '<li><button data-click-event="toggle-list-view" data-view="grid" class="btn btn-default"><i class="fw fw-grid"></i></button></li>' +
                         '<li><button data-click-event="toggle-list-view" data-view="list" class="btn btn-default"><i class="fw fw-list"></i></button></li>' +
                         '<li><button class="btn btn-default" data-toggle="dropdown"><i class="fw fw-sort"></i></button>'+dropdownmenu[0].outerHTML+'</li>' +
@@ -164,23 +165,41 @@ $.fn.datatables_extended = function(settings){
                 var rowSelectedClass = 'DTTT_selected selected';
 
                 /**
+                 *  Enable/Disable selection on rows
+                 */
+                $('.dataTables_wrapper [data-click-event=toggle-selectable]').click(function () {
+                    console.log("2323");
+                    var button = this,
+                        thisTable = $(this).closest('.dataTables_wrapper').find('.dataTable').dataTable();
+                    if ($(button).html() == 'Select') {
+                        thisTable.addClass("table-selectable");
+                        $(button).addClass("active").html('Cancel');
+                        $(button).parent().next().children("button").removeClass("disabled");
+                    } else if ($(button).html() == 'Cancel'){
+                        thisTable.removeClass("table-selectable");
+                        $(button).addClass("active").html('Select');
+                        $(button).parent().next().children().addClass("disabled");
+                    }
+                });
+                /**
                  *  select/deselect all rows function
                  */
                 $('.dataTables_wrapper [data-click-event=toggle-selected]').click(function() {
                     var button = this,
                         thisTable = $(this).closest('.dataTables_wrapper').find('.dataTable').dataTable();
-
-                    if($(button).html() == 'Select All') {
-                        thisTable.api().rows().every(function () {
-                            $(this.node()).addClass(rowSelectedClass);
-                            $(button).html('Deselect All');
-                        });
-                    }
-                    else if($(button).html() == 'Deselect All') {
-                        thisTable.api().rows().every(function () {
-                            $(this.node()).removeClass(rowSelectedClass);
-                            $(button).html('Select All');
-                        });
+                    if(!$(button).hasClass('disabled')){
+                        if($(button).html() == 'Select All') {
+                            thisTable.api().rows().every(function () {
+                                $(this.node()).addClass(rowSelectedClass);
+                                $(button).html('Deselect All');
+                            });
+                        }
+                        else if($(button).html() == 'Deselect All') {
+                            thisTable.api().rows().every(function () {
+                                $(this.node()).removeClass(rowSelectedClass);
+                                $(button).html('Select All');
+                            });
+                        }
                     }
                 });
 

@@ -22,7 +22,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
@@ -54,7 +53,6 @@ public class OTAServerManager {
     private OTAServerConfig serverConfig;
     private BuildPropParser parser = null;
     private long cacheProgress = -1;
-    private boolean stopUpdate = false;
     private Context context;
     private WakeLock wakeLock;
 
@@ -63,52 +61,41 @@ public class OTAServerManager {
             Log.d(TAG, "Verify progress " + progress);
             if (stateChangeListener != null) {
                 stateChangeListener.onStateOrProgress(OTAStateChangeListener.MESSAGE_VERIFY_PROGRESS,
-                                            0, new Long(progress));
+                                            0, null, progress);
             }
         }
     };
 
     public OTAServerManager(Context context) throws MalformedURLException {
-        serverConfig = new OTAServerConfig(Build.PRODUCT);
+        serverConfig = new OTAServerConfig(Build.PRODUCT, context);
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "OTA Wakelock");
         this.context = context;
-    }
-
-    public OTAStateChangeListener getStateChangeListener() {
-        return stateChangeListener;
     }
 
     public void setStateChangeListener(OTAStateChangeListener stateChangeListener) {
         this.stateChangeListener = stateChangeListener;
     }
 
-    public OTAServerConfig getConfig() {
-        return serverConfig;
-    }
-
-    public BuildPropParser getParser() {
-        return parser;
-    }
-
     public boolean checkNetworkOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-        if ((info != null) && (info.isConnectedOrConnecting() == true)) {
-            return true;
-        } else {
-            return false;
+        boolean status = false;
+        if (info != null && info.isConnectedOrConnecting()) {
+            status = true;
         }
+
+        return status;
     }
 
     public void startCheckingVersion() {
 
-        if (checkURL(serverConfig.getBuildPropURL()) == false) {
+        if (!checkURL(serverConfig.getBuildPropURL())) {
             if (this.stateChangeListener != null) {
                 if (this.checkNetworkOnline()) {
                     reportCheckingError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
                 } else {
-                    reportCheckingError(OTAStateChangeListener.ERROR_WIFI_NOT_AVALIBLE);
+                    reportCheckingError(OTAStateChangeListener.ERROR_WIFI_NOT_AVAILABLE);
                 }
             }
             return;
@@ -119,7 +106,7 @@ public class OTAServerManager {
         if (parser != null) {
             if (this.stateChangeListener != null) {
                 this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED,
-                                                 OTAStateChangeListener.NO_ERROR, parser);
+                                                 OTAStateChangeListener.NO_ERROR, parser, 0);
             }
         } else {
             reportCheckingError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
@@ -143,46 +130,45 @@ public class OTAServerManager {
             remoteBuildUTC = (Long.parseLong(buildTimeUTC)) * 1000;
         } else {
             remoteBuildUTC = Long.MIN_VALUE;
-            Log.e(TAG, "UTC date not found in config file " +
-                       "- config may be corrupted or missing");
+            Log.e(TAG, "UTC date not found in config file, config may be corrupted or missing");
         }
 
         Log.d(TAG, "Local Version:" + Build.VERSION.INCREMENTAL + " Server Version:" + parser.getNumRelease());
         boolean upgrade = remoteBuildUTC > buildTime;
-        Log.d(TAG, "Remote build time : " + remoteBuildUTC + " Local build time :" + buildTime);
+        Log.d(TAG, "Remote build time : " + remoteBuildUTC + " Local build time : " + buildTime);
         return upgrade;
     }
 
     void publishDownloadProgress(long total, long downloaded) {
         Log.d(TAG, "Download Progress - Total: " + total + " Downloaded:" + downloaded);
-        Long progress = new Long((downloaded * 100) / total);
-        if (this.stateChangeListener != null && progress.longValue() != cacheProgress) {
+        Long progress = (downloaded * 100) / total;
+        if (this.stateChangeListener != null && progress != cacheProgress) {
             this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.MESSAGE_DOWNLOAD_PROGRESS,
-                                             0, progress);
-            cacheProgress = progress.longValue();
+                                             0, null, progress);
+            cacheProgress = progress;
         }
     }
 
     void reportCheckingError(int error) {
         if (this.stateChangeListener != null) {
-            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED, error, null);
+            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED, error, null, 0);
         }
     }
 
     void reportDownloadError(int error) {
         if (this.stateChangeListener != null) {
-            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING, error, null);
+            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING, error, null, 0);
         }
     }
 
     void reportInstallError(int error) {
         if (this.stateChangeListener != null) {
-            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_UPGRADING, error, null);
+            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_UPGRADING, error, null, 0);
         }
     }
 
     public long getUpgradePackageSize() {
-        if (checkURL(serverConfig.getPackageURL()) == false) {
+        if (!checkURL(serverConfig.getPackageURL())) {
             Log.e(TAG, "getUpgradePackageSize Failed");
             return -1;
         }
@@ -198,22 +184,21 @@ public class OTAServerManager {
         }
     }
 
-    public void onStop() {
-        stopUpdate = true;
-    }
-
     public void startDownloadUpgradePackage() {
 
-        if (checkURL(serverConfig.getPackageURL()) == false) {
+        if (!checkURL(serverConfig.getPackageURL())) {
             if (this.stateChangeListener != null) {
                 reportDownloadError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
             }
             return;
         }
 
-        File targetFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOACTION);
+        File targetFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
         try {
-            targetFile.createNewFile();
+            boolean fileStatus = targetFile.createNewFile();
+            if(!fileStatus) {
+                Log.e(TAG, "Update package file creation failed.");
+            }
         } catch (IOException e) {
             Log.e(TAG, "Update package file retrieval error." + e);
             reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
@@ -236,7 +221,7 @@ public class OTAServerManager {
             Log.d(TAG, "Update package file size:" + lengthOfFile);
             byte data[] = new byte[100 * 1024];
             long total = 0, count;
-            while ((count = input.read(data)) >= 0 && !stopUpdate) {
+            while ((count = input.read(data)) >= 0) {
                 total += count;
                 publishDownloadProgress(lengthOfFile, total);
                 output.write(data, 0, (int) count);
@@ -245,8 +230,8 @@ public class OTAServerManager {
             output.flush();
             output.close();
             input.close();
-            if (this.stateChangeListener != null && !stopUpdate) {
-                this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING, 0, null);
+            if (this.stateChangeListener != null) {
+                this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING, 0, null, 0);
             }
         } catch (IOException e) {
             Log.e(TAG, "Connection failure when downloading update package." + e);
@@ -258,26 +243,24 @@ public class OTAServerManager {
     }
 
     public void startVerifyUpgradePackage() {
-        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOACTION);
+        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
 
         try {
             wakeLock.acquire();
             RecoverySystem.verifyPackage(recoveryFile, recoveryVerifyListener, null);
         } catch (IOException e) {
-            reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FALIED);
+            reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
             Log.e(TAG, "Update verification failed due to file error." + e);
-            return;
         } catch (GeneralSecurityException e) {
-            reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FALIED);
+            reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
             Log.e(TAG, "Update verification failed due to security check failure." + e);
-            return;
         } finally {
             wakeLock.release();
         }
     }
 
     public void startInstallUpgradePackage() {
-        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOACTION);
+        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
 
         try {
             wakeLock.acquire();
@@ -285,11 +268,9 @@ public class OTAServerManager {
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
             Log.e(TAG, "Update installation failed due to file error." + e);
-            return;
         } catch (SecurityException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
             Log.e(TAG, "Update installation failure due to security check failure." + e);
-            return;
         } finally {
             wakeLock.release();
         }
@@ -316,7 +297,7 @@ public class OTAServerManager {
      * The caller can parse this list and get information.
      * @return - Returns true if rhe firmware needs to be upgraded.
      */
-    public BuildPropParser getTargetPackagePropertyList(URL configURL) {
+    public BuildPropParser getTargetPackagePropertyList(URL url) {
 
         InputStream reader = null;
         ByteArrayOutputStream writer = null;
@@ -325,20 +306,19 @@ public class OTAServerManager {
 
         // First, trying to download the property list file. the build.prop of target image.
         try {
-            URL url = configURL;
-            URLConnection ucon;
+            URLConnection urlConnection;
 
 			/* Use the URL configuration to open a connection
 			   to the OTA server */
-            ucon = url.openConnection();
+            urlConnection = url.openConnection();
 
 			/* Since you get a URLConnection, use it to get the
                            InputStream */
-            reader = ucon.getInputStream();
+            reader = urlConnection.getInputStream();
 
 			/* Now that the InputStream is open, get the content
                            length */
-            final int contentLength = ucon.getContentLength();
+            final int contentLength = urlConnection.getContentLength();
             byte[] buffer = new byte[bufSize];
 
             if (contentLength != -1) {
@@ -361,7 +341,7 @@ public class OTAServerManager {
                 buffer = new byte[bufSize];
             }
 
-            Log.d(TAG, "Download finished: " + (new Integer(totalBufRead).toString()) + " bytes downloaded");
+            Log.d(TAG, "Download finished: " + (Integer.toString(totalBufRead)) + " bytes downloaded");
 
             parser = new BuildPropParser(writer, context);
 
@@ -374,7 +354,6 @@ public class OTAServerManager {
                     reader.close();
                 } catch (IOException e) {
                     Log.e(TAG, "Failed to close buffer reader." + e);
-                    return null;
                 }
             }
             if (writer != null) {
@@ -382,43 +361,27 @@ public class OTAServerManager {
                     writer.close();
                 } catch (IOException e) {
                     Log.e(TAG, "Failed to close buffer writer." + e);
-                    return null;
                 }
             }
         }
-
         return parser;
-
-    }
-
-    public boolean handleMessage(Message arg0) {
-        return false;
     }
 
     public interface OTAStateChangeListener {
 
-        final int STATE_IN_IDLE = 0;
-        final int STATE_IN_CHECKED = 1;
-        final int STATE_IN_DOWNLOADING = 2;
-        final int STATE_IN_UPGRADING = 3;
+        int STATE_IN_CHECKED = 1;
+        int STATE_IN_DOWNLOADING = 2;
+        int STATE_IN_UPGRADING = 3;
+        int MESSAGE_DOWNLOAD_PROGRESS = 4;
+        int MESSAGE_VERIFY_PROGRESS = 5;
+        int NO_ERROR = 0;
+        int ERROR_WIFI_NOT_AVAILABLE = 1;
+        int ERROR_CANNOT_FIND_SERVER = 2;
+        int ERROR_PACKAGE_VERIFY_FAILED = 3;
+        int ERROR_WRITE_FILE_ERROR = 4;
+        int ERROR_PACKAGE_INSTALL_FAILED = 6;
 
-        final int MESSAGE_DOWNLOAD_PROGRESS = 4;
-        final int MESSAGE_VERIFY_PROGRESS = 5;
-        final int MESSAGE_STATE_CHANGE = 6;
-        final int MESSAGE_ERROR = 7;
-
-        final int NO_ERROR = 0;
-        final int ERROR_WIFI_NOT_AVALIBLE = 1;
-        final int ERROR_CANNOT_FIND_SERVER = 2;
-        final int ERROR_PACKAGE_VERIFY_FALIED = 3;
-        final int ERROR_WRITE_FILE_ERROR = 4;
-        final int ERROR_NETWORK_ERROR = 5;
-        final int ERROR_PACKAGE_INSTALL_FAILED = 6;
-        final int ERROR_PACKAGE_VERIFY_FAILED = 7;
-
-        final int RESULTS_ALREADY_LATEST = 1;
-
-        public void onStateOrProgress(int message, int error, Object info);
+        void onStateOrProgress(int message, int error, BuildPropParser parser, long info);
 
     }
 

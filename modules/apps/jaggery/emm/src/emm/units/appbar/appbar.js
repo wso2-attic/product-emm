@@ -75,3 +75,4 @@ function onRequest(context) {
     context["enrollmentURL"] = mdmProps.generalConfig.host + mdmProps.enrollmentDir;
     return context;
 }
+
