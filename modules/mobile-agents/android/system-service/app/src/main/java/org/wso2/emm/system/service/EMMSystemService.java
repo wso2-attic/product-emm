@@ -68,7 +68,7 @@ public class EMMSystemService extends IntentService {
         if (extras != null) {
             operationCode = extras.getString("code");
 
-            if(extras.containsKey("command")) {
+            if (extras.containsKey("command")) {
                 shellCommand = extras.getString("command");
             }
         }
@@ -79,7 +79,7 @@ public class EMMSystemService extends IntentService {
 
             Log.i(TAG, "Will now executing the command ..." + operationCode);
             //Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
-            if(Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
+            if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                 doTask(operationCode);
             }
         }
@@ -100,17 +100,17 @@ public class EMMSystemService extends IntentService {
                 rebootDevice();
                 break;
             case Constants.Operation.EXECUTE_SHELL_COMMAND:
-                if(shellCommand != null) {
+                if (shellCommand != null) {
                     executeShellCommand(shellCommand);
                 }
                 break;
             case Constants.Operation.SILENT_INSTALL_APPLICATION:
-                if(appUri != null) {
+                if (appUri != null) {
                     silentInstallApp(getApplicationContext(), Uri.parse(appUri));
                 }
                 break;
             case Constants.Operation.SILENT_UNINSTALL_APPLICATION:
-                if(appUri != null) {
+                if (appUri != null) {
                     silentUninstallApp(getApplicationContext(), appUri);
                 }
                 break;
@@ -128,7 +128,7 @@ public class EMMSystemService extends IntentService {
         Toast.makeText(this, "Upgrade request initiated by admin.",
                        Toast.LENGTH_SHORT).show();
         //Prepare for upgrade
-        OTADownload otaDownload = new OTADownload(this);
+        OTADownload otaDownload = new OTADownload(this.getApplicationContext());
         otaDownload.startOTA();
     }
 

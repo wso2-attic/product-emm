@@ -26,26 +26,33 @@
                                 </select>
                             </div>
                             <label class="wr-input-label">
-                                User Name * <br>
-                                ( should be in minimum 3 characters long and do not include any whitespaces or special characters )
+                                User Name *
+                            </label>
+                            <br>
+                            <label class="wr-input-label" id="userNameValidationText">
+                                ( {{usernameHelpText}} )
                             </label>
                             <div class="wr-input-control">
-                                <input limit="{{charLimit}}" type="text" id="username" data-regex="{{usernameJSRegEx}}" data-errormsg="{{usernameRegExViolationErrorMsg}}" class="form-control" placeholder="[ Required field ]"/>
+                                <input limit="{{charLimit}}" type="text" id="username" data-regex="{{usernameJSRegEx}}" data-errormsg="{{usernameRegExViolationErrorMsg}}" class="form-control"/>
                             </div>
                             <label class="wr-input-label">First Name *</label>
                             <div class="wr-input-control">
-                                <input type="text" id="firstname" data-regex="{{firstnameJSRegEx}}" data-errormsg="{{firstnameRegExViolationErrorMsg}}" class="form-control" placeholder="[ Required field ]"/>
+                                <input type="text" id="firstname" data-regex="{{firstnameJSRegEx}}" data-errormsg="{{firstnameRegExViolationErrorMsg}}" class="form-control"/>
                             </div>
                             <label class="wr-input-label">Last Name *</label>
                             <div class="wr-input-control">
-                                <input type="text" id="lastname" data-regex="{{lastnameJSRegEx}}" data-errormsg="{{lastnameRegExViolationErrorMsg}}" class="form-control" placeholder="[ Required field ]"/>
+                                <input type="text" id="lastname" data-regex="{{lastnameJSRegEx}}" data-errormsg="{{lastnameRegExViolationErrorMsg}}" class="form-control"/>
                             </div>
                             <label class="wr-input-label">
                                 Email Address * <br>
                                 ( ex: sam@gmail.com )
                             </label>
+                            <br>
+                            <label class="wr-input-label" id="emailValidationText">
+                                Invalid Email Address.
+                            </label>
                             <div class="wr-input-control">
-                                <input type="email" id="emailAddress" class="form-control" placeholder="[ Required field ]"/>
+                                <input type="email" id="emailAddress" class="form-control"/>
                             </div>
                             <label class="wr-input-label" title="Optional field that can have 0-to-many roles for the user">
                                 User Roles
@@ -61,7 +68,7 @@
                         </div>
                     </div>
                     <br>
-                    <button id="add-user-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Add User&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <button id="add-user-btn" class="wr-btn">Add User</button>
                 </div>
             </div>
             <div id="user-created-msg" class="container col-centered wr-content hidden">

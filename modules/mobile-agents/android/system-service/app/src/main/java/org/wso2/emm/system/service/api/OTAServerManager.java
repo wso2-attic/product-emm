@@ -67,7 +67,7 @@ public class OTAServerManager {
     };
 
     public OTAServerManager(Context context) throws MalformedURLException {
-        serverConfig = new OTAServerConfig(Build.PRODUCT);
+        serverConfig = new OTAServerConfig(Build.PRODUCT, context);
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "OTA Wakelock");
         this.context = context;
@@ -130,13 +130,12 @@ public class OTAServerManager {
             remoteBuildUTC = (Long.parseLong(buildTimeUTC)) * 1000;
         } else {
             remoteBuildUTC = Long.MIN_VALUE;
-            Log.e(TAG, "UTC date not found in config file " +
-                       "- config may be corrupted or missing");
+            Log.e(TAG, "UTC date not found in config file, config may be corrupted or missing");
         }
 
         Log.d(TAG, "Local Version:" + Build.VERSION.INCREMENTAL + " Server Version:" + parser.getNumRelease());
         boolean upgrade = remoteBuildUTC > buildTime;
-        Log.d(TAG, "Remote build time : " + remoteBuildUTC + " Local build time :" + buildTime);
+        Log.d(TAG, "Remote build time : " + remoteBuildUTC + " Local build time : " + buildTime);
         return upgrade;
     }
 
@@ -365,9 +364,7 @@ public class OTAServerManager {
                 }
             }
         }
-
         return parser;
-
     }
 
     public interface OTAStateChangeListener {
@@ -375,10 +372,8 @@ public class OTAServerManager {
         int STATE_IN_CHECKED = 1;
         int STATE_IN_DOWNLOADING = 2;
         int STATE_IN_UPGRADING = 3;
-
         int MESSAGE_DOWNLOAD_PROGRESS = 4;
         int MESSAGE_VERIFY_PROGRESS = 5;
-
         int NO_ERROR = 0;
         int ERROR_WIFI_NOT_AVAILABLE = 1;
         int ERROR_CANNOT_FIND_SERVER = 2;

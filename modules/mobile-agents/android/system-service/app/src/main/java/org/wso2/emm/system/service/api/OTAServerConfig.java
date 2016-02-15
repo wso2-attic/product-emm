@@ -18,6 +18,7 @@
 
 package org.wso2.emm.system.service.api;
 
+import android.content.Context;
 import android.util.Log;
 import org.wso2.emm.system.service.utils.Constants;
 
@@ -43,8 +44,10 @@ public class OTAServerConfig {
     private static final long DEFAULT_DELAY = 2592000000L;
     private URL updatePackageURL;
     private URL buildPropURL;
+    private Context context;
 
-    public OTAServerConfig(String productName) throws MalformedURLException {
+    public OTAServerConfig(String productName, Context context) throws MalformedURLException {
+        this.context = context;
         if (!loadConfigureFromFile(Constants.OTA_CONFIG_LOCATION, productName)) {
             Log.i(TAG, "Loading default configuration for product " + productName + ".");
             defaultConfigure(productName);
@@ -55,7 +58,7 @@ public class OTAServerConfig {
         try {
             Log.d(TAG, "Loading configuration from file " +
                        configFile + " for product " + product);
-            BuildPropParser parser = new BuildPropParser(new File(configFile), null);
+            BuildPropParser parser = new BuildPropParser(new File(configFile), context);
             String protocol = parser.getProp(PROTOCOL_TAG);
 
             /* Retrieving properties needed to build URLs*/
@@ -63,11 +66,13 @@ public class OTAServerConfig {
                 Log.i(TAG, "Using default protocol " + Constants.DEFAULT_OTA_SERVER_PROTOCOL);
                 protocol = Constants.DEFAULT_OTA_SERVER_PROTOCOL;
             }
+
             String server = parser.getProp(SERVER_IP_CONFIG);
             if (server == null) {
                 Log.i(TAG, "Using default server " + Constants.DEFAULT_OTA_SERVER_ADDRESS);
                 server = Constants.DEFAULT_OTA_SERVER_ADDRESS;
             }
+
             String portConfig = parser.getProp(PORT_CONFIG_STR);
             int port;
             if (portConfig != null) {
@@ -76,17 +81,20 @@ public class OTAServerConfig {
                 Log.i(TAG, "Using default port " + Constants.DEFAULT_OTA_SERVER_PORT);
                 port = Constants.DEFAULT_OTA_SERVER_PORT;
             }
+
             String updateFileName = parser.getProp(OTA_TAG);
             if (updateFileName == null) {
                 Log.i(TAG, "Using default OTA suffix " + Constants.DEFAULT_OTA_ZIP_FILE);
                 updateFileName = Constants.DEFAULT_OTA_ZIP_FILE;
             }
+
             String buildFile = parser.getProp(BUILD_TAG);
             if (buildFile == null) {
                 Log.i(TAG, "Using default build config suffix " +
                            Constants.DEFAULT_OTA_BUILD_PROP_FILE);
                 buildFile = Constants.DEFAULT_OTA_BUILD_PROP_FILE;
             }
+
             String buildMonthlyCheck = parser.getProp(MONTHLY_TAG);
 
             String fileAddress = product + "/" + product + updateFileName;
