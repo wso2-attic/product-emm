@@ -168,7 +168,6 @@ $.fn.datatables_extended = function(settings){
                  *  Enable/Disable selection on rows
                  */
                 $('.dataTables_wrapper [data-click-event=toggle-selectable]').click(function () {
-                    console.log("2323");
                     var button = this,
                         thisTable = $(this).closest('.dataTables_wrapper').find('.dataTable').dataTable();
                     if ($(button).html() == 'Select') {
