@@ -132,18 +132,12 @@ public class SyncmlServiceImpl implements SyncmlService {
 
         try {
             if (SyncmlParser.parseSyncmlPayload(request) != null) {
-                try {
-                    syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
-                } catch (SyncmlMessageFormatException e) {
-                    String msg = "Error occurred due to bad syncml format.";
-                    log.error(msg, e);
-                    throw new SyncmlMessageFormatException(msg, e);
-                }
+                syncmlDocument = SyncmlParser.parseSyncmlPayload(request);
                 SyncmlHeader syncmlHeader = syncmlDocument.getHeader();
                 sessionId = syncmlHeader.getSessionId();
                 user = syncmlHeader.getSource().getLocName();
-                DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlHeader.getSource()
-                        .getLocURI());
+                DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(syncmlHeader.getSource().
+                        getLocURI());
                 msgId = syncmlHeader.getMsgID();
                 if ((PluginConstants.SyncML.SYNCML_FIRST_MESSAGE_ID == msgId) &&
                         (PluginConstants.SyncML.SYNCML_FIRST_SESSION_ID == sessionId)) {
@@ -154,14 +148,8 @@ public class SyncmlServiceImpl implements SyncmlService {
 
                         if (enrollDevice(request)) {
                             deviceInfoOperations = deviceInfo.getDeviceInfo();
-                            try {
-                                response = generateReply(syncmlDocument, deviceInfoOperations);
-                                return Response.status(Response.Status.OK).entity(response).build();
-                            } catch (SyncmlOperationException e) {
-                                String msg = "Error occurred while generating hash value.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
-                            }
+                            response = generateReply(syncmlDocument, deviceInfoOperations);
+                            return Response.status(Response.Status.OK).entity(response).build();
                         } else {
                             String msg = "Error occurred in device enrollment.";
                             log.error(msg);
@@ -174,15 +162,8 @@ public class SyncmlServiceImpl implements SyncmlService {
                     }
                 } else if (PluginConstants.SyncML.SYNCML_SECOND_MESSAGE_ID == msgId &&
                         PluginConstants.SyncML.SYNCML_FIRST_SESSION_ID == sessionId) {
-
                     if (enrollDevice(request)) {
-                        try {
-                            return Response.ok().entity(generateReply(syncmlDocument, null)).build();
-                        } catch (SyncmlOperationException e) {
-                            String msg = "Error occurred while getting effective feature.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
-                        }
+                        return Response.ok().entity(generateReply(syncmlDocument, null)).build();
                     } else {
                         String msg = "Error occurred in modify enrollment.";
                         log.error(msg);
@@ -191,51 +172,21 @@ public class SyncmlServiceImpl implements SyncmlService {
                 } else if (sessionId >= PluginConstants.SyncML.SYNCML_SECOND_SESSION_ID) {
                     if ((syncmlDocument.getBody().getAlert() != null)) {
                         if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
-                            try {
-                                pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
-                                return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
-                            } catch (OperationManagementException e) {
-                                String msg = "Cannot access operation management service.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
-                            } catch (SyncmlOperationException e) {
-                                String msg = "Error occurred while encoding hash value.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
-                            }
+                            pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
+                            return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
                         } else {
-                            try {
-                                if (WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier) != null) {
-                                    WindowsAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
-                                    return Response.ok().entity(generateReply(syncmlDocument, null)).build();
-                                } else {
-                                    String msg = "Enrolled device can not be found in the server.";
-                                    log.error(msg);
-                                    return Response.status(Response.Status.NOT_FOUND).entity(msg).build();
-                                }
-                            } catch (DeviceManagementException e) {
-                                String msg = "Failure occurred in dis-enrollment flow.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
-                            } catch (SyncmlOperationException e) {
-                                String msg = "Error occurred while generating hash value.";
-                                log.error(msg, e);
-                                throw new WindowsOperationException(msg, e);
+                            if (WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier) != null) {
+                                WindowsAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+                                return Response.ok().entity(generateReply(syncmlDocument, null)).build();
+                            } else {
+                                String msg = "Enrolled device can not be found in the server.";
+                                log.error(msg);
+                                return Response.status(Response.Status.NOT_FOUND).entity(msg).build();
                             }
                         }
                     } else {
-                        try {
-                            pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
-                            return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
-                        } catch (OperationManagementException e) {
-                            String msg = "Cannot access operation management service.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
-                        } catch (SyncmlOperationException e) {
-                            String msg = "Error occurred while getting effective feature.";
-                            log.error(msg, e);
-                            throw new WindowsConfigurationException(msg, e);
-                        }
+                        pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
+                        return Response.ok().entity(generateReply(syncmlDocument, pendingOperations)).build();
                     }
                 } else {
                     String msg = "Failure occurred in Device request message.";
@@ -245,6 +196,18 @@ public class SyncmlServiceImpl implements SyncmlService {
             }
         } catch (SyncmlMessageFormatException e) {
             String msg = "Error occurred while parsing syncml request.";
+            log.error(msg, e);
+            throw new WindowsOperationException(msg, e);
+        } catch (OperationManagementException e) {
+            String msg = "Cannot access operation management service.";
+            log.error(msg, e);
+            throw new WindowsOperationException(msg, e);
+        } catch (SyncmlOperationException e) {
+            String msg = "Error occurred while getting effective feature.";
+            log.error(msg, e);
+            throw new WindowsConfigurationException(msg, e);
+        } catch (DeviceManagementException e) {
+            String msg = "Failure occurred in dis-enrollment flow.";
             log.error(msg, e);
             throw new WindowsOperationException(msg, e);
         }
@@ -274,7 +237,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         String resolution;
         String modVersion;
         boolean status = false;
-        String user = null;
+        String user;
         String deviceName;
         int msgID;
         SyncmlDocument syncmlDocument;
@@ -385,10 +348,6 @@ public class SyncmlServiceImpl implements SyncmlService {
             String msg = "Failure occurred in enrolling device.";
             log.error(msg, e);
             throw new WindowsDeviceEnrolmentException(msg, e);
-        } catch (SyncmlMessageFormatException e) {
-            String msg = "Error occurred in bad format of the syncml payload.";
-            log.error(msg, e);
-            throw new WindowsOperationException(msg, e);
         } catch (PolicyManagementException e) {
             String msg = "Error occurred while getting effective policy.";
             log.error(msg, e);

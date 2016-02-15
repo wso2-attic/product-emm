@@ -19,8 +19,6 @@
 package org.wso2.carbon.mdm.mobileservices.windows;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -47,8 +45,6 @@ import java.io.StringWriter;
 
 public class SyncmlParserTest {
 
-    private static Log log = LogFactory.getLog(SyncmlParser.class);
-
     @Test
     public void parseSyncML() throws IOException, SyncmlMessageFormatException, SyncmlOperationException {
         SyncmlParser syncmlParser = new SyncmlParser();
@@ -58,35 +54,37 @@ public class SyncmlParserTest {
         Document document = null;
         Document documentInputSyncML;
         String inputSyncmlMessage = null;
+        String generatedSyncmlMsg = null;
 
         try {
             docBuilder = docBuilderFactory.newDocumentBuilder();
             if (docBuilder != null) {
                 document = docBuilder.parse(syncmlTestMessage);
             }
+
+            String fileInputSyncmlMsg = FileUtils.readFileToString(syncmlTestMessage);
+            generatedSyncmlMsg = SyncmlGenerator.generatePayload(syncmlParser.parseSyncmlPayload(document));
+            DocumentBuilder documentBuilderInputSyncML;
+            documentBuilderInputSyncML = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+            InputSource inputSourceInputSyncML = new InputSource();
+            inputSourceInputSyncML.setCharacterStream(new StringReader(fileInputSyncmlMsg));
+            documentInputSyncML = documentBuilderInputSyncML.parse(inputSourceInputSyncML);
+            inputSyncmlMessage = convertToString(documentInputSyncML);
         } catch (ParserConfigurationException e) {
             Assert.fail("Test failure in parser configuration while reading syncml-test-message.xml.");
         } catch (SAXException e) {
             Assert.fail("Test failure occurred while reading syncml-test-message.xml.");
         } catch (IOException e) {
             Assert.fail("Test failure while accessing syncml-test-message.xml.");
+        } catch (TransformerException e) {
+            Assert.fail("Test failure while transforming input stream. ");
         }
-        SyncmlGenerator generator = new SyncmlGenerator();
-        String fileInputSyncmlMsg = FileUtils.readFileToString(syncmlTestMessage);
-        String generatedSyncmlMsg = generator.generatePayload(syncmlParser.parseSyncmlPayload(document));
-        try {
-            DocumentBuilder documentBuilderInputSyncML = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            InputSource inputSourceInputSyncML = new InputSource();
-            inputSourceInputSyncML.setCharacterStream(new StringReader(fileInputSyncmlMsg));
-            documentInputSyncML = documentBuilderInputSyncML.parse(inputSourceInputSyncML);
-            inputSyncmlMessage = convertToString(documentInputSyncML);
-        } catch (Exception e) {
-            log.info("Failure occurred in input test XML file parsing.");
-        }
+
         Assert.assertEquals(inputSyncmlMessage, generatedSyncmlMsg);
     }
 
-    public String convertToString(Document doc) throws TransformerException {
+    private String convertToString(Document doc) throws TransformerException {
         DOMSource domSource = new DOMSource(doc);
         StringWriter stringWriter = new StringWriter();
         StreamResult streamResult = new StreamResult(stringWriter);

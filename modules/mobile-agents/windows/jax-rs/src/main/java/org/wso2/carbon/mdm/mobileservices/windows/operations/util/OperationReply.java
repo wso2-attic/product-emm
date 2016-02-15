@@ -108,7 +108,7 @@ public class OperationReply {
                 nextNonceValue = status.getChallenge().getMeta().getNextNonce();
             }
         }
-        cred.setData(new SyncmlCredentials().generateCredData(nextNonceValue));
+        cred.setData(SyncmlCredentialUtil.generateCredData(nextNonceValue));
         header.setCredential(cred);
 
         replySyncmlDocument.setHeader(header);
@@ -721,6 +721,3 @@ public class OperationReply {
     }
 
 }
-
-
-

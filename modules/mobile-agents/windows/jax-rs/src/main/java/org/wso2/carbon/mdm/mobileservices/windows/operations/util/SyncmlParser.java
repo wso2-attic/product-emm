@@ -22,10 +22,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Parses the receiving SyncML payload and generates the SyncML document object from it.
@@ -78,15 +78,17 @@ public class SyncmlParser {
      * @param syncmlPayload - Received SyncML XML payload
      * @return - SyncmlDocument object generated from the received payload
      */
-    public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws SyncmlMessageFormatException {
+    public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) {
         SyncmlDocument syncmlDocument = new SyncmlDocument();
         if (syncmlPayload.getElementsByTagName(SYNC_HEADER) == null) {
-            throw new SyncmlMessageFormatException();
+            throw new IllegalStateException();
         }
         NodeList syncHeaderList = syncmlPayload.getElementsByTagName(SYNC_HEADER);
         Node syncHeader = syncHeaderList.item(0);
         SyncmlHeader header = generateSyncmlHeader(syncHeader);
-
+        if (syncmlPayload.getElementsByTagName(SYNC_BODY) == null) {
+            throw new IllegalStateException();
+        }
         NodeList syncBodyList = syncmlPayload.getElementsByTagName(SYNC_BODY);
         Node syncBody = syncBodyList.item(0);
         SyncmlBody body = generateSyncmlBody(syncBody);

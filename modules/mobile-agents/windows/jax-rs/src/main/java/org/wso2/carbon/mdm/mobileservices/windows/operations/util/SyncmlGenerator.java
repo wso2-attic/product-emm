@@ -38,7 +38,7 @@ import java.io.StringWriter;
  */
 public class SyncmlGenerator {
 
-    public String generatePayload(SyncmlDocument syncmlDocument) throws SyncmlOperationException {
+    public static String generatePayload(SyncmlDocument syncmlDocument) throws SyncmlOperationException {
         Document doc = generateDocument();
         Element rootElement = createRootElement(doc);
         SyncmlHeader header = syncmlDocument.getHeader();
@@ -66,7 +66,7 @@ public class SyncmlGenerator {
         return rootElement;
     }
 
-    private String transformDocument(Document document) throws SyncmlOperationException {
+    private static String transformDocument(Document document) throws SyncmlOperationException {
         DOMSource domSource = new DOMSource(document);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
