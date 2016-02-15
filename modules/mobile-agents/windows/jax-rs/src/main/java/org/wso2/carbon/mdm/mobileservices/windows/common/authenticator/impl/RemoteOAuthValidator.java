@@ -43,10 +43,10 @@ public class RemoteOAuthValidator implements OAuth2TokenValidator {
     private GenericObjectPool stubs;
     private static final Log log = LogFactory.getLog(RemoteOAuthValidator.class);
 
-    public RemoteOAuthValidator(String hostURL, String adminUserName, String adminPassword, Properties properties) {
+    public RemoteOAuthValidator(String hostURL, String adminUsername, String adminPassword, Properties properties) {
         this.stubs =
                 new GenericObjectPool(new OAuthTokenValidationStubFactory(
-                        hostURL, adminUserName, adminPassword, properties));
+                        hostURL, adminUsername, adminPassword, properties));
     }
 
     public OAuthValidationResponse validateToken(String accessToken,

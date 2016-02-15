@@ -36,7 +36,7 @@ public class ChallengeTag {
         this.meta = meta;
     }
 
-    public void buildChalElement(Document doc, Element rootElement) {
+    public void buildChallengeElement(Document doc, Element rootElement) {
         Element challenge = doc.createElement(Constants.CHALLENGE);
         rootElement.appendChild(challenge);
         if (getMeta() != null) {

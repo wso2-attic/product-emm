@@ -51,7 +51,7 @@ public class OperationsImpl implements Operations {
      * REST endpoint for the Device Lock operation
      *
      * @param acceptHeader header value of the request POST message.
-     * @param deviceIDs    list of device ids to be add device lockOperationUpdate operation.
+     * @param deviceIDs    list of device ids to be add device updateLockOperation operation.
      * @return Response object for client.
      * @throws WindowsDeviceEnrolmentException
      */
@@ -60,7 +60,7 @@ public class OperationsImpl implements Operations {
     public Response lock(@HeaderParam("Accept") String acceptHeader, List<String> deviceIDs)
             throws WindowsDeviceEnrolmentException {
         if (log.isDebugEnabled()) {
-            log.debug("Invoking windows device lockOperationUpdate operation");
+            log.debug("Invoking windows device updateLockOperation operation");
         }
         MediaType responseMediaType = WindowsAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
@@ -198,15 +198,15 @@ public class OperationsImpl implements Operations {
     }
 
     /**
-     * REST endpoint for the device lockOperationUpdate reset.
-     * Lock reset have to be done, when device user does not set PIN for the lockOperationUpdate screen.
-     * Admin set lockOperationUpdate operation for the specific device,If the device is in above scenario,
+     * REST endpoint for the device updateLockOperation reset.
+     * Lock reset have to be done, when device user does not set PIN for the updateLockOperation screen.
+     * Admin set updateLockOperation operation for the specific device,If the device is in above scenario,
      * admin will be notified.since
-     * admin have to set lockOperationUpdate reset operation to the device so that automatically generate PIN value for the
-     * lockOperationUpdate screen.
+     * admin have to set updateLockOperation reset operation to the device so that automatically generate PIN value for the
+     * updateLockOperation screen.
      *
      * @param acceptHeader POST message header value.
-     * @param deviceIDs    Device ids to be lockOperationUpdate reset.
+     * @param deviceIDs    Device ids to be updateLockOperation reset.
      * @return Response object for the client.
      * @throws WindowsDeviceEnrolmentException
      */

@@ -31,7 +31,7 @@ var platformTypeConstants = {
 };
 
 // Constants to define platform types ids.
-var platformTypeIds = {
+var platformIds = {
     "ANDROID": 1,
     "IOS": 3,
     "WINDOWS": 2
@@ -1809,7 +1809,7 @@ var savePolicy = function (policy, serviceURL) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if (policy["platformId"] == platformTypeIds["WINDOWS"] &&
+        if (policy["platformId"] == platformIds["WINDOWS"] &&
             key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
             policy["profile"][key].enablePassword = true;
         }
