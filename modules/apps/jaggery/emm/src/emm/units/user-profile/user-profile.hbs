@@ -16,7 +16,12 @@
             <div class="row no-gutter add-padding-5x add-margin-top-5x" style="border: 1px solid #e4e4e4;">
                 <div class="media">
                     <div class="media-left media-middle asset-image col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                        <div class="thumbnail icon"><i class="square-element text fw fw-user"></i></div>
+                        <div class="thumbnail icon" style="margin-bottom: 43px"><i class="square-element text fw fw-user"></i></div>
+                        <div class="media">
+                            {{#if editPermitted}}
+                                <button class="wr-btn" onclick="location.href='/emm/users/edit-user?username={{user.username}}';" id="sortUpdateBtn" style="width: 100%; vertical-align: bottom; background-color: #7fa030;"><span><i class="fw fw-edit"></i> Edit</span></button>
+                            {{/if}}
+                        </div>
                     </div>
                     <div class="media-body asset-desc add-padding-left-5x">
                         <div style="background: #11375B; color: #fff; padding: 10px; margin-bottom: 5px">Profile Overview</div>
@@ -36,11 +41,6 @@
                             </table>
                         {{/defineZone}}
                     </div>
-                </div>
-                <div class="media">
-                    {{#if editPermitted}}
-                        <button class="wr-btn" onclick="location.href='/emm/users/edit-user?username={{user.username}}';" id="sortUpdateBtn" style="width: 290px; background-color: #7fa030;"><span><i class="fw fw-edit"></i> Edit</span></button>
-                    {{/if}}        
                 </div>
                 <div class="media">
                     <div class="media-left col-xs-12 col-sm-2 col-md-2 col-lg-2">

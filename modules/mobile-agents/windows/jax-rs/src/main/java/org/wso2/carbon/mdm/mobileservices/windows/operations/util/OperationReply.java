@@ -77,7 +77,7 @@ public class OperationReply {
     }
 
     private void generateHeader() throws SyncmlMessageFormatException {
-        String nextnonceValue = Constants.INITIAL_NONCE;
+        String nextNonceValue = Constants.INITIAL_NONCE;
         SyncmlHeader sourceHeader = syncmlDocument.getHeader();
         SyncmlHeader header = new SyncmlHeader();
         header.setMsgID(sourceHeader.getMsgID());
@@ -105,10 +105,10 @@ public class OperationReply {
         for (StatusTag status : statuses) {
             if (HEADER_COMMAND_TEXT.equals(status.getCommand()) &&
                     status.getChallenge() != null) {
-                nextnonceValue = status.getChallenge().getMeta().getNextNonce();
+                nextNonceValue = status.getChallenge().getMeta().getNextNonce();
             }
         }
-        cred.setData(new SyncmlCredentials().generateCredData(nextnonceValue));
+        cred.setData(SyncmlCredentialUtil.generateCredData(nextNonceValue));
         header.setCredential(cred);
 
         replySyncmlDocument.setHeader(header);
@@ -237,20 +237,21 @@ public class OperationReply {
                         getElements.add(itemGet);
                         break;
                     case COMMAND:
+                        ExecuteTag execElement;
                         if ((PluginConstants.OperationCodes.DEVICE_LOCK.equals(operation.getCode()))) {
-                            ExecuteTag execElement = executeCommand(operation);
+                            execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
                         if ((PluginConstants.OperationCodes.DEVICE_RING.equals(operation.getCode()))) {
-                            ExecuteTag execElement = executeCommand(operation);
+                            execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
                         if ((PluginConstants.OperationCodes.DISENROLL.equals(operation.getCode()))) {
-                            ExecuteTag execElement = executeCommand(operation);
+                            execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
                         if ((PluginConstants.OperationCodes.WIPE_DATA.equals(operation.getCode()))) {
-                            ExecuteTag execElement = executeCommand(operation);
+                            execElement = executeCommand(operation);
                             executeElements.add(execElement);
                         }
                         if ((PluginConstants.OperationCodes.LOCK_RESET.equals(operation.getCode()))) {
@@ -259,7 +260,6 @@ public class OperationReply {
                             syncmlBody.setSequence(sequence);
                         }
                         if ((PluginConstants.OperationCodes.MONITOR.equals(operation.getCode()))) {
-
                             GetTag monitorGetElement = new GetTag();
                             List<ItemTag> monitorItems;
                             List<ProfileFeature> profileFeatures;
@@ -540,7 +540,7 @@ public class OperationReply {
             }
             for (Operation policy : policyOperations) {
 
-                if (policy.getCode().equals(PluginConstants.OperationCodes.CAMERA)) {
+                if (PluginConstants.OperationCodes.CAMERA.equals(policy.getCode())) {
                     ReplaceTag replaceCameraConfig = new ReplaceTag();
                     ItemTag cameraItem;
                     List<ItemTag> cameraItems = new ArrayList<>();
@@ -579,9 +579,9 @@ public class OperationReply {
                         addConfig = appendAddInfo(policy);
                         atomicTagElement.setAdds(addConfig);
                         atomicTagElement.setCommandId(operation.getId());
-                        List<ItemTag> deleteItems = buildDeletePassCode(policy);
+                        List<ItemTag> deleteTagItems = buildDeletePasscodeData(policy);
                         deleteTag.setCommandId(operation.getId());
-                        deleteTag.setItems(deleteItems);
+                        deleteTag.setItems(deleteTagItems);
                         sequenceElement.setDeleteTag(deleteTag);
                         sequenceElement.setAtomicTag(atomicTagElement);
                     } catch (WindowsOperationException e) {
@@ -639,23 +639,22 @@ public class OperationReply {
     }
 
 
-    public List<ItemTag> buildDeletePassCode(Operation operation) {
-        List<ItemTag> deleteItems = new ArrayList<>();
-        ItemTag deleteItem = new ItemTag();
+    public List<ItemTag> buildDeletePasscodeData(Operation operation) {
+        List<ItemTag> deleteTagItems = new ArrayList<>();
+        ItemTag itemTag = new ItemTag();
         TargetTag target = new TargetTag();
-        if (operation.getCode().equals(PluginConstants.OperationCodes.PASSCODE_POLICY)) {
-
+        if ((PluginConstants.OperationCodes.PASSCODE_POLICY.equals(operation.getCode()))) {
             operation.setCode(PluginConstants.OperationCodes.DEVICE_PASSCODE_DELETE);
             for (Command command : Command.values()) {
                 if (operation.getCode() != null && operation.getCode().equals(command.name())) {
                     target.setLocURI(command.getCode());
-                    deleteItem.setTarget(target);
-                    deleteItems.add(deleteItem);
+                    itemTag.setTarget(target);
+                    deleteTagItems.add(itemTag);
                 }
 
             }
         }
-        return deleteItems;
+        return deleteTagItems;
     }
 
     public AddTag generatePasscodePolicyData(Configure configure, int policyData) {
@@ -679,7 +678,7 @@ public class OperationReply {
     public AddTag generatePasscodeBooleanData(Operation operation, Configure configure) {
         TargetTag target = new TargetTag();
         MetaTag meta = new MetaTag();
-        AddTag add = new AddTag();
+        AddTag addTag = null;
 
         PasscodePolicy passcodePolicy = gson.fromJson((String) operation.getPayLoad(), PasscodePolicy.class);
         if (operation.getCode() != null && (PluginConstants.OperationCodes.DEVICE_PASSWORD_ENABLE.
@@ -687,87 +686,38 @@ public class OperationReply {
             if (passcodePolicy.isEnablePassword()) {
                 target.setLocURI(configure.getCode());
                 meta.setFormat(Constants.META_FORMAT_INT);
-                List<ItemTag> itemList = new ArrayList<>();
-                ItemTag item = new ItemTag();
-                item.setTarget(target);
-                item.setMeta(meta);
-                item.setData("0");
-                itemList.add(item);
-
-                add.setCommandId(operation.getId());
-                add.setItems(itemList);
-
+                addTag = TagUtil.buildAddTag(operation, Constants.SyncMLResponseCodes.NEGATIVE_CSP_DATA);
             } else {
                 target.setLocURI(configure.getCode());
                 meta.setFormat(Constants.META_FORMAT_INT);
-                List<ItemTag> itemList = new ArrayList<>();
-                ItemTag item = new ItemTag();
-                item.setTarget(target);
-                item.setMeta(meta);
-                item.setData("1");
-                itemList.add(item);
-                add.setCommandId(operation.getId());
-                add.setItems(itemList);
-
+                addTag = TagUtil.buildAddTag(operation, Constants.SyncMLResponseCodes.POSITIVE_CSP_DATA);
             }
         }
         if (PluginConstants.OperationCodes.ALPHANUMERIC_PASSWORD.
                 equals(configure.name())) {
             if (passcodePolicy.isRequireAlphanumeric()) {
-                ItemTag item = new ItemTag();
                 target.setLocURI(configure.getCode());
                 meta.setFormat(Constants.META_FORMAT_INT);
-                List<ItemTag> itemList = new ArrayList<>();
-                item.setTarget(target);
-                item.setMeta(meta);
-                item.setData("1");
-                itemList.add(item);
-                add.setCommandId(operation.getId());
-                add.setItems(itemList);
+                addTag = TagUtil.buildAddTag(operation, Constants.SyncMLResponseCodes.POSITIVE_CSP_DATA);
             } else {
                 target.setLocURI(configure.getCode());
                 meta.setFormat(Constants.META_FORMAT_INT);
-                List<ItemTag> itemList = new ArrayList<>();
-                ItemTag item = new ItemTag();
-                item.setTarget(target);
-                item.setMeta(meta);
-                item.setData("0");
-                itemList.add(item);
-                add.setCommandId(operation.getId());
-                add.setItems(itemList);
+                addTag = TagUtil.buildAddTag(operation, Constants.SyncMLResponseCodes.NEGATIVE_CSP_DATA);
             }
         }
         if (PluginConstants.OperationCodes.SIMPLE_PASSWORD.
                 equals(configure.name())) {
             if (passcodePolicy.isAllowSimple()) {
-                ItemTag item = new ItemTag();
                 target.setLocURI(configure.getCode());
                 meta.setFormat(Constants.META_FORMAT_INT);
-                List<ItemTag> itemList = new ArrayList<>();
-                item.setTarget(target);
-                item.setMeta(meta);
-                item.setData("1");
-                itemList.add(item);
-                add.setCommandId(operation.getId());
-                add.setItems(itemList);
-
+                addTag = TagUtil.buildAddTag(operation, Constants.SyncMLResponseCodes.POSITIVE_CSP_DATA);
             } else {
-                ItemTag item = new ItemTag();
                 target.setLocURI(configure.getCode());
                 meta.setFormat(Constants.META_FORMAT_INT);
-                List<ItemTag> itemList = new ArrayList<>();
-                item.setTarget(target);
-                item.setMeta(meta);
-                item.setData("0");
-                itemList.add(item);
-                add.setCommandId(operation.getId());
-                add.setItems(itemList);
+                addTag = TagUtil.buildAddTag(operation, Constants.SyncMLResponseCodes.NEGATIVE_CSP_DATA);
             }
         }
-        return add;
+        return addTag;
     }
 
 }
-
-
-

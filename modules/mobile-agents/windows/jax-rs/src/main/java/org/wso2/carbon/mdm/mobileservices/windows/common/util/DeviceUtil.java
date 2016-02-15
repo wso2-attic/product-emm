@@ -18,7 +18,6 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.CacheEntry;
 
 import javax.cache.Cache;
@@ -29,7 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class for generate random token for XCEP and WSTEP
+ * Class for generate random token for XCEP and WSTEP.
  */
 public class DeviceUtil {
 
@@ -42,7 +41,7 @@ public class DeviceUtil {
         return String.valueOf(UUID.randomUUID());
     }
 
-    public static void persistChallengeToken(String token, String deviceID, String username) throws DeviceManagementException {
+    public static void persistChallengeToken(String token, String deviceID, String username) {
 
         Object objCacheEntry = getCacheEntry(token);
         CacheEntry cacheEntry;
@@ -70,12 +69,12 @@ public class DeviceUtil {
         CacheManager contextCacheManager = Caching.getCacheManager(TOKEN_CACHE_MANAGER).
                 getCache(TOKEN_CACHE).getCacheManager();
         if (!isContextCacheInitialized) {
+            return Caching.getCacheManager(TOKEN_CACHE_MANAGER).getCache(TOKEN_CACHE);
+        } else {
             isContextCacheInitialized = true;
             return contextCacheManager.createCacheBuilder(TOKEN_CACHE_MANAGER).setExpiry(
                     CacheConfiguration.ExpiryType.MODIFIED,
                     new CacheConfiguration.Duration(TimeUnit.MINUTES, CACHE_DURATION)).setStoreByValue(false).build();
-        } else {
-            return Caching.getCacheManager(TOKEN_CACHE_MANAGER).getCache(TOKEN_CACHE);
         }
     }
 }

@@ -60,7 +60,7 @@ function onRequest(context) {
         });
 
         links["policy-mgt"].push({
-            "title": "Apply Changes",
+            "title": "Apply Changes To Devices",
             "icon": "fw-check",
             "url": "#",
             "tooltip": "Click to apply policy changes to devices (This depends on policy priority if you have multiple policies)",

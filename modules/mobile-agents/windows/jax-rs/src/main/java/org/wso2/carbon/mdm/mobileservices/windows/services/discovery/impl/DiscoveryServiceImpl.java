@@ -65,8 +65,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             throws WindowsDeviceEnrolmentException {
 
         String emailId = discoveryRequest.getEmailId();
-        String[] domainUserArray = emailId.split(DELIMITER);
-        String domain = domainUserArray[DOMAIN_SEGMENT];
+        String[] userDomains = emailId.split(DELIMITER);
+        String domain = userDomains[DOMAIN_SEGMENT];
 
         DiscoveryResponse discoveryResponse = new DiscoveryResponse();
         if (FEDERATED.equals(getAuthPolicy())) {
@@ -127,7 +127,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                 log.error(msg);
             }
         } catch (DeviceManagementException e) {
-            String msg = "Error occurred in while getting tenant configurations.";
+            String msg = "Error occurred while getting tenant configurations.";
             log.error(msg);
             throw new WindowsDeviceEnrolmentException(msg, e);
         }
