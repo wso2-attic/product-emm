@@ -83,10 +83,9 @@ function operationSelect(selection) {
 function getDevicesByTypes(deviceList) {
     var deviceTypes = {};
     $.each(deviceList, function (index, item) {
-        if (deviceTypes[item.type]) {
+        if (!deviceTypes[item.type]) {
             deviceTypes[item.type] = [];
         }
-
         if (item.type == platformTypeConstants.ANDROID ||
             item.type == platformTypeConstants.IOS || item.type == platformTypeConstants.WINDOWS) {
             deviceTypes[item.type].push(item.id);
