@@ -17,30 +17,8 @@
  */
 package org.wso2.emm.agent.services;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.AlertActivity;
-import org.wso2.emm.agent.ServerDetails;
-import org.wso2.emm.agent.api.ApplicationManager;
-import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.api.GPSTracker;
-import org.wso2.emm.agent.api.WiFiConfig;
-import org.wso2.emm.agent.beans.ComplianceFeature;
-import org.wso2.emm.agent.beans.DeviceAppInfo;
-import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-import org.wso2.emm.agent.utils.CommonUtils;
-
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -54,6 +32,31 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.emm.agent.AlertActivity;
+import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.ServerDetails;
+import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.api.GPSTracker;
+import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.ComplianceFeature;
+import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class handles all the functionalities related to device management operations.
@@ -187,6 +190,8 @@ public class Operation implements APIResultCallBack {
 			case Constants.Operation.EXECUTE_SHELL_COMMAND:
 				executeShellCommand(operation);
 				break;
+			case Constants.Operation.APP_RESTRICTION:
+				blockApplicationByPackageName(operation);
 			default:
 				Log.e(TAG, "Invalid operation code received");
 				break;
@@ -305,9 +310,9 @@ public class Operation implements APIResultCallBack {
 		intent.putExtra(resources.getString(R.string.intent_extra_type),
 				resources.getString(R.string.intent_extra_ring));
 		intent.putExtra(resources.getString(R.string.intent_extra_message),
-		                resources.getString(R.string.intent_extra_stop_ringing));
+				        resources.getString(R.string.intent_extra_stop_ringing));
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-		                Intent.FLAG_ACTIVITY_NEW_TASK);
+				        Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 
 		if (Constants.DEBUG_MODE_ENABLED) {
@@ -1205,5 +1210,28 @@ public class Operation implements APIResultCallBack {
 				}
 			}
 		}
+	}
+
+	public void blockApplicationByPackageName(org.wso2.emm.agent.beans.Operation operation){
+		Intent restrictionIntent = new Intent(context, AppLockService.class);
+		restrictionIntent.setAction("AppLockService");
+		ArrayList<String> appList = new ArrayList<String>(){{
+			add("com.netflix.mediaclient");
+			add("com.dropbox.android");
+			add("me.scan.android.client");
+		}};
+
+		restrictionIntent.putStringArrayListExtra("appList", appList);
+
+		PendingIntent pendingIntent = PendingIntent.getService(context,  0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.add(Calendar.SECOND, 1); // first time
+		long frequency= 1 * 1000; // in ms
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
+
+		context.startService(restrictionIntent);
 	}
 }

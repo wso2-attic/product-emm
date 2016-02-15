@@ -50,6 +50,8 @@ public class PolicyOperationsMapper {
 				return buildPasswordPolicyOperation(operation);
 			case Constants.Operation.WIFI:
 				return buildWifiOperation(operation);
+			case Constants.Operation.APP_RESTRICTION:
+				return buildApplicationRestrictionOpearation(operation);
 			default:
 				throw new AndroidAgentException("Invalid operation code received");
 		}
@@ -95,6 +97,11 @@ public class PolicyOperationsMapper {
 	}
 
 	private Operation buildWifiOperation(Operation operation) {
+		operation.setId(INVALID_FLAG);
+		return operation;
+	}
+
+	private Operation buildApplicationRestrictionOpearation(Operation operation){
 		operation.setId(INVALID_FLAG);
 		return operation;
 	}

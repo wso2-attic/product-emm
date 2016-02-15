@@ -28,7 +28,7 @@ import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
-import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.beans.*;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
@@ -79,6 +79,9 @@ public class PolicyRevokeHandler {
                 break;
             case Constants.Operation.WIFI:
                 revokeWifiPolicy(operation);
+                break;
+            case Constants.Operation.APP_RESTRICTION:
+                revokeAppRestrictionPolicy(operation);
                 break;
             default:
                 throw new AndroidAgentException("Invalid operation code received");
@@ -186,5 +189,9 @@ public class PolicyRevokeHandler {
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
+    }
+
+    private void revokeAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation){
+        //TODO implement application restriction revoke
     }
 }
