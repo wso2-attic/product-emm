@@ -36,6 +36,15 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('app-restriction', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                   <i class="fw fw-block fw-stack-2x"></i>
+                </span>
+            Applications Restrictions
+            <span id="app-restriction-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="app-restriction-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="app-restriction-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('install-apps', this)">-->
                 <!--<span class="wr-hidden-operations-icon fw-stack">-->
                     <!--<i class="fw fw-application fw-stack-2x"></i>-->
@@ -347,6 +356,77 @@
             </div>
         </div>
         <!-- /wi-fi -->
+        <!--app-restriction-->
+        <div class="wr-hidden-operation" data-operation="app-restriction">
+            <div class="panel panel-default operation-data" data-operation="app-restriction" data-operation-code="APP-RESTRICTION">
+                <div id="app-restriction-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Application Restriction Settings
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#app-restriction-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            This configurations can be used to create Application black list or white list.
+                        </div>
+                    </h2>
+                </div>
+                <div id="app-restriction-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="app-restriction-body">
+                    <div class="btn-group">
+                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            Select List Criteria
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                            <li><a tabindex="-1" href="#">Black List</a></li>
+                            <li><a tabindex="-1" href="#">White List</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="app-list-add-widget" class="hidden">
+                        <div class="row">
+                        <div class="col-md-6">
+                            <div id="custom-search-input">
+                                <div class="input-group col-md-12">
+                                    <input type="text" class="form-control input-lg" placeholder="search by package name in app store..."/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info btn-lg" type="button">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span class="input-group-btn">
+                                    <input type="search" id="container-search" value="" class="form-control input-lg" placeholder="Search by package name in list...">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="container" id="searchable-container">
+                            <div class="row row-padding">
+                                <div class="col-xs-4">Col 1</div>
+                            </div>
+                            <div class="row row-padding">
+                                <div class="col-xs-4">Another row</div>
+                            </div>
+                            <div class="row row-padding">
+                                <div class="col-xs-4">Lorem</div>
+                            </div>
+                            <div class="row row-padding">
+                                <div class="col-xs-4">Foo</div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+        <!--/app-restriction-->
 
         <!-- install-applications -->
         <!--<div class="wr-hidden-operation" data-operation="install-apps">-->

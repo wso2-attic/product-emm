@@ -46,7 +46,9 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
-    "WIFI_OPERATION_CODE": "WIFI"
+    "WIFI_OPERATION_CODE": "WIFI",
+    "APPLICATION_OPERATION":"app-restriction",
+    "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
 };
 
 // Constants to define Android Operation Constants

@@ -42,7 +42,8 @@ var operationModule = function () {
         "WIFI_OPERATION_CODE": "WIFI",
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
-        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE"
+        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
+        "APPLICATION_OPERATION_CODE":"APP_RESTRICTION"
     };
 
     // Constants to define Windows Operation Constants
@@ -667,6 +668,13 @@ var operationModule = function () {
                         "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                         "pinHistory": operationData["passcodePolicyPasscodeHistory"],
                         "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
+                    }
+                };
+                break;
+            case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
+                payload = {
+                    "operation":{
+                        "application_restriction_list": "com.netflix.mediaclient"
                     }
                 };
                 break;
