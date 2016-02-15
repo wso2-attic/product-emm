@@ -28,7 +28,7 @@ import org.wso2.emm.integration.ui.pages.UIElementMapper;
 import java.io.IOException;
 
 /**
- * Class to represent the Platform Configuration Page.
+ * This class represents the state and behavior of the Notification View User interface.
  */
 public class PlatformConfiguration {
 

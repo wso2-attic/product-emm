@@ -185,7 +185,7 @@
                 viewModel.policy = activePolicy;
                 viewModel.deviceType = deviceType;
                 data = JSON.parse(data);
-                if(data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined &&
+                if (data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined &&
                    data.complianceFeatures.length > 0) {
                     viewModel.compliance = "NON-COMPLIANT";
                     viewModel.complianceFeatures = data.complianceFeatures;
