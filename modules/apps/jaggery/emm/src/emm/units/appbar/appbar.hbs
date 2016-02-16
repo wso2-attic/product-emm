@@ -105,12 +105,6 @@
         </nav>
     </div>
 
-    <div class="sidebar-wrapper" id="right-sidebar" is-authorized="{{isAuthorizedForNotifications}}" data-side="right" data-width="320" data-sidebar-fixed="true" data-fixed-offset="50" data-spy="affix" data-offset-top="80">
-        <ul class="sidebar-messages">
-        </ul>
-        <h4 class="text-center" ><a href="/emm/notification-listing" class="text-center">Show all notifications</a></h4>
-    </div>
-
     <div id="qr-code-modal" data-enrollment-url="{{enrollmentURL}}" class="hidden">
 
         <div class="content">
@@ -132,6 +126,14 @@
             </div>
         </div>
     </div>
+    <div class="page-content-wrapper">
+        <div class="sidebar-wrapper" id="right-sidebar" is-authorized="{{isAuthorizedForNotifications}}" data-side="right" data-width="320" data-sidebar-fixed="true" data-fixed-offset="50" data-spy="affix" data-offset-top="80">
+            <ul class="sidebar-messages">
+            </ul>
+            <h4 class="text-center" ><a href="/emm/notification-listing" class="text-center">Show all notifications</a></h4>
+        </div>
+        <div class="container-fluid">
+
 {{/zone}}
 {{#zone "bottomJs"}}
     <script id="notifications" data-current-user="{{currentUser.username}}" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/notifications.hbs" type="text/x-handlebars-template" ></script>
