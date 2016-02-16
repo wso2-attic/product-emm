@@ -694,6 +694,7 @@ var operationModule = function () {
             "APPLICATION_LIST": "get-application-list",
             "DEVICE_RING": "ring-device",
             "DEVICE_REBOOT": "reboot-device",
+            "UPGRADE_FIRMWARE": "upgrade-firmware",
             "DEVICE_MUTE": "mute",
             "NOTIFICATION": "notification",
             "ENCRYPT_STORAGE": "encrypt",
@@ -819,6 +820,7 @@ var operationModule = function () {
             "APPLICATION_LIST": "get-application-list",
             "DEVICE_RING": "ring-device",
             "DEVICE_REBOOT": "reboot-device",
+            "UPGRADE_FIRMWARE": "upgrade-firmware",
             "DEVICE_MUTE": "mute",
             "LOCK_RESET": "lock-reset",
             "NOTIFICATION": "notification",
@@ -849,6 +851,7 @@ var operationModule = function () {
             "WIPE_DATA": "fw-database",
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_REBOOT": "fw-refresh",
+            "UPGRADE_FIRMWARE": "fw-up-arrow",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
             "CHANGE_LOCK_CODE": "fw-security"
@@ -869,6 +872,7 @@ var operationModule = function () {
             "WIPE_DATA": "fw-clear",
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_REBOOT": "fw-refresh",
+            "UPGRADE_FIRMWARE": "fw-up-arrow",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
             "LOCK_RESET": "fw-key"

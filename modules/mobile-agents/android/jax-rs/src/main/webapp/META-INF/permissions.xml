@@ -127,6 +127,14 @@
     </Permission>
 
     <Permission>
+        <name>Upgrade Firmware</name>
+        <path>/device-mgt/android/operations/upgrade-firmware</path>
+        <url>/operation/upgrade-firmware</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
         <name>Install Application</name>
         <path>/device-mgt/android/operations/install-application</path>
         <url>/operation/install-application</url>
