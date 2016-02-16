@@ -7051,3 +7051,7 @@ ul.tiles .icon {
     text-transform: uppercase;
     font-weight: bold;
 }
+
+.row.wr-tile-buttons-list .tile-buttons a{
+  margin-bottom: 10px;
+}
