@@ -343,6 +343,13 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
                                                                                          response.getData().toString());
     }
+    
+	@Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device reboot operation.")
+	public void testDeviceReboot() throws Exception {
+		HttpResponse response = client.post(Constants.AndroidOperations.REBOOT_ENDPOINT,
+				Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
+		Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+	}
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android mute operation.")
     public void testMute() throws Exception {

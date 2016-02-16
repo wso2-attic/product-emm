@@ -693,6 +693,7 @@ var operationModule = function () {
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
             "DEVICE_RING": "ring-device",
+            "DEVICE_REBOOT": "reboot-device",
             "DEVICE_MUTE": "mute",
             "NOTIFICATION": "notification",
             "ENCRYPT_STORAGE": "encrypt",
@@ -817,6 +818,7 @@ var operationModule = function () {
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
             "DEVICE_RING": "ring-device",
+            "DEVICE_REBOOT": "reboot-device",
             "DEVICE_MUTE": "mute",
             "LOCK_RESET": "lock-reset",
             "NOTIFICATION": "notification",
@@ -846,6 +848,7 @@ var operationModule = function () {
             "ENTERPRISE_WIPE": "fw-clear",
             "WIPE_DATA": "fw-database",
             "DEVICE_RING": "fw-dial-up",
+            "DEVICE_REBOOT": "fw-refresh",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
             "CHANGE_LOCK_CODE": "fw-security"
@@ -865,6 +868,7 @@ var operationModule = function () {
             "DISENROLL": "fw-delete",
             "WIPE_DATA": "fw-clear",
             "DEVICE_RING": "fw-dial-up",
+            "DEVICE_REBOOT": "fw-refresh",
             "DEVICE_MUTE": "fw-incoming-call",
             "NOTIFICATION": "fw-message",
             "LOCK_RESET": "fw-key"

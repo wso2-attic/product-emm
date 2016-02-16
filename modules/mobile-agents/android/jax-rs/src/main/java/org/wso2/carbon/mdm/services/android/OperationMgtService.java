@@ -430,6 +430,39 @@ public class OperationMgtService {
     }
 
     @POST
+    @Path("reboot-device")
+    public Response rebootDevice(@HeaderParam(ACCEPT) String acceptHeader,
+                               List<String> deviceIDs) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android reboot-device device operation");
+        }
+
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(AndroidConstants.OperationCodes.DEVICE_REBOOT);
+            operation.setType(Operation.Type.COMMAND);
+            return AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message,
+                    responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+    }
+
+    @POST
     @Path("mute")
     public Response muteDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {

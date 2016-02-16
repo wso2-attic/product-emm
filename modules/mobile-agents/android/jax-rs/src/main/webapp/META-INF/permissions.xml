@@ -119,6 +119,14 @@
     </Permission>
 
     <Permission>
+        <name>Reboot</name>
+        <path>/device-mgt/android/operations/reboot-device</path>
+        <url>/operation/reboot-device</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
         <name>Install Application</name>
         <path>/device-mgt/android/operations/install-application</path>
         <url>/operation/install-application</url>
