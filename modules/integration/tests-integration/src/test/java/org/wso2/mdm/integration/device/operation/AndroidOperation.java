@@ -21,7 +21,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+
 import junit.framework.Assert;
+
 import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -343,6 +345,20 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(Constants.AndroidOperations.OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID,
                                                                                          response.getData().toString());
     }
+    
+	@Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device reboot operation.")
+	public void testDeviceReboot() throws Exception {
+		HttpResponse response = client.post(Constants.AndroidOperations.REBOOT_ENDPOINT,
+				Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
+		Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+	}
+    
+	@Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android firmware upgrade operation.")
+	public void testUpgradeFirmware() throws Exception {
+		HttpResponse response = client.post(Constants.AndroidOperations.UPGRADE_FIRMWARE_ENDPOINT,
+				Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
+		Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+	}
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android mute operation.")
     public void testMute() throws Exception {
