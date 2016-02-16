@@ -1,16 +1,7 @@
 {{#zone "main"}}
-    <div class="row wr-device-board">
-        <div class="col-lg-12 wr-secondary-bar">
-            <span class="page-sub-title">
-                &nbsp;&nbsp;Policy List
-            </span>
-        </div>
-    </div>
     {{#equal isUpdated true}}
         <input type="hidden" id="is-updated" name="country" value="UPDATED">
     {{/equal}}
-    <!-- content -->
-    <div class="container-fluid">
         <div id="loading-content" class="col-centered">
             <i class="fw fw-settings fw-spin fw-2x"></i>
             &nbsp;&nbsp;&nbsp;
@@ -19,7 +10,7 @@
         </div>
         <span id="policy-listing-status-msg" class="hidden">{{policyListingStatusMsg}}</span>
         {{#equal noPolicy false}}
-        <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view hidden" id="policy-grid">
+        <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view hidden" id="policy-grid">
             <thead>
             <tr class="sort-row">
                 <th class="no-sort"></th>
@@ -83,7 +74,7 @@
             <tbody>
             {{#each policyListToView}}
                 <tr data-type="selectable" data-id="{{id}}" data-status="{{status}}">
-                    <td class="remove-padding icon-only content-fill">
+                    <td class="remove-padding icon-only content-fill viewEnabledIcon" data-url="/emm/policies/view?id={{id}}" data-id="{{id}}">
                         <div class="thumbnail icon">
                             {{#equal platform "android"}}
                                 <i class="square-element text fw fw-android"></i>
@@ -126,14 +117,6 @@
                         data-display="{{status}}">
                     </td>
                     <td class="text-right content-fill text-left-on-grid-view no-wrap">
-                        <a href="/emm/policies/view?id={{id}}" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-view-link">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw fw-view fw-stack-1x"></i>
-                            </span>
-                            <span class="hidden-xs hidden-on-grid-view">View</span>
-                        </a>
-
                         <a href="/emm/policies/view-edit-policy?id={{id}}" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-update-link">
                             <span class="fw-stack">
                                 <i class="fw fw-ring fw-stack-2x"></i>
@@ -149,9 +132,7 @@
             </tbody>
         </table>
         {{/equal}}
-    </div>
     <br class="c-both"/>
-    <!-- /content -->
 
     <div id="content-filter-types" style="display: none">
         <div class="sort-title">Sort By</div>
