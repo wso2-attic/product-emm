@@ -49,8 +49,8 @@ public class DeviceManagementService {
     /**
      * Get all devices.Returns list of Windows devices registered in MDM.
      *
-     * @return Device List
-     * @throws WindowsConfigurationException
+     * @return Returns retrieved devices.
+     * @throws WindowsConfigurationException occurred while retrieving all the devices from DB.
      */
     @GET
     public List<Device> getAllDevices() throws WindowsConfigurationException {
@@ -71,8 +71,8 @@ public class DeviceManagementService {
      * Fetch Windows device details of a given device Id.
      *
      * @param id Device Id
-     * @return Device
-     * @throws WindowsConfigurationException
+     * @return Returns retrieved device.
+     * @throws WindowsConfigurationException occurred while getting device from DB.
      */
     @GET
     @Path("{id}")
@@ -96,10 +96,10 @@ public class DeviceManagementService {
     /**
      * Update Windows device details of given device id.
      *
-     * @param id     Device Id
-     * @param device Device Details
-     * @return Message
-     * @throws WindowsConfigurationException
+     * @param id     Device Id.
+     * @param device Device details to be updated.
+     * @return Returns the message whether device update or not.
+     * @throws WindowsConfigurationException occurred while updating the Device Info.
      */
     @PUT
     @Path("{id}")
@@ -128,6 +128,12 @@ public class DeviceManagementService {
         return responseMessage;
     }
 
+    /**
+     * Fetch the Licence agreement for specific windows platform.
+     *
+     * @return Returns License agreement.
+     * @throws WindowsConfigurationException occurred while getting licence for specific platform and Language.
+     */
     @GET
     @Path("license")
     @Produces("application/json")
