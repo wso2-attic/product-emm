@@ -132,8 +132,7 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
 
         List<ConfigurationEntry> tenantConfigurations;
         try {
-            if (WindowsAPIUtils.getTenantConfigurationData() != null) {
-                tenantConfigurations = WindowsAPIUtils.getTenantConfigurationData();
+            if ((tenantConfigurations = WindowsAPIUtils.getTenantConfigurationData()) != null) {
                 for (ConfigurationEntry configurationEntry : tenantConfigurations) {
                     if ((PluginConstants.TenantConfigProperties.NOTIFIER_FREQUENCY.equals(
                             configurationEntry.getName()))) {
@@ -147,7 +146,6 @@ public class CertificateEnrollmentServiceImpl implements CertificateEnrollmentSe
                 String msg = "Tenant configurations are not initialized yet.";
                 log.error(msg);
             }
-
             ServletContext ctx = (ServletContext) context.getMessageContext().
                     get(MessageContext.SERVLET_CONTEXT);
             File wapProvisioningFile = (File) ctx.getAttribute(PluginConstants.CONTEXT_WAP_PROVISIONING_FILE);

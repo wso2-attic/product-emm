@@ -53,11 +53,9 @@ public class DeviceManagementService {
      * @throws WindowsConfigurationException
      */
     @GET
-    public List<Device> getAllDevices()
-            throws WindowsConfigurationException {
+    public List<Device> getAllDevices() throws WindowsConfigurationException {
         String msg;
-        List<org.wso2.carbon.device.mgt.common.Device> devices;
-
+        List<Device> devices;
         try {
             devices = WindowsAPIUtils.getDeviceManagementService().
                     getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
@@ -78,21 +76,19 @@ public class DeviceManagementService {
      */
     @GET
     @Path("{id}")
-    public org.wso2.carbon.device.mgt.common.Device getDevice(@PathParam("id") String id)
-            throws WindowsConfigurationException {
+    public Device getDevice(@PathParam("id") String id) throws WindowsConfigurationException {
         String msg;
         Device device;
-
         try {
             DeviceIdentifier deviceIdentifier = WindowsAPIUtils.convertToDeviceIdentifierObject(id);
             device = WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
             if (device == null) {
                 Response.status(Response.Status.NOT_FOUND);
             }
-        } catch (DeviceManagementException deviceMgtEx) {
+        } catch (DeviceManagementException e) {
             msg = "Error occurred while fetching the device information.";
-            log.error(msg, deviceMgtEx);
-            throw new WindowsConfigurationException(msg, deviceMgtEx);
+            log.error(msg, e);
+            throw new WindowsConfigurationException(msg, e);
         }
         return device;
     }
@@ -107,20 +103,17 @@ public class DeviceManagementService {
      */
     @PUT
     @Path("{id}")
-    public Message updateDevice(@PathParam("id") String id, Device device)
-            throws WindowsConfigurationException {
+    public Message updateDevice(@PathParam("id") String id, Device device) throws WindowsConfigurationException {
         String msg;
         Message responseMessage = new Message();
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setId(id);
-        deviceIdentifier
-                .setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
-        boolean result;
+        deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
+        boolean isUpdated;
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS);
-            result = WindowsAPIUtils.getDeviceManagementService()
-                    .updateDeviceInfo(deviceIdentifier, device);
-            if (result) {
+            isUpdated = WindowsAPIUtils.getDeviceManagementService().updateDeviceInfo(deviceIdentifier, device);
+            if (isUpdated) {
                 Response.status(Response.Status.ACCEPTED);
                 responseMessage.setResponseMessage("Device information has modified successfully.");
             } else {
@@ -140,7 +133,6 @@ public class DeviceManagementService {
     @Produces("application/json")
     public License getLicense() throws WindowsConfigurationException {
         License license;
-
         try {
             license =
                     WindowsAPIUtils.getDeviceManagementService().getLicense(
@@ -153,6 +145,4 @@ public class DeviceManagementService {
         }
         return license;
     }
-
 }
-
