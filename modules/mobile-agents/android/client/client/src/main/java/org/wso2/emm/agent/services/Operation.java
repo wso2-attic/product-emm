@@ -19,6 +19,8 @@ package org.wso2.emm.agent.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,9 +37,12 @@ import org.wso2.emm.agent.api.GPSTracker;
 import org.wso2.emm.agent.api.WiFiConfig;
 import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.DatabaseHelper;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
@@ -68,6 +73,7 @@ public class Operation implements APIResultCallBack {
 	private ResultPayload resultBuilder;
 	private DeviceInfo deviceInfo;
 	private GPSTracker gps;
+	private NotificationDAO notificationDAO;
 
 	private static final String TAG = "Operation Handler";
 
@@ -92,6 +98,7 @@ public class Operation implements APIResultCallBack {
 		this.resultBuilder = new ResultPayload();
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
 		gps = new GPSTracker(context.getApplicationContext());
+		notificationDAO = new NotificationDAO(context);
 	}
 
 	/**
@@ -391,14 +398,17 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void displayNotification(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		try {
-			operation.setStatus(resources.getString(R.string.operation_value_completed));
+
+			operation.setStatus(resources.getString(R.string.operation_value_progress));
 			resultBuilder.build(operation);
 			JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
 			String message = inputData.getString(resources.getString(R.string.intent_extra_message));
 
 			if (message != null && !message.isEmpty()) {
+				addNotification(operation.getId(), message, Notification.Status.PENDING); //adding notification to the db
 				Intent intent = new Intent(context, AlertActivity.class);
 				intent.putExtra(resources.getString(R.string.intent_extra_message), message);
+				intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
 				intent.putExtra(resources.getString(R.string.intent_extra_type),
 						resources.getString(R.string.intent_extra_alert));
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
@@ -1205,5 +1215,32 @@ public class Operation implements APIResultCallBack {
 				}
 			}
 		}
+	}
+
+	private void addNotification(int id, String message, Notification.Status status) {
+		Notification notification = new Notification();
+		notification.setId(id);
+		notification.setMessage(message);
+		notification.setStatus(status);
+		notification.setReceivedTime(Calendar.getInstance().getTime().toString());
+		notificationDAO.open();
+		notificationDAO.addNotification(notification);
+		notificationDAO.close();
+	}
+
+	public void checkPreviousNotifications() {
+		notificationDAO.open();
+		List<Notification> dismissedNotifications = notificationDAO.getAllDismissedNotifications();
+		org.wso2.emm.agent.beans.Operation operation;
+		for (Notification notification : dismissedNotifications) {
+			operation = new org.wso2.emm.agent.beans.Operation();
+			operation.setId(notification.getId());
+			operation.setCode(Constants.Operation.NOTIFICATION);
+			operation.setStatus(resources.getString(R.string.operation_value_completed));
+			operation.setOperationResponse("Alert was dismissed: " + notification.getResponseTime());
+			resultBuilder.build(operation);
+			notificationDAO.updateNotification(notification.getId(), Notification.Status.SENT);
+		}
+		notificationDAO.close();
 	}
 }

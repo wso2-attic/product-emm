@@ -36,6 +36,8 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 
 import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.Notification;
+import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.utils.Constants;
 
 /**
@@ -51,6 +53,7 @@ public class AlertActivity extends SherlockActivity {
 	private String type;
 	private Context context;
 	private AudioManager audio;
+	private int operationId;
 	private static final int DEFAULT_VOLUME = 0;
 	private static final int DEFAULT_FLAG = 0;
 	private static final String DEVICE_OPERATION_RING = "ring";
@@ -69,6 +72,7 @@ public class AlertActivity extends SherlockActivity {
 		context = AlertActivity.this.getApplicationContext();
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 
@@ -81,6 +85,9 @@ public class AlertActivity extends SherlockActivity {
 			if (DEVICE_OPERATION_RING.equalsIgnoreCase(type)) {
 				startRing();
 			}
+		}
+		if (extras.containsKey(getResources().getString(R.string.intent_extra_operation_id))) {
+			operationId = extras.getInt(getResources().getString(R.string.intent_extra_operation_id));
 		}
 
 		txtMessage.setText(message);
@@ -95,6 +102,7 @@ public class AlertActivity extends SherlockActivity {
 					openPasswordSettings();
 					AlertActivity.this.finish();
 				} else {
+					updateNotification(operationId);
 					AlertActivity.this.finish();
 				}
 			}
@@ -157,6 +165,14 @@ public class AlertActivity extends SherlockActivity {
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.i(TAG, "Back button is pressed");
 		}
+	}
+
+	private void updateNotification (int id) {
+		NotificationDAO notificationDAO = new NotificationDAO(context);
+		notificationDAO.open();
+		Notification n = notificationDAO.getNotification(id);
+		notificationDAO.updateNotification(id, Notification.Status.DISMISSED);
+		notificationDAO.close();
 	}
 
 }

@@ -36,7 +36,8 @@ public class Root {
 	 * @return - Device rooted status.
 	 */
 	public boolean isDeviceRooted() {
-		return checkRootBySuAccess() || checkRootBySuperUserApk() || checkRootByBuildTags();
+		return false;
+		//return checkRootBySuAccess() || checkRootBySuperUserApk() || checkRootByBuildTags();
 	}
 
 	/**
