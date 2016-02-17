@@ -1,34 +1,23 @@
 {{#zone "main"}}
-    <!-- secondary header - app bar -->
+    <!-- navbar -->
     <div class="navbar-wrapper">
-        <div id="nav" class="row wr-app-bar">
-            <div class="wr-action-container">
-                <div class="wr-action-btn-bar">
-                    <a href="javascript:openCollapsedNav()" class="cu-btn wr-hidden-nav-toggle-btn">
-                        <span class="fw-stack">
-                            <i class="fw fw-tiles fw-stack-1-5x"></i>
+        <nav class="navbar navbar-default" data-spy="affix" data-offset-top="80" data-offset-bottom="40">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-menu-toggle collapsed" data-toggle="collapse" data-target="#navbar2"  aria-expanded="false" aria-controls="navbar2">
+                        <span class="icon fw-stack">
+                            <i class="fw fw-tiles fw-stack-1x toggle-icon-up"></i>
                         </span>
-                    </a><!--
-                 --><a class="cu-btn page-title">
-                        <span class="fw-stack"></span>
-                        {{pageTitle}}
-                    </a><!--
-                 -->{{#each currentActions}}<!--
-                     --><a href="{{url}}" class="cu-btn" id="appbar-btn-{{id}}" title="{{tooltip}}">
-                            <span class="fw-stack">
-                                <i class="fw fw-ring fw-stack-2x"></i>
-                                <i class="fw {{icon}} fw-stack-1x"></i>
-                            </span>
-                            {{title}}
-                        </a><!--
-                 -->{{/each}}
-                    <a href="/emm/notification-listing" class="cu-btn wr-notification-toggle-btn" title="Failures of operations on the device side will be listed here">
-                        <span class="fw-stack-md">
-                            <i class="glyphicon glyphicon-bell"></i>
-                        </span>
-                        &nbsp;
-                        <span class="wr-notification-bubble" id="notification-bubble">0</span>
                     </a>
+                    <div class="navbar-brand">
+                        {{pageTitle}}
+                    </div>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
@@ -43,7 +32,7 @@
                             </a>
                         </li>
                         {{/if}}
-                        
+
                         {{#each currentActions}}
                         <li>
                             <a href="{{url}}" id="appbar-btn-{{id}}" title="{{tooltip}}">
@@ -55,7 +44,7 @@
                             </a>
                         </li>
                         {{/each}}
-                        
+
                         {{#equal pageTitle "Device Management"}}
                         <li>
                             <a href="javascript:toggleEnrollment()">
@@ -75,8 +64,8 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="visible-inline-block">
-                            <a href="/emm/notification-listing" title="Failures of operations on the device side will be listed here">
-                            <!--<a data-toggle="sidebar" data-target="#right-sidebar" data-container=".page-content" aria-expanded="false" rel="notifications-sidebar">-->
+                            <!--<a href="/emm/notification-listing" title="Failures of operations on the device side will be listed here">-->
+                            <a data-toggle="sidebar" data-target="#right-sidebar" data-container=".page-content" aria-expanded="false" rel="notifications-sidebar">
                                 <span class="icon fw-stack">
                                     <i class="fw fw-notification fw-stack-1x"></i>
                                 </span>
@@ -87,38 +76,34 @@
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
-        </div>
+            <div id="navbar2" class="collapse navbar-collapse dropdown tiles"><!-- nav-collapse -->
+                <ul class="nav navbar-nav">
+                    <!--Below area is used to add navigational links from other units-->
+                    {{defineZone "common-navigation"}}
+
+                    {{#if permissions.VIEW_DASHBOARD}}
+                        <li><a href="/emm"><i class="fw fw-dashboard"></i>Admin Dashboard</a></li>
+                    {{/if}}
+                    {{#if permissions.LIST_DEVICES}}
+                        <li><a href="/emm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
+                    {{/if}}
+                    {{#if permissions.LIST_USERS}}
+                        <li><a href="/emm/users"><i class="fw fw-user"></i>User Management</a></li>
+                    {{/if}}
+
+                    {{#if permissions.LIST_ROLES}}
+                        <li><a href="/emm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
+                    {{/if}}
+                    {{#if permissions.LIST_POLICIES}}
+                        <li><a href="/emm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
+                    {{/if}}
+                    {{#if permissions.TENANT_CONFIGURATION}}
+                        <li><a href="/emm/platform-configuration"><i class="fw fw-settings"></i>Platform Configurations</a></li>
+                    {{/if}}
+                </ul>
+            </div><!--/ .nav-collapse -->
+        </nav>
     </div>
-    <!-- secondary header - app bar -->
-
-    <!-- common navigation -->
-    <div id="hiddenNav" class="wr-hidden-nav">
-        <ul>
-            <!--Below area is used to add navigational links from other units-->
-            {{defineZone "common-navigation"}}
-
-            {{#if permissions.VIEW_DASHBOARD}}
-                <li><a href="/emm"><i class="fw fw-dashboard"></i>Admin Dashboard</a></li>
-            {{/if}}
-            {{#if permissions.LIST_DEVICES}}
-                <li><a href="/emm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
-            {{/if}}
-            {{#if permissions.LIST_USERS}}
-                <li><a href="/emm/users"><i class="fw fw-user"></i>User Management</a></li>
-            {{/if}}
-
-            {{#if permissions.LIST_ROLES}}
-                <li><a href="/emm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
-            {{/if}}
-            {{#if permissions.LIST_POLICIES}}
-                <li><a href="/emm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
-            {{/if}}
-            {{#if permissions.TENANT_CONFIGURATION}}
-                <li><a href="/emm/platform-configuration"><i class="fw fw-settings"></i>Platform Configurations</a></li>
-            {{/if}}
-        </ul>
-    </div>
-    <!-- /common navigation -->
 
     <div id="qr-code-modal" data-enrollment-url="{{enrollmentURL}}" class="hidden">
 
@@ -141,8 +126,17 @@
             </div>
         </div>
     </div>
+    <div class="page-content-wrapper">
+        <div class="sidebar-wrapper" id="right-sidebar" is-authorized="{{isAuthorizedForNotifications}}" data-side="right" data-width="320" data-sidebar-fixed="true" data-fixed-offset="50" data-spy="affix" data-offset-top="80">
+            <ul class="sidebar-messages">
+            </ul>
+            <h4 class="text-center" ><a href="/emm/notification-listing" class="text-center">Show all notifications</a></h4>
+        </div>
+        <div class="container-fluid">
+
 {{/zone}}
 {{#zone "bottomJs"}}
+    <script id="notifications" data-current-user="{{currentUser.username}}" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/notifications.hbs" type="text/x-handlebars-template" ></script>
     <script src="{{self.publicURL}}/js/appbar.js"></script>
     <script src="{{self.publicURL}}/js/jquery.qrcode.min.js"></script>
 {{/zone}}

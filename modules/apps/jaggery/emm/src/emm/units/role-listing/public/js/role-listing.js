@@ -8,6 +8,15 @@ var loadRoleBasedActionURL = function (action, rolename) {
 };
 
 /**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    $(location).attr('href', $(this).data("url"));
+}
+
+/**
  * Sorting function of roles
  * listed on Role Management page in WSO2 MDM Console.
  */

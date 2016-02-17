@@ -16,6 +16,15 @@
  * under the License.
  */
 
+/**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    $(location).attr('href', $(this).data("url"));
+}
+
 (function () {
     var cache = {};
     var permissionSet = {};

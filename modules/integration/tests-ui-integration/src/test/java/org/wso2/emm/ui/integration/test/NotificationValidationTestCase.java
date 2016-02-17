@@ -17,7 +17,6 @@
  */
 package org.wso2.emm.ui.integration.test;
 
-
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -37,13 +36,6 @@ public class NotificationValidationTestCase extends EMMIntegrationUiBaseTestCase
         driver = BrowserManager.getWebDriver();
         LoginUtils.login(driver, automationContext, getWebAppURL());
     }
-
-//    @Test(description = "verify notification count in emm")
-//    public void viewNotificationCount() throws Exception {
-//        driver.get(getWebAppURL() + Constants.MDM_HOME_URL);
-//        HomePage homePage = new HomePage(driver);
-//        homePage.checkNotificationCount(notificationValue);
-//    }
 
     @Test(description = "verify notification visibility in emm")
     public void verifyNotificationView() throws Exception {

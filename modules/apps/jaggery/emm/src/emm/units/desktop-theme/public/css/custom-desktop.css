@@ -115,14 +115,13 @@ body {
 
 body > .page-content-wrapper > .container,
 body > .page-content-wrapper > .container-fluid {
-  padding: 20px 20px 60px;
+  padding: 10px 10px 30px;
   margin: 0;
 }
 
 @media only screen and (min-width: 768px) {
   body > .page-content-wrapper > .container,
   body > .page-content-wrapper > .container-fluid {
-    padding: 3% 4% 4%;
     margin: 0;
   }
 }
@@ -953,24 +952,22 @@ header .dropdown[aria-expanded=true], header .dropdown:hover {
   width: 150px;
   height: 120px;
   padding: 15px;
-  background: #132D45;
+  background: #11375B;
   display: block;
   overflow: hidden;
   line-height: 1.4em;
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 
 .navbar-collapse.tiles ul.nav li li a {
-  background: #777777;
-}
-
-.navbar-collapse.tiles ul.nav li a:hover {
   background: #526A84;
 }
 
+.navbar-collapse.tiles ul.nav li a:hover {
+  background: #133e67;
+}
+
 .navbar-collapse.tiles ul.nav li li a:hover {
-  background: #888888;
+  background: #5d7896;
 }
 
 .navbar-collapse.tiles ul.nav li a i {
@@ -980,7 +977,7 @@ header .dropdown[aria-expanded=true], header .dropdown:hover {
 }
 
 .navbar-collapse.tiles ul.nav li ul {
-  padding-left: 140px;
+  padding-left: 160px;
   margin-top: -130px;
   display: none;
 }
@@ -988,7 +985,7 @@ header .dropdown[aria-expanded=true], header .dropdown:hover {
 .navbar-collapse.tiles ul.nav li.has-sub > a:after {
   width: 7px;
   height: 120px;
-  background: #757575;
+  background: #526a84;
   display: inline-block;
   content: " ";
   top: 0;

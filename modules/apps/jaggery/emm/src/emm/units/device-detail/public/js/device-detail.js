@@ -30,9 +30,11 @@
     if(serviceUrl){
         invokerUtil.post(serviceUrl, payload,
             function(message){
-                console.log(message);
+                $(".panel-body").show();
             }, function (message) {
-                console.log(message.content);
+                var defaultInnerHTML =
+                    "<br><p class='fw-warning'>Device data might not be updated Please refresh this page<p>";
+                $(".panel-body").append(defaultInnerHTML);
             });
     }
     $(document).ready(function(){
@@ -161,7 +163,8 @@
             };
             invokerUtil.get(serviceURL,
                 successCallback, function(message){
-                    console.log(message.content);
+                    $("#applications-list-container").append("<br><p class='fw-warning'>Loading application was not" +
+                                                             " successful please try again in a while<p>");
             });
         });
     }
@@ -182,7 +185,8 @@
                 viewModel.policy = activePolicy;
                 viewModel.deviceType = deviceType;
                 data = JSON.parse(data);
-                if(data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined && data.complianceFeatures.length > 0) {
+                if (data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined &&
+                   data.complianceFeatures.length > 0) {
                     viewModel.compliance = "NON-COMPLIANT";
                     viewModel.complianceFeatures = data.complianceFeatures;
                     var content = template(viewModel);
@@ -203,17 +207,18 @@
                     activePolicy = data;
                     invokerUtil.get(serviceURLCompliance,
                         successCallbackCompliance, function(message){
-                            console.log(message.content);
+                            $("#policy-list-container").append("<br><p class='fw-warning'>Loading policy related data" +
+                                                               " was not successful please try again in a while<p>");
                     });
                 }
             };
 
             invokerUtil.get(serviceURLPolicy,
                 successCallbackPolicy, function(message){
-                    console.log(message.content);
+                    $("#policy-list-container").append("<br><p class='fw-warning'>Loading policy related was not" +
+                    " successful please try again in a while<p>");
             });
         });
 
     }
-
 }());

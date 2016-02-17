@@ -164,6 +164,8 @@ public final class Constants {
         public static final String WIPE_DATA_ENDPOINT = "/mdm-android-agent/operation/wipe-data";
         public static final String APPLICATION_LIST_ENDPOINT = "/mdm-android-agent/operation/application-list";
         public static final String RING_ENDPOINT = "/mdm-android-agent/operation/ring-device";
+        public static final String REBOOT_ENDPOINT = "/mdm-android-agent/operation/reboot-device";
+        public static final String UPGRADE_FIRMWARE_ENDPOINT = "/mdm-android-agent/operation/upgrade-firmware";
         public static final String MUTE_ENDPOINT = "/mdm-android-agent/operation/mute";
         public static final String INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
         public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";

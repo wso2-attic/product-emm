@@ -65,39 +65,27 @@ var userModule = function () {
      * }
      */
     privateMethods.callBackend = function (url, method) {
-        switch (method) {
-            case constants.HTTP_GET:
-                var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                        var response = {};
-                        response.content = responsePayload["responseContent"];
-                        if(responsePayload["responseContent"] == null && responsePayload != null){
-                            response.content = responsePayload;
-                        }
-                        response.status = "success";
-                        return response;
-                    },
-                    function (responsePayload) {
-                        var response = {};
-                        response.content = responsePayload;
-                        response.status = "error";
-                        return response;
-                    });
+        if (constants.HTTP_GET == method) {
+            var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
+                var response = {};
+                response.content = responsePayload["responseContent"];
+                if (responsePayload["responseContent"] == null && responsePayload != null) {
+                    response.content = responsePayload;
+                }
+                response.status = "success";
                 return response;
-                break;
-            case constants.HTTP_POST:
-                //todo
-                log.error("programing error");
-                break;
-            case constants.HTTP_PUT:
-                //todo
-                log.error("programing error");
-                break;
-            case constants.HTTP_DELETE:
-                //todo
-                log.error("programing error");
-                break;
+            },
+            function (responsePayload) {
+                var response = {};
+                response.content = responsePayload;
+                response.status = "error";
+                return response;
+            });
+            return response;
+        } else {
+            log.error("Programming error : This method only support HTTP GET requests.");
         }
-    }
+    };
 
     /*
      @Deprecated
