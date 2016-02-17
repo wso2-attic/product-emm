@@ -29,6 +29,15 @@ if (saveNewPrioritiesButtonEnabled) {
     $(saveNewPrioritiesButton).removeClass("hide");
 }
 
+/**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    $(location).attr('href', $(this).data("url"));
+}
+
 var addSortableIndexNumbers = function () {
     $(".wr-sortable .list-group-item").not(".ui-sortable-placeholder").each(function (i) {
         $(".wr-sort-index", this).html(i+1);

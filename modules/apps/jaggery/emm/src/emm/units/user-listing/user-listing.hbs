@@ -1,9 +1,4 @@
 {{#zone "main"}}
-    <div class="row wr-device-board">
-        <div class="col-lg-12 wr-secondary-bar">
-            <span class="page-sub-title">Users</span>
-        </div>
-    </div>
     <!-- content -->
     <div id="loading-content" class="col-centered">
         {{#if removePermitted}}
@@ -17,55 +12,54 @@
         Loading users . . .
         <br>
     </div>
-    <div class="container-fluid">
-        <span id="user-listing-status-msg"></span>
-        <div id="user-table">
-            <table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view"
-                   id="user-grid">
-                <thead>
-                <tr class="sort-row">
-                    <th class="no-sort"></th>
-                    <th class="no-sort"></th>
-                    <th>By Username</th>
-                    <th class="no-sort"></th>
-                    <th class="no-sort"></th>
-                </tr>
-                <tr class="filter-row filter-box">
-                    <th colspan="4">
-                        <label class="wr-input-label" for="search-by-username">
-                            By Username
-                        </label>
-                        <input id="search-by-username" type="text" class="form-control"
-                               placeholder="Search By Username">
-                    </th>
-                    <th style="vertical-align:bottom;">
-                        <button id="search-btn" class="wr-btn">
-                            Search</button>
-                    </th>
-                </tr>
-                <tr class="bulk-action-row">
-                    <th colspan="5">
-                        <ul class="tiles">
-                            <li class="square">
-                                <a href="#" data-click-event="remove-form" class="btn square-element invite-user-link"
-                                   data-toggle="modal" data-target="#modalDemo">
+    <span id="user-listing-status-msg"></span>
+    <div id="user-table">
+        <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view"
+               id="user-grid">
+            <thead>
+            <tr class="sort-row">
+                <th class="no-sort"></th>
+                <th class="no-sort"></th>
+                <th>By Username</th>
+                <th class="no-sort"></th>
+                <th class="no-sort"></th>
+            </tr>
+            <tr class="filter-row filter-box">
+                <th colspan="4">
+                    <label class="wr-input-label" for="search-by-username">
+                        By Username
+                    </label>
+                    <input id="search-by-username" type="text" class="form-control"
+                           placeholder="Search By Username">
+                </th>
+                <th style="vertical-align:bottom;">
+                    <button id="search-btn" class="wr-btn">
+                        Search
+                    </button>
+                </th>
+            </tr>
+            <tr class="bulk-action-row">
+                <th colspan="5">
+                    <ul class="tiles">
+                        <li class="square">
+                            <a href="#" data-click-event="remove-form" class="btn square-element invite-user-link"
+                               data-toggle="modal" data-target="#modalDemo">
                                     <span class="icon fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-invitation fw-stack-1x"></i>
                                     </span>
-                                    Invite Selected
-                                </a>
-                            </li>
-                        </ul>
-                    </th>
-                </tr>
-                </thead>
-                <tbody id="ast-container">
+                                Invite Selected
+                            </a>
+                        </li>
+                    </ul>
+                </th>
+            </tr>
+            </thead>
+            <tbody id="ast-container">
 
-                <br class="c-both"/>
-                </tbody>
-            </table>
-        </div>
+            <br class="c-both"/>
+            </tbody>
+        </table>
     </div>
     <br class="c-both"/>
     <div id="content-filter-types" style="display: none">

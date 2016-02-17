@@ -1,19 +1,13 @@
 {{#zone "main"}}
-    <div class="row wr-device-board">
-        <div class="col-lg-12 wr-secondary-bar">
-            <span class="page-sub-title">DASHBOARD</span>
-        </div>
-    </div>
-    <div class="wr-content">
-        {{#if permissions.VIEW_DASHBOARD}}
-            <div class="row wr-stats-board">
-                <div class="col-md-4">
-                    <div class="wr-stats-board-tile">
-                        <div class="tile-name">Devices</div>
-                        <div>
-                            <div class="tile-icon"><i class="fw fw-mobile"></i></div>
-                            <div class="tile-stats">
-                                <span id="device-count">Loading...</span>
+    {{#if permissions.VIEW_DASHBOARD}}
+        <div class="row wr-stats-board">
+            <div class="col-md-4">
+                <div class="wr-stats-board-tile">
+                    <div class="tile-name">Devices</div>
+                    <div>
+                        <div class="tile-icon"><i class="fw fw-mobile"></i></div>
+                        <div class="tile-stats">
+                            <span id="device-count">Loading...</span>
                             <span class="tile-stats-free">
                                 <a id="device-count-view-btn" href="/emm/device-mgt">
                                     <span class="fw-stack">
@@ -30,48 +24,19 @@
                                     Add
                                 </a>
                             </span>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row wr-stats-board">
-                <div class="col-md-4">
-                    <div class="wr-stats-board-tile">
-                        <div class="tile-name">Users</div>
-                        <div>
-                            <div class="tile-icon"><i class="fw fw-user"></i></div>
-                            <div class="tile-stats">
-                                <span id="user-count">Loading...</span>
-                            <span class="tile-stats-free">
-                                <a id="user-count-view-btn" href="/emm/users/">
-                                    <span class="fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="fw fw-view fw-stack-1x"></i>
-                                    </span>
-                                    View
-                                </a>
-                                <a href="/emm/users/add-user">
-                                    <span class="fw-stack">
-                                        <i class="fw fw-ring fw-stack-2x"></i>
-                                        <i class="fw fw-add fw-stack-1x"></i>
-                                    </span>
-                                    Add
-                                </a>
-                            </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row wr-stats-board">
-                <div class="col-md-4">
-                    <div class="wr-stats-board-tile">
-                        <div class="tile-name">Policies</div>
-                        <div>
-                            <div class="tile-icon"><i class="fw fw-policy"></i></div>
-                            <div class="tile-stats">
-                                <span id="policy-count">Loading...</span>
+        </div>
+        <div class="row wr-stats-board">
+            <div class="col-md-4">
+                <div class="wr-stats-board-tile">
+                    <div class="tile-name">Policies</div>
+                    <div>
+                        <div class="tile-icon"><i class="fw fw-policy"></i></div>
+                        <div class="tile-stats">
+                            <span id="policy-count">Loading...</span>
                             <span class="tile-stats-free">
                                 <a id="policy-count-view-btn" href="/emm/policies/">
                                     <span class="fw-stack">
@@ -88,16 +53,72 @@
                                     Add
                                 </a>
                             </span>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {{else}}
-            Permission denied
-            {{/if}}
-
-    </div>
+        </div>
+        <div class="row wr-stats-board">
+            <div class="col-md-4">
+                <div class="wr-stats-board-tile">
+                    <div class="tile-name">Users</div>
+                    <div>
+                        <div class="tile-icon"><i class="fw fw-user"></i></div>
+                        <div class="tile-stats">
+                            <span id="user-count">Loading...</span>
+                            <span class="tile-stats-free">
+                                <a id="user-count-view-btn" href="/emm/users/">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-view fw-stack-1x"></i>
+                                    </span>
+                                    View
+                                </a>
+                                <a href="/emm/users/add-user">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                    </span>
+                                    Add
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row wr-stats-board">
+            <div class="col-md-4">
+                <div class="wr-stats-board-tile">
+                    <div class="tile-name">Roles</div>
+                    <div>
+                        <div class="tile-icon"><i class="fw fw-bookmark"></i></div>
+                        <div class="tile-stats">
+                            <span id="role-count">Loading...</span>
+                            <span class="tile-stats-free">
+                                <a id="device-count-view-btn" href="/emm/roles">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-view fw-stack-1x"></i>
+                                    </span>
+                                    View
+                                </a>
+                                <a href="/emm/roles/add-role">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-add fw-stack-1x"></i>
+                                    </span>
+                                    Add
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{else}}
+        Permission denied
+    {{/if}}
     <div id="qr-code-modal" data-enrollment-url="{{enrollmentURL}}" class="hidden">
 
         <div class="content">
