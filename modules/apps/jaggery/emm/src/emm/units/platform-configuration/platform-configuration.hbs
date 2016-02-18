@@ -2,11 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <!-- content -->
-            <div id="config-save-form" class="container col-centered wr-content">
-                <br>
-                <h1 class="page-sub-title">
-                    Platform Configurations
-                </h1>
+            <div id="config-save-form" class="container col-centered">
                 <br>
                 General and Platform Specific Server Settings for the Tenant
                 <br>
@@ -14,7 +10,7 @@
                 <div class="wr-advance-operations">
                     <div class="row no-gutter" id="typeDiv" typeData="{{#each types}}{{name}},{{/each}}">
                         <div class="wr-hidden-operations-nav col-lg-4">
-                            <a id=generalConfigLink href="javascript:void(0)" onclick="showAdvanceOperation('general', this)" class="selected">
+                            <a id="generalConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('general', this)" class="selected">
                                 <span class="wr-hidden-operations-icon fw-stack">
                                     <i class="fw fw-settings fw-stack-2x"></i>
                                 </span>
@@ -216,7 +212,7 @@
                                             <textarea id="android-eula" type="text" class="form-control"></textarea>
                                         </div>
                                         <div class="wr-input-control wr-btn-grp">
-                                            <button id="save-android-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                            <button id="save-android-btn" class="wr-btn">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -411,7 +407,7 @@
                                             <textarea id="ios-eula" type="text" class="form-control"></textarea>
                                         </div>
                                         <div class="wr-input-control wr-btn-grp">
-                                            <button id="save-ios-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                            <button id="save-ios-btn" class="wr-btn">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -450,7 +446,7 @@
                                             <textarea id="windows-eula" type="text" class="form-control"></textarea>
                                         </div>
                                         <div class="wr-input-control wr-btn-grp">
-                                            <button id="save-windows-btn" class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                            <button id="save-windows-btn" class="wr-btn">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -468,8 +464,8 @@
                     <br>Please click <b>"Go back to configurations"</b>, if you wish to save another configuration or click
                     <b>"Exit"</b> to complete the process and go back to the dashboard.
                     <hr />
-                    <button id=btnBack class="wr-btn" onclick="window.location.href='/emm/platform-configuration'">Go back to configurations</button>
-                    <button id=btnExit class="wr-btn" onclick="window.location.href='/emm'">&nbsp;&nbsp;&nbsp;&nbsp;Exit&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <button id="btnBack" class="wr-btn" onclick="window.location.href='/emm/platform-configuration'">Go back to configurations</button>
+                    <button id="btnExit" class="wr-btn" onclick="window.location.href='/emm'">Exit</button>
                 </div>
             </div>
             <!-- /content -->

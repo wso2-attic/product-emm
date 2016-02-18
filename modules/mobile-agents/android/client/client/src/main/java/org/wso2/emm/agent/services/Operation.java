@@ -75,7 +75,7 @@ public class Operation implements APIResultCallBack {
 	private static final String LOCATION_INFO_TAG_LATITUDE = "latitude";
 	private static final String APP_INFO_TAG_NAME = "name";
 	private static final String APP_INFO_TAG_PACKAGE = "package";
-	private static final String APP_INFO_TAG_ICON = "icon";
+	private static final String APP_INFO_TAG_VERSION = "version";
 	private static final int DEFAULT_PASSWORD_LENGTH = 0;
 	private static final int DEFAULT_VOLUME = 0;
 	private static final int DEFAULT_FLAG = 0;
@@ -178,6 +178,15 @@ public class Operation implements APIResultCallBack {
 			case Constants.Operation.DISENROLL:
 				disenrollDevice(operation);
 				break;
+			case Constants.Operation.UPGRADE_FIRMWARE:
+				upgradeFirmware(operation);
+				break;
+			case Constants.Operation.REBOOT:
+				rebootDevice(operation);
+				break;
+			case Constants.Operation.EXECUTE_SHELL_COMMAND:
+				executeShellCommand(operation);
+				break;
 			default:
 				Log.e(TAG, "Invalid operation code received");
 				break;
@@ -253,7 +262,7 @@ public class Operation implements APIResultCallBack {
 			try {
 				app.put(APP_INFO_TAG_NAME, Uri.encode(infoApp.getAppname()));
 				app.put(APP_INFO_TAG_PACKAGE, infoApp.getPackagename());
-				app.put(APP_INFO_TAG_ICON, infoApp.getIcon());
+				app.put(APP_INFO_TAG_VERSION, infoApp.getVersionCode());
 				result.put(app);
 			} catch (JSONException e) {
 				operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -296,9 +305,9 @@ public class Operation implements APIResultCallBack {
 		intent.putExtra(resources.getString(R.string.intent_extra_type),
 				resources.getString(R.string.intent_extra_ring));
 		intent.putExtra(resources.getString(R.string.intent_extra_message),
-				resources.getString(R.string.intent_extra_stop_ringing));
+		                resources.getString(R.string.intent_extra_stop_ringing));
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-				Intent.FLAG_ACTIVITY_NEW_TASK);
+		                Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 
 		if (Constants.DEBUG_MODE_ENABLED) {
@@ -1062,6 +1071,105 @@ public class Operation implements APIResultCallBack {
 		if (status) {
 			CommonUtils.disableAdmin(context);
 		} 
+	}
+
+	/**
+	 * Reboot the device [System app required].
+	 *
+	 * @param operation - Operation object.
+	 */
+	public void rebootDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+		JSONObject result = new JSONObject();
+
+		try {
+			String status = resources.getString(R.string.shared_pref_default_status);
+			result.put(resources.getString(R.string.operation_status), status);
+			operation.setPayLoad(result.toString());
+
+			if (status.equals(resources.getString(R.string.shared_pref_default_status))) {
+				Toast.makeText(context, resources.getString(R.string.toast_message_reboot),
+				               Toast.LENGTH_LONG).show();
+				operation.setStatus(resources.getString(R.string.operation_value_completed));
+				resultBuilder.build(operation);
+
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.d(TAG, "Reboot initiated.");
+				}
+			} else {
+				Toast.makeText(context, resources.getString(R.string.toast_message_reboot_failed),
+				               Toast.LENGTH_LONG).show();
+				operation.setStatus(resources.getString(R.string.operation_value_error));
+				resultBuilder.build(operation);
+			}
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
+	}
+
+	/**
+	 * Upgrading device firmware from the configured OTA server.
+	 *
+	 * @param operation - Operation object.
+	 */
+	public void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+		JSONObject result = new JSONObject();
+
+		try {
+			String status = resources.getString(R.string.shared_pref_default_status);
+			result.put(resources.getString(R.string.operation_status), status);
+
+			operation.setPayLoad(result.toString());
+
+			if (status.equals(resources.getString(R.string.shared_pref_default_status))) {
+				operation.setStatus(resources.getString(R.string.operation_value_completed));
+				resultBuilder.build(operation);
+
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.d(TAG, "Firmware upgrade started.");
+				}
+			} else {
+				operation.setStatus(resources.getString(R.string.operation_value_error));
+				resultBuilder.build(operation);
+			}
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
+	}
+
+	/**
+	 * Execute shell commands as the super user.
+	 *
+	 * @param operation - Operation object.
+	 */
+	public void executeShellCommand(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+		JSONObject result = new JSONObject();
+
+		try {
+			String status = resources.getString(R.string.shared_pref_default_status);
+			result.put(resources.getString(R.string.operation_status), status);
+
+			operation.setPayLoad(result.toString());
+
+			if (status.equals(resources.getString(R.string.shared_pref_default_status))) {
+				operation.setStatus(resources.getString(R.string.operation_value_completed));
+				resultBuilder.build(operation);
+
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.d(TAG, "Shell command received.");
+				}
+			} else {
+				operation.setStatus(resources.getString(R.string.operation_value_error));
+				resultBuilder.build(operation);
+			}
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
 	}
 
 	/**

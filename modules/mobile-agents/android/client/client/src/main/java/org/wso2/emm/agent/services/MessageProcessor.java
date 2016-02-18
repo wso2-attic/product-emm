@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.admin.DevicePolicyManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.DeviceInfo;
@@ -57,9 +59,13 @@ public class MessageProcessor implements APIResultCallBack {
 	private org.wso2.emm.agent.services.Operation operation;
 	private ObjectMapper mapper;
 	private boolean isWipeTriggered = false;
+	private boolean isRebootTriggered = false;
+	private boolean isUpgradeTriggered = false;
+	private boolean isShellCommandTriggered = false;
 	private DevicePolicyManager devicePolicyManager;
 	private static final int ACTIVATION_REQUEST = 47;
 	private static final String ERROR_STATE = "ERROR";
+	private String shellCommand = null;
 
 	/**
 	 * Local notification message handler.
@@ -140,6 +146,21 @@ public class MessageProcessor implements APIResultCallBack {
 					if (operation.getCode().equals(Constants.Operation.WIPE_DATA) && !operation.getStatus().
 							equals(ERROR_STATE)) {
 						isWipeTriggered = true;
+					} else if (operation.getCode().equals(Constants.Operation.REBOOT) && !operation.getStatus().
+							equals(ERROR_STATE)) {
+						isRebootTriggered = true;
+					} else if (operation.getCode().equals(Constants.Operation.UPGRADE_FIRMWARE) && !operation.getStatus().
+							equals(ERROR_STATE)) {
+						isUpgradeTriggered = true;
+					} else if (operation.getCode().equals(Constants.Operation.EXECUTE_SHELL_COMMAND) && !operation.getStatus().
+							equals(ERROR_STATE)) {
+						isShellCommandTriggered = true;
+						try {
+							JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+							shellCommand = (String) payload.get(context.getResources().getString(R.string.shared_pref_command));
+						} catch (JSONException e) {
+							throw new AndroidAgentException("Invalid JSON format.", e);
+						}
 					}
 				}
 			}
@@ -170,6 +191,18 @@ public class MessageProcessor implements APIResultCallBack {
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
 			if(isWipeTriggered) {
 				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
+			}
+
+			if (isRebootTriggered) {
+				CommonUtils.callSystemApp(context, Constants.Operation.REBOOT, null);
+			}
+
+			if (isUpgradeTriggered) {
+				CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, null);
+			}
+
+			if (isShellCommandTriggered && shellCommand != null) {
+				CommonUtils.callSystemApp(context, Constants.Operation.EXECUTE_SHELL_COMMAND, shellCommand);
 			}
 
 			if (result != null) {

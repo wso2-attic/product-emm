@@ -28,7 +28,7 @@ import java.io.File;
 /**
  * This class performs one time operations.
  */
-public class ConfigInitializerContextListener implements ServletContextListener {
+public class ContextInitializer implements ServletContextListener {
 
     /**
      * This method loads wap-provisioning file and sets wap-provisioning file as attribute in servlet context.

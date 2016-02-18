@@ -156,7 +156,6 @@ var backendServiceInvoker = function () {
             } else {
                 response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
             }
-
         }
         var stringRequestEntity = new StringRequestEntity(stringify(payload));
         httpMethodObject.setRequestEntity(stringRequestEntity);

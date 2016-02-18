@@ -44,7 +44,7 @@ if (platform != "Windows Phone") {
     } else {
         apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
-        if (tokenPair != null && tokenPair != undefined && tokenPair.accessToken != null) {
+        if (tokenPair.accessToken) {
             var payload = {
                 "credentials": {
                     "username": username, "email": email,

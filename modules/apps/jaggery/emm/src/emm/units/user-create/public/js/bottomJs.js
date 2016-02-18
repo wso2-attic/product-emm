@@ -10,6 +10,35 @@ function inputIsValid(regExp, inputString) {
     return regExp.test(inputString);
 }
 
+var validateInline = {};
+
+/**
+ * Validate if provided username is valid against RegEx configures.
+ */
+validateInline["user-name"] = function () {
+    var usernameinput = $("input#username");
+    if (inputIsValid( usernameinput.data("regex"), usernameinput.val())) {
+        $("#userNameValidationText").removeClass("inline-warning");
+    } else {
+        $("#userNameValidationText").addClass("inline-warning");
+    }
+};
+
+/**
+ * Checks if provided email address is valid against
+ * the email format.
+ */
+validateInline["emailAddress"] = function () {
+    var email = $("#emailAddress").val();
+    if (emailIsValid(email)) {
+        $("#emailValidationText").removeClass("inline-warning");
+        $("#emailValidationText").hide();
+    } else {
+        $("#emailValidationText").addClass("inline-warning");
+        $("#emailValidationText").show();
+    }
+};
+
 /**
  * Checks if an email address has the valid format or not.
  *
@@ -47,6 +76,7 @@ $( "#userStore" )
     }).change();
 
 $(document).ready(function () {
+    $("#emailValidationText").hide();
     $("select.select2[multiple=multiple]").select2({
         tags: false
     });
@@ -72,9 +102,6 @@ $(document).ready(function () {
         var errorMsg = "#user-create-error-msg span";
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (username.length > charLimit || username.length < 3) {
-            $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(usernameInput.data("regex"), username)) {
             $(errorMsg).text(usernameInput.data("errormsg"));
@@ -146,5 +173,21 @@ $(document).ready(function () {
                 }
             );
         }
+    });
+
+    $("#username").focus(function() {
+        $("#userNameValidationText").removeClass("inline-warning");
+    });
+
+    $("#username").blur(function() {
+        validateInline["user-name"]();
+    });
+
+    $("#emailAddress").focus(function() {
+        $("#emailValidationText").hide();
+    });
+
+    $("#emailAddress").blur(function() {
+        validateInline["emailAddress"]();
     });
 });

@@ -34,6 +34,7 @@ import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.wso2.carbon.identity.oauth2.stub.OAuth2TokenValidationServiceStub;
+import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.OAuthTokenValidationException;
 
 import java.util.ArrayList;
@@ -71,7 +72,8 @@ public class OAuthTokenValidationStubFactory implements PoolableObjectFactory {
             throw new IllegalArgumentException("Parameters required to initialize HttpClient instances " +
                     "associated with OAuth token validation service stub are not provided");
         }
-        String maxConnectionsPerHostParam = properties.getProperty("MaxConnectionsPerHost");
+        String maxConnectionsPerHostParam = properties.getProperty(PluginConstants.
+                AuthenticatorProperties.MAX_CONNECTION_PER_HOST);
         if (maxConnectionsPerHostParam == null || maxConnectionsPerHostParam.isEmpty()) {
             if (log.isDebugEnabled()) {
                 log.debug("MaxConnectionsPerHost parameter is not explicitly defined. Therefore, the default, " +
@@ -81,7 +83,8 @@ public class OAuthTokenValidationStubFactory implements PoolableObjectFactory {
             params.setDefaultMaxConnectionsPerHost(Integer.parseInt(maxConnectionsPerHostParam));
         }
 
-        String maxTotalConnectionsParam = properties.getProperty("MaxTotalConnections");
+        String maxTotalConnectionsParam = properties.getProperty(PluginConstants.
+                AuthenticatorProperties.MAX_TOTAL_CONNECTIONS);
         if (maxTotalConnectionsParam == null || maxTotalConnectionsParam.isEmpty()) {
             if (log.isDebugEnabled()) {
                 log.debug("MaxTotalConnections parameter is not explicitly defined. Therefore, the default, " +
@@ -104,7 +107,8 @@ public class OAuthTokenValidationStubFactory implements PoolableObjectFactory {
     private HttpClientConnectionManager createClientConnectionManager(Properties properties) {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         if (properties != null) {
-            String maxConnectionsPerHostParam = properties.getProperty("MaxConnectionsPerHost");
+            String maxConnectionsPerHostParam = properties.getProperty(PluginConstants.
+                    AuthenticatorProperties.MAX_CONNECTION_PER_HOST);
             if (maxConnectionsPerHostParam == null || maxConnectionsPerHostParam.isEmpty()) {
                 if (log.isDebugEnabled()) {
                     log.debug("MaxConnectionsPerHost parameter is not explicitly defined. Therefore, the default, " +
@@ -114,7 +118,8 @@ public class OAuthTokenValidationStubFactory implements PoolableObjectFactory {
                 connectionManager.setDefaultMaxPerRoute(Integer.parseInt(maxConnectionsPerHostParam));
             }
 
-            String maxTotalConnectionsParam = properties.getProperty("MaxTotalConnections");
+            String maxTotalConnectionsParam = properties.getProperty(PluginConstants.
+                    AuthenticatorProperties.MAX_TOTAL_CONNECTIONS);
             if (maxTotalConnectionsParam == null || maxTotalConnectionsParam.isEmpty()) {
                 if (log.isDebugEnabled()) {
                     log.debug("MaxTotalConnections parameter is not explicitly defined. Therefore, the default, " +

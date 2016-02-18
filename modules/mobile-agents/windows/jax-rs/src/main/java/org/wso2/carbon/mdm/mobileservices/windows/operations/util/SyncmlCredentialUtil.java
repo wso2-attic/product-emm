@@ -26,11 +26,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Class for generate security token for client and server.
+ * Generate security token to client and server.
  */
-public class SyncmlCredentials {
+public class SyncmlCredentialUtil {
 
-    public String generateCredData(String nextNonce) throws SyncmlMessageFormatException {
+    public static String generateCredData(String nextNonce) throws SyncmlMessageFormatException {
         MessageDigest digest;
         String usrPwdNonceHash;
         String nonce;
@@ -42,14 +42,15 @@ public class SyncmlCredentials {
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes(Constants.UTF_8)));
         } catch (UnsupportedEncodingException e) {
-            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.", e);
+            throw new SyncmlMessageFormatException("Problem occurred while decoding credentials data.", e);
         } catch (NoSuchAlgorithmException e) {
-            throw new SyncmlMessageFormatException("Problem occurred in generating password hash.", e);
+            throw new SyncmlMessageFormatException("Application environment does not have an implementation " +
+                    "available/configured for the requested algorithm", e);
         }
         return usrPwdNonceHash;
     }
 
-    public String generateRST(String username, String password) throws SyncmlMessageFormatException {
+    public static String generateRST(String username, String password) throws SyncmlMessageFormatException {
         MessageDigest digest;
         String usrPwdNonceHash;
         String nonce;
@@ -61,9 +62,10 @@ public class SyncmlCredentials {
             String usrPwdNonce = usrPwdHash + ":" + nonce;
             usrPwdNonceHash = Base64.encodeBase64String(digest.digest(usrPwdNonce.getBytes(Constants.UTF_8)));
         } catch (UnsupportedEncodingException e) {
-            throw new SyncmlMessageFormatException("Problem occurred in encoding credentials data.", e);
+            throw new SyncmlMessageFormatException("Problem occurred while decoding credentials data.", e);
         } catch (NoSuchAlgorithmException e) {
-            throw new SyncmlMessageFormatException("Problem occurred in generating password hash.", e);
+            throw new SyncmlMessageFormatException("Application environment does not have an implementation " +
+                    "available/configured for the requested algorithm", e);
         }
         return usrPwdNonceHash;
     }

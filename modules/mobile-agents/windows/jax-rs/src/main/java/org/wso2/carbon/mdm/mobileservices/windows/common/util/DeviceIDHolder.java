@@ -23,19 +23,19 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import java.util.List;
 
 /**
- * Class for holding device ids.
+ * Class for holding valid and invalid devices.
  */
 public class DeviceIDHolder {
 
-    private List<String> errorDeviceIdList;
+    private List<String> invalidDeviceIdList;
     private List<DeviceIdentifier> validDeviceIDList;
 
-    public List<String> getErrorDeviceIdList() {
-        return errorDeviceIdList;
+    public List<String> getInvalidDeviceIdList() {
+        return invalidDeviceIdList;
     }
 
-    public void setErrorDeviceIdList(List<String> errorDeviceIdList) {
-        this.errorDeviceIdList = errorDeviceIdList;
+    public void setInvalidDeviceIdList(List<String> invalidDeviceIdList) {
+        this.invalidDeviceIdList = invalidDeviceIdList;
     }
 
     public List<DeviceIdentifier> getValidDeviceIDList() {

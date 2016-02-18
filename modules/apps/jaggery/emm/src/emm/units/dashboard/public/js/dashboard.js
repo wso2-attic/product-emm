@@ -7,7 +7,6 @@ var updateStats = function (serviceURL, id) {
             } else {
                 data = JSON.parse(data);
                 $(id).html(data);
-                console.log(data);
                 if (Number(data) <= 0) {
                     $(id + "-view-btn").hide();
                 }
@@ -22,6 +21,7 @@ $(document).ready(function () {
     updateStats("/mdm-admin/devices/count", "#device-count");
     updateStats("/mdm-admin/policies/count", "#policy-count");
     updateStats("/mdm-admin/users/count", "#user-count");
+    updateStats("/mdm-admin/roles/count", "#role-count");
 });
 
 function toggleEnrollment() {

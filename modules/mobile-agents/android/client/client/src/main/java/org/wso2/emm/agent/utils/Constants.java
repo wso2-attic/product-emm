@@ -26,6 +26,8 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
+	public static final boolean SYSTEM_APP_ENABLED = false;
+	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String REG_ID = "gcm_reg_id";
 	public static final String NOTIFIER_LOCAL = "LOCAL";
@@ -87,7 +89,7 @@ public class Constants {
 	public static final String TOKEN_SCOPE = "production";
 	public static final String APPLICATION_TYPE = "device";
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
-	public static final String PACKAGE_NAME = "com.mdm";
+	public static final String PACKAGE_NAME = "org.wso2.emm.agent";
 
 
 	/**
@@ -178,6 +180,9 @@ public class Constants {
 		public static final String POLICY_MONITOR = "MONITOR";
 		public static final String POLICY_REVOKE = "POLICY_REVOKE";
 		public static final String DISENROLL = "DISENROLL";
+		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
+		public static final String REBOOT = "REBOOT";
+		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
 	}
 
 	/**
@@ -203,6 +208,34 @@ public class Constants {
 		public static final String NETWORK_OPERATOR = "OPERATOR";
 		public static final String INFO = "DEVICE_INFO";
 		public static final String GCM_TOKEN = "GCM_TOKEN";
+		public static final String WIFI_SSID = "WIFI_SSID";
+		public static final String WIFI_SIGNAL_STRENGTH = "WIFI_SIGNAL_STRENGTH";
+		public static final String NETWORK_INFO = "NETWORK_INFO";
+		public static final String CONNECTION_TYPE = "CONNECTION_TYPE";
+		public static final String MOBILE_CONNECTION_TYPE = "MOBILE_CONNECTION_TYPE";
+		public static final String MOBILE_SIGNAL_STRENGTH = "MOBILE_SIGNAL_STRENGTH";
+		public static final String CPU_INFO = "CPU_INFO";
+		public static final String RAM_INFO = "RAM_INFO";
+		public static final String TOTAL_MEMORY = "TOTAL_MEMORY";
+		public static final String LOW_MEMORY = "LOW_MEMORY";
+		public static final String THRESHOLD = "THRESHOLD";
+		public static final String AVAILABLE_MEMORY = "AVAILABLE_MEMORY";
+		public static final String BATTERY_INFO = "BATTERY_INFO";
+		public static final String SCALE = "SCALE";
+		public static final String VOLTAGE = "VOLTAGE";
+		public static final String TEMPERATURE = "TEMPERATURE";
+		public static final String CURRENT_AVERAGE = "CURRENT_AVERAGE";
+		public static final String TECHNOLOGY = "TECHNOLOGY";
+		public static final String HEALTH = "HEALTH";
+		public static final String STATUS = "STATUS";
+		public static final String PLUGGED = "PLUGGED";
+		public static final String APP_MEMORY_INFO = "APP_MEMORY_INFO";
+		public static final String USS = "USS";
+		public static final String PSS = "PSS";
+		public static final String PACKAGE = "PACKAGE";
+		public static final String PID = "PID";
+		public static final String SHARED_DIRTY = "SHARED_DIRTY";
+
 	}
 
 }

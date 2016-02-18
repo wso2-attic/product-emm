@@ -22,11 +22,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -80,15 +78,17 @@ public class SyncmlParser {
      * @param syncmlPayload - Received SyncML XML payload
      * @return - SyncmlDocument object generated from the received payload
      */
-    public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) throws SyncmlMessageFormatException {
+    public static SyncmlDocument parseSyncmlPayload(Document syncmlPayload) {
         SyncmlDocument syncmlDocument = new SyncmlDocument();
         if (syncmlPayload.getElementsByTagName(SYNC_HEADER) == null) {
-            throw new SyncmlMessageFormatException();
+            throw new IllegalStateException();
         }
         NodeList syncHeaderList = syncmlPayload.getElementsByTagName(SYNC_HEADER);
         Node syncHeader = syncHeaderList.item(0);
         SyncmlHeader header = generateSyncmlHeader(syncHeader);
-
+        if (syncmlPayload.getElementsByTagName(SYNC_BODY) == null) {
+            throw new IllegalStateException();
+        }
         NodeList syncBodyList = syncmlPayload.getElementsByTagName(SYNC_BODY);
         Node syncBody = syncBodyList.item(0);
         SyncmlBody body = generateSyncmlBody(syncBody);
@@ -122,31 +122,31 @@ public class SyncmlParser {
 
                 if (SyncMLHeaderParameter.MSG_ID.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         messageID = node.getTextContent().trim();
                     }
                 } else if (SyncMLHeaderParameter.SESSION_ID.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         sessionID = node.getTextContent().trim();
                     }
                 } else if (SyncMLHeaderParameter.TARGET.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         target = generateTarget(node);
                     }
                 } else if (SyncMLHeaderParameter.SOURCE.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         source = generateSource(node);
                     }
                 } else if (SyncMLHeaderParameter.CRED.getValue().equals(nodeName)) {
                     if (node.getTextContent().trim() == null) {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     } else {
                         credential = generateCredential(node);
                     }
@@ -394,31 +394,33 @@ public class SyncmlParser {
         String childNodeName;
         String locUri;
         for (int x = 0; x < node.getChildNodes().getLength(); x++) {
-            if (node.getChildNodes().item(x).getNodeName() != null) {
+            Node itemNode;
+            itemNode = node.getChildNodes().item(x);
+            if (itemNode.getNodeName() != null) {
                 nodeName = node.getChildNodes().item(x).getNodeName();
             } else {
-                throw new IllegalFormatCodePointException(2);
+                throw new IllegalStateException();
             }
-            if (nodeName == PluginConstants.SyncML.SYNCML_SOURCE) {
-                if (node.getChildNodes().item(x).getChildNodes().item(x).getNodeName() != null) {
-                    childNodeName = node.getChildNodes().item(x).getChildNodes().item(x).getNodeName();
+            if (PluginConstants.SyncML.SYNCML_SOURCE.equals(nodeName)) {
+                if (itemNode.getChildNodes().item(x).getNodeName() != null) {
+                    childNodeName = itemNode.getChildNodes().item(x).getNodeName();
                 } else {
-                    throw new IllegalFormatCodePointException(2);
+                    throw new IllegalStateException();
                 }
-                if (childNodeName == PluginConstants.SyncML.SYNCML_LOCATION_URI) {
-                    if (node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim() != null) {
-                        locUri = node.getChildNodes().item(x).getChildNodes().item(x).getTextContent().trim();
+                if ((PluginConstants.SyncML.SYNCML_LOCATION_URI.equals(childNodeName))) {
+                    if (itemNode.getChildNodes().item(x).getTextContent().trim() != null) {
+                        locUri = itemNode.getChildNodes().item(x).getTextContent().trim();
                     } else {
-                        throw new IllegalFormatCodePointException(2);
+                        throw new IllegalStateException();
                     }
                     source.setLocURI(locUri);
                     item.setSource(source);
                 }
-            } else if (nodeName == PluginConstants.SyncML.SYNCML_DATA) {
-                if (node.getChildNodes().item(x).getTextContent().trim() != null) {
-                    data = node.getChildNodes().item(x).getTextContent().trim();
+            } else if (PluginConstants.SyncML.SYNCML_DATA.equals(nodeName)) {
+                if (itemNode.getTextContent().trim() != null) {
+                    data = itemNode.getTextContent().trim();
                 } else {
-                    throw new IllegalFormatCodePointException(2);
+                    throw new IllegalStateException();
                 }
                 item.setData(data);
             }

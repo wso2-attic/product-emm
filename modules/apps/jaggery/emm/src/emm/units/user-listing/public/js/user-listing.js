@@ -7,7 +7,6 @@ $(function () {
     $(sortableElem).sortable({
         beforeStop: function () {
             var sortedIDs = $(this).sortable('toArray');
-            console.log(sortedIDs);
         }
     });
     $(sortableElem).disableSelection();
@@ -215,14 +214,20 @@ function resetPassword(uname) {
  * when a user type on the search field on User Listing page in
  * WSO2 MDM Console then click on the search button.
  */
-
 $("#search-btn").click(function () {
     var searchQuery = $("#search-by-username").val();
     $("#ast-container").empty();
     loadUsers(searchQuery);
-
 });
 
+/**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    $(location).attr('href', $(this).data("url"));
+}
 
 function loadUsers(searchParam) {
     $("#loading-content").show();
@@ -234,7 +239,7 @@ function loadUsers(searchParam) {
             serviceURL = serviceURL + "/view-users?username=" + searchParam;
         }
         var successCallback = function (data) {
-            if (data) {
+            if (!data) {
                 $('#ast-container').addClass('hidden');
                 $('#user-listing-status-msg').text('No users are available to be displayed.');
                 return;
@@ -247,11 +252,10 @@ function loadUsers(searchParam) {
             viewModel.users = data;
             for (var i = 0; i < viewModel.users.length; i++) {
                 viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
-                if (!canRemove) {
+                if (canRemove) {
                     viewModel.users[i].canRemove = true;
                 }
-
-                if (!canEdit) {
+                if (canEdit) {
                     viewModel.users[i].canEdit = true;
                 }
             }
@@ -284,4 +288,8 @@ function loadUsers(searchParam) {
 
 $(document).ready(function () {
     loadUsers();
+
+    $(".viewEnabledIcon").click(function () {
+        InitiateViewOption();
+    });
 });

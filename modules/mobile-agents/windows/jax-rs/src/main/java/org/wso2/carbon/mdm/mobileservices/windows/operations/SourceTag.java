@@ -27,23 +27,23 @@ import org.w3c.dom.Element;
  */
 public class SourceTag {
 
-    private String LocURI;
-    private String LocName;
+    private String locURI;
+    private String locName;
 
     public String getLocURI() {
-        return LocURI;
+        return locURI;
     }
 
     public void setLocURI(String locURI) {
-        LocURI = locURI;
+        this.locURI = locURI;
     }
 
     public String getLocName() {
-        return LocName;
+        return locName;
     }
 
     public void setLocName(String locName) {
-        LocName = locName;
+        this.locName = locName;
     }
 
     public void buildSourceElement(Document doc, Element rootElement) {

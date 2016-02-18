@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 /**
  * Generate Error Messages for responses.
  */
@@ -23,7 +24,6 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 public class ErrorMessage {
 
     private String errorMessage;
-    private String errorCode;
 
     public String getErrorMessage() {
         return errorMessage;
@@ -33,7 +33,5 @@ public class ErrorMessage {
         this.errorMessage = errorMessage;
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
+
 }

@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.RequestData;
 import org.apache.ws.security.validate.Credential;
@@ -40,7 +38,6 @@ public class UsernameTokenValidator implements Validator {
     private static final int USER_SEGMENT = 0;
     private static final int DOMAIN_SEGMENT = 1;
     private static final String DELIMITER = "@";
-    private static Log log = LogFactory.getLog(UsernameTokenValidator.class);
 
     /**
      * This method validates the username token in SOAP message coming from the device.
@@ -65,20 +62,12 @@ public class UsernameTokenValidator implements Validator {
             if (authenticate(user, password, domain)) {
                 returnCredentials = credential;
             } else {
-                String msg = "Authentication failure due to incorrect credentials.";
-                log.error(msg);
-                throw new WindowsDeviceEnrolmentException(msg);
+                throw new WindowsDeviceEnrolmentException("Authentication failure due to incorrect credentials.");
             }
-            //Generic exception is caught here as there is no need of taking different actions for
-            //different exceptions.
         } catch (AuthenticationException e) {
-            String msg = "Failure occurred in the BST validator.";
-            log.error(msg, e);
-            throw new WSSecurityException(msg, e);
+            throw new WSSecurityException("Failure occurred in the BST validator.", e);
         } catch (WindowsDeviceEnrolmentException e) {
-            String msg = "Authentication Failure occurred due to binary security token.";
-            log.error(msg, e);
-            throw new WSSecurityException(msg, e);
+            throw new WSSecurityException("Authentication Failure occurred due to binary security token.", e);
         }
         return returnCredentials;
     }
@@ -103,30 +92,21 @@ public class UsernameTokenValidator implements Validator {
             RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
 
             if (realmService == null) {
-                String msg = "RealmService not initialized.";
-                log.error(msg);
-                throw new AuthenticationException(msg);
+                throw new AuthenticationException("RealmService not initialized.");
             }
-
             int tenantId;
             if (tenantDomain == null || tenantDomain.trim().isEmpty()) {
                 tenantId = MultitenantConstants.SUPER_TENANT_ID;
             } else {
                 tenantId = realmService.getTenantManager().getTenantId(tenantDomain);
             }
-
             if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-                String msg = "Invalid tenant domain " + tenantDomain;
-                log.error(msg);
-                throw new AuthenticationException(msg);
+                throw new AuthenticationException("Invalid tenant domain " + tenantDomain);
             }
             UserRealm userRealm = realmService.getTenantUserRealm(tenantId);
-
             return userRealm.getUserStoreManager().authenticate(username, password);
         } catch (UserStoreException e) {
-            String msg = "User store is not initialized.";
-            log.error(msg, e);
-            throw new AuthenticationException(msg, e);
+            throw new AuthenticationException("User store is not initialized.", e);
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }

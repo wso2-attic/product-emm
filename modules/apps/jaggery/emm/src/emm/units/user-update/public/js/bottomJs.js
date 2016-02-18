@@ -10,6 +10,23 @@ function inputIsValid(regExp, inputString) {
     return regExp.test(inputString);
 }
 
+//holds the list of inline validation methods
+var validateInline = {};
+/**
+ * Checks if provided email address is valid against
+ * the email format.
+ */
+validateInline["emailAddress"] = function () {
+    var email = $("#emailAddress").val();
+    if (emailIsValid(email)) {
+        $("#emailValidationText").removeClass("inline-warning");
+        $("#emailValidationText").hide();
+    } else {
+        $("#emailValidationText").addClass("inline-warning");
+        $("#emailValidationText").show();
+    }
+};
+
 /**
  * Checks if an email address has the valid format or not.
  *
@@ -22,6 +39,7 @@ function emailIsValid(email) {
 }
 
 $(document).ready(function () {
+    $("#emailValidationText").hide();
     $("select.select2[multiple=multiple]").select2({
         tags: false
     });
@@ -49,9 +67,6 @@ $(document).ready(function () {
         var errorMsg = "#user-create-error-msg span";
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
-            $(errorMsgWrapper).removeClass("hidden");
-        } else if (username.length > charLimit || username.length < 3) {
-            $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
             $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(usernameInput.data("regex"), username)) {
             $(errorMsg).text(usernameInput.data("errormsg"));
@@ -117,5 +132,13 @@ $(document).ready(function () {
                 }
             );
         }
+    });
+
+    $("#emailAddress").focus(function() {
+        $("#emailValidationText").hide();
+    });
+
+    $("#emailAddress").blur(function() {
+        validateInline["emailAddress"]();
     });
 });
