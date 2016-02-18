@@ -113,7 +113,6 @@ function loadNotifications() {
                                   "<p>You have no new notifications</p></li>";
                     $(".sidebar-messages").html(content);
                 }
-
             };
             invokerUtil.get(serviceURL, successCallback, function (message) {
                 var content = "<li class='message message-danger'><h4><i class='icon fw fw-error'></i>Warning</h4>" +

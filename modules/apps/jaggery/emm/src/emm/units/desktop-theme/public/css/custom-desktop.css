@@ -115,14 +115,13 @@ body {
 
 body > .page-content-wrapper > .container,
 body > .page-content-wrapper > .container-fluid {
-  padding: 20px 20px 60px;
+  padding: 10px 10px 30px;
   margin: 0;
 }
 
 @media only screen and (min-width: 768px) {
   body > .page-content-wrapper > .container,
   body > .page-content-wrapper > .container-fluid {
-    padding: 3% 4% 4%;
     margin: 0;
   }
 }

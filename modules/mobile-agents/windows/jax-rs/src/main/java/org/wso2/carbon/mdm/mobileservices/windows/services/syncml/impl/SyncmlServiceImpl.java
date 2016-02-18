@@ -345,13 +345,9 @@ public class SyncmlServiceImpl implements SyncmlService {
                 }
             }
         } catch (DeviceManagementException e) {
-            String msg = "Failure occurred in enrolling device.";
-            log.error(msg, e);
-            throw new WindowsDeviceEnrolmentException(msg, e);
+            throw new WindowsDeviceEnrolmentException("Failure occurred while enrolling device.", e);
         } catch (PolicyManagementException e) {
-            String msg = "Error occurred while getting effective policy.";
-            log.error(msg, e);
-            throw new WindowsOperationException(msg, e);
+            throw new WindowsOperationException("Error occurred while getting effective policy.", e);
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }

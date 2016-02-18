@@ -7,7 +7,6 @@ $(function () {
     $(sortableElem).sortable({
         beforeStop: function () {
             var sortedIDs = $(this).sortable('toArray');
-            console.log(sortedIDs);
         }
     });
     $(sortableElem).disableSelection();
@@ -152,6 +151,15 @@ $("#search-btn").click(function () {
     loadUsers(searchQuery);
 });
 
+/**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    $(location).attr('href', $(this).data("url"));
+}
+
 function loadUsers(searchParam) {
     $("#loading-content").show();
     var userListing = $("#user-listing");
@@ -175,11 +183,10 @@ function loadUsers(searchParam) {
             viewModel.users = data;
             for (var i = 0; i < viewModel.users.length; i++) {
                 viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
-                if (!canRemove) {
+                if (canRemove) {
                     viewModel.users[i].canRemove = true;
                 }
-
-                if (!canEdit) {
+                if (canEdit) {
                     viewModel.users[i].canEdit = true;
                 }
             }
@@ -212,4 +219,8 @@ function loadUsers(searchParam) {
 
 $(document).ready(function () {
     loadUsers();
+
+    $(".viewEnabledIcon").click(function () {
+        InitiateViewOption();
+    });
 });
