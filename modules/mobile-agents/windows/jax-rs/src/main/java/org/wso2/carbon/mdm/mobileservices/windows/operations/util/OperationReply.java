@@ -292,15 +292,15 @@ public class OperationReply {
             }
         }
         if (!replaceItems.isEmpty()) {
-            replaceElement.setCommandId(300);
+            replaceElement.setCommandId(Constants.SyncmlMessageCodes.replaceCommandId);
             replaceElement.setItems(replaceItems);
         }
         if (!getElements.isEmpty()) {
-            getElement.setCommandId(75);
+            getElement.setCommandId(Constants.SyncmlMessageCodes.elementCommandId);
             getElement.setItems(getElements);
         }
         if (!addElements.isEmpty()) {
-            atomicTagElement.setCommandId(400);
+            atomicTagElement.setCommandId(Constants.SyncmlMessageCodes.atomicCommandId);
             atomicTagElement.setAdds(addElements);
         }
         syncmlBody.setGet(getElement);
@@ -670,7 +670,7 @@ public class OperationReply {
         item.setMeta(meta);
         item.setData(attempt);
         itemList.add(item);
-        add.setCommandId(90);
+        add.setCommandId(Constants.SyncmlMessageCodes.addCommandId);
         add.setItems(itemList);
         return add;
     }

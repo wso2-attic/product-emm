@@ -50,14 +50,15 @@ if (platform != "iOS") {
         }
         apiWrapperUtil.setupAccessTokenPair("password", {"username": fullyQualifiedUsername, "password": password});
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
-        if (tokenPair != null && tokenPair != undefined && tokenPair.accessToken != null) {
-
+        if (tokenPair != tokenPair.accessToken) {
             var authUrl = mdmProps["iOSConfigRoot"] + "authenticate";
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.open("POST", authUrl);
             xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
-            xmlHttpRequest.send(stringify({"username": username, "password": password, "ownership": ownership,
-            "tenantDomain": domain}));
+            xmlHttpRequest.send(stringify({
+                "username": username, "password": password, "ownership": ownership,
+                "tenantDomain": domain
+            }));
 
             if (xmlHttpRequest.status == 200 && xmlHttpRequest.readyState == 4) {
                 var responseContent = parse(xmlHttpRequest.responseText);

@@ -22,7 +22,6 @@ package org.wso2.carbon.mdm.mobileservices.windows.operations.util;
  * Constant values used in syncml generator.
  */
 public class Constants {
-
     public static final String PROVIDER_ID = "MobiCDMServer";
     public static final String SERVER_SECRET = "dummy";
     public static final String INITIAL_NONCE = "ZHVtbXk=";
@@ -93,4 +92,13 @@ public class Constants {
         public static final String NEGATIVE_CSP_DATA = "0";
     }
 
+    /**
+     * SyncmML message related constants.
+     */
+    public final class SyncmlMessageCodes {
+        public static final int replaceCommandId = 300;
+        public static final int elementCommandId = 75;
+        public static final int atomicCommandId = 400;
+        public static final int addCommandId = 90;
+    }
 }
