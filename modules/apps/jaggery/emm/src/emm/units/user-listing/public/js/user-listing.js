@@ -148,13 +148,13 @@ function removeUser(uname, uid) {
 function resetPassword(uname) {
     var username = uname;
 
-    $(modalPopupContent).html($('#change-password-admin-window').html());
+    $(modalPopupContent).html($('#reset-password-window').html());
     showPopup();
 
-    $("a#change-password-yes-link").click(function () {
+    $("a#reset-password-yes-link").click(function () {
         var newPassword = $("#new-password").val();
         var confirmedPassword = $("#confirmed-password").val();
-        var user = $("#user").val();
+        var user = uname;
 
         var errorMsgWrapper = "#notification-error-msg";
         var errorMsg = "#notification-error-msg span";
@@ -175,7 +175,7 @@ function resetPassword(uname) {
             changePasswordFormData.username = user;
             changePasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
-            var changePasswordAPI = "/mdm-admin/users/reset-password-admin";
+            var changePasswordAPI = "/mdm-admin/users/reset-password";
 
             invokerUtil.post(
                 changePasswordAPI,
@@ -183,8 +183,8 @@ function resetPassword(uname) {
                 function (data) {
                     data = JSON.parse(data);
                     if (data.statusCode == 201) {
-                        $(modalPopupContent).html($('#change-password-success-content').html());
-                        $("a#change-password-success-link").click(function () {
+                        $(modalPopupContent).html($('#reset-password-success-content').html());
+                        $("a#reset-password-success-link").click(function () {
                             hidePopup();
                         });
                     } else if (data.statusCode == 400) {
@@ -204,7 +204,7 @@ function resetPassword(uname) {
         }
     });
 
-    $("a#change-password-cancel-link").click(function () {
+    $("a#reset-password-cancel-link").click(function () {
         hidePopup();
     });
 }
@@ -246,6 +246,7 @@ function loadUsers(searchParam) {
             }
             var canRemove = $("#can-remove").val();
             var canEdit = $("#can-edit").val();
+            var canResetPassword = $("#can-reset-password").val();
             data = JSON.parse(data);
             data = data.responseContent;
             var viewModel = {};
@@ -256,6 +257,9 @@ function loadUsers(searchParam) {
                     viewModel.users[i].canRemove = true;
                 }
                 if (canEdit) {
+                    viewModel.users[i].canEdit = true;
+                }
+                if (canResetPassword) {
                     viewModel.users[i].canEdit = true;
                 }
             }

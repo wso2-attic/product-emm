@@ -757,7 +757,7 @@ public class User {
      * @throws MDMAPIException
      */
     @POST
-    @Path("reset-password")
+    @Path("change-password")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response resetPassword(UserCredentialWrapper credentials) throws MDMAPIException {
@@ -793,7 +793,7 @@ public class User {
      * @throws MDMAPIException
      */
     @POST
-    @Path("reset-password-admin")
+    @Path("reset-password")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response resetPasswordByAdmin(UserCredentialWrapper credentials) throws MDMAPIException {

@@ -48,7 +48,7 @@ $(document).ready(function () {
                 changePasswordFormData.oldPassword = window.btoa(unescape(encodeURIComponent(oldPassword)));
                 changePasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
-                var changePasswordAPI = "/mdm-admin/users/reset-password";
+                var changePasswordAPI = "/mdm-admin/users/change-password";
 
                 invokerUtil.post(
                     changePasswordAPI,

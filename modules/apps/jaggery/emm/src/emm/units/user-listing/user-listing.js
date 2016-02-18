@@ -9,5 +9,9 @@ function onRequest(context) {
         context["editPermitted"] = true;
     }
 
+    if(userModule.isAuthorized("/permission/admin/device-mgt/users/reset-password")){
+        context["resetPasswordPermitted"] = true;
+    }
+
     return context;
 }

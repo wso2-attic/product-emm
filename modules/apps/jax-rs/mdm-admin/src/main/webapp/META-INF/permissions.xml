@@ -285,6 +285,13 @@
     </Permission>
     <Permission>
         <name>Change user password</name>
+        <path>/device-mgt/users/change-password</path>
+        <url>/users/change-password</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Reset user password by admin</name>
         <path>/device-mgt/users/reset-password</path>
         <url>/users/reset-password</url>
         <method>POST</method>
