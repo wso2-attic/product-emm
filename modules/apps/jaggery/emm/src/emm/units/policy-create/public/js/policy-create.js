@@ -1646,9 +1646,7 @@ stepBackFrom["policy-profile"] = function () {
     $(".wr-advance-operations").html(
         "<div class='wr-advance-operations-init'>" +
         "<br>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
         "<i class='fw fw-settings fw-spin fw-2x'></i>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;" +
         "Loading Platform Features . . ." +
         "<br>" +
         "<br>" +
