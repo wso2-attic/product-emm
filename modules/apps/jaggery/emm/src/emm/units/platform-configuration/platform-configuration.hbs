@@ -16,35 +16,46 @@
                                 </span>
                                 General Configurations
                             </a>
-                            {{#each types}}
-                                {{#equal name "android"}}
+                            <div id="supportedPlatforms" class="hidden"
+                                {{#each types}}
+                                    {{#equal name "android"}} data-android-id={{id}}
+                                         data-android="true"
+                                    {{/equal}}
+                                    {{#equal name "ios"}} data-ios-id={{id}}
+                                         data-ios="true"
+                                    {{/equal}}
+                                    {{#equal name "windows"}}
+                                 data-windows="true" data-windows-id={{id}}
+                                    {{/equal}}
+                                {{/each}}
+                                    ></div>
                                     <a id="androidConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('android', this)">
                                         <span class="wr-hidden-operations-icon fw-stack">
                                             <i class="fw fw-android fw-stack-2x"></i>
                                         </span>
                                         Android Configurations
                                     </a>
-                                {{/equal}}
-                                {{#equal name "ios"}}
                                     <a id="iosConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('ios', this)">
                                         <span class="wr-hidden-operations-icon fw-stack">
                                             <i class="fw fw-apple fw-stack-2x"></i>
                                         </span>
                                         iOS Configurations
                                     </a>
-                                {{/equal}}
-                                {{#equal name "windows"}}
                                     <a id="windowsConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('windows', this)">
                                         <span class="wr-hidden-operations-icon fw-stack">
                                             <i class="fw fw-windows fw-stack-2x"></i>
                                         </span>
                                         Windows Configurations
                                     </a>
-                                {{/equal}}
-                            {{/each}}
                         </div>
 
                         <div class="wr-hidden-operations-content col-lg-8">
+                            <!-- error -->
+                            <div data-operation="error" class="wr-hidden-operation alert alert-danger" role="alert">
+                                <div id="platform-config-main-error-msg" class="panel panel-default">
+                                    <i class="icon fw fw-error"></i><span></span>
+                                </div>
+                            </div>
                             <!-- general -->
                             <div class="wr-hidden-operation" data-operation="general" style="display: block">
                                 <div class="panel panel-default">

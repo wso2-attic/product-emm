@@ -6,8 +6,9 @@
             <div id="role-create-form" class="container col-centered wr-content">
                 <div class="wr-form">
                     <p class="page-sub-title">Change Role permissions</p>
+
                     <p>Please note that * sign represents required fields of data.</p>
-                    <hr />
+                    <hr/>
                     <div class="row">
                         <div class="col-lg-8">
                             <div id="role-create-error-msg" class="alert alert-danger hidden" role="alert">
@@ -32,7 +33,7 @@
                     <p class="page-sub-title">Permissions were assigned to the role successfully.</p>
                     <br>Please click <b>"Add Another Role"</b>, if you wish to add another role or click
                     <b>"View Role List"</b> to complete the process and go back to the role list.
-                    <hr />
+                    <hr/>
                     <button class="wr-btn" onclick="window.location.href='/emm/roles'">View Role List</button>
                     <a href="/emm/roles/add-role" class="cu-btn-inner">
                         <span class="fw-stack">
@@ -44,27 +45,30 @@
                 </div>
             </div>
             <div id="child-deselect-error-content" class="hide">
-                                <div class="content">
-                                    <div class="row">
-                                        <div class="col-lg-5 col-md-6 col-centered">
-                                            <h3>Can't deselect child permissions when parent permission is selected.</h3>
-                                            <div class="buttons">
-                                                <a href="#" id="child-deselect-error-link" class="btn-operations">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                         </div>
+                <div class="content">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-6 col-centered">
+                            <h3>Can't deselect child permissions when parent permission is selected.</h3>
+
+                            <div class="buttons">
+                                <a href="#" id="child-deselect-error-link" class="btn-operations">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- /content -->
         </div>
     </div>
     <!-- /content/body -->
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script id="list-partial" src="{{self.publicURL}}/templates/list-partial.hbs" type="text/x-handlebars-template" ></script>
-    <script id="tree-template" src="{{self.publicURL}}/templates/tree-template.hbs" type="text/x-handlebars-template" ></script>
+    <script id="list-partial" src="{{self.publicURL}}/templates/list-partial.hbs"
+            type="text/x-handlebars-template"></script>
+    <script id="tree-template" src="{{self.publicURL}}/templates/tree-template.hbs"
+            type="text/x-handlebars-template"></script>
     <script src="{{self.publicURL}}/js/bottomJs.js"></script>
 {{/zone}}
 
