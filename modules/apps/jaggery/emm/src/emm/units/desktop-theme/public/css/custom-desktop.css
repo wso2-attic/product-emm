@@ -4038,10 +4038,11 @@ a.btn-operations {
     font-size: 13px;
     color: #fff;
     background: #11375B;
-    padding: 10px 10px;
+    padding: 10px 24px;
     display: inline-block;
     margin-right: 2px;
     text-decoration: none;
+    margin-right:10px;
 }
 
 /* modal pop-up styles */
