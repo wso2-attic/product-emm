@@ -48,6 +48,20 @@
                     </a>
                 {{/if}}
             {{/unequal}}
+
+            {{#unequal "admin" username }}
+                {{#if canRemove}}
+                    <a href="#" data-username="{{username}}" data-userid="{{userid}}"
+                       data-click-event="edit-form" onclick="javascript:resetPassword('{{username}}')"
+                       class="btn padding-reduce-on-grid-view remove-user-link">
+                                <span class="fw-stack">
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                    <i class="fw fw-delete fw-stack-1x"></i>
+                                </span>
+                        <span class="hidden-xs hidden-on-grid-view">Remove</span>
+                    </a>
+                {{/if}}
+            {{/unequal}}
         </td>
     </tr>
 {{/each}}
