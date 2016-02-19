@@ -33,23 +33,23 @@ public class OAuthValidatorFactory {
 
     private static Properties authenticatorProperties;
 
-    public static OAuth2TokenValidator getValidator() throws IllegalArgumentException {
+    public static OAuth2TokenValidator getValidator() {
         Properties authenticatorProperties = getAuthenticatorProperties();
         boolean isRemote = Boolean.parseBoolean(authenticatorProperties.getProperty("IsRemote"));
         if (isRemote) {
             String url = authenticatorProperties.getProperty("TokenValidationEndpointUrl");
             if ((url == null) || (url.isEmpty())) {
-                throw new IllegalArgumentException("OAuth token validation endpoint url is not provided");
+                throw new IllegalStateException("OAuth token validation endpoint url is not provided");
             }
             String adminUsername = authenticatorProperties.getProperty("Username");
             if (adminUsername == null) {
-                throw new IllegalArgumentException("Username to connect to the OAuth token validation endpoint " +
+                throw new IllegalStateException("Username to connect to the OAuth token validation endpoint " +
                         "is not provided");
             }
 
             String adminPassword = authenticatorProperties.getProperty("Password");
             if (adminPassword == null) {
-                throw new IllegalArgumentException("Password to connect to the OAuth token validation endpoint " +
+                throw new IllegalStateException("Password to connect to the OAuth token validation endpoint " +
                         "is not provided");
             }
 
@@ -60,7 +60,7 @@ public class OAuthValidatorFactory {
                 url = url + "/services/OAuth2TokenValidationService.OAuth2TokenValidationServiceHttpsSoap12Endpoint/";
                 return new RemoteOAuthValidator(url, adminUsername, adminPassword, validatorProperties);
             }
-            throw new IllegalArgumentException("Remote server host can't be empty in OAuthAuthenticator configuration.");
+            throw new IllegalStateException("Remote server host can't be empty in OAuthAuthenticator configuration.");
         }
         return new LocalOAuthValidator();
     }
