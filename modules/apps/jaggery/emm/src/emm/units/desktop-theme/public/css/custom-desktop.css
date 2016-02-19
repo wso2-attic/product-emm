@@ -3338,7 +3338,13 @@ a.ast-type-item:hover {
     border: none;
     text-decoration: none;
 }
-
+@media all and (max-width:480px) {
+   .wr-btn, a.wr-btn {
+    width: 100%; display:block;
+    margin:0px;
+    margin-bottom:4px;
+   }
+}
 .wr-btn:disabled, a.wr-btn:disabled {
    opacity: 0.5;
 }
