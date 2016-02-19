@@ -39,6 +39,12 @@ public class CredentialManagementResponseBuilder {
 
     private ResponsePayload responsePayload;
 
+    /**
+     * Builds the response to change the password of a user
+     * @param credentials - User credentials
+     * @return Response Object
+     * @throws MDMAPIException
+     */
     public static Response buildChangePasswordResponse(UserCredentialWrapper credentials) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
@@ -66,6 +72,12 @@ public class CredentialManagementResponseBuilder {
 
     }
 
+    /**
+     * Builds the response to reset the password of a user
+     * @param credentials - User credentials
+     * @return Response Object
+     * @throws MDMAPIException
+     */
     public static Response buildResetPasswordResponse(UserCredentialWrapper credentials) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
         ResponsePayload responsePayload = new ResponsePayload();
