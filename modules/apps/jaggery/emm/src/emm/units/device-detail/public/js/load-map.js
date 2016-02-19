@@ -22,8 +22,8 @@ $('a[data-toggle="tab"]').on("shown.bs.tab", function() {
 });
 
 function loadLeafletMap(){
-    var lat     = , //$("#device-location").data("lat"),
-        long    = 4, //$("#device-location").data("long"),
+    var lat     = $("#device-location").data("lat"),
+        long    = $("#device-location").data("long"),
         container = 'device-location',
         zoomLevel = 13,
         tileSet = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
