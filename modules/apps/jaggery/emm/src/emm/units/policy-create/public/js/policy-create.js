@@ -303,9 +303,21 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+            if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1){
+                operation = androidOperationConstants["APPLICATION_OPERATION"];
+
+                continueToCheckNextInputs = true;
+
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+
+            }
         }
-    }
-    if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
+    }if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
         if (configuredOperations.length == 0) {
             // updating validationStatus
             validationStatus = {
@@ -2178,6 +2190,25 @@ $(document).ready(function () {
                 );
             }
         }
+    });
+
+    $(advanceOperations).on("click", ".wr-input-control.switch", function (event) {
+        $(".dropdown-menu li a").on("click", function(){
+            var selText = $(this).text();
+            $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+            $("#app-list-add-widget").removeClass("hidden");
+        });
+        $( '#searchable-container' ).searchable({
+            searchField: '#container-search',
+            selector: '.row',
+            childSelector: '.col-xs-4',
+            show: function( elem ) {
+                elem.slideDown(100);
+            },
+            hide: function( elem ) {
+                elem.slideUp( 100 );
+            }
+        });
     });
 
     // adding support for cloning multiple profiles per feature with cloneable class definitions

@@ -43,7 +43,7 @@ var operationModule = function () {
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
-        "APPLICATION_OPERATION_CODE":"APP_RESTRICTION"
+        "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
     };
 
     // Constants to define Windows Operation Constants

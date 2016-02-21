@@ -2,6 +2,7 @@ package org.wso2.emm.agent;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -38,14 +39,35 @@ public class AppLockActivity extends SherlockActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startHomescreen=new Intent(Intent.ACTION_MAIN);
-                startHomescreen.addCategory(Intent.CATEGORY_HOME);
-                startHomescreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(startHomescreen);
-                AppLockActivity.this.finish();
+                loadHomeScreen();
             }
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        loadHomeScreen();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            loadHomeScreen();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_HOME) {
+            loadHomeScreen();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void loadHomeScreen() {
+        Intent i = new Intent();
+        i.setAction(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        this.startActivity(i);
+        AppLockActivity.this.finish();
     }
 }
