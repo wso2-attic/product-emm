@@ -146,7 +146,6 @@ function removeUser(uname, uid) {
  * on User Listing page in WSO2 MDM Console.
  */
 function resetPassword(uname) {
-    var username = uname;
 
     $(modalPopupContent).html($('#reset-password-window').html());
     showPopup();

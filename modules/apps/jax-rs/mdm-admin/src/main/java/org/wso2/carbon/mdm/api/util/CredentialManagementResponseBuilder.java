@@ -59,13 +59,13 @@ public class CredentialManagementResponseBuilder {
                     " was successfully changed.");
             return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
         } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to change the password by username: " + credentials.getUsername();
-            log.error(errorMsg, e);
+            log.error(e.getMessage(), e);
             responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
             responsePayload.setMessageFromServer("Old password does not match.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
         } catch (UnsupportedEncodingException e) {
-            String errorMsg = "Exception in trying to change the password by username: " + credentials.getUsername();
+            String errorMsg = "Could not change the password of the user: " + credentials.getUsername() +
+                    ". The Character Encoding is not supported.";
             log.error(errorMsg, e);
             throw new MDMAPIException(errorMsg, e);
         }
@@ -90,13 +90,13 @@ public class CredentialManagementResponseBuilder {
                     " was successfully changed.");
             return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
         } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to change the password by username: " + credentials.getUsername();
-            log.error(errorMsg, e);
+            log.error(e.getMessage(), e);
             responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
             responsePayload.setMessageFromServer("Could not change the password.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
         } catch (UnsupportedEncodingException e) {
-            String errorMsg = "Exception in trying to change the password by username: " + credentials.getUsername();
+            String errorMsg = "Could not change the password of the user: " + credentials.getUsername() +
+                    ". The Character Encoding is not supported.";
             log.error(errorMsg, e);
             throw new MDMAPIException(errorMsg, e);
         }
