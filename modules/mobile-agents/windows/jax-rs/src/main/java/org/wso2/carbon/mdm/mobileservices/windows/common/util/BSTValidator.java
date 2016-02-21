@@ -19,8 +19,6 @@
 package org.wso2.carbon.mdm.mobileservices.windows.common.util;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.RequestData;
 import org.apache.ws.security.message.token.BinarySecurity;
@@ -36,31 +34,25 @@ import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.OAuthTokenVa
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 /**
  * Validator class for user authentication checking the default carbon user store.
  */
 public class BSTValidator implements Validator {
 
-    private static Log log = LogFactory.getLog(BSTValidator.class);
-    private static final String BEARER_TOKEN_TYPE = "bearer";
-    private static final String RESOURCE_KEY = "resource";
-    private static final Pattern PATTERN = Pattern.compile("[B|b]earer\\s");
-
     /**
      * This method validates the binary security token in SOAP message coming from the device.
      *
-     * @param credential  - binary security token credential object
-     * @param requestData - Request data associated with the request
-     * @return - Credential object if authentication is success, or null if not success
+     * @param credential  - binary security token credential object.
+     * @param requestData - Request data associated with the request.
+     * @return - Credential object if authentication is success, or null if not success.
      * @throws WSSecurityException
      */
     @Override
     public Credential validate(Credential credential, RequestData requestData) throws WSSecurityException {
         String bearerToken;
         String requestedUri;
-        Credential returnCredentials = null;
+        Credential userCredentials;
 
         HashMap msgContext = (HashMap) requestData.getMsgContext();
         requestedUri = msgContext.get(PluginConstants.CXF_REQUEST_URI).toString();
@@ -71,59 +63,55 @@ public class BSTValidator implements Validator {
         AuthenticationInfo authenticationInfo;
         try {
             authenticationInfo = validateRequest(requestedUri, bearerToken);
-            PrivilegedCarbonContext.startTenantFlow();
-            PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            privilegedCarbonContext.setTenantId(authenticationInfo.getTenantId());
-            privilegedCarbonContext.setTenantDomain(authenticationInfo.getTenantDomain());
-            privilegedCarbonContext.setUsername(authenticationInfo.getUsername());
+            WindowsAPIUtils.startTenantFlow(authenticationInfo);
 
-            if (authenticate(binarySecurityToken)) {
-                returnCredentials = credential;
+            if (authenticate(binarySecurityToken, authenticationInfo)) {
+                userCredentials = credential;
             } else {
-                String msg = "Authentication failure due to invalid binary security token.";
-                log.error(msg);
-                throw new WindowsDeviceEnrolmentException(msg);
+                throw new WindowsDeviceEnrolmentException(
+                        "Authentication failure due to invalid binary security token.");
             }
         } catch (AuthenticationException e) {
-            String msg = "Failure occurred in the BST validator.";
-            log.error(msg, e);
-            throw new WSSecurityException(msg, e);
+            throw new WSSecurityException("Failure occurred in the BST validator.", e);
         } catch (WindowsDeviceEnrolmentException e) {
-            String msg = "Authentication Failure occurred due to binary security token.";
-            log.error(msg, e);
-            throw new WSSecurityException(msg, e);
+            throw new WSSecurityException("Authentication failure occurred due to binary security token.", e);
         } catch (OAuthTokenValidationException e) {
-            String msg = "Failed to authenticate the incoming request due to oauth token validation error.";
-            log.error(msg, e);
-            throw new WSSecurityException(msg, e);
+            throw new WSSecurityException(
+                    "Failed to authenticate the incoming request due to oauth token validation error.", e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
         }
-        return returnCredentials;
+        return userCredentials;
     }
 
     /**
-     * This method authenticates the user checking the binary security token in the user store.
+     * This method authenticates the client who comes with binary security token.
      *
-     * @param binarySecurityToken - Binary security token received in the SOAP message header
-     * @return - Authentication status
+     * @param binarySecurityToken - Binary security token received in the SOAP message header.
+     * @return - Authentication status.
      * @throws AuthenticationException
      */
-    public boolean authenticate(String binarySecurityToken) throws
+    private boolean authenticate(String binarySecurityToken, AuthenticationInfo authenticationInfo) throws
             AuthenticationException {
-
-        CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(binarySecurityToken);
-        String username = cacheentry.getUsername();
-        return username != null;
+        WindowsAPIUtils.startTenantFlow(authenticationInfo);
+        if (DeviceUtil.getCacheEntry(binarySecurityToken) != null) {
+            CacheEntry cacheentry = (CacheEntry) DeviceUtil.getCacheEntry(binarySecurityToken);
+            String username = cacheentry.getUsername();
+            return username != null;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Validate SOAP request token.
      *
-     * @param requestedUri-              Requested endpoint URI.
-     * @param binarySecurityToken-Binary security token comes from the soap request message.
+     * @param requestedUri        -Requested endpoint URI.
+     * @param binarySecurityToken -Binary security token comes from the soap request message.
      * @return returns authorized user information.
      * @throws WindowsDeviceEnrolmentException
      */
-    public AuthenticationInfo validateRequest(String requestedUri, String binarySecurityToken)
+    private AuthenticationInfo validateRequest(String requestedUri, String binarySecurityToken)
             throws WindowsDeviceEnrolmentException, OAuthTokenValidationException {
 
         AuthenticationInfo authenticationInfo = new AuthenticationInfo();
@@ -142,9 +130,8 @@ public class BSTValidator implements Validator {
                 authenticationInfo.setMessage(oAuthValidationResponse.getErrorMsg());
             }
         } catch (DeviceManagementException e) {
-            String msg = "Authentication failure due to invalid binary security token.";
-            log.error(msg, e);
-            throw new WindowsDeviceEnrolmentException(msg, e);
+            throw new WindowsDeviceEnrolmentException(
+                    "Authentication failure due to invalid binary security token.", e);
         }
         return authenticationInfo;
     }

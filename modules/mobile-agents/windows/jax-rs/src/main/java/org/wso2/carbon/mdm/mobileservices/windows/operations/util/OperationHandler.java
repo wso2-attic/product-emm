@@ -24,14 +24,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.FeatureManagementException;
 import org.wso2.carbon.device.mgt.common.notification.mgt.Notification;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.PluginConstants;
-import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils;
 import org.wso2.carbon.mdm.mobileservices.windows.operations.*;
 import org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans.Profile;
@@ -46,11 +44,10 @@ import java.util.List;
 import static org.wso2.carbon.mdm.mobileservices.windows.common.util.WindowsAPIUtils.convertToDeviceIdentifierObject;
 
 /**
- * Class contains Operation related utilities.
+ * This class is used to handle pending operations of the device.
  */
-public class OperationUtils {
-    private static Log log = LogFactory.getLog(OperationUtils.class);
-    List<? extends Operation> pendingDataOperations;
+public class OperationHandler {
+    private static Log log = LogFactory.getLog(OperationHandler.class);
 
 
     /**
@@ -60,43 +57,46 @@ public class OperationUtils {
      * @param syncmlDocument   syncml payload for operation status which parse through  the syncml engine.
      * @param deviceIdentifier specific device identifier for each device.
      * @throws OperationManagementException
-     * @throws DeviceManagementException
      */
     public void updateDeviceOperations(StatusTag status, SyncmlDocument syncmlDocument,
-                                       DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException, NotificationManagementException,
-            WindowsOperationException {
+                                       DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+        List<? extends Operation> pendingDataOperations;
+        try {
+            pendingDataOperations = WindowsAPIUtils.getPendingOperations(deviceIdentifier);
 
-        pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
-                .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-        if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()) || (Constants.SyncMLResponseCodes.
-                ACCEPTED_FOR_PROCESSING.equals(status.getData()))) {
-            for (Operation operation : pendingDataOperations) {
-                if (operation.getId() == status.getCommandReference()) {
-                    operation.setStatus(Operation.Status.COMPLETED);
+            if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()) ||
+                    (Constants.SyncMLResponseCodes.ACCEPTED_FOR_PROCESSING.equals(status.getData()))) {
+                for (Operation operation : pendingDataOperations) {
+                    if (operation.getId() == status.getCommandReference()) {
+                        operation.setStatus(Operation.Status.COMPLETED);
+                    }
                 }
-            }
-            updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
-        } else if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
-            for (Operation operation : pendingDataOperations) {
-                if (operation.getId() == status.getCommandReference() && (OperationCode.Command.DEVICE_LOCK.equals(
-                        operation.getCode()))) {
-                    operation.setStatus(Operation.Status.ERROR);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
-                    try {
+                if (syncmlDocument.getHeader().getSource().getLocURI() != null) {
+                    updateStatus(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
+                }
+            } else if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
+                for (Operation operation : pendingDataOperations) {
+                    if (operation.getId() == status.getCommandReference() && (OperationCode.Command.DEVICE_LOCK.equals(
+                            operation.getCode()))) {
+                        operation.setStatus(Operation.Status.ERROR);
+                        if (syncmlDocument.getHeader().getSource().getLocURI() != null) {
+                            updateStatus(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
+                        }
                         NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
                         lockResetNotification.setDescription(
-                                Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
+                                Constants.SyncMLResponseCodes.LOCK_RESET_NOTIFICATION);
                         nmService.addNotification(lockResetNotification);
-                    } catch (NotificationManagementException e) {
-                        throw new WindowsOperationException("Failure occurred in getting notification service", e);
                     }
                 }
             }
+        } catch (DeviceManagementException e) {
+            throw new OperationManagementException("Error occurred in getting pending operations.");
+        } catch (NotificationManagementException e) {
+            throw new OperationManagementException("Error occurred while adding notification", e);
         }
     }
 
@@ -107,10 +107,8 @@ public class OperationUtils {
      * @param operations operation list to be update.
      * @throws OperationManagementException
      */
-    public void updateOperations(String deviceId,
-                                 List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations)
+    public static void updateStatus(String deviceId, List<? extends Operation> operations)
             throws OperationManagementException {
-
         for (Operation operation : operations) {
             WindowsAPIUtils.updateOperation(deviceId, operation);
             if (log.isDebugEnabled()) {
@@ -126,48 +124,44 @@ public class OperationUtils {
      * @param syncmlDocument   parsed syncml payload.
      * @param deviceIdentifier Device Id.
      * @throws OperationManagementException
-     * @throws DeviceManagementException
-     * @throws NotificationManagementException
      */
-    public void lockOperationUpdate(StatusTag status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException, NotificationManagementException {
-
-        pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
-                .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-        if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData())) {
-            for (Operation operation : pendingDataOperations) {
-                if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()))
-                        && operation.getId() == status.getCommandReference()) {
-                    operation.setStatus(Operation.Status.COMPLETED);
-                    new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
-                            pendingDataOperations);
+    public void updateLockOperation(StatusTag status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException {
+        List<? extends Operation> pendingDataOperations;
+        try {
+            pendingDataOperations = WindowsAPIUtils.getPendingOperations(deviceIdentifier);
+            if (Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData())) {
+                for (Operation operation : pendingDataOperations) {
+                    if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()))
+                            && operation.getId() == status.getCommandReference()) {
+                        operation.setStatus(Operation.Status.COMPLETED);
+                        updateStatus(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
+                    }
                 }
             }
-        }
-        if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
-            for (Operation operation : pendingDataOperations) {
+            if (Constants.SyncMLResponseCodes.PIN_NOTFOUND.equals(status.getData())) {
+                for (Operation operation : pendingDataOperations) {
 
-                if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()) &&
-                        operation.getId() == status.getCommandReference())) {
-                    operation.setStatus(Operation.Status.ERROR);
-                    new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
-                            pendingDataOperations);
-                    try {
+                    if ((OperationCode.Command.DEVICE_LOCK.getCode().equals(operation.getCode()) &&
+                            operation.getId() == status.getCommandReference())) {
+                        operation.setStatus(Operation.Status.ERROR);
+                        updateStatus(syncmlDocument.getHeader().getSource().getLocURI(), pendingDataOperations);
+
                         NotificationManagementService nmService = WindowsAPIUtils.getNotificationManagementService();
                         Notification lockResetNotification = new Notification();
                         lockResetNotification.setOperationId(status.getCommandReference());
                         lockResetNotification.setStatus(String.valueOf(Notification.Status.NEW));
                         lockResetNotification.setDeviceIdentifier(deviceIdentifier);
-                        lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCKRESET_NOTIFICATION);
+                        lockResetNotification.setDescription(Constants.SyncMLResponseCodes.LOCK_RESET_NOTIFICATION);
 
                         nmService.addNotification(lockResetNotification);
-                    } catch (NotificationManagementException e) {
-                        String msg = "Failure occurred in getting notification service";
-                        log.error(msg, e);
-                        throw new NotificationManagementException(msg, e);
                     }
                 }
             }
+        } catch (DeviceManagementException e) {
+            throw new OperationManagementException("Error occurred in getting pending operations.");
+        } catch (NotificationManagementException e) {
+            throw new OperationManagementException("Error occurred in adding notifications.");
         }
     }
 
@@ -178,23 +172,24 @@ public class OperationUtils {
      * @param syncmlDocument   Parsed syncml payload from the syncml engine.
      * @param deviceIdentifier specific device id to be update.
      * @throws OperationManagementException
-     * @throws DeviceManagementException
      */
-    public void ring(StatusTag status, SyncmlDocument syncmlDocument,
-                     DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException {
-
-        if ((Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()))) {
-            pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
-                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
-            for (Operation operation : pendingDataOperations) {
-                if ((OperationCode.Command.DEVICE_RING.equals(operation.getCode())) &&
-                        (operation.getId() == status.getCommandReference())) {
-                    operation.setStatus(Operation.Status.COMPLETED);
-                    new OperationUtils().updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
-                            pendingDataOperations);
+    public void ring(StatusTag status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException {
+        List<? extends Operation> pendingDataOperations;
+        try {
+            if ((Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()))) {
+                pendingDataOperations = WindowsAPIUtils.getPendingOperations(deviceIdentifier);
+                for (Operation operation : pendingDataOperations) {
+                    if ((OperationCode.Command.DEVICE_RING.equals(operation.getCode())) &&
+                            (operation.getId() == status.getCommandReference())) {
+                        operation.setStatus(Operation.Status.COMPLETED);
+                        updateStatus(syncmlDocument.getHeader().getSource().getLocURI(),
+                                pendingDataOperations);
+                    }
                 }
             }
+        } catch (DeviceManagementException e) {
+            throw new OperationManagementException("Error occurred in getting pending operation.");
         }
     }
 
@@ -205,21 +200,22 @@ public class OperationUtils {
      * @param syncmlDocument   Parsed syncml payload from the syncml engine.
      * @param deviceIdentifier specific device id to be wiped.
      * @throws OperationManagementException
-     * @throws DeviceManagementException
      */
-    public void dataWipe(StatusTag status, SyncmlDocument syncmlDocument,
-                         DeviceIdentifier deviceIdentifier)
-            throws OperationManagementException, DeviceManagementException {
-
+    public void dataWipe(StatusTag status, SyncmlDocument syncmlDocument, DeviceIdentifier deviceIdentifier)
+            throws OperationManagementException {
+        List<? extends Operation> pendingDataOperations;
         if ((Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()))) {
-            pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
-                    .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
+            try {
+                pendingDataOperations = WindowsAPIUtils.getPendingOperations(deviceIdentifier);
+            } catch (DeviceManagementException e) {
+                throw new OperationManagementException("Error occurred in getting pending operation.");
+            }
             for (Operation operation : pendingDataOperations) {
 
                 if ((OperationCode.Command.WIPE_DATA.equals(operation.getCode())) &&
                         (operation.getId() == status.getCommandReference())) {
                     operation.setStatus(Operation.Status.COMPLETED);
-                    updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateStatus(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 }
             }
@@ -232,15 +228,9 @@ public class OperationUtils {
      * @param syncmlDocument SyncmlDocument object which creates from the syncml engine using syncml payload
      * @return Return list of pending operations.
      * @throws OperationManagementException
-     * @throws DeviceManagementException
-     * @throws FeatureManagementException
-     * @throws PolicyComplianceException
-     * @throws NotificationManagementException
      */
     public List<? extends Operation> getPendingOperations(SyncmlDocument syncmlDocument)
-            throws OperationManagementException, DeviceManagementException, FeatureManagementException,
-            PolicyComplianceException, NotificationManagementException, WindowsDeviceEnrolmentException,
-            WindowsOperationException {
+            throws OperationManagementException, WindowsOperationException {
 
         List<? extends Operation> pendingOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
@@ -255,8 +245,8 @@ public class OperationUtils {
     /**
      * Set compliance of the feature according to the device status for the specific feature.
      *
-     * @param activeFeature
-     * @param deviceFeature
+     * @param activeFeature Features to be applied on the device.
+     * @param deviceFeature Actual features applied on the device.
      * @return Returns setting up compliance feature.
      */
     public ComplianceFeature setComplianceFeatures(ProfileFeature activeFeature, Profile deviceFeature) {
@@ -271,39 +261,39 @@ public class OperationUtils {
      * Update the completed/Error status of the operation which have the URI of the operation code in the syncml payload.
      *
      * @param syncmlDocument SyncmlDocument object generated from the the syncml engine.
-     * @throws DeviceManagementException
-     * @throws NotificationManagementException
      * @throws OperationManagementException
      */
-    public void UpdateUriOperations(SyncmlDocument syncmlDocument) throws DeviceManagementException,
-            NotificationManagementException, OperationManagementException, WindowsOperationException {
+    public void UpdateUriOperations(SyncmlDocument syncmlDocument) throws OperationManagementException,
+            WindowsOperationException {
+        List<? extends Operation> pendingDataOperations;
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
-        List<StatusTag> statuses = syncmlDocument.getBody().getStatus();
-        OperationUtils operationUtils = new OperationUtils();
 
+        List<StatusTag> statuses = syncmlDocument.getBody().getStatus();
+        try {
+            pendingDataOperations = WindowsAPIUtils.getPendingOperations(deviceIdentifier);
+        } catch (DeviceManagementException e) {
+            throw new OperationManagementException("Error occurred in getting pending operation.");
+        }
         for (StatusTag status : statuses) {
 
             if ((Constants.EXECUTE.equals(status.getCommand()))) {
                 if (status.getTargetReference() == null) {
-                    operationUtils.updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
+                    updateDeviceOperations(status, syncmlDocument, deviceIdentifier);
                 } else {
                     if ((OperationCode.Command.DEVICE_LOCK.equals(status.getTargetReference()))) {
-                        operationUtils.lockOperationUpdate(status, syncmlDocument, deviceIdentifier);
+                        updateLockOperation(status, syncmlDocument, deviceIdentifier);
                     }
                     if ((OperationCode.Command.DEVICE_RING.equals(status.getTargetReference()))) {
-                        operationUtils.ring(status, syncmlDocument, deviceIdentifier);
+                        ring(status, syncmlDocument, deviceIdentifier);
                     }
                     if (equals(OperationCode.Command.WIPE_DATA.equals(status.getTargetReference()))) {
-                        operationUtils.dataWipe(status, syncmlDocument, deviceIdentifier);
+                        dataWipe(status, syncmlDocument, deviceIdentifier);
                     }
                 }
             }
             if ((Constants.SEQUENCE.equals(status.getCommand()))) {
                 if ((Constants.SyncMLResponseCodes.ACCEPTED.equals(status.getData()))) {
-
-                    pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
-                            .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
                     for (Operation operation : pendingDataOperations) {
                         if ((PluginConstants.OperationCodes.POLICY_BUNDLE.equals(operation.getCode())) &&
                                 operation.getId() == status.getCommandReference()) {
@@ -314,11 +304,9 @@ public class OperationUtils {
                             operation.setStatus(Operation.Status.COMPLETED);
                         }
                     }
-                    operationUtils.updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateStatus(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 } else {
-                    pendingDataOperations = WindowsAPIUtils.getDeviceManagementService()
-                            .getOperationsByDeviceAndStatus(deviceIdentifier, Operation.Status.PENDING);
                     for (Operation operation : pendingDataOperations) {
 
                         if ((PluginConstants.OperationCodes.POLICY_BUNDLE.equals(operation.getCode())) &&
@@ -330,7 +318,7 @@ public class OperationUtils {
                             operation.setStatus(Operation.Status.ERROR);
                         }
                     }
-                    operationUtils.updateOperations(syncmlDocument.getHeader().getSource().getLocURI(),
+                    updateStatus(syncmlDocument.getHeader().getSource().getLocURI(),
                             pendingDataOperations);
                 }
             }
@@ -342,10 +330,10 @@ public class OperationUtils {
      *
      * @param syncmlDocument syncmlDocument object pasrsed from the syncml engine.
      * @return device statuses for the activated features
-     * @throws NotificationManagementException
+     * @throws WindowsOperationException
      */
     public List<Profile> generateDeviceOperationStatusObject(SyncmlDocument syncmlDocument) throws
-            NotificationManagementException, WindowsOperationException {
+            WindowsOperationException {
 
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
@@ -410,9 +398,8 @@ public class OperationUtils {
                         try {
                             nmService.addNotification(notification);
                         } catch (NotificationManagementException e) {
-                            String msg = "Failure Occurred in getting notification service.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
+                            throw new WindowsOperationException("Failure Occurred while getting notification" +
+                                    " service.", e);
                         }
                         break;
                     }
@@ -426,13 +413,9 @@ public class OperationUtils {
      * Generate Compliance Features.
      *
      * @param syncmlDocument syncmlDocument object parsed from the syncml engine.
-     * @throws NotificationManagementException
-     * @throws FeatureManagementException
-     * @throws PolicyComplianceException
+     * @throws WindowsOperationException
      */
-    public void generateComplianceFeatureStatus(SyncmlDocument syncmlDocument) throws NotificationManagementException,
-            FeatureManagementException, PolicyComplianceException, WindowsDeviceEnrolmentException,
-            WindowsOperationException {
+    public void generateComplianceFeatureStatus(SyncmlDocument syncmlDocument) throws WindowsOperationException {
         List<Profile> profiles = generateDeviceOperationStatusObject(syncmlDocument);
         DeviceIdentifier deviceIdentifier = convertToDeviceIdentifierObject(
                 syncmlDocument.getHeader().getSource().getLocURI());
@@ -495,17 +478,11 @@ public class OperationUtils {
                             complianceFeatures);
                 }
             } catch (JSONException e) {
-                String msg = "Error occurred while parsing json object.";
-                log.error(msg);
-                throw new WindowsDeviceEnrolmentException(msg, e);
+                throw new WindowsOperationException("Error occurred while parsing json object.", e);
             } catch (PolicyComplianceException e) {
-                String msg = "Error occurred while setting up policy compliance.";
-                log.error(msg, e);
-                throw new PolicyComplianceException(msg, e);
+                throw new WindowsOperationException("Error occurred while setting up policy compliance.", e);
             } catch (PolicyManagementException e) {
-                String msg = "Error occurred while getting effective policy.";
-                log.error(msg, e);
-                throw new PolicyComplianceException(msg, e);
+                throw new WindowsOperationException("Error occurred while getting effective policy.", e);
             }
         }
 

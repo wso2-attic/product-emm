@@ -20,6 +20,8 @@ var WEB_APP_TITLE = "WSO2 EMM";
 var WEB_APP_CONTEXT = "/emm";
 var USER_SESSION_KEY = "USER";
 var UNSPECIFIED = "Unspecified";
+var httpURL = "httpURL";
+var httpsURL = "httpsURL";
 
 var DEVICE_IDENTIFIER = "deviceIdentifier";
 var DEVICE_NAME = "name";
@@ -38,6 +40,7 @@ var FEATURE_NAME = "featureName";
 var FEATURE_DESCRIPTION = "featureDescription";
 
 var PLATFORM_ANDROID = "android";
+var PLATFORM_WINDOWS = "windows";
 var PLATFORM_IOS = "ios";
 
 var LANGUAGE_US = "en_US";

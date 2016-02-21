@@ -66,7 +66,6 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
         CACollection caCollectionElement = new CACollection();
 
         PolicyCollection policyCollectionElement = new PolicyCollection();
-
         CertificateEnrollmentPolicy certEnrollmentPolicyElement = new CertificateEnrollmentPolicy();
         Attributes attributeElement = new Attributes();
         PrivateKeyAttributes privateKeyAttributeElement = new PrivateKeyAttributes();
@@ -94,7 +93,6 @@ public class CertificateEnrollmentPolicyServiceImpl implements CertificateEnroll
         oidCollectionElement.getOID().add(oidElement);
         caCollection.value = caCollectionElement;
         oidCollection.value = oidCollectionElement;
-
         PrivilegedCarbonContext.endTenantFlow();
 
     }

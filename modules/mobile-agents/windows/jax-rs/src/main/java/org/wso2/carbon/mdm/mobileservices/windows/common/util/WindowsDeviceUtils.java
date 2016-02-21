@@ -43,8 +43,8 @@ public class WindowsDeviceUtils {
             message.setResponseMessage("Device identifier list is empty");
             throw new BadRequestException(message, responseMediaType);
         }
-        List<String> errorDeviceIdList = new ArrayList<String>();
-        List<DeviceIdentifier> validDeviceIDList = new ArrayList<DeviceIdentifier>();
+        List<String> errorDeviceIdList = new ArrayList<>();
+        List<DeviceIdentifier> validDeviceIDList = new ArrayList<>();
         int deviceIDCounter = 0;
 
         for (String deviceID : deviceIDs) {
@@ -75,11 +75,12 @@ public class WindowsDeviceUtils {
         }
         DeviceIDHolder deviceIDHolder = new DeviceIDHolder();
         deviceIDHolder.setValidDeviceIDList(validDeviceIDList);
-        deviceIDHolder.setErrorDeviceIdList(errorDeviceIdList);
+        deviceIDHolder.setInvalidDeviceIdList(errorDeviceIdList);
         return deviceIDHolder;
     }
 
     public String convertErrorMapIntoErrorMessage(List<String> errorDeviceIdList) {
         return StringUtils.join(errorDeviceIdList.iterator(), COMMA_SEPARATION_PATTERN);
     }
+
 }

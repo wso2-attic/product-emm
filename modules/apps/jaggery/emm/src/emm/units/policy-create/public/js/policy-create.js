@@ -31,7 +31,7 @@ var platformTypeConstants = {
 };
 
 // Constants to define platform types ids.
-var platformTypeIds = {
+var platformIds = {
     "ANDROID": 1,
     "IOS": 3,
     "WINDOWS": 2
@@ -1660,9 +1660,7 @@ stepBackFrom["policy-profile"] = function () {
     $(".wr-advance-operations").html(
         "<div class='wr-advance-operations-init'>" +
         "<br>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
         "<i class='fw fw-settings fw-spin fw-2x'></i>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;" +
         "Loading Platform Features . . ." +
         "<br>" +
         "<br>" +
@@ -1823,7 +1821,7 @@ var savePolicy = function (policy, serviceURL) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if (policy["platformId"] == platformTypeIds["WINDOWS"] &&
+        if (policy["platformId"] == platformIds["WINDOWS"] &&
             key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
             policy["profile"][key].enablePassword = true;
         }

@@ -19,12 +19,9 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.authbst.impl;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.beans.Token;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.AuthenticationException;
 import org.wso2.carbon.mdm.mobileservices.windows.common.exceptions.WindowsDeviceEnrolmentException;
@@ -43,14 +40,12 @@ import javax.ws.rs.core.Response;
  */
 public class BSTProviderImpl implements BSTProvider {
 
-    private static Log log = LogFactory.getLog(BSTProviderImpl.class);
-
     /**
      * This method validates the device user, checking passed credentials and returns the corresponding
      * binary security token which is used in XCEP and WSTEP stages for authentication.
      *
-     * @param credentials - Credential object passes from the wab page
-     * @return - Response with binary security token
+     * @param credentials - Credential object passes from the wab page.
+     * @return - Response with binary security token.
      */
     @Override
     public Response getBST(Credentials credentials) throws WindowsDeviceEnrolmentException {
@@ -67,14 +62,9 @@ public class BSTProviderImpl implements BSTProvider {
             JSONObject tokenContent = new JSONObject();
             tokenContent.put("UserToken", userToken);
             return Response.ok().entity(tokenContent.toString()).build();
-        } catch (DeviceManagementException e) {
-            String msg = "Failure occurred in generating challenge token.";
-            log.error(msg, e);
-            throw new WindowsDeviceEnrolmentException(msg, e);
         } catch (JSONException e) {
-            String msg = "Failure occurred in generating challenge token Json.";
-            log.error(msg, e);
-            throw new WindowsDeviceEnrolmentException(msg, e);
+            throw new WindowsDeviceEnrolmentException(
+                    "Failure occurred in generating Json payload for challenge token.", e);
         }
     }
 
@@ -98,9 +88,7 @@ public class BSTProviderImpl implements BSTProvider {
             RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
 
             if (realmService == null) {
-                String msg = "RealmService not initialized.";
-                log.error(msg);
-                throw new AuthenticationException(msg);
+                throw new AuthenticationException("RealmService not initialized.");
             }
 
             int tenantId;
@@ -111,17 +99,13 @@ public class BSTProviderImpl implements BSTProvider {
             }
 
             if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
-                String msg = "Invalid tenant domain " + tenantDomain;
-                log.error(msg);
-                throw new AuthenticationException(msg);
+                throw new AuthenticationException("Invalid tenant domain " + tenantDomain);
             }
             UserRealm userRealm = realmService.getTenantUserRealm(tenantId);
 
             return userRealm.getUserStoreManager().authenticate(username, password);
         } catch (UserStoreException e) {
-            String msg = "User store is not initialized.";
-            log.error(msg, e);
-            throw new AuthenticationException(msg, e);
+            throw new AuthenticationException("User store is not initialized.", e);
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }

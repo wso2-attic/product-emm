@@ -57,10 +57,10 @@ public class LocalOAuthValidator implements OAuth2TokenValidator {
                 WindowsAPIUtils.getOAuth2TokenValidationService().findOAuthConsumerIfTokenIsValid(
                         validationRequest).getAccessTokenValidationResponse();
         boolean isValid = tokenValidationResponse.isValid();
-        String userName;
+        String username;
         String tenantDomain;
         if (isValid) {
-            userName = MultitenantUtils.getTenantAwareUsername(
+            username = MultitenantUtils.getTenantAwareUsername(
                     tokenValidationResponse.getAuthorizedUser());
             tenantDomain =
                     MultitenantUtils.getTenantDomain(tokenValidationResponse.getAuthorizedUser());
@@ -69,6 +69,6 @@ public class LocalOAuthValidator implements OAuth2TokenValidator {
             oAuthValidationResponse.setErrorMsg(tokenValidationResponse.getErrorMsg());
             return oAuthValidationResponse;
         }
-        return new OAuthValidationResponse(userName, tenantDomain, isValid);
+        return new OAuthValidationResponse(username, tenantDomain, isValid);
     }
 }

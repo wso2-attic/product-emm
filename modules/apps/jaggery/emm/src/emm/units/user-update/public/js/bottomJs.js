@@ -68,9 +68,6 @@ $(document).ready(function () {
         if (!username) {
             $(errorMsg).text("Username is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (username.length > charLimit || username.length < 3) {
-            $(errorMsg).text("Username must be between 3 and " + charLimit + " characters long.");
-            $(errorMsgWrapper).removeClass("hidden");
         } else if (!inputIsValid(usernameInput.data("regex"), username)) {
             $(errorMsg).text(usernameInput.data("errormsg"));
             $(errorMsgWrapper).removeClass("hidden");

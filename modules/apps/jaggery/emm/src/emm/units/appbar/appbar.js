@@ -19,6 +19,7 @@
 function onRequest(context) {
     var userModule = require("/modules/user.js").userModule;
     var mdmProps = require('/config/mdm-props.js').config();
+    var constants = require("/modules/constants.js");
     var uiPermissions = userModule.getUIPermissions();
     context["permissions"] = uiPermissions;
 
@@ -60,7 +61,7 @@ function onRequest(context) {
         });
 
         links["policy-mgt"].push({
-            "title": "Apply Changes",
+            "title": "Apply Changes To Devices",
             "icon": "fw-check",
             "url": "#",
             "tooltip": "Click to apply policy changes to devices (This depends on policy priority if you have multiple policies)",
@@ -73,6 +74,11 @@ function onRequest(context) {
     // eg: {{unit "appbar" pageLink="users" title="User Management"}}
     context["currentActions"] = links[context["pageLink"]];
     context["enrollmentURL"] = mdmProps.generalConfig.host + mdmProps.enrollmentDir;
+    var  isAuthorizedForNotifications =
+        userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/notifications/list");
+    var currentUser = session.get(constants.USER_SESSION_KEY);
+    context.isAuthorizedForNotifications = isAuthorizedForNotifications;
+    context.currentUser = currentUser;
     return context;
 }
 

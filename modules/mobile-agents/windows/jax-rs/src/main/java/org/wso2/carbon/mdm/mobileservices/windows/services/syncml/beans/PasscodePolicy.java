@@ -19,7 +19,7 @@
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans;
 
 /**
- * Bean for device lockOperationUpdate screen passcode policy.
+ * Bean for device updateLockOperation screen passcode policy.
  */
 public class PasscodePolicy extends BasicOperation {
 
