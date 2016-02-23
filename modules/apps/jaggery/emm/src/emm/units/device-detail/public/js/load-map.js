@@ -18,14 +18,19 @@
 
 
 $('a[data-toggle="tab"]').on("shown.bs.tab", function() {
-    loadLeafletMap();
+    var url = $(this).prop('href');
+    var hash = url.substring(url.indexOf("#")+1);
+
+    if(hash == 'device_location'){
+        loadLeafletMap();
+    }
 });
 
 function loadLeafletMap(){
     var lat     = $("#device-location").data("lat"),
         long    = $("#device-location").data("long"),
         container = 'device-location',
-        zoomLevel = 13,
+        zoomLevel = 5,
         tileSet = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attrib =  '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 

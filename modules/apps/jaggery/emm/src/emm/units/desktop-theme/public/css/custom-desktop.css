@@ -7064,6 +7064,12 @@ ul.tiles .icon {
 
 #device-location{
   height:450px;
+  margin-bottom:0px;
+}
+#device-location .leaflet-popup-content-wrapper{
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 
 .media .panel-group.tab-content{
