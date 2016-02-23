@@ -170,16 +170,16 @@ function resetPassword(uname) {
             $(errorMsg).text("Password should be minimum 5 characters long, should not include any whitespaces.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
-            var changePasswordFormData = {};
-            changePasswordFormData.username = user;
-            changePasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
+            var resetPasswordFormData = {};
+            resetPasswordFormData.username = user;
+            resetPasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
-            var changePasswordAPI = "/mdm-admin/users/reset-password";
+            var resetPasswordAPI = "/mdm-admin/users/reset-password";
 
             invokerUtil.post(
-                changePasswordAPI,
-                changePasswordFormData,
-                function (data) {
+                resetPasswordAPI,
+                resetPasswordFormData,
+                function (data) {   // The success callback
                     data = JSON.parse(data);
                     if (data.statusCode == 201) {
                         $(modalPopupContent).html($('#reset-password-success-content').html());
@@ -190,7 +190,7 @@ function resetPassword(uname) {
                         $(errorMsg).text("Old password does not match with the provided value.");
                         $(errorMsgWrapper).removeClass("hidden");
                     }
-                }, function (data) {
+                }, function (data) {    // The error callback
                     if (data.status == 400) {
                         $(errorMsg).text("Old password does not match with the provided value.");
                         $(errorMsgWrapper).removeClass("hidden");
