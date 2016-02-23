@@ -398,9 +398,8 @@ public class OperationHandler {
                         try {
                             nmService.addNotification(notification);
                         } catch (NotificationManagementException e) {
-                            String msg = "Failure Occurred in getting notification service.";
-                            log.error(msg, e);
-                            throw new WindowsOperationException(msg, e);
+                            throw new WindowsOperationException("Failure Occurred while getting notification" +
+                                    " service.", e);
                         }
                         break;
                     }
@@ -479,17 +478,11 @@ public class OperationHandler {
                             complianceFeatures);
                 }
             } catch (JSONException e) {
-                String msg = "Error occurred while parsing json object.";
-                log.error(msg);
-                throw new WindowsOperationException(msg, e);
+                throw new WindowsOperationException("Error occurred while parsing json object.", e);
             } catch (PolicyComplianceException e) {
-                String msg = "Error occurred while setting up policy compliance.";
-                log.error(msg, e);
-                throw new WindowsOperationException(msg, e);
+                throw new WindowsOperationException("Error occurred while setting up policy compliance.", e);
             } catch (PolicyManagementException e) {
-                String msg = "Error occurred while getting effective policy.";
-                log.error(msg, e);
-                throw new WindowsOperationException(msg, e);
+                throw new WindowsOperationException("Error occurred while getting effective policy.", e);
             }
         }
 

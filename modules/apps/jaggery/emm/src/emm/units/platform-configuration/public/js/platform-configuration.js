@@ -120,7 +120,7 @@ var configParams = {
     "WINDOWS_EULA": "windowsLicense"
 };
 
-function promtErrorPolicyPlatform(errorMsg){
+function promptErrorPolicyPlatform(errorMsg) {
     var mainErrorMsgWrapper = "#platform-config-main-error-msg";
     var mainErrorMsg = mainErrorMsgWrapper + " span";
     $(mainErrorMsg).text(errorMsg);
@@ -872,7 +872,7 @@ var showAdvanceOperation = function (operation, button) {
         var hiddenOperation = ".wr-hidden-operations-content > div";
         $(hiddenOperation + '[data-operation="error"]').show();
         $(hiddenOperation + '[data-operation="error"]').siblings().hide();
-        promtErrorPolicyPlatform("To use " + operation + " related functionalities you need to configure the server " +
+        promptErrorPolicyPlatform("To use " + operation + " related functionalities you need to configure the server " +
                                  "accordingly.Please refer to the user guiled.");
     }
 };

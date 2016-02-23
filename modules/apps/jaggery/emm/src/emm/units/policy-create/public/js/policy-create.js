@@ -1646,9 +1646,7 @@ stepBackFrom["policy-profile"] = function () {
     $(".wr-advance-operations").html(
         "<div class='wr-advance-operations-init'>" +
         "<br>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
         "<i class='fw fw-settings fw-spin fw-2x'></i>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;" +
         "Loading Platform Features . . ." +
         "<br>" +
         "<br>" +
@@ -2010,7 +2008,7 @@ function formatRepoSelection(user) {
     return user.username || user.text;
 }
 
-function promtErrorPolicyPlatform(errorMsg){
+function promptErrorPolicyPlatform(errorMsg) {
     var mainErrorMsgWrapper = "#policy-platform-main-error-msg";
     var mainErrorMsg = mainErrorMsgWrapper + " span";
     $(mainErrorMsg).text(errorMsg);
@@ -2036,7 +2034,7 @@ $(document).ready(function () {
         androidLink.unbind("click");
         androidLink.attr("data-validate","true");
         androidLink.bind("click",function(){
-            promtErrorPolicyPlatform("You need to configure Android plugging in order to use android related feature.");
+            promptErrorPolicyPlatform("You need to configure Android plugging in order to use android related feature.");
         });
 
     }
@@ -2047,7 +2045,7 @@ $(document).ready(function () {
         windowsLink.unbind("click");
         windowsLink.attr("data-validate","true");
         windowsLink.bind("click",function(){
-            promtErrorPolicyPlatform("You need to configure Windows plugging in order to use windows related feature.");
+            promptErrorPolicyPlatform("You need to configure Windows plugging in order to use windows related feature.");
         });
     }
     var iosLink = $(".windows-platform");
@@ -2057,7 +2055,7 @@ $(document).ready(function () {
         iosLink.unbind("click");
         iosLink.attr("data-validate","true");
         iosLink.bind("click",function(){
-            promtErrorPolicyPlatform("You need to configure IOS plugging in order to use ios related feature.");
+            promptErrorPolicyPlatform("You need to configure IOS plugging in order to use ios related feature.");
         });
     }
 
