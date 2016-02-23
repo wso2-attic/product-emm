@@ -19,6 +19,10 @@ var body = "body";
 var isInit = true;
 $(".icon .text").res_text(0.2);
 
+/*
+ * Service endpoint URLs
+ */
+var resetPasswordServiceURL = "/mdm-admin/users/reset-password";
 
 /*
  * set popup maximum height function.
@@ -174,10 +178,8 @@ function resetPassword(uname) {
             resetPasswordFormData.username = user;
             resetPasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
-            var resetPasswordAPI = "/mdm-admin/users/reset-password";
-
             invokerUtil.post(
-                resetPasswordAPI,
+                resetPasswordServiceURL,
                 resetPasswordFormData,
                 function (data) {   // The success callback
                     data = JSON.parse(data);
