@@ -188,12 +188,9 @@ function resetPassword(uname) {
                         $("a#reset-password-success-link").click(function () {
                             hidePopup();
                         });
-                    } else if (data.statusCode == 400) {
-                        $(errorMsg).text("Old password does not match with the provided value.");
-                        $(errorMsgWrapper).removeClass("hidden");
                     }
                 }, function (data) {    // The error callback
-                    if (data.status == 400) {
+                    if (data.statusCode == 400) {
                         $(errorMsg).text("Old password does not match with the provided value.");
                         $(errorMsgWrapper).removeClass("hidden");
                     } else {

@@ -60,12 +60,9 @@ $(document).ready(function () {
                             $("a#change-password-success-link").click(function () {
                                 hidePopup();
                             });
-                        } else if (data.statusCode == 400) {
-                            $(errorMsg).text("Old password does not match with the provided value.");
-                            $(errorMsgWrapper).removeClass("hidden");
                         }
                     }, function (data) {
-                        if (data.status == 400) {
+                        if (data.statusCode == 400) {
                             $(errorMsg).text("Old password does not match with the provided value.");
                             $(errorMsgWrapper).removeClass("hidden");
                         } else {
