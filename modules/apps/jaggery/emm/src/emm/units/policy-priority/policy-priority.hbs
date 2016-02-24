@@ -13,7 +13,7 @@
                 {{#each policyListToView}}
                     <span class="list-group-item " place="place_{{id}}" id="{{id}}">
                             <div class="row no-gutter">
-                                <div class="col-lg-3 clearfix" style="width:40%">
+                                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 clearfix">
                                     <span class="wr-sortable-icon"><i class="fw fw-sort"></i></span>
                                     <span class="editable-text wr-sort-index">
                                         <input type="text" id="dd" class="index">
@@ -38,27 +38,27 @@
                                         <span class="wr-list-username">{{platform}}</span>
                                     </span>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
                                     <div class="row no-gutter">
-                                        <div class="wr-desc-list-configs highlight col-lg-4">
+                                        <div class="wr-desc-list-configs highlight col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                             <div>
                                                 <b>Ownership Type : </b> {{ownershipType}}
                                             </div>
                                         </div>
                                         {{#if roles}}
-                                            <div class="wr-desc-list-configs highlight col-lg-4">
+                                            <div class="wr-desc-list-configs highlight col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                                 <div>
                                                     <b>Assigned Role(s) : </b> {{roles}}
                                                 </div>
                                             </div>
                                         {{else}}
-                                            <div class="wr-desc-list-configs highlight col-lg-4">
+                                            <div class="wr-desc-list-configs highlight col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                                 <div>
                                                     <b>Assigned User(s) : </b> {{users}}
                                                 </div>
                                             </div>
                                         {{/if}}
-                                        <div class="wr-desc-list-configs col-lg-4">
+                                        <div class="wr-desc-list-configs col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                             <div>
                                                 <b>Compliance Type :</b> {{compliance}}
                                             </div>
