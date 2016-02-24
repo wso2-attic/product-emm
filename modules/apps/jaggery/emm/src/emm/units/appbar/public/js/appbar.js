@@ -86,8 +86,13 @@ var showNotificationCount = function (data) {
 };
 
 function loadNotificationCount() {
-    var serviceURL = "/mdm-admin/notifications/NEW";
-    invokerUtil.get(serviceURL, showNotificationCount, hideNotificationCount);
+    if ("true" == $("#right-sidebar").attr("is-authorized")) {
+        var serviceURL = "/mdm-admin/notifications/NEW";
+        invokerUtil.get(serviceURL, showNotificationCount, hideNotificationCount);
+        loadNotifications();
+    } else {
+        $("#notification-bubble-wrapper").remove();
+    }
 }
 
 function hideNotificationCount() {
@@ -322,7 +327,6 @@ $.fn.collapse_nav_sub = function () {
 $(document).ready(function () {
     loadNotificationCount();
     $.sidebar_toggle();
-    loadNotifications();
 
     $("#right-sidebar").on("click", ".new-notification", function (e) {
         var notificationId = $(this).data("id");
