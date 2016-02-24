@@ -138,7 +138,7 @@ stepForwardFrom["policy-platform"] = function (actionButton) {
     setTimeout(
         function () {
             $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
-``                var serviceURL = "/mdm-admin/roles/primary";
+                var serviceURL = "/mdm-admin/roles/primary";
 
                 var successCallback = function (data) {
 
@@ -159,9 +159,6 @@ stepForwardFrom["policy-platform"] = function (actionButton) {
                     successCallback,
                     function (message) {
                         console.log("failed...!!");
-                        //$('#ast-container').addClass('hidden');
-                        //$('#user-listing-status-msg').
-                        //text('Invalid search query. Try again with a valid search query');
                     }
                 );
             });
