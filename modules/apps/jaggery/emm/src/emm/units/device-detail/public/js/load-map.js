@@ -16,40 +16,34 @@
  * under the License.
  */
 
-$(document).ready(function(){
-    if (document.getElementById('device-location')){
-        loadMap();
+
+$('a[data-toggle="tab"]').on("shown.bs.tab", function() {
+    var url = $(this).prop('href');
+    var hash = url.substring(url.indexOf("#")+1);
+
+    if(hash == 'device_location'){
+        loadLeafletMap();
     }
 });
 
-function loadMap() {
-    var map;
-    function initialize() {
-        var mapOptions = {
-            zoom: 18
-        };
-        var lat = $("#device-location").data("lat");
-        var long = $("#device-location").data("long");
+function loadLeafletMap(){
+    var lat     = $("#device-location").data("lat"),
+        long    = $("#device-location").data("long"),
+        container = 'device-location',
+        zoomLevel = 5,
+        tileSet = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attrib =  '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
         if(lat != null && lat != undefined && lat != "" && long != null && long != undefined && long != "") {
             $("#map-error").hide();
             $("#device-location").show();
-            map = new google.maps.Map(document.getElementById('device-location'),
-                mapOptions);
-
-            var pos = new google.maps.LatLng(lat,
-                long);
-            var marker = new google.maps.Marker({
-                position: pos,
-                map: map
-            });
-
-            map.setCenter(pos);
         }else{
             $("#device-location").hide();
             $("#map-error").show();
         }
 
-    }
-    google.maps.event.addDomListener(window, 'load', initialize);
+    var map = L.map(container).setView([lat,long], zoomLevel);
+
+    L.tileLayer(tileSet, { attribution: attrib}).addTo(map);
+    L.marker([lat,long]).addTo(map).bindPopup('Your device is here..').openPopup();
 }
