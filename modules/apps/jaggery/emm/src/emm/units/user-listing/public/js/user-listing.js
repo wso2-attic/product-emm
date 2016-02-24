@@ -19,9 +19,6 @@ var body = "body";
 var isInit = true;
 $(".icon .text").res_text(0.2);
 
-/*
- * Service endpoint URLs
- */
 var resetPasswordServiceURL = "/mdm-admin/users/reset-password";
 
 /*
