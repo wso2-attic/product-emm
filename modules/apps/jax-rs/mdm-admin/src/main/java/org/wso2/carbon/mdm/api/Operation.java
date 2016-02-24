@@ -183,7 +183,7 @@ public class Operation {
                 appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
             Response.status(HttpStatus.SC_CREATED);
-            responseMsg.setMessageFromServer("Application has installed successfully.");
+            responseMsg.setMessageFromServer("Application installation request has been sent to the device.");
             return responseMsg;
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while saving the operation";
@@ -218,7 +218,7 @@ public class Operation {
                 appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
             Response.status(HttpStatus.SC_CREATED);
-            responseMsg.setMessageFromServer("Application has uninstalled successfully.");
+            responseMsg.setMessageFromServer("Application removal request has been sent to the device.");
             return responseMsg;
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while saving the operation";
