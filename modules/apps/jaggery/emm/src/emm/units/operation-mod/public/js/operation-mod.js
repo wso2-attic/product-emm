@@ -674,7 +674,8 @@ var operationModule = function () {
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {
                     "operation":{
-                        "application_restriction_list": "com.netflix.mediaclient"
+                        "black_list": operationData["blackList"],
+                        "white-list": operationData["whiteList"]
                     }
                 };
                 break;
@@ -927,6 +928,7 @@ var operationModule = function () {
     publicMethods.generatePayload = function (platformType, operationCode, deviceList) {
         var payload;
         var operationData = {};
+        var has_restriction_list_not_set = true;
         // capturing form input data designated by .operationDataKeys
         $(".operation-data").filterByData("operation-code", operationCode).find(".operationDataKeys").each(
             function () {
@@ -1028,6 +1030,36 @@ var operationModule = function () {
                             }
                         });
                     }
+                }
+                if (operationDataObj.is("table")){
+                    var is_white_list_enabled = $('#searchable-container_black_list').hasClass("hidden");
+                    if(has_restriction_list_not_set){
+                        if (!is_white_list_enabled && key == "blackList"){
+                            var application_list = [];
+                            var application_index = $('th:contains("Application")').index();
+                            $(".black-list tr td:nth-child("+(application_index+1)+")").each(function () {
+                                application_list.push($(this).text());
+                            });
+                            value = application_list;
+                            has_restriction_list_not_set = false;
+                        }
+                        else if(is_white_list_enabled && key == "whiteList") {
+                            var application_with_roles_list= [];
+                            var application_index = $('th:contains("Application")').index();
+                            var role_index = $('th:contains("Roles")').index();
+                            $(".white-list tr td:nth-child("+(application_index+1)+")").each(function () {
+                                var application_entry = {};
+                                var application_name = $(this).text();
+                                var rolesList = $('.white-list tr:eq(' + ($(this).parent().index()+1) + ') td:eq(' + role_index + ')').text();
+                                application_entry[application_name] = rolesList;
+                                application_with_roles_list.push(application_entry);
+                            });
+                            value = application_with_roles_list;
+                            has_restriction_list_not_set = false;
+                        }
+
+                    }
+
                 }
                 operationData[key] = value;
             }

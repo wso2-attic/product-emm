@@ -1212,14 +1212,35 @@ public class Operation implements APIResultCallBack {
 		}
 	}
 
-	public void blockApplicationByPackageName(org.wso2.emm.agent.beans.Operation operation){
+	public void blockApplicationByPackageName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException{
+		JSONArray blacklistApps = new JSONArray();
+		try {
+			JSONObject resultAppList = new JSONObject(operation.getPayLoad().toString());
+				blacklistApps = resultAppList.getJSONArray("black_list");
+
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
+
+
+
 		Intent restrictionIntent = new Intent(context, AppLockService.class);
 		restrictionIntent.setAction("AppLockService");
-		ArrayList<String> appList = new ArrayList<String>(){{
-			add("com.netflix.mediaclient");
-			add("com.dropbox.android");
-			add("me.scan.android.client");
-		}};
+		ArrayList<String> appList = new ArrayList<String>();
+
+		if (blacklistApps != null) {
+			for (int i=0;i<blacklistApps.length();i++){
+				try {
+					appList.add(blacklistApps.get(i).toString());
+				} catch (JSONException e) {
+					operation.setStatus(resources.getString(R.string.operation_value_error));
+					resultBuilder.build(operation);
+					throw new AndroidAgentException("Invalid JSON format", e);
+				}
+			}
+		}
 
 		restrictionIntent.putStringArrayListExtra("appList", appList);
 
@@ -1233,5 +1254,10 @@ public class Operation implements APIResultCallBack {
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
 
 		context.startService(restrictionIntent);
+
+		operation.setStatus(resources.getString(R.string.operation_value_completed));
+		resultBuilder.build(operation);
+
+
 	}
 }

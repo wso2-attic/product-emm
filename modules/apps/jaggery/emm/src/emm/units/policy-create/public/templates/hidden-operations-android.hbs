@@ -37,8 +37,9 @@
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('app-restriction', this)">
-                <span class="wr-hidden-operations-icon fw-stack">
-                   <i class="fw fw-block fw-stack-2x"></i>
+                <span class="fw-stack fw-lg">
+                    <i class="fw fw-application fw-stack-1x"></i>
+                    <i class="fw fw-block fw-stack-2x"></i>
                 </span>
             Applications Restrictions
             <span id="app-restriction-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
@@ -380,17 +381,18 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                            <li><a tabindex="-1" href="#">Black List</a></li>
-                            <li><a tabindex="-1" href="#">White List</a></li>
+                            <li><a tabindex="-1">Black List</a></li>
+                            <li><a tabindex="-1">White List</a></li>
                         </ul>
                     </div>
 
                     <div id="app-list-add-widget" class="hidden">
                         <div class="row">
-                        <div class="col-md-6">
-                            <div id="custom-search-input">
-                                <div class="input-group col-md-12">
-                                    <input type="text" class="form-control input-lg" placeholder="search by package name in app store..."/>
+                            <div class="col-md-6">
+                                <div id="custom-search-input">
+                                    <div class="input-group col-md-12">
+                                        <input type="text" class="form-control"
+                                               placeholder="search by package name in app store..."/>
                                     <span class="input-group-btn">
                                         <button class="btn btn-info btn-lg" type="button">
                                         <i class="glyphicon glyphicon-search"></i>
@@ -404,26 +406,107 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <span class="input-group-btn">
-                                    <input type="search" id="container-search" value="" class="form-control input-lg" placeholder="Search by package name in list...">
+                                    <input type="search" id="container-search" value=""
+                                           class="form-control"
+                                           placeholder="Search by package name in list...">
                                 </span>
+                                <div class="user-role hidden">
+                                    <label class="wr-input-label" title="Optional field that can have 0-to-many roles for the user">
+                                        User Roles
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </label>
+                                    <div class="wr-input-control">
+                                        <select id="roles" class="form-control select2" multiple="multiple">
+                                            {{#each roles}}
+                                                <option>{{this}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <button id="application-add" type="button" class="btn btn-primary">Add</button>
                             </div>
                         </div>
-                        <div class="container" id="searchable-container">
-                            <div class="row row-padding">
-                                <div class="col-xs-4">Col 1</div>
-                            </div>
-                            <div class="row row-padding">
-                                <div class="col-xs-4">Another row</div>
-                            </div>
-                            <div class="row row-padding">
-                                <div class="col-xs-4">Lorem</div>
-                            </div>
-                            <div class="row row-padding">
-                                <div class="col-xs-4">Foo</div>
-                            </div>
+                        <div class="container hidden" id="searchable-container_black_list">
+                            <table class="operationDataKeys black-list" style="width: 50%" border="1" cellpadding="0" cellspacing="0" data-key="blackList">
+                                <thead>
+                                <tr>
+                                    <th>Application</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody class="app-list">
+                                <!--<tr>-->
+                                    <!--<td>package 1</td>-->
+                                    <!--<td>-->
+                                        <!--<a class="row-delete">-->
+                                                <!--<span class="fw-stack">-->
+                                                    <!--<i class="fw fw-ring fw-stack-2x"></i>-->
+                                                    <!--<i class="fw fw-delete fw-stack-1x"></i>-->
+                                                 <!--</span>-->
+                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
+                                        <!--</a>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>package 2</td>-->
+                                    <!--<td>-->
+                                        <!--<a class="row-delete">-->
+                                                <!--<span class="fw-stack">-->
+                                                    <!--<i class="fw fw-ring fw-stack-2x"></i>-->
+                                                    <!--<i class="fw fw-delete fw-stack-1x"></i>-->
+                                                 <!--</span>-->
+                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
+                                        <!--</a>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                </tbody>
+                            </table>
                         </div>
+
+                        <div class="container hidden" id="searchable-container_white_list">
+                            <table class="operationDataKeys white-list" style="width: 50%" border="1" cellpadding="0" cellspacing="0" data-key="whiteList">
+                                <thead>
+                                <tr>
+                                    <th>Application</th>
+                                    <th>Roles</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody class="app-list">
+                                <!--<tr>-->
+                                    <!--<td>package 1</td>-->
+                                    <!--<td>role1, role2</td>-->
+                                    <!--<td>-->
+                                        <!--<a class="row-delete">-->
+                                            <!--<span class="fw-stack">-->
+                                                <!--<i class="fw fw-ring fw-stack-2x"></i>-->
+                                                <!--<i class="fw fw-delete fw-stack-1x"></i>-->
+                                            <!--</span>-->
+                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
+                                        <!--</a>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>package 2</td>-->
+                                    <!--<td>role3</td>-->
+                                    <!--<td>-->
+                                        <!--<a class="row-delete">-->
+                                           <!--<span class="fw-stack">-->
+                                               <!--<i class="fw fw-ring fw-stack-2x"></i>-->
+                                               <!--<i class="fw fw-delete fw-stack-1x"></i>-->
+                                           <!--</span>-->
+                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
+                                        <!--</a>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                </tbody>
+                            </table>
+                        </div>
+
+
                     </div>
 
+                </div>
             </div>
         </div>
         <!--/app-restriction-->

@@ -138,11 +138,32 @@ stepForwardFrom["policy-platform"] = function (actionButton) {
     setTimeout(
         function () {
             $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
-                var content = template();
-                $(".wr-advance-operations").html(content);
-                $(".wr-advance-operations li.grouped-input").each(function () {
-                    updateGroupedInputVisibility(this);
-                });
+``                var serviceURL = "/mdm-admin/roles/primary";
+
+                var successCallback = function (data) {
+
+                    data = JSON.parse(data);
+                    data = data.responseContent;
+                    var viewModel = {};
+                    viewModel.roles = data;
+                    var content = template(viewModel);
+                    $(".wr-advance-operations").html(content);
+                    $(".wr-advance-operations li.grouped-input").each(function () {
+                        updateGroupedInputVisibility(this);
+                    });
+                    $("#roles").select2();
+
+                };
+
+                invokerUtil.get(serviceURL,
+                    successCallback,
+                    function (message) {
+                        console.log("failed...!!");
+                        //$('#ast-container').addClass('hidden');
+                        //$('#user-listing-status-msg').
+                        //text('Invalid search query. Try again with a valid search query');
+                    }
+                );
             });
         },
         250 // time delayed for the execution of above function, 250 milliseconds
@@ -306,12 +327,28 @@ validateStep["policy-profile"] = function () {
             if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1){
                 operation = androidOperationConstants["APPLICATION_OPERATION"];
 
-                continueToCheckNextInputs = true;
+                if($("button.dropdown-toggle").text().trim() == "Black List" && $('table.black-list tbody tr').length > 0){
+                    continueToCheckNextInputs = true;
+                }
+                else if($("button.dropdown-toggle").text().trim() == "White List" && $('table.white-list tbody tr').length > 0){
+                    continueToCheckNextInputs = true;
+                }
+                else{
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Application list is not provided. You cannot proceed.",
+                        "erroneousFeature": operation
+                    }
+                    continueToCheckNextInputs = false;
+                }
 
-                validationStatus = {
-                    "error": false,
-                    "okFeature": operation
-                };
+                if(continueToCheckNextInputs){
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
 
@@ -2021,6 +2058,18 @@ function formatRepoSelection(user) {
 
 // End of functions related to grid-input-view
 
+var searchAndFade = function(keyWord){
+    var application_index = $('th:contains("Application")').index();
+    $("table tr td:nth-child("+(application_index+1)+")").each(function () {
+        var application_name = $(this).text();
+        if(application_name.indexOf(keyWord) > -1){
+            $(this).parent().fadeIn("1000");
+        }
+        else{
+            $(this).parent().fadeOut("2000");
+        }
+    });
+}
 
 $(document).ready(function () {
     $("#users-input").select2({
@@ -2195,18 +2244,91 @@ $(document).ready(function () {
             var selText = $(this).text();
             $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
             $("#app-list-add-widget").removeClass("hidden");
-        });
-        $( '#searchable-container' ).searchable({
-            searchField: '#container-search',
-            selector: '.row',
-            childSelector: '.col-xs-4',
-            show: function( elem ) {
-                elem.slideDown(100);
-            },
-            hide: function( elem ) {
-                elem.slideUp( 100 );
+            if(selText == "Black List"){
+                $("#searchable-container_black_list").removeClass("hidden");
+                $("#searchable-container_white_list").addClass("hidden");
+                $(".user-role").addClass("hidden");
+
             }
+            else if(selText == "White List"){
+                $("#searchable-container_black_list").addClass("hidden");
+                $("#searchable-container_white_list").removeClass("hidden");
+                $(".user-role").removeClass("hidden");
+
+            }
+
+            $("#application-add").unbind("click").on('click', function(){
+                var packageName = $("#container-search").val();
+                if(packageName == "" | packageName == null){
+                    return;
+                }
+                var rolesList = $("#roles").val();
+                if(rolesList == null){
+                    rolesList = "ANY";
+                }
+
+                var application_index = $('th:contains("Application")').index();
+                var has_duplicate = false;
+                if(selText == "Black List"){
+                    check_for_duplicates("black-list");
+                }
+                else if(selText == "White List"){
+                    check_for_duplicates("white-list");
+                }
+
+
+                function check_for_duplicates (class_name){
+                    $("table."+class_name+" tr td:nth-child("+(application_index+1)+")").each(function () {
+                        if($(this).text() == $("#container-search").val()){
+                            alert("There is a duplicate entry for this application name. " +
+                                "Remove it first to create new entry");
+                            has_duplicate = true;
+                        }
+                    });
+                }
+
+                if(has_duplicate) {
+                    return;
+                }
+
+                var deleteButton = "<td>"+
+                    "<a class='row-delete'>"+
+                    "<span class='fw-stack'>"+
+                    "<i class='fw fw-ring fw-stack-2x'></i>"+
+                    "<i class='fw fw-delete fw-stack-1x'></i>"+
+                    "</span>"+
+                    "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
+                    "</a>"+
+                    "</td>";
+
+                if(selText == "Black List"){
+                    var new_table_row = "<tr>"+
+                        "<td>"+packageName+"</td>"+deleteButton+"</tr>";
+                    $('#searchable-container_black_list > table > tbody').append(new_table_row);
+                }
+                else if(selText == "White List"){
+                    var new_table_row = "<tr>"+
+                        "<td>"+packageName+"</td>"+
+                        "<td>"+rolesList+"</td>"+deleteButton+"</tr>";
+
+                    $('#searchable-container_white_list > table > tbody').append(new_table_row);
+
+                }
+                $("#container-search").val("");
+                $("#container-search").keyup();
+
+            });
         });
+
+        $(".app-list").on('click','.row-delete',function(event) {
+            $(this).parent().parent().remove();
+        });
+
+        $("#container-search").on("keyup", function(){
+                var searchVal = $(this).val();
+                searchAndFade(searchVal);
+        });
+
     });
 
     // adding support for cloning multiple profiles per feature with cloneable class definitions
