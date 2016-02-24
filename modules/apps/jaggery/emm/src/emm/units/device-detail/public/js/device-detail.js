@@ -16,8 +16,7 @@
  * under the License.
  */
 
-
-
+var InitiateViewOption = null;
 (function () {
     var deviceId = $(".device-id");
     var deviceIdentifier = deviceId.data("deviceid");
@@ -86,7 +85,7 @@
     }
 
     $(document).ready(function(){
-        $(".panel-body").removeClass("hidden");
+        $(".device-detail-body").removeClass("hidden");
         $("#loading-content").remove();
         loadOperationBar(deviceType);
         loadOperationsLog();
