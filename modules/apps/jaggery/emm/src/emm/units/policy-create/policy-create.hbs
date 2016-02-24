@@ -4,20 +4,32 @@
 
             <div class="wr-steps hidden">
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz itm-wiz-current" data-step="policy-platform"><div class="wiz-no">1</div><div class="wiz-lbl hidden-xs"><span>Select a platform</span></div></div>
-                    <br class="c-both" />
+                    <div class="itm-wiz itm-wiz-current" data-step="policy-platform">
+                        <div class="wiz-no">1</div>
+                        <div class="wiz-lbl hidden-xs"><span>Select a platform</span></div>
+                    </div>
+                    <br class="c-both"/>
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-profile"><div class="wiz-no">2</div><div class="wiz-lbl hidden-xs"><span>Configure profile</span></div></div>
-                    <br class="c-both" />
+                    <div class="itm-wiz" data-step="policy-profile">
+                        <div class="wiz-no">2</div>
+                        <div class="wiz-lbl hidden-xs"><span>Configure profile</span></div>
+                    </div>
+                    <br class="c-both"/>
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-criteria"><div class="wiz-no">3</div><div class="wiz-lbl hidden-xs"><span>Assign to groups</span></div></div>
-                    <br class="c-both" />
+                    <div class="itm-wiz" data-step="policy-criteria">
+                        <div class="wiz-no">3</div>
+                        <div class="wiz-lbl hidden-xs"><span>Assign to groups</span></div>
+                    </div>
+                    <br class="c-both"/>
                 </div>
                 <div class="col-md-3 col-xs-3">
-                    <div class="itm-wiz" data-step="policy-naming"><div class="wiz-no">4</div><div class="wiz-lbl hidden-xs"><span>Publish to devices</span></div></div>
-                    <br class="c-both" />
+                    <div class="itm-wiz" data-step="policy-naming">
+                        <div class="wiz-no">4</div>
+                        <div class="wiz-lbl hidden-xs"><span>Publish to devices</span></div>
+                    </div>
+                    <br class="c-both"/>
                 </div>
             </div>
 
@@ -63,16 +75,17 @@
                                     <div class="cus-col-50">
                                         <input id="policy-name-input" class="form-control" type="text" value=""/>
                                     </div>
-                                    <br class="c-both" />
+                                    <br class="c-both"/>
                                 </div>
                                 <label class="wr-input-label">
                                     Add a description
                                 </label>
                                 <div class="wr-input-control">
                                     <div class="cus-col-50">
-                                        <textarea id="policy-description-input" class="form-control" rows="10" placeholder="[ Summery about the policy ]"></textarea>
+                                        <textarea id="policy-description-input" class="form-control" rows="10"
+                                                  placeholder="[ Summery about the policy ]"></textarea>
                                     </div>
-                                    <br class="c-both" />
+                                    <br class="c-both"/>
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
@@ -110,29 +123,32 @@
                                             <option value="COPE">COPE (Corporate-Owned, Personally Enabled)</option>
                                         </select>
                                     </div>
-                                    <br class="c-both" />
+                                    <br class="c-both"/>
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-control radio light">
-                                        <input id="user-roles-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" checked/>
+                                        <input id="user-roles-radio-btn" type="radio" name="select-users-radio-btn"
+                                               class="select-users-radio" checked/>
                                         <span class="helper">&nbsp;Set user role(s)</span>
                                     </label>
                                     <label class="wr-input-control radio light" rel="assetfilter">
-                                        <input id="users-radio-btn" type="radio" name="select-users-radio-btn" class="select-users-radio" />
+                                        <input id="users-radio-btn" type="radio" name="select-users-radio-btn"
+                                               class="select-users-radio"/>
                                         <span class="helper">&nbsp;Set user(s)</span>
                                     </label>
                                 </div>
                                 <div id="user-roles-select-field" class="select-users">
                                     <div class="wr-input-control">
                                         <div class="cus-col-50">
-                                            <select id="user-roles-input" class="form-control select2" multiple="multiple">
+                                            <select id="user-roles-input" class="form-control select2"
+                                                    multiple="multiple">
                                                 <option value="ANY" selected>ANY</option>
                                                 {{#each roles}}
                                                     <option>{{this}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
-                                        <br class="c-both" />
+                                        <br class="c-both"/>
                                     </div>
                                 </div>
                                 <div id="users-select-field" class="select-users">
@@ -141,7 +157,7 @@
                                             <select id="users-input" class="form-control select2" multiple="multiple">
                                             </select>
                                         </div>
-                                        <br class="c-both" />
+                                        <br class="c-both"/>
                                     </div>
                                 </div>
                                 <br>
@@ -156,7 +172,7 @@
                                             <option data-action="monitor">Monitor</option>
                                         </select>
                                     </div>
-                                    <br class="c-both" />
+                                    <br class="c-both"/>
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
@@ -203,39 +219,56 @@
                     <hr>
                     <div id="policy-platform-wizard-steps" class="row wr-wizard"></div>
                     <hr>
+                    <div id="policy-platform-main-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <h4>Step 1: Select a platform</h4>
                             <br>
+                            <div id="policy-platform-main-error-msg" class="alert alert-danger hidden" role="alert">
+                                <i class="icon fw fw-error"></i><span></span>
+                            </div>
+                            <div id="supportedPlatforms" class="hidden"
+                            {{#each types}}
+                                {{#equal name "android"}} data-android-id={{id}}
+                                    data-android="true"
+                                {{/equal}}
+                                {{#equal name "ios"}} data-ios-id={{id}}
+                                 data-ios="true"
+                                {{/equal}}
+                                {{#equal name "windows"}}
+                                 data-windows="true" data-windows-id={{id}}
+                                {{/equal}}
+                            {{/each}}
+                                    ></div>
                             <div class="row wr-tile-buttons-list">
                                 <div class="wr-input-control">
                                     <ul class="tile-buttons row">
-                                        {{#each types}}
-                                            {{#equal name "android"}}
-                                                <li class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="android" data-platform-id={{id}} data-validate="false">
-                                                        <i class="fw fw-android"></i>
-                                                        <b>Android</b>
-                                                    </a>
-                                                </li>
-                                            {{/equal}}
-                                            {{#equal name "ios"}}
-                                                <li class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="ios" data-platform-id={{id}} data-validate="false">
-                                                        <i class="fw fw-apple"></i>
-                                                        <b>Apple iOS</b>
-                                                    </a>
-                                                </li>
-                                            {{/equal}}
-                                            {{#equal name "windows"}}
-                                                <li class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                                    <a href="javascript:void(0)" class="wizard-stepper" data-current="policy-platform" data-next="policy-profile" data-platform="windows" data-platform-id={{id}} data-validate="false">
-                                                        <i class="fw fw-windows"></i>
-                                                        <b>Windows Phone</b>
-                                                    </a>
-                                                </li>
-                                            {{/equal}}
-                                        {{/each}}
+                                        <li class="col-xs-12 col-sm-12 col-md- 4 col-lg-4">
+                                            <a href="javascript:void(0)" class="android-platform wizard-stepper"
+                                               data-current="policy-platform" data-next="policy-profile"
+                                               data-platform="android" data-validate="false">
+                                                <i class="fw fw-android"></i>
+                                                <b>Android</b>
+                                            </a>
+                                        </li>
+                                        <li class="col-xs-12 col-sm-12 col-md- 4 col-lg-4">
+                                            <a href="javascript:void(0)" class="ios-platform wizard-stepper"
+                                               data-current="policy-platform" data-next="policy-profile"
+                                               data-platform="ios" data-validate="false">
+                                                <i class="fw fw-apple"></i>
+                                                <b>Apple iOS</b>
+                                            </a>
+                                        </li>
+                                        <li class="col-xs-12 col-sm-12 col-md- 4 col-lg-4">
+                                            <a href="javascript:void(0)" class="windows-platform wizard-stepper"
+                                               data-current="policy-platform" data-next="policy-profile"
+                                               data-platform="windows" data-validate="false">
+                                                <i class="fw fw-windows"></i>
+                                                <b>Windows Phone</b>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -249,9 +282,12 @@
     </div>
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script id="hidden-operations-ios" src="{{self.publicURL}}/templates/hidden-operations-ios.hbs" type="text/x-handlebars-template" ></script>
-    <script id="hidden-operations-android" src="{{self.publicURL}}/templates/hidden-operations-android.hbs" type="text/x-handlebars-template" ></script>
-    <script id="hidden-operations-windows" src="{{self.publicURL}}/templates/hidden-operations-windows.hbs" type="text/x-handlebars-template" ></script>
+    <script id="hidden-operations-ios" src="{{self.publicURL}}/templates/hidden-operations-ios.hbs"
+            type="text/x-handlebars-template"></script>
+    <script id="hidden-operations-android" src="{{self.publicURL}}/templates/hidden-operations-android.hbs"
+            type="text/x-handlebars-template"></script>
+    <script id="hidden-operations-windows" src="{{self.publicURL}}/templates/hidden-operations-windows.hbs"
+            type="text/x-handlebars-template"></script>
     <script src="{{self.publicURL}}/js/policy-create.js"></script>
     <script src="{{self.publicURL}}/js/jquery.searchable-1.1.0.min.js"></script>
 {{/zone}}
