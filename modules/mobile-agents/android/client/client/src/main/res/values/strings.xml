@@ -280,6 +280,7 @@
     <string name="authentication_failed">Authentication Failed</string>
     <string name="try_again">Try again</string>
     <string name="button_unregister">Unregister</string>
+    <string name="button_enable_managed_profile">Enable Managed Profile</string>
     <string name="txt_domain">Domain</string>
     <string name="txt_username">Username</string>
     <string name="txt_password">Password</string>
