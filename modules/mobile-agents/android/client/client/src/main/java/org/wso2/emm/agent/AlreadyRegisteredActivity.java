@@ -64,9 +64,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private Resources resources;
 	private ProgressDialog progressDialog;
 	private Button btnUnregister;
+	private Button btnEnableMngProfile;
 	private TextView txtRegText;
 	private static final int TAG_BTN_UNREGISTER = 0;
 	private static final int TAG_BTN_RE_REGISTER = 2;
+	private static final int TAG_BTN_ENABLE_MANAGED_PROFILE = 3;
 	private boolean freshRegFlag = false;
 	private boolean isUnregisterBtnClicked = false;
 	private AlertDialog.Builder alertDialog;
@@ -119,8 +121,12 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		txtRegText = (TextView) findViewById(R.id.txtRegText);
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
+		btnEnableMngProfile = (Button) findViewById(R.id.btnEnableMngProfile);
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
+		btnEnableMngProfile.setTag(TAG_BTN_ENABLE_MANAGED_PROFILE);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+		btnEnableMngProfile.setOnClickListener(onClickListenerButtonClicked);
+
 	}
 
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -156,6 +162,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 					loadServerDetailsActivity();
 					break;
 
+				case TAG_BTN_ENABLE_MANAGED_PROFILE:
+					startManagedProfileManager();
 				default:
 					break;
 			}
@@ -163,6 +171,13 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 	};
 
+	/**
+	 * Start ManagedProfileManager which configures Android Managed Profile Feature
+	 */
+	private void startManagedProfileManager(){
+		Intent ManagedProfileManager = new Intent(getApplicationContext(), ManagedProfileManager.class);
+		startActivity(ManagedProfileManager);
+	}
 
 	/**
 	 * Send unregistration request.
@@ -172,9 +187,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		isUnregisterBtnClicked = true;
 
 		progressDialog = ProgressDialog.show(AlreadyRegisteredActivity.this,
-						getResources().getString(R.string.dialog_message_unregistering),
-						getResources().getString(R.string.dialog_message_please_wait),
-						true);
+				getResources().getString(R.string.dialog_message_unregistering),
+				getResources().getString(R.string.dialog_message_please_wait),
+				true);
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {
@@ -270,10 +285,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 						utils.setServerIP(serverIP);
 						if(utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
 							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-							                           utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
-							                           HTTP_METHODS.GET,
-							                           null, AlreadyRegisteredActivity.this,
-							                           Constants.IS_REGISTERED_REQUEST_CODE);
+									utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
+									HTTP_METHODS.GET,
+									null, AlreadyRegisteredActivity.this,
+									Constants.IS_REGISTERED_REQUEST_CODE);
 						} else {
 							try {
 								CommonUtils.clearAppData(context);
@@ -381,7 +396,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
 		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-		                           getResources().getString(R.string.device_admin_enable_alert));
+				getResources().getString(R.string.device_admin_enable_alert));
 		startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
 	}
 
@@ -391,11 +406,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private void showUnregisterDialog() {
 		AlertDialog.Builder alertDialog =
 				CommonDialogUtils.getAlertDialogWithTwoButtonAndTitle(context,
-                      null,
-                      getResources().getString(R.string.dialog_unregister),
-                      getResources().getString(R.string.yes),
-                      getResources().getString(R.string.no),
-                      dialogClickListener, dialogClickListener);
+						null,
+						getResources().getString(R.string.dialog_unregister),
+						getResources().getString(R.string.yes),
+						getResources().getString(R.string.no),
+						dialogClickListener, dialogClickListener);
 		alertDialog.show();
 	}
 
@@ -435,7 +450,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this, PinCodeActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-		                AlreadyRegisteredActivity.class.getSimpleName());
+				AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
 	}
 

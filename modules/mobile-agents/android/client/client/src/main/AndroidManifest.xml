@@ -155,6 +155,28 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+
+        <!-- Managed Profile Manifest items -->
+        <activity
+            android:name=".services.managedProfileServices.EnableProfileActivity"
+            android:label="@string/app_name"/>
+        <activity
+            android:name="org.wso2.emm.agent.ManagedProfileManager"
+            android:label="@string/title_activity_notify"
+            android:screenOrientation="portrait" >
+        </activity>
+        <receiver
+            android:name=".services.managedProfileServices.ManagedProfileDeviceAdminReceiver"
+            android:description="@string/app_name"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/agent_device_admin"/>
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
