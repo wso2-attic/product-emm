@@ -22,11 +22,16 @@ $('a[data-toggle="tab"]').on("shown.bs.tab", function() {
     var hash = url.substring(url.indexOf("#")+1);
 
     if(hash == 'device_location'){
-        loadLeafletMap();
+        if(typeof map == "undefined")  {
+            loadLeafletMap();
+        }
+    }else{
+
     }
 });
 
 function loadLeafletMap(){
+
     var lat     = $("#device-location").data("lat"),
         long    = $("#device-location").data("long"),
         container = 'device-location',
@@ -43,6 +48,7 @@ function loadLeafletMap(){
         }
 
     var map = L.map(container).setView([lat,long], zoomLevel);
+
 
     L.tileLayer(tileSet, { attribution: attrib}).addTo(map);
     L.marker([lat,long]).addTo(map).bindPopup('Your device is here..').openPopup();
