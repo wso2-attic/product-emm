@@ -389,34 +389,36 @@
                     <div id="app-list-add-widget" class="hidden">
                         <div class="row">
                             <div class="col-md-6">
-                                <div id="custom-search-input">
-                                    <div class="input-group col-md-12">
-                                        <input type="text" class="form-control"
-                                               placeholder="search by package name in app store..."/>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-info btn-lg" type="button">
-                                        <i class="glyphicon glyphicon-search"></i>
-                                    </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <br/>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <span class="input-group-btn">
-                                    <input type="search" id="container-search" value=""
-                                           class="form-control"
-                                           placeholder="Search by package name in list...">
-                                </span>
+                                <label class="wr-input-label"
+                                       title="search for applications on app stores">
+                                    Search on App Stores
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </label>
+                                    <div class="wr-input-control">
+                                            <select id="app-select" class="form-control select2">
+                                            </select>
+                                    </div>
                                 <div class="user-role hidden">
-                                    <label class="wr-input-label" title="Optional field that can have 0-to-many roles for the user">
+
+                                    <label class="wr-input-label"
+                                           title="List of available secondary user stores">
+                                        User Stores
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </label>
+
+                                    <div class="wr-input-control">
+                                        <select id="userStore" class="form-control select" disabled>
+                                            <option>PRIMARY</option>
+                                        </select>
+                                    </div>
+                                    <label class="wr-input-label"
+                                           title="Optional field that can have 0-to-many roles for the user">
                                         User Roles
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </label>
                                     <div class="wr-input-control">
-                                        <select id="roles" class="form-control select2" multiple="multiple">
+                                        <select id="roles" class="form-control select2"
+                                                multiple="multiple" disabled>
                                             {{#each roles}}
                                                 <option>{{this}}</option>
                                             {{/each}}
@@ -435,30 +437,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="app-list">
-                                <!--<tr>-->
-                                    <!--<td>package 1</td>-->
-                                    <!--<td>-->
-                                        <!--<a class="row-delete">-->
-                                                <!--<span class="fw-stack">-->
-                                                    <!--<i class="fw fw-ring fw-stack-2x"></i>-->
-                                                    <!--<i class="fw fw-delete fw-stack-1x"></i>-->
-                                                 <!--</span>-->
-                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
-                                        <!--</a>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                    <!--<td>package 2</td>-->
-                                    <!--<td>-->
-                                        <!--<a class="row-delete">-->
-                                                <!--<span class="fw-stack">-->
-                                                    <!--<i class="fw fw-ring fw-stack-2x"></i>-->
-                                                    <!--<i class="fw fw-delete fw-stack-1x"></i>-->
-                                                 <!--</span>-->
-                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
-                                        <!--</a>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
+
                                 </tbody>
                             </table>
                         </div>
@@ -473,32 +452,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="app-list">
-                                <!--<tr>-->
-                                    <!--<td>package 1</td>-->
-                                    <!--<td>role1, role2</td>-->
-                                    <!--<td>-->
-                                        <!--<a class="row-delete">-->
-                                            <!--<span class="fw-stack">-->
-                                                <!--<i class="fw fw-ring fw-stack-2x"></i>-->
-                                                <!--<i class="fw fw-delete fw-stack-1x"></i>-->
-                                            <!--</span>-->
-                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
-                                        <!--</a>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                    <!--<td>package 2</td>-->
-                                    <!--<td>role3</td>-->
-                                    <!--<td>-->
-                                        <!--<a class="row-delete">-->
-                                           <!--<span class="fw-stack">-->
-                                               <!--<i class="fw fw-ring fw-stack-2x"></i>-->
-                                               <!--<i class="fw fw-delete fw-stack-1x"></i>-->
-                                           <!--</span>-->
-                                            <!--<span class="hidden-xs hidden-on-grid-view">Delete</span>-->
-                                        <!--</a>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
+
                                 </tbody>
                             </table>
                         </div>

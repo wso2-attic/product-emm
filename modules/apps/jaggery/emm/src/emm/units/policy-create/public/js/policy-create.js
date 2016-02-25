@@ -1846,6 +1846,8 @@ stepForwardFrom["policy-naming-publish"] = function () {
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
     savePolicy(policy, "/mdm-admin/policies/active-policy");
+    appRestrictionInStoreByRole(policy);
+
 };
 stepForwardFrom["policy-naming"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
@@ -1915,6 +1917,39 @@ var savePolicy = function (policy, serviceURL) {
         }
     );
 };
+
+var appRestrictionInStoreByRole = function(policy){
+    var whiteList = policy["profile"]["APP-RESTRICTION"]["white-list"];
+    var appUUID = getUUIDForApp("admin", "sample", "1.0");
+    var serviceURL  = "/publisher/asset/mobileapp/id/"+appUUID+"/permissions";
+    var payload = '[{"role":"Internal/store-admin","permissions":["GET"]}]';
+    if(typeof whiteList != "undefined"){
+        invokerUtil.post(
+            serviceURL,
+            payload,
+            function () {
+                console.log("successfully ended...............!");
+            },
+            function (data) {
+                console.log("error occured.................!!!");
+            }
+        );
+    }
+};
+
+var getUUIDForApp = function(provider, name, version){
+
+    var serviceURL = "/publisher/api/asset/get/uuid/mobileapp/"+provider+"/"+name+"/"+version;
+    invokerUtil.get(
+        serviceURL,
+        function (data) {
+            console.log("call succeeded...............!");
+        },
+        function (data) {
+            console.log("error occured.................!!!");
+        }
+    );
+}
 
 // Start of HTML embedded invoke methods
 var showAdvanceOperation = function (operation, button) {
@@ -2305,7 +2340,7 @@ $(document).ready(function () {
             }
 
             $("#application-add").unbind("click").on('click', function(){
-                var packageName = $("#container-search").val();
+                var packageName = $("#app-select").val();
                 if(packageName == "" | packageName == null){
                     return;
                 }
@@ -2326,7 +2361,7 @@ $(document).ready(function () {
 
                 function check_for_duplicates (class_name){
                     $("table."+class_name+" tr td:nth-child("+(application_index+1)+")").each(function () {
-                        if($(this).text() == $("#container-search").val()){
+                        if($(this).text() == $("#app-select").val()){
                             alert("There is a duplicate entry for this application name. " +
                                 "Remove it first to create new entry");
                             has_duplicate = true;
@@ -2361,8 +2396,11 @@ $(document).ready(function () {
                     $('#searchable-container_white_list > table > tbody').append(new_table_row);
 
                 }
-                $("#container-search").val("");
-                $("#container-search").keyup();
+
+                $("#app-select").select2("val", "");
+                $("#userStore").prop("disabled", true);
+                $("#roles").select2("val", "");
+                $("#roles").prop("disabled", true);
 
             });
         });
@@ -2371,10 +2409,81 @@ $(document).ready(function () {
             $(this).parent().parent().remove();
         });
 
-        $("#container-search").on("keyup", function(){
-                var searchVal = $(this).val();
-                searchAndFade(searchVal);
+        $("#app-select").select2({
+            ajax: {
+                url: "https://api.github.com/search/repositories",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+                    // parse the results into the format expected by Select2
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data, except to indicate that infinite
+                    // scrolling can be used
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 1,
+            multiple: true,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection
+        }).on('select2:select', function (e) {
+            //clear the input box after a selection is made
+            $(this).val([]).trigger('change');
+            $(this).val([e.params.data.id]).trigger("change");
+            $("#userStore").prop("disabled", false);
+            $("#roles").prop("disabled", false);
+
         });
+
+        function formatRepo (repo) {
+            if (repo.loading) return repo.text;
+
+            var markup = '<div class="clearfix">' +
+                '<div class="col-sm-10">' +
+                '<img src="' + repo.owner.avatar_url + '" style="max-width: 100%" />' +
+                '</div>' +
+                '<div clas="col-sm-1">' +
+                '<div class="clearfix">' +
+                '<div class="col-sm-6">' + repo.full_name + '</div>' +
+                '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
+                '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
+                '</div>';
+
+            //if (repo.description) {
+            //    markup += '<div>' + repo.description + '</div>';
+            //}
+
+            markup += '</div></div>';
+
+            return markup;
+        }
+
+        function formatRepoSelection (repo) {
+            return repo.full_name || repo.text;
+        }
+
+        //$("#container-search").on("keyup", function(){
+        //        var searchVal = $(this).val();
+        //        //searchAndFade(searchVal);
+        //        searchInAppStores(searchVal);
+        //
+        //});
 
     });
 
