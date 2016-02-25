@@ -54,7 +54,7 @@ import java.util.List;
 public class Operation {
 
     private static Log log = LogFactory.getLog(Operation.class);
-
+    /* @deprecated */
     @GET
     public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
             throws MDMAPIException {
@@ -115,6 +115,7 @@ public class Operation {
 		return operations;
 	}
 
+    /* @deprecated */
     @POST
     public ResponsePayload addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
         DeviceManagementProviderService dmService;
