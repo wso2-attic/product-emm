@@ -16,6 +16,7 @@
  * under the License.
  */
 
+var InitiateViewOption = null;
 (function () {
     var deviceId = $(".device-id");
     var deviceIdentifier = deviceId.data("deviceid");
@@ -37,8 +38,54 @@
                 $(".panel-body").append(defaultInnerHTML);
             });
     }
+    $('.media.tab-responsive [data-toggle=tab]').on('shown.bs.tab', function(e){
+        var activeTabPane = $(e.target).attr('href'),
+            activeCollpasePane = $(activeTabPane).find('[data-toggle=collapse]').data('target'),
+            activeCollpasePaneSiblings = $(activeTabPane).siblings().find('[data-toggle=collapse]').data('target'),
+            activeListGroupItem = $('.media .list-group-item.active');
+
+        $(activeCollpasePaneSiblings).collapse('hide');
+        $(activeCollpasePane).collapse('show');
+        positionArrow(activeListGroupItem);
+
+        $(".panel-heading .caret-updown").removeClass("fw-sort-down");
+        $(".panel-heading.collapsed .caret-updown").addClass("fw-sort-up");
+    });
+
+    $('.media.tab-responsive .tab-content').on('shown.bs.collapse', function(e){
+        var activeTabPane = $(e.target).parent().attr('id');
+        $('.media.tab-responsive [data-toggle=tab][href=#'+activeTabPane+']').tab('show');
+        $(".panel-heading .caret-updown").removeClass("fw-sort-up");
+        $(".panel-heading.collapsed .caret-updown").addClass("fw-sort-down");
+    });
+
+    function positionArrow(selectedTab){
+        var selectedTabHeight = $(selectedTab).outerHeight();
+        var arrowPosition = 0;
+        var totalHeight = 0;
+        var arrow = $(".media .panel-group.tab-content .arrow-left");
+        var parentHeight = $(arrow).parent().outerHeight();
+
+        if($(selectedTab).prev().length){
+            $(selectedTab).prevAll().each(function() {
+                totalHeight += $(this).outerHeight();
+            });
+            arrowPosition = totalHeight + (selectedTabHeight / 2);
+        }else{
+            arrowPosition = selectedTabHeight / 2;
+        }
+
+        if(arrowPosition >= parentHeight){
+            parentHeight = arrowPosition + 10;
+            $(arrow).parent().height(parentHeight);
+        }else{
+            $(arrow).parent().removeAttr("style");
+        }
+        $(arrow).css("top",arrowPosition - 10);
+    }
+
     $(document).ready(function(){
-        $(".panel-body").removeClass("hidden");
+        $(".device-detail-body").removeClass("hidden");
         $("#loading-content").remove();
         loadOperationBar(deviceType);
         loadOperationsLog();
