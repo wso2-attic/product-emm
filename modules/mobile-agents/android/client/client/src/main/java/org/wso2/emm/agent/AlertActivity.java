@@ -170,7 +170,6 @@ public class AlertActivity extends SherlockActivity {
 	private void updateNotification (int id) {
 		NotificationDAO notificationDAO = new NotificationDAO(context);
 		notificationDAO.open();
-		Notification n = notificationDAO.getNotification(id);
 		notificationDAO.updateNotification(id, Notification.Status.DISMISSED);
 		notificationDAO.close();
 	}

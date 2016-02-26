@@ -68,15 +68,17 @@ public class NotificationDAO {
 
     public Notification getNotification(int id) {
         Cursor result =  db.rawQuery( "SELECT * FROM " + Constants.NotificationTable.NAME + " WHERE id = " + id, null);
-        result.moveToFirst();
-        return cursorToNotification(result);
+        if (result.getCount() > 0) {
+            result.moveToFirst();
+            return cursorToNotification(result);
+        }
+        return null;
     }
 
-    public Notification updateNotification(int id, Notification.Status status) {
-        Cursor result =  db.rawQuery( "UPDATE " + Constants.NotificationTable.NAME + " SET status = '" + status +
+    public void updateNotification(int id, Notification.Status status) {
+        Cursor result =  db.rawQuery( "UPDATE " + Constants.NotificationTable.NAME + " SET status = '" + status.toString() +
                                       "' WHERE id = " + id, null);
-        result.moveToFirst();
-        return cursorToNotification(result);
+        result.close();
     }
 
     public List<Notification> getAllNotifications() {

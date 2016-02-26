@@ -1224,7 +1224,9 @@ public class Operation implements APIResultCallBack {
 		notification.setStatus(status);
 		notification.setReceivedTime(Calendar.getInstance().getTime().toString());
 		notificationDAO.open();
-		notificationDAO.addNotification(notification);
+		if (notificationDAO.getNotification(id) == null) {
+			notificationDAO.addNotification(notification);
+		}
 		notificationDAO.close();
 	}
 
