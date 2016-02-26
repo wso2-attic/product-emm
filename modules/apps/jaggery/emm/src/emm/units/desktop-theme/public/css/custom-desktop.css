@@ -7073,49 +7073,66 @@ ul.tiles .icon {
 }
 
 .media .panel-group.tab-content{
+     position: relative;
+     background: #f4f4f4;
+     border: 1px solid #ddd;
+ }
+ .media .panel-group .panel-heading{
     padding:10px;
-    position: relative;
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-}
-.arrow-left {
-    position: absolute;
-    right: 100%;
-    top: 20px;
-    width: 0px;
-    height: 0px;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid #f4f4f4;
-}
+    margin-bottom:0px;
+ }
+ .media .panel.active .panel-heading.visible-xs{
+    background:#2c313b;
+    color:#fff;
+ }
+  .media .panel-heading{
+     font-size:14px;
+  }
+ .media .panel-group .panel-body{
+    padding:10px;
+ }
+ .arrow-left {
+     position: absolute;
+     right: 100%;
+     top: 20px;
+     width: 0px;
+     height: 0px;
+     border-top: 10px solid transparent;
+     border-bottom: 10px solid transparent;
+     border-right: 10px solid #f4f4f4;
+ }
 
-.media .panel-group.tab-content .panel{
-    background:none;
-}
-.media .list-group-item a, .media .list-group-item a{
-    background:#f4f4f4;
-}
-.media .list-group-item a:focus, .media .list-group-item a:hover{
-    background:#f6f6f6;
-}
-.media  .panel-group .panel+.panel{
-    margin-top:0px;
-}
-.media .panel-group .panel-body{
-    margin-bottom:40px;
-}
-.media .panel-group .panel-body .thumbnail.icon{
-    margin-bottom:10px;
-}
-.media .panel-body .switch-container{
-    text-align:right;
-    margin-bottom:10px;
-}
-.media .panel-body .switch-container > label{
-    font-weight:normal;
-}
-.media .panel-group .panel-title .caret-updown{
-    color:#999;
-    margin-top:10px;
-    float:right;
-}
+ .media .panel-group.tab-content .panel{
+     background:none;
+ }
+ .media .list-group-item a, .media .list-group-item a{
+     background:#f4f4f4;
+ }
+ .media .list-group-item a:focus, .media .list-group-item a:hover{
+     color:#333;
+     background:#f6f6f6;
+ }
+ .media  .panel-group .panel+.panel{
+     margin-top:0px;
+ }
+ .media .panel-group .panel-body{
+     margin-bottom:40px;
+ }
+ .media .panel-group .panel-body .thumbnail.icon{
+     margin-bottom:10px;
+ }
+ .media .panel-body .switch-container{
+     text-align:right;
+     margin-bottom:10px;
+ }
+ .media .panel-body .switch-container > label{
+     font-weight:normal;
+ }
+ .media .panel .panel-heading .caret-updown{
+     color:#2c313b;
+     margin-top:10px;
+     float:right;
+ }
+ .media .panel.active .panel-heading .caret-updown{
+    color:#fff;
+ }

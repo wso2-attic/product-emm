@@ -69,7 +69,6 @@
                 </div>
             </div>
         </div>
-        <div class="row">
             <div class="media tab-responsive">
                 <div class="media-left col-xs-1 col-sm-1 col-md-2 col-lg-2 hidden-xs">
                     <ul class="list-group nav nav-pills nav-stacked" role="tablist">
@@ -125,7 +124,6 @@
                                      id="tabContent1">
                                     <div class="device-detail-body hidden">
                                     <!-- device summary -->
-                                        <div class="row">
                                             {{#equal device.type "windows"}}
                                                 <div class="panel-body">
                                                     Not available yet
@@ -133,7 +131,7 @@
                                                 <br class="c-both"/>
                                             {{/equal}}
                                             {{#if device.viewModel.BatteryLevel}}
-                                                <div class="col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">BATTERY</div>
                                                         <div>
@@ -144,7 +142,7 @@
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.DeviceCapacity}}
-                                                <div class="col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">STORAGE</div>
                                                         <div>
@@ -157,7 +155,7 @@
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.internal_memory.FreeCapacity}}
-                                                <div class="col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">LOCAL STORAGE</div>
                                                         <div>
@@ -170,7 +168,7 @@
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.external_memory.FreeCapacity}}
-                                                <div class="col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">EXTERNAL STORAGE</div>
                                                         <div>
@@ -182,7 +180,6 @@
                                                     </div>
                                                 </div>
                                             {{/if}}
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -319,7 +316,6 @@
                 </div>
                 {{/defineZone}}
             </div>
-        </div>
     </div>
 {{/zone}}
 {{#zone "bottomJs"}}
