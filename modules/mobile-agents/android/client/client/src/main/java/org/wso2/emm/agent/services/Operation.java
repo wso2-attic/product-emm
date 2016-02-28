@@ -400,6 +400,7 @@ public class Operation implements APIResultCallBack {
 		try {
 
 			operation.setStatus(resources.getString(R.string.operation_value_progress));
+			operation.setOperationResponse("Alert is received: " + Calendar.getInstance().getTime().toString());
 			resultBuilder.build(operation);
 			JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
 			String message = inputData.getString(resources.getString(R.string.intent_extra_message));
@@ -1217,6 +1218,12 @@ public class Operation implements APIResultCallBack {
 		}
 	}
 
+	/**
+	 * This method is used to add notification to the embedded db.
+	 * @param id notification id (operation id).
+	 * @param message notification.
+	 * @param status current status of the notification.
+	 */
 	private void addNotification(int id, String message, Notification.Status status) {
 		Notification notification = new Notification();
 		notification.setId(id);
@@ -1230,6 +1237,10 @@ public class Operation implements APIResultCallBack {
 		notificationDAO.close();
 	}
 
+	/**
+	 * This method checks whether there are any previous notifications which were not sent
+	 * and send if found any.
+	 */
 	public void checkPreviousNotifications() {
 		notificationDAO.open();
 		List<Notification> dismissedNotifications = notificationDAO.getAllDismissedNotifications();
