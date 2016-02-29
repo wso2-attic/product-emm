@@ -16,7 +16,7 @@
             </a>
         </td>
         <td class="text-right content-fill text-left-on-grid-view no-wrap">
-            {{#unequal "admin" username }}
+            {{#unequal adminUser username }}
                 {{#if canEdit}}
                     <a href="/emm/users/edit-user?username={{username}}" data-username="{{username}}"
                        data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-user-link">
@@ -29,7 +29,7 @@
                 {{/if}}
             {{/unequal}}
 
-            {{#unequal "admin" username }}
+            {{#unequal adminUser username }}
                 {{#if canRemove}}
                     <a href="#" data-username="{{username}}" data-userid="{{userid}}"
                        data-click-event="remove-form" onclick="javascript:removeUser('{{username}}', '{{userid}}')"
