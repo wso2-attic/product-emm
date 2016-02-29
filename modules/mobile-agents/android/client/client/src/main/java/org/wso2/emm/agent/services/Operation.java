@@ -17,6 +17,35 @@
  */
 package org.wso2.emm.agent.services;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.AlertActivity;
+import org.wso2.emm.agent.ServerDetails;
+import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.api.GPSTracker;
+import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.ComplianceFeature;
+import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.beans.Notification;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.dao.NotificationDAO;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.DatabaseHelper;
+import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.CommonUtils;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
@@ -33,31 +62,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.wso2.emm.agent.AlertActivity;
-import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.ServerDetails;
-import org.wso2.emm.agent.api.ApplicationManager;
-import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.api.GPSTracker;
-import org.wso2.emm.agent.api.WiFiConfig;
-import org.wso2.emm.agent.beans.ComplianceFeature;
-import org.wso2.emm.agent.beans.DeviceAppInfo;
-import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.utils.CommonUtils;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-
 /**
  * This class handles all the functionalities related to device management operations.
  */
@@ -71,6 +75,7 @@ public class Operation implements APIResultCallBack {
 	private ResultPayload resultBuilder;
 	private DeviceInfo deviceInfo;
 	private GPSTracker gps;
+	private NotificationDAO notificationDAO;
 
 	private static final String TAG = "Operation Handler";
 
@@ -95,6 +100,7 @@ public class Operation implements APIResultCallBack {
 		this.resultBuilder = new ResultPayload();
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
 		gps = new GPSTracker(context.getApplicationContext());
+		notificationDAO = new NotificationDAO(context);
 	}
 
 	/**
@@ -310,9 +316,9 @@ public class Operation implements APIResultCallBack {
 		intent.putExtra(resources.getString(R.string.intent_extra_type),
 				resources.getString(R.string.intent_extra_ring));
 		intent.putExtra(resources.getString(R.string.intent_extra_message),
-				        resources.getString(R.string.intent_extra_stop_ringing));
+				resources.getString(R.string.intent_extra_stop_ringing));
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-				        Intent.FLAG_ACTIVITY_NEW_TASK);
+				Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 
 		if (Constants.DEBUG_MODE_ENABLED) {
@@ -396,14 +402,18 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void displayNotification(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		try {
-			operation.setStatus(resources.getString(R.string.operation_value_completed));
+
+			operation.setStatus(resources.getString(R.string.operation_value_progress));
+			operation.setOperationResponse("Alert is received: " + Calendar.getInstance().getTime().toString());
 			resultBuilder.build(operation);
 			JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
 			String message = inputData.getString(resources.getString(R.string.intent_extra_message));
 
 			if (message != null && !message.isEmpty()) {
+				addNotification(operation.getId(), message, Notification.Status.PENDING); //adding notification to the db
 				Intent intent = new Intent(context, AlertActivity.class);
 				intent.putExtra(resources.getString(R.string.intent_extra_message), message);
+				intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
 				intent.putExtra(resources.getString(R.string.intent_extra_type),
 						resources.getString(R.string.intent_extra_alert));
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
@@ -1216,7 +1226,7 @@ public class Operation implements APIResultCallBack {
 		JSONArray blacklistApps = new JSONArray();
 		try {
 			JSONObject resultAppList = new JSONObject(operation.getPayLoad().toString());
-				blacklistApps = resultAppList.getJSONArray("black_list");
+			blacklistApps = resultAppList.getJSONArray("black_list");
 
 		} catch (JSONException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -1244,7 +1254,7 @@ public class Operation implements APIResultCallBack {
 
 		restrictionIntent.putStringArrayListExtra("appList", appList);
 
-		PendingIntent pendingIntent = PendingIntent.getService(context,  0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getService(context, 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		Calendar calendar = Calendar.getInstance();
@@ -1259,5 +1269,44 @@ public class Operation implements APIResultCallBack {
 		resultBuilder.build(operation);
 
 
+	}
+
+	/**
+	 * This method is used to add notification to the embedded db.
+	 * @param id notification id (operation id).
+	 * @param message notification.
+	 * @param status current status of the notification.
+	 */
+	private void addNotification(int id, String message, Notification.Status status) {
+		Notification notification = new Notification();
+		notification.setId(id);
+		notification.setMessage(message);
+		notification.setStatus(status);
+		notification.setReceivedTime(Calendar.getInstance().getTime().toString());
+		notificationDAO.open();
+		if (notificationDAO.getNotification(id) == null) {
+			notificationDAO.addNotification(notification);
+		}
+		notificationDAO.close();
+	}
+
+	/**
+	 * This method checks whether there are any previous notifications which were not sent
+	 * and send if found any.
+	 */
+	public void checkPreviousNotifications() {
+		notificationDAO.open();
+		List<Notification> dismissedNotifications = notificationDAO.getAllDismissedNotifications();
+		org.wso2.emm.agent.beans.Operation operation;
+		for (Notification notification : dismissedNotifications) {
+			operation = new org.wso2.emm.agent.beans.Operation();
+			operation.setId(notification.getId());
+			operation.setCode(Constants.Operation.NOTIFICATION);
+			operation.setStatus(resources.getString(R.string.operation_value_completed));
+			operation.setOperationResponse("Alert was dismissed: " + notification.getResponseTime());
+			resultBuilder.build(operation);
+			notificationDAO.updateNotification(notification.getId(), Notification.Status.SENT);
+		}
+		notificationDAO.close();
 	}
 }
