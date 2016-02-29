@@ -373,7 +373,7 @@ public class ServerUtilities {
 			if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
 				KeyStore localTrustStore = KeyStore.getInstance("BKS");
 				inStream = IdentityProxy.getInstance().getContext().getResources().
-						openRawResource(R.raw.emm_truststore);
+						openRawResource(R.raw.emmtruststore);
 				localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
 
 				SchemeRegistry schemeRegistry = new SchemeRegistry();

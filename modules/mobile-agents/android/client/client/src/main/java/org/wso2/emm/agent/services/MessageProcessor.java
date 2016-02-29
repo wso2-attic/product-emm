@@ -114,6 +114,8 @@ public class MessageProcessor implements APIResultCallBack {
 		} catch (IOException e) {
 			Log.e(TAG, "Issue in stream parsing", e);
 		}
+		// check whether if there are any dismissed notifications to be sent
+		operation.checkPreviousNotifications();
 
 		for (org.wso2.emm.agent.beans.Operation op : operations) {
 			try {
