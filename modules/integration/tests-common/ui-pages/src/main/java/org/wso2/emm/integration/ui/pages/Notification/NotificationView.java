@@ -51,6 +51,11 @@ public class NotificationView {
     private UIElementMapper uiElementMapper;
     private static final Log log = LogFactory.getLog(NotificationView.class);
 
+    /**
+     * Constructor for the NotificationView Class
+     * @param driver Instance of the current Web driver
+     * @throws IOException driver throws an IOException if failed to load the input URL.
+     */
     public NotificationView(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
@@ -60,6 +65,9 @@ public class NotificationView {
         }
     }
 
+    /**
+     * This method imitate the view notification UI action.
+     */
     public void viewNotification() {
         WebElement unReadNotificationTab = driver.findElement(By.id(uiElementMapper.
                 getElement("emm.notification.unread.identifier")));

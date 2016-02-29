@@ -30,6 +30,9 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
                             if (data.length > 0 && data != null) {
                                 $('#ast-container').removeClass('hidden');
                                 $('#role-listing-status-msg').text('');
+                                for (var i = 0; i < data.viewModel.roles.length; i++) {
+                                   data.viewModel.roles[i].adminRole = $("#role-table").data("role");
+                                }
                                 var content = template(data.viewModel);
                                 $(objectGridContainer).html(content);
                                 if (isInit) {

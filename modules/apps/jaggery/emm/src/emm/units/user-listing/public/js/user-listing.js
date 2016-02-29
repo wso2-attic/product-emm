@@ -257,6 +257,7 @@ function loadUsers(searchParam) {
                 if (canResetPassword) {
                     viewModel.users[i].canEdit = true;
                 }
+                viewModel.roles[i].adminUser = $("#user-table").data("user");
             }
             if (data.length > 0) {
                 $('#ast-container').removeClass('hidden');
