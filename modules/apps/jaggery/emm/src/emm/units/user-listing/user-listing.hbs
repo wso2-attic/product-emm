@@ -7,6 +7,9 @@
         {{#if editPermitted}}
             <input type="hidden" id="can-edit" value="true"/>
         {{/if}}
+        {{#if resetPasswordPermitted}}
+            <input type="hidden" id="can-reset-password" value="true"/>
+        {{/if}}
         <i class="fw fw-settings fw-spin fw-2x"></i>
 
         Loading users . . .
@@ -188,6 +191,65 @@
                     <div class="buttons">
                         <a href="javascript:hidePopup()" class="btn-operations">
                             Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="reset-password-window" class="hide">
+        <input type="hidden" id="user" value="{{user.username}}">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-key fw-stack-1x"></i>
+                        </span>
+                        Reset Password
+                        <br>
+                    </h3>
+                    <div id="notification-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <h4>
+                        Enter new password
+                        <br><br>
+                        <div>
+                            <input type="password" class="form-control modal-input operationDataKeys" id="new-password" data-key="message"/>
+                        </div>
+                        <br>
+                        Retype new password
+                        <br><br>
+                        <div>
+                            <input type="password" class="form-control modal-input operationDataKeys" id="confirmed-password" data-key="message"/>
+                        </div>
+                        <br>
+                    </h4>
+                    <div class="buttons">
+                        <a href="#" id="reset-password-yes-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="#" id="reset-password-cancel-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="reset-password-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Password reset is successful.</h3>
+                    <div class="buttons">
+                        <a href="#" id="reset-password-success-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </div>
                 </div>
