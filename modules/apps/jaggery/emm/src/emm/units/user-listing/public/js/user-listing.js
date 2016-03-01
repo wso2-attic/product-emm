@@ -189,7 +189,7 @@ function loadUsers(searchParam) {
                 if (canEdit) {
                     viewModel.users[i].canEdit = true;
                 }
-                viewModel.roles[i].adminUser = $("#user-table").data("user");
+                viewModel.users[i].adminUser = $("#user-table").data("user");
             }
             if (data.length > 0) {
                 $('#ast-container').removeClass('hidden');
