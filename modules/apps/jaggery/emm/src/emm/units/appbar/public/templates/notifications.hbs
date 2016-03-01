@@ -1,0 +1,14 @@
+{{#each notifications}}
+    <li class="message message-info" data-type="selectable" >
+    <h4>
+        <i class="icon fw fw-info"></i>
+        <a href="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}"
+                                          data-id="{{notificationId}}"
+                                          data-url="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}"
+                                          class="new-notification" data-click-event="remove-form">
+        Device Type : {{deviceIdentifier.type}}
+        </a>
+    </h4>
+    <p>{{description}}</p>
+    </li>
+{{/each}}

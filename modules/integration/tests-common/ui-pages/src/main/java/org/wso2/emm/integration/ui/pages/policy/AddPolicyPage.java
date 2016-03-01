@@ -21,13 +21,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
+
 import java.io.IOException;
 
 public class AddPolicyPage {
     private WebDriver driver;
     private UIElementMapper uiElementMapper;
 
-    public AddPolicyPage(WebDriver driver) throws IOException{
+    public AddPolicyPage(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
@@ -36,8 +37,12 @@ public class AddPolicyPage {
         }
     }
 
+    /**
+     * Imitate the create policy function.
+     * @param policyName name of the policy to be added.
+     * @throws IOException
+     */
     public void addPolicy(String policyName) throws IOException {
-
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.platform.android"))).click();
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.camera"))).click();
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.checkbox.camera"))).click();
@@ -48,7 +53,7 @@ public class AddPolicyPage {
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.publish"))).click();
         String resultText = driver.findElement(By.id(uiElementMapper.getElement("emm.add.policy.publish.created.msg.div")
         )).getText();
-        if(!resultText.contains("POLICY CREATION IS SUCCESSFUL.")){
+        if (!resultText.contains("POLICY CREATION IS SUCCESSFUL.")) {
             throw new IllegalStateException("Policy was not added");
         }
     }

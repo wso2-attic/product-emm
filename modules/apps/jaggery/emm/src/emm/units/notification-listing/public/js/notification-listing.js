@@ -22,6 +22,15 @@ var responseCodes = {
     "INTERNAL_SERVER_ERROR": "Internal Server Error"
 };
 
+/**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    $(location).attr('href', $(this).data("url"));
+}
+
 $(document).ready(function () {
     var permissionSet = {};
     $.setPermission = function (permission) {

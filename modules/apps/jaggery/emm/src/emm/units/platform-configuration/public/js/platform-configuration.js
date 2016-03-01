@@ -120,6 +120,13 @@ var configParams = {
     "WINDOWS_EULA": "windowsLicense"
 };
 
+function promptErrorPolicyPlatform(errorMsg) {
+    var mainErrorMsgWrapper = "#platform-config-main-error-msg";
+    var mainErrorMsg = mainErrorMsgWrapper + " span";
+    $(mainErrorMsg).text(errorMsg);
+    $(mainErrorMsgWrapper).show();
+}
+
 $(document).ready(function () {
 
     var platformsSupported = $("#typeDiv").attr("typeData");
@@ -152,7 +159,6 @@ $(document).ready(function () {
     if (platformsSupported.indexOf('android') != -1) {
         invokerUtil.get(
             getAndroidConfigAPI,
-
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
@@ -180,8 +186,7 @@ $(document).ready(function () {
                 }
             }, function (data) {
                 console.log(data);
-            }
-        );
+            });
     }
 
     invokerUtil.get(
@@ -196,11 +201,9 @@ $(document).ready(function () {
                     }
                 }
             }
-
         }, function (data) {
             console.log(data);
-        }
-    );
+        });
 
     if (platformsSupported.indexOf('windows') != -1) {
         invokerUtil.get(
@@ -217,7 +220,6 @@ $(document).ready(function () {
                         }
                     }
                 }
-
             }, function (data) {
                 console.log(data);
             }
@@ -265,7 +267,6 @@ $(document).ready(function () {
                         }
                     }
                 }
-
             }, function (data) {
                 console.log(data);
             }
@@ -286,6 +287,7 @@ $(document).ready(function () {
             $("#gcm-inputs").show();
         }
     });
+
     /**
      * Following click function would execute
      * when a user clicks on "Save" button
@@ -840,7 +842,37 @@ $(document).ready(function () {
 var showAdvanceOperation = function (operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
-    var hiddenOperation = ".wr-hidden-operations-content > div";
-    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
-    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
+    var enabledPlatforms = $("#supportedPlatforms");
+    var isPluginEnabled = false;
+    switch (operation) {
+        case 'ios':
+            if (enabledPlatforms.data("ios")) {
+                isPluginEnabled = true;
+            }
+            break;
+        case 'windows':
+            if (enabledPlatforms.data("windows")) {
+                isPluginEnabled = true;
+            }
+            break;
+        case 'android':
+            if (enabledPlatforms.data("android")) {
+                isPluginEnabled = true;
+            }
+            break;
+        case 'general':
+            isPluginEnabled = true;
+            break;
+    }
+    if (isPluginEnabled) {
+        var hiddenOperation = ".wr-hidden-operations-content > div";
+        $(hiddenOperation + '[data-operation="' + operation + '"]').show();
+        $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
+    } else {
+        var hiddenOperation = ".wr-hidden-operations-content > div";
+        $(hiddenOperation + '[data-operation="error"]').show();
+        $(hiddenOperation + '[data-operation="error"]').siblings().hide();
+        promptErrorPolicyPlatform("To use " + operation + " related functionalities you need to configure the server " +
+                                 "accordingly.Please refer to the user guiled.");
+    }
 };

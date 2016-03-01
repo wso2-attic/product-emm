@@ -31,7 +31,7 @@ var platformTypeConstants = {
 };
 
 // Constants to define platform types ids.
-var platformTypeIds = {
+var platformIds = {
     "ANDROID": 1,
     "IOS": 3,
     "WINDOWS": 2
@@ -1646,9 +1646,7 @@ stepBackFrom["policy-profile"] = function () {
     $(".wr-advance-operations").html(
         "<div class='wr-advance-operations-init'>" +
         "<br>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
         "<i class='fw fw-settings fw-spin fw-2x'></i>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;" +
         "Loading Platform Features . . ." +
         "<br>" +
         "<br>" +
@@ -1758,6 +1756,10 @@ validateStep["policy-naming"] = function () {
     return wizardIsToBeContinued;
 };
 
+validateStep["policy-platform"] = function () {
+    return false;
+};
+
 validateStep["policy-naming-publish"] = function () {
     var validationStatus = {};
 
@@ -1809,7 +1811,7 @@ var savePolicy = function (policy, serviceURL) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if (policy["platformId"] == platformTypeIds["WINDOWS"] &&
+        if (policy["platformId"] == platformIds["WINDOWS"] &&
             key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
             policy["profile"][key].enablePassword = true;
         }
@@ -1862,7 +1864,6 @@ var savePolicy = function (policy, serviceURL) {
             $(".policy-message").removeClass("hidden");
         },
         function (data) {
-            console.log(data);
         }
     );
 };
@@ -2007,10 +2008,57 @@ function formatRepoSelection(user) {
     return user.username || user.text;
 }
 
+function promptErrorPolicyPlatform(errorMsg) {
+    var mainErrorMsgWrapper = "#policy-platform-main-error-msg";
+    var mainErrorMsg = mainErrorMsgWrapper + " span";
+    $(mainErrorMsg).text(errorMsg);
+    $(mainErrorMsgWrapper).removeClass("hidden");
+}
+
 // End of functions related to grid-input-view
 
 
 $(document).ready(function () {
+    var enabledPlatforms = $("#supportedPlatforms");
+    var isAndroidEnabled = enabledPlatforms.data("android");
+    var isWindowsEnabled = enabledPlatforms.data("windows");
+    var isIosEnabled = enabledPlatforms.data("ios");
+    var androidID = enabledPlatforms.data("android-id");
+    var windowsID = enabledPlatforms.data("windows-id");
+    var iosID = enabledPlatforms.data("ios-id");
+
+    var androidLink = $(".android-platform");
+    if (isAndroidEnabled) {
+        androidLink.attr("data-platform-id",androidID);
+    } else {
+        androidLink.unbind("click");
+        androidLink.attr("data-validate","true");
+        androidLink.bind("click",function(){
+            promptErrorPolicyPlatform("You need to configure Android plugging in order to use android related feature.");
+        });
+
+    }
+    var windowsLink = $(".windows-platform") ;
+    if (isWindowsEnabled) {
+        windowsLink.attr("data-platform-id",windowsID);
+    } else {
+        windowsLink.unbind("click");
+        windowsLink.attr("data-validate","true");
+        windowsLink.bind("click",function(){
+            promptErrorPolicyPlatform("You need to configure Windows plugging in order to use windows related feature.");
+        });
+    }
+    var iosLink = $(".windows-platform");
+    if (isIosEnabled) {
+        iosLink.attr("data-platform-id",iosID);
+    } else {
+        iosLink.unbind("click");
+        iosLink.attr("data-validate","true");
+        iosLink.bind("click",function(){
+            promptErrorPolicyPlatform("You need to configure IOS plugging in order to use ios related feature.");
+        });
+    }
+
     $("#users-input").select2({
         multiple: true,
         tags: false,

@@ -8,6 +8,15 @@ var loadRoleBasedActionURL = function (action, rolename) {
 };
 
 /**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    $(location).attr('href', $(this).data("url"));
+}
+
+/**
  * Sorting function of roles
  * listed on Role Management page in WSO2 MDM Console.
  */
@@ -21,6 +30,9 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
                             if (data.length > 0 && data != null) {
                                 $('#ast-container').removeClass('hidden');
                                 $('#role-listing-status-msg').text('');
+                                for (var i = 0; i < data.viewModel.roles.length; i++) {
+                                   data.viewModel.roles[i].adminRole = $("#role-table").data("role");
+                                }
                                 var content = template(data.viewModel);
                                 $(objectGridContainer).html(content);
                                 if (isInit) {

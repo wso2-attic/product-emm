@@ -2,10 +2,11 @@
     {{#defineZone "device-detail-top"}}
         <div class="row wr-device-board">
             <div class="col-lg-12 wr-secondary-bar">
-                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}" data-type="{{device.type}}">
+                <label class="device-id device-select" data-deviceid="{{device.deviceIdentifier}}"
+                       data-type="{{device.type}}">
                     Device {{device.name}}
                     {{#if device.viewModel.model}}
-                    <span class="lbl-device">
+                        <span class="lbl-device">
                         ( {{device.viewModel.vendor}} {{device.viewModel.model}} )
                     </span>
                     {{/if}}
@@ -13,85 +14,124 @@
             </div>
         </div>
     {{/defineZone}}
-
-    <!-- #page-content-wrapper -->
-    <div class="page-content-wrapper">
-        <!-- content/body -->
-        <div class="container-fluid body-wrapper">
-            <div class="row no-gutter add-padding-5x add-margin-top-5x" style="border: 1px solid #e4e4e4;">
-                <div class="media">
-                    <div class="media-left media-middle asset-image col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                        <div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>
-                    </div>
-                    <div class="media-body asset-desc add-padding-left-5x">
-                        <div style="background: #11375B; color: #fff; padding: 10px; margin-bottom: 5px">Device Overview</div>
-                        {{#defineZone "device-detail-properties"}}
-                            <table class="table table-responsive table-striped" id="members">
-                                <tbody>
-                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px; width: 1%;">Device</td><td style="padding:10px 15px;">{{device.viewModel.vendor}} {{device.properties.model}}</td></tr>
-                                {{#if device.viewModel.model}}
-                                    <tr role="row" class="odd"><td class="sorting_1" style="padding:10px 15px;">Model</td><td style="padding:10px 15px;">{{device.viewModel.model}}</td></tr>
-                                {{/if}}
-                                <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">IMEI</td><td style="padding:10px 15px;">{{device.viewModel.imei}}</td></tr>
-                                {{#if device.viewModel.udid}}
-                                    <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">UDID</td><td style="padding:10px 15px;">{{device.viewModel.udid}}</td></tr>
-                                {{/if}}
-                                {{#if device.viewModel.phoneNumber}}
-                                    <tr role="row" class="even"><td class="sorting_1" style="padding:10px 15px;">Phone Number</td><td style="padding:10px 15px;">{{device.viewModel.phoneNumber}}</td></tr>
-                                {{/if}}
-                                <tr role="row" class="even">
-                                    <td class="sorting_1" style="padding:10px 15px;">Status</td>
-                                    <td style="padding:10px 15px;">
-                                        {{#equal device.status "ACTIVE"}}<span><i class="fw fw-ok icon-success"></i> Active</span>{{/equal}}
-                                        {{#equal device.status "INACTIVE"}}<span><i class="fw fw-warning icon-warning"></i> Inactive</span>{{/equal}}
-                                        {{#equal device.status "BLOCKED"}}<span><i class="fw fw-remove icon-danger"></i> Blocked</span>{{/equal}}
-                                        {{#equal device.status "REMOVED"}}<span><i class="fw fw-delete icon-danger"></i> Removed</span>{{/equal}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        {{/defineZone}}
-                        <div style="background: #11375B; color: #fff; padding: 10px; margin-bottom: 5px">Operations</div>
-                        <div class="add-margin-top-4x">
-                            {{unit "operation-bar" deviceType=device.type}}
-                        </div>
-                    </div>
+    <div class="row no-gutter add-padding-5x add-margin-top-5x" style="border: 1px solid #e4e4e4;">
+        <div class="media">
+            <div class="media-left media-middle asset-image col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                <div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>
+            </div>
+            <div class="media-body asset-desc add-padding-left-5x">
+                <div style="background: #11375B; color: #fff; padding: 10px; margin-bottom: 5px">Device Overview</div>
+                {{#defineZone "device-detail-properties"}}
+                    <table class="table table-responsive table-striped" id="members">
+                        <tbody>
+                        <tr role="row" class="even">
+                            <td class="sorting_1" style="padding:10px 15px; width: 1%;">Device</td>
+                            <td style="padding:10px 15px;">{{device.viewModel.vendor}} {{device.properties.model}}</td>
+                        </tr>
+                        {{#if device.viewModel.model}}
+                            <tr role="row" class="odd">
+                                <td class="sorting_1" style="padding:10px 15px;">Model</td>
+                                <td style="padding:10px 15px;">{{device.viewModel.model}}</td>
+                            </tr>
+                        {{/if}}
+                        <tr role="row" class="even">
+                            <td class="sorting_1" style="padding:10px 15px;">IMEI</td>
+                            <td style="padding:10px 15px;">{{device.viewModel.imei}}</td>
+                        </tr>
+                        {{#if device.viewModel.udid}}
+                            <tr role="row" class="even">
+                                <td class="sorting_1" style="padding:10px 15px;">UDID</td>
+                                <td style="padding:10px 15px;">{{device.viewModel.udid}}</td>
+                            </tr>
+                        {{/if}}
+                        {{#if device.viewModel.phoneNumber}}
+                            <tr role="row" class="even">
+                                <td class="sorting_1" style="padding:10px 15px;">Phone Number</td>
+                                <td style="padding:10px 15px;">{{device.viewModel.phoneNumber}}</td>
+                            </tr>
+                        {{/if}}
+                        <tr role="row" class="even">
+                            <td class="sorting_1" style="padding:10px 15px;">Status</td>
+                            <td style="padding:10px 15px;">
+                                {{#equal device.status "ACTIVE"}}<span><i
+                                        class="fw fw-ok icon-success"></i> Active</span>{{/equal}}
+                                {{#equal device.status "INACTIVE"}}<span><i class="fw fw-warning icon-warning"></i> Inactive</span>{{/equal}}
+                                {{#equal device.status "BLOCKED"}}<span><i class="fw fw-remove icon-danger"></i> Blocked</span>{{/equal}}
+                                {{#equal device.status "REMOVED"}}<span><i class="fw fw-delete icon-danger"></i> Removed</span>{{/equal}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                {{/defineZone}}
+                <div style="background: #11375B; color: #fff; padding: 10px; margin-bottom: 5px">Operations</div>
+                <div class="add-margin-top-4x">
+                    {{unit "operation-bar" deviceType=device.type}}
                 </div>
+            </div>
+        </div>
+            <div class="media tab-responsive">
+                <div class="media-left col-xs-1 col-sm-1 col-md-2 col-lg-2 hidden-xs">
+                    <ul class="list-group nav nav-pills nav-stacked" role="tablist">
+                        <li class="list-group-item active">
+                            <a href="#device_details" role="tab" data-toggle="tab" aria-controls="device_details">
+                                <i class="fw fw-text"></i>Device Details
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#policy_compliance" role="tab" data-toggle="tab" aria-controls="policy_compliance">
+                                <i class="fw fw-text"></i>Policy Compliance
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#device_location" role="tab" data-toggle="tab" aria-controls="device_location">
+                                <i class="fw fw-map-location"></i> Device Location
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#installed_applications" role="tab" data-toggle="tab" aria-controls="installed_applications">
+                                <i class="fw fw-application"></i> Installed Applications
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#event_log" role="tab" data-toggle="tab" aria-controls="event_log">
+                                <i class="fw fw-text"></i> OperationsLog
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            <div class="media-body add-padding-left-5x remove-padding-xs">
+                {{#defineZone "device-detail-properties"}}
+                    <div class="media-body add-padding-left-5x remove-padding-xs">
+                        <div class="panel-group tab-content" id="tabs">
+                            <div class="arrow-left hidden-xs"></div>
 
-                <div class="media">
-                    <div class="media-left col-xs-12 col-sm-2 col-md-2 col-lg-2">
-                        <ul class="list-group" role="tablist">
-                            <li class="active"><a class="list-group-item" href="#device_details" role="tab" data-toggle="tab" aria-controls="device_details">Device Details</a></li>
-                            <li><a class="list-group-item" href="#policy_compliance" role="tab" data-toggle="tab" aria-controls="policy_compliance">Policy Compliance</a></li>
-                            <li><a class="list-group-item" href="#device_location" role="tab" data-toggle="tab" aria-controls="device_location">Device Location</a></li>
-                            <li><a class="list-group-item" href="#installed_applications" role="tab" data-toggle="tab" aria-controls="installed_applications">Installed Applications</a></li>
-                            <li><a class="list-group-item" href="#event_log" role="tab" data-toggle="tab" aria-controls="event_log">Operations Log</a></li>
-                        </ul>
-                    </div>
-                    {{#defineZone "device-detail-properties"}}
-                        <div class="media-body add-padding-left-5x remove-padding-xs tab-content">
-                            <div class="panel-group tab-content">
-                                <div class="panel panel-default tab-pane active" id="device_details" role="tabpanel" aria-labelledby="device_details">
-                                    <div class="panel-heading">Device Details</div>
-                                    <div id="loading-content" class="col-centered">
-                                        <br>
-                                        <br>
-                                        <i class="fw fw-settings fw-spin fw-2x"></i>
-                                        &nbsp;&nbsp;&nbsp;
-                                        Loading Device Details . . .
-                                        <br>
-                                    </div>
-                                    <div class="panel-body hidden">
-                                        <!-- device summary -->
-                                        <div class="row">
+                            <div class="panel panel-default tab-pane fade in active fade-in-xs visible-block"
+                                 id="device_details" role="tabpanel"
+                                 aria-labelledby="device_details">
+                                <div class="panel-heading dropup visible-xs" role="tab" id="tab1" data-toggle="collapse"
+                                     data-target="#tabContent1" aria-expanded="false" data-parent="#tabs">
+                                    <h4 class="panel-title">
+                                        <i class="fw fw-map-location fw-2x"></i>
+                                        Device Details
+                                        <i class="caret-updown fw fw-sort-up"></i>
+                                    </h4>
+                                </div>
+                                <div class="panel-heading display-none-xs">Device Details</div>
+                                <div id="loading-content" class="col-centered">
+                                    <br><br><i class="fw fw-settings fw-spin fw-2x"></i>Loading Device Details . . .<br>
+                                </div>
+                                <div class="panel-body collapse display-block-sm display-block-md display-block-lg in"
+                                     id="tabContent1">
+                                    <div class="device-detail-body hidden">
+                                    <!-- device summary -->
                                             {{#equal device.type "windows"}}
                                                 <div class="panel-body">
                                                     Not available yet
                                                 </div>
-                                                <br class="c-both" />
+                                                <br class="c-both"/>
                                             {{/equal}}
                                             {{#if device.viewModel.BatteryLevel}}
-                                                <div class="col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">BATTERY</div>
                                                         <div>
@@ -102,145 +142,192 @@
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.DeviceCapacity}}
-                                                <div class="col-lg-4" >
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">STORAGE</div>
                                                         <div>
                                                             <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                            <div class="tile-stats">{{device.viewModel.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.AvailableDeviceCapacity}} GB Free</span></div>
+                                                            <div class="tile-stats">{{device.viewModel.DeviceCapacityPercentage}}
+                                                                %<span class="tile-stats-free">{{device.viewModel.AvailableDeviceCapacity}}
+                                                                    GB Free</span></div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.internal_memory.FreeCapacity}}
-                                                <div class="col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">LOCAL STORAGE</div>
                                                         <div>
                                                             <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                            <div class="tile-stats">{{device.viewModel.internal_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.internal_memory.FreeCapacity}} GB Free</span></div>
+                                                            <div class="tile-stats">{{device.viewModel.internal_memory.DeviceCapacityPercentage}}
+                                                                %<span class="tile-stats-free">{{device.viewModel.internal_memory.FreeCapacity}}
+                                                                    GB Free</span></div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.external_memory.FreeCapacity}}
-                                                <div class="col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <div class="wr-stats-board-tile">
                                                         <div class="tile-name">EXTERNAL STORAGE</div>
                                                         <div>
                                                             <div class="tile-icon"><i class="fw fw-usb-drive"></i></div>
-                                                            <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}%<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}} GB Free</span></div>
+                                                            <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}
+                                                                %<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}}
+                                                                    GB Free</span></div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             {{/if}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default tab-pane" id="policy_compliance" role="tabpanel" aria-labelledby="policy_compliance">
-                                    <div class="panel-heading">Policy Compliance <span><a href="#" id="refresh-policy"><i class="fw fw-refresh"></i></a></span></div>
-                                    <div class="panel-body">
-                                        <div id="policy-spinner" class="wr-advance-operations-init hidden">
-                                            <br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <i class="fw fw-settings fw-spin fw-2x"></i>
-                                            &nbsp;&nbsp;&nbsp;
-                                            Loading Policy Compliance . . .
-                                            <br>
-                                            <br>
-                                        </div>
-                                        <div id="policy-list-container">
-                                            <div class="panel-body">
-                                                There are no active policies for this device
-                                            </div>
-                                            <br class="c-both" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default tab-pane" id="device_location" role="tabpanel" aria-labelledby="device_location">
-                                    <div class="panel-heading">Device Location</div>
-                                    <div class="panel-body">
-                                        <div id="device-location" data-lat="{{device.viewModel.location.latitude}}" data-long="{{device.viewModel.location.longitude}}" style="height:450px" class="panel-body">
-
-                                        </div>
-                                        <div id = "map-error" class="panel-body">
-                                            Device location cannot be retrieved
-                                        </div>
-                                        <br class="c-both" />
-                                    </div>
-                                </div>
-                                <div class="panel panel-default tab-pane" id="installed_applications" role="tabpanel" aria-labelledby="installed_applications">
-                                    <div class="panel-heading">Installed Applications <span><a href="#" id="refresh-apps"><i class="fw fw-refresh"></i></a></span></div>
-                                    <div class="panel-body">
-                                        <div id="apps-spinner" class="wr-advance-operations-init hidden">
-                                            <br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <i class="fw fw-settings fw-spin fw-2x"></i>
-                                            &nbsp;&nbsp;&nbsp;
-                                            Loading App List . . .
-                                            <br>
-                                            <br>
-                                        </div>
-                                        <div id="applications-list-container">
-                                            <div class="panel-body">
-                                                No applications found
-                                            </div>
-                                            <br class="c-both" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default tab-pane" id="event_log" role="tabpanel" aria-labelledby="event_log">
-                                    <div class="panel-heading">Operations Log <span><a href="#" id="refresh-operations"><i class="fw fw-refresh"></i></a></span></div>
-                                    <div class="panel-body">
-                                        <div id="operations-spinner" class="wr-advance-operations-init hidden">
-                                            <br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <i class="fw fw-settings fw-spin fw-2x"></i>
-                                            &nbsp;&nbsp;&nbsp;
-                                            Loading Operations Log . . .
-                                            <br>
-                                            <br>
-                                        </div>
-                                        <div id="operations-log-container">
-                                            <div class="panel-body">
-                                                There are no operations performed on this device
-                                            </div>
-                                            <br class="c-both" />
-                                        </div>
-                                        <table class="table table-striped table-hover table-bordered display data-table" id="operations-log-table">
-                                            <thead>
-                                            <tr class="sort-row">
-                                                <th>Operation Code</th>
-                                                <th>Status</th>
-                                                <th>Request created at</th>
-                                            </tr>
-                                            <!--
-                                            <tr class="filter-row filter-box">
-                                                <th data-for="By Operation Code" class="select-filter"></th>
-                                                <th data-for="By Status" class="select-filter"></th>
-                                                <th data-for="By Request created" class="text-filter"></th>
-                                            </tr>
-                                            -->
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {{/defineZone}}
-                </div>
-            </div>
-        </div>
-        <!-- /content/body -->
-    </div>
+                            <div class="panel panel-default tab-pane fade fade-in-xs visible-block"
+                                 id="policy_compliance">
+                                <div class="panel-heading dropdown visible-xs collapsed" role="tab" id="tab2"
+                                     data-toggle="collapse" data-target="#tabContent2" aria-expanded="false"
+                                     data-parent="#tabs">
+                                    <h4 class="panel-title"><i class="fw fw-text fw-2x"></i>
+                                        Policy Compliance
+                                        <i class="caret-updown fw fw-sort-down"></i>
+                                    </h4>
+                                </div>
+                                <div class="panel-heading display-none-xs"> Policy Compliance</div>
+                                <div id="policy-spinner" class="wr-advance-operations-init hidden">
+                                    <br>
+                                    <i class="fw fw-settings fw-spin fw-2x">
+                                    </i>
+                                    Loading Policy Compliance . . .
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
+                                     id="tabContent2">
+                                    <span>
+                                        <a href="#" id="refresh-policy">
+                                            <i class="fw fw-refresh"></i>
+                                        </a>
+                                    </span>
+                                    <div id="policy-list-container">
+                                        <div class="panel-body">
+                                            There are no active policies for this device
+                                        </div>
+                                        <br class="c-both"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default tab-pane fade fade-in-xs visible-block"
+                                 id="device_location">
+                                <div class="panel-heading dropdown visible-xs collapsed" role="tab" id="tab3"
+                                     data-toggle="collapse" data-target="#tabContent3" aria-expanded="false"
+                                     data-parent="#tabs">
+                                    <h4 class="panel-title">
+                                        <i class="fw fw-text fw-2x"></i>
+                                        Device Location
+                                        <i class="caret-updown fw fw-sort-down"></i>
+                                    </h4>
+                                </div>
+                                <div class="panel-heading display-none-xs">Device Location</div>
+                                <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
+                                     id="tabContent3">
+                                    <div id="device-location" data-lat="{{device.viewModel.location.latitude}}"
+                                         data-long="{{device.viewModel.location.longitude}}" class="panel-body">
 
+                                    </div>
+                                    <div id="map-error" class="panel-body">
+                                        Device location cannot be retrieved
+                                    </div>
+                                    <br class="c-both"/>
+                                </div>
+                            </div>
+                            <div class="panel panel-default tab-pane fade fade-in-xs visible-block"
+                                 id="installed_applications">
+                                <div class="panel-heading dropdown visible-xs collapsed" role="tab" id="tab4"
+                                     data-toggle="collapse" data-target="#tabContent4" aria-expanded="false"
+                                     data-parent="#tabs">
+                                    <h4 class="panel-title">
+                                        <i class="fw fw-text fw-2x"></i>
+                                        Installed Applications
+                                        <i class="caret-updown fw fw-sort-down"></i></h4>
+                                </div>
+                                <div class="panel-heading display-none-xs">Installed Applications
+                                    <span>
+                                        <a href="#" id="refresh-apps">
+                                            <i class="fw fw-refresh"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
+                                     id="tabContent4">
+                                    <div id="apps-spinner" class="wr-advance-operations-init hidden">
+                                        <br><i class="fw fw-settings fw-spin fw-2x"></i>Loading App List . . .<br><br>
+                                    </div>
+                                    <div id="applications-list-container">
+                                        <div class="panel-body">
+                                            No applications found
+                                        </div>
+                                        <br class="c-both"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default tab-pane fade fade-in-xs visible-block" id="event_log">
+                                <div class="panel-heading dropdown visible-xs collapsed" role="tab" id="tab5"
+                                     data-toggle="collapse" data-target="#tabContent5" aria-expanded="false"
+                                     data-parent="#tabs">
+                                    <h4 class="panel-title">
+                                        <i class="fw fw-text fw-2x"></i>
+                                        Operations Logs
+                                        <i class="caret-updown fw fw-sort-down"></i>
+                                    </h4>
+                                </div>
+                                <div class="panel-heading display-none-xs">Operations Logs
+                                </div>
+                                <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
+                                     id="tabContent5">
+                                    <span><a href="#" id="refresh-operations">
+                                        <i class="fw fw-refresh"></i></a> Refresh Operations Log
+                                    </span>
+                                    <div id="operations-spinner" class="wr-advance-operations-init hidden">
+                                        <br><i class="fw fw-settings fw-spin fw-2x"></i>Loading Operations Log . . .<br><br>
+                                    </div>
+                                    <div id="operations-log-container">
+                                        <div class="panel-body">
+                                            There are no operations performed on this device
+                                        </div>
+                                        <br class="c-both"/>
+                                    </div>
+                                    <table class="table table-striped table-hover table-bordered display data-table"
+                                           id="operations-log-table">
+                                        <thead>
+                                        <tr class="sort-row">
+                                            <th>Operation Code</th>
+                                            <th>Status</th>
+                                            <th>Request created at</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/defineZone}}
+            </div>
+    </div>
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script id="policy-view"  src="{{self.publicURL}}/templates/policy-compliance.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
-    <script id="applications-list"  src="{{self.publicURL}}/templates/applications-list.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
-    <script id="operations-log"  src="{{self.publicURL}}/templates/operations-log.hbs" data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}" type="text/x-handlebars-template" ></script>
+    <script id="policy-view" src="{{self.publicURL}}/templates/policy-compliance.hbs"
+            data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}"
+            type="text/x-handlebars-template"></script>
+    <script id="applications-list" src="{{self.publicURL}}/templates/applications-list.hbs"
+            data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}"
+            type="text/x-handlebars-template"></script>
+    <script id="operations-log" src="{{self.publicURL}}/templates/operations-log.hbs"
+            data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}"
+            type="text/x-handlebars-template"></script>
     <script src="{{self.publicURL}}/js/device-detail.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
     <script src="{{self.publicURL}}/js/load-map.js"></script>

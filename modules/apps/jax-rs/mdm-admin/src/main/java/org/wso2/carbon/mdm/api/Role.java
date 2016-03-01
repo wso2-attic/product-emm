@@ -419,4 +419,36 @@ public class Role {
         }
         return list;
     }
+
+    /**
+     * This method is used to retrieve the user count of the system.
+     *
+     * @return returns the count.
+     * @throws MDMAPIException
+     */
+    @GET
+    @Path("count")
+    public int getRoleCount() throws MDMAPIException {
+        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        String[] roles;
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("Getting the list of user roles");
+            }
+            roles = userStoreManager.getRoleNames();
+
+        } catch (UserStoreException e) {
+            String msg = "Error occurred while retrieving the list of user roles.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        // removing all internal roles and roles created for Service-providers
+        List<String> filteredRoles = new ArrayList<String>();
+        for (String role : roles) {
+            if (!(role.startsWith("Internal/") || role.startsWith("Application/"))) {
+                filteredRoles.add(role);
+            }
+        }
+        return filteredRoles.size();
+    }
 }

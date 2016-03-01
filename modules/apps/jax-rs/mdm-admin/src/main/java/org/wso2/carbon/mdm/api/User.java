@@ -29,6 +29,7 @@ import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
+import org.wso2.carbon.mdm.api.util.CredentialManagementResponseBuilder;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.UserCredentialWrapper;
@@ -419,7 +420,7 @@ public class User {
             log.debug("Getting the list of users with all user-related information");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList;
+        List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*", -1);
             userList = new ArrayList<UserWrapper>(users.length);
@@ -463,7 +464,7 @@ public class User {
             log.debug("Getting the list of users with all user-related information using the filter : " + filter);
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList;
+        List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers(filter + "*", -1);
             userList = new ArrayList<UserWrapper>(users.length);
@@ -506,7 +507,7 @@ public class User {
             log.debug("Getting the list of users by name");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<UserWrapper> userList;
+        List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
             userList = new ArrayList<UserWrapper>(users.length);
@@ -549,7 +550,7 @@ public class User {
             log.debug("Getting the list of users by name");
         }
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ArrayList<String> userList;
+        List<String> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
             userList = new ArrayList<String>(users.length);
@@ -601,7 +602,7 @@ public class User {
             log.debug("Sending invitation mail to user by username: " + username);
         }
         String tennentDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        if (tennentDomain.equalsIgnoreCase("carbon.super")) {
+        if ("carbon.super".equalsIgnoreCase(tennentDomain)) {
             tennentDomain = "";
         }
         if (!username.contains("/")) {
@@ -757,31 +758,25 @@ public class User {
      * @throws MDMAPIException
      */
     @POST
-    @Path("reset-password")
+    @Path("change-password")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response resetPassword(UserCredentialWrapper credentials) throws MDMAPIException {
-        UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ResponsePayload responsePayload = new ResponsePayload();
-        try {
-            byte[] decodedNewPassword = Base64.decodeBase64(credentials.getNewPassword());
-            byte[] decodedOldPassword = Base64.decodeBase64(credentials.getOldPassword());
-            userStoreManager.updateCredential(credentials.getUsername(), new String(
-                    decodedNewPassword, "UTF-8"), new String(decodedOldPassword, "UTF-8"));
-            responsePayload.setStatusCode(HttpStatus.SC_CREATED);
-            responsePayload.setMessageFromServer("User password by username: " + credentials.getUsername() +
-                                                 " was successfully changed.");
-            return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
-        } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to change the password by username: " + credentials.getUsername();
-            log.error(errorMsg, e);
-            responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-            responsePayload.setMessageFromServer("Old password does not match.");
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
-        } catch (UnsupportedEncodingException e) {
-            String errorMsg = "Exception in trying to change the password by username: " + credentials.getUsername();
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
-        }
+        return CredentialManagementResponseBuilder.buildChangePasswordResponse(credentials);
+    }
+
+    /**
+     * Method to change the user password.
+     *
+     * @param credentials Wrapper object representing user credentials.
+     * @return {Response} Status of the request wrapped inside Response object.
+     * @throws MDMAPIException
+     */
+    @POST
+    @Path("reset-password")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response resetPasswordByAdmin(UserCredentialWrapper credentials) throws MDMAPIException {
+        return CredentialManagementResponseBuilder.buildResetPasswordResponse(credentials);
     }
 }

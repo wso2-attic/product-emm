@@ -16,6 +16,7 @@
  * under the License.
  */
 
+var InitiateViewOption = null;
 (function () {
     var deviceId = $(".device-id");
     var deviceIdentifier = deviceId.data("deviceid");
@@ -30,13 +31,61 @@
     if(serviceUrl){
         invokerUtil.post(serviceUrl, payload,
             function(message){
-                console.log(message);
+                $(".panel-body").show();
             }, function (message) {
-                console.log(message.content);
+                var defaultInnerHTML =
+                    "<br><p class='fw-warning'>Device data might not be updated Please refresh this page<p>";
+                $(".panel-body").append(defaultInnerHTML);
             });
     }
+    $('.media.tab-responsive [data-toggle=tab]').on('shown.bs.tab', function(e){
+        var activeTabPane = $(e.target).attr('href'),
+            activeCollpasePane = $(activeTabPane).find('[data-toggle=collapse]').data('target'),
+            activeCollpasePaneSiblings = $(activeTabPane).siblings().find('[data-toggle=collapse]').data('target'),
+            activeListGroupItem = $('.media .list-group-item.active');
+
+        $(activeCollpasePaneSiblings).collapse('hide');
+        $(activeCollpasePane).collapse('show');
+        positionArrow(activeListGroupItem);
+
+        $(".panel-heading .caret-updown").removeClass("fw-sort-down");
+        $(".panel-heading.collapsed .caret-updown").addClass("fw-sort-up");
+    });
+
+    $('.media.tab-responsive .tab-content').on('shown.bs.collapse', function(e){
+        var activeTabPane = $(e.target).parent().attr('id');
+        $('.media.tab-responsive [data-toggle=tab][href=#'+activeTabPane+']').tab('show');
+        $(".panel-heading .caret-updown").removeClass("fw-sort-up");
+        $(".panel-heading.collapsed .caret-updown").addClass("fw-sort-down");
+    });
+
+    function positionArrow(selectedTab){
+        var selectedTabHeight = $(selectedTab).outerHeight();
+        var arrowPosition = 0;
+        var totalHeight = 0;
+        var arrow = $(".media .panel-group.tab-content .arrow-left");
+        var parentHeight = $(arrow).parent().outerHeight();
+
+        if($(selectedTab).prev().length){
+            $(selectedTab).prevAll().each(function() {
+                totalHeight += $(this).outerHeight();
+            });
+            arrowPosition = totalHeight + (selectedTabHeight / 2);
+        }else{
+            arrowPosition = selectedTabHeight / 2;
+        }
+
+        if(arrowPosition >= parentHeight){
+            parentHeight = arrowPosition + 10;
+            $(arrow).parent().height(parentHeight);
+        }else{
+            $(arrow).parent().removeAttr("style");
+        }
+        $(arrow).css("top",arrowPosition - 10);
+    }
+
     $(document).ready(function(){
-        $(".panel-body").removeClass("hidden");
+        $(".device-detail-body").removeClass("hidden");
         $("#loading-content").remove();
         loadOperationBar(deviceType);
         loadOperationsLog();
@@ -161,7 +210,8 @@
             };
             invokerUtil.get(serviceURL,
                 successCallback, function(message){
-                    console.log(message.content);
+                    $("#applications-list-container").append("<br><p class='fw-warning'>Loading application was not" +
+                                                             " successful please try again in a while<p>");
             });
         });
     }
@@ -182,7 +232,8 @@
                 viewModel.policy = activePolicy;
                 viewModel.deviceType = deviceType;
                 data = JSON.parse(data);
-                if(data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined && data.complianceFeatures.length > 0) {
+                if (data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined &&
+                   data.complianceFeatures.length > 0) {
                     viewModel.compliance = "NON-COMPLIANT";
                     viewModel.complianceFeatures = data.complianceFeatures;
                     var content = template(viewModel);
@@ -203,17 +254,18 @@
                     activePolicy = data;
                     invokerUtil.get(serviceURLCompliance,
                         successCallbackCompliance, function(message){
-                            console.log(message.content);
+                            $("#policy-list-container").append("<br><p class='fw-warning'>Loading policy related data" +
+                                                               " was not successful please try again in a while<p>");
                     });
                 }
             };
 
             invokerUtil.get(serviceURLPolicy,
                 successCallbackPolicy, function(message){
-                    console.log(message.content);
+                    $("#policy-list-container").append("<br><p class='fw-warning'>Loading policy related was not" +
+                    " successful please try again in a while<p>");
             });
         });
 
     }
-
 }());

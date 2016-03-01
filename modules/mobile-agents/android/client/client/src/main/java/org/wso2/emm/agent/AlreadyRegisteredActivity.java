@@ -95,7 +95,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				freshRegFlag = extras.getBoolean(
 						getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
-
 		}
 
 		String registrationId =
@@ -114,6 +113,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
 			}
+
 			freshRegFlag = false;
 		}
 
