@@ -43,7 +43,7 @@
                 {{/if}}
             {{/unequal}}
 
-            {{#unequal "admin" username }}
+            {{#unequal adminUser username }}
                 {{#if canResetPassword}}
                     <a href="#" data-username="{{username}}" data-userid="{{userid}}"
                        data-click-event="edit-form" onclick="javascript:resetPassword('{{username}}')"

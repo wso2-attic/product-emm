@@ -283,7 +283,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 osVersion = itemList.get(PluginConstants.SyncML.OSVERSION_POSITION).getData();
                 imsi = itemList.get(PluginConstants.SyncML.IMSI_POSITION).getData();
                 imei = itemList.get(PluginConstants.SyncML.IMEI_POSITION).getData();
-                vender = itemList.get(PluginConstants.SyncML.VENDER_POSITION).getData();
+                vender = itemList.get(PluginConstants.SyncML.VENDOR_POSITION).getData();
                 devMod = itemList.get(PluginConstants.SyncML.MODEL_POSITION).getData();
                 macAddress = itemList.get(PluginConstants.SyncML.MAC_ADDRESS_POSITION).getData();
                 resolution = itemList.get(PluginConstants.SyncML.RESOLUTION_POSITION).getData();
