@@ -296,6 +296,8 @@
     <string name="txt_enter_pin">Enter PIN Code</string>
     <string name="txt_new_pin">Set PIN Code</string>
     <string name="txt_start_reg">Start Registration</string>
+    <string name="txt_start_enable_work_profile">Go to set-up Work-Profile</string>
+    <string name="txt_skip_to_enrolling">Skip for Enrolling</string>
     <string name="txt_register_success">Device successfully registered, click to un-register from the EMM</string>
     <string name="txt_unregister">Unregister</string>
     <string name="txt_enroll">Please click to enroll the device</string>
@@ -317,6 +319,7 @@
 
     <!-- Headings -->
     <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com. If your server runs on a special port, server address should be in following format. i.e : www.abc.com:9763</string>
+    <string name="enable_work_profile_heading">Congrats! Your device supports Android For Work. Set-up the work-profile before enrolling</string>
 
     <!-- Validation Errors -->
     <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>
