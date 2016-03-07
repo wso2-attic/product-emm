@@ -255,7 +255,7 @@ function loadUsers(searchParam) {
                     viewModel.users[i].canEdit = true;
                 }
                 if (canResetPassword) {
-                    viewModel.users[i].canEdit = true;
+                    viewModel.users[i].canResetPassword = true;
                 }
                 viewModel.users[i].adminUser = $("#user-table").data("user");
             }
