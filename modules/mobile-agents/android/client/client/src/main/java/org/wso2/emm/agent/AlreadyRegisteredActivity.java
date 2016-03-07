@@ -18,10 +18,22 @@
 package org.wso2.emm.agent;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.CursorLoader;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
@@ -29,10 +41,13 @@ import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.proxy.IdentityProxy;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.services.LocalNotification;
+import org.wso2.emm.agent.services.managedProfileServices.AppPusher;
+import org.wso2.emm.agent.services.managedProfileServices.EnableProfileActivity;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -58,6 +73,9 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+
+import static android.app.admin.DevicePolicyManager.FLAG_MANAGED_CAN_ACCESS_PARENT;
+import static android.app.admin.DevicePolicyManager.FLAG_PARENT_CAN_ACCESS_MANAGED;
 
 /**
  * Activity which handles user un-registration from the MDM server.
@@ -199,28 +217,65 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		devicePolicyManager.setGlobalSetting(divAd,"bluetooth_on","enable()");*/
 
     }
+	private String getRealPathFromURI(Uri contentUri) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		CursorLoader loader = new CursorLoader(context, contentUri, proj, null, null, null);
+		Cursor cursor = loader.loadInBackground();
+		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		String result = cursor.getString(column_index);
+		cursor.close();
+		return result;
+	}
 
 	/**
 	 * Send unregistration request.
 	 */
 	private void startUnRegistration() {
-        /*
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File("sdcard/Download/MRP.apk")),"application/vnd.android.package-archive");
-        startActivity(intent);
-        */
-
+		//EnableProfileActivity ep = new EnableProfileActivity();
+		//ep.setAppEnabled("com.android.providers.settings",true);
         // Open File object from its file URI
-        File fileToShare = new File(Uri.fromFile(new File("sdcard/Download/MRP.apk")).toString());
+       // File fileToShare = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+ "/MRP.apk");
+/*
+        File tempFile = new File(getFilesDir(),"appStore/MRP.apk");
 
-        Uri contentUriToShare = FileProvider.getUriForFile(context,
-                "org.wso2.emm.agent.fileprovider", fileToShare);
+       Uri contentUriToShare = FileProvider.getUriForFile(context,
+               "org.wso2.emm.agent.fileprovider", tempFile);
+*/
+        //Toast.makeText(context,contentUriToShare.toString(),Toast.LENGTH_LONG).show();
+		/*
+        Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+		intent.setData(Uri.parse(fileToShare.getAbsolutePath()));
+		intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+		intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
 
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(contentUriToShare,"application/vnd.android.package-archive");
         startActivity(intent);
+*/
+		/*InputStream inStream = null;
+		inStream = IdentityProxy.getInstance().getContext().getResources().
+				openRawResource(R.raw.mrp);
+*//*
+		ParcelFileDescriptor pfd = null;
+		try {
+			pfd = getContentResolver().openFileDescriptor(contentUriToShare,"r");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
-		/*final Context context = AlreadyRegisteredActivity.this;
+		FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+		FileInputStream fis = new FileInputStream(pfd.getFileDescriptor());
+
+		File fil =  new File(fis.);
+*/
+
+
+		/* install normal app in external space
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(fileuri,"application/vnd.android.package-archive");
+		startActivity(intent);*/
+
+
+		final Context context = AlreadyRegisteredActivity.this;
 		isUnregisterBtnClicked = true;
 
 		progressDialog = ProgressDialog.show(AlreadyRegisteredActivity.this,
@@ -245,7 +300,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
 			}
 
-		}*/
+		}
 	}
 
 	@Override

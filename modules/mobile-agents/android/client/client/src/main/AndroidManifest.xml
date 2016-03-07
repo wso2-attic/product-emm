@@ -45,7 +45,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
-
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -165,16 +165,20 @@
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
-
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.mydomain.fileprovider"
+            android:authorities="org.wso2.emm.agent.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/share_paths" />
         </provider>
+        <activity
+            android:name="org.wso2.emm.agent.services.managedProfileServices.AlreadyEnabledActivity"
+            android:label="@string/title_activity_notify"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

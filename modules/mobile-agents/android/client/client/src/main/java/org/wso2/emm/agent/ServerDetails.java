@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.services.managedProfileServices.AlreadyEnabledActivity;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
@@ -76,14 +77,12 @@ public class ServerDetails extends Activity {
 		} else {
             DevicePolicyManager manager = (DevicePolicyManager)
                     getSystemService(Context.DEVICE_POLICY_SERVICE);
-            if (androidForWorkCompatibility == Response.ANDROID_FOR_WORK_COMPATIBLE && manager.
+            /*if (androidForWorkCompatibility == Response.ANDROID_FOR_WORK_COMPATIBLE && manager.
                     isProfileOwnerApp(getApplicationContext().getPackageName())) {
-                Toast.makeText(context.getApplicationContext(),
-                        "Yes its working!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            } else {
+            } else {*/
                 btnStartRegistration.setVisibility(View.VISIBLE);
                 evServerIP.setVisibility(View.VISIBLE);
                 String ipSaved =
@@ -130,7 +129,7 @@ public class ServerDetails extends Activity {
                     }
                 });
             }
-        }
+        //}
     }
 
 	/**

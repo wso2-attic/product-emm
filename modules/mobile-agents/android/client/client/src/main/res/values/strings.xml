@@ -301,7 +301,7 @@
     <string name="txt_enroll">Please click to enroll the device</string>
     <string name="txt_lblpin">Please enter a PIN code to make your device safe from critical operations</string>
     <string name="button_unregister_text">Device successfully registered, click to unregister from the EMM</string>
-
+    <string name="txt_managed_profile_enable">Managed Profile is Enabled</string>
     <!-- APPLICATION MANAGER -->
     <string name="application_mgr_download_location">/Download/</string>
     <string name="application_mgr_download_file_name">update.apk</string>
