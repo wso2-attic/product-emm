@@ -35,8 +35,6 @@
     </parent>
 
     <modules>
-        <module>modules/components/mdm-mgt</module>
-        <module>modules/components/app-mgt</module>
         <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/emm</module>
@@ -1090,8 +1088,8 @@
         <caramel.version>1.0.1</caramel.version>
 
         <!-- App manager version-->
-        <appmgt.feature.version>1.1.1</appmgt.feature.version>
-        <carbon.appmgt.version>1.1.1</carbon.appmgt.version>
+        <appmgt.feature.version>1.1.2-SNAPSHOT</appmgt.feature.version>
+        <carbon.appmgt.version>1.1.2-SNAPSHOT</carbon.appmgt.version>
 
         <!-- Carbon Store version-->
         <carbon.store.version>1.4.1</carbon.store.version>

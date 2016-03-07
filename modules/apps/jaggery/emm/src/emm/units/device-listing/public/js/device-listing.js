@@ -21,8 +21,10 @@
  * when a user clicks on the list item
  * initial mode and with out select mode.
  */
-function InitiateViewOption() {
-    $(location).attr('href', $(this).data("url"));
+function InitiateViewOption(url) {
+    if ($(".select-enable-btn").text() == "Select") {
+        $(location).attr('href', url);
+    }
 }
 
 (function () {
@@ -204,8 +206,14 @@ function loadDevices(searchType, searchParam){
                 }
         },
         columnDefs: [
-            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill' , render: function ( data, type, row, meta ) {
-                return '<div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
+            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill viewEnabledIcon' , render: function ( data, type, row, meta ) {
+                var deviceType = row.type;
+                var deviceIdentifier = row.deviceIdentifier;
+                var url = "#";
+                if (status != 'REMOVED') {
+                    url = "device?type=" + deviceType + "&id=" + deviceIdentifier;
+                }
+                return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
             }},
             { targets: 1, data: 'name', className: 'fade-edge' , render: function ( name, type, row, meta ) {
                 var model = getPropertyValue(row.properties, 'DEVICE_MODEL');
@@ -243,11 +251,6 @@ function loadDevices(searchType, searchParam){
                 var deviceType = row.type;
                 var deviceIdentifier = row.deviceIdentifier;
                 var html = '<span></span>';
-                if (status != 'REMOVED') {
-                    html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
-                    ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +
-                        '<i class="fw fw-view fw-stack-1x"></i></span><span class="hidden-xs hidden-on-grid-view">View</span></a>';
-                }
                 return html;
             }}
         ],
