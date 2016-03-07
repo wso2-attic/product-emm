@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import org.wso2.emm.agent.beans.Power;
@@ -173,6 +174,18 @@ public class DeviceState {
             return Response.INCOMPATIBLE_ROOT;
         }
         return Response.COMPATIBLE;
+    }
+
+    /**
+     * Returns true if the device is compatible to Android For Work (Managed Profile Feature).
+     *
+     * @return - Device AndroidForWork-Compatibility status
+     */
+    public Response evaluateAndroidForWorkCompatibility(){
+        if (info.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP){
+            return Response.ANDROID_FOR_WORK_COMPATIBLE;
+        }else
+            return Response.ANDROID_FOR_WORK_INCOMPATIBLE;
     }
 
     /**

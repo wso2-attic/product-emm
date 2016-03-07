@@ -17,7 +17,6 @@
  ~ under the License.
 -->
 <resources>
-
     <string name="client_id">or0WN8OXqpsBfLSQOShf14TeojEa</string>
     <string name="client_secret">WALHOjfXmMNjbjhZdIbQ5zTjDN0a</string>
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
@@ -56,6 +55,8 @@
     <string name="device_not_compatible_error">You are not allowed to enroll because your device is rooted and device OS version is older than 4.0.3</string>
     <string name="device_not_compatible_error_os">You are not allowed to enroll because your device OS version is older than 4.0.3</string>
     <string name="device_not_compatible_error_root">You are not allowed to enroll because your device is rooted</string>
+    <string name="device_not_compatible_with_android_for_work">Device is incompatible with Android For Work</string>
+    <string name="device_compatible_with_android_for_work">Device is compatible with Android For Work</string>
     <string name="device_compatible">Compatible device</string>
     <string name="title_activity_authentication_error">AuthenticationError</string>
     <string name="title_activity_notification">NotificationActivity</string>

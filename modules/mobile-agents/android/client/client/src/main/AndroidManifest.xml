@@ -165,18 +165,16 @@
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
-        <receiver
-            android:name=".services.managedProfileServices.ManagedProfileDeviceAdminReceiver"
-            android:description="@string/app_name"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.mydomain.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
-                android:name="android.app.device_admin"
-                android:resource="@xml/agent_device_admin"/>
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
-            </intent-filter>
-        </receiver>
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/share_paths" />
+        </provider>
     </application>
 
 </manifest>

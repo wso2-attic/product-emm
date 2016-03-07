@@ -23,8 +23,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+
 /**
- * This activity is started after the provisioning is complete in {@link ManagedProfileDeviceAdminReceiver}.
+ * This activity is started after the provisioning is complete in {@link AgentDeviceAdminReceiver}.
  */
 public class EnableProfileActivity extends Activity {
 
@@ -44,12 +46,11 @@ public class EnableProfileActivity extends Activity {
     private void enableProfile() {
         DevicePolicyManager manager =
                 (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName componentName = ManagedProfileDeviceAdminReceiver.getComponentName(this);
+        ComponentName componentName = AgentDeviceAdminReceiver.getComponentName(this);
         // This is the name for the newly created managed profile.
         manager.setProfileName(componentName, "WSO2-EMM");
         // We enable the profile here.
         manager.setProfileEnabled(componentName);
     }
-
 
 }

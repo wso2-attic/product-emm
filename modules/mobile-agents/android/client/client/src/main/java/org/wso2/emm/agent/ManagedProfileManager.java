@@ -58,7 +58,8 @@ public class ManagedProfileManager extends Activity {
                 .add(R.id.container, BasicManagedProfileFragment.newInstance())
                 .commit();
     */
-        Toast.makeText(this, "showMainFragment", Toast.LENGTH_LONG).show();
+
+
     }
 
     private void provisionManagedProfile() {

@@ -24,11 +24,13 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
+import org.wso2.emm.agent.services.managedProfileServices.EnableProfileActivity;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
 import android.app.admin.DeviceAdminReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -106,10 +108,10 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		utils.setServerIP(serverIP);
 
 		CommonUtils.callSecuredAPI(context,
-		                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
-		                           HTTP_METHODS.DELETE,
-		                           null, AgentDeviceAdminReceiver.this,
-		                           Constants.UNREGISTER_REQUEST_CODE);
+				utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
+				HTTP_METHODS.DELETE,
+				null, AgentDeviceAdminReceiver.this,
+				Constants.UNREGISTER_REQUEST_CODE);
 		try {
 			CommonUtils.unRegisterClientApp(context);
 			CommonUtils.clearAppData(context);
@@ -147,5 +149,21 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Unregistered." + arg0.toString());
 		}
+	}
+
+	@Override
+	public void onProfileProvisioningComplete(Context context, Intent intent) {
+		Intent launch = new Intent(context, EnableProfileActivity.class);
+		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(launch);
+
+	}
+
+	/**
+	 * Generates a {@link ComponentName} that is used throughout the app.
+	 * @return a {@link ComponentName}
+	 */
+	public static ComponentName getComponentName(Context context) {
+		return new ComponentName(context.getApplicationContext(), AgentDeviceAdminReceiver.class);
 	}
 }

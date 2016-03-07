@@ -19,6 +19,7 @@ package org.wso2.emm.agent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -64,61 +65,73 @@ public class ServerDetails extends Activity {
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
-		Response compatibility = state.evaluateCompatibility();
+		Response deviceCompatibility = state.evaluateCompatibility();
+        Response androidForWorkCompatibility = state.evaluateAndroidForWorkCompatibility();
 
-		if (!compatibility.getCode()) {
-			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+		if (!deviceCompatibility.getCode()) {
+			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
 			btnStartRegistration.setVisibility(View.GONE);
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
-			btnStartRegistration.setVisibility(View.VISIBLE);
-			evServerIP.setVisibility(View.VISIBLE);
-			String ipSaved =
-					Preference.getString(context.getApplicationContext(), Constants.IP);
+            DevicePolicyManager manager = (DevicePolicyManager)
+                    getSystemService(Context.DEVICE_POLICY_SERVICE);
+            if (androidForWorkCompatibility == Response.ANDROID_FOR_WORK_COMPATIBLE && manager.
+                    isProfileOwnerApp(getApplicationContext().getPackageName())) {
+                Toast.makeText(context.getApplicationContext(),
+                        "Yes its working!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                btnStartRegistration.setVisibility(View.VISIBLE);
+                evServerIP.setVisibility(View.VISIBLE);
+                String ipSaved =
+                        Preference.getString(context.getApplicationContext(), Constants.IP);
 
-			// check if we have the IP saved previously.
-			if (ipSaved != null && !ipSaved.isEmpty()) {
-				evServerIP.setText(ipSaved);
-				startAuthenticationActivity();
-			} else {
-				evServerIP.setText(ipSaved);
-			}
+                // check if we have the IP saved previously.
+                if (ipSaved != null && !ipSaved.isEmpty()) {
+                    evServerIP.setText(ipSaved);
+                    startAuthenticationActivity();
+                } else {
+                    evServerIP.setText(ipSaved);
+                }
 
-			String deviceActive = Preference.getString(context, context.getResources().
-					getString(R.string.shared_pref_device_active));
+                String deviceActive = Preference.getString(context, context.getResources().
+                        getString(R.string.shared_pref_device_active));
 
-			if (deviceActive != null && deviceActive.equals(context.getResources().
-					getString(R.string.shared_pref_reg_success))) {
-				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-			}
+                if (deviceActive != null && deviceActive.equals(context.getResources().
+                        getString(R.string.shared_pref_reg_success))) {
+                    Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
 
-			evServerIP.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				}
+                evServerIP.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {
-					enableSubmitIfReady();
-				}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        enableSubmitIfReady();
+                    }
 
-				@Override
-				public void afterTextChanged(Editable s) {
-					enableSubmitIfReady();
-				}
-			});
-			// on click handler for start registration.
-			btnStartRegistration.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					loadStartRegistrationDialog();
-				}
-			});
-		}
-	}
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        enableSubmitIfReady();
+                    }
+                });
+                // on click handler for start registration.
+                btnStartRegistration.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loadStartRegistrationDialog();
+                    }
+                });
+            }
+        }
+    }
 
 	/**
 	 * Validation done to see if the server IP field is properly

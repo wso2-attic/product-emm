@@ -17,11 +17,17 @@
  */
 package org.wso2.emm.agent;
 
+import java.io.File;
 import java.util.Map;
 
 import android.app.Activity;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.widget.Toast;
+
+import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
@@ -31,6 +37,7 @@ import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Response;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -76,6 +83,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private DevicePolicyManager devicePolicyManager;
 	private ComponentName cdmDeviceAdmin;
 	private DeviceInfo info;
+    private DeviceState state;
+    private Response compatibility;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +94,12 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		getSupportActionBar().setCustomView(R.layout.custom_sherlock_bar);
 		getSupportActionBar().setTitle(Constants.EMPTY_STRING);
 
+
 		devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 		cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
 		context = this;
 		resources = context.getResources();
+        state = new DeviceState(context);
 		info = new DeviceInfo(context);
 		Bundle extras = getIntent().getExtras();
 
@@ -121,12 +132,19 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		txtRegText = (TextView) findViewById(R.id.txtRegText);
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
-		btnEnableMngProfile = (Button) findViewById(R.id.btnEnableMngProfile);
-		btnUnregister.setTag(TAG_BTN_UNREGISTER);
-		btnEnableMngProfile.setTag(TAG_BTN_ENABLE_MANAGED_PROFILE);
-		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-		btnEnableMngProfile.setOnClickListener(onClickListenerButtonClicked);
+        btnUnregister.setTag(TAG_BTN_UNREGISTER);
+        btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+        btnEnableMngProfile = (Button) findViewById(R.id.btnEnableMngProfile);
+        btnEnableMngProfile.setTag(TAG_BTN_ENABLE_MANAGED_PROFILE);
 
+        compatibility = state.evaluateAndroidForWorkCompatibility();
+        if(compatibility==Response.ANDROID_FOR_WORK_COMPATIBLE) {
+            btnEnableMngProfile.setVisibility(View.VISIBLE);
+            btnEnableMngProfile.setOnClickListener(onClickListenerButtonClicked);
+        }
+        else{
+            btnEnableMngProfile.setVisibility(View.GONE);
+        }
 	}
 
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -177,13 +195,32 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private void startManagedProfileManager(){
 		Intent ManagedProfileManager = new Intent(getApplicationContext(), ManagedProfileManager.class);
 		startActivity(ManagedProfileManager);
-	}
+        /*ComponentName divAd = new ComponentName(this, AgentDeviceAdminReceiver.class);
+		devicePolicyManager.setGlobalSetting(divAd,"bluetooth_on","enable()");*/
+
+    }
 
 	/**
 	 * Send unregistration request.
 	 */
 	private void startUnRegistration() {
-		final Context context = AlreadyRegisteredActivity.this;
+        /*
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File("sdcard/Download/MRP.apk")),"application/vnd.android.package-archive");
+        startActivity(intent);
+        */
+
+        // Open File object from its file URI
+        File fileToShare = new File(Uri.fromFile(new File("sdcard/Download/MRP.apk")).toString());
+
+        Uri contentUriToShare = FileProvider.getUriForFile(context,
+                "org.wso2.emm.agent.fileprovider", fileToShare);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(contentUriToShare,"application/vnd.android.package-archive");
+        startActivity(intent);
+
+		/*final Context context = AlreadyRegisteredActivity.this;
 		isUnregisterBtnClicked = true;
 
 		progressDialog = ProgressDialog.show(AlreadyRegisteredActivity.this,
@@ -208,7 +245,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
 			}
 
-		}
+		}*/
 	}
 
 	@Override
