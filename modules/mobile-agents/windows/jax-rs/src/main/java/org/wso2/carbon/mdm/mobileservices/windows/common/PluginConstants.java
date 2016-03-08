@@ -185,7 +185,7 @@ public final class PluginConstants {
         public static final int DEVICE_LANG_POSITION = 4;
         public static final int IMSI_POSITION = 1;
         public static final int IMEI_POSITION = 2;
-        public static final int VENDER_POSITION = 4;
+        public static final int VENDOR_POSITION = 4;
         public static final int MODEL_POSITION = 5;
         public static final int MAC_ADDRESS_POSITION = 7;
         public static final int RESOLUTION_POSITION = 8;

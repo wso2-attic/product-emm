@@ -12,6 +12,7 @@
     "idPServer":"%https.ip%",
     "callBackUrl":"%https.ip%/mdm-admin",
     "adminUser":"admin",
+    "adminRole":"admin",
     "usernameLength":30,
     "ssoConfiguration" : {
         "enabled" : false,

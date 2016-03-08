@@ -111,6 +111,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
 			}
+
 			freshRegFlag = false;
 		}
 

@@ -50,4 +50,18 @@ public class ResultPayload {
 	public List<Operation> getResultPayload(){
 		return this.operationResponses;
 	}
+
+	/**
+	 * Return an operation object for given operation id.
+	 * @param id Operation id.
+	 * @return returns an object if id matches.
+	 */
+	public Operation getResult(int id) {
+		for (Operation operation : operationResponses) {
+			if (operation.getId() == id) {
+				return operation;
+			}
+		}
+		return null;
+	}
 }

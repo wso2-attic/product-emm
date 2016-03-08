@@ -109,7 +109,7 @@ $(document).ready(function () {
         } else if (!domain) {
             $(errorMsg).text("Domain is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"]{1,30}$/, domain)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"]/, domain)) {
             $(errorMsg).text("Provided domain is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
