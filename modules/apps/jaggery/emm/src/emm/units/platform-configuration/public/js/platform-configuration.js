@@ -117,7 +117,9 @@ var configParams = {
     "PRIVATE_KEY_PASSWORD": "privateKeyPassword",
     "BEFORE_EXPIRE": "beforeExpire",
     "AFTER_EXPIRE": "afterExpire",
-    "WINDOWS_EULA": "windowsLicense"
+    "WINDOWS_EULA": "windowsLicense",
+    "IOS_CONFIG_MDM_MODE": "iOSConfigMDMMode",
+    "IOS_CONFIG_APNS_MODE": "iOSConfigAPNSMode"
 };
 
 function promptErrorPolicyPlatform(errorMsg) {
@@ -264,6 +266,18 @@ $(document).ready(function () {
                             $("input#ios-org-display-name").val(config.value);
                         } else if (config.name == configParams["IOS_EULA"]) {
                             $("#ios-eula").val(config.value);
+                        } else if (config.name == configParams["IOS_CONFIG_MDM_MODE"]) {
+                            if(config.value == 2) {
+                                $('#ios-config-mdm-mode option:eq(1)').prop('selected', true);
+                            } else {
+                                $('#ios-config-mdm-mode option:eq(0)').prop('selected', true);
+                            }
+                        } else if (config.name == configParams["IOS_CONFIG_APNS_MODE"]) {
+                            if(config.value == 2) {
+                                $('#ios-config-apns-mode option:eq(1)').prop('selected', true);
+                            } else {
+                                $('#ios-config-apns-mode option:eq(0)').prop('selected', true);
+                            }
                         }
                     }
                 }
@@ -540,6 +554,8 @@ $(document).ready(function () {
         var APNSCertPassword = $("#ios-config-apns-certificate-password").val();
         var configOrgDisplayName = $("#ios-org-display-name").val();
         var iosLicense = tinymce.get('ios-eula').getContent();
+        var iOSConfigMDMMode = $("#ios-config-mdm-mode").val();;
+        var iOSConfigAPNSMode = $("#ios-config-apns-mode").val();;
 
         fileNameMDMCert = validateCertificateParams(fileNameMDMCert, iOSMDMCertificateName);
         fileNameAPNSCert = validateCertificateParams(fileNameAPNSCert, iOSAPNSCertificateName);
@@ -676,6 +692,18 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var iosMDMMode = {
+                "name": configParams["IOS_CONFIG_MDM_MODE"],
+                "value": iOSConfigMDMMode,
+                "contentType": "text"
+            };
+
+            var iosAPNSMode = {
+                "name": configParams["IOS_CONFIG_APNS_MODE"],
+                "value": iOSConfigAPNSMode,
+                "contentType": "text"
+            };
+
             configList.push(configCountry);
             configList.push(configState);
             configList.push(configLocality);
@@ -690,6 +718,8 @@ $(document).ready(function () {
             configList.push(APNSCertName);
             configList.push(paramOrganizationDisplayName);
             configList.push(iosEula);
+            configList.push(iosMDMMode);
+            configList.push(iosAPNSMode);
 
             addConfigFormData.type = platformTypeConstants["IOS"];
             addConfigFormData.configuration = configList;
