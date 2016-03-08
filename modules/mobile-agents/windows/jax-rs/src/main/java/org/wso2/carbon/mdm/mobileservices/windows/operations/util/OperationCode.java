@@ -31,7 +31,7 @@ public class OperationCode {
         IMSI("./Vendor/MSFT/DeviceInstanceService/Identity/Identity1/IMSI"),
         IMEI("./Vendor/MSFT/DeviceInstanceService/Identity/Identity1/IMEI"),
         SOFTWARE_VERSION("./DevDetail/SwV"),
-        VENDER("./DevDetail/OEM"),
+        VENDOR("./DevDetail/OEM"),
         MAC_ADDRESS("./DevDetail/Ext/WLANMACAddress"),
         RESOLUTION("./DevDetail/Ext/Microsoft/Resolution"),
         DEVICE_NAME("./DevDetail/Ext/Microsoft/DeviceName"),
