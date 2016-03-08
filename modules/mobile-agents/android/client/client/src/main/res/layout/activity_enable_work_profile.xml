@@ -70,22 +70,10 @@
             android:text="@string/enable_work_profile_heading"
             android:textColor="#372c24"
             android:textSize="16sp"
-            android:layout_below="@+id/errorLayout"
+            android:layout_above="@+id/btnSetupWorkProfile"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <EditText
-            android:id="@+id/evServerIP"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvSeverAddress"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="22dp"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:ems="10"
-            android:inputType="text" >
-        </EditText>
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="68dp" />
 
         <Button
             android:id="@+id/btnSetupWorkProfile"
@@ -94,11 +82,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_orange"
             android:text="@string/txt_start_enable_work_profile"
-            android:layout_below="@+id/evServerIP"
-            android:layout_alignRight="@+id/evServerIP"
-            android:layout_alignEnd="@+id/evServerIP"
-            android:layout_alignLeft="@+id/evServerIP"
-            android:layout_alignStart="@+id/evServerIP" />
+            android:layout_marginBottom="58dp"
+            android:layout_above="@+id/btnSkipProfile"
+            android:layout_centerHorizontal="true" />
 
         <Button
             style="@style/ButtonText"

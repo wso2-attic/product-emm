@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 
 /**
@@ -42,10 +44,10 @@ public class EnableProfileActivity extends Activity {
             // Important: After the profile has been created, the MDM must enable it for corporate
             // apps to become visible in the launcher.
             enableProfile();
+            finish();
+            startEnrollment();
         }
-        /* This is just a friendly shortcut to the main screen.*/
-        setContentView(R.layout.activity_already_registered);
-        //findViewById(R.id.icon).setOnClickListener(this);
+
     }
 
     private void enableProfile() {
@@ -54,9 +56,9 @@ public class EnableProfileActivity extends Activity {
         ComponentName componentName = AgentDeviceAdminReceiver.getComponentName(this);
         // This is the name for the newly created managed profile.
         manager.setProfileName(componentName, "WSO2-EMM");
-        // We enable the profile here.
+        // Enable the profile here.
         manager.setProfileEnabled(componentName);
-        setAppEnabled("com.android.providers.settings",true);
+        setAppEnabled("com.android.providers.settings", true);
     }
 
     /**
@@ -72,11 +74,11 @@ public class EnableProfileActivity extends Activity {
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName,
                     PackageManager.GET_UNINSTALLED_PACKAGES);
-            // Here, we check the ApplicationInfo of the target app, and see if the flags have
-            // ApplicationInfo.FLAG_INSTALLED turned on using bitwise operation.
+            /* Here, we check the ApplicationInfo of the target app, and see if the flags have
+            ApplicationInfo.FLAG_INSTALLED turned on using bitwise operation. */
             if (0 == (applicationInfo.flags & ApplicationInfo.FLAG_INSTALLED)) {
-                // If the app is not installed in this profile, we can enable it by
-                // DPM.enableSystemApp
+                /* If the app is not installed in this profile, we can enable it by
+                DPM.enableSystemApp */
                 if (enabled) {
                     devicePolicyManager.enableSystemApp(
                             AgentDeviceAdminReceiver.getComponentName(this), packageName);
@@ -92,11 +94,16 @@ public class EnableProfileActivity extends Activity {
                 devicePolicyManager.setApplicationHidden(
                         AgentDeviceAdminReceiver.getComponentName(this), packageName, !enabled);
             }
-            Toast.makeText(this, enabled ? "enabled" : "disabled",
+            Toast.makeText(this, enabled ? packageName + " enabled" : packageName + " disabled",
                     Toast.LENGTH_SHORT).show();
         } catch (PackageManager.NameNotFoundException e) {
             //Log.e(TAG, "The app cannot be found: " + packageName, e);
         }
+    }
+
+    private void startEnrollment(){
+        Intent intent = new Intent(this, ServerDetails.class);
+        startActivity(intent);
     }
 
 }

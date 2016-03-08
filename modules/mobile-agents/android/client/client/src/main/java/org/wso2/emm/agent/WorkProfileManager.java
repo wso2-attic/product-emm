@@ -27,7 +27,7 @@ import android.widget.Toast;
 import static android.app.admin.DevicePolicyManager.ACTION_PROVISION_MANAGED_PROFILE;
 import static android.app.admin.DevicePolicyManager.EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME;
 
-public class ManagedProfileManager extends Activity {
+public class WorkProfileManager extends Activity {
 
     private static final int REQUEST_PROVISION_MANAGED_PROFILE = 1;
 
@@ -73,12 +73,11 @@ public class ManagedProfileManager extends Activity {
         if (intent.resolveActivity(activity.getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_PROVISION_MANAGED_PROFILE);
             activity.finish();
-            Toast.makeText(activity, "Starting Device provisioning..",
-                    Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(activity, "Device provisioning is not enabled. Stopping.",
                     Toast.LENGTH_SHORT).show();
         }
+        finish();
     }
 
     @Override
@@ -86,6 +85,9 @@ public class ManagedProfileManager extends Activity {
         if (requestCode == REQUEST_PROVISION_MANAGED_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "Provisioning done.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,ServerDetails.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             } else {
                 Toast.makeText(this, "Provisioning failed.", Toast.LENGTH_SHORT).show();
             }

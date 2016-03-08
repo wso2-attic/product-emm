@@ -138,11 +138,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="org.wso2.emm.agent.PinCodeActivity"
@@ -161,7 +156,7 @@
             android:name=".services.managedProfileServices.EnableProfileActivity"
             android:label="@string/app_name"/>
         <activity
-            android:name="org.wso2.emm.agent.ManagedProfileManager"
+            android:name=".WorkProfileManager"
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
@@ -178,6 +173,14 @@
             android:name="org.wso2.emm.agent.services.managedProfileServices.AlreadyEnabledActivity"
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="org.wso2.emm.agent.LanderM"
+            android:label="WSO2 Agent">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
     </application>
 
