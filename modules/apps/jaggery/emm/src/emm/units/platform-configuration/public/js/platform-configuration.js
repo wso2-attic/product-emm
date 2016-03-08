@@ -872,7 +872,7 @@ var showAdvanceOperation = function (operation, button) {
         var hiddenOperation = ".wr-hidden-operations-content > div";
         $(hiddenOperation + '[data-operation="error"]').show();
         $(hiddenOperation + '[data-operation="error"]').siblings().hide();
-        promptErrorPolicyPlatform("To use " + operation + " related functionalities you need to configure the server " +
-                                 "accordingly.Please refer to the user guiled.");
+        promptErrorPolicyPlatform("To use " + operation + " related functionality you need to configure the server " +
+                                 "accordingly.Please refer to the documentation.");
     }
 };
