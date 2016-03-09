@@ -24,35 +24,50 @@ import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 
 import javax.xml.xpath.XPathExpressionException;
 
+/**
+ * This is the base test class that provides common details necessary for other test cases.
+ */
 public class TestBase {
-	protected AutomationContext automationContext;
-	protected String backendURL;
+    protected AutomationContext automationContext;
+    protected String backendHTTPSURL;
+    protected String backendHTTPURL;
+    static String accessToken;
 
-	protected void init(TestUserMode userMode) throws Exception {
-		automationContext = new AutomationContext("MDM", userMode);
-		backendURL = automationContext.getContextUrls().getWebAppURLHttps();
-	}
 
-	protected void initPublisher(String productGroupName, String instanceName, TestUserMode userMode, String userKey)
-			throws XPathExpressionException {
-		automationContext = new AutomationContext(productGroupName, instanceName, userMode);
-		backendURL = automationContext.getContextUrls().getBackEndUrl();
-	}
+    protected void init(TestUserMode userMode) throws Exception {
+        automationContext = new AutomationContext(Constants.AUTOMATION_CONTEXT, userMode);
+        backendHTTPSURL = automationContext.getContextUrls().getWebAppURLHttps();
+        backendHTTPURL = automationContext.getContextUrls().getWebAppURL();
+    }
 
-	protected String getBackendURL() throws XPathExpressionException {
-		return automationContext.getContextUrls().getBackEndUrl();
-	}
+    protected void initPublisher(String productGroupName, String instanceName, TestUserMode userMode)
+            throws XPathExpressionException {
+        automationContext = new AutomationContext(productGroupName, instanceName, userMode);
+        backendHTTPSURL = automationContext.getContextUrls().getBackEndUrl();
+    }
 
-	protected String getSessionCookie() throws Exception {
-		LoginLogoutClient loginLogoutClient = new LoginLogoutClient(automationContext);
-		return loginLogoutClient.login();
-	}
+    public String getBackendHTTPURL() {
+        return backendHTTPURL;
+    }
 
-	protected String getServiceURL() throws XPathExpressionException {
-		return automationContext.getContextUrls().getServiceUrl();
-	}
+    public void setBackendHTTPURL(String backendHTTPURL) {
+        this.backendHTTPURL = backendHTTPURL;
+    }
 
-	protected String getTestArtifactLocation() {
-		return FrameworkPathUtil.getSystemResourceLocation();
-	}
+    protected String getBackendHTTPSURL() throws XPathExpressionException {
+        return automationContext.getContextUrls().getBackEndUrl();
+    }
+
+    protected String getSessionCookie() throws Exception {
+        LoginLogoutClient loginLogoutClient = new LoginLogoutClient(automationContext);
+        return loginLogoutClient.login();
+    }
+
+    protected String getServiceURL() throws XPathExpressionException {
+        return automationContext.getContextUrls().getServiceUrl();
+    }
+
+    protected String getTestArtifactLocation() {
+        return FrameworkPathUtil.getSystemResourceLocation();
+    }
 }

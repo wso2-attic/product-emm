@@ -1,0 +1,39 @@
+{
+  "POST" : {
+    "name": "person_name",
+    "type": "android",
+    "description": "enrollingWithInvalidProperties",
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "123123123"
+      },
+      {
+        "name": "IMSI",
+        "value": "123123123"
+      }
+    ]
+  },
+  "PUT" : {
+    "name": "milan123",
+    "type": "android",
+    "description": "updatedDescription",
+    "deviceIdentifier": "1111",
+    "enrolmentInfo": {
+      "ownership": "BYOD",
+      "status": "ACTIVE",
+      "owner": "admin",
+      "dateOfEnrolment": "1445438864650"
+    },
+    "properties": [
+      {
+        "name": "IMEI",
+        "value": "12222222"
+      },
+      {
+        "name": "IMSI",
+        "value": "122222"
+      }
+    ]
+  }
+}

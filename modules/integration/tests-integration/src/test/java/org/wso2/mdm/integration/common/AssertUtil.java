@@ -23,22 +23,20 @@ import com.google.gson.JsonParser;
 import org.testng.Assert;
 
 /**
- * This class contains methods to make assertions easier and which are not available out of the box, from testng.
+ * This class contains methods to make assertions easier and which are not available out of the box, from testing.
  */
 public class AssertUtil {
     /**
      * This can be used to compare if to json strings are matched or not.
      *
      * @param expectedJsonPayload the expected json string.
-     * @param realJsonPayload     real json string.
+     * @param realPayload         real json string.
      * @param mustMatch           If the real and expected must match, in order to become the test successful or not.
      */
-    public static void jsonPayloadCompare(String expectedJsonPayload, String realJsonPayload, boolean mustMatch) {
-        JsonElement jsonElement =
-                new JsonParser().parse((String) expectedJsonPayload);
+    public static void jsonPayloadCompare(String expectedJsonPayload, String realPayload, boolean mustMatch) {
+        JsonElement jsonElement = new JsonParser().parse(expectedJsonPayload);
         JsonObject expectedPayloadObject = jsonElement.getAsJsonObject();
-        jsonElement =
-                new JsonParser().parse((String) realJsonPayload);
+        jsonElement = new JsonParser().parse(realPayload);
         JsonObject realPayloadObject = jsonElement.getAsJsonObject();
         if (mustMatch) {
             Assert.assertTrue(realPayloadObject.equals(expectedPayloadObject));

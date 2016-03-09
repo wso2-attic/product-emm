@@ -18,6 +18,9 @@
 package org.wso2.emm.agent;
 
 import android.annotation.TargetApi;
+import android.app.admin.DevicePolicyManager;
+import android.content.Context;
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -33,6 +36,8 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 
 import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.Notification;
+import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.utils.Constants;
 
 /**
@@ -46,8 +51,13 @@ public class AlertActivity extends SherlockActivity {
 	private Ringtone defaultRingtone;
 	private DeviceInfo deviceInfo;
 	private String type;
-
+	private Context context;
+	private AudioManager audio;
+	private int operationId;
+	private static final int DEFAULT_VOLUME = 0;
+	private static final int DEFAULT_FLAG = 0;
 	private static final String DEVICE_OPERATION_RING = "ring";
+	private static final String OPEN_LOCK_SETTINGS = "lock_settings";
 	private static final String TAG = AlertActivity.class.getSimpleName();
 
 
@@ -59,6 +69,9 @@ public class AlertActivity extends SherlockActivity {
 		btnOK = (Button) findViewById(R.id.btnOK);
 		txtMessage = (TextView) findViewById(R.id.txtMessage);
 		deviceInfo = new DeviceInfo(this);
+		context = AlertActivity.this.getApplicationContext();
+		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -73,6 +86,9 @@ public class AlertActivity extends SherlockActivity {
 				startRing();
 			}
 		}
+		if (extras.containsKey(getResources().getString(R.string.intent_extra_operation_id))) {
+			operationId = extras.getInt(getResources().getString(R.string.intent_extra_operation_id));
+		}
 
 		txtMessage.setText(message);
 
@@ -82,7 +98,11 @@ public class AlertActivity extends SherlockActivity {
 				if (DEVICE_OPERATION_RING.equalsIgnoreCase(type)) {
 					stopRing();
 					AlertActivity.this.finish();
+				} else if (OPEN_LOCK_SETTINGS.equalsIgnoreCase(type)) {
+					openPasswordSettings();
+					AlertActivity.this.finish();
 				} else {
+					updateNotification(operationId);
 					AlertActivity.this.finish();
 				}
 			}
@@ -101,6 +121,8 @@ public class AlertActivity extends SherlockActivity {
 		if (defaultRingtone != null && defaultRingtone.isPlaying()) {
 			defaultRingtone.stop();
 		}
+		audio.setStreamVolume(AudioManager.STREAM_RING, DEFAULT_VOLUME, DEFAULT_FLAG);
+		audio.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 	}
 
 	/**
@@ -108,6 +130,9 @@ public class AlertActivity extends SherlockActivity {
 	 */
 	@TargetApi(21)
 	private void startRing() {
+		audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+		audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING),
+		                      AudioManager.FLAG_PLAY_SOUND);
 		defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE);
 		defaultRingtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
 
@@ -124,6 +149,14 @@ public class AlertActivity extends SherlockActivity {
 	}
 
 	/**
+	 * This method is used to open screen lock password settings screen.
+	 */
+	private void openPasswordSettings() {
+		Intent intent = new Intent(DevicePolicyManager.ACTION_SET_NEW_PASSWORD);
+		startActivity(intent);
+	}
+
+	/**
 	 * This is used to disable the action of back button press.
 	 */
 	@Override
@@ -132,6 +165,13 @@ public class AlertActivity extends SherlockActivity {
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.i(TAG, "Back button is pressed");
 		}
+	}
+
+	private void updateNotification (int id) {
+		NotificationDAO notificationDAO = new NotificationDAO(context);
+		notificationDAO.open();
+		notificationDAO.updateNotification(id, Notification.Status.DISMISSED);
+		notificationDAO.close();
 	}
 
 }

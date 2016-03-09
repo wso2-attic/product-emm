@@ -15,10 +15,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.carbon.mdm.mobileservices.windows.services.syncml.beans;
 
 /**
- * Bean for lock password policy
+ * Bean for device updateLockOperation screen passcode policy.
  */
 public class PasscodePolicy extends BasicOperation {
 

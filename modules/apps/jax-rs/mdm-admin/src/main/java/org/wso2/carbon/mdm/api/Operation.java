@@ -22,10 +22,14 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.PaginationRequest;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.Platform;
+import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.context.DeviceOperationContext;
@@ -50,7 +54,7 @@ import java.util.List;
 public class Operation {
 
     private static Log log = LogFactory.getLog(Operation.class);
-
+    /* @deprecated */
     @GET
     public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
             throws MDMAPIException {
@@ -67,13 +71,58 @@ public class Operation {
         return operations;
     }
 
+    @GET
+    @Path("paginate/{type}/{id}")
+    public PaginationResult getDeviceOperations(
+            @PathParam("type") String type,	@PathParam("id") String id, @QueryParam("start") int startIdx,
+            @QueryParam("length") int length, @QueryParam("search") String search)
+            throws MDMAPIException {
+        PaginationResult operations;
+        DeviceManagementProviderService dmService;
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        PaginationRequest paginationRequest = new PaginationRequest(startIdx, length);
+        try {
+            deviceIdentifier.setType(type);
+            deviceIdentifier.setId(id);
+            dmService = MDMAPIUtils.getDeviceManagementService();
+            operations = dmService.getOperations(deviceIdentifier, paginationRequest);
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while fetching the operations for the device.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return operations;
+    }
+
+	@GET
+	@Path("{type}/{id}")
+	public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getDeviceOperations(
+			@PathParam("type") String type,	@PathParam("id") String id)
+			throws MDMAPIException {
+		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+		DeviceManagementProviderService dmService;
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		try {
+			deviceIdentifier.setType(type);
+			deviceIdentifier.setId(id);
+			dmService = MDMAPIUtils.getDeviceManagementService();
+			operations = dmService.getOperations(deviceIdentifier);
+		} catch (OperationManagementException e) {
+			String msg = "Error occurred while fetching the operations for the device.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return operations;
+	}
+
+    /* @deprecated */
     @POST
     public ResponsePayload addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
         DeviceManagementProviderService dmService;
         ResponsePayload responseMsg = new ResponsePayload();
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            int  operationId = dmService.addOperation(operationContext.getOperation(),
+            int operationId = dmService.addOperation(operationContext.getOperation(),
                     operationContext.getDevices());
             if (operationId>0) {
                 Response.status(HttpStatus.SC_CREATED);
@@ -87,6 +136,28 @@ public class Operation {
         }
     }
 
+	@GET
+	@Path("{type}/{id}/apps")
+	public List<? extends Application> getInstalledApps(
+			@PathParam("type") String type,
+			@PathParam("id") String id)
+			throws MDMAPIException {
+		List<Application> applications;
+		ApplicationManagementProviderService appManagerConnector;
+		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+		try {
+			deviceIdentifier.setType(type);
+			deviceIdentifier.setId(id);
+			appManagerConnector = MDMAPIUtils.getAppManagementService();
+			applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
+		} catch (ApplicationManagementException e) {
+			String msg = "Error occurred while fetching the apps of the device.";
+			log.error(msg, e);
+			throw new MDMAPIException(msg, e);
+		}
+		return applications;
+	}
+
     @POST
     @Path("installApp/{tenantDomain}")
     public ResponsePayload installApplication(ApplicationWrapper applicationWrapper,
@@ -96,7 +167,7 @@ public class Operation {
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
         ArrayList<DeviceIdentifier> deviceIdentifiers;
         try {
-            appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            appManagerConnector = MDMAPIUtils.getAppManagementService();
             MobileApp mobileApp = applicationWrapper.getApplication();
 
             if (applicationWrapper.getDeviceIdentifiers() != null) {
@@ -110,8 +181,10 @@ public class Operation {
                     }
                     deviceIdentifiers.add(deviceIdentifier);
                 }
-                appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
+                appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
+            Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setMessageFromServer("Application installation request has been sent to the device.");
             return responseMsg;
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while saving the operation";
@@ -129,7 +202,7 @@ public class Operation {
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation = null;
         ArrayList<DeviceIdentifier> deviceIdentifiers;
         try {
-            appManagerConnector = MDMAPIUtils.getAppManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+            appManagerConnector = MDMAPIUtils.getAppManagementService();
             MobileApp mobileApp = applicationWrapper.getApplication();
 
             if (applicationWrapper.getDeviceIdentifiers() != null) {
@@ -143,8 +216,10 @@ public class Operation {
                     }
                     deviceIdentifiers.add(deviceIdentifier);
                 }
-                appManagerConnector.installApplication(operation, applicationWrapper.getDeviceIdentifiers());
+                appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
+            Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setMessageFromServer("Application removal request has been sent to the device.");
             return responseMsg;
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while saving the operation";

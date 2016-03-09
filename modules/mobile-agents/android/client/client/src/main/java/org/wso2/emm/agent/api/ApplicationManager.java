@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.pm.ApplicationInfo;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
@@ -80,13 +81,15 @@ public class ApplicationManager {
 		DeviceAppInfo app;
 
 		for (PackageInfo packageInfo : packages) {
-			app = new DeviceAppInfo();
-			app.setAppname(packageInfo.applicationInfo.
-					loadLabel(packageManager).toString());
-			app.setPackagename(packageInfo.packageName);
-			app.setVersionName(packageInfo.versionName);
-			app.setVersionCode(packageInfo.versionCode);
-			appList.put(packageInfo.packageName, app);
+			if(!isSystemPackage(packageInfo)) {
+				app = new DeviceAppInfo();
+				app.setAppname(packageInfo.applicationInfo.
+						loadLabel(packageManager).toString());
+				app.setPackagename(packageInfo.packageName);
+				app.setVersionName(packageInfo.versionName);
+				app.setVersionCode(packageInfo.versionCode);
+				appList.put(packageInfo.packageName, app);
+			}
 		}
 		return appList;
 	}
@@ -109,6 +112,15 @@ public class ApplicationManager {
 		}
 		
 		return appName;
+	}
+
+	/**
+	 * Returns whether the app is a system app.
+	 * @param packageInfo - Package of the app which you need the status.
+	 * @return - App status.
+	 */
+	private boolean isSystemPackage(PackageInfo packageInfo) {
+		return ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
 	}
 
 	/**

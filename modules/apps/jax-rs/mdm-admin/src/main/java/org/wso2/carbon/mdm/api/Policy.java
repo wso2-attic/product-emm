@@ -54,7 +54,7 @@ public class Policy {
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
-
+	    policy.setDescription(policyWrapper.getDescription());
         policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
         policy.setOwnershipType(policyWrapper.getOwnershipType());
         policy.setRoles(policyWrapper.getRoles());
@@ -66,6 +66,7 @@ public class Policy {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             pap.addPolicy(policy);
             Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setStatusCode(HttpStatus.SC_CREATED);
             responseMsg.setMessageFromServer("Policy has been added successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
@@ -84,7 +85,7 @@ public class Policy {
         org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
         policy.setPolicyName(policyWrapper.getPolicyName());
         policy.setProfileId(policyWrapper.getProfileId());
-
+	    policy.setDescription(policyWrapper.getDescription());
         policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
         policy.setOwnershipType(policyWrapper.getOwnershipType());
         policy.setRoles(policyWrapper.getRoles());
@@ -97,6 +98,7 @@ public class Policy {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             pap.addPolicy(policy);
             Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setStatusCode(HttpStatus.SC_CREATED);
             responseMsg.setMessageFromServer("Policy has been added successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
@@ -127,6 +129,33 @@ public class Policy {
     }
 
     @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("{id}")
+    public Response getPolicy(@PathParam("id") int policyId) throws MDMAPIException {
+        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+        final org.wso2.carbon.policy.mgt.common.Policy policy;
+        try {
+            PolicyAdministratorPoint policyAdministratorPoint = policyManagementService.getPAP();
+            policy = policyAdministratorPoint.getPolicy(policyId);
+        } catch (PolicyManagementException e) {
+            String error = "Policy Management related exception";
+            log.error(error, e);
+            throw new MDMAPIException(error, e);
+        }
+        if (policy == null){
+            ResponsePayload responsePayload = new ResponsePayload();
+            responsePayload.setStatusCode(HttpStatus.SC_NOT_FOUND);
+            responsePayload.setMessageFromServer("Policy for ID " + policyId + " not found.");
+            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+        }
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatusCode(HttpStatus.SC_OK);
+        responsePayload.setMessageFromServer("Sending all retrieved device policies.");
+        responsePayload.setResponseContent(policy);
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    @GET
     @Path("count")
     public int getPolicyCount() throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
@@ -140,23 +169,56 @@ public class Policy {
         }
     }
 
-    @POST
+    @PUT
     @Path("{id}")
-    public ResponsePayload updatePolicy(org.wso2.carbon.policy.mgt.common.Policy policy, @PathParam("id") int policyId)
+    public ResponsePayload updatePolicy(PolicyWrapper policyWrapper, @PathParam("id") int policyId)
             throws MDMAPIException {
+//        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+//        ResponsePayload responseMsg = new ResponsePayload();
+//        try {
+//            PolicyAdministratorPoint pap = policyManagementService.getPAP();
+//            org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
+//            policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
+//            policy.setId(previousPolicy.getId());
+//            pap.updatePolicy(policy);
+//            Response.status(HttpStatus.SC_OK);
+//            responseMsg.setMessageFromServer("Policy has been updated successfully.");
+//            return responseMsg;
+//        } catch (PolicyManagementException e) {
+//            String error = "Policy Management related exception";
+//            log.error(error, e);
+//            throw new MDMAPIException(error, e);
+//        }
+
+
+
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         ResponsePayload responseMsg = new ResponsePayload();
+        org.wso2.carbon.policy.mgt.common.Policy policy = new org.wso2.carbon.policy.mgt.common.Policy();
+        policy.setPolicyName(policyWrapper.getPolicyName());
+        policy.setId(policyId);
+        policy.setProfileId(policyWrapper.getProfileId());
+        policy.setDescription(policyWrapper.getDescription());
+        policy.setProfile(MDMUtil.convertProfile(policyWrapper.getProfile()));
+        policy.setOwnershipType(policyWrapper.getOwnershipType());
+        policy.setRoles(policyWrapper.getRoles());
+        policy.setUsers(policyWrapper.getUsers());
+        policy.setTenantId(policyWrapper.getTenantId());
+        policy.setCompliance(policyWrapper.getCompliance());
+       // policy.setActive(true);
+
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            policy.setProfile(pap.getProfile(policy.getProfileId()));
-            org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
-            policy.setPolicyName(previousPolicy.getPolicyName());
+//            pap.addPolicy(policy);
             pap.updatePolicy(policy);
+//            Response.status(HttpStatus.SC_CREATED);
             Response.status(HttpStatus.SC_OK);
+            responseMsg.setStatusCode(HttpStatus.SC_CREATED);
+//            responseMsg.setMessageFromServer("Policy has been added successfully.");
             responseMsg.setMessageFromServer("Policy has been updated successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
+            String error = "Policy Management related exception in policy update.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
@@ -170,7 +232,7 @@ public class Policy {
             throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         List<org.wso2.carbon.policy.mgt.common.Policy> policiesToUpdate =
-                new ArrayList<org.wso2.carbon.policy.mgt.common.Policy>();
+                new ArrayList<org.wso2.carbon.policy.mgt.common.Policy>(priorityUpdatedPolicies.size());
         int i;
         for (i = 0; i < priorityUpdatedPolicies.size(); i++) {
             org.wso2.carbon.policy.mgt.common.Policy policyObj = new org.wso2.carbon.policy.mgt.common.Policy();
@@ -199,29 +261,34 @@ public class Policy {
         }
     }
 
-    @DELETE
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response deletePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+    @POST
+    @Path("bulk-remove")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response bulkRemovePolicy(List<Integer> policyIds) throws MDMAPIException {
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-        boolean policyDeleted;
+        boolean policyDeleted = true;
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
-            policyDeleted = pap.deletePolicy(policy);
+	        for(int i : policyIds) {
+		        org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(i);
+		        if(!pap.deletePolicy(policy)){
+			        policyDeleted = false;
+		        }
+	        }
         } catch (PolicyManagementException e) {
-            String error = "Exception in deleting policy by id:" + policyId;
+            String error = "Exception in deleting policies.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
         ResponsePayload responsePayload = new ResponsePayload();
         if (policyDeleted) {
             responsePayload.setStatusCode(HttpStatus.SC_OK);
-            responsePayload.setMessageFromServer("Policy by id:" + policyId + " has been successfully deleted.");
+            responsePayload.setMessageFromServer("Policies have been successfully deleted.");
             return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
         } else {
             responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-            responsePayload.setMessageFromServer("Policy by id:" + policyId + " does not exist.");
+            responsePayload.setMessageFromServer("Policy does not exist.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
         }
     }
@@ -245,21 +312,23 @@ public class Policy {
 
     @PUT
     @Produces("application/json")
-    @Path("activate/{id}")
-    public Response activatePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+    @Path("activate")
+    public Response activatePolicy(List<Integer> policyIds) throws MDMAPIException {
         try {
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            pap.activatePolicy(policyId);
+	        for(int i : policyIds) {
+		        pap.activatePolicy(i);
+	        }
         } catch (PolicyManagementException e) {
-            String error = "Exception in activating policy by id:" + policyId;
+            String error = "Exception in activating policies.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
 
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        responsePayload.setMessageFromServer("Policy by id:" + policyId + " has been successfully activated.");
+        responsePayload.setMessageFromServer("Selected policies have been successfully activated.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
 
     }
@@ -267,21 +336,23 @@ public class Policy {
 
     @PUT
     @Produces("application/json")
-    @Path("inactivate/{id}")
-    public Response inactivatePolicy(@PathParam("id") int policyId) throws MDMAPIException {
+    @Path("inactivate")
+    public Response inactivatePolicy(List<Integer> policyIds) throws MDMAPIException {
 
         try {
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-            pap.inactivatePolicy(policyId);
+	        for(int i : policyIds) {
+		        pap.inactivatePolicy(i);
+	        }
         } catch (PolicyManagementException e) {
-            String error = "Exception in inactivating policy by id:" + policyId;
+            String error = "Exception in inactivating policies.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        responsePayload.setMessageFromServer("Policy by id:" + policyId + " has been successfully inactivated.");
+        responsePayload.setMessageFromServer("Selected policies have been successfully inactivated.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
@@ -374,20 +445,31 @@ public class Policy {
 
     @GET
     @Path("{type}/{id}")
-    public ComplianceData getComplianceDataOfDevice(@PathParam("id") String id, @PathParam("type") String type) throws
+    public ComplianceData getComplianceDataOfDevice(@PathParam("type") String type, @PathParam("id") String id) throws
             MDMAPIException {
         try {
-            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(id, type);
+            DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
             PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
             return policyManagementService.getDeviceCompliance(deviceIdentifier);
-        } catch (MDMAPIException e) {
-            String error = "Error occurred while getting the policy management service.";
-            log.error(error, e);
-            throw new MDMAPIException(error, e);
         } catch (PolicyComplianceException e) {
             String error = "Error occurred while getting the compliance data.";
             log.error(error, e);
             throw new MDMAPIException(error, e);
         }
     }
+
+	@GET
+	@Path("{type}/{id}/active-policy")
+	public org.wso2.carbon.policy.mgt.common.Policy getDeviceActivePolicy(@PathParam("type") String type,
+                                                                    @PathParam("id") String id) throws MDMAPIException {
+		try {
+			DeviceIdentifier deviceIdentifier = MDMAPIUtils.instantiateDeviceIdentifier(type, id);
+			PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
+			return policyManagementService.getAppliedPolicyToDevice(deviceIdentifier);
+		}  catch (PolicyManagementException e) {
+			String error = "Error occurred while getting the current policy.";
+			log.error(error, e);
+			throw new MDMAPIException(error, e);
+		}
+	}
 }

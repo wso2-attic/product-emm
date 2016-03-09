@@ -26,80 +26,89 @@ import org.w3c.dom.Element;
  * Represents the header details of a syncml.
  */
 public class SyncmlHeader {
-	private int sessionId = -1;
-	private int MsgID = -1;
-	private Target target;
-	private Source source;
-	private Credential credential;
+    private int sessionId = -1;
+    private int MsgID = -1;
+    private TargetTag target;
+    private SourceTag source;
+    private CredentialTag credential;
+    private String hexadecimalSessionId;
 
-	public Credential getCredential() {
-		return credential;
-	}
+    public String getHexadecimalSessionId() {
+        return hexadecimalSessionId;
+    }
 
-	public void setCredential(Credential credential) {
-		this.credential = credential;
-	}
+    public void setHexadecimalSessionId(String hexSessionId) {
+        this.hexadecimalSessionId = hexSessionId;
+    }
 
-	public int getSessionId() {
-		return sessionId;
-	}
+    public CredentialTag getCredential() {
+        return credential;
+    }
 
-	public void setSessionId(int sessionId) {
-		this.sessionId = sessionId;
-	}
+    public void setCredential(CredentialTag credential) {
+        this.credential = credential;
+    }
 
-	public int getMsgID() {
-		return MsgID;
-	}
+    public int getSessionId() {
+        return sessionId;
+    }
 
-	public void setMsgID(int msgID) {
-		this.MsgID = msgID;
-	}
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
 
-	public Target getTarget() {
-		return target;
-	}
+    public int getMsgID() {
+        return MsgID;
+    }
 
-	public void setTarget(Target target) {
-		this.target = target;
-	}
+    public void setMsgID(int msgID) {
+        this.MsgID = msgID;
+    }
 
-	public Source getSource() {
-		return source;
-	}
+    public TargetTag getTarget() {
+        return target;
+    }
 
-	public void setSource(Source source) {
-		this.source = source;
-	}
+    public void setTarget(TargetTag target) {
+        this.target = target;
+    }
 
-	public void buildSyncmlHeaderElement(Document doc, Element rootElement) {
-		Element syncHdr = doc.createElement(Constants.SYNC_HDR);
-		rootElement.appendChild(syncHdr);
-		Element verDTD = doc.createElement(Constants.VER_DTD);
-		verDTD.appendChild(doc.createTextNode(Constants.VER_DTD_VALUE));
-		syncHdr.appendChild(verDTD);
+    public SourceTag getSource() {
+        return source;
+    }
 
-		Element verProtocol = doc.createElement(Constants.VER_PROTOCOL);
-		verProtocol.appendChild(doc.createTextNode(Constants.VER_PROTOCOL_VALUE));
-		syncHdr.appendChild(verProtocol);
-		if (getSessionId() != -1) {
-			Element sessionId = doc.createElement(Constants.SESSION_ID);
-			sessionId.appendChild(doc.createTextNode(String.valueOf(getSessionId())));
-			syncHdr.appendChild(sessionId);
-		}
-		if (getMsgID() != -1) {
-			Element msgId = doc.createElement(Constants.MESSAGE_ID);
-			msgId.appendChild(doc.createTextNode(String.valueOf(getMsgID())));
-			syncHdr.appendChild(msgId);
-		}
-		if (getTarget() != null) {
-			getTarget().buildTargetElement(doc, syncHdr);
-		}
-		if (getSource() != null) {
-			getSource().buildSourceElement(doc, syncHdr);
-		}
-		if (getCredential() != null) {
-			getCredential().buildCredentialElement(doc, syncHdr);
-		}
-	}
+    public void setSource(SourceTag source) {
+        this.source = source;
+    }
+
+    public void buildSyncmlHeaderElement(Document doc, Element rootElement) {
+        Element syncHdr = doc.createElement(Constants.SYNC_HDR);
+        rootElement.appendChild(syncHdr);
+        Element verDTD = doc.createElement(Constants.VER_DTD);
+        verDTD.appendChild(doc.createTextNode(Constants.VER_DTD_VALUE));
+        syncHdr.appendChild(verDTD);
+
+        Element verProtocol = doc.createElement(Constants.VER_PROTOCOL);
+        verProtocol.appendChild(doc.createTextNode(Constants.VER_PROTOCOL_VALUE));
+        syncHdr.appendChild(verProtocol);
+        if (getHexadecimalSessionId() != null) {
+            Element sessionId = doc.createElement(Constants.SESSION_ID);
+            sessionId.appendChild(doc.createTextNode(getHexadecimalSessionId()));
+            syncHdr.appendChild(sessionId);
+        }
+        if (getMsgID() != -1) {
+            Element msgId = doc.createElement(Constants.MESSAGE_ID);
+            msgId.appendChild(doc.createTextNode(String.valueOf(getMsgID())));
+            syncHdr.appendChild(msgId);
+        }
+        if (getTarget() != null) {
+            getTarget().buildTargetElement(doc, syncHdr);
+        }
+        if (getSource() != null) {
+            getSource().buildSourceElement(doc, syncHdr);
+        }
+        if (getCredential() != null) {
+            getCredential().buildCredentialElement(doc, syncHdr);
+        }
+    }
 }

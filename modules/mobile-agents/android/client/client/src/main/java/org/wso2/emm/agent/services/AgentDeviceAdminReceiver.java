@@ -66,7 +66,9 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		Toast.makeText(context, R.string.device_admin_enabled,
 				Toast.LENGTH_LONG).show();
 		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
-		if(notifier.equals(Constants.NOTIFIER_LOCAL)) {
+		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
+			LocalNotification.startPolling(context);
+		} else if(notifier == null) {
 			LocalNotification.startPolling(context);
 		}
 	}
@@ -104,7 +106,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		utils.setServerIP(serverIP);
 
 		CommonUtils.callSecuredAPI(context,
-		                           utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
+		                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
 		                           HTTP_METHODS.DELETE,
 		                           null, AgentDeviceAdminReceiver.this,
 		                           Constants.UNREGISTER_REQUEST_CODE);

@@ -23,36 +23,36 @@ package org.wso2.carbon.mdm.mobileservices.windows.common.exceptions;
  */
 public class AuthenticationException extends Exception {
 
-	private String errorMessage;
+    private String errorMessage;
 
-	public AuthenticationException(String message) {
-		super(message);
-		setErrorMessage(message);
-	}
+    public AuthenticationException(String message) {
+        super(message);
+        setErrorMessage(message);
+    }
 
-	public AuthenticationException(String message, Throwable cause) {
-		super(message, cause);
-		setErrorMessage(message);
-	}
+    public AuthenticationException(String message, Throwable cause) {
+        super(message, cause);
+        setErrorMessage(message);
+    }
 
-	public AuthenticationException(String message, Exception nestedEx) {
-		super(message, nestedEx);
-		setErrorMessage(message);
-	}
+    public AuthenticationException(String message, Exception nestedEx) {
+        super(message, nestedEx);
+        setErrorMessage(message);
+    }
 
-	public AuthenticationException(Throwable cause) {
-		super(cause);
-	}
+    public AuthenticationException(Throwable cause) {
+        super(cause);
+    }
 
-	public AuthenticationException() {
-		super();
-	}
+    public AuthenticationException() {
+        super();
+    }
 
-	public String getErrorMessage() {
-		return errorMessage;
-	}
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }

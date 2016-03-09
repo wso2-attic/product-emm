@@ -81,6 +81,8 @@ public final class AndroidConstants {
 		public static final String BLACKLIST_APPLICATIONS = "BLACKLIST_APPLICATIONS";
 		public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
 		public static final String DEVICE_RING = "DEVICE_RING";
+		public static final String DEVICE_REBOOT = "REBOOT";
+		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String NOTIFICATION = "NOTIFICATION";
 		public static final String WEBCLIP = "WEBCLIP";
 		public static final String DISENROLL = "DISENROLL";
@@ -103,4 +105,12 @@ public final class AndroidConstants {
 		public static final String CONTENT_TYPE_TEXT = "text";
 	}
 
+    public final class ApplicationProperties {
+        private ApplicationProperties(){
+            throw new AssertionError();
+        }
+        public static final String NAME = "name";
+        public static final String IDENTIFIER = "package";
+        public static final String ICON = "icon";
+    }
 }

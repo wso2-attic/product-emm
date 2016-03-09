@@ -1,0 +1,14 @@
+{{#each nodeList}} {{! Each item is an "li" }}
+    <li aria-expanded="true">
+        <div class="checkbox">
+            <label>
+                <input class="permissionItem" {{#if isSelected}} checked {{/if}} data-resourcepath="{{resourcePath}}" type="checkbox"> {{displayName}}
+            </label>
+        </div>
+        {{#if nodeList}} {{! Within the context of the current item }}
+            <ul>
+                {{> list}} {{! Recursively render the partial }}
+            </ul>
+        {{/if}}
+    </li>
+{{/each}}

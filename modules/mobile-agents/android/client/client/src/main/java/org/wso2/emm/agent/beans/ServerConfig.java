@@ -17,7 +17,9 @@
  */
 package org.wso2.emm.agent.beans;
 
+import android.content.Context;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 /**
  * This class represents the server configuration parameters.
@@ -36,18 +38,44 @@ public class ServerConfig {
 		this.serverIP = serverIP;
 	}
 
-	public String getServerURL() {
-		serverURL = Constants.SERVER_PROTOCOL + serverIP + COLON + Constants.SERVER_PORT;
+	public String getServerURL(Context context) {
+		serverURL = getProtocolFromPreferences(context) + getHostFromPreferences(context) + COLON +
+		            getPortFromPreferences(context);
 		return serverURL;
 	}
 
-	public void setServerURL(String serverURL) {
+	public void setServerURL(Context context, String serverURL) {
 		this.serverURL = serverURL;
 	}
 
-	public String getAPIServerURL() {
-		APIServerURL = Constants.SERVER_PROTOCOL + serverIP + COLON + Constants.API_SERVER_PORT;
+	public String getAPIServerURL(Context context) {
+		APIServerURL = getProtocolFromPreferences(context) + getHostFromPreferences(context) + COLON +
+		               getPortFromPreferences(context);
 		return APIServerURL;
+	}
+
+	public String getProtocolFromPreferences (Context context) {
+		if (Preference.getString(context, Constants.PROTOCOL) != null) {
+			return Preference.getString(context, Constants.PROTOCOL);
+		} else {
+			return Constants.SERVER_PROTOCOL;
+		}
+	}
+
+	public String getPortFromPreferences (Context context) {
+		if (Preference.getString(context, Constants.PORT) != null) {
+			return Preference.getString(context, Constants.PORT);
+		} else {
+			return Constants.API_SERVER_PORT;
+		}
+	}
+
+	public String getHostFromPreferences (Context context) {
+		if (Preference.getString(context, Constants.IP) != null) {
+			return Preference.getString(context, Constants.IP);
+		} else {
+			return serverIP;
+		}
 	}
 
 	public void setAPIServerURL(String aPIServerURL) {

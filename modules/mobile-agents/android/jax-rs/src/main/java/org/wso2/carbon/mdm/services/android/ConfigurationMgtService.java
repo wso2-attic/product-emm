@@ -33,6 +33,7 @@ import org.wso2.carbon.mdm.services.android.util.Message;
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,6 +67,7 @@ public class ConfigurationMgtService {
 					AndroidAPIUtils.getDeviceManagementService().addLicense(DeviceManagementConstants.
 							                         MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
 					licenseEntry = entry;
+					break;
 				}
 			}
 
@@ -74,15 +76,14 @@ public class ConfigurationMgtService {
 			}
 			configuration.setConfiguration(configs);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
+			AndroidAPIUtils.getGCMService().resetTenantConfigCache();
 			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Android platform configuration saved successfully");
+			responseMsg.setResponseMessage("Android platform configuration saved successfully.");
 			responseMsg.setResponseCode(Response.Status.CREATED.toString());
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while configuring the android platform";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -91,15 +92,23 @@ public class ConfigurationMgtService {
 	public TenantConfiguration getConfiguration() throws AndroidAgentException {
 		String msg;
 		TenantConfiguration tenantConfiguration;
+        List<ConfigurationEntry> configs;
 		try {
 			tenantConfiguration = AndroidAPIUtils.getDeviceManagementService().
 					getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-			List<ConfigurationEntry> configs = tenantConfiguration.getConfiguration();
+			if(tenantConfiguration != null) {
+                configs = tenantConfiguration.getConfiguration();
+            } else {
+                tenantConfiguration = new TenantConfiguration();
+                configs = new ArrayList<ConfigurationEntry>();
+            }
+
 			ConfigurationEntry entry = new ConfigurationEntry();
 			License license = AndroidAPIUtils.getDeviceManagementService().getLicense(
 					DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, AndroidConstants.
 							                                             TenantConfigProperties.LANGUAGE_US);
-			if(license != null) {
+
+			if(license != null && configs != null) {
 				entry.setContentType(AndroidConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
 				entry.setName(AndroidConstants.TenantConfigProperties.LICENSE_KEY);
 				entry.setValue(license.getText());
@@ -110,15 +119,12 @@ public class ConfigurationMgtService {
 			msg = "Error occurred while retrieving the Android tenant configuration";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return tenantConfiguration;
 	}
 
 	@PUT
-	public Message updateConfiguration(TenantConfiguration configuration)
-			throws AndroidAgentException {
+	public Message updateConfiguration(TenantConfiguration configuration) throws AndroidAgentException {
 		String msg;
 		Message responseMsg = new Message();
 		ConfigurationEntry licenseEntry = null;
@@ -133,7 +139,7 @@ public class ConfigurationMgtService {
 					license.setVersion("1.0.0");
 					license.setText(entry.getValue().toString());
 					AndroidAPIUtils.getDeviceManagementService().addLicense(DeviceManagementConstants.
-							                                                        MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
+							                                    MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
 					licenseEntry = entry;
 				}
 			}
@@ -143,15 +149,14 @@ public class ConfigurationMgtService {
 			}
 			configuration.setConfiguration(configs);
 			AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
-			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Android platform configuration succeeded");
-			responseMsg.setResponseCode(Response.Status.CREATED.toString());
+            AndroidAPIUtils.getGCMService().resetTenantConfigCache();
+			Response.status(Response.Status.ACCEPTED);
+			responseMsg.setResponseMessage("Android platform configuration has updated successfully.");
+			responseMsg.setResponseCode(Response.Status.ACCEPTED.toString());
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while modifying configuration settings of Android platform";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}

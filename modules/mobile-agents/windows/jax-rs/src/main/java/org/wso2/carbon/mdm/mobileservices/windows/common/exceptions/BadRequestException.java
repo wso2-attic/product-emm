@@ -4,7 +4,7 @@
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
- * you may obtain a copy of the License at
+ * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -30,7 +30,7 @@ import javax.ws.rs.core.Response;
 public class BadRequestException extends WebApplicationException {
 
     public BadRequestException(Message message, MediaType mediaType) {
-        super(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).
+        super(Response.status(Response.Status.BAD_REQUEST).entity(message).
                 type(mediaType).build());
     }
 }

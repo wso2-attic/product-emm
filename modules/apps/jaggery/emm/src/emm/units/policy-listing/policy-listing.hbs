@@ -1,0 +1,534 @@
+{{#zone "main"}}
+    {{#equal isUpdated true}}
+        <input type="hidden" id="is-updated" name="country" value="UPDATED">
+    {{/equal}}
+    <div id="loading-content" class="col-centered">
+        <i class="fw fw-settings fw-spin fw-2x"></i>
+        Loading policies . . .
+        <br>
+    </div>
+    <span id="policy-listing-status-msg" class="hidden">{{policyListingStatusMsg}}</span>
+    {{#equal noPolicy false}}
+        <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view hidden"
+               id="policy-grid">
+            <thead>
+            <tr class="sort-row">
+                <th class="no-sort"></th>
+                <th class="no-sort"></th>
+                <th>By Platform</th>
+                <th>By Ownership Type</th>
+                <th>By Role</th>
+                <th>By User</th>
+                <th>By Compliance Type</th>
+                <th>By Status</th>
+                <th class="no-sort"></th>
+            </tr>
+            <tr class="filter-row filter-box">
+                <th class="no-sort"></th>
+                <th class="no-sort"></th>
+                <th data-for="By Platform" class="select-filter"></th>
+                <th data-for="By Ownership Type" class="select-filter"></th>
+                <th data-for="By Role" class="text-filter"></th>
+                <th data-for="By User" class="text-filter"></th>
+                <th data-for="By Compliance Type" class="select-filter"></th>
+                <th data-for="By Status" class="select-filter"></th>
+                <th class="no-sort"></th>
+            </tr>
+            <tr class="bulk-action-row">
+                <th colspan="9">
+                    <ul class="tiles">
+                        {{#if removePermitted}}
+                            <li class="square">
+                                <a href="#" data-click-event="remove-form" class="btn square-element policy-remove-link"
+                                   data-toggle="modal" data-target="#modalDemo">
+                                            <span class="icon fw-stack">
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                                <i class="fw fw-delete fw-stack-1x"></i>
+                                            </span>
+                                    Remove
+                                </a>
+                            </li>
+                        {{/if}}
+                        <li class="square">
+                            <a href="#" data-click-event="remove-form" class="btn square-element policy-publish-link"
+                               data-toggle="modal" data-target="#modalDemo">
+                                        <span class="icon fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="glyphicon glyphicon-floppy-saved"></i>
+                                        </span>
+                                Publish
+                            </a>
+                        </li>
+                        <li class="square">
+                            <a href="#" data-click-event="remove-form" class="btn square-element policy-unpublish-link"
+                               data-toggle="modal" data-target="#modalDemo">
+                                        <span class="icon fw-stack">
+                                            <i class="fw fw-ring fw-stack-2x"></i>
+                                            <i class="glyphicon glyphicon-floppy-remove"></i>
+                                        </span>
+                                Unpublish
+                            </a>
+                        </li>
+                    </ul>
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {{#each policyListToView}}
+                <tr data-type="selectable" data-id="{{id}}" data-status="{{status}}">
+                    <td class="remove-padding icon-only content-fill viewEnabledIcon"
+                        data-url="/emm/policies/view?id={{id}}" data-id="{{id}}">
+                        <div class="thumbnail icon">
+                            {{#equal platform "android"}}
+                                <i class="square-element text fw fw-android"></i>
+                            {{/equal}}
+                            {{#equal platform "ios"}}
+                                <i class="square-element text fw fw-apple"></i>
+                            {{/equal}}
+                            {{#equal platform "windows"}}
+                                <i class="square-element text fw fw-windows"></i>
+                            {{/equal}}
+                        </div>
+                    </td>
+                    <td class="fade-edge" data-search="{{name}}" data-display="{{name}}">
+                        <h4>{{name}}</h4>
+
+                        <div>({{platform}})</div>
+                        {{#equal status "Active/Updated"}}
+                            <i class="fw fw-warning icon-success"></i> Active/Updated</span>
+                        {{/equal}}
+                        {{#equal status "Active"}}
+                            <i class="fw fw-ok icon-success"></i> Active</span>
+                        {{/equal}}
+                        {{#equal status "Inactive/Updated"}}
+                            <i class="fw fw-warning icon-warning"></i> Inactive/Updated</span>
+                        {{/equal}}
+                        {{#equal status "Inactive"}}
+                            <i class="fw fw-error icon-danger"></i> Inactive</span>
+                        {{/equal}}
+                    </td>
+                    <td class="fade-edge remove-padding-top" data-search="{{platform}}"
+                        data-display="{{platform}}"></td>
+                    <td class="fade-edge remove-padding-top" data-search="{{ownershipType}}"
+                        data-display="{{ownershipType}}" data-grid-label="Ownership">{{ownershipType}}</td>
+                    <td id="policy-roles" class="fade-edge remove-padding-top" data-search="{{roles}}"
+                        data-display="{{roles}}"
+                        data-grid-label="Role(s)">{{roles}}</td>
+                    <td id="policy-users" class="fade-edge remove-padding-top" data-search="{{users}}"
+                        data-display="{{users}}" data-grid-label="User(s)">{{users}}</td>
+                    <td class="fade-edge remove-padding-top" data-search="{{compliance}}"
+                        data-display="{{compliance}}" data-grid-label="Compliance">{{compliance}}</td>
+                    <td id="policy-status" class="fade-edge remove-padding-top" data-search="{{status}}"
+                        data-display="{{status}}">
+                    </td>
+                    <td class="text-right content-fill text-left-on-grid-view no-wrap">
+                        <a href="/emm/policies/view-edit-policy?id={{id}}" data-id="{{id}}"
+                           data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-update-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-edit fw-stack-1x"></i>
+                            </span>
+                            <span class="hidden-xs hidden-on-grid-view">Re-Configure</span>
+                        </a>
+
+                    </td>
+                </tr>
+            {{/each}}
+            <br class="c-both"/>
+            </tbody>
+        </table>
+    {{/equal}}
+    <br class="c-both"/>
+
+    <div id="content-filter-types" style="display: none">
+        <div class="sort-title">Sort By</div>
+        <div class="sort-options">
+            <a href="#">By Platform<span class="ico-sort-asc"></span></a>
+            <a href="#">By Ownership Type</a>
+            <a href="#">By Role</a>
+            <a href="#">By User</a>
+            <a href="#">By Compliance Type</a>
+            <a href="#">By Status</a>
+        </div>
+    </div>
+
+    <div id="remove-policy-modal-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Do you really want to remove the selected policy(s)?</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="remove-policy-yes-link" class="btn-operations">
+                            Remove
+                        </a>
+
+                        <a href="#" id="remove-policy-cancel-link" class="btn-operations">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-policy-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Done. Selected policy was successfully removed.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="remove-policy-success-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-policy-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="remove-policy-error-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove-policy-error-devices" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>You cannot remove policies that are already applied to devices. Please deselect them and try
+                        again.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="remove-policy-error-devices" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="publish-policy-modal-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Do you really want to publish the selected policy(s)?</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="publish-policy-yes-link" class="btn-operations">Yes</a>
+                        <a href="#" id="publish-policy-cancel-link" class="btn-operations">No</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="publish-policy-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Done. Selected policy was successfully published.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="publish-policy-success-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="publish-policy-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="publish-policy-error-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="unpublish-policy-modal-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Do you really want to unpublish the selected policy(s)?</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="unpublish-policy-yes-link" class="btn-operations">
+                            Yes
+                        </a>
+
+                        <a href="#" id="unpublish-policy-cancel-link" class="btn-operations">
+                            No
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="unpublish-policy-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Done. Selected policy was successfully unpublished.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="unpublish-policy-success-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="unpublish-policy-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="unpublish-policy-error-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="save-policy-priorities-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Done. New Policy priorities were successfully updated.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="save-policy-priorities-success-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="save-policy-priorities-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+                    <h4 class="message-from-server"></h4>
+
+                    <div class="buttons">
+                        <a href="#" id="save-policy-priorities-error-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-policy-modal-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Do you really want to apply changes to all policies?</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="change-policy-yes-link" class="btn-operations">
+                            Yes
+                        </a>
+
+                        <a href="#" id="change-policy-cancel-link" class="btn-operations">
+                            No
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-policy-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Done. Changes applied successfully.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="change-policy-success-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-policy-error-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>An unexpected error occurred. Please try again later.</h3>
+
+                    <div class="buttons">
+                        <a href="#" id="change-policy-error-link" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorPolicyUnPublish" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        Please select a policy or a list of policies to unpublish.
+                    </h4>
+
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="errorPolicyUnPublishSelection" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        You cannot select already inactive policies. Please deselect inactive policies and try again.
+                    </h4>
+
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="errorPolicyPublishSelection" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        You cannot select already active policies. Please deselect active policies and try again.
+                    </h4>
+
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="errorPolicyPublish" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        Please select a policy or a list of policies to publish.
+                    </h4>
+
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="errorPolicy" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-error fw-stack-1x"></i>
+                    </span>
+                        Operation cannot be performed !
+                    </h3>
+                    <h4>
+                        Please select a policy or a list of policies to remove.
+                    </h4>
+
+                    <div class="buttons">
+                        <a href="javascript:hidePopup()" class="btn-operations">
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/policy-list.js"></script>
+{{/zone}}

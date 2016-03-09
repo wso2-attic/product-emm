@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>app-mgt</artifactId>
+        <groupId>org.wso2.mdm</groupId>
+        <version>2.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>WSO2 Carbon - Mobile Device app Management Core</name>
+    <description>WSO2 Carbon - Device Management Core</description>
+    <url>http://wso2.org</url>
+    <groupId>org.wso2.mdm</groupId>
+    <artifactId>org.wso2.mdm.appmgt</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-scr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>1.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Name>${project.artifactId}</Bundle-Name>
+                        <Bundle-Version>${mdm.version}</Bundle-Version>
+                        <Bundle-Description>MDM Management Core Bundle</Bundle-Description>
+                        <Private-Package>org.wso2.mdm.appmgt.internal</Private-Package>
+                        <Import-Package>
+                            org.osgi.framework,
+                            org.osgi.service.component,
+                            org.apache.commons.logging,
+                            org.wso2.carbon.appmgt.mobile.*,
+                            org.wso2.carbon.device.mgt.common,
+                            org.wso2.carbon.device.mgt.common.operation.mgt,
+                            org.wso2.carbon.device.mgt.core.operation.mgt,
+                            org.wso2.mdm.mdmmgt.*,
+                            org.wso2.carbon.device.mgt.common.app.mgt,
+                            org.wso2.carbon.device.mgt.core.service,
+                            org.wso2.carbon.device.mgt.core.app.mgt
+                        </Import-Package>
+                        <Export-Package>
+                            !org.wso2.mdm.appmgt.internal,
+                            org.wso2.mdm.appmgt.*
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <!--
+                   <plugin>
+                       <groupId>org.apache.maven.plugins</groupId>
+                       <artifactId>maven-surefire-plugin</artifactId>
+                       <version>2.18</version>
+                       <configuration>
+                           <systemPropertyVariables>
+                               <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
+                           </systemPropertyVariables>
+                           <suiteXmlFiles>
+                               <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                           </suiteXmlFiles>
+                       </configuration>
+                   </plugin>
+                -->
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.wso2.mdm</groupId>
+            <artifactId>org.wso2.mdm.mdmmgt</artifactId>
+            <version>${mdm.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi.services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.appmgt</groupId>
+            <artifactId>org.wso2.carbon.appmgt.mobile</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

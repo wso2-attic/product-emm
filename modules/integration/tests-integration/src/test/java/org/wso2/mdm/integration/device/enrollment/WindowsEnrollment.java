@@ -18,31 +18,107 @@
 package org.wso2.mdm.integration.device.enrollment;
 
 import junit.framework.Assert;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.io.FileUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
-import org.wso2.mdm.integration.common.Constants;
-import org.wso2.mdm.integration.common.RestClient;
-import org.wso2.mdm.integration.common.TestBase;
+import org.wso2.mdm.integration.common.*;
+
+import java.io.File;
+import java.net.URL;
 
 /**
  * This contains testing of Windows device enrollment which is necessary to run prior to all other Windows related
  * tests.
  */
 public class WindowsEnrollment extends TestBase {
-    private RestClient client;
+    private MDMHttpClient client;
+    private static String bsd;
+    private static String UserToken = "UserToken";
+    private static final String BSD_PLACEHOLDER = "{BinarySecurityToken}";
+    Base64 base64Encoder;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.Enrollment.ANDROID_ENROLLMENT_GROUP })
+    @BeforeClass(alwaysRun = true, groups = {Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
-        client = new RestClient(backendURL);
+        String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
+        client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
-    @Test(groups = Constants.Enrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test an Windows device enrollment.")
-    public void testAndroidEnrollment() throws Exception {
-        HttpResponse response = client.get("/mdm-windows-agent/services/discovery/get");
-        client.setHttpHeader("Content-Type", "application/soap+xml; charset=utf-8");
-        Assert.assertEquals(response.getResponseCode(), Constants.SUCCESS_CODE);
+    /**
+     * Test the Windows Discovery Get endpoint to see if the server is available.
+     *
+     * @throws Exception
+     */
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery get " +
+            "request.")
+    public void testServerAvailability() throws Exception {
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
+        MDMResponse response = client.get(Constants.WindowsEnrollment.DISCOVERY_GET_URL);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows Discovery post" +
+            " request.", dependsOnMethods = {"testServerAvailability"})
+    public void testDiscoveryPost() throws Exception {
+        String xml = readXML(Constants.WindowsEnrollment.DISCOVERY_POST_FILE, Constants.UTF8);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.DISCOVERY_POST_URL, xml);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows BST.",
+            dependsOnMethods = {"testDiscoveryPost"})
+    public void testBST() throws Exception {
+        String token = "token";
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(Constants.WindowsEnrollment.BSD_PAYLOAD);
+        JsonNode node = root.path("credentials");
+        ((ObjectNode) node).put(token, OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL));
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.BSD_URL, root.toString());
+        bsd = response.getBody();
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post" +
+            " request.", dependsOnMethods = {"testBST"})
+    public void testMSXCEP() throws Exception {
+        base64Encoder = new Base64();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(bsd);
+        JsonNode token = node.get(UserToken);
+        String encodedToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
+        String xml = readXML(Constants.WindowsEnrollment.MS_XCEP_FILE, Constants.UTF8);
+        String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.MS_EXCEP, payload);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post " +
+            "request.", dependsOnMethods = {"testMSXCEP"})
+    public void testWSETP() throws Exception {
+        base64Encoder = new Base64();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(bsd);
+        JsonNode token = node.get(UserToken);
+        String encodedToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
+        String xml = readXML(Constants.WindowsEnrollment.WS_STEP_FILE, Constants.UTF8);
+        String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.WSTEP_URL, payload);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    private String readXML(String fileName, String characterEncoding) throws Exception {
+        URL url = ClassLoader.getSystemResource(fileName);
+        File file = new File(url.toURI());
+        return FileUtils.readFileToString(file, characterEncoding);
     }
 }

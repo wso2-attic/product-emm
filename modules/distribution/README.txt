@@ -1,11 +1,11 @@
-WSO2 Mobile Device Manager (MDM)
+WSO2 Enterprise Mobility Manager (EMM)
 ----------------------
-Welcome to the WSO2 Mobile Device Manager Manager (MDM) 2.0.0-SNAPSHOT release
+Welcome to the WSO2 Enterprise Mobility Manager (EMM) 2.0.0-SNAPSHOT release
 =======
 
 Key Features
 ------------
-1.  Self-service device enrollment and management with end-user MDM console
+1.  Self-service device enrollment and management with end-user EMM console
 
 
 Installation & Running
@@ -14,21 +14,9 @@ Installation & Running
 2. Run the wso2server.sh or wso2server.bat file in the bin directory
 3. Once the server starts, point your Web browser to
    https://localhost:9443/
-4. An external API manager is necessary to access the APIs MDM exposes for Android agent.
-   Create the following APIs,
-	i. http://<HOST_NAME>:9763/cdm-android-api/enrollment/
-   	   Keeps the context as /enroll and version as 1.0.0
-	ii. http://<HOST_NAME>:9763/cdm-android-ap/devices/license
-           Keeps the context as /license and version as 1.0.0
-	iii. http://<HOST_NAME>:9763/cdm-android-ap/operations/
-   	   Keeps the context as /operation and version as 1.0.0
-
-5. After publishing these APIs, subscribe to these APIs with default app/any app.
-   In API store, go to my subscriptions and find client ID and secret.
-
-6. Please find the maven-archetype in <PRODUCT_HOME>repository/tools to generate the mdm-android-agent project & follow the README file.
-
-7. Go to MDM admin console.
+6. Please find the maven-archetype in <PRODUCT_HOME>repository/tools to generate the mdm-android-agent project for any specific changes from the default agent provided.
+    Make sure to follow the README file.
+7. Go to EMM admin console.
     Add a license with following properties.
     Ex -: Provider -: Any text
              Name -: android
@@ -38,7 +26,7 @@ Installation & Running
              License -: License Text
 
 8. Configure email account.
-   Go to Following path and open CARBON_HOME/repository/conf/axis2 and open axis2_client.xml.
+   Go to Following path and open CARBON_HOME/repository/conf/axis2 and open axis2.xml.
    Un comment following entry and give correct credentials for email account.
 
  <transportSender name="mailto"
@@ -54,14 +42,14 @@ Installation & Running
     </transportSender>
 
 9. Install following features using carbon admin features.
-   MDM - iOS APNS Server 1.9.2.SNAPSHOT More Info.
-   MDM - iOS Device Management JAX-RS Web Application 1.9.2.SNAPSHOT More Info.
-   MDM - iOS Device Management Server.
+   EMM - iOS APNS Server 1.9.2.SNAPSHOT More Info.
+   EMM - iOS Device Management JAX-RS Web Application 1.9.2.SNAPSHOT More Info.
+   EMM - iOS Device Management Server.
 
 10. Change Urls and settings in ios-config.xml found in CARBON_HOME/repository/conf.
 
 11. Follow the instructions in following document to generate keys.
-    https://docs.wso2.com/display/EMM110/iOS+Server+Configurations
+    https://docs.wso2.com/display/EMM200/iOS+Server+Configurations
 
 
 For more details, see the Installation Guide
@@ -73,16 +61,15 @@ System Requirements
 2. Portal app requires full Javascript enablement of the Web browser
 
 For known issues see
-https://wso2.org/jira/issues/?filter=12190
+https://wso2.org/jira/issues/?filter=12593
 
-WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
+WSO2 Enterprise Mobility Manager (EMM) Binary Distribution Directory Structure
 -----------------------------------------------------
 
   EMM_HOME
         .
         ├── bin              //executables
         ├── dbscripts        //DBScripts
-        ├── INSTALL.txt
         ├── lib
         ├── LICENSE.txt
         ├── modules          //Jaggery Modules
@@ -90,7 +77,7 @@ WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
         ├── release-notes.html
         ├── repository       // repository
         ├── tmp
-        ├── webapp-mode
+        ├── resources
 
 
     - bin
@@ -108,12 +95,9 @@ WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
       The repository where Carbon artifacts & Axis2 services and
       modules deployed in WSO2 Carbon are stored.
       In addition to this other custom deployers such as
-      dataservices and axis1services are also stored.
+      data services and axis1services are also stored.
 
-        - carbonapps
-          Carbon Application hot deployment directory.
-
-      - components
+        - components
           Contains all OSGi related libraries and configurations.
 
         - conf
@@ -135,26 +119,22 @@ WSO2 Mobile Device Manager (MDM) Binary Distribution Directory Structure
         - resources
           Contains additional resources that may be required.
 
-  - tenants
-    Directory will contain relevant tenant artifacts
-    in the case of a multitenant deployment.
+        - tools
+          Contains the Script to generate WSO2 MDM Android agent.
+
+        - tenants
+          Directory will contain relevant tenant artifacts
+          in the case of a multitenant deployment.
 
     - tmp
       Used for storing temporary files, and is pointed to by the
       java.io.tmpdir System property.
-
-    - webapp-mode
-      The user has the option of running WSO2 Carbon in webapp mode (hosted as a web-app in an application server).
-      This directory contains files required to run Carbon in webapp mode.
 
     - LICENSE.txt
       Apache License 2.0 under which WSO2 Carbon is distributed.
 
     - README.txt
       This document.
-
-    - INSTALL.txt
-      This document contains information on installing WSO2 Enterprise Mobility Manager.
 
     - release-notes.html
       Release information for WSO2 Enterprise Mobility Manager 2.0.0-SNAPSHOT

@@ -1,0 +1,12 @@
+<div class="wr-app-listing">
+    <div class="wr-applist">
+        {{#each applications}}
+                <a style="text-align: center;width: 100px;height: 100px;">
+                    {{#equal platform "android"}}<i class="fw fw-android"></i>{{/equal}}
+                    {{#equal platform "ios"}}<i class="fw fw-apple"></i>{{/equal}}
+                    {{#equal platform "windows"}}<i class="fw fw-windows"></i>{{/equal}}
+                    <span style="max-width: 90px;word-wrap: break-word;">{{name}}</span>
+                </a>
+        {{/each}}
+    </div>
+</div>

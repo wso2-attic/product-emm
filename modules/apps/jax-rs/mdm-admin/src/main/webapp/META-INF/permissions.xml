@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ you may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<!-- This file contains the list of permissions that are associated with URL end points
+    of the web app. Each permission should contain the name, permission path ,API path
+    (URL) , HTTP method and OAUTH2 authorization scope (not-required).
+    When defining dynamic paths for APIs, path variables are denoted by '*' notation.
+    For ex:
+    Actual API endpoint: mdm-admin/1.0.0/devices/{device-id}
+    URL to be represented here: /devices/*
+    NOTE: All the endpoints of the web app should be available in this file. Otherwise
+    it will result 403 error at the runtime.
+-->
+<PermissionConfiguration>
+    <APIVersion></APIVersion>
+    <!-- Device related APIs -->
+    <Permission>
+        <name>Get all devices</name>
+        <path>/device-mgt/devices/list</path>
+        <url>/devices</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get all device types</name>
+        <path>/device-mgt/devices/types</path>
+        <url>/devices/types</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>View device</name>
+        <path>/device-mgt/devices/view</path>
+        <url>/devices/view</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get device</name>
+        <path>/device-mgt/devices/view</path>
+        <url>/devices/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get users' devices</name>
+        <path>/device-mgt/devices/view</path>
+        <url>/devices/user/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get device count</name>
+        <path>/device-mgt/devices/count</path>
+        <url>/devices/count</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get all users' devices</name>
+        <path>/device-mgt/devices/list</path>
+        <url>/devices/name/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+    <!-- End of Device related APIs -->
+
+    <!-- Notification related APIs -->
+    <Permission>
+        <name>Get all notifications</name>
+        <path>/device-mgt/notifications/view</path>
+        <url>/notifications</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Add notification</name>
+        <path>/device-mgt/notifications/add</path>
+        <url>/notifications</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Update notification</name>
+        <path>/device-mgt/notifications/view</path>
+        <url>/notifications/*/*</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get new notifications</name>
+        <path>/device-mgt/notifications/view</path>
+        <url>/notifications/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Notification related APIs -->
+
+    <!-- Operations related APIs -->
+    <Permission>
+        <name>Get all operations</name>
+        <path>/device-mgt/operations/view</path>
+        <url>/operations</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Add Operation</name>
+        <path>/device-mgt/operations/add</path>
+        <url>/operations</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+
+    <Permission>
+        <name>Install Application</name>
+        <path>/device-mgt/operations/application/install</path>
+        <url>/operations/installApp/*</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Uninstall Application</name>
+        <path>/device-mgt/operations/application/uninstall</path>
+        <url>/operations/uninstallApp/*</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get Applications For Devices</name>
+        <path>/device-mgt/operations/application/view</path>
+        <url>/operations/*/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+    <Permission>
+        <name>Get Device Operations</name>
+        <path>/device-mgt/operations/view</path>
+        <url>/operations/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Get Applications For Device Type</name>
+        <path>/device-mgt/operations/application/view</path>
+        <url>/operations/*</url>
+        <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+    <!-- End of Operations related APIs -->
+
+    <!-- Feature related APIs -->
+    <Permission>
+        <name>Get features</name>
+        <path>/device-mgt/features/view</path>
+        <url>/features/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get all features</name>
+        <path>/device-mgt/features/view</path>
+        <url>/features</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Feature related APIs -->
+
+    <!-- Role related APIs -->
+    <Permission>
+        <name>Get all roles</name>
+        <path>/device-mgt/roles</path>
+        <url>/roles</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get role permissions</name>
+        <path>/device-mgt/roles</path>
+        <url>/roles/permissions</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get User roles</name>
+        <path>/device-mgt/roles</path>
+        <url>/roles/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update User roles</name>
+        <path>/device-mgt/roles/update</path>
+        <url>/roles</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update a specific role</name>
+        <path>/device-mgt/roles/update</path>
+        <url>/roles/*</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update User roles</name>
+        <path>/device-mgt/roles</path>
+        <url>/roles/*/users</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Save User roles</name>
+        <path>/device-mgt/roles/add</path>
+        <url>/roles</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Delete User roles</name>
+        <path>/device-mgt/roles/delete</path>
+        <url>/roles</url>
+        <method>DELETE</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Role related APIs -->
+
+    <!-- User related APIs -->
+    <Permission>
+        <name>Get all users</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Add user</name>
+        <path>/device-mgt/users/add</path>
+        <url>/users</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users/view</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update user</name>
+        <path>/device-mgt/users/update</path>
+        <url>/users</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Change user password</name>
+        <path>/device-mgt/users/change-password</path>
+        <url>/users/change-password</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Reset user password by admin</name>
+        <path>/device-mgt/users/reset-password</path>
+        <url>/users/reset-password</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Delete user</name>
+        <path>/device-mgt/users/delete</path>
+        <url>/users</url>
+        <method>DELETE</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user roles by name</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/users/roles</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user roles by name</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/roles</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Save Roles</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/roles</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get all devices of user</name>
+        <path>/device-mgt/users/devices</path>
+        <url>/users/devices</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user roles</name>
+        <path>/device-mgt/users/roles</path>
+        <url>/users/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get user count</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users/count</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get all user names</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users/view-users</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get all usernames</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users/users-by-username</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get filtered usernames</name>
+        <path>/device-mgt/users/view</path>
+        <url>/users/users-by-username/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Send invitation</name>
+        <path>/device-mgt/users/invite</path>
+        <url>/users/email-invitation</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of User related APIs -->
+
+    <!-- Policy related APIs -->
+    <Permission>
+        <name>Add Policy</name>
+        <path>/device-mgt/policies/add</path>
+        <url>/policies/inactive-policy</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get Policy For Device</name>
+        <path>/device-mgt/policies/view</path>
+        <url>/policies/*/*</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get Policy For Device By Type</name>
+        <path>/device-mgt/policies/view</path>
+        <url>/policies/*/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Add Active Policy</name>
+        <path>/device-mgt/policies/add</path>
+        <url>/policies/active-policy</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Bulk Policy Removal</name>
+        <path>/device-mgt/policies/bulk-remove</path>
+        <url>/policies/bulk-remove</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get Policies</name>
+        <path>/device-mgt/policies/view</path>
+        <url>/policies</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get Policy</name>
+        <path>/device-mgt/policies/view</path>
+        <url>/policies/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update Policy</name>
+        <path>/device-mgt/policies/update</path>
+        <url>/policies/*</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Delete Policy</name>
+        <path>/device-mgt/policies/delete</path>
+        <url>/policies</url>
+        <method>DELETE</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Policy Count</name>
+        <path>/device-mgt/policies/view</path>
+        <url>/policies/count</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Policy priorities</name>
+        <path>/device-mgt/policies/update</path>
+        <url>/policies/priorities</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Activate Policy</name>
+        <path>/device-mgt/policies/update</path>
+        <url>/policies/activate</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Inactivate Policy</name>
+        <path>/device-mgt/policies/update</path>
+        <url>/policies/inactivate</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Apply Policy changes</name>
+        <path>/device-mgt/policies/update</path>
+        <url>/policies/apply-changes</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Start Task</name>
+        <path>/device-mgt/policies/task</path>
+        <url>/policies/start-task/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update Task</name>
+        <path>/device-mgt/policies/task</path>
+        <url>/policies/update-task/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Stop Task</name>
+        <path>/device-mgt/policies/task</path>
+        <url>/policies/stop-task</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Get Policy Compliance</name>
+        <path>/device-mgt/policies/compliance</path>
+        <url>/policies/*/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Policy related APIs -->
+
+    <!-- Profile related APIs -->
+    <Permission>
+        <name>Add profile</name>
+        <path>/device-mgt/profiles/add</path>
+        <url>/profiles</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update profile</name>
+        <path>/device-mgt/profiles/update</path>
+        <url>/profiles/*</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Add profile</name>
+        <path>/device-mgt/profiles/delete</path>
+        <url>/profiles/*</url>
+        <method>DELETE</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Profile related APIs -->
+
+    <!-- License related APIs -->
+    <!--<Permission>-->
+    <!--<name>Get license</name>-->
+    <!--<path>/device-mgt/license/view</path>-->
+    <!--<url>/license/*/*</url>-->
+    <!--<method>GET</method>-->
+    <!--<scope>emm_admin</scope>-->
+    <!--</Permission>-->
+    <!--<Permission>-->
+    <!--<name>Add license</name>-->
+    <!--<path>/device-mgt/license/add</path>-->
+    <!--<url>/license</url>-->
+    <!--<method>POST</method>-->
+    <!--<scope>emm_admin</scope>-->
+    <!--</Permission>-->
+    <!-- End of License related APIs -->
+
+    <!-- Configuration related APIs -->
+    <Permission>
+        <name>Get configuration</name>
+        <path>/device-mgt/tenant/configuration/view</path>
+        <url>/configuration</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Add configuration</name>
+        <path>/device-mgt/tenant/configuration/modify</path>
+        <url>/configuration</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>Update configuration</name>
+        <path>/device-mgt/tenant/configuration/modify</path>
+        <url>/configuration</url>
+        <method>PUT</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Configuration related APIs -->
+</PermissionConfiguration>

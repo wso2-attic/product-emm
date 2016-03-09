@@ -17,6 +17,8 @@
  */
 package org.wso2.emm.agent;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -278,13 +280,14 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				Preference.getString(AuthenticationActivity.this, Constants.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(serverIP);
-		String serverURL = utils.getServerURL() + Constants.OAUTH_ENDPOINT;
-		
-		if (etDomain.getText() != null && !etDomain.getText().toString().trim().isEmpty()) {
+		String serverURL = utils.getServerURL(context) + Constants.OAUTH_ENDPOINT;
+		Editable tenantDomain = etDomain.getText();
+
+		if (tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
 			username =
 					etUsername.getText().toString().trim() +
 					context.getResources().getString(R.string.intent_extra_at) +
-					etDomain.getText().toString().trim();
+					tenantDomain.toString().trim();
 
 		} else {
 			username = etUsername.getText().toString().trim();
@@ -297,8 +300,16 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		info.setClientID(clientKey);
 		info.setClientSecret(clientSecret);
 		info.setUsername(username);
-		info.setPassword(passwordVal);
+		try {
+			info.setPassword(URLEncoder.encode(passwordVal, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			String msg = "error occurred while encoding password.";
+			Log.e(TAG, msg, e);
+		}
 		info.setTokenEndPoint(serverURL);
+		if(tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
+			info.setTenantDomain(tenantDomain.toString().trim());
+		}
 		
 		IdentityProxy.getInstance().init(info, AuthenticationActivity.this, this.getApplicationContext());
 	}
@@ -321,18 +332,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 			} else if (status.trim().equals(Constants.Status.AUTHENTICATION_FAILED)) {
 				showAuthenticationError();
-				try {
-					CommonUtils.clearAppData(context);
-				} catch (AndroidAgentException e) {
-					Log.e(TAG, "Failed to clear app data.", e);
-				}
+				// clearing client credentials from shared memory
+				CommonUtils.clearClientCredentials(context);
 			} else if (status.trim().equals(Constants.Status.INTERNAL_SERVER_ERROR)) {
 				showInternalServerErrorMessage();
-
 			} else {
 				showAuthCommonErrorMessage();
 			}
-
 		} else {
 			showAuthCommonErrorMessage();
 		}
@@ -399,7 +405,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
-				utils.getAPIServerURL() + Constants.LICENSE_ENDPOINT,
+				utils.getAPIServerURL(context) + Constants.LICENSE_ENDPOINT,
 				HTTP_METHODS.GET, null, AuthenticationActivity.this,
 				Constants.LICENSE_REQUEST_CODE
 		);
@@ -432,7 +438,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
 		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
-		                           utils.getAPIServerURL() + Constants.CONFIGURATION_ENDPOINT,
+		                           utils.getAPIServerURL(context) + Constants.CONFIGURATION_ENDPOINT,
 		                           HTTP_METHODS.GET, null, AuthenticationActivity.this,
 		                           Constants.CONFIGURATION_REQUEST_CODE
 		);
@@ -479,7 +485,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 										                     Constants.NOTIFIER_LOCAL);
 									}
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
-										equals(context.getString(R.string.shared_pref_frequency))){
+										equals(context.getString(R.string.shared_pref_frequency)) && !param.getString(
+										context.getString(R.string.shared_pref_config_value)).trim().isEmpty()){
 										Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
 										                  Integer.valueOf(param.getString(context.getString(R.string.shared_pref_config_value)).trim()));
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
@@ -542,18 +549,22 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					                     licenseAgreement);
 					showAgreement(licenseAgreement, Constants.EULA_TITLE);
 				} else {
+					CommonUtils.clearClientCredentials(context);
 					showErrorMessage(
 							getResources().getString(R.string.error_enrollment_failed_detail),
 							getResources().getString(R.string.error_enrollment_failed));
 				}
 
 			} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
+				CommonUtils.clearClientCredentials(context);
 				showInternalServerErrorMessage();
 			} else {
+				CommonUtils.clearClientCredentials(context);
 				showEnrollementFailedErrorMessage();
 			}
 
 		} else {
+			CommonUtils.clearClientCredentials(context);
 			showEnrollementFailedErrorMessage();
 		}
 	}
@@ -627,6 +638,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
+				CommonUtils.clearClientCredentials(context);
 				cancelEntry();
 			}
 		});
@@ -832,9 +844,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		profile.setGrantType(Constants.GRANT_TYPE);
 		profile.setOwner(usernameVal);
 		profile.setTokenScope(Constants.TOKEN_SCOPE);
+		profile.setApplicationType(Constants.APPLICATION_TYPE);
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		return dynamicClientManager.getClientCredentials(profile, utils);
+		return dynamicClientManager.getClientCredentials(profile, utils, context);
 	}
 
 	/**

@@ -1,0 +1,123 @@
+<%
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/*
+ @Deprecated
+ */
+
+var uri = request.getRequestURI();
+var uriMatcher = new URIMatcher(String(uri));
+
+var log = new Log("api/device-api.jag");
+
+var deviceModule = require("/modules/device.js").deviceModule;
+var userModule = require("/modules/user.js").userModule;
+var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
+var mdmProps = require('/config/mdm-props.js').config();
+
+var result;
+
+if (uriMatcher.match("/{context}/api/devices")) {
+    var url = request.getParameter("url");
+    var draw = request.getParameter("draw");
+    var length = request.getParameter("length");
+    var start = request.getParameter("start");
+    var search = request.getParameter("search[value]");
+    var deviceName = request.getParameter("columns[1][search][value]");
+    var owner = request.getParameter("columns[2][search][value]");
+    var status = request.getParameter("columns[3][search][value]");
+    var platform = request.getParameter("columns[4][search][value]");
+    var ownership = request.getParameter("columns[5][search][value]");
+    var targetURL;
+
+    function appendQueryParam (url, queryParam , value) {
+        if (url.indexOf("?") > 0) {
+            return url + "&" + queryParam + "=" + value;
+        }
+        return url + "?" + queryParam + "=" + value;
+    }
+    targetURL = mdmProps.httpsURL + request.getParameter("url");
+    targetURL = appendQueryParam(targetURL, "draw", draw);
+    targetURL = appendQueryParam(targetURL, "start", start);
+    targetURL = appendQueryParam(targetURL, "length", length);
+
+    if (search && search !== "") {
+        targetURL = appendQueryParam(targetURL, "search", search);
+    }
+
+    if (deviceName && deviceName !== "") {
+        targetURL = appendQueryParam(targetURL, "device-name", deviceName);
+    }
+
+    if (owner && owner !== "") {
+        targetURL = appendQueryParam(targetURL, "user", owner);
+    }
+
+    if (status && status !== "") {
+        targetURL = appendQueryParam(targetURL, "status", status);
+    }
+
+    if (platform && platform !== "") {
+        targetURL = appendQueryParam(targetURL, "type", platform);
+    }
+
+    if (ownership && ownership !== "") {
+        targetURL = appendQueryParam(targetURL, "ownership", ownership);
+    }
+
+    serviceInvokers.XMLHttp.get(
+            targetURL, function (responsePayload) {
+                response.status = 200;
+                result =  responsePayload;
+            },
+            function (responsePayload) {
+                response.status = responsePayload.status;
+                result =  responsePayload.responseText;
+            });
+} else if (uriMatcher.match("/{context}/api/devices/")) {
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")) {
+        result = deviceModule.listDevices();
+    } else {
+        response.sendError(403);
+    }
+} else if (uriMatcher.match("/{context}/api/devices/{type}/{deviceId}")) {
+    elements = uriMatcher.elements();
+    deviceId = elements.deviceId;
+    type = elements.type;
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")) {
+        result = deviceModule.viewDevice(type, deviceId);
+    }else {
+        response.sendError(403);
+    }
+} else if (uriMatcher.match("{context}/api/devices/{type}/{deviceId}/{operation}")) {
+    elements = uriMatcher.elements();
+    deviceId = elements.deviceId;
+    type = elements.type;
+    operation = elements.operation;
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/operation")) {
+        result = deviceModule.performOperation(deviceId, operation, [], type);
+    } else {
+        response.sendError(403);
+    }
+}
+
+if (result){
+    print(result);
+}
+%>

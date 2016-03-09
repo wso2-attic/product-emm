@@ -1,0 +1,57 @@
+{
+  "POST": {
+    "policyName": "Camera",
+    "description": "",
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "profile": {
+      "profileName": "Camera",
+      "deviceType": {
+        "id": 2
+      },
+      "profileFeaturesList": [
+        {
+          "featureCode": "CAMERA",
+          "deviceTypeId": 2,
+          "content": {
+            "enabled": true
+          }
+        }
+      ]
+    },
+    "roles": [
+      "ANY"
+    ]
+  },
+  "PUT": {
+    "policyName": "Camera",
+    "description": "",
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "profile": {
+      "profileName": "Camera",
+      "deviceType": {
+        "id": 2
+      },
+      "profileFeaturesList": [
+        {
+          "featureCode": "CAMERA",
+          "deviceTypeId": 2,
+          "content": {
+            "enabled": true
+          }
+        },
+        {
+          "featureCode": "ENCRYPT_STORAGE",
+          "deviceTypeId": 2,
+          "content": {
+            "encrypted": true
+          }
+        }
+      ]
+    },
+    "roles": [
+      "ANY"
+    ]
+  }
+}

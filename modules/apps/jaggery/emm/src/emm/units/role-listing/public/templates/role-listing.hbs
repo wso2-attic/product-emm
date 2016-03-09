@@ -1,0 +1,52 @@
+{{#each roles}}
+    <tr data-type="selectable" id="role-{{roleName}}">
+        <td class="remove-padding icon-only content-fill">
+            <div class="thumbnail icon">
+                <i class="square-element text fw fw-user"></i>
+            </div>
+        </td>
+        <td class="fade-edge remove-padding-top" >{{roleName}}</td>
+        <td class="text-right content-fill text-left-on-grid-view no-wrap">
+
+            {{#unequal adminRole roleName }}
+            {{#if canEdit}}
+                <a onclick="javascript:loadRoleBasedActionURL('edit-role', '{{roleName}}')" data-role="{{roleName}}" data-click-event="edit-form"
+                   class="btn padding-reduce-on-grid-view edit-role-link">
+                                <span class="fw-stack fw-lg">
+                                   <i class="fw fw-ring fw-stack-2x"></i>
+                                   <i class="fw fw-user fw-stack-1x"></i>
+                                   <span class="fw-stack fw-move-right fw-move-bottom">
+                                      <i class="fw fw-circle fw-stack-2x fw-stroke fw-inverse"></i>
+                                      <i class="fw fw-circle fw-stack-2x"></i>
+                                      <i class="fw fw-edit fw-stack-1x fw-inverse"></i>
+                                   </span>
+                                </span>
+                    <span class="hidden-xs hidden-on-grid-view">Edit</span>
+                </a>
+                <a onclick="javascript:loadRoleBasedActionURL('edit-role-permission', '{{roleName}}')" data-role="{{roleName}}"
+                   data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-permission-link">
+                                <span class="fw-stack fw-lg">
+                                   <i class="fw fw-ring fw-stack-2x"></i>
+                                   <i class="fw fw-security-policy fw-stack-1x"></i>
+                                   <span class="fw-stack fw-move-right fw-move-bottom">
+                                      <i class="fw fw-circle fw-stack-2x fw-stroke fw-inverse"></i>
+                                      <i class="fw fw-circle fw-stack-2x"></i>
+                                      <i class="fw fw-edit fw-stack-1x fw-inverse"></i>
+                                   </span>
+                                </span>
+                    <span class="hidden-xs hidden-on-grid-view">Edit Permission</span>
+                </a>
+            {{/if}}
+            {{#if canRemove}}
+                <a data-role="{{roleName}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-role-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-delete fw-stack-1x"></i>
+                            </span>
+                    <span class="hidden-xs hidden-on-grid-view">Remove</span>
+                </a>
+            {{/if}}
+            {{/unequal}}
+        </td>
+    </tr>
+{{/each}}

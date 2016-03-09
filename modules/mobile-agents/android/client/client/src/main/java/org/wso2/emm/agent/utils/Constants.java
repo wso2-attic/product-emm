@@ -26,17 +26,20 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
-    	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
-    	public static final String REG_ID = "gcm_reg_id";
+	public static final boolean SYSTEM_APP_ENABLED = false;
+	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
+	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
+	public static final String REG_ID = "gcm_reg_id";
 	public static final String NOTIFIER_LOCAL = "LOCAL";
 	public static final String NOTIFIER_GCM = "GCM";
 
-	public static final String SERVER_PORT = "9763";
+	public static final String SERVER_PORT = "80";
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String API_VERSION = "1.0.0/";
-	public static final String API_SERVER_PORT = "9763";
+	public static final String API_SERVER_PORT = "80";
 
-	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/" + API_VERSION;
+	// TODO: Add API_VERSION to server endpoint
+	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
@@ -48,7 +51,7 @@ public class Constants {
 	public static final String UNREGISTER_ENDPOINT =  REGISTER_ENDPOINT;
 	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
-	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-manager/register";
+	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
@@ -72,17 +75,22 @@ public class Constants {
 	public static final String ENABLED= "enabled";
 	public static final String LOCAL = "LOCAL";
 	public static final String LOG_FILE = "wso2log.txt";
-    	public static final String MESSAGE_TYPE_GCM = "gcm";
+	public static final String MESSAGE_TYPE_GCM = "gcm";
 	public static final String OWNERSHIP_BYOD = "BYOD";
 	public static final String OWNERSHIP_COPE = "COPE";
 	public static final String DEVICE_TYPE = "deviceType";
-	public static final String CLIENT_ID = "clientId";
-	public static final String CLIENT_SECRET = "clientSecret";
-	public static final String CLIENT_NAME = "clientName";
+	public static final String CLIENT_ID = "client_id";
+	public static final String CLIENT_SECRET = "client_secret";
+	public static final String CLIENT_NAME = "client_name";
 	public static final String IP = "ip";
-	public static final String GRANT_TYPE = "password";
+	public static final String PROTOCOL = "serverProtocol";
+	public static final String PORT = "serverPort";
+	public static final String GRANT_TYPE = "password refresh_token";
 	public static final String TOKEN_SCOPE = "production";
+	public static final String APPLICATION_TYPE = "device";
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
+	public static final String PACKAGE_NAME = "org.wso2.emm.agent";
+
 
 	/**
 	 * Request codes.
@@ -131,6 +139,7 @@ public class Constants {
 			throw new AssertionError();
 		}
 		public static final String SUCCESSFUL = "200";
+		public static final String CREATED = "201";
 		public static final String ACCEPT = "202";
 		public static final String AUTHENTICATION_FAILED = "400";
 		public static final String INTERNAL_SERVER_ERROR = "500";
@@ -150,7 +159,7 @@ public class Constants {
 		public static final String CAMERA = "CAMERA";
 		public static final String EMAIL = "EMAIL";
 		public static final String DEVICE_MUTE = "DEVICE_MUTE";
-		public static final String PASSWORD_POLICY = "PASSWORD_POLICY";
+		public static final String PASSWORD_POLICY = "PASSCODE_POLICY";
 		public static final String DEVICE_INFO = "DEVICE_INFO";
 		public static final String ENTERPRISE_WIPE = "ENTERPRISE_WIPE";
 		public static final String CLEAR_PASSWORD = "CLEAR_PASSWORD";
@@ -171,6 +180,9 @@ public class Constants {
 		public static final String POLICY_MONITOR = "MONITOR";
 		public static final String POLICY_REVOKE = "POLICY_REVOKE";
 		public static final String DISENROLL = "DISENROLL";
+		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
+		public static final String REBOOT = "REBOOT";
+		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
 	}
 
 	/**
@@ -195,7 +207,47 @@ public class Constants {
 		public static final String MEMORY_INFO_EXTERNAL_AVAILABLE = "EXTERNAL_AVAILABLE_MEMORY";
 		public static final String NETWORK_OPERATOR = "OPERATOR";
 		public static final String INFO = "DEVICE_INFO";
-        	public static final String GCM_TOKEN = "GCM_TOKEN";
+		public static final String GCM_TOKEN = "GCM_TOKEN";
+		public static final String WIFI_SSID = "WIFI_SSID";
+		public static final String WIFI_SIGNAL_STRENGTH = "WIFI_SIGNAL_STRENGTH";
+		public static final String NETWORK_INFO = "NETWORK_INFO";
+		public static final String CONNECTION_TYPE = "CONNECTION_TYPE";
+		public static final String MOBILE_CONNECTION_TYPE = "MOBILE_CONNECTION_TYPE";
+		public static final String MOBILE_SIGNAL_STRENGTH = "MOBILE_SIGNAL_STRENGTH";
+		public static final String CPU_INFO = "CPU_INFO";
+		public static final String RAM_INFO = "RAM_INFO";
+		public static final String TOTAL_MEMORY = "TOTAL_MEMORY";
+		public static final String LOW_MEMORY = "LOW_MEMORY";
+		public static final String THRESHOLD = "THRESHOLD";
+		public static final String AVAILABLE_MEMORY = "AVAILABLE_MEMORY";
+		public static final String BATTERY_INFO = "BATTERY_INFO";
+		public static final String SCALE = "SCALE";
+		public static final String VOLTAGE = "VOLTAGE";
+		public static final String TEMPERATURE = "TEMPERATURE";
+		public static final String CURRENT_AVERAGE = "CURRENT_AVERAGE";
+		public static final String TECHNOLOGY = "TECHNOLOGY";
+		public static final String HEALTH = "HEALTH";
+		public static final String STATUS = "STATUS";
+		public static final String PLUGGED = "PLUGGED";
+		public static final String APP_MEMORY_INFO = "APP_MEMORY_INFO";
+		public static final String USS = "USS";
+		public static final String PSS = "PSS";
+		public static final String PACKAGE = "PACKAGE";
+		public static final String PID = "PID";
+		public static final String SHARED_DIRTY = "SHARED_DIRTY";
+	}
+
+	// sqlite database related tables
+	public final class NotificationTable {
+		private NotificationTable() {
+			throw new AssertionError();
+		}
+		public static final String NAME = "notification";
+		public static final String ID = "id";
+		public static final String MESSAGE = "message";
+		public static final String RECEIVED_TIME = "received_time";
+		public static final String RESPONSE_TIME = "response_time";
+		public static final String STATUS = "status";
 	}
 
 }

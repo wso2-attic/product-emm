@@ -69,11 +69,11 @@ public class ApplicationManager {
 	 * @return - List of applications which installed on the device.
 	 */
 	public ArrayList<DeviceAppInfo> getInstalledApps() {
-		ArrayList<DeviceAppInfo> appList = new ArrayList<DeviceAppInfo>();
 		DeviceAppInfo app;
 		List<PackageInfo> packages = packageManager.
 									 	getInstalledPackages(SYSTEM_APPS_DISABLED_FLAG);
-		
+		ArrayList<DeviceAppInfo> appList = new ArrayList<DeviceAppInfo>(packages.size());
+
 		for (PackageInfo packageInfo : packages) {
 			app = new DeviceAppInfo();
 			app.setAppname(packageInfo.applicationInfo.

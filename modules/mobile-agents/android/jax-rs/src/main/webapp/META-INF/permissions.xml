@@ -5,9 +5,9 @@
   ~ WSO2 Inc. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
   ~ in compliance with the License.
-  ~ You may obtain a copy of the License at
+  ~ you may obtain a copy of the License at
   ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~   http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing,
   ~ software distributed under the License is distributed on an
@@ -19,265 +19,314 @@
 
 <!-- This file contains the list of permissions that are associated with URL end points
     of the web app. Each permission should contain the name, permission path, API path
-    (URL) and HTTP method.
+    (URL) , HTTP method and authorization scope (OAuth2).
     When defining dynamic paths for APIs, path variables are denoted by '*' notation.
     For ex:
-    Actual API endpoint: mdm-android-agent/operation/{device-id}
-    URL to be represented here: mdm-android-agent/operation/*
-
+    Actual API endpoint: mdm-android-agent/1.0.0/operation/{device-id}
+    URL to be represented here: /operation/*
     NOTE: All the endpoints of the web app should be available in this file. Otherwise
     it will result 403 error at the runtime.
 -->
 <PermissionConfiguration>
-
+    <APIVersion></APIVersion>
     <!-- Operations management related permissions for admin -->
     <Permission>
         <name>Get Pending Operation</name>
-        <path>/device-mgt/operation/poll</path>
-        <url>mdm-android-agent/operation/*</url>
+        <path>/device-mgt/android/operations/poll</path>
+        <url>/operation/*</url>
         <method>PUT</method>
+        <scope>emm_android_agent</scope>
     </Permission>
 
     <Permission>
         <name>Lock</name>
-        <path>/device-mgt/operation/lock</path>
-        <url>mdm-android-agent/operation/lock</url>
+        <path>/device-mgt/android/operations/lock</path>
+        <url>/operation/lock</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Mute</name>
-        <path>/device-mgt/operation/mute</path>
-        <url>mdm-android-agent/operation/mute</url>
+        <path>/device-mgt/android/operations/mute</path>
+        <url>/operation/mute</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Location</name>
-        <path>/device-mgt/operation/location</path>
-        <url>mdm-android-agent/operation/location</url>
+        <path>/device-mgt/android/operations/location</path>
+        <url>/operation/location</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Clear Passcode</name>
-        <path>/device-mgt/operation/clear-password</path>
-        <url>mdm-android-agent/operation/clear-password/</url>
+        <path>/device-mgt/android/operations/clear-password</path>
+        <url>/operation/clear-password</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Camera</name>
-        <path>/device-mgt/operation/camera</path>
-        <url>mdm-android-agent/operation/camera</url>
+        <path>/device-mgt/android/operations/camera</path>
+        <url>/operation/camera</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Device Info</name>
-        <path>/device-mgt/operation/device-info</path>
-        <url>mdm-android-agent/operation/device-info</url>
+        <path>/device-mgt/android/operations/device-info</path>
+        <url>/operation/device-info</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Enterprise Wipe</name>
-        <path>/device-mgt/operation/enterprise-wipe</path>
-        <url>mdm-android-agent/operation/enterprise-wipe</url>
+        <path>/device-mgt/android/operations/enterprise-wipe</path>
+        <url>/operation/enterprise-wipe</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Wipe Data</name>
-        <path>/device-mgt/operation/wipe-data</path>
-        <url>mdm-android-agent/operation/wipe-data</url>
+        <path>/device-mgt/android/operations/wipe-data</path>
+        <url>/operation/wipe-data</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Application List</name>
-        <path>/device-mgt/operation/get-application-list</path>
-        <url>mdm-android-agent/operation/get-application-list</url>
+        <path>/device-mgt/android/operations/application-list</path>
+        <url>/operation/application-list</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Ring</name>
-        <path>/device-mgt/operation/ring-device</path>
-        <url>mdm-android-agent/operation/ring-device</url>
+        <path>/device-mgt/android/operations/ring-device</path>
+        <url>/operation/ring-device</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Reboot</name>
+        <path>/device-mgt/android/operations/reboot-device</path>
+        <url>/operation/reboot-device</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Upgrade Firmware</name>
+        <path>/device-mgt/android/operations/upgrade-firmware</path>
+        <url>/operation/upgrade-firmware</url>
+        <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Install Application</name>
-        <path>/device-mgt/operation/install-application</path>
-        <url>mdm-android-agent/operation/install-application</url>
+        <path>/device-mgt/android/operations/install-application</path>
+        <url>/operation/install-application</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Uninstall Application</name>
-        <path>/device-mgt/operation/uninstall-application</path>
-        <url>mdm-android-agent/operation/uninstall-application</url>
+        <path>/device-mgt/android/operations/uninstall-application</path>
+        <url>/operation/uninstall-application</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Blacklist Applications</name>
-        <path>/device-mgt/operation/blacklist-applications</path>
-        <url>mdm-android-agent/operation/blacklist-applications</url>
+        <path>/device-mgt/android/operations/blacklist-applications</path>
+        <url>/operation/blacklist-applications</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Notification</name>
-        <path>/device-mgt/operation/notification</path>
-        <url>mdm-android-agent/operation/notification</url>
+        <path>/device-mgt/android/operations/notification</path>
+        <url>/operation/notification</url>
         <method>POST</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Wifi</name>
-        <path>/device-mgt/operation/wifi</path>
-        <url>mdm-android-agent/operation/wifi</url>
+        <path>/device-mgt/android/operations/wifi</path>
+        <url>/operation/wifi</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Encryption</name>
-        <path>/device-mgt/operation/encrypt</path>
-        <url>mdm-android-agent/operation/encrypt</url>
+        <path>/device-mgt/android/operations/encrypt</path>
+        <url>/operation/encrypt</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Change lock code</name>
-        <path>/device-mgt/operation/change-lock-code</path>
-        <url>mdm-android-agent/operation/change-lock-code</url>
+        <path>/device-mgt/android/operations/change-lock-code</path>
+        <url>/operation/change-lock-code</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Password Policy</name>
-        <path>/device-mgt/operation/password-policy</path>
-        <url>mdm-android-agent/operation/password-policy</url>
+        <path>/device-mgt/android/operations/password-policy</path>
+        <url>/operation/password-policy</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Webclip</name>
-        <path>/device-mgt/operation/webclip</path>
-        <url>mdm-android-agent/operation/webclip</url>
+        <path>/device-mgt/android/operations/webclip</path>
+        <url>/operation/webclip</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Disenroll</name>
-        <path>/device-mgt/operation/disenroll</path>
-        <url>mdm-android-agent/operation/disenroll</url>
+        <path>/device-mgt/android/operations/disenroll</path>
+        <url>/operation/disenroll</url>
         <method>POST</method>
+        <scope>emm_android_agent</scope>
     </Permission>
 
     <!-- Device management related permissions -->
     <Permission>
         <name>View devices</name>
-        <path>/device-mgt/device/list</path>
-        <url>mdm-android-agent/device</url>
+        <path>/device-mgt/android/devices/list</path>
+        <url>/device</url>
         <method>GET</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>View device</name>
-        <path>/device-mgt/device/view</path>
-        <url>mdm-android-agent/device/*</url>
+        <path>/device-mgt/android/devices/view</path>
+        <url>/device/*</url>
         <method>GET</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Update device</name>
-        <path>/device-mgt/device/update</path>
-        <url>mdm-android-agent/device/*</url>
+        <path>/device-mgt/android/devices/update</path>
+        <url>/device/*</url>
         <method>PUT</method>
+        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Update application list</name>
-        <path>/device-mgt/device/update-app</path>
-        <url>mdm-android-agent/device/appList/*</url>
+        <path>/device-mgt/android/devices/update-app</path>
+        <url>/device/appList/*</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>View license</name>
-        <path>/device-mgt/device/license</path>
-        <url>mdm-android-agent/device/license</url>
+        <path>/device-mgt/android/license/view</path>
+        <url>/device/license</url>
         <method>GET</method>
+        <scope>emm_android_agent</scope>
     </Permission>
 
     <!-- Enrollment related permissions -->
     <Permission>
         <name>Enroll device</name>
-        <path>/device-mgt/device/enroll</path>
-        <url>mdm-android-agent/enrollment</url>
+        <path>/device-mgt/android/devices/enroll</path>
+        <url>/enrollment</url>
         <method>POST</method>
+        <scope>emm_android_agent</scope>
     </Permission>
 
     <Permission>
-        <name>Enroll device</name>
-        <path>/device-mgt/device/enroll</path>
-        <url>mdm-android-agent/enrollment/*</url>
+        <name>Get Enrollment Status</name>
+        <path>/device-mgt/android/devices/enroll</path>
+        <url>/enrollment/*</url>
         <method>GET</method>
+        <scope>emm_android_agent</scope>
     </Permission>
 
     <Permission>
-        <name>Enroll device</name>
-        <path>/device-mgt/device/enroll</path>
-        <url>mdm-android-agent/enrollment/*</url>
+        <name>Update Enrollment</name>
+        <path>/device-mgt/android/devices/enroll</path>
+        <url>/enrollment/*</url>
         <method>PUT</method>
+        <scope>emm_user,emm_admin</scope>
     </Permission>
 
     <Permission>
-        <name>Enroll device</name>
-        <path>/device-mgt/device/enroll</path>
-        <url>mdm-android-agent/enrollment/*</url>
+        <name>Disenroll device</name>
+        <path>/device-mgt/android/devices/enroll</path>
+        <url>/enrollment/*</url>
         <method>DELETE</method>
+        <scope>emm_user,emm_admin</scope>
     </Permission>
 
     <!-- Policy related permissions -->
     <Permission>
         <name>View Policies</name>
-        <path>/device-mgt/policies/view</path>
-        <url>mdm-android-agent/policy/*</url>
+        <path>/device-mgt/android/policies/view</path>
+        <url>/policy/*</url>
         <method>GET</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
-        <name>View Policies</name>
-        <path>/device-mgt/policies/view</path>
-        <url>mdm-android-agent/policy/features/*</url>
+        <name>View Policy Features</name>
+        <path>/device-mgt/android/policies/view</path>
+        <url>/policy/features/*</url>
         <method>GET</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <!-- Configuration related permissions -->
     <Permission>
-        <name>Tenant configuration</name>
-        <path>/device-mgt/configuration</path>
-        <url>mdm-android-agent/configuration</url>
+        <name>View Tenant configuration</name>
+        <path>/device-mgt/android/tenant/configuration/view</path>
+        <url>/configuration</url>
         <method>GET</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
-        <name>Tenant configuration</name>
-        <path>/device-mgt/configuration</path>
-        <url>mdm-android-agent/configuration</url>
+        <name>Add Tenant configuration</name>
+        <path>/device-mgt/android/tenant/configuration/modify</path>
+        <url>/configuration</url>
         <method>POST</method>
+        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
-        <name>Tenant configuration</name>
-        <path>/device-mgt/configuration</path>
-        <url>mdm-android-agent/configuration</url>
+        <name>Update Tenant configuration</name>
+        <path>/device-mgt/android/tenant/configuration/modify</path>
+        <url>/configuration</url>
         <method>PUT</method>
+        <scope>emm_admin</scope>
     </Permission>
-
 </PermissionConfiguration>

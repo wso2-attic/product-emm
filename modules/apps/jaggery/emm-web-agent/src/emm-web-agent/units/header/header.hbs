@@ -1,0 +1,94 @@
+{{#zone "header"}}
+    <!-- header -->
+    <header>
+        <div class="row wr-global-header">
+            <div class="col-xs-8 col-sm-6 col-lg-8 app-logo">
+                <a href="{{homeLink}}">{{ defineZone "brand"}}</a>
+            </div>
+            <div class="col-xs-4 col-sm-6 col-lg-4 wr-auth-container">
+                {{#if user}}
+                    <div class="wr-auth pull-right">
+                        <a href="#" data-toggle="dropdown">
+                            <div class="auth-img">
+                                <span class="fw-stack-md fw-lg">
+                                    <i class="fw fw-user fw-stack-1-5x"></i>
+                                </span>
+                                &nbsp;
+                                <b>{{user.username}}</b>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="cu-arrow"></div>
+                            <div class="dropdown-menu-content">
+                                <a href="javascript:void(0)" id="change-password" class="filter-item">Change Password</a>
+                            </div>
+                            <div class="dropdown-menu-content">
+                                <a href="{{logoutURL}}" class="filter-item">Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </header>
+    <!-- /header -->
+    <div id="change-password-window" class="hide">
+        <input type="hidden" id="user" value="{{user.username}}">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-key fw-stack-1x"></i>
+                        </span>
+                        Change Password
+                        <br>
+                    </h3>
+                    <div id="notification-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <h4>
+                        Enter old password
+                        <br><br>
+                        <div>
+                            <input type="password" class="form-control modal-input operationDataKeys" id="old-password" data-key="message"/>
+                        </div>
+                        <br>
+                        Enter new password
+                        <br><br>
+                        <div>
+                            <input type="password" class="form-control modal-input operationDataKeys" id="new-password" data-key="message"/>
+                        </div>
+                        <br>
+                        Retype new password
+                        <br><br>
+                        <div>
+                            <input type="password" class="form-control modal-input operationDataKeys" id="confirmed-password" data-key="message"/>
+                        </div>
+                        <br>
+                    </h4>
+                    <div class="buttons">
+                        <a href="#" id="change-password-yes-link" class="btn-operations">Yes</a>
+                        <a href="#" id="change-password-cancel-link" class="btn-operations">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="change-password-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Done. Password reset successful.</h3>
+                    <div class="buttons">
+                        <a href="#" id="change-password-success-link" class="btn-operations">Ok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/header.js"></script>
+{{/zone}}

@@ -87,7 +87,9 @@
     <string name="toast_error_username">Please enter username</string>
     <string name="toast_error_password">Please enter password</string>
     <string name="toast_message_wipe">Device is being wiped</string>
+    <string name="toast_message_reboot">Device is being rebooted</string>
     <string name="toast_message_wipe_failed">Device wipe failed due to wrong PIN</string>
+    <string name="toast_message_reboot_failed">Device reboot failed due to insufficient privileges</string>
     <string name="toast_message_disenroll">Device disenrolled</string>
 
 
@@ -136,6 +138,7 @@
     <string name="intent_extra_stop_ringing">Your phone is ringing</string>
     <string name="intent_extra_alert">alert</string>
     <string name="intent_extra_ring">ring</string>
+    <string name="intent_extra_password_setting">lock_settings</string>
 
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>
@@ -164,7 +167,7 @@
     <string name="policy_violation_apps_number">. </string>
 
     <!-- SHARED PREF KEYS -->
-    <string name="shared_pref_package">com.mdm</string>
+    <string name="shared_pref_package">org.wso2.emm.agent</string>
     <string name="shared_pref_policy">policy</string>
     <string name="shared_pref_configuration">configuration</string>
     <string name="shared_pref_notifier">notifierType</string>
@@ -180,6 +183,7 @@
     <string name="shared_pref_regId">regId</string>
     <string name="shared_pref_username">username</string>
     <string name="shared_pref_pin">pin</string>
+    <string name="shared_pref_command">command</string>
     <string name="shared_pref_reg_success">1</string>
     <string name="shared_pref_reg_fail">0</string>
     <string name="shared_pref_reg_type">deviceType</string>
@@ -230,7 +234,7 @@
     <string name="dialog_enrolling">Enrolling Device</string>
     <string name="dialog_pin_confirmation">Are you sure you want to set </string>
     <string name="dialog_pin_confirmation_end"> as your PIN code?</string>
-    <string name="dialog_init_confirmation">You have set your domain to </string>
+    <string name="dialog_init_confirmation">You have set your server address to </string>
     <string name="dialog_init_middle">Your device is a </string>
     <string name="dialog_init_device_type">Device type</string>
     <string name="dialog_init_end"> device, are you sure you want to proceed ?</string>
@@ -310,7 +314,7 @@
     <string name="title_activity_log">LogActivity</string>
 
     <!-- Headings -->
-    <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com</string>
+    <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com. If your server runs on a special port, server address should be in following format. i.e : www.abc.com:9763</string>
 
     <!-- Validation Errors -->
     <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>
@@ -329,6 +333,7 @@
     <string name="operation_value_null">null</string>
     <string name="operation_value_completed">COMPLETED</string>
     <string name="operation_value_error">ERROR</string>
+    <string name="operation_value_progress">IN_PROGRESS</string>
     <string name="operation_install">install</string>
     <string name="operation_uninstall">uninstall</string>
 

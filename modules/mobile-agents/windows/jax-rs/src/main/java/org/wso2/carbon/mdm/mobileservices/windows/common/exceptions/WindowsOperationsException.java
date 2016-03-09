@@ -27,7 +27,6 @@ import javax.ws.rs.core.Response;
 /**
  * Exception Class for windows operations related exceptions
  */
-
 public class WindowsOperationsException extends WebApplicationException {
 
     public WindowsOperationsException(Message message, MediaType mediaType) {

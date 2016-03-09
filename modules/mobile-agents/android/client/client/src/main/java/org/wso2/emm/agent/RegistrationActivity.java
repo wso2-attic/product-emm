@@ -92,11 +92,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			utils.setServerIP(ipSaved);
 
 			CommonUtils.callSecuredAPI(RegistrationActivity.this,
-					utils.getAPIServerURL() + Constants.REGISTER_ENDPOINT,
-					HTTP_METHODS.POST,
-					deviceInfoBuilder.getDeviceInfoPayload(),
-					RegistrationActivity.this,
-					Constants.REGISTER_REQUEST_CODE);
+			                           utils.getAPIServerURL(context) + Constants.REGISTER_ENDPOINT,
+			                           HTTP_METHODS.POST,
+			                           deviceInfoBuilder.getDeviceInfoPayload(),
+			                           RegistrationActivity.this,
+			                           Constants.REGISTER_REQUEST_CODE);
 
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
@@ -176,7 +176,6 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
-		CommonDialogUtils.stopProgressDialog(progressDialog);
 		DeviceInfo info = new DeviceInfo(context);
 		if (Constants.REGISTER_REQUEST_CODE == requestCode) {
 			String responseStatus;
@@ -184,8 +183,8 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				responseStatus = result.get(Constants.STATUS);
 				Preference.putString(context, resources.getString(R.string.shared_pref_regId), info.getDeviceId());
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					if (Preference.getString(context, context.getResources().
-							getString(R.string.shared_pref_notifier)).trim().equals(Constants.NOTIFIER_GCM)) {
+					if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, context.getResources().
+							getString(R.string.shared_pref_notifier)))) {
 						registerGCM();
 					} else {
 						getEffectivePolicy();
@@ -197,7 +196,17 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				displayConnectionError();
 			}
 		} else if (Constants.POLICY_REQUEST_CODE == requestCode) {
+			CommonDialogUtils.stopProgressDialog(progressDialog);
 			loadAlreadyRegisteredActivity();
+		} else if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
+			String status = result.get(Constants.STATUS_KEY);
+			if (!Constants.Status.SUCCESSFUL.equals(status)) {
+				displayConnectionError();
+			} else {
+				getEffectivePolicy();
+			}
+		} else {
+			CommonDialogUtils.stopProgressDialog(progressDialog);
 		}
 	}
 
@@ -222,7 +231,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				Preference.putString(context, Constants.REG_ID, regId);
 				if (regId != null) {
 					try {
-						registrationManager.sendRegistrationId();
+						sendRegistrationId();
 					} catch (AndroidAgentException e) {
 						Log.e(TAG, "Error while sending registration Id");
 					}
@@ -236,7 +245,30 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				}
 			}
 		}.execute();
-		getEffectivePolicy();
+	}
+
+	/**
+	 * This is used to send the registration Id to MDM server so that the server
+	 * can use it as a reference to identify the device when sending messages to
+	 * Google server.
+	 *
+	 * @throws AndroidAgentException
+	 */
+	public void sendRegistrationId() throws AndroidAgentException {
+		DeviceInfo deviceInfo = new DeviceInfo(context);
+		DeviceInfoPayload deviceInfoPayload = new DeviceInfoPayload(context);
+		deviceInfoPayload.build();
+
+		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
+		String ipSaved = Preference.getString(context, Constants.IP);
+		ServerConfig utils = new ServerConfig();
+		utils.setServerIP(ipSaved);
+
+		String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
+
+		CommonUtils.callSecuredAPI(context, url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
+		                           replyPayload, RegistrationActivity.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
+
 	}
 
 	/**
@@ -266,7 +298,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			utils.setServerIP(ipSaved);
 
 			CommonUtils.callSecuredAPI(RegistrationActivity.this,
-					utils.getAPIServerURL() + Constants.POLICY_ENDPOINT + deviceIdentifier,
+					utils.getAPIServerURL(context) + Constants.POLICY_ENDPOINT + deviceIdentifier,
 					HTTP_METHODS.GET,
 					null,
 					RegistrationActivity.this,

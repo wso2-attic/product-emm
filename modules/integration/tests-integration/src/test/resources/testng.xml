@@ -26,14 +26,104 @@
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
     </listeners>
-    <test name="android-enrollment" preserve-order="false" parallel="true">
+    <test name="mobile-device-mgt-no-devices" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.mobileDevice.MobileDeviceManagementWithNoDevices"/>
+        </classes>
+    </test>
+    <test name="android-enrollment" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.device.enrollment.AndroidEnrollment"/>
         </classes>
     </test>
-    <test name="android-operation" preserve-order="false" parallel="true">
+    <test name="operation" preserve-order="false" parallel="true">
         <classes>
             <class name="org.wso2.mdm.integration.device.operation.AndroidOperation"/>
+        </classes>
+    </test>
+    <test name="windows-enrollment" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.enrollment.WindowsEnrollment"/>
+        </classes>
+    </test>
+    <test name="windows-operation" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.operation.WindowsOperation"/>
+        </classes>
+    </test>
+    <test name="android-device-mgt" preserve-order="false" parallel="true">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.mgt.AndroidDeviceManagement"/>
+        </classes>
+    </test>
+    <test name="android-configuration" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.configuration.AndroidConfigurationManagement"/>
+        </classes>
+    </test>
+    <test name="android-policy" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.device.policy.AndroidPolicy"/>
+        </classes>
+    </test>
+     <test name="operation-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.operation.OperationManagement"/>
+        </classes>
+    </test>
+    <test name="operation-mgt-oracle" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.operation.OracleOperationManagement"/>
+        </classes>
+    </test>
+    <test name="mobile-device-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.mobileDevice.MobileDeviceManagement"/>
+        </classes>
+    </test>
+    <test name="mobile-device-mgt-oracle" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.mobileDevice.OracleMobileDeviceManagement"/>
+        </classes>
+    </test>
+    <test name="user-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.user.UserManagement"/>
+        </classes>
+    </test>
+    <test name="role-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.role.RoleManagement"/>
+        </classes>
+    </test>
+    <test name="policy-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.policy.AndroidPolicyManagement"/>
+        </classes>
+    </test>
+    <test name="windows-policy-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.policy.WindowsPolicyManagement"/>
+        </classes>
+    </test>
+    <test name="feature-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.feature.FeatureManagement"/>
+        </classes>
+    </test>
+    <!--test name="license-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.license.LicenseManagement"/>
+        </classes>
+    </test-->
+    <test name="configuration-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.configuration.ConfigurationManagement"/>
+        </classes>
+    </test>
+    <test name="notification-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.notification.NotificationManagement"/>
         </classes>
     </test>
 </suite>

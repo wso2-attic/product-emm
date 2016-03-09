@@ -25,31 +25,31 @@ import org.w3c.dom.Element;
  * Represents a base format of a syncml document
  */
 public class SyncmlDocument {
-	SyncmlHeader header;
-	SyncmlBody body;
+    SyncmlHeader header;
+    SyncmlBody body;
 
-	public SyncmlHeader getHeader() {
-		return header;
-	}
+    public SyncmlHeader getHeader() {
+        return header;
+    }
 
-	public void setHeader(SyncmlHeader header) {
-		this.header = header;
-	}
+    public void setHeader(SyncmlHeader header) {
+        this.header = header;
+    }
 
-	public SyncmlBody getBody() {
-		return body;
-	}
+    public SyncmlBody getBody() {
+        return body;
+    }
 
-	public void setBody(SyncmlBody body) {
-		this.body = body;
-	}
+    public void setBody(SyncmlBody body) {
+        this.body = body;
+    }
 
-	public void buildDocument(Document doc, Element rootElement) {
-		if (getHeader() != null) {
-			getHeader().buildSyncmlHeaderElement(doc, rootElement);
-		}
-		if (getBody() != null) {
-			getBody().buildBodyElement(doc, rootElement);
-		}
-	}
+    public void buildDocument(Document doc, Element rootElement) {
+        if (getHeader() != null) {
+            getHeader().buildSyncmlHeaderElement(doc, rootElement);
+        }
+        if (getBody() != null) {
+            getBody().buildBodyElement(doc, rootElement);
+        }
+    }
 }

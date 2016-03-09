@@ -17,6 +17,7 @@
  */
 package org.wso2.emm.agent.utils;
 
+import android.content.Intent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -70,6 +71,7 @@ public class CommonUtils {
 									  APIResultCallBack apiResultCallBack, int requestCode) {
 
 		EndPointInfo apiUtilities = new EndPointInfo();
+		ServerConfig utils = new ServerConfig();
 		apiUtilities.setEndPoint(endpoint);
 		apiUtilities.setHttpMethod(methodType);
 		if (requestParams != null) {
@@ -78,7 +80,8 @@ public class CommonUtils {
 		APIController apiController;
 		String clientKey = Preference.getString(context, Constants.CLIENT_ID);
 		String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
-		if (clientKey!=null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
+		if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty() &&
+		    clientKey != null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
 			apiController = new APIController(clientKey, clientSecret);
 			apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
 					context.getApplicationContext());
@@ -91,33 +94,34 @@ public class CommonUtils {
 	 * @param context - Application context.
 	 */
 	public static void clearAppData(Context context) throws AndroidAgentException {
-		revokePolicy(context);
-		Resources resources = context.getResources();
-		SharedPreferences mainPref = context.getSharedPreferences(context.getResources().
-				                                                          getString(R.string.shared_pref_package),
-		                                                          Context.MODE_PRIVATE);
-
-		Editor editor = mainPref.edit();
-		editor.putString(context.getResources().getString(R.string.shared_pref_policy),
-				resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_isagreed),
-				resources.getString(R.string.shared_pref_reg_fail));
-		editor.putString(context.getResources().getString(R.string.shared_pref_regId),
-				resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_registered),
-				resources.getString(R.string.shared_pref_reg_fail));
-		editor.putString(context.getResources().getString(R.string.shared_pref_ip),
-				resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
-                resources.getString(R.string.shared_pref_default_string));
-		editor.putString(context.getResources().getString(R.string.shared_pref_eula),
-				resources.getString(R.string.shared_pref_default_string));
-		editor.putString(resources.getString(R.string.shared_pref_device_active),
-				resources.getString(R.string.shared_pref_reg_fail));
-		editor.putString(Constants.CLIENT_ID, null);
-		editor.putString(Constants.CLIENT_SECRET, null);
-		editor.commit();
-
+		try {
+			revokePolicy(context);
+		} catch (SecurityException e) {
+			throw new AndroidAgentException("Error occurred while revoking policy", e);
+		} finally {
+			Resources resources = context.getResources();
+			SharedPreferences mainPref = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
+			Editor editor = mainPref.edit();
+			editor.putString(context.getResources().getString(R.string.shared_pref_policy),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_isagreed),
+			                 resources.getString(R.string.shared_pref_reg_fail));
+			editor.putString(context.getResources().getString(R.string.shared_pref_regId),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_registered),
+			                 resources.getString(R.string.shared_pref_reg_fail));
+			editor.putString(context.getResources().getString(R.string.shared_pref_ip),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(context.getResources().getString(R.string.shared_pref_eula),
+			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putString(resources.getString(R.string.shared_pref_device_active),
+			                 resources.getString(R.string.shared_pref_reg_fail));
+			editor.commit();
+			Preference.clearPreferences(context);
+			clearClientCredentials(context);
+		}
 	}
 
 	/**
@@ -175,7 +179,7 @@ public class CommonUtils {
 		utils.setServerIP(serverIP);
 
 		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		dynamicClientManager.unregisterClient(profile,utils);
+		dynamicClientManager.unregisterClient(profile,utils, context);
 	}
 
 	/**
@@ -220,6 +224,37 @@ public class CommonUtils {
 			}
 		} catch (IOException e) {
 			throw new AndroidAgentException("Error occurred while parsing stream", e);
+		}
+	}
+
+	/**
+	 * Clear client credentials.
+	 * @param context - Application context.
+	 */
+	public static void clearClientCredentials(Context context) {
+		SharedPreferences mainPref = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
+		Editor editor = mainPref.edit();
+		editor.putString(Constants.CLIENT_ID, null);
+		editor.putString(Constants.CLIENT_SECRET, null);
+		editor.commit();
+	}
+
+	/**
+	 * Call EMM system app in COPE mode.
+	 * @param context - Application context.
+	 * @param operation - Operation code.
+	 * @param command - Shell command to be executed.
+	 */
+	public static void callSystemApp(Context context, String operation, String command) {
+		if(Constants.SYSTEM_APP_ENABLED) {
+			Intent intent = new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
+			intent.putExtra("code", operation);
+			if (command != null) {
+				intent.putExtra("command", command);
+			}
+			context.startService(intent);
+		} else {
+			Log.e(TAG, "System app not enabled.");
 		}
 	}
 }

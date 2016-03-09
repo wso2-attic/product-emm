@@ -50,16 +50,21 @@ public class EnrollmentService {
 		String msg;
 		try {
 			device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-			AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
-			Response.status(Response.Status.CREATED);
-			responseMsg.setResponseMessage("Device enrollment succeeded");
-			responseMsg.setResponseCode(Response.Status.CREATED.toString());
+			device.getEnrolmentInfo().setOwner(AndroidAPIUtils.getAuthenticatedUser());
+			boolean status = AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
+			if (status) {
+				Response.status(Response.Status.CREATED);
+				responseMsg.setResponseMessage("Device enrollment succeeded.");
+				responseMsg.setResponseCode(Response.Status.CREATED.toString());
+			} else {
+				Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+				responseMsg.setResponseMessage("Device enrollment failed.");
+				responseMsg.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+			}
 		} catch (DeviceManagementException e) {
 			msg = "Error occurred while enrolling the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -75,7 +80,7 @@ public class EnrollmentService {
 		try {
 			result = AndroidAPIUtils.getDeviceManagementService().isEnrolled(deviceIdentifier);
 			if (result) {
-				responseMsg.setResponseMessage("Device has already enrolled");
+		                responseMsg.setResponseMessage("Device has already enrolled");
 				responseMsg.setResponseCode(Response.Status.ACCEPTED.toString());
 				Response.status(Response.Status.ACCEPTED);
 			} else {
@@ -84,11 +89,12 @@ public class EnrollmentService {
 				Response.status(Response.Status.NOT_FOUND);
 			}
 		} catch (DeviceManagementException e) {
-			msg = "Error occurred while enrollment of the device.";
+                        msg = "Error occurred while checking enrollment status of the device.";
+                        responseMsg.setResponseMessage(msg);
+                        responseMsg.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+                        Response.status(Response.Status.INTERNAL_SERVER_ERROR);
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -117,8 +123,6 @@ public class EnrollmentService {
 			msg = "Error occurred while modifying enrollment of the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}
@@ -146,8 +150,6 @@ public class EnrollmentService {
 			msg = "Error occurred while dis enrolling the device";
 			log.error(msg, e);
 			throw new AndroidAgentException(msg, e);
-		} finally {
-			AndroidAPIUtils.endTenantFlow();
 		}
 		return responseMsg;
 	}

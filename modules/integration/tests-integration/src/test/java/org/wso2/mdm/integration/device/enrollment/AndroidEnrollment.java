@@ -17,41 +17,102 @@
  */
 package org.wso2.mdm.integration.device.enrollment;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import junit.framework.Assert;
+import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
-import org.wso2.mdm.integration.common.AssertUtil;
-import org.wso2.mdm.integration.common.Constants;
-import org.wso2.mdm.integration.common.RestClient;
-import org.wso2.mdm.integration.common.TestBase;
+import org.wso2.mdm.integration.common.*;
 
 /**
- * This contains testing of Android device enrollment which is necessery to run prior to all other Android related
+ * This contains testing of Android device enrollment which is necessary to run prior to all other Android related
  * tests.
  */
 public class AndroidEnrollment extends TestBase {
-    private RestClient client;
+    private MDMHttpClient client;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.Enrollment.ANDROID_ENROLLMENT_GROUP })
+    @BeforeClass(alwaysRun = true, groups = { Constants.AndroidEnrollment.ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
-        client = new RestClient(backendURL);
+        String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
     @Test(description = "Test an Android device enrollment.")
-    public void testAndroidEnrollment() throws Exception {
-        HttpResponse response = client.post(Constants.Enrollment.ENROLLMENT_ENDPOINT,
-                                            Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_PAYLOAD);
-        Assert.assertEquals(response.getResponseCode(), Constants.SUCCESS_CODE);
-        JsonElement jsonElement =
-                new JsonParser().parse((String) Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED);
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
-        AssertUtil.jsonPayloadCompare(Constants.Enrollment.ANDROID_REQUEST_ENROLLMENT_EXPECTED,
-                                      response.getData().toString(), true);
+    public void testEnrollment() throws Exception {
+        JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST);
+        enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
+        MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
     }
+
+    @Test(description ="Test an Android device enrollment with no device identifier")
+    public void testEnrollmentWithErroneousInfo() throws Exception {
+        JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidEnrollment.ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST);
+        enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
+        MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
+        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+    }
+
+    @Test(description = "Test an Android device is enrolled.", dependsOnMethods = { "testEnrollment" })
+    public void testIsEnrolled() throws Exception {
+        MDMResponse response = client.get(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
+    }
+
+    @Test(description = "Test modify enrollment.", dependsOnMethods = { "testIsEnrolled" })
+    public void testModifyEnrollment() throws Exception {
+        JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_PUT);
+        enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
+        MDMResponse response = client.put(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID,
+                                           enrollmentData.toString());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_PUT).toString(), response.getBody(), true);
+    }
+
+    @Test(description = "Test disenrollment.", dependsOnMethods = { "testModifyEnrollment" })
+    public void testDisEnrollDevice() throws Exception {
+        MDMResponse response = client.delete(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_DELETE).toString(),
+                                      response.getBody(), true);
+    }
+
+    @Test(description = "Test disenrollment with wrong device ID.", dependsOnMethods = { "testModifyEnrollment" })
+    public void testDisEnrollDeviceWithWrongDeviceId() throws Exception {
+        MDMResponse response = client.delete(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT +
+                                                                            Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                                              Constants.AndroidEnrollment.ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                                              Constants.HTTP_METHOD_DELETE).toString(),
+                                      response.getBody(), true);
+    }
+
+    @Test(description = "Test disenrollment for already disenrolled device.", dependsOnMethods = { "testDisEnrollDevice" })
+    public void testDisEnrollDeviceSameDeviceTwice() throws Exception {
+        MDMResponse response = client.delete(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
+                        Constants.AndroidEnrollment.ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_DELETE).toString(),
+                response.getBody(), true);
+    }
+
 }

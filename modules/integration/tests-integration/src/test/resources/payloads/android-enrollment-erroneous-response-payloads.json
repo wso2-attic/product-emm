@@ -1,0 +1,12 @@
+{
+  "DELETE" : {
+    "responseCode": "Not Found",
+    "responseMessage": "Device not found"
+  },
+
+  "PUT" : {
+    "responseCode": "Not Modified",
+    "responseMessage": "Device not found for enrollment"
+  }
+
+}

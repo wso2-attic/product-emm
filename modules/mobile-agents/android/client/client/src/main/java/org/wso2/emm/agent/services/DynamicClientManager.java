@@ -17,6 +17,7 @@
 
 package org.wso2.emm.agent.services;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -25,6 +26,7 @@ import org.wso2.emm.agent.beans.RegistrationProfile;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.beans.UnregisterProfile;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
+import org.wso2.emm.agent.proxy.IdentityProxy;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import org.wso2.emm.agent.utils.Constants;
@@ -54,10 +56,11 @@ public class DynamicClientManager {
      *         if it fails to register.
      * @throws AndroidAgentException
      */
-    public String getClientCredentials(RegistrationProfile profile, ServerConfig utils)
+    public String getClientCredentials(RegistrationProfile profile, ServerConfig utils, Context context)
             throws AndroidAgentException {
+        IdentityProxy.getInstance().setContext(context);
         EndPointInfo endPointInfo = new EndPointInfo();
-        String endPoint = utils.getAPIServerURL() +
+        String endPoint = utils.getAPIServerURL(context) +
                 org.wso2.emm.agent.utils.Constants.DYNAMIC_CLIENT_REGISTER_ENDPOINT;
         endPointInfo.setHttpMethod(org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.POST);
         endPointInfo.setEndPoint(endPoint);
@@ -69,7 +72,7 @@ public class DynamicClientManager {
 
             if (responseParams != null) {
                 String statusCode = responseParams.get(Constants.STATUS);
-                if (Constants.Status.ACCEPT.equalsIgnoreCase(statusCode)) {
+                if (Constants.Status.CREATED.equalsIgnoreCase(statusCode)) {
                     response = responseParams.get(Constants.RESPONSE);
                 }
             }
@@ -91,10 +94,10 @@ public class DynamicClientManager {
      * @return true if unregistration success, else false.
      * @throws AndroidAgentException
      */
-    public boolean unregisterClient(UnregisterProfile profile, ServerConfig utils)
+    public boolean unregisterClient(UnregisterProfile profile, ServerConfig utils, Context context)
             throws AndroidAgentException {
         StringBuilder endPoint = new StringBuilder();
-        endPoint.append(utils.getAPIServerURL());
+        endPoint.append(utils.getAPIServerURL(context));
         endPoint.append(Constants.DYNAMIC_CLIENT_REGISTER_ENDPOINT);
         endPoint.append("?" + USER_ID + "=" + profile.getUserId());
         endPoint.append("&" + CONSUMER_KEY + "=" + profile.getConsumerKey());
@@ -107,7 +110,11 @@ public class DynamicClientManager {
         try {
             SendRequest sendRequestTask = new SendRequest();
             Map<String, String> responseParams = sendRequestTask.execute(endPointInfo).get();
-            String statusCode = responseParams.get(Constants.STATUS);
+            String statusCode = null;
+            if(responseParams != null) {
+                statusCode = responseParams.get(Constants.STATUS);
+            }
+
             return Constants.Status.ACCEPT.equalsIgnoreCase(statusCode);
         } catch (InterruptedException e) {
             throw new AndroidAgentException("Error occurred due to thread interruption", e);

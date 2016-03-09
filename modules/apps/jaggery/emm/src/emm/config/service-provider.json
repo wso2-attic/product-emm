@@ -1,0 +1,6 @@
+{
+  "grantType" : "password urn:ietf:params:oauth:grant-type:saml2-bearer refresh_token",
+  "saasApp" : true,
+  "tokenScope": "admin",
+  "requireDynamicClientRegistration" : true
+}
